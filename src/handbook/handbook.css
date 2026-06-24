@@ -1,0 +1,463 @@
+.handbook-shell {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  max-width: 1280px;
+  margin: 0 auto;
+  background: var(--paper);
+}
+
+.handbook-toc {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  padding: 32px 20px 48px;
+  background: var(--paper);
+}
+
+.handbook-main {
+  min-width: 0;
+  padding: 0 56px 120px;
+  background: var(--paper);
+}
+
+.handbook-toc .nav-brand {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--green);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.handbook-toc .nav-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.handbook-toc a {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.handbook-toc a:hover,
+.handbook-toc a:focus-visible {
+  background: var(--green-tint);
+  color: var(--green-deep);
+  outline: none;
+}
+
+.handbook-toc a .code {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--green);
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+.handbook-main .hero {
+  padding: 72px 0 48px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.handbook-main .hero-serial {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.handbook-main .hero-serial span {
+  border: 1px solid var(--line);
+  padding: 3px 10px;
+  border-radius: 3px;
+  background: var(--panel);
+}
+
+.handbook-main h1 {
+  font-size: clamp(30px, 4.5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: var(--ink);
+  margin: 0;
+}
+
+.handbook-main .hero-sub {
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 660px;
+}
+
+.handbook-main .hero-meta {
+  margin-top: 28px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+.handbook-main section {
+  padding-top: 72px;
+}
+
+.handbook-main .ch-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 28px;
+}
+
+.handbook-main .ch-code {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.handbook-main h2 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.handbook-main h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 36px 0 12px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.handbook-main h3 .h3-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 500;
+  margin-right: 8px;
+  letter-spacing: 0.06em;
+}
+
+.handbook-main p {
+  margin: 0 0 14px;
+}
+
+.handbook-main p.lede {
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+
+.handbook-main em {
+  font-style: normal;
+  background: linear-gradient(transparent 62%, var(--green-tint) 62%);
+  padding: 0 1px;
+}
+
+.handbook-main ul,
+.handbook-main ol {
+  margin: 0 0 16px 22px;
+}
+
+.handbook-main li {
+  margin-bottom: 7px;
+}
+
+.handbook-main code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--green-tint);
+  color: var(--green-deep);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.handbook-main .callout {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--green);
+  background: var(--panel);
+  padding: 18px 22px;
+  border-radius: 0 6px 6px 0;
+  margin: 22px 0;
+}
+
+.handbook-main .callout.warn {
+  border-left-color: var(--amber);
+  background: var(--amber-tint);
+}
+
+.handbook-main .callout.risk {
+  border-left-color: var(--red);
+  background: var(--red-tint);
+}
+
+.handbook-main .callout.gm {
+  border-left-color: var(--ink);
+  background: #eceef3;
+}
+
+.handbook-main .callout .co-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--green);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.handbook-main .callout.warn .co-label {
+  color: var(--amber);
+}
+
+.handbook-main .callout.risk .co-label {
+  color: var(--red);
+}
+
+.handbook-main .callout.gm .co-label {
+  color: var(--ink);
+}
+
+.handbook-main .callout p:last-child {
+  margin-bottom: 0;
+}
+
+.handbook-main table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 22px 0;
+  font-size: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.handbook-main th {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-align: left;
+  font-weight: 600;
+  color: var(--green-deep);
+  background: var(--green-tint);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.handbook-main td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.handbook-main tr:last-child td {
+  border-bottom: none;
+}
+
+.handbook-main td .mono,
+.handbook-main td code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+
+.handbook-main .flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 22px 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+
+.handbook-main .flow .step {
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.handbook-main .flow .step.hl {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+.handbook-main .flow .arr {
+  color: var(--ink-soft);
+}
+
+.handbook-main .serial-card {
+  position: relative;
+  font-family: var(--mono);
+  background: var(--ink);
+  color: #e7eaf1;
+  border-radius: 8px;
+  padding: 22px 26px;
+  margin: 24px 0;
+  font-size: 13.5px;
+  line-height: 2;
+  overflow-x: auto;
+}
+
+.handbook-main .serial-card-copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  min-width: 70px;
+  height: 30px;
+  border: 1px solid rgba(231, 234, 241, 0.22);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e7eaf1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.handbook-main .serial-card-copy:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(231, 234, 241, 0.4);
+}
+
+.handbook-main .serial-card-copy:focus-visible {
+  outline: 2px solid #9db6e8;
+  outline-offset: 2px;
+}
+
+.handbook-main .serial-card .sc-label {
+  color: #8696bd;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.handbook-main .serial-card .seg {
+  color: #facc6b;
+}
+
+.handbook-main .serial-card .seg2 {
+  color: #9db6e8;
+}
+
+.handbook-main .serial-card .dim {
+  color: #9aa3b8;
+}
+
+.handbook-main .glossary {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--panel);
+  margin-top: 24px;
+}
+
+.handbook-main .g-row {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.handbook-main .g-row:last-child {
+  border-bottom: none;
+}
+
+.handbook-main .g-term {
+  padding: 13px 18px;
+  background: var(--green-tint);
+}
+
+.handbook-main .g-term b {
+  display: block;
+  font-size: 14px;
+}
+
+.handbook-main .g-term span {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green-deep);
+}
+
+.handbook-main .g-def {
+  padding: 13px 18px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.handbook-main footer {
+  margin-top: 96px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  line-height: 2;
+}
+
+.handbook-empty {
+  max-width: 760px;
+  margin: 80px auto;
+  padding: 24px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .handbook-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .handbook-toc {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .handbook-main {
+    padding: 0 20px 80px;
+  }
+}
+
+@media (max-width: 700px) {
+  .handbook-main .g-row {
+    grid-template-columns: 1fr;
+  }
+
+  .handbook-main .g-term {
+    border-bottom: 1px dashed var(--line);
+  }
+}

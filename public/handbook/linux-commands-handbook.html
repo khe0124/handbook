@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Commands Handbook — 자주 쓰는 리눅스/셸 명령어 핸드북</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECEEF3}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono,td code{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#9DB6E8}
+.serial-card .dim{color:#9AA3B8}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">LINUX / SHELL</div>
+  <div class="nav-title">자주 쓰는 명령어 핸드북</div>
+  <a href="#ch1"><span class="code">LX-01</span>셸의 사고 모델</a>
+  <a href="#ch2"><span class="code">LX-02</span>탐색·이동</a>
+  <a href="#ch3"><span class="code">LX-03</span>파일 보기·편집</a>
+  <a href="#ch4"><span class="code">LX-04</span>검색 — 텍스트와 파일</a>
+  <a href="#ch5"><span class="code">LX-05</span>파일 조작</a>
+  <a href="#ch6"><span class="code">LX-06</span>권한·소유권</a>
+  <a href="#ch7"><span class="code">LX-07</span>프로세스·잡</a>
+  <a href="#ch8"><span class="code">LX-08</span>파이프·텍스트 가공</a>
+  <a href="#ch9"><span class="code">LX-09</span>네트워크·HTTP</a>
+  <a href="#ch10"><span class="code">LX-10</span>디스크·시스템</a>
+  <a href="#ch11"><span class="code">LX-11</span>압축·아카이브</a>
+  <a href="#ch12"><span class="code">LX-12</span>원격·동기화</a>
+  <a href="#ch13"><span class="code">LX-13</span>셸 환경·생산성</a>
+  <a href="#ch14"><span class="code">LX-14</span>치트시트</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : LX-HANDBOOK-V1</span>
+    <span>ENV : macOS(Darwin) · zsh · mise · chezmoi</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>리눅스 / 셸 명령어<br>핸드북</h1>
+  <p class="hero-sub">명령어 암기가 아니라 <strong>사고 모델</strong>을 먼저 잡습니다 — 모든 명령은 텍스트 스트림을 입력받아 텍스트 스트림을 내보내고, 작은 도구들을 파이프로 조립해 큰 일을 합니다. 이 한 가지 철학을 이해하면 나머지는 조합입니다. 네 환경(macOS·zsh·mise·chezmoi)과 모던 CLI(rg·fd·bat) 기준.</p>
+  <div class="hero-meta">NOTE : macOS는 BSD 계열 — 일부 플래그가 GNU(Linux)와 다름. 차이 나는 곳은 표기함<br>COMPILED : 2026-06</div>
+</header>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">LX-01</span><h2>셸의 사고 모델</h2></div>
+<p class="lede">Unix 철학 한 줄: <em>"한 가지를 잘하는 작은 프로그램을, 텍스트 스트림으로 잇는다."</em> 명령어를 외우기 전에 이 구조를 잡으면, 처음 보는 명령도 같은 문법으로 읽힙니다.</p>
+<div class="serial-card">
+<span class="sc-label">ANATOMY OF A COMMAND</span>
+<span class="seg">command</span> <span class="seg2">-옵션 --긴옵션</span> <span class="dim">인자(파일·경로)</span><br>
+<span class="dim">예:</span> ls <span class="seg2">-la</span> <span class="dim">~/projects</span><br>
+<br>
+<span class="sc-label">THREE STREAMS</span>
+stdin(0) ──▶ [ <span class="seg">프로그램</span> ] ──▶ stdout(1)<br>
+<span class="dim">                  └──▶ stderr(2)  ← 에러는 별도 채널</span>
+</div>
+<p>모든 프로세스엔 세 개의 표준 스트림이 있습니다 — 입력(<code>stdin</code>), 정상 출력(<code>stdout</code>), 에러 출력(<code>stderr</code>). 이게 분리돼 있어서 <em>정상 결과는 파일로 저장하면서 에러는 화면에 띄우는</em> 식의 조합이 가능합니다(→ LX-08). 그리고 모든 명령은 끝나면 <strong>종료코드(exit code)</strong>를 남깁니다 — <code>0</code>은 성공, 그 외는 실패. <code>echo $?</code>로 직전 명령의 종료코드를 보고, <code>&amp;&amp;</code>/<code>||</code>로 성공·실패에 따라 다음을 잇습니다.</p>
+<table>
+<tr><th>도움 받기</th><th>의미</th></tr>
+<tr><td><code>man ls</code></td><td>매뉴얼 페이지 (<code>q</code>로 종료, <code>/단어</code>로 검색)</td></tr>
+<tr><td><code>ls --help</code></td><td>간단 사용법 (대부분의 GNU 도구)</td></tr>
+<tr><td><code>tldr ls</code></td><td>예제 중심 요약 (별도 설치 — 실전에 가장 빠름)</td></tr>
+<tr><td><code>which ls</code> · <code>type ls</code></td><td>이 명령이 어디 있는지 / alias·함수인지</td></tr>
+</table>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">LX-02</span><h2>탐색·이동</h2></div>
+<p class="lede">디렉터리 트리 안에서 "지금 어디고, 뭐가 있고, 어디로 갈까". 가장 자주 치는 명령들이라 손에 붙여둘 가치가 큽니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 자주 쓰는 형태</th></tr>
+<tr><td><code>pwd</code></td><td>현재 경로 출력</td></tr>
+<tr><td><code>ls -la</code></td><td>숨김파일 포함(<code>-a</code>) 상세(<code>-l</code>). <code>-lh</code> 사람이 읽는 크기, <code>-lt</code> 시간순, <code>-ltr</code> 오래된 순</td></tr>
+<tr><td><code>cd -</code></td><td>직전 디렉터리로 토글. <code>cd</code> 단독은 홈(<code>~</code>)으로, <code>cd ..</code> 상위</td></tr>
+<tr><td><code>tree -L 2</code></td><td>트리 구조 2단계까지 (별도 설치). <code>-d</code> 디렉터리만</td></tr>
+<tr><td><code>find . -name "*.ts"</code></td><td>이름으로 찾기. <code>-type f/d</code>(파일/디렉터리), <code>-mtime -7</code>(7일 내 수정)</td></tr>
+<tr><td><code>fd 패턴</code></td><td><code>find</code>의 모던 대체 — 빠르고 직관적, <code>.gitignore</code> 자동 존중. <code>fd -e ts</code>(확장자)</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">경로 기본기</span>
+<p><code>.</code>=현재 · <code>..</code>=상위 · <code>~</code>=홈 · <code>/</code>=루트 · <code>-</code>=직전(cd 한정). <strong>절대경로</strong>(<code>/Users/...</code>)는 어디서 쳐도 같은 곳, <strong>상대경로</strong>(<code>./src</code>)는 현재 위치 기준. 스크립트에선 위치에 안 흔들리게 절대경로가 안전합니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">LX-03</span><h2>파일 보기·편집</h2></div>
+<p class="lede">"내용만 잠깐 볼 것"과 "고칠 것"은 도구가 다릅니다. 큰 로그를 <code>cat</code>으로 통째로 쏟지 마세요.</p>
+<table>
+<tr><th>명령</th><th>언제 / 형태</th></tr>
+<tr><td><code>cat file</code></td><td>전체를 한 번에 출력 — <em>작은 파일</em>에만. 여러 파일 이어붙이기에도 씀</td></tr>
+<tr><td><code>less file</code></td><td>페이지 단위로 큰 파일 탐색. <code>/검색</code>, <code>G</code>(끝), <code>g</code>(처음), <code>q</code>(종료)</td></tr>
+<tr><td><code>head -n 20</code> / <code>tail -n 20</code></td><td>앞/뒤 N줄. 구조·결과 빠른 확인</td></tr>
+<tr><td><code>tail -f app.log</code></td><td><b>실시간 추적</b> — 로그가 쌓이는 걸 계속 따라감. 운영 디버깅 필수</td></tr>
+<tr><td><code>bat file</code></td><td><code>cat</code>의 모던판 — 문법 강조·줄번호·페이징 (별도 설치)</td></tr>
+<tr><td><code>vim file</code></td><td>터미널 편집기. 최소 생존: <code>i</code>(입력)→<code>Esc</code>→<code>:wq</code>(저장종료) / <code>:q!</code>(버리고 종료)</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실전 팁</span>
+<p>에러를 쫓을 땐 <code>tail -f</code>에 필터를 얹습니다: <code>tail -f app.log | grep ERROR</code> — 새로 찍히는 에러만 실시간으로. nano가 vim보다 편하면 <code>nano</code>도 충분합니다(저장 <code>Ctrl-O</code>, 종료 <code>Ctrl-X</code>). 편집기 전쟁에 끼지 말고 <em>탈출하는 법</em>만 확실히 익히세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">LX-04</span><h2>검색 — 텍스트와 파일</h2></div>
+<p class="lede">두 종류의 검색을 구분하세요 — <em>파일 안의 내용</em>을 찾는가(grep/rg), <em>파일 자체</em>를 찾는가(find/fd). 개발 일상에서 가장 자주 쓰는 무기입니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>grep "패턴" file</code></td><td>파일 안에서 줄 찾기. <code>-i</code>(대소문자 무시) <code>-n</code>(줄번호) <code>-r</code>(재귀) <code>-v</code>(반대=제외) <code>-C 3</code>(앞뒤 3줄)</td></tr>
+<tr><td><code>rg "패턴"</code></td><td><b>ripgrep</b> — grep의 모던 대체. 빠르고 <code>.gitignore</code> 자동 존중, 재귀가 기본. <code>rg -t ts "useState"</code>(타입 한정)</td></tr>
+<tr><td><code>rg -l "패턴"</code></td><td>매칭된 <em>파일 이름만</em> 나열 (<code>-l</code>)</td></tr>
+<tr><td><code>find . -name "*.log"</code></td><td>이름 패턴으로 파일 찾기</td></tr>
+<tr><td><code>fd -e log</code></td><td>확장자로 (모던, 빠름)</td></tr>
+<tr><td><code>find . -name "*.tmp" -delete</code></td><td>찾아서 삭제 — <b>실행 전 <code>-delete</code> 빼고 먼저 확인</b></td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">grep과 정규식</span>
+<p><code>grep</code>의 패턴은 정규식입니다 — <code>.</code>(아무 글자) <code>*</code>(0회 이상) <code>^</code>(줄 시작) <code>$</code>(줄 끝). 특수문자를 글자 그대로 찾으려면 이스케이프하거나 <code>grep -F</code>(고정 문자열). 코드베이스 탐색은 거의 항상 <code>rg</code>가 정답입니다 — 빠르고, 빌드 산출물·<code>node_modules</code>를 알아서 건너뜁니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">LX-05</span><h2>파일 조작</h2></div>
+<p class="lede">복사·이동·삭제·생성. 단순하지만 <code>rm</code>은 되돌릴 수 없으니, 파괴적 명령엔 손이 한 번 멈춰야 합니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>cp src dst</code></td><td>복사. 디렉터리는 <code>-r</code>(재귀). <code>-i</code> 덮어쓰기 전 확인, <code>-p</code> 속성 보존</td></tr>
+<tr><td><code>mv src dst</code></td><td>이동 <b>겸 이름 변경</b> (같은 위치로 옮기면 rename)</td></tr>
+<tr><td><code>rm file</code></td><td>삭제. <code>-r</code> 디렉터리, <code>-f</code> 강제(확인 없음), <code>-i</code> 하나씩 확인</td></tr>
+<tr><td><code>mkdir -p a/b/c</code></td><td>디렉터리 생성. <code>-p</code> 중간 경로까지 한 번에</td></tr>
+<tr><td><code>touch file</code></td><td>빈 파일 생성 / 기존 파일 수정시각 갱신</td></tr>
+<tr><td><code>ln -s 대상 링크</code></td><td>심볼릭 링크(바로가기) 생성. <code>-s</code> 없으면 하드링크</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">절대 하지 말 것</span>
+<p><code>rm -rf /</code> 또는 변수 미설정 상태의 <code>rm -rf $VAR/</code>(<code>$VAR</code>이 비면 <code>rm -rf /</code>가 됨)는 시스템을 지웁니다. 안전 습관: ① <code>rm</code> 전에 같은 인자로 <code>ls</code>를 먼저 쳐서 대상을 눈으로 확인 ② 와일드카드(<code>*</code>) 삭제는 특히 조심 ③ 중요한 건 <code>rm</code> 대신 휴지통으로 보내는 도구(<code>trash</code>)를 쓰는 것도 방법.</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">LX-06</span><h2>권한·소유권</h2></div>
+<p class="lede">Unix 권한은 외울 게 아니라 <em>모델</em>입니다 — 누구(소유자/그룹/기타)가 무엇(읽기/쓰기/실행)을 할 수 있는가. <code>ls -l</code>의 맨 앞 10글자가 그 지도입니다.</p>
+<div class="serial-card">
+<span class="sc-label">ls -l 의 권한 비트</span>
+<span class="seg">-</span><span class="seg2">rwx</span><span class="dim">r-x</span>r-- &nbsp; 1 haeun staff &nbsp;...<br>
+│ └user└group└others<br>
+<span class="dim">type</span> &nbsp; <span class="seg2">소유자=읽기·쓰기·실행</span> <span class="dim">그룹=읽기·실행</span> 기타=읽기<br>
+<br>
+<span class="sc-label">숫자(8진수) 표기</span>
+r=4 &nbsp; w=2 &nbsp; x=1 &nbsp;→ &nbsp; rwx=7 &nbsp; r-x=5 &nbsp; rw-=6<br>
+<span class="dim">예:</span> chmod <span class="seg">755</span> = rwxr-xr-x &nbsp;|&nbsp; chmod <span class="seg">644</span> = rw-r--r--
+</div>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>chmod 755 file</code></td><td>권한을 8진수로 설정 (스크립트 실행 권한엔 보통 <code>+x</code>)</td></tr>
+<tr><td><code>chmod +x script.sh</code></td><td>실행 권한 추가 (기호 표기). <code>-x</code> 제거</td></tr>
+<tr><td><code>chown user:group file</code></td><td>소유자·그룹 변경 (보통 <code>sudo</code> 필요)</td></tr>
+<tr><td><code>umask</code></td><td>새로 만드는 파일의 기본 권한 마스크 확인/설정</td></tr>
+<tr><td><code>sudo 명령</code></td><td>관리자 권한으로 실행 — <b>무엇을 왜 올리는지 알고 쓸 것</b></td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실전</span>
+<p>"Permission denied"의 90%는 두 가지입니다 — ① 스크립트에 실행 권한이 없음(<code>chmod +x</code>) ② 남의 소유 파일·시스템 경로를 건드림(<code>sudo</code> 필요하거나, 애초에 건드리면 안 됨). <code>755</code>(실행파일·디렉터리)와 <code>644</code>(일반 파일)만 손에 익혀도 일상은 충분합니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">LX-07</span><h2>프로세스·잡</h2></div>
+<p class="lede">"포트가 이미 쓰이고 있어요", "멈춘 프로세스를 죽여야 해요" — 백엔드 일상의 단골입니다. 프로세스를 보고, 신호를 보내고, 백그라운드로 다루는 법.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>ps aux | grep node</code></td><td>실행 중 프로세스에서 node 찾기 (PID 확인)</td></tr>
+<tr><td><code>top</code> / <code>htop</code></td><td>실시간 자원 모니터 (CPU·메모리). htop이 보기 편함(별도 설치)</td></tr>
+<tr><td><code>kill PID</code></td><td>프로세스에 종료 신호(<code>SIGTERM</code>) — 정상 종료 요청</td></tr>
+<tr><td><code>kill -9 PID</code></td><td><code>SIGKILL</code> — 강제 종료. <b>마지막 수단</b>(정리 못 하고 죽음)</td></tr>
+<tr><td><code>lsof -i :3000</code></td><td><b>3000 포트를 누가 쓰는지</b> 확인 → PID 찾아 kill</td></tr>
+<tr><td><code>명령 &amp;</code></td><td>백그라운드로 실행</td></tr>
+<tr><td><code>jobs</code> / <code>fg</code> / <code>bg</code></td><td>백그라운드 잡 목록 / 앞으로 / 뒤로. <code>Ctrl-Z</code>로 일시정지 후 <code>bg</code></td></tr>
+<tr><td><code>nohup 명령 &amp;</code></td><td>터미널 닫혀도 계속 실행 (장시간 작업)</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">SIGNAL — kill은 "죽이기"가 아니라 "신호 보내기"</span>
+<p><code>kill</code>은 프로세스에 신호를 보내는 명령입니다. 기본 <code>SIGTERM</code>(15)은 "정리하고 끝내라"는 <em>정중한 요청</em>이라 프로세스가 받아 graceful shutdown을 합니다. <code>SIGKILL</code>(9)은 OS가 즉시 죽여 거부할 수 없지만, 열린 파일·연결을 못 정리합니다. <strong>먼저 <code>kill PID</code>, 안 죽으면 <code>kill -9</code></strong> 순서가 맞습니다. <code>Ctrl-C</code>는 포그라운드 프로세스에 <code>SIGINT</code>를 보내는 것입니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">LX-08</span><h2>파이프·텍스트 가공</h2></div>
+<p class="lede">셸의 진짜 힘이 여기 있습니다. 작은 도구를 <code>|</code>로 이어 데이터를 흐르게 하면, 한 줄로 로그 분석·집계가 됩니다. "조립"의 영역입니다.</p>
+<table>
+<tr><th>기호</th><th>의미</th></tr>
+<tr><td><code>cmd1 | cmd2</code></td><td>cmd1의 출력을 cmd2의 입력으로 (파이프)</td></tr>
+<tr><td><code>cmd &gt; file</code></td><td>출력을 파일로 (덮어쓰기). <code>&gt;&gt;</code>는 이어쓰기</td></tr>
+<tr><td><code>cmd 2&gt; err.log</code></td><td>에러(stderr)만 파일로. <code>2&gt;&amp;1</code>은 에러를 출력에 합침</td></tr>
+<tr><td><code>cmd &gt; out 2&gt;&amp;1</code></td><td>출력과 에러를 모두 한 파일로</td></tr>
+</table>
+<table>
+<tr><th>도구</th><th>의미 / 형태</th></tr>
+<tr><td><code>wc -l</code></td><td>줄 수 세기 (<code>-w</code> 단어, <code>-c</code> 바이트)</td></tr>
+<tr><td><code>sort</code> / <code>sort -u</code></td><td>정렬 / 정렬+중복제거. <code>-n</code> 숫자, <code>-r</code> 역순</td></tr>
+<tr><td><code>uniq -c</code></td><td>연속 중복을 세기 (<b>정렬 후</b> 써야 함)</td></tr>
+<tr><td><code>cut -d',' -f1</code></td><td>구분자(<code>-d</code>)로 잘라 N번째 필드(<code>-f</code>). CSV 다루기</td></tr>
+<tr><td><code>tr 'a-z' 'A-Z'</code></td><td>문자 치환·삭제 (대문자화 등)</td></tr>
+<tr><td><code>xargs</code></td><td>앞 출력을 <em>다음 명령의 인자로</em> 변환. <code>fd -e log | xargs rm</code></td></tr>
+<tr><td><code>sed 's/old/new/g'</code></td><td>스트림 치환 (find&amp;replace). 파일 직접 수정은 <code>-i</code></td></tr>
+<tr><td><code>awk '{print $2}'</code></td><td>열 단위 가공 — 공백 구분 2번째 열 출력 등. 가벼운 표 처리</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">WORKED EXAMPLE — 접속로그에서 상위 IP 5개</span>
+cat access.log <span class="dim">|</span> awk <span class="seg2">'{print $1}'</span> <span class="dim">|</span> sort <span class="dim">|</span> uniq -c <span class="dim">|</span> sort -rn <span class="dim">|</span> head -5<br>
+<span class="dim">└ IP 추출 → 정렬 → 개수 세기 → 많은 순 정렬 → 상위 5 — 작은 도구 5개의 조립</span>
+</div>
+<div class="callout warn">
+<span class="co-label">macOS 주의 — sed -i</span>
+<p>macOS(BSD)의 <code>sed -i</code>는 백업 확장자 인자를 <em>요구</em>합니다 — <code>sed -i '' 's/a/b/' file</code>(빈 따옴표 필수). GNU(Linux)는 <code>sed -i 's/a/b/' file</code>. 스크립트 이식할 때 단골 함정이라, 헷갈리면 <code>brew install gnu-sed</code>로 <code>gsed</code>를 쓰는 방법도 있습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">LX-09</span><h2>네트워크·HTTP</h2></div>
+<p class="lede">API를 때려보고, 포트 연결을 확인하고, DNS를 추적하는 일상 도구들. 백엔드라면 <code>curl</code>은 거의 반사신경이 돼야 합니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>curl -i URL</code></td><td>HTTP 요청 — <code>-i</code> 응답 헤더 포함. <code>-X POST -d '{}' -H "Content-Type: application/json"</code></td></tr>
+<tr><td><code>curl -s URL | jq</code></td><td>조용히(<code>-s</code>) 받아 <code>jq</code>로 JSON 예쁘게/추출</td></tr>
+<tr><td><code>curl -O URL</code></td><td>파일 다운로드(원래 이름). <code>wget URL</code>도 같은 용도</td></tr>
+<tr><td><code>dig example.com</code></td><td>DNS 조회 (A 레코드·TTL). <code>+short</code> 간단히</td></tr>
+<tr><td><code>ping host</code></td><td>도달성·왕복시간 확인 (<code>Ctrl-C</code>로 종료)</td></tr>
+<tr><td><code>ss -tlnp</code> / <code>lsof -i</code></td><td>열린 포트·리스닝 소켓. macOS는 <code>lsof -i -P</code>가 흔함</td></tr>
+<tr><td><code>nc -zv host 5432</code></td><td>특정 포트 연결 가능한지 점검 (DB·서비스 도달성)</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">디버깅 순서</span>
+<p>"서비스가 안 붙어요"의 추적 사다리: ① <code>ping</code>으로 호스트 도달 → ② <code>nc -zv host port</code>로 포트 열림 → ③ <code>curl -v URL</code>로 HTTP 응답·TLS 핸드셰이크 → ④ <code>dig</code>로 DNS가 맞는 IP를 주는지. 위에서 아래로 한 칸씩 좁히면 어디서 끊겼는지가 드러납니다(→ 백엔드 핸드북 BE-08).</p>
+</div>
+</section>
+
+<!-- ============ CH 10 ============ -->
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">LX-10</span><h2>디스크·시스템</h2></div>
+<p class="lede">"디스크가 꽉 찼어요", "메모리가 부족해요"의 진단 도구들. 평소엔 안 쓰다가 사고 날 때 찾게 됩니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>df -h</code></td><td>디스크 여유 공간 (사람이 읽는 단위). 파티션별 사용률</td></tr>
+<tr><td><code>du -sh *</code></td><td>현재 위치 항목별 용량 합계 — <b>뭐가 용량을 먹는지</b> 추적</td></tr>
+<tr><td><code>du -sh * | sort -rh | head</code></td><td>큰 것부터 정렬해 상위만 (용량 범인 색출)</td></tr>
+<tr><td><code>free -h</code></td><td>메모리 사용량 (Linux). macOS는 <code>vm_stat</code> / <code>top</code></td></tr>
+<tr><td><code>uname -a</code></td><td>OS·커널 정보</td></tr>
+<tr><td><code>uptime</code></td><td>가동 시간·부하 평균(load average)</td></tr>
+<tr><td><code>date</code></td><td>현재 시각. 로그 타임스탬프·스크립트에서 활용</td></tr>
+</table>
+</section>
+
+<!-- ============ CH 11 ============ -->
+<section id="ch11">
+<div class="ch-head"><span class="ch-code">LX-11</span><h2>압축·아카이브</h2></div>
+<p class="lede"><code>tar</code>의 플래그는 한 번 외우면 평생 씁니다 — <em>"create / extract"</em>의 두 패턴만 손에 넣으세요.</p>
+<table>
+<tr><th>명령</th><th>의미</th></tr>
+<tr><td><code>tar -czf out.tar.gz dir/</code></td><td><b>묶고 압축</b> — <code>c</code>reate <code>z</code>(gzip) <code>f</code>ile</td></tr>
+<tr><td><code>tar -xzf out.tar.gz</code></td><td><b>풀기</b> — e<code>x</code>tract. <code>-C 경로</code>로 풀 위치 지정</td></tr>
+<tr><td><code>tar -tzf out.tar.gz</code></td><td>풀지 않고 내용 목록만 (<code>t</code>)</td></tr>
+<tr><td><code>zip -r out.zip dir/</code></td><td>zip으로 묶기 (재귀). 윈도/공유용</td></tr>
+<tr><td><code>unzip out.zip</code></td><td>zip 풀기. <code>-d 경로</code>로 위치 지정</td></tr>
+<tr><td><code>gzip file</code> / <code>gunzip file.gz</code></td><td>단일 파일 압축/해제 (원본 대체)</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">기억법</span>
+<p><code>tar</code> = <b>T</b>ape <b>AR</b>chive. 외울 조합은 둘뿐 — 만들 땐 <code>czf</code>, 풀 땐 <code>xzf</code>. "<b>c</b>ompress / e<b>x</b>tract, <b>z</b>ip(gzip), <b>f</b>ile". <code>.tar.gz</code>가 가장 흔하고, 더 작게는 <code>-cJf</code>(xz)도 있습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 12 ============ -->
+<section id="ch12">
+<div class="ch-head"><span class="ch-code">LX-12</span><h2>원격·동기화</h2></div>
+<p class="lede">서버에 접속하고, 파일을 옮기고, 디렉터리를 동기화. 배포·운영의 기본 동선입니다.</p>
+<table>
+<tr><th>명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>ssh user@host</code></td><td>원격 셸 접속. <code>-p 포트</code>, <code>-i key.pem</code>(키 지정)</td></tr>
+<tr><td><code>ssh user@host '명령'</code></td><td>접속 없이 원격에서 명령 한 번 실행</td></tr>
+<tr><td><code>scp file user@host:/path</code></td><td>원격으로 파일 복사. <code>-r</code> 디렉터리. 반대 방향도 가능</td></tr>
+<tr><td><code>rsync -avz src/ host:dst/</code></td><td><b>변경분만</b> 동기화 — 빠르고 재개 가능. <code>-a</code> 보존 <code>-v</code> 로그 <code>-z</code> 압축</td></tr>
+<tr><td><code>rsync -avzn ...</code></td><td><code>-n</code>(dry-run) — <b>실제로 옮기기 전 무엇이 바뀔지 미리보기</b></td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">rsync의 끝 슬래시 함정</span>
+<p><code>rsync src/ dst/</code>(끝 <code>/</code>)는 <em>src 안의 내용</em>을 dst로, <code>rsync src dst/</code>(끝 <code>/</code> 없음)는 <em>src 디렉터리째</em> dst 안으로 — 결과가 다릅니다. 큰 동기화는 항상 <code>-n</code>(dry-run)으로 먼저 확인하는 습관이 사고를 막습니다. SSH 키는 <code>~/.ssh/config</code>에 호스트 별칭을 등록해두면 <code>ssh myserver</code>로 짧게 씁니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 13 ============ -->
+<section id="ch13">
+<div class="ch-head"><span class="ch-code">LX-13</span><h2>셸 환경·생산성</h2></div>
+<p class="lede">같은 명령을 매번 길게 치지 마세요. 환경변수·alias·히스토리·키바인딩이 손의 속도를 바꿉니다. 네 도구 체인(zsh·mise·chezmoi) 기준으로.</p>
+<h3><span class="h3-tag">13.1</span>환경·변수·히스토리</h3>
+<table>
+<tr><th>명령</th><th>의미</th></tr>
+<tr><td><code>export VAR=value</code></td><td>환경변수 설정 (자식 프로세스에 전달). <code>echo $VAR</code>로 확인</td></tr>
+<tr><td><code>env</code> / <code>printenv</code></td><td>현재 환경변수 목록</td></tr>
+<tr><td><code>alias gs='git status'</code></td><td>긴 명령에 별칭. <code>~/.zshrc</code>에 넣어 영구화</td></tr>
+<tr><td><code>history</code> / <code>Ctrl-R</code></td><td>이전 명령 / <b>역방향 검색</b>(치다가 Ctrl-R, 같은 거 다시 누르면 이전 매치)</td></tr>
+<tr><td><code>!!</code> / <code>!$</code></td><td>직전 명령 전체 / 직전 명령의 마지막 인자 (<code>sudo !!</code> 단골)</td></tr>
+<tr><td><code>cmd1 &amp;&amp; cmd2</code> / <code>cmd1 || cmd2</code></td><td>앞이 성공하면(&amp;&amp;) / 실패하면(||) 다음 실행</td></tr>
+</table>
+<h3><span class="h3-tag">13.2</span>네 도구 체인</h3>
+<table>
+<tr><th>도구</th><th>역할 / 자주 쓰는 형태</th></tr>
+<tr><td><code>mise</code></td><td>언어 런타임 관리 — <code>mise use node@22</code>(프로젝트별 버전), <code>mise install</code>, <code>mise ls</code>. <code>.mise.toml</code>로 프로젝트 고정</td></tr>
+<tr><td><code>brew</code></td><td>macOS 패키지 — <code>brew install rg fd bat jq</code>, <code>brew update &amp;&amp; brew upgrade</code>, <code>brew list</code></td></tr>
+<tr><td><code>chezmoi</code></td><td>dotfiles 관리 — <code>chezmoi edit ~/.zshrc</code>, <code>chezmoi apply</code>(반영), <code>chezmoi diff</code>(변경 미리보기)</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">.zshrc는 chezmoi로 관리</span>
+<p>alias·환경변수·PATH를 <code>~/.zshrc</code>에 직접 고치면 chezmoi 관리와 어긋날 수 있습니다 — <code>chezmoi edit ~/.zshrc</code>로 고치고 <code>chezmoi apply</code>로 반영하세요. 새 alias를 추가했으면 <code>source ~/.zshrc</code>(또는 새 탭)로 현재 셸에 로드. mise는 <code>.zshrc</code>에 <code>eval "$(mise activate zsh)"</code>가 있어야 자동 전환됩니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 14 ============ -->
+<section id="ch14">
+<div class="ch-head"><span class="ch-code">LX-14</span><h2>치트시트 — 자주 쓰는 한 줄</h2></div>
+<p class="lede">실전에서 반복되는 조합들. 외우기보다 "이런 게 가능하다"를 알아두고 필요할 때 찾으세요.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>포트 점유 죽이기</b><span>kill by port</span></div><div class="g-def"><code>lsof -i :3000</code> 로 PID 확인 → <code>kill -9 &lt;PID&gt;</code>. 또는 한 줄: <code>lsof -ti :3000 | xargs kill -9</code></div></div>
+<div class="g-row"><div class="g-term"><b>로그 실시간 + 필터</b><span>tail + grep</span></div><div class="g-def"><code>tail -f app.log | grep -i error</code> — 새로 찍히는 에러만 실시간으로</div></div>
+<div class="g-row"><div class="g-term"><b>용량 범인 찾기</b><span>biggest dirs</span></div><div class="g-def"><code>du -sh * | sort -rh | head</code> — 현재 위치에서 용량 큰 것 상위</div></div>
+<div class="g-row"><div class="g-term"><b>코드 전체 검색</b><span>ripgrep</span></div><div class="g-def"><code>rg -n "TODO" -t ts</code> — 타입스크립트에서 TODO를 줄번호와 함께</div></div>
+<div class="g-row"><div class="g-term"><b>특정 파일 일괄 삭제</b><span>fd + xargs</span></div><div class="g-def"><code>fd -e tmp | xargs rm</code> — 먼저 <code>fd -e tmp</code>만 쳐서 대상 확인 후</div></div>
+<div class="g-row"><div class="g-term"><b>JSON API 찔러보기</b><span>curl + jq</span></div><div class="g-def"><code>curl -s localhost:8080/api/users | jq '.[].name'</code> — 받아서 이름만 추출</div></div>
+<div class="g-row"><div class="g-term"><b>중복 제거 카운트</b><span>sort | uniq -c</span></div><div class="g-def"><code>... | sort | uniq -c | sort -rn</code> — 빈도 집계의 정석 (반드시 sort 먼저)</div></div>
+<div class="g-row"><div class="g-term"><b>방금 명령 sudo로</b><span>!!</span></div><div class="g-def"><code>sudo !!</code> — "Permission denied" 뜬 직후 가장 빠른 재실행</div></div>
+<div class="g-row"><div class="g-term"><b>동기화 미리보기</b><span>rsync -n</span></div><div class="g-def"><code>rsync -avzn src/ host:dst/</code> — 실제 전송 전 무엇이 바뀔지 dry-run</div></div>
+<div class="g-row"><div class="g-term"><b>출력+에러 한 파일로</b><span>2&gt;&amp;1</span></div><div class="g-def"><code>./build.sh &gt; build.log 2&gt;&amp;1</code> — 정상·에러 모두 로그로</div></div>
+<div class="g-row"><div class="g-term"><b>히스토리 검색</b><span>Ctrl-R</span></div><div class="g-def">치다가 <code>Ctrl-R</code> → 키워드 입력 → 같은 키 반복으로 이전 매치. 긴 명령 재사용의 핵심</div></div>
+<div class="g-row"><div class="g-term"><b>안전한 삭제 습관</b><span>ls before rm</span></div><div class="g-def"><code>rm</code> 전에 같은 인자로 <code>ls</code>를 먼저 — 와일드카드가 무엇을 잡는지 눈으로 확인</div></div>
+</div>
+<div class="callout gm">
+<span class="co-label">학습 순서 제안</span>
+<p>전부 외우려 하지 마세요. 손에 먼저 붙일 것: <code>ls -la</code> · <code>cd -</code> · <code>rg</code> · <code>tail -f</code> · <code>lsof -i :포트</code> · <code>kill</code> · <code>curl | jq</code> · <code>Ctrl-R</code>. 이 여덟 개가 일상의 80%입니다. 파이프(<code>|</code>)와 종료코드(<code>&amp;&amp;</code>/<code>||</code>) 사고만 잡히면 나머지는 필요할 때 이 핸드북에서 찾으면 됩니다(→ 백엔드 핸드북과 함께 보면 BE-08 네트워킹·BE-09 관측가능성의 실습 도구가 됩니다).</p>
+</div>
+</section>
+
+<footer>
+LINUX / SHELL COMMANDS HANDBOOK · V1 · 2026-06<br>
+ENV : macOS(Darwin) · zsh · mise · chezmoi · MODERN CLI(ripgrep·fd·bat·jq)<br>
+NOTE : BSD vs GNU 차이 있는 항목은 본문 표기 · COMPANION : BACKEND ENGINEERING HANDBOOK
+</footer>
+
+</main>
+</div>
+</body>
+</html>

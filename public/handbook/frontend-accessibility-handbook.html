@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>웹접근성 핸드북</title></head>
+<body>
+<div class="shell"><nav aria-label="목차">
+  <div class="nav-brand">WEB ACCESSIBILITY</div>
+  <div class="nav-title">웹접근성 핸드북</div>
+  <a href="#ch1"><span class="code">A11Y-01</span>접근성은 UI의 계약</a>
+  <a href="#ch2"><span class="code">A11Y-02</span>Semantic HTML</a>
+  <a href="#ch3"><span class="code">A11Y-03</span>키보드와 focus</a>
+  <a href="#ch4"><span class="code">A11Y-04</span>ARIA 사용 기준</a>
+  <a href="#ch5"><span class="code">A11Y-05</span>폼·오류·상태 전달</a>
+  <a href="#ch6"><span class="code">A11Y-06</span>검증 루틴</a>
+</nav><main>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : FE-A11Y-V1</span><span>SCOPE : SEMANTIC · KEYBOARD · ARIA · FORMS</span><span>LANG : KO</span></div>
+  <h1>웹접근성<br>핸드북</h1>
+  <p class="hero-sub">접근성은 특정 사용자만을 위한 부가 기능이 아니라 <strong>브라우저와 보조기술이 이해할 수 있는 UI 계약</strong>입니다. 올바른 HTML은 접근성, 테스트 안정성, SEO, 유지보수성을 동시에 개선합니다.</p>
+  <div class="hero-meta">STANDARD : WCAG 사고방식 · 실무 컴포넌트 기준</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">A11Y-01</span><h2>접근성은 UI의 계약</h2></div>
+<p class="lede">화면에 보이는 것과 DOM이 말하는 의미가 다르면 UI는 거짓말을 합니다. 접근성의 출발점은 시각 표현이 아니라 의미 구조입니다.</p>
+<table>
+<tr><th>품질</th><th>나쁜 기준</th><th>좋은 기준</th></tr>
+<tr><td>탐색</td><td>마우스로만 가능</td><td>키보드만으로 모든 기능 접근</td></tr>
+<tr><td>의미</td><td>div와 span으로 전부 구현</td><td>button, a, nav, main, form 등 의미 요소 사용</td></tr>
+<tr><td>상태</td><td>색으로만 알림</td><td>텍스트, aria, focus, live region으로 전달</td></tr>
+<tr><td>오류</td><td>빨간 테두리만 표시</td><td>오류 문구와 필드를 연결하고 수정 방법 제공</td></tr>
+</table>
+<div class="callout"><span class="co-label">PRODUCT QUALITY</span><p>접근성은 법적 요구이기 전에 제품 품질입니다. 키보드 탐색, 명확한 label, 충분한 contrast는 장애 사용자뿐 아니라 빠른 작업자, 모바일 사용자, 임시 장애 상황의 사용자에게도 직접적인 개선입니다.</p></div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">A11Y-02</span><h2>Semantic HTML</h2></div>
+<p class="lede">가장 좋은 ARIA는 필요 없는 ARIA입니다. 먼저 올바른 HTML 요소를 선택합니다.</p>
+<table>
+<tr><th>상황</th><th>사용</th><th>피함</th></tr>
+<tr><td>액션 실행</td><td><code>&lt;button type="button"&gt;</code></td><td><code>&lt;div onClick&gt;</code></td></tr>
+<tr><td>페이지 이동</td><td><code>&lt;a href&gt;</code></td><td>button으로 route 이동</td></tr>
+<tr><td>주요 영역</td><td><code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code></td><td>의미 없는 wrapper 중첩</td></tr>
+<tr><td>제목 구조</td><td>순서 있는 <code>h1</code>~<code>h6</code></td><td>크기 때문에 heading 건너뛰기</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">A11Y-03</span><h2>키보드와 focus</h2></div>
+<p class="lede">키보드 사용자는 focus를 통해 UI의 현재 위치를 파악합니다. focus가 사라지거나 예측 불가능하게 이동하면 UI 맥락이 끊깁니다.</p>
+<table>
+<tr><th>컴포넌트</th><th>키보드 기준</th><th>focus 기준</th></tr>
+<tr><td>Modal</td><td>Esc 닫기, Tab trap</td><td>열릴 때 첫 actionable 또는 제목으로 이동, 닫히면 트리거로 복귀</td></tr>
+<tr><td>Menu</td><td>Arrow navigation, Enter/Space 선택</td><td>열린 메뉴 안에서 현재 항목 표시</td></tr>
+<tr><td>Tabs</td><td>Arrow로 tab 이동</td><td>선택된 tab과 panel 연결</td></tr>
+<tr><td>Toast</td><td>키보드 작업 방해 금지</td><td>중요 상태는 live region 고려</td></tr>
+</table>
+<table>
+<tr><th>패턴</th><th>구현 기준</th><th>주의</th></tr>
+<tr><td>Dialog</td><td><code>role="dialog"</code> 또는 native <code>&lt;dialog&gt;</code>, <code>aria-modal</code>, <code>aria-labelledby</code>, 배경 inert, focus trap/restore</td><td>닫힌 뒤 focus를 원래 트리거로 돌려보내야 함</td></tr>
+<tr><td>Menu button</td><td><code>aria-haspopup</code>, <code>aria-expanded</code>, roving tabindex 또는 active descendant</td><td>단순 사이트 내비게이션에 menu role을 남용하지 않음</td></tr>
+<tr><td>Tabs</td><td><code>role="tablist/tab/tabpanel"</code>, <code>aria-selected</code>, <code>aria-controls</code>, keyboard arrow 처리</td><td>일반 링크 목록을 tabs로 꾸미지 않음</td></tr>
+<tr><td>Disclosure</td><td>button + <code>aria-expanded</code> + 연결된 panel</td><td>상태가 시각적으로만 드러나지 않게 함</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">FOCUS RING</span><p>outline을 지우는 것은 접근성 회귀입니다. 디자인에 맞춰 focus style을 새로 정의할 수는 있지만, 키보드 사용자가 현재 위치를 알 수 있어야 합니다.</p></div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">A11Y-04</span><h2>ARIA 사용 기준</h2></div>
+<p class="lede">ARIA는 의미를 보강하는 도구이지 잘못된 HTML을 고치는 만능 패치가 아닙니다.</p>
+<table>
+<tr><th>원칙</th><th>설명</th></tr>
+<tr><td>가능하면 native 사용</td><td>button을 만들 수 있으면 role="button"을 만들지 않음</td></tr>
+<tr><td>role은 행동까지 책임</td><td>role만 붙이면 키보드 동작은 자동으로 생기지 않음</td></tr>
+<tr><td>이름을 제공</td><td>아이콘 버튼에는 <code>aria-label</code> 필요</td></tr>
+<tr><td>관계를 연결</td><td><code>aria-controls</code>, <code>aria-describedby</code>로 상태/오류 연결</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">A11Y-05</span><h2>폼·오류·상태 전달</h2></div>
+<p class="lede">폼 접근성은 label, 설명, 오류, 필수 여부, 제출 상태를 사용자가 이해할 수 있게 연결하는 일입니다.</p>
+<div class="serial-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span>label과 input은 htmlFor/id로 연결<br>오류 문구는 aria-describedby로 연결<br>오류 상태는 aria-invalid로 표시<br>제출 실패 후 첫 오류 필드로 focus 이동<br>필수값은 시각 표시와 텍스트 설명을 함께 제공</div>
+<div class="callout"><span class="co-label">ERROR UX</span><p>오류는 "틀렸습니다"가 아니라 "무엇을 어떻게 고쳐야 하는지"를 알려야 합니다. 서버 오류와 클라이언트 검증 오류도 구분합니다.</p></div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">A11Y-06</span><h2>검증 루틴</h2></div>
+<p class="lede">접근성은 자동 검사만으로 충분하지 않습니다. 자동화와 수동 키보드 검사를 함께 둡니다.</p>
+<table>
+<tr><th>도구</th><th>잡는 것</th><th>못 잡는 것</th></tr>
+<tr><td>Lighthouse</td><td>기본 label, contrast, landmark 일부</td><td>실제 키보드 흐름의 자연스러움</td></tr>
+<tr><td>axe</td><td>규칙 기반 접근성 위반</td><td>제품 맥락의 설명 품질</td></tr>
+<tr><td>키보드 테스트</td><td>Tab 순서, focus trap, hidden focus</td><td>스크린 리더 발화 품질 일부</td></tr>
+<tr><td>스크린 리더</td><td>실제 보조기술 경험</td><td>모든 브라우저 조합 자동 커버</td></tr>
+</table>
+<table>
+<tr><th>수동 검증</th><th>기준</th></tr>
+<tr><td>Keyboard only</td><td>핵심 플로우를 Tab/Shift+Tab/Enter/Space/Esc/Arrow로 완료</td></tr>
+<tr><td>Screen reader</td><td>Safari + VoiceOver, Chrome/Firefox + NVDA 조합 중 최소 주요 플로우 확인</td></tr>
+<tr><td>Mobile assistive tech</td><td>iOS VoiceOver 또는 Android TalkBack으로 주요 화면 탐색</td></tr>
+<tr><td>Display settings</td><td>zoom 200%, reduced motion, 고대비 모드, text spacing에서 레이아웃 유지</td></tr>
+<tr><td>Touch target</td><td>작은 화면에서 주요 터치 대상 크기와 간격 확인</td></tr>
+</table>
+<div class="callout gm"><span class="co-label">PR CHECK</span><p>새 상호작용 컴포넌트는 keyboard-only 플로우, focus visible, label/name, 오류 메시지 연결, 모바일 화면 겹침 여부를 PR 체크리스트에 포함합니다. 자동 axe/Lighthouse 통과만으로 완료 처리하지 않습니다.</p></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Accessible Name</b><span>이름</span></div><div class="g-def">보조기술이 요소를 부를 때 사용하는 이름입니다. 버튼 텍스트나 aria-label에서 옵니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Live Region</b><span>상태 알림</span></div><div class="g-def">동적으로 바뀐 메시지를 스크린 리더에게 알리는 영역입니다.</div></div>
+</div>
+</section>
+<footer>WEB ACCESSIBILITY HANDBOOK · V1 · 2026-06</footer>
+</main></div></body></html>

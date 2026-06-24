@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Infrastructure Handbook — 네트워크 인프라 개요</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">네트워크 인프라 개요</div>
+  <a href="#ch1"><span class="code">NET-01</span>전체 지도</a>
+  <a href="#ch2"><span class="code">NET-02</span>Docker 경험과 VPC</a>
+  <a href="#ch3"><span class="code">NET-03</span>VPN 구축 흐름</a>
+  <a href="#ch4"><span class="code">NET-04</span>실무 책임 범위</a>
+  <a href="#ch5"><span class="code">NET-05</span>학습 순서</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : NETWORK-INFRA-V1</span>
+    <span>SCOPE : VPC · SUBNET · ROUTING · IPSEC VPN</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>네트워크 인프라<br>개요</h1>
+  <p class="hero-sub">프론트엔드와 Docker 경험을 가진 개발자가 VPC, 서브넷, 라우팅, 방화벽, IPsec VPN을 실무에서 다룰 수 있도록 연결하는 입문서입니다. 목표는 네트워크 이론 암기가 아니라 <strong>VPN 인프라 세팅과 장애 대응에 필요한 판단력</strong>을 만드는 것입니다.</p>
+  <div class="hero-meta">TARGET : Cloud VPN · NCP · KT Cloud · Private Network<br>STYLE : 쉬운 비유 → 실무 설정 → 고급 장애 포인트</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">NET-01</span><h2>전체 지도</h2></div>
+<p class="lede">클라우드 VPN 구축은 여러 메뉴를 누르는 작업처럼 보이지만, 실제로는 다섯 가지 개념을 올바른 순서로 연결하는 일입니다.</p>
+<div class="flow">
+  <span class="step hl">IP 대역</span><span class="arr">→</span>
+  <span class="step">서브넷</span><span class="arr">→</span>
+  <span class="step">라우팅</span><span class="arr">→</span>
+  <span class="step">방화벽</span><span class="arr">→</span>
+  <span class="step hl">VPN 터널</span>
+</div>
+<table>
+<tr><th>구성요소</th><th>역할</th><th>실무 질문</th></tr>
+<tr><td>VPC</td><td>클라우드 안의 격리된 사설 네트워크</td><td>우리 서비스가 쓸 전체 IP 대역은 무엇인가</td></tr>
+<tr><td>Subnet</td><td>역할별로 나눈 IP 구간</td><td>외부 공개 영역과 내부 서버 영역을 어떻게 나눌 것인가</td></tr>
+<tr><td>Route Table</td><td>목적지별 다음 경로</td><td>고객사 대역으로 가는 패킷을 VPN Gateway로 보낼 것인가</td></tr>
+<tr><td>ACG/NACL</td><td>트래픽 허용 규칙</td><td>어느 대역에서 어느 포트까지 허용할 것인가</td></tr>
+<tr><td>IPsec VPN</td><td>인터넷 위 암호화 터널</td><td>양쪽 장비가 같은 암호화 파라미터로 합의했는가</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">NET-02</span><h2>Docker 경험과 VPC</h2></div>
+<p class="lede">Docker Compose의 network를 이해하고 있다면 VPC의 절반은 이미 알고 있는 셈입니다. 차이는 범위와 운영 책임입니다.</p>
+<div class="serial-card">
+<span class="sc-label">DOCKER COMPOSE NETWORK</span>
+networks:<br>
+&nbsp;&nbsp;frontend:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;subnet: <span class="seg">172.20.1.0/24</span><br>
+&nbsp;&nbsp;backend:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;subnet: <span class="seg">172.20.2.0/24</span><br>
+&nbsp;&nbsp;db:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;subnet: <span class="seg">172.20.3.0/24</span>
+</div>
+<p>VPC는 위 `networks` 블록 전체에 가깝고, 각 subnet이 public/private/db 서브넷에 해당합니다. Docker는 한 서버 안의 가상 네트워크이고, VPC는 클라우드 전체를 아우르는 가상 네트워크입니다.</p>
+<div class="callout">
+<span class="co-label">실무 감각</span>
+<p>VPC 설계에서 가장 먼저 할 일은 멋진 구조를 그리는 것이 아니라 <strong>고객사와 IP 대역이 겹치지 않는지 확인</strong>하는 것입니다. VPN은 서로 다른 사설망을 라우팅으로 이어 붙이는 구조라서, 양쪽이 모두 <code>10.0.0.0/16</code>을 쓰면 목적지를 구분할 수 없습니다.</p>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">NET-03</span><h2>VPN 구축 흐름</h2></div>
+<p class="lede">VPN 구축은 “터널 생성” 하나가 아니라 네트워크 설계, 양쪽 협의, 라우팅, 방화벽, 검증이 묶인 작업입니다.</p>
+<div class="flow">
+  <span class="step">VPC 설계</span><span class="arr">→</span>
+  <span class="step">VPN Gateway</span><span class="arr">→</span>
+  <span class="step">IKE 합의</span><span class="arr">→</span>
+  <span class="step">Route 추가</span><span class="arr">→</span>
+  <span class="step hl">검증</span>
+</div>
+<table>
+<tr><th>단계</th><th>해야 할 일</th><th>실패 시 흔한 원인</th></tr>
+<tr><td>1</td><td>VPC·서브넷 CIDR 결정</td><td>고객사 대역과 충돌</td></tr>
+<tr><td>2</td><td>VPN Gateway와 Customer Gateway 정보 교환</td><td>Peer IP 오기입</td></tr>
+<tr><td>3</td><td>Phase 1/2 파라미터 합의</td><td>암호화, DH group, lifetime 불일치</td></tr>
+<tr><td>4</td><td>Route Table과 ACG 설정</td><td>터널은 UP인데 패킷이 VPN으로 가지 않음</td></tr>
+<tr><td>5</td><td>ping, nc, curl, tcpdump로 검증</td><td>ICMP 차단을 네트워크 장애로 오판</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">NET-04</span><h2>실무 책임 범위</h2></div>
+<p class="lede">VPN 프로젝트는 클라우드 담당자 혼자 끝낼 수 없습니다. 우리 쪽, 고객사 쪽, 애플리케이션 팀의 책임이 분리됩니다.</p>
+<table>
+<tr><th>역할</th><th>책임</th><th>확인해야 할 산출물</th></tr>
+<tr><td>우리 클라우드</td><td>VPC, 서브넷, VPN Gateway, route, ACG</td><td>터널 상태, 라우팅 테이블, 방화벽 규칙</td></tr>
+<tr><td>고객사 네트워크</td><td>Peer VPN 장비, 고객사 방화벽, 내부 라우팅</td><td>Peer IP, 내부 대역, 허용 포트, return route</td></tr>
+<tr><td>애플리케이션 팀</td><td>서비스 포트, health endpoint, DNS, TLS</td><td>접속 URL, 포트, 인증 방식, timeout 정책</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">고급 포인트</span>
+<p>VPN 장애는 “우리 쪽은 정상”과 “상대 쪽은 정상”이 동시에 참일 수 있습니다. 예를 들어 요청 패킷은 고객사에 도달하지만 응답 패킷의 return route가 없으면 애플리케이션에서는 timeout으로 보입니다. 그래서 장애 대응은 항상 <strong>양방향 패킷 흐름</strong>으로 판단해야 합니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">NET-05</span><h2>학습 순서</h2></div>
+<p class="lede">이 메뉴는 아래 순서로 읽으면 가장 자연스럽습니다. 각 문서는 기본 설명 뒤에 실무 감각과 고급 포인트를 붙입니다.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1. VPC·서브넷·CIDR</b><span>addressing</span></div><div class="g-def">IP 대역을 어떻게 잡고 나누는지 이해합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>2. Public·Private·라우팅</b><span>path</span></div><div class="g-def">패킷이 어느 게이트웨이로 가는지 결정하는 방식을 익힙니다.</div></div>
+<div class="g-row"><div class="g-term"><b>3. IPsec VPN 원리</b><span>tunnel</span></div><div class="g-def">IKE Phase 1/2, PSK, PFS, SA lifetime을 이해합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>4. Cloud VPN Gateway</b><span>console</span></div><div class="g-def">NCP와 KT Cloud에서 실제로 어떤 순서로 세팅하는지 봅니다.</div></div>
+<div class="g-row"><div class="g-term"><b>5. 방화벽·디버깅·트러블슈팅</b><span>operation</span></div><div class="g-def">터널이 열려도 통신이 안 되는 상황을 판독합니다.</div></div>
+</div>
+</section>
+
+<footer>
+NETWORK INFRASTRUCTURE HANDBOOK · V1 · 2026-06<br>
+TARGET : FRONTEND / DOCKER EXPERIENCED DEVELOPERS · CLOUD VPN BEGINNER TO PRACTICAL OPERATOR<br>
+NOTE : 개인명 없이 중립적 실무 표현 사용
+</footer>
+</main>
+</div>
+</body>
+</html>

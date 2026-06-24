@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Handbook — IPsec VPN 원리</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">IPsec VPN 원리</div>
+  <a href="#ch1"><span class="code">VPN-01</span>왜 VPN이 필요한가</a>
+  <a href="#ch2"><span class="code">VPN-02</span>HTTPS와 차이</a>
+  <a href="#ch3"><span class="code">VPN-03</span>IKE Phase 1</a>
+  <a href="#ch4"><span class="code">VPN-04</span>IKE Phase 2</a>
+  <a href="#ch5"><span class="code">VPN-05</span>고급 포인트</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : NETWORK-IPSEC-V1</span>
+    <span>SCOPE : IPSEC · IKE · SA · PSK · PFS</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>IPsec VPN 원리</h1>
+  <p class="hero-sub">IPsec VPN은 인터넷 위에 암호화된 네트워크 터널을 만드는 기술입니다. HTTPS가 애플리케이션 연결을 보호한다면, IPsec은 IP 패킷 수준에서 네트워크 대역 간 통신을 보호합니다.</p>
+  <div class="hero-meta">GOAL : Phase 1/2 파라미터를 보고 장애 원인을 추정할 수 있기</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">VPN-01</span><h2>왜 VPN이 필요한가</h2></div>
+<p class="lede">클라우드 사설망과 고객사 사설망은 기본적으로 인터넷으로 분리되어 있습니다. VPN은 이 사이에 암호화된 터널을 만듭니다.</p>
+<div class="serial-card">
+<span class="sc-label">SITE TO SITE VPN</span>
+우리 클라우드 <span class="seg">10.0.0.0/16</span><br>
+&nbsp;&nbsp;╚══ IPsec 터널: 암호화 · 무결성 · 상호 인증 ══╗<br>
+고객사 네트워크 <span class="seg2">172.16.0.0/16</span>
+</div>
+<p>터널이 수립되면 <code>10.0.2.5</code>의 API 서버가 <code>172.16.1.10</code>의 고객사 DB나 API에 접근할 때 패킷이 자동으로 암호화되어 VPN Gateway를 통과합니다.</p>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">VPN-02</span><h2>HTTPS와 차이</h2></div>
+<table>
+<tr><th>구분</th><th>HTTPS/TLS</th><th>IPsec VPN</th></tr>
+<tr><td>보호 단위</td><td>HTTP 연결 하나</td><td>네트워크 대역 간 IP 패킷</td></tr>
+<tr><td>계층</td><td>애플리케이션에 가까움</td><td>네트워크 계층</td></tr>
+<tr><td>설정 주체</td><td>개발자, 플랫폼 팀</td><td>인프라, 네트워크 팀</td></tr>
+<tr><td>적용 범위</td><td>브라우저 ↔ 서버</td><td>VPC ↔ 고객사 사설망</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">핵심 차이</span>
+<p>HTTPS는 서비스마다 설정하지만, VPN은 네트워크 경로에 설정합니다. 그래서 VPN 위에서 HTTP, DB, Redis, 파일 전송 같은 여러 프로토콜이 함께 지나갈 수 있습니다. 단, VPN이 있다고 애플리케이션 인증과 TLS가 불필요해지는 것은 아닙니다.</p>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">VPN-03</span><h2>IKE Phase 1</h2></div>
+<p class="lede">Phase 1은 서로를 인증하고, 이후 협상을 보호할 관리 채널인 IKE SA를 만드는 단계입니다.</p>
+<div class="serial-card">
+<span class="sc-label">PHASE 1</span>
+1. 양쪽 VPN 장비가 지원 암호화 방식을 제안<br>
+2. PSK 또는 인증서로 상대를 인증<br>
+3. Diffie-Hellman 키 교환으로 공유 비밀 생성<br>
+4. <span class="seg">IKE SA</span> 수립
+</div>
+<table>
+<tr><th>파라미터</th><th>의미</th><th>일반 값</th></tr>
+<tr><td>Encryption</td><td>관리 채널 암호화</td><td>AES-256</td></tr>
+<tr><td>Hash/Integrity</td><td>무결성 검증</td><td>SHA-256</td></tr>
+<tr><td>DH Group</td><td>키 교환 강도</td><td>Group 14 이상</td></tr>
+<tr><td>Authentication</td><td>상대방 검증</td><td>PSK</td></tr>
+<tr><td>Lifetime</td><td>IKE SA 유효 시간</td><td>28800초</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">VPN-04</span><h2>IKE Phase 2</h2></div>
+<p class="lede">Phase 2는 실제 데이터 패킷이 지나갈 IPsec SA를 만드는 단계입니다. 어떤 대역 사이의 트래픽을 보호할지도 여기서 결정됩니다.</p>
+<div class="serial-card">
+<span class="sc-label">PHASE 2 SELECTOR</span>
+Local Network: <span class="seg">10.0.0.0/16</span><br>
+Peer Network: &nbsp;<span class="seg2">172.16.0.0/16</span><br>
+Encryption: AES-256 / Integrity: SHA-256 / PFS: Group 14
+</div>
+<table>
+<tr><th>파라미터</th><th>의미</th><th>장애 시 증상</th></tr>
+<tr><td>Local/Remote subnet</td><td>보호 대상 대역</td><td>특정 서브넷만 통신 실패</td></tr>
+<tr><td>PFS</td><td>Phase 2마다 추가 키 교환</td><td>한쪽만 켜면 협상 실패</td></tr>
+<tr><td>Lifetime</td><td>터널 갱신 주기</td><td>주기적으로 끊김</td></tr>
+<tr><td>ESP proposal</td><td>데이터 암호화·무결성 조합</td><td>Phase 2 DOWN</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">VPN-05</span><h2>고급 포인트</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>NAT-T</b><span>UDP 4500</span></div><div class="g-def">VPN 장비 앞에 NAT가 있으면 ESP를 UDP 4500으로 감싸 통과시킵니다. 방화벽에서 UDP 500/4500 허용이 필요합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>DPD</b><span>Dead Peer Detection</span></div><div class="g-def">상대 VPN 장비가 살아 있는지 감지합니다. 설정이 맞지 않으면 죽은 터널을 오래 붙잡을 수 있습니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Rekey</b><span>재협상</span></div><div class="g-def">SA lifetime 만료 전에 새 키로 갈아탑니다. rekey 타이밍 불일치는 주기적 끊김으로 보입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>MTU/MSS</b><span>패킷 크기</span></div><div class="g-def">IPsec 캡슐화는 헤더를 추가합니다. 큰 패킷이 중간에서 조각나거나 드롭되면 작은 요청은 되고 큰 응답만 실패합니다.</div></div>
+</div>
+</section>
+
+<footer>
+NETWORK IPSEC VPN · V1 · 2026-06<br>
+PRINCIPLE : Phase 1은 관리 채널, Phase 2는 실제 데이터 터널
+</footer>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Handbook — 컨테이너와 런타임</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">컨테이너와 런타임</div>
+  <a href="#ch1"><span class="code">CTR-01</span>이미지와 레이어</a>
+  <a href="#ch2"><span class="code">CTR-02</span>격리의 의미</a>
+  <a href="#ch3"><span class="code">CTR-03</span>네트워크와 스토리지</a>
+  <a href="#ch4"><span class="code">CTR-04</span>리소스와 Health</a>
+  <a href="#ch5"><span class="code">CTR-05</span>런타임 보안</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DEVOPS-CONTAINERS-V1</span>
+    <span>SCOPE : IMAGE · RUNTIME · NETWORK · SECURITY</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>컨테이너와 런타임</h1>
+  <p class="hero-sub">컨테이너는 애플리케이션과 실행 환경을 이미지로 묶어 배포하는 방식입니다. DevOps 관점에서는 이미지 재현성, 리소스 제한, 보안 경계, 운영 관측성이 핵심입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">CTR-01</span><h2>이미지와 레이어</h2></div>
+<p class="lede">컨테이너 이미지는 여러 레이어로 구성된 불변 아티팩트입니다.</p>
+<table>
+<tr><th>구성</th><th>의미</th><th>실무 포인트</th></tr>
+<tr><td>Base image</td><td>OS/runtime 기반</td><td>태그보다 digest 고정 검토</td></tr>
+<tr><td>Dependency layer</td><td>패키지 설치 결과</td><td>lockfile 기반 설치</td></tr>
+<tr><td>Application layer</td><td>빌드 산출물</td><td>불필요 파일 제외</td></tr>
+<tr><td>Metadata</td><td>entrypoint, env, labels</td><td>commit SHA, source repo 기록</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실무 감각</span>
+<p>이미지는 “서버에 배포할 파일 묶음”이 아니라 registry에 저장되는 배포 아티팩트입니다. 태그는 움직일 수 있으므로 운영 추적에는 image digest가 더 강합니다.</p>
+</div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">CTR-02</span><h2>격리의 의미</h2></div>
+<table>
+<tr><th>격리</th><th>역할</th><th>주의</th></tr>
+<tr><td>Process namespace</td><td>프로세스 시야 분리</td><td>VM 수준 격리는 아님</td></tr>
+<tr><td>Network namespace</td><td>컨테이너별 네트워크 스택</td><td>port mapping과 service discovery 필요</td></tr>
+<tr><td>Filesystem</td><td>이미지 레이어와 writable layer</td><td>컨테이너 삭제 시 로컬 변경 손실</td></tr>
+<tr><td>cgroups</td><td>CPU/memory 제한</td><td>제한 없으면 node 전체 영향</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">PID 1과 종료 처리</span>
+<p>컨테이너 안의 메인 프로세스는 PID 1로 동작하며 신호 처리와 zombie process 회수 책임을 가집니다. 앱이 SIGTERM을 받고 요청을 마무리하도록 구현하고, orchestrator의 termination grace period 안에 정상 종료되도록 shutdown hook과 readiness 전환을 맞춥니다.</p>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">CTR-03</span><h2>네트워크와 스토리지</h2></div>
+<table>
+<tr><th>영역</th><th>핵심</th><th>운영 질문</th></tr>
+<tr><td>Network</td><td>컨테이너 IP, port, service name</td><td>누가 어떤 이름과 포트로 접근하는가</td></tr>
+<tr><td>Volume</td><td>컨테이너 밖 지속 저장소</td><td>삭제와 재시작 후 데이터가 보존되는가</td></tr>
+<tr><td>Registry</td><td>이미지 저장소</td><td>권한, 취약점 scan, retention 정책은 있는가</td></tr>
+<tr><td>Log</td><td>stdout/stderr 수집</td><td>로그가 중앙 수집 시스템으로 가는가</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">CTR-04</span><h2>리소스와 Health</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>CPU limit</b><span>throttle</span></div><div class="g-def">CPU 제한은 성능 저하로 나타날 수 있습니다. latency 지표와 함께 봅니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Memory limit</b><span>OOM</span></div><div class="g-def">메모리 초과는 OOM kill로 이어집니다. JVM/Node heap 설정과 함께 조정합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Readiness</b><span>traffic ready</span></div><div class="g-def">트래픽을 받을 준비가 되었는지 판단합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Liveness</b><span>restart</span></div><div class="g-def">프로세스를 재시작해야 하는 죽은 상태인지 판단합니다.</div></div>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">CTR-05</span><h2>런타임 보안</h2></div>
+<table>
+<tr><th>원칙</th><th>설명</th></tr>
+<tr><td>Non-root user</td><td>컨테이너 안 프로세스를 root로 실행하지 않음</td></tr>
+<tr><td>Minimal image</td><td>불필요한 패키지와 shell을 줄임</td></tr>
+<tr><td>Read-only filesystem</td><td>쓰기 위치를 명시하고 나머지는 읽기 전용 검토</td></tr>
+<tr><td>Image scan</td><td>base image와 dependency 취약점 탐지</td></tr>
+<tr><td>Secret mount</td><td>이미지에 secret을 bake하지 않음</td></tr>
+</table>
+</section>
+
+<footer>
+DEVOPS CONTAINERS AND RUNTIME · V1 · 2026-06<br>
+PRINCIPLE : 이미지는 불변, 설정은 외부화, 런타임은 제한과 관측을 가진다
+</footer>
+</main>
+</div>
+</body>
+</html>

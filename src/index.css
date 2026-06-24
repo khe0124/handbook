@@ -1,0 +1,57 @@
+:root {
+  --paper: #f6f7fa;
+  --panel: #ffffff;
+  --ink: #161d2b;
+  --ink-soft: #465063;
+  --line: #d8dce6;
+  --green: #22418a;
+  --green-deep: #15294f;
+  --green-tint: #e8edf7;
+  --amber: #a8650d;
+  --amber-tint: #fbf2e3;
+  --red: #9a3324;
+  --red-tint: #f9ece9;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}

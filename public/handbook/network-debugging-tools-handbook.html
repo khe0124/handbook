@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Handbook — 네트워크 디버깅 도구</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">네트워크 디버깅 도구</div>
+  <a href="#ch1"><span class="code">DBG-01</span>진단 순서</a>
+  <a href="#ch2"><span class="code">DBG-02</span>ping·traceroute</a>
+  <a href="#ch3"><span class="code">DBG-03</span>nc·curl·dig</a>
+  <a href="#ch4"><span class="code">DBG-04</span>tcpdump</a>
+  <a href="#ch5"><span class="code">DBG-05</span>판독 패턴</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : NETWORK-DEBUGGING-V1</span>
+    <span>SCOPE : PING · TRACEROUTE · NC · CURL · DIG · TCPDUMP</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>네트워크<br>디버깅 도구</h1>
+  <p class="hero-sub">VPN 연결 후 “안 되는데요”가 나오면 L3부터 L7까지 순서대로 확인합니다. 감으로 설정을 바꾸지 않고, 어느 계층에서 막히는지 좁혀야 합니다.</p>
+  <div class="hero-meta">GOAL : 증상에 맞는 명령어를 고르고 출력에서 다음 확인 지점을 찾기</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">DBG-01</span><h2>진단 순서</h2></div>
+<div class="flow">
+  <span class="step">L3 IP</span><span class="arr">→</span>
+  <span class="step">L4 Port</span><span class="arr">→</span>
+  <span class="step">L7 HTTP</span><span class="arr">→</span>
+  <span class="step hl">Packet Capture</span>
+</div>
+<table>
+<tr><th>계층</th><th>도구</th><th>확인 내용</th></tr>
+<tr><td>L3</td><td><code>ping</code>, <code>traceroute</code></td><td>IP 도달성과 경로</td></tr>
+<tr><td>L4</td><td><code>nc</code>, <code>telnet</code></td><td>TCP 포트 연결 가능 여부</td></tr>
+<tr><td>L7</td><td><code>curl</code></td><td>HTTP 상태, TLS, 헤더, 응답</td></tr>
+<tr><td>DNS</td><td><code>dig</code>, <code>nslookup</code></td><td>도메인 해석</td></tr>
+<tr><td>Packet</td><td><code>tcpdump</code></td><td>패킷 송수신 실제 여부</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">DBG-02</span><h2>ping·traceroute</h2></div>
+<div class="serial-card">
+<span class="sc-label">IP REACHABILITY</span>
+ping 172.16.1.10<br>
+traceroute 172.16.1.10
+</div>
+<p><code>ping</code>은 대상이 살아 있는지 보는 가장 단순한 도구지만, ICMP가 차단된 환경에서는 실패해도 서비스 통신은 정상일 수 있습니다. <code>traceroute</code>는 어느 홉에서 응답이 끊기는지 보는 데 유용하지만, VPN과 방화벽 환경에서는 중간 홉이 숨겨질 수 있습니다.</p>
+<div class="callout warn">
+<span class="co-label">오판 방지</span>
+<p>ping 실패만으로 VPN 장애라고 결론 내리지 않습니다. ICMP 차단 가능성을 고려해 <code>nc -zv 대상IP 포트</code>로 실제 서비스 포트를 확인합니다.</p>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">DBG-03</span><h2>nc·curl·dig</h2></div>
+<div class="serial-card">
+<span class="sc-label">PORT / HTTP / DNS</span>
+nc -zv 172.16.1.10 5432<br>
+curl -v --connect-timeout 10 --max-time 30 http://172.16.1.10:8080/api/health<br>
+dig @172.16.0.2 customer-db.internal.example.com
+</div>
+<table>
+<tr><th>도구</th><th>성공 의미</th><th>실패 의미</th></tr>
+<tr><td><code>nc</code></td><td>TCP handshake 가능</td><td>포트 차단, 서비스 미기동, route 문제</td></tr>
+<tr><td><code>curl</code></td><td>HTTP/TLS 레벨 응답 확인</td><td>앱 오류와 네트워크 오류 분리</td></tr>
+<tr><td><code>dig</code></td><td>DNS 서버와 레코드 확인</td><td>내부 DNS route 또는 resolver 문제</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">DBG-04</span><h2>tcpdump</h2></div>
+<p class="lede">tcpdump는 네트워크 인터페이스를 지나는 패킷을 직접 봅니다. 장애의 책임 지점을 좁히는 가장 강력한 도구입니다.</p>
+<div class="serial-card">
+<span class="sc-label">TCPDUMP RECIPES</span>
+sudo tcpdump -i eth0 src net 172.16.0.0/16 -n<br>
+sudo tcpdump -i eth0 host 172.16.1.10 -n<br>
+sudo tcpdump -i eth0 port 5432 -n<br>
+sudo tcpdump -i eth0 -w capture.pcap
+</div>
+<table>
+<tr><th>옵션</th><th>의미</th></tr>
+<tr><td><code>-i eth0</code></td><td>볼 네트워크 인터페이스</td></tr>
+<tr><td><code>-n</code></td><td>DNS 역조회 생략</td></tr>
+<tr><td><code>-c 100</code></td><td>100개 패킷 캡처 후 종료</td></tr>
+<tr><td><code>-w file</code></td><td>pcap 파일로 저장</td></tr>
+<tr><td><code>src/dst/host/port</code></td><td>필터 조건</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">DBG-05</span><h2>판독 패턴</h2></div>
+<div class="serial-card">
+<span class="sc-label">TCP FLAGS</span>
+[S] &nbsp;&nbsp;= SYN, 연결 시작 요청<br>
+[S.] &nbsp;= SYN-ACK, 연결 수락<br>
+[.] &nbsp;&nbsp;= ACK, 확인<br>
+[P.] &nbsp;= PSH-ACK, 데이터 전송<br>
+[F.] &nbsp;= FIN-ACK, 정상 종료<br>
+[R.] &nbsp;= RST-ACK, 연결 거부 또는 리셋
+</div>
+<table>
+<tr><th>관찰</th><th>해석</th><th>다음 확인</th></tr>
+<tr><td>SYN만 나가고 응답 없음</td><td>route, 방화벽, 상대 서버 미응답</td><td>상대 tcpdump, 고객사 inbound/return route</td></tr>
+<tr><td>SYN-ACK가 오는데 연결 실패</td><td>클라이언트 응답 또는 로컬 방화벽 문제</td><td>로컬 outbound, NACL ephemeral port</td></tr>
+<tr><td>RST가 즉시 옴</td><td>대상 포트 닫힘 또는 서비스 거부</td><td>서비스 listen 상태, host firewall</td></tr>
+<tr><td>HTTP 502/503</td><td>네트워크보다 앱/프록시 문제 가능</td><td>업스트림 health, LB target status</td></tr>
+</table>
+</section>
+
+<footer>
+NETWORK DEBUGGING TOOLS · V1 · 2026-06<br>
+PRINCIPLE : L3 → L4 → L7 → packet capture 순서로 좁힌다
+</footer>
+</main>
+</div>
+</body>
+</html>

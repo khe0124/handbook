@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostgreSQL 예시 사례 — 바로 쓰는 PostgreSQL 레시피</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECEEF3}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono,td code{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#9DB6E8}
+.serial-card .dim{color:#9AA3B8}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">POSTGRESQL</div>
+  <div class="nav-title">PostgreSQL 예시 사례</div>
+  <a href="#ch1"><span class="code">PG-01</span>psql 기본·접속</a>
+  <a href="#ch2"><span class="code">PG-02</span>자주 쓰는 SQL</a>
+  <a href="#ch3"><span class="code">PG-03</span>INSERT·UPDATE·upsert</a>
+  <a href="#ch4"><span class="code">PG-04</span>인덱스와 EXPLAIN</a>
+  <a href="#ch5"><span class="code">PG-05</span>트랜잭션·격리</a>
+  <a href="#ch6"><span class="code">PG-06</span>JSONB</a>
+  <a href="#ch7"><span class="code">PG-07</span>윈도우 함수</a>
+  <a href="#ch8"><span class="code">PG-08</span>페이지네이션</a>
+  <a href="#ch9"><span class="code">PG-09</span>유용한 기능</a>
+  <a href="#ch10"><span class="code">PG-10</span>치트시트</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : PG-EXAMPLES-V1</span>
+    <span>STACK : POSTGRESQL</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>PostgreSQL<br>예시 사례</h1>
+  <p class="hero-sub">psql 기본부터 upsert·JSONB·윈도우 함수·실행계획까지 — 바로 쓰는 PostgreSQL 레시피. 개념(격리수준·인덱스 원리)은 DB 핸드북에.</p>
+  <div class="hero-meta">NOTE : 모든 쿼리는 실재 PostgreSQL 문법 · psql 메타명령은 백슬래시(\)로 시작<br>COMPILED : 2026-06</div>
+</header>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">PG-01</span><h2>psql 기본·접속</h2></div>
+<p class="lede"><code>psql</code>은 PostgreSQL의 공식 CLI입니다. SQL을 치기 전에 <em>접속하고, 무엇이 있는지 둘러보는</em> 메타명령(<code>\</code>로 시작)부터 손에 익히세요. GUI 없이도 디버깅의 90%가 여기서 끝납니다.</p>
+<div class="serial-card">
+<span class="sc-label">접속 — 두 가지 방식</span>
+<span class="dim"># 옵션 방식</span><br>
+psql <span class="seg2">-h</span> localhost <span class="seg2">-p</span> 5432 <span class="seg2">-U</span> myuser <span class="seg2">-d</span> mydb<br>
+<br>
+<span class="dim"># 연결 URL 방식 (앱 설정과 동일한 형태)</span><br>
+psql <span class="seg">'postgresql://myuser:mypass@localhost:5432/mydb'</span><br>
+<br>
+<span class="dim"># Docker 컨테이너 안의 psql로 바로 접속</span><br>
+docker exec <span class="seg2">-it</span> my-postgres psql <span class="seg2">-U</span> myuser <span class="seg2">-d</span> mydb
+</div>
+<table>
+<tr><th>메타명령</th><th>의미</th></tr>
+<tr><td><code>\l</code></td><td>데이터베이스 목록 (list databases)</td></tr>
+<tr><td><code>\c mydb</code></td><td>다른 데이터베이스로 접속 전환 (connect)</td></tr>
+<tr><td><code>\dt</code></td><td>현재 스키마의 테이블 목록. <code>\dt+</code>는 크기까지</td></tr>
+<tr><td><code>\d users</code></td><td><b>테이블 구조</b> — 컬럼·타입·인덱스·제약. 가장 자주 씀</td></tr>
+<tr><td><code>\di</code> · <code>\dn</code> · <code>\df</code></td><td>인덱스 / 스키마 / 함수 목록</td></tr>
+<tr><td><code>\x</code></td><td>확장 출력 토글 — 컬럼 많은 행을 세로로 (가독성)</td></tr>
+<tr><td><code>\timing</code></td><td>쿼리 실행 시간 표시 토글</td></tr>
+<tr><td><code>\q</code></td><td>psql 종료</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">메타명령 vs SQL</span>
+<p><code>\dt</code> 같은 <strong>메타명령은 psql 클라이언트 기능</strong>이라 세미콜론이 필요 없고 즉시 실행됩니다. 반면 <code>SELECT ...</code> 같은 <strong>SQL은 세미콜론(<code>;</code>)으로 끝나야</strong> 실행됩니다. 세미콜론을 빼먹으면 프롬프트가 <code>mydb-&gt;</code>로 바뀌며 계속 입력을 기다립니다 — 당황 말고 <code>;</code>를 치거나 <code>\r</code>(버퍼 비우기)로 빠져나오면 됩니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">PG-02</span><h2>자주 쓰는 SQL</h2></div>
+<p class="lede">SQL 기본 문법은 표준이라 익숙할 겁니다. 여기선 PostgreSQL에서 <em>실전에 매일 치는 형태</em>를 모았습니다 — 필터링, JOIN, 그룹 집계까지.</p>
+<div class="serial-card">
+<span class="sc-label">SELECT + WHERE — 필터링</span>
+SELECT id, name, created_at<br>
+&nbsp;&nbsp;FROM users<br>
+&nbsp;WHERE status = <span class="seg">'active'</span><br>
+&nbsp;&nbsp;&nbsp;AND created_at &gt;= <span class="seg">'2026-01-01'</span><br>
+&nbsp;ORDER BY created_at DESC<br>
+&nbsp;LIMIT 20;
+</div>
+<div class="serial-card">
+<span class="sc-label">JOIN — INNER vs LEFT</span>
+<span class="dim">-- 주문이 있는 유저만 (교집합)</span><br>
+SELECT u.name, o.total<br>
+&nbsp;&nbsp;FROM users u<br>
+&nbsp;&nbsp;<span class="seg2">JOIN</span> orders o ON o.user_id = u.id;<br>
+<br>
+<span class="dim">-- 주문이 없어도 유저는 모두 (없으면 o.* 는 NULL)</span><br>
+SELECT u.name, o.total<br>
+&nbsp;&nbsp;FROM users u<br>
+&nbsp;&nbsp;<span class="seg2">LEFT JOIN</span> orders o ON o.user_id = u.id;
+</div>
+<div class="serial-card">
+<span class="sc-label">GROUP BY + 집계 + HAVING</span>
+SELECT user_id,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg">count(*)</span> AS order_count,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg">sum(total)</span> AS total_spent,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg">avg(total)</span> AS avg_order<br>
+&nbsp;&nbsp;FROM orders<br>
+&nbsp;GROUP BY user_id<br>
+<span class="seg2">HAVING</span> count(*) &gt;= 3<br>
+&nbsp;ORDER BY total_spent DESC;
+</div>
+<div class="callout">
+<span class="co-label">WHERE와 HAVING의 차이</span>
+<p><code>WHERE</code>는 <em>그룹핑 전</em> 개별 행을 거르고, <code>HAVING</code>은 <em>그룹핑 후</em> 집계 결과를 거릅니다. "주문 3건 이상인 유저"처럼 <code>count(*)</code> 같은 집계값으로 필터링하려면 <code>HAVING</code>을 써야 합니다 — <code>WHERE count(*) &gt;= 3</code>은 에러입니다. 그리고 <code>SELECT</code>의 집계 아닌 컬럼은 모두 <code>GROUP BY</code>에 있어야 합니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">PG-03</span><h2>INSERT·UPDATE·upsert</h2></div>
+<p class="lede">데이터를 넣고 고치는 건 기본이지만, PostgreSQL의 진짜 무기는 <code>ON CONFLICT</code>입니다 — "있으면 업데이트, 없으면 삽입"을 한 문장으로, 경쟁 조건 없이. 멱등한 동기화 작업의 핵심입니다.</p>
+<div class="serial-card">
+<span class="sc-label">INSERT — 여러 행 한 번에</span>
+INSERT INTO users (email, name, status)<br>
+VALUES<br>
+&nbsp;&nbsp;(<span class="seg">'a@x.com'</span>, <span class="seg">'Aria'</span>, <span class="seg">'active'</span>),<br>
+&nbsp;&nbsp;(<span class="seg">'b@x.com'</span>, <span class="seg">'Ben'</span>, <span class="seg">'active'</span>);
+</div>
+<div class="serial-card">
+<span class="sc-label">UPDATE — 조건 필수</span>
+UPDATE users<br>
+&nbsp;&nbsp; SET status = <span class="seg">'inactive'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; updated_at = now()<br>
+&nbsp;WHERE last_login &lt; <span class="seg">'2025-01-01'</span>;
+</div>
+<div class="serial-card">
+<span class="sc-label">UPSERT — ON CONFLICT DO UPDATE</span>
+INSERT INTO users (email, name, status)<br>
+VALUES (<span class="seg">'a@x.com'</span>, <span class="seg">'Aria Kim'</span>, <span class="seg">'active'</span>)<br>
+<span class="seg2">ON CONFLICT (email)</span> DO UPDATE<br>
+&nbsp;&nbsp;SET name = <span class="dim">EXCLUDED</span>.name,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status = <span class="dim">EXCLUDED</span>.status;<br>
+<br>
+<span class="dim">-- 이미 있으면 그냥 무시 (중복 삽입 방지)</span><br>
+INSERT INTO users (email, name)<br>
+VALUES (<span class="seg">'a@x.com'</span>, <span class="seg">'Aria'</span>)<br>
+<span class="seg2">ON CONFLICT (email)</span> DO NOTHING;
+</div>
+<div class="callout warn">
+<span class="co-label">EXCLUDED와 충돌 대상</span>
+<p><code>ON CONFLICT (email)</code>의 <code>email</code>은 <strong>UNIQUE 제약 또는 unique index가 걸려 있어야</strong> 동작합니다(없으면 에러). <code>EXCLUDED</code>는 "삽입하려다 충돌한 그 새 값"을 가리키는 특수 테이블입니다 — 즉 <code>EXCLUDED.name</code>은 방금 넣으려던 새 name. 충돌 시에만 일부 컬럼을 갱신하고 싶을 때 이 패턴을 씁니다. <code>WHERE</code> 절을 붙여 <code>DO UPDATE ... WHERE users.status &lt;&gt; EXCLUDED.status</code>처럼 조건부 갱신도 가능합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">WHERE 없는 UPDATE/DELETE</span>
+<p><code>UPDATE users SET status='x';</code>처럼 <strong>WHERE를 빼면 전체 행이 바뀝니다</strong>. 운영 DB에서 사고의 단골입니다. psql에서 위험한 문장 전엔 같은 조건으로 <code>SELECT count(*)</code>를 먼저 쳐서 몇 행이 잡히는지 눈으로 확인하세요. 트랜잭션으로 감싸 <code>ROLLBACK</code> 여지를 두는 것도 방법입니다(→ PG-05).</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">PG-04</span><h2>인덱스와 EXPLAIN ANALYZE</h2></div>
+<p class="lede">"쿼리가 느려요"의 답은 거의 항상 <em>인덱스</em>와 <em>실행계획</em>에 있습니다. 인덱스를 만들고, <code>EXPLAIN ANALYZE</code>로 PostgreSQL이 실제로 어떻게 도는지 들여다보세요. 원리는 DB 핸드북(B-tree)에.</p>
+<div class="serial-card">
+<span class="sc-label">CREATE INDEX</span>
+<span class="dim">-- 단일 컬럼</span><br>
+CREATE INDEX idx_users_email ON users (email);<br>
+<br>
+<span class="dim">-- 복합 인덱스 (순서가 중요)</span><br>
+CREATE INDEX idx_orders_user_created<br>
+&nbsp;&nbsp;ON orders (user_id, created_at DESC);<br>
+<br>
+<span class="dim">-- 운영 중 테이블 락 없이 (느리지만 안전)</span><br>
+CREATE INDEX <span class="seg2">CONCURRENTLY</span> idx_orders_status<br>
+&nbsp;&nbsp;ON orders (status);
+</div>
+<div class="serial-card">
+<span class="sc-label">EXPLAIN ANALYZE — 실제 실행 측정</span>
+EXPLAIN ANALYZE<br>
+SELECT * FROM orders<br>
+&nbsp;WHERE user_id = 42<br>
+&nbsp;ORDER BY created_at DESC<br>
+&nbsp;LIMIT 10;<br>
+<br>
+<span class="dim">-- 출력에서 볼 것:</span><br>
+<span class="dim">--&nbsp;</span><span class="seg">Seq Scan</span><span class="dim"> → 전체 훑기 (인덱스 못 씀, 큰 테이블이면 경고)</span><br>
+<span class="dim">--&nbsp;</span><span class="seg2">Index Scan</span><span class="dim"> → 인덱스로 바로 찾음 (좋음)</span><br>
+<span class="dim">-- actual time / rows → 실제 걸린 시간·행 수</span>
+</div>
+<table>
+<tr><th>실행계획 노드</th><th>의미</th></tr>
+<tr><td><code>Seq Scan</code></td><td>테이블 전체 순차 스캔. 작은 테이블엔 정상, 큰 테이블에서 자주 보이면 인덱스 검토 신호</td></tr>
+<tr><td><code>Index Scan</code></td><td>인덱스를 타고 해당 행만 읽음. 선택도 높은 조건에서 이상적</td></tr>
+<tr><td><code>Bitmap Heap Scan</code></td><td>인덱스로 여러 위치를 모아 한 번에 읽기 — 중간 선택도에서 등장</td></tr>
+<tr><td><code>actual time=...</code></td><td>그 노드의 실제 소요 시간(ms). 병목 노드 찾기의 핵심</td></tr>
+<tr><td><code>rows=... (planned/actual)</code></td><td>예상 행 수 vs 실제 행 수. 크게 어긋나면 통계가 오래됨 → <code>ANALYZE</code></td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">복합 인덱스는 leftmost prefix</span>
+<p><code>(user_id, created_at)</code> 인덱스는 <code>WHERE user_id = ?</code> 또는 <code>WHERE user_id = ? AND created_at &gt; ?</code>엔 쓰이지만, <strong><code>WHERE created_at &gt; ?</code>만으로는 잘 안 쓰입니다</strong> — 인덱스는 왼쪽 컬럼부터 차례로 타기 때문입니다. 그래서 컬럼 순서가 중요합니다. 그리고 <code>EXPLAIN</code>(ANALYZE 없이)은 계획만 보여주고 <em>실행하지 않지만</em>, <code>EXPLAIN ANALYZE</code>는 <strong>실제로 쿼리를 실행</strong>합니다 — <code>UPDATE</code>/<code>DELETE</code>에 쓰면 진짜 데이터가 바뀌니 트랜잭션으로 감싸세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">PG-05</span><h2>트랜잭션·격리</h2></div>
+<p class="lede">여러 변경을 <em>전부 성공 또는 전부 취소</em>로 묶는 게 트랜잭션입니다. 동시에 같은 행을 건드릴 때의 충돌은 격리수준과 행 잠금으로 다룹니다. 격리수준의 개념·이상현상은 DB 핸드북에.</p>
+<div class="serial-card">
+<span class="sc-label">BEGIN / COMMIT / ROLLBACK</span>
+BEGIN;<br>
+<br>
+UPDATE accounts SET balance = balance - 100<br>
+&nbsp;WHERE id = 1;<br>
+UPDATE accounts SET balance = balance + 100<br>
+&nbsp;WHERE id = 2;<br>
+<br>
+<span class="dim">-- 둘 다 맞으면</span> COMMIT;<br>
+<span class="dim">-- 뭔가 틀렸으면</span> ROLLBACK;
+</div>
+<div class="serial-card">
+<span class="sc-label">격리수준 설정</span>
+BEGIN;<br>
+SET TRANSACTION ISOLATION LEVEL <span class="seg2">REPEATABLE READ</span>;<br>
+<span class="dim">-- ... 쿼리들 ...</span><br>
+COMMIT;<br>
+<br>
+<span class="dim">-- 가능한 레벨:</span><br>
+<span class="dim">--&nbsp;</span><span class="seg">READ COMMITTED</span><span class="dim"> (기본값)</span><br>
+<span class="dim">--&nbsp;</span><span class="seg">REPEATABLE READ</span><br>
+<span class="dim">--&nbsp;</span><span class="seg">SERIALIZABLE</span><span class="dim"> (가장 엄격)</span>
+</div>
+<div class="serial-card">
+<span class="sc-label">SELECT ... FOR UPDATE — 행 잠금</span>
+BEGIN;<br>
+<span class="dim">-- 이 행을 읽고, 커밋까지 다른 트랜잭션의 수정·잠금을 막음</span><br>
+SELECT balance FROM accounts<br>
+&nbsp;WHERE id = 1<br>
+&nbsp;<span class="seg2">FOR UPDATE</span>;<br>
+<br>
+UPDATE accounts SET balance = balance - 100<br>
+&nbsp;WHERE id = 1;<br>
+COMMIT;
+</div>
+<div class="callout warn">
+<span class="co-label">PostgreSQL 기본은 READ COMMITTED</span>
+<p>별도 설정이 없으면 모든 트랜잭션은 <code>READ COMMITTED</code>로 돕니다 — 각 문장은 <em>그 문장 시작 시점에 커밋된</em> 데이터를 봅니다. "잔액 읽고 → 검사하고 → 차감"처럼 읽은 값에 의존해 쓰는 로직은 그 사이 다른 트랜잭션이 끼어들 수 있으니, <code>SELECT ... FOR UPDATE</code>로 행을 잠그거나 <code>UPDATE accounts SET balance = balance - 100</code>처럼 <strong>읽기 없이 원자적으로</strong> 계산하세요. 잠금을 오래 쥐면 다른 트랜잭션이 대기하니 트랜잭션은 짧게.</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">PG-06</span><h2>JSONB — 반정형 데이터</h2></div>
+<p class="lede">스키마가 유동적인 데이터(설정값, 외부 API 응답, 메타데이터)는 <code>jsonb</code> 컬럼에 담습니다. <code>json</code>이 아니라 <em><code>jsonb</code></em>를 쓰세요 — 이진 저장이라 빠르고 인덱싱이 됩니다.</p>
+<div class="serial-card">
+<span class="sc-label">컬럼 정의 + 삽입</span>
+CREATE TABLE events (<br>
+&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;bigserial PRIMARY KEY,<br>
+&nbsp;&nbsp;payload <span class="seg2">jsonb</span> NOT NULL<br>
+);<br>
+<br>
+INSERT INTO events (payload) VALUES<br>
+&nbsp;&nbsp;(<span class="seg">'{"type":"login","user":{"id":42,"plan":"pro"}}'</span>);
+</div>
+<div class="serial-card">
+<span class="sc-label">조회 — -&gt; (객체 반환) vs -&gt;&gt; (텍스트 반환)</span>
+<span class="dim">-- -&gt; 는 jsonb 를 반환 (중첩 접근 체이닝용)</span><br>
+SELECT payload <span class="seg2">-&gt;</span> <span class="seg">'user'</span> <span class="seg2">-&gt;&gt;</span> <span class="seg">'id'</span> AS user_id<br>
+&nbsp;&nbsp;FROM events;<br>
+<br>
+<span class="dim">-- -&gt;&gt; 는 text 를 반환 (비교·캐스팅용)</span><br>
+SELECT * FROM events<br>
+&nbsp;WHERE payload <span class="seg2">-&gt;&gt;</span> <span class="seg">'type'</span> = <span class="seg">'login'</span>;<br>
+<br>
+<span class="dim">-- 숫자 비교는 캐스팅</span><br>
+SELECT * FROM events<br>
+&nbsp;WHERE (payload -&gt; <span class="seg">'user'</span> -&gt;&gt; <span class="seg">'id'</span>)::int &gt; 40;
+</div>
+<div class="serial-card">
+<span class="sc-label">@&gt; 포함 연산자 + GIN 인덱스</span>
+<span class="dim">-- payload 가 이 키-값을 "포함"하는가</span><br>
+SELECT * FROM events<br>
+&nbsp;WHERE payload <span class="seg2">@&gt;</span> <span class="seg">'{"type":"login"}'</span>;<br>
+<br>
+<span class="dim">-- @&gt; 검색을 빠르게 하는 GIN 인덱스</span><br>
+CREATE INDEX idx_events_payload<br>
+&nbsp;&nbsp;ON events USING <span class="seg2">GIN</span> (payload);
+</div>
+<table>
+<tr><th>연산자</th><th>의미</th></tr>
+<tr><td><code>-&gt;</code></td><td>키/인덱스로 접근, <b>jsonb 반환</b> (체이닝 가능)</td></tr>
+<tr><td><code>-&gt;&gt;</code></td><td>키/인덱스로 접근, <b>text 반환</b> (비교·캐스팅용)</td></tr>
+<tr><td><code>@&gt;</code></td><td>좌변이 우변을 <b>포함</b>하는가 (containment)</td></tr>
+<tr><td><code>?</code></td><td>해당 <b>키가 존재</b>하는가 (top-level key)</td></tr>
+<tr><td><code>#&gt;</code> · <code>#&gt;&gt;</code></td><td>경로(path)로 깊이 접근. <code>payload #&gt;&gt; '{user,id}'</code></td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">-&gt; 와 -&gt;&gt; 를 혼동하지 말 것</span>
+<p>가장 흔한 실수입니다. <code>payload -&gt; 'type' = 'login'</code>은 <em>jsonb</em>와 <em>text</em>를 비교해 의도대로 안 됩니다 — 비교엔 <strong><code>-&gt;&gt;</code>(text 반환)</strong>를 써야 합니다. 반대로 중첩 객체를 더 파고들 땐 <code>-&gt;</code>로 jsonb를 유지하다가 마지막에 <code>-&gt;&gt;</code>로 꺼냅니다. 그리고 <code>@&gt;</code> 포함 검색만 GIN 인덱스의 혜택을 받습니다 — <code>-&gt;&gt;</code> 등호 비교를 자주 한다면 <code>((payload -&gt;&gt; 'type'))</code>에 대한 표현식 인덱스를 따로 만드세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">PG-07</span><h2>윈도우 함수 — 순위·누적</h2></div>
+<p class="lede">"유저별 최신 주문", "카테고리 내 매출 순위", "누적 합계" — <code>GROUP BY</code>는 행을 뭉치지만, 윈도우 함수는 <em>행을 유지한 채</em> 그 행 주변을 계산합니다. 한 번 익히면 복잡한 서브쿼리가 사라집니다.</p>
+<div class="serial-card">
+<span class="sc-label">ROW_NUMBER — 그룹 내 순번</span>
+SELECT id, user_id, total, created_at,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg2">ROW_NUMBER() OVER (</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg">PARTITION BY</span> user_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg">ORDER BY</span> created_at DESC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg2">)</span> AS rn<br>
+&nbsp;&nbsp;FROM orders;<br>
+<br>
+<span class="dim">-- "유저별 최신 주문 1건"은 이걸 감싸서:</span><br>
+<span class="dim">-- SELECT * FROM (위 쿼리) t WHERE rn = 1;</span>
+</div>
+<div class="serial-card">
+<span class="sc-label">RANK vs ROW_NUMBER</span>
+SELECT category, name, price,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg2">RANK() OVER (</span>PARTITION BY category<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY price DESC<span class="seg2">)</span> AS price_rank<br>
+&nbsp;&nbsp;FROM products;<br>
+<br>
+<span class="dim">-- RANK: 동점이면 같은 순위, 다음은 건너뜀 (1,1,3)</span><br>
+<span class="dim">-- ROW_NUMBER: 동점이어도 무조건 고유 (1,2,3)</span>
+</div>
+<div class="serial-card">
+<span class="sc-label">SUM OVER — 누적 합계 (running total)</span>
+SELECT created_at, total,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg2">SUM(total) OVER (</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ORDER BY created_at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="seg2">)</span> AS running_total<br>
+&nbsp;&nbsp;FROM orders;
+</div>
+<div class="callout">
+<span class="co-label">PARTITION BY는 "그룹", ORDER BY는 "정렬"</span>
+<p><code>OVER (PARTITION BY user_id ORDER BY created_at)</code>를 풀면 — <em>user_id별로 묶고, 각 묶음 안에서 created_at 순으로 정렬한 뒤</em> 계산하라는 뜻입니다. <code>PARTITION BY</code>를 빼면 전체가 하나의 윈도우가 됩니다. "유저별 최신 N건"은 <code>ROW_NUMBER</code>를 매기고 바깥에서 <code>WHERE rn &lt;= N</code>으로 거르는 게 정석입니다 — 서브쿼리·상관 서브쿼리보다 훨씬 빠릅니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">PG-08</span><h2>페이지네이션 — OFFSET vs keyset</h2></div>
+<p class="lede"><code>OFFSET</code> 페이징은 쓰기 쉽지만 <em>뒤로 갈수록 느려집니다</em> — DB가 건너뛸 행을 매번 다 세기 때문입니다. 무한 스크롤·대용량엔 keyset(cursor) 페이징이 정답입니다.</p>
+<div class="serial-card">
+<span class="sc-label">OFFSET / LIMIT — 쉽지만 한계 있음</span>
+<span class="dim">-- 3페이지 (페이지당 20개) → 40개 건너뛰고 20개</span><br>
+SELECT * FROM orders<br>
+&nbsp;ORDER BY created_at DESC, id DESC<br>
+&nbsp;LIMIT 20 <span class="seg2">OFFSET 40</span>;<br>
+<br>
+<span class="dim">-- 문제: OFFSET 100000 이면 10만 행을 세고 버림 → 느림</span>
+</div>
+<div class="serial-card">
+<span class="sc-label">KEYSET — 마지막 본 값 이후부터</span>
+<span class="dim">-- 첫 페이지</span><br>
+SELECT * FROM orders<br>
+&nbsp;ORDER BY id DESC<br>
+&nbsp;LIMIT 20;<br>
+<br>
+<span class="dim">-- 다음 페이지: 직전 페이지 마지막 id 가 1000 이었다면</span><br>
+SELECT * FROM orders<br>
+&nbsp;WHERE id <span class="seg2">&lt;</span> 1000<br>
+&nbsp;ORDER BY id DESC<br>
+&nbsp;LIMIT 20;
+</div>
+<table>
+<tr><th>방식</th><th>장점</th><th>단점</th></tr>
+<tr><td><code>OFFSET</code></td><td>"N페이지로 점프" 가능, 구현 쉬움</td><td>뒤 페이지일수록 느림, 그 사이 삽입되면 행 중복·누락</td></tr>
+<tr><td><code>keyset</code></td><td>페이지 깊이와 무관하게 빠름(인덱스 활용), 결과 안정적</td><td>임의 페이지 점프 불가(이전/다음만), 정렬 키가 인덱스에 있어야</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">정렬 키는 유일해야 한다</span>
+<p>keyset 페이징의 정렬 컬럼은 <strong>유일(unique)해야</strong> 페이지 경계가 안전합니다. <code>created_at</code>처럼 중복될 수 있는 값으로만 자르면 같은 시각의 행이 잘려 누락·중복됩니다. 해결: <code>ORDER BY created_at DESC, id DESC</code>로 tie-breaker를 더하고, 조건도 <code>WHERE (created_at, id) &lt; ('2026-06-01 10:00', 1000)</code>처럼 <em>튜플 비교</em>로 씁니다. 이 정렬 순서와 <strong>같은 복합 인덱스</strong>가 있어야 진짜 빠릅니다(→ PG-04).</p>
+</div>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">PG-09</span><h2>유용한 기능</h2></div>
+<p class="lede">매일 쓰진 않지만 알면 코드가 짧아지는 PostgreSQL 기능들. <code>RETURNING</code>, <code>COALESCE</code>, <code>generate_series</code>, 날짜 함수.</p>
+<div class="serial-card">
+<span class="sc-label">RETURNING — INSERT/UPDATE 결과 즉시 받기</span>
+<span class="dim">-- 생성된 id 를 별도 SELECT 없이 바로</span><br>
+INSERT INTO users (email, name)<br>
+VALUES (<span class="seg">'c@x.com'</span>, <span class="seg">'Cara'</span>)<br>
+<span class="seg2">RETURNING</span> id, created_at;<br>
+<br>
+<span class="dim">-- UPDATE/DELETE 에도 — 바뀐 행을 돌려받음</span><br>
+UPDATE orders SET status = <span class="seg">'shipped'</span><br>
+&nbsp;WHERE id = 7 <span class="seg2">RETURNING</span> *;
+</div>
+<div class="serial-card">
+<span class="sc-label">COALESCE — NULL 대체</span>
+<span class="dim">-- 첫 번째 NULL 아닌 값을 반환</span><br>
+SELECT name, <span class="seg2">COALESCE</span>(nickname, name, <span class="seg">'익명'</span>) AS display_name<br>
+&nbsp;&nbsp;FROM users;<br>
+<br>
+<span class="dim">-- 집계 NULL 방어: 합계 없으면 0</span><br>
+SELECT <span class="seg2">COALESCE</span>(sum(total), 0) FROM orders WHERE user_id = 99;
+</div>
+<div class="serial-card">
+<span class="sc-label">generate_series + 날짜 함수 — 빈 날짜 채우기</span>
+<span class="dim">-- 6월 한 달의 모든 날짜 행 생성</span><br>
+SELECT <span class="seg2">generate_series</span>(<br>
+&nbsp;&nbsp;<span class="seg">'2026-06-01'</span>::date,<br>
+&nbsp;&nbsp;<span class="seg">'2026-06-30'</span>::date,<br>
+&nbsp;&nbsp;<span class="seg">'1 day'</span>::interval<br>
+) AS day;<br>
+<br>
+<span class="dim">-- 날짜 자르기·간격</span><br>
+SELECT <span class="seg2">date_trunc</span>(<span class="seg">'month'</span>, created_at) AS month, count(*)<br>
+&nbsp;&nbsp;FROM orders<br>
+&nbsp;WHERE created_at &gt;= now() - <span class="seg">'30 days'</span>::interval<br>
+&nbsp;GROUP BY month ORDER BY month;
+</div>
+<div class="callout">
+<span class="co-label">파티셔닝 — 한 줄 소개</span>
+<p>로그·이벤트처럼 시간이 갈수록 무한히 쌓이는 거대 테이블은 <strong>선언적 파티셔닝</strong>(<code>CREATE TABLE ... PARTITION BY RANGE (created_at)</code>)으로 월별·연도별 물리 테이블로 쪼갤 수 있습니다. 오래된 파티션을 통째로 <code>DETACH</code>/<code>DROP</code>하면 대량 삭제보다 훨씬 빠릅니다. 다만 설계·운영 부담이 있으니 테이블이 정말 커지기 전엔 과하게 도입하지 마세요 — 측정이 먼저입니다.</p>
+</div>
+<div class="callout warn">
+<span class="co-label">RETURNING은 PostgreSQL의 강점</span>
+<p>많은 ORM이 INSERT 후 생성된 id를 얻으려 별도 쿼리를 날리지만, PostgreSQL은 <code>RETURNING</code>으로 <strong>한 번의 왕복(round-trip)에 끝낼 수 있습니다</strong>. upsert와 결합하면 <code>INSERT ... ON CONFLICT ... DO UPDATE ... RETURNING id</code>로 "있으면 그 id, 없으면 새 id"를 한 문장에 받습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 10 ============ -->
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">PG-10</span><h2>치트시트 — 바로 쓰는 한 줄</h2></div>
+<p class="lede">반복되는 PostgreSQL 패턴 모음. 외우기보다 "이런 게 된다"를 알아두고 필요할 때 찾으세요.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>접속 (Docker)</b><span>docker exec psql</span></div><div class="g-def"><code>docker exec -it pg psql -U user -d db</code> — 컨테이너 안 psql로 바로</div></div>
+<div class="g-row"><div class="g-term"><b>테이블 구조 보기</b><span>\d table</span></div><div class="g-def"><code>\dt</code>(목록) → <code>\d users</code>(컬럼·인덱스·제약). 컬럼 많으면 <code>\x</code> 켜기</div></div>
+<div class="g-row"><div class="g-term"><b>멱등 삽입</b><span>ON CONFLICT</span></div><div class="g-def"><code>INSERT ... ON CONFLICT (col) DO UPDATE SET x = EXCLUDED.x</code> — 있으면 갱신, 없으면 삽입</div></div>
+<div class="g-row"><div class="g-term"><b>중복 무시 삽입</b><span>DO NOTHING</span></div><div class="g-def"><code>INSERT ... ON CONFLICT (col) DO NOTHING</code> — 이미 있으면 조용히 통과</div></div>
+<div class="g-row"><div class="g-term"><b>인덱스 생성</b><span>CREATE INDEX</span></div><div class="g-def"><code>CREATE INDEX idx ON t (a, b)</code>. 운영 중엔 <code>CONCURRENTLY</code>로 락 회피</div></div>
+<div class="g-row"><div class="g-term"><b>실행계획 측정</b><span>EXPLAIN ANALYZE</span></div><div class="g-def"><code>EXPLAIN ANALYZE SELECT ...</code> — <code>Seq Scan</code> 나오면 인덱스 의심. 실제 실행됨 주의</div></div>
+<div class="g-row"><div class="g-term"><b>트랜잭션</b><span>BEGIN/COMMIT</span></div><div class="g-def"><code>BEGIN; ... COMMIT;</code> 또는 취소 <code>ROLLBACK;</code>. 위험한 UPDATE는 감싸서</div></div>
+<div class="g-row"><div class="g-term"><b>행 잠금</b><span>FOR UPDATE</span></div><div class="g-def"><code>SELECT ... FOR UPDATE</code> — 읽은 행을 커밋까지 잠가 동시 수정 방지</div></div>
+<div class="g-row"><div class="g-term"><b>JSONB 조회</b><span>-&gt; / -&gt;&gt; / @&gt;</span></div><div class="g-def"><code>p -&gt;&gt; 'k'</code>(text) · <code>p -&gt; 'o' -&gt;&gt; 'k'</code>(중첩) · <code>p @&gt; '{"k":"v"}'</code>(포함, GIN 인덱스)</div></div>
+<div class="g-row"><div class="g-term"><b>그룹 내 순위</b><span>ROW_NUMBER OVER</span></div><div class="g-def"><code>ROW_NUMBER() OVER (PARTITION BY g ORDER BY t DESC)</code> → 바깥에서 <code>WHERE rn = 1</code></div></div>
+<div class="g-row"><div class="g-term"><b>누적 합계</b><span>SUM OVER</span></div><div class="g-def"><code>SUM(x) OVER (ORDER BY t)</code> — running total. PARTITION 추가로 그룹별</div></div>
+<div class="g-row"><div class="g-term"><b>빠른 페이징</b><span>keyset</span></div><div class="g-def"><code>WHERE id &lt; :last_id ORDER BY id DESC LIMIT 20</code> — OFFSET 대신, 깊어도 빠름</div></div>
+<div class="g-row"><div class="g-term"><b>삽입 결과 받기</b><span>RETURNING</span></div><div class="g-def"><code>INSERT ... RETURNING id</code> — 생성된 값을 별도 SELECT 없이 한 왕복에</div></div>
+<div class="g-row"><div class="g-term"><b>NULL 대체</b><span>COALESCE</span></div><div class="g-def"><code>COALESCE(sum(total), 0)</code> — 첫 NULL 아닌 값. 집계 NULL 방어의 정석</div></div>
+</div>
+<div class="callout gm">
+<span class="co-label">학습 순서 제안</span>
+<p>전부 한 번에 익히려 하지 마세요. 손에 먼저 붙일 것: <code>\dt</code>·<code>\d</code>(둘러보기) · <code>ON CONFLICT</code>(멱등 삽입) · <code>EXPLAIN ANALYZE</code>(느린 쿼리 진단) · <code>BEGIN/COMMIT/ROLLBACK</code>(안전한 변경). 이 넷이 PostgreSQL 실전의 출발점입니다. JSONB·윈도우 함수·keyset 페이징은 필요한 상황이 왔을 때 이 문서에서 찾아 쓰면 됩니다. 격리수준·인덱스 내부 원리(B-tree)는 DB 핸드북과 함께 보세요.</p>
+</div>
+</section>
+
+<footer>
+POSTGRESQL EXAMPLES · PG-EXAMPLES-V1 · 2026-06<br>
+STACK : POSTGRESQL · SCOPE : psql · SQL · upsert · index/EXPLAIN · transaction · JSONB · window · pagination<br>
+NOTE : 실재 PostgreSQL 문법만 수록 · COMPANION : DATABASE HANDBOOK (격리수준·B-tree 인덱스 개념)
+</footer>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPA 예시 사례 — 바로 복붙해 쓰는 Spring Data JPA 레시피</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECEEF3}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono,td code{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#9DB6E8}
+.serial-card .dim{color:#9AA3B8}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">JPA</div>
+  <div class="nav-title">JPA 예시 사례</div>
+  <a href="#ch1"><span class="code">JPA-01</span>엔티티 기본</a>
+  <a href="#ch2"><span class="code">JPA-02</span>연관관계 매핑</a>
+  <a href="#ch3"><span class="code">JPA-03</span>Repository</a>
+  <a href="#ch4"><span class="code">JPA-04</span>JPQL과 @Query</a>
+  <a href="#ch5"><span class="code">JPA-05</span>N+1 해결</a>
+  <a href="#ch6"><span class="code">JPA-06</span>페이징·정렬</a>
+  <a href="#ch7"><span class="code">JPA-07</span>트랜잭션·영속성</a>
+  <a href="#ch8"><span class="code">JPA-08</span>낙관적 락</a>
+  <a href="#ch9"><span class="code">JPA-09</span>Auditing</a>
+  <a href="#ch10"><span class="code">JPA-10</span>치트시트</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : JPA-EXAMPLES-V1</span>
+    <span>STACK : SPRING DATA JPA · HIBERNATE</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>JPA<br>예시 사례</h1>
+  <p class="hero-sub">엔티티 매핑부터 N+1 회피까지 — 바로 복붙해 쓰는 JPA 레시피. 개념의 <strong>왜</strong>는 JPA 핸드북에 넘기고, 여기선 <strong>실제로 어떻게 쓰는지</strong>만 코드로 봅니다. 각 섹션은 "언제·왜" 한두 줄 + 복붙 가능한 코드 + 발 걸리는 곳 경고.</p>
+  <div class="hero-meta">NOTE : 패키지는 jakarta.persistence.* (Spring Boot 3 / Jakarta EE 9+) 기준 — 구버전은 javax.persistence.*<br>COMPILED : 2026-06</div>
+</header>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">JPA-01</span><h2>엔티티 기본</h2></div>
+<p class="lede">테이블 하나를 객체 하나에 매핑하는 출발점. <em>엔티티 = DB 테이블에 대응하는 영속 객체</em>이고, JPA가 추적할 수 있는 형태로 만드는 게 1번 작업입니다.</p>
+<div class="serial-card">
+<span class="sc-label">Member.java — 가장 기본형 엔티티</span>
+<span class="seg2">@Entity</span><br>
+<span class="seg2">@Table</span>(name = <span class="seg">"member"</span>)<br>
+<span class="dim">public class</span> Member {<br>
+&nbsp;&nbsp;<span class="seg2">@Id</span><br>
+&nbsp;&nbsp;<span class="seg2">@GeneratedValue</span>(strategy = GenerationType.<span class="seg">IDENTITY</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> Long id;<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@Column</span>(name = <span class="seg">"email"</span>, nullable = <span class="seg">false</span>, unique = <span class="seg">true</span>, length = 100)<br>
+&nbsp;&nbsp;<span class="dim">private</span> String email;<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@Column</span>(nullable = <span class="seg">false</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> String name;<br>
+<br>
+&nbsp;&nbsp;<span class="dim">protected</span> Member() {}&nbsp;&nbsp;<span class="dim">// JPA 기본 생성자 (필수)</span><br>
+<br>
+&nbsp;&nbsp;<span class="dim">public</span> Member(String email, String name) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">this</span>.email = email;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">this</span>.name = name;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="dim">// getter ...</span><br>
+}
+</div>
+<table>
+<tr><th>어노테이션</th><th>역할</th></tr>
+<tr><td><code>@Entity</code></td><td>이 클래스를 영속 엔티티로 등록. 클래스명이 기본 엔티티명</td></tr>
+<tr><td><code>@Table(name=...)</code></td><td>매핑할 테이블명 지정. 생략하면 엔티티명을 테이블명으로</td></tr>
+<tr><td><code>@Id</code></td><td>PK 필드 표시 (엔티티당 하나는 필수)</td></tr>
+<tr><td><code>@GeneratedValue(strategy=IDENTITY)</code></td><td>PK를 DB의 AUTO_INCREMENT에 위임 (MySQL·PostgreSQL 흔함)</td></tr>
+<tr><td><code>@Column(nullable, unique, length)</code></td><td>컬럼 제약. 생략하면 필드명·기본 제약으로 매핑</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">기본 생성자는 빼먹지 말 것</span>
+<p>JPA는 reflection으로 엔티티를 만들기 때문에 <strong>파라미터 없는 기본 생성자</strong>가 반드시 있어야 합니다. 접근 제어는 <code>protected</code>까지 허용 — 외부에서 빈 객체를 못 만들게 막으면서 JPA·프록시는 쓸 수 있습니다. <code>final</code> 클래스/필드, <code>@Id</code> 없는 엔티티는 안 됩니다. (→ JPA 핸드북: 엔티티 생명주기)</p>
+</div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">JPA-02</span><h2>연관관계 매핑</h2></div>
+<p class="lede">테이블의 외래키(FK)를 객체 참조로 바꾸는 작업. 핵심 두 가지 — <em>FK를 가진 쪽이 연관관계의 주인(owner)</em>이고, fetch는 거의 항상 <code>LAZY</code>로 시작합니다.</p>
+<div class="serial-card">
+<span class="sc-label">N:1 — 주인 쪽 (FK 보유: Order → Member)</span>
+<span class="seg2">@Entity</span><br>
+<span class="dim">public class</span> Order {<br>
+&nbsp;&nbsp;<span class="seg2">@Id</span> <span class="seg2">@GeneratedValue</span>(strategy = GenerationType.<span class="seg">IDENTITY</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> Long id;<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@ManyToOne</span>(fetch = FetchType.<span class="seg">LAZY</span>)<br>
+&nbsp;&nbsp;<span class="seg2">@JoinColumn</span>(name = <span class="seg">"member_id"</span>)&nbsp;&nbsp;<span class="dim">// FK 컬럼명</span><br>
+&nbsp;&nbsp;<span class="dim">private</span> Member member;<br>
+}
+</div>
+<div class="serial-card">
+<span class="sc-label">1:N — 반대편 (mappedBy: 거울만, FK 없음)</span>
+<span class="seg2">@Entity</span><br>
+<span class="dim">public class</span> Member {<br>
+&nbsp;&nbsp;<span class="dim">// ... @Id 등</span><br>
+&nbsp;&nbsp;<span class="seg2">@OneToMany</span>(mappedBy = <span class="seg">"member"</span>, cascade = CascadeType.<span class="seg">ALL</span>, orphanRemoval = <span class="seg">true</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> List&lt;Order&gt; orders = <span class="dim">new</span> ArrayList&lt;&gt;();<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// 양방향 연관관계 편의 메서드</span><br>
+&nbsp;&nbsp;<span class="dim">public void</span> addOrder(Order order) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">this</span>.orders.add(order);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;order.setMember(<span class="dim">this</span>);&nbsp;&nbsp;<span class="dim">// 양쪽 동기화</span><br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<table>
+<tr><th>요소</th><th>의미</th></tr>
+<tr><td><code>@ManyToOne</code> + <code>@JoinColumn</code></td><td>FK를 가진 <em>주인</em> 쪽. <code>name</code>이 실제 FK 컬럼명</td></tr>
+<tr><td><code>@OneToMany(mappedBy="member")</code></td><td>주인이 아닌 거울. <code>mappedBy</code>는 <em>상대 엔티티의 필드명</em></td></tr>
+<tr><td><code>cascade = ALL</code></td><td>부모 영속화/삭제가 자식에 전파 (수명주기 종속일 때만)</td></tr>
+<tr><td><code>orphanRemoval = true</code></td><td>컬렉션에서 빠진 자식을 DELETE</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">편의 메서드를 쓰는 이유</span>
+<p>양방향에선 <strong>객체 양쪽을 직접 맞춰줘야</strong> 합니다 — JPA가 자동으로 동기화하지 않습니다. <code>order.setMember(member)</code>만 하고 <code>member.getOrders()</code>에 안 넣으면, 같은 트랜잭션 안에서 컬렉션이 비어 보이는 버그가 납니다. 그래서 한쪽에 <code>addOrder</code> 같은 편의 메서드를 두고 양쪽을 한 번에 맞춥니다. DB에 FK를 쓰는 건 <em>주인 쪽(<code>@ManyToOne</code>)</em>뿐이라는 점도 기억하세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">JPA-03</span><h2>Repository</h2></div>
+<p class="lede">Spring Data JPA의 핵심 편의 — <em>인터페이스만 선언하면 구현체는 런타임에 자동 생성</em>됩니다. 메서드 이름 규칙만 지키면 쿼리가 만들어집니다.</p>
+<div class="serial-card">
+<span class="sc-label">MemberRepository.java — 쿼리 메서드</span>
+<span class="dim">public interface</span> MemberRepository <span class="dim">extends</span> JpaRepository&lt;Member, Long&gt; {<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// SELECT ... WHERE email = ?</span><br>
+&nbsp;&nbsp;Optional&lt;Member&gt; <span class="seg">findByEmail</span>(String email);<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// SELECT ... WHERE name LIKE %?%</span><br>
+&nbsp;&nbsp;List&lt;Member&gt; <span class="seg">findByNameContaining</span>(String keyword);<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// SELECT EXISTS ... WHERE email = ?</span><br>
+&nbsp;&nbsp;<span class="dim">boolean</span> <span class="seg">existsByEmail</span>(String email);<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// SELECT COUNT(*) WHERE name = ?</span><br>
+&nbsp;&nbsp;<span class="dim">long</span> <span class="seg">countByName</span>(String name);<br>
+<br>
+&nbsp;&nbsp;<span class="dim">// 조건 조합 — AND / OrderBy</span><br>
+&nbsp;&nbsp;List&lt;Member&gt; <span class="seg">findByNameAndEmail</span>(String name, String email);<br>
+&nbsp;&nbsp;List&lt;Member&gt; <span class="seg">findByNameOrderByIdDesc</span>(String name);<br>
+}
+</div>
+<table>
+<tr><th>키워드</th><th>생성되는 조건</th></tr>
+<tr><td><code>findBy필드</code></td><td><code>WHERE 필드 = ?</code> — 단건은 <code>Optional&lt;T&gt;</code>, 다건은 <code>List&lt;T&gt;</code></td></tr>
+<tr><td><code>Containing</code> / <code>StartingWith</code></td><td><code>LIKE %?%</code> / <code>LIKE ?%</code></td></tr>
+<tr><td><code>existsBy필드</code></td><td><code>boolean</code> 반환 — 존재 여부만 (count보다 가벼움)</td></tr>
+<tr><td><code>countBy필드</code></td><td><code>long</code> 반환 — 개수</td></tr>
+<tr><td><code>And</code> / <code>Or</code> / <code>OrderBy</code></td><td>조건 조합·정렬</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">JpaRepository가 공짜로 주는 것</span>
+<p><code>JpaRepository&lt;Member, Long&gt;</code>만 상속해도 <code>save</code>, <code>findById</code>, <code>findAll</code>, <code>delete</code>, <code>count</code> 등이 이미 들어 있습니다. 제네릭은 <code>&lt;엔티티타입, PK타입&gt;</code> 순서. 단건 조회는 <code>null</code> 대신 <code>Optional</code>로 받아 <code>orElseThrow</code>로 명시적으로 처리하는 패턴을 권합니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">JPA-04</span><h2>JPQL과 @Query</h2></div>
+<p class="lede">메서드 이름으로 표현이 안 되는 쿼리는 직접 씁니다. <em>JPQL은 테이블이 아니라 엔티티·필드를 대상으로 하는 쿼리</em>입니다 — <code>FROM Member m</code>처럼 클래스명을 씁니다.</p>
+<div class="serial-card">
+<span class="sc-label">@Query — JPQL + @Param 바인딩</span>
+<span class="seg2">@Query</span>(<span class="seg">"SELECT m FROM Member m WHERE m.email = :email"</span>)<br>
+Optional&lt;Member&gt; findByEmailJpql(<span class="seg2">@Param</span>(<span class="seg">"email"</span>) String email);<br>
+<br>
+<span class="dim">// 일부 컬럼만 — DTO projection (생성자 표현식)</span><br>
+<span class="seg2">@Query</span>(<span class="seg">"SELECT new com.example.dto.MemberView(m.id, m.name) FROM Member m"</span>)<br>
+List&lt;MemberView&gt; findAllViews();<br>
+<br>
+<span class="dim">// 네이티브 SQL — DB 함수가 필요할 때</span><br>
+<span class="seg2">@Query</span>(value = <span class="seg">"SELECT * FROM member WHERE email = :email"</span>, nativeQuery = <span class="seg">true</span>)<br>
+Optional&lt;Member&gt; findByEmailNative(<span class="seg2">@Param</span>(<span class="seg">"email"</span>) String email);
+</div>
+<table>
+<tr><th>방식</th><th>언제</th></tr>
+<tr><td>JPQL <code>@Query</code></td><td>기본. 엔티티·필드 기준, DB 독립적</td></tr>
+<tr><td><code>@Param</code> 바인딩</td><td><code>:name</code> 형태 이름 파라미터. SQL 인젝션 방지에도 필수</td></tr>
+<tr><td>DTO projection</td><td><code>SELECT new ...</code>로 필요한 컬럼만 — 조회 전용에 유리</td></tr>
+<tr><td><code>nativeQuery = true</code></td><td>DB 고유 함수·복잡 SQL이 필요할 때만. 이식성 포기</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">문자열 연결로 파라미터 넣지 말 것</span>
+<p><code>"WHERE email = '" + email + "'"</code> 같은 문자열 조립은 <strong>SQL 인젝션</strong>입니다. 항상 <code>:param</code> + <code>@Param</code> 바인딩을 쓰세요 — JPA가 parameterized query로 처리합니다. 네이티브 쿼리도 마찬가지로 바인딩으로만 값을 넣습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">JPA-05</span><h2>N+1 해결</h2></div>
+<p class="lede">JPA에서 가장 자주 만나는 성능 함정. <em>목록 1번 조회 후, 각 행의 연관 엔티티를 N번 추가 조회</em>하는 현상입니다. LAZY 연관을 루프에서 건드릴 때 터집니다.</p>
+<div class="serial-card">
+<span class="sc-label">문제 재현 — orders 10건이면 쿼리 1 + 10 = 11번</span>
+List&lt;Order&gt; orders = orderRepository.findAll();&nbsp;&nbsp;<span class="dim">// SELECT * FROM orders (1번)</span><br>
+<span class="dim">for</span> (Order o : orders) {<br>
+&nbsp;&nbsp;o.getMember().getName();&nbsp;&nbsp;<span class="dim">// member마다 SELECT (N번) ← 문제</span><br>
+}
+</div>
+<div class="serial-card">
+<span class="sc-label">해결 1 — fetch join (한 방에 조인 조회)</span>
+<span class="seg2">@Query</span>(<span class="seg">"SELECT o FROM Order o JOIN FETCH o.member"</span>)<br>
+List&lt;Order&gt; findAllWithMember();<br>
+<br>
+<span class="sc-label">해결 2 — @EntityGraph (메서드 이름 규칙 유지하며 fetch)</span><br>
+<span class="seg2">@EntityGraph</span>(attributePaths = {<span class="seg">"member"</span>})<br>
+<span class="seg2">@Query</span>(<span class="seg">"SELECT o FROM Order o"</span>)<br>
+List&lt;Order&gt; findAllGraph();
+</div>
+<table>
+<tr><th>해결책</th><th>특징</th></tr>
+<tr><td>fetch join <code>JOIN FETCH</code></td><td>가장 명시적. <code>@ManyToOne</code>·단건 컬렉션에 적합</td></tr>
+<tr><td><code>@EntityGraph(attributePaths)</code></td><td>JPQL 없이 어노테이션으로 fetch 지정. 쿼리 메서드와 조합 가능</td></tr>
+<tr><td><code>default_batch_fetch_size</code></td><td>컬렉션 N+1을 <code>IN (?, ?, ...)</code>로 묶어 N → 1~몇 번으로</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">해결 3 — 컬렉션엔 batch size (application.yml)</span>
+spring:<br>
+&nbsp;&nbsp;jpa:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;properties:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hibernate:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">default_batch_fetch_size</span>: <span class="seg">100</span>
+</div>
+<div class="callout warn">
+<span class="co-label">컬렉션 fetch join + 페이징은 함께 못 씀</span>
+<p><code>@OneToMany</code> 컬렉션에 <code>JOIN FETCH</code>와 <code>Pageable</code>을 같이 쓰면, Hibernate가 <em>메모리에서 페이징</em>하며 경고를 띄웁니다(전체를 다 읽음). 컬렉션 N+1은 fetch join 대신 <code>default_batch_fetch_size</code>로 푸는 게 정석입니다. <code>@ManyToOne</code>·<code>@OneToOne</code>(to-one) 연관은 fetch join + 페이징이 안전합니다. (→ JPA 핸드북: N+1 심화)</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">JPA-06</span><h2>페이징·정렬</h2></div>
+<p class="lede">목록을 통째로 읽지 말고 페이지 단위로. Spring Data가 <code>Pageable</code> 하나로 <em>LIMIT·OFFSET·정렬·전체 개수</em>를 한 번에 처리합니다.</p>
+<div class="serial-card">
+<span class="sc-label">Repository — Pageable 파라미터만 추가</span>
+Page&lt;Member&gt; findByNameContaining(String keyword, Pageable pageable);<br>
+<br>
+<span class="sc-label">호출 — PageRequest.of(page, size, sort)</span><br>
+Pageable pageable = PageRequest.<span class="seg">of</span>(0, 20, Sort.by(Sort.Direction.<span class="seg">DESC</span>, <span class="seg">"id"</span>));<br>
+Page&lt;Member&gt; page = memberRepository.findByNameContaining(<span class="seg">"kim"</span>, pageable);<br>
+<br>
+List&lt;Member&gt; content = page.getContent();&nbsp;&nbsp;<span class="dim">// 현재 페이지 데이터</span><br>
+<span class="dim">long</span> total = page.getTotalElements();&nbsp;&nbsp;<span class="dim">// 전체 개수 (count 쿼리 자동)</span><br>
+<span class="dim">int</span> pages = page.getTotalPages();&nbsp;&nbsp;<span class="dim">boolean</span> last = page.isLast();
+</div>
+<table>
+<tr><th>요소</th><th>의미</th></tr>
+<tr><td><code>Pageable</code></td><td>페이지 번호·크기·정렬을 담는 요청 객체</td></tr>
+<tr><td><code>PageRequest.of(page, size)</code></td><td>0-based 페이지 번호. <code>of(0, 20)</code>은 첫 20개</td></tr>
+<tr><td><code>Page&lt;T&gt;</code></td><td>데이터 + 전체 개수 + 페이지 메타. count 쿼리가 같이 나감</td></tr>
+<tr><td><code>Slice&lt;T&gt;</code></td><td>전체 개수 불필요할 때 (count 쿼리 생략, "더보기"식)</td></tr>
+<tr><td><code>Sort.by(...)</code></td><td>정렬. <code>PageRequest.of(p, s, sort)</code>로 합쳐 전달</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">page는 0부터</span>
+<p><code>PageRequest.of</code>의 페이지 번호는 <strong>0-based</strong>입니다 — 첫 페이지가 <code>0</code>. 프론트의 1-based 페이지와 어긋나기 쉬우니 변환을 한 곳에서 처리하세요. 전체 개수가 굳이 필요 없는 무한 스크롤은 <code>Page</code> 대신 <code>Slice</code>를 쓰면 count 쿼리를 아낍니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">JPA-07</span><h2>트랜잭션·영속성 컨텍스트</h2></div>
+<p class="lede">JPA의 마법이자 함정. <em>트랜잭션 안에서 조회한 엔티티는 영속 상태이고, 값을 바꾸면 커밋 시점에 자동으로 UPDATE가 나갑니다</em> — 이게 dirty checking입니다.</p>
+<div class="serial-card">
+<span class="sc-label">변경감지 — save() 호출이 없어도 UPDATE</span>
+<span class="seg2">@Transactional</span><br>
+<span class="dim">public void</span> changeName(Long id, String newName) {<br>
+&nbsp;&nbsp;Member member = memberRepository.findById(id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.orElseThrow(() -&gt; <span class="dim">new</span> IllegalArgumentException(<span class="seg">"없는 회원"</span>));<br>
+<br>
+&nbsp;&nbsp;member.changeName(newName);&nbsp;&nbsp;<span class="dim">// 필드만 변경</span><br>
+&nbsp;&nbsp;<span class="dim">// save() 호출 불필요 — 커밋 시 dirty checking으로 UPDATE 자동</span><br>
+}
+</div>
+<table>
+<tr><th>상황</th><th>해야 할 일</th></tr>
+<tr><td>이미 영속 상태인 엔티티 수정</td><td><strong>변경감지</strong> — 필드만 바꾸면 끝. <code>save()</code> 불필요</td></tr>
+<tr><td>새 엔티티 저장 (PK 없음)</td><td><code>save()</code> 명시 호출 → INSERT</td></tr>
+<tr><td>준영속/분리된 엔티티 반영</td><td><code>save()</code>(merge) 호출 필요</td></tr>
+<tr><td>읽기 전용 메서드</td><td><code>@Transactional(readOnly = true)</code> — 스냅샷 생략, 최적화</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">변경감지는 트랜잭션 경계 안에서만</span>
+<p>dirty checking은 <strong>영속성 컨텍스트가 살아 있는 동안</strong>, 즉 <code>@Transactional</code> 경계 안에서만 동작합니다. 트랜잭션 밖에서 받은 엔티티는 준영속(detached) 상태라 필드를 바꿔도 DB에 반영되지 않습니다. 그래서 수정 로직은 트랜잭션 안의 서비스 메서드에 두고, 거기서 조회한 엔티티를 바꿔야 합니다. LAZY 연관 접근도 같은 이유로 트랜잭션 밖이면 <code>LazyInitializationException</code>이 납니다. (→ JPA 핸드북: 영속성 컨텍스트)</p>
+</div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">JPA-08</span><h2>낙관적 락</h2></div>
+<p class="lede">두 트랜잭션이 같은 행을 동시에 수정할 때, <em>마지막 저장이 앞 저장을 덮어쓰는(lost update)</em> 문제를 막습니다. 락을 미리 걸지 않고 "충돌하면 그때 실패"시키는 방식.</p>
+<div class="serial-card">
+<span class="sc-label">@Version 필드 하나면 끝</span>
+<span class="seg2">@Entity</span><br>
+<span class="dim">public class</span> Product {<br>
+&nbsp;&nbsp;<span class="seg2">@Id</span> <span class="seg2">@GeneratedValue</span>(strategy = GenerationType.<span class="seg">IDENTITY</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> Long id;<br>
+<br>
+&nbsp;&nbsp;<span class="dim">private int</span> stock;<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@Version</span><br>
+&nbsp;&nbsp;<span class="dim">private</span> Long version;&nbsp;&nbsp;<span class="dim">// UPDATE 때마다 자동 +1, WHERE version=? 로 충돌 검출</span><br>
+}
+</div>
+<div class="serial-card">
+<span class="sc-label">충돌 처리 — 예외 잡아 재시도/안내</span>
+<span class="seg2">@Transactional</span><br>
+<span class="dim">public void</span> decreaseStock(Long id, <span class="dim">int</span> qty) {<br>
+&nbsp;&nbsp;Product p = productRepository.findById(id).orElseThrow();<br>
+&nbsp;&nbsp;p.decrease(qty);&nbsp;&nbsp;<span class="dim">// 커밋 시 UPDATE ... SET version=version+1 WHERE id=? AND version=?</span><br>
+}<br>
+<span class="dim">// 다른 트랜잭션이 먼저 바꿨다면 → OptimisticLockingFailureException</span>
+</div>
+<div class="callout warn">
+<span class="co-label">동작 원리와 한계</span>
+<p><code>@Version</code> 필드가 있으면 Hibernate가 UPDATE에 <code>WHERE id=? AND version=?</code>를 붙입니다. 그 사이 누가 먼저 수정했으면 version이 안 맞아 <em>영향받은 행 0건</em> → <code>OptimisticLockingFailureException</code>(JPA 표준은 <code>OptimisticLockException</code>). 충돌 빈도가 낮을 때 적합하고, 충돌 시 <strong>재시도하거나 사용자에게 다시 시도를 안내</strong>해야 합니다. 충돌이 잦으면 비관적 락(<code>@Lock(PESSIMISTIC_WRITE)</code>)을 검토하세요. (→ JPA 핸드북: 동시성 제어)</p>
+</div>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">JPA-09</span><h2>Auditing</h2></div>
+<p class="lede">생성·수정 시각을 매번 수동으로 세팅하지 마세요. <em>JPA Auditing이 INSERT·UPDATE 시점에 자동으로 채워줍니다</em>. 거의 모든 엔티티에 공통으로 들어가는 패턴.</p>
+<div class="serial-card">
+<span class="sc-label">1) 설정 활성화 (@Configuration 또는 메인 클래스)</span>
+<span class="seg2">@Configuration</span><br>
+<span class="seg2">@EnableJpaAuditing</span><br>
+<span class="dim">public class</span> JpaConfig {}
+</div>
+<div class="serial-card">
+<span class="sc-label">2) 공통 베이스 클래스 — 상속해서 재사용</span>
+<span class="seg2">@MappedSuperclass</span><br>
+<span class="seg2">@EntityListeners</span>(AuditingEntityListener.<span class="dim">class</span>)<br>
+<span class="dim">public abstract class</span> BaseTimeEntity {<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@CreatedDate</span><br>
+&nbsp;&nbsp;<span class="seg2">@Column</span>(updatable = <span class="seg">false</span>)<br>
+&nbsp;&nbsp;<span class="dim">private</span> LocalDateTime createdAt;<br>
+<br>
+&nbsp;&nbsp;<span class="seg2">@LastModifiedDate</span><br>
+&nbsp;&nbsp;<span class="dim">private</span> LocalDateTime updatedAt;<br>
+}<br>
+<br>
+<span class="dim">// 사용: public class Member extends BaseTimeEntity { ... }</span>
+</div>
+<table>
+<tr><th>요소</th><th>역할</th></tr>
+<tr><td><code>@EnableJpaAuditing</code></td><td>Auditing 기능 켜기 (설정에 한 번)</td></tr>
+<tr><td><code>@EntityListeners(AuditingEntityListener.class)</code></td><td>해당 엔티티에 Auditing 리스너 연결</td></tr>
+<tr><td><code>@CreatedDate</code></td><td>INSERT 시각 자동 기록 (<code>updatable=false</code>로 고정)</td></tr>
+<tr><td><code>@LastModifiedDate</code></td><td>UPDATE 시각 자동 갱신</td></tr>
+<tr><td><code>@MappedSuperclass</code></td><td>테이블 없는 공통 매핑 부모 — 필드만 상속</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">생성자·수정자도 자동으로</span>
+<p>시각뿐 아니라 <em>누가</em> 만들고 바꿨는지도 <code>@CreatedBy</code>/<code>@LastModifiedBy</code>로 자동 기록할 수 있습니다 — <code>AuditorAware&lt;String&gt;</code> 빈을 등록해 현재 사용자를 공급하면 됩니다. 시간대는 <code>LocalDateTime</code>이 기본이지만, 다국가/UTC 저장이 필요하면 <code>Instant</code>를 검토하세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 10 ============ -->
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">JPA-10</span><h2>치트시트 — 자주 쓰는 한 줄</h2></div>
+<p class="lede">현장에서 반복되는 어노테이션·API. 외우기보다 "이게 있다"를 알아두고 필요할 때 찾으세요.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>엔티티 선언</b><span>@Entity</span></div><div class="g-def"><code>@Entity</code> + <code>@Id</code> + 기본 생성자(<code>protected</code>)는 최소 3종 세트. <code>@Table(name=...)</code>로 테이블명 지정</div></div>
+<div class="g-row"><div class="g-term"><b>PK 자동 생성</b><span>@GeneratedValue</span></div><div class="g-def"><code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code> — DB AUTO_INCREMENT 위임. MySQL·PostgreSQL 기본 선택</div></div>
+<div class="g-row"><div class="g-term"><b>N:1 (FK 주인)</b><span>@ManyToOne</span></div><div class="g-def"><code>@ManyToOne(fetch = FetchType.LAZY)</code> + <code>@JoinColumn(name="member_id")</code>. fetch는 항상 LAZY부터</div></div>
+<div class="g-row"><div class="g-term"><b>1:N (거울)</b><span>@OneToMany</span></div><div class="g-def"><code>@OneToMany(mappedBy="member")</code> — <code>mappedBy</code>는 상대 엔티티의 필드명. 양방향 편의 메서드로 동기화</div></div>
+<div class="g-row"><div class="g-term"><b>Repository 상속</b><span>JpaRepository</span></div><div class="g-def"><code>interface MemberRepository extends JpaRepository&lt;Member, Long&gt;</code> — <code>&lt;엔티티, PK타입&gt;</code> 순서</div></div>
+<div class="g-row"><div class="g-term"><b>쿼리 메서드</b><span>findBy / existsBy / countBy</span></div><div class="g-def"><code>findByEmail</code>, <code>findByNameContaining</code>, <code>existsByEmail</code>, <code>countByName</code> — 이름 규칙으로 쿼리 자동 생성</div></div>
+<div class="g-row"><div class="g-term"><b>직접 쿼리</b><span>@Query + @Param</span></div><div class="g-def"><code>@Query("SELECT m FROM Member m WHERE m.email = :email")</code> + <code>@Param("email")</code>. 네이티브는 <code>nativeQuery = true</code></div></div>
+<div class="g-row"><div class="g-term"><b>N+1 (to-one)</b><span>fetch join</span></div><div class="g-def"><code>@Query("SELECT o FROM Order o JOIN FETCH o.member")</code> 또는 <code>@EntityGraph(attributePaths={"member"})</code></div></div>
+<div class="g-row"><div class="g-term"><b>N+1 (컬렉션)</b><span>batch_fetch_size</span></div><div class="g-def"><code>hibernate.default_batch_fetch_size: 100</code> — 컬렉션을 <code>IN (?,?,...)</code>으로 묶음. 페이징과 fetch join 동시 금지</div></div>
+<div class="g-row"><div class="g-term"><b>페이징</b><span>Pageable / Page</span></div><div class="g-def"><code>PageRequest.of(0, 20, Sort.by("id"))</code> → <code>Page&lt;Member&gt;</code>. 페이지는 0-based, count 쿼리 자동</div></div>
+<div class="g-row"><div class="g-term"><b>트랜잭션 경계</b><span>@Transactional</span></div><div class="g-def">서비스 메서드에 부착. 안에서 조회한 엔티티는 필드만 바꿔도 <strong>변경감지(dirty checking)</strong>로 UPDATE 자동. 읽기는 <code>readOnly = true</code></div></div>
+<div class="g-row"><div class="g-term"><b>동시 수정 충돌</b><span>@Version</span></div><div class="g-def"><code>@Version</code> 필드 추가 → UPDATE에 <code>WHERE version=?</code>. 충돌 시 <code>OptimisticLockingFailureException</code> → 재시도/안내</div></div>
+<div class="g-row"><div class="g-term"><b>시각 자동 기록</b><span>Auditing</span></div><div class="g-def"><code>@EnableJpaAuditing</code> + <code>@EntityListeners(AuditingEntityListener.class)</code> + <code>@CreatedDate</code>/<code>@LastModifiedDate</code></div></div>
+<div class="g-row"><div class="g-term"><b>공통 필드 상속</b><span>@MappedSuperclass</span></div><div class="g-def"><code>@MappedSuperclass</code>로 베이스 클래스 만들어 createdAt/updatedAt 등 공통 필드를 모든 엔티티에 상속</div></div>
+</div>
+<div class="callout gm">
+<span class="co-label">학습 순서 제안</span>
+<p>전부 한 번에 외우려 하지 마세요. 손에 먼저 붙일 것: <code>@Entity</code>+<code>@Id</code> · <code>JpaRepository</code> 상속 · 쿼리 메서드(<code>findBy</code>) · <code>@Transactional</code> 안에서의 변경감지. 이 네 가지로 foundational CRUD는 끝납니다. 그다음 실무에서 거의 반드시 만나는 게 <strong>N+1</strong>(JPA-05)이니, 여기까지 잡으면 실전 80%입니다. 각 항목의 <em>왜</em>가 궁금하면 JPA 핸드북에서 영속성 컨텍스트·프록시·flush 타이밍을 보세요.</p>
+</div>
+</section>
+
+<footer>
+JPA EXAMPLES · V1 · 2026-06<br>
+STACK : SPRING DATA JPA · HIBERNATE · jakarta.persistence (Spring Boot 3+)<br>
+NOTE : 구버전 Spring Boot 2.x는 javax.persistence.* · COMPANION : JPA 핸드북(개념 심화)
+</footer>
+
+</main>
+</div>
+</body>
+</html>

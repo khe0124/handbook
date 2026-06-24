@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>탄소회계 — 상세 화면·기능 목록 (CRUD 분해)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:8px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;font-size:16px}
+.shell{display:grid;grid-template-columns:248px 1fr;max-width:1520px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:30px 18px 48px;background:var(--paper)}
+main{min-width:0;padding:0 36px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 16px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.13em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.nav-back{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-decoration:none;margin-bottom:18px;letter-spacing:.04em}
+.nav-back:hover{color:var(--green)}
+nav a.lk{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:6px 8px;border-radius:6px;font-size:13px;line-height:1.35}
+nav a.lk:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a.lk .code{font-family:var(--mono);font-size:10px;color:var(--green);flex-shrink:0}
+header.hero{padding:56px 0 32px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.16}
+.hero-sub{margin-top:16px;font-size:16px;color:var(--ink-soft);max-width:780px}
+.hero-meta{margin-top:22px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.04em;line-height:1.9}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 6px}
+.stat{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:12px 18px;min-width:104px}
+.stat b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.stat span{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.04em}
+.legend{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:16px 0 4px;font-size:12px;color:var(--ink-soft)}
+.legend .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--ink-soft)}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:14px 18px;border-radius:0 6px 6px 0;margin:20px 0;font-size:13.5px}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout b{color:var(--green-deep)}
+section{padding-top:46px}
+.s-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:9px;margin-bottom:6px}
+.s-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.08em}
+h2{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.s-note{font-size:13px;color:var(--ink-soft);margin:8px 0 0}
+.reg{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px}
+table.dt{width:100%;border-collapse:collapse;font-size:12px;min-width:1200px;background:var(--panel)}
+table.dt th{position:sticky;top:0;z-index:2;background:var(--green-deep);color:#Eaeffb;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;padding:8px 9px;text-align:left;white-space:nowrap;font-weight:600}
+table.dt td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+table.dt tr:last-child td{border-bottom:none}
+tr.grp td{background:var(--green-tint);border-top:2px solid var(--green);border-bottom:1px solid var(--line)}
+tr.grp b{font-size:13px;font-weight:800;color:var(--green-deep);letter-spacing:-.01em}
+tr.grp .scid{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:600;margin-right:8px}
+tr.grp .ent{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-left:8px}
+td.id{font-family:var(--mono);font-size:10.5px;color:var(--green-deep);white-space:nowrap}
+td.nm{font-weight:600;min-width:150px}
+td.de{min-width:230px;color:var(--ink)}
+td.df{min-width:170px;font-size:11.5px;color:var(--ink-soft)}
+td.st{min-width:185px;font-size:11.5px;color:var(--ink-soft)}
+td.pm{font-family:var(--mono);font-size:10px;color:var(--ink-soft);white-space:nowrap}
+td.std{font-family:var(--mono);font-size:10px;color:var(--green);white-space:nowrap}
+.op{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;letter-spacing:.03em}
+.op.c{background:#E2EFE6;color:#1F5C40}
+.op.r{background:#E2E9F6;color:#22418A}
+.op.l{background:#EAF0F8;color:#3C5066}
+.op.u{background:var(--amber-tint);color:var(--amber)}
+.op.d{background:var(--red-tint);color:var(--red)}
+.op.x{background:#ECE6F4;color:#5B3E8A}
+code{font-family:var(--mono);font-size:.88em;background:var(--green-tint);color:var(--green-deep);padding:0 4px;border-radius:3px}
+.p{font-family:var(--mono);font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.p.p0{background:var(--green);color:#fff}.p.p1{background:var(--green-tint);color:var(--green-deep);border:1px solid var(--green)}.p.p2{background:#EEF0F4;color:var(--ink-soft);border:1px solid var(--line)}
+footer{margin-top:80px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">SCREEN · CRUD OPERATION REGISTER</div>
+  <div class="nav-title">탄소회계 상세 목록 (CRUD)</div>
+  <a class="nav-back" href="carbon-accounting-functional-spec.html">← 탄소회계 기능정의서(개괄)</a>
+  <a class="lk" href="#map"><span class="code">▦</span>전체 화면 목록</a>
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-soft);margin:14px 8px 6px">— 화면별 오퍼레이션 —</div>
+  <a class="lk" href="#a"><span class="code">A</span>설정·경계</a>
+  <a class="lk" href="#b"><span class="code">B</span>데이터 수집</a>
+  <a class="lk" href="#c"><span class="code">C</span>계수·산정</a>
+  <a class="lk" href="#d"><span class="code">D</span>Scope 작업공간</a>
+  <a class="lk" href="#e"><span class="code">E</span>결과·관리</a>
+  <a class="lk" href="#f"><span class="code">F</span>거버넌스</a>
+  <a class="lk" href="#x"><span class="code">X</span>횡단 요소</a>
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-soft);margin:14px 8px 6px">— 개발 명세 —</div>
+  <a class="lk" href="#g"><span class="code">G</span>데이터 사전(필드)</a>
+  <a class="lk" href="#h"><span class="code">H</span>ENUM·코드값</a>
+  <a class="lk" href="#i"><span class="code">I</span>API 엔드포인트</a>
+  <a class="lk" href="#j"><span class="code">J</span>검증·에러 코드</a>
+  <a class="lk" href="#k"><span class="code">K</span>상태 전이</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : REG-CA-01 · R2</span>
+    <span>TYPE : CRUD OPERATION REGISTER</span>
+    <span>COMPANION : SPEC-CA-01</span>
+  </div>
+  <h1>탄소회계<br>상세 화면·기능 목록 <span style="font-size:.6em;color:var(--ink-soft)">CRUD 분해</span></h1>
+  <p class="hero-sub">상세 목록을 <strong>엔티티별 오퍼레이션(CRUD) 단위</strong>로 더 쪼갰습니다. "기능" 하나가 실제로는 생성·조회·수정·삭제 + 도메인 오퍼레이션(import·calculate·approve·lock·verify)으로 나뉩니다. 특히 회계·감사 시스템에서는 <em>무엇을 못 하는지</em>(잠긴 산정·감사로그의 Update/Delete 금지)가 설계의 핵심이라, CRUD로 분해해야 그 제약이 드러납니다.</p>
+  <div class="hero-meta">READ : 각 행 = 엔티티에 대한 하나의 오퍼레이션 · 상태·제약 컬럼이 불변성·SoD를 명시<br>OPS : C 생성 · R 조회 · L 목록 · U 수정 · D 삭제 · 확장(IM·EX·CALC·AP·LK·VF·AS·CMT)</div>
+
+  <div class="stats">
+    <div class="stat"><b>6+1</b><span>영역 AREA</span></div>
+    <div class="stat"><b>72</b><span>화면 SCREEN</span></div>
+    <div class="stat"><b>85</b><span>오퍼레이션 OP</span></div>
+    <div class="stat"><b>13</b><span>OP 유형</span></div>
+  </div>
+  <div class="legend">
+    <span class="lab">OP:</span>
+    <span class="op c">C 생성</span><span class="op r">R 조회</span><span class="op l">L 목록</span><span class="op u">U 수정</span><span class="op d">D 삭제</span>
+    <span class="op x">IM 임포트</span><span class="op x">EX 익스포트</span><span class="op x">CALC 계산</span><span class="op x">AP 승인</span><span class="op x">LK 잠금</span><span class="op x">VF 검증</span><span class="op x">AS 배정</span><span class="op x">CMT 코멘트</span>
+    <span class="lab" style="margin-left:8px">우선:</span><span class="p p0">P0</span><span class="p p1">P1</span><span class="p p2">P2</span>
+  </div>
+</header>
+
+<div class="callout">
+<span class="co-label">CRUD 분해가 드러내는 것 — 불변성</span>
+<p>이 시스템의 핵심 엔티티 다수는 <b>append-only / 불변</b>입니다. <b>EmissionFactor</b>는 U=in-place 수정이 아니라 새 버전 발행, <b>Calculation 스냅샷·AuditEvent</b>는 U·D 자체가 금지, <b>Credit 무효화(retire)</b>는 되돌릴 수 없습니다. 아래 표의 <em>상태·제약</em> 컬럼이 이 "할 수 없음"을 행마다 명시합니다 — 이것이 CRUD를 분리하는 진짜 이유입니다.</p>
+</div>
+
+<!-- ===================== SCREEN INVENTORY ===================== -->
+<section id="map">
+<div class="s-head"><span class="s-code">▦ MAP</span><h2>전체 화면 목록 (Screen Inventory)</h2></div>
+<p class="s-note">앞의 18개 기능 화면(SC)을 <strong>실제 화면 단위로 분해</strong>하고, 빠져 있던 전역 화면(인증·온보딩·설정·시스템)을 더한 전수 목록입니다. 한 기능이 목록·상세·입력폼·마법사로 나뉘고, 제품 셸(로그인·알림·검색 등)이 추가돼 <strong>72개 화면</strong>이 됩니다. 유형: 대시보드·목록·상세·폼·마법사·워크스페이스·설정·시스템·상태.</p>
+<div class="reg"><table class="dt">
+<tr><th>화면 ID</th><th>화면명</th><th>유형</th><th>진입·부모</th><th>우선</th><th>비고</th></tr>
+
+<tr class="grp"><td colspan="6"><b>SHELL · 인증·전역</b><span class="ent">로그인 전후 공통, 모든 제품에 필수</span></td></tr>
+<tr><td class="id">SCR-G01</td><td class="nm">로그인</td><td class="df">시스템</td><td class="st">진입점</td><td><span class="p p0">P0</span></td><td class="st">SSO·로컬</td></tr>
+<tr><td class="id">SCR-G02</td><td class="nm">SSO 콜백·IdP 연결</td><td class="df">시스템</td><td class="st">로그인</td><td><span class="p p1">P1</span></td><td class="st">SAML/OIDC</td></tr>
+<tr><td class="id">SCR-G03</td><td class="nm">MFA 입력</td><td class="df">폼</td><td class="st">로그인</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-G04</td><td class="nm">비밀번호 재설정</td><td class="df">폼</td><td class="st">로그인</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-G05</td><td class="nm">초대 수락·계정 설정</td><td class="df">마법사</td><td class="st">이메일 링크</td><td><span class="p p1">P1</span></td><td class="st">외부 사용자 포함</td></tr>
+<tr><td class="id">SCR-G06</td><td class="nm">조직 선택·전환</td><td class="df">시스템</td><td class="st">로그인 후</td><td><span class="p p1">P1</span></td><td class="st">멀티테넌트</td></tr>
+<tr><td class="id">SCR-G07</td><td class="nm">홈 포털·보고연도 선택</td><td class="df">대시보드</td><td class="st">로그인 후</td><td><span class="p p0">P0</span></td><td class="st">컨텍스트 진입</td></tr>
+<tr><td class="id">SCR-G08</td><td class="nm">전역 검색 결과</td><td class="df">목록</td><td class="st">상단 검색</td><td><span class="p p1">P1</span></td><td class="st">권한 범위 내</td></tr>
+<tr><td class="id">SCR-G09</td><td class="nm">알림 센터</td><td class="df">목록</td><td class="st">상단 벨</td><td><span class="p p1">P1</span></td><td class="st">FS-10</td></tr>
+<tr><td class="id">SCR-G10</td><td class="nm">작업 인박스·할당</td><td class="df">목록</td><td class="st">상단</td><td><span class="p p1">P1</span></td><td class="st">검토·보완·finding</td></tr>
+<tr><td class="id">SCR-G11</td><td class="nm">내 프로필·환경설정</td><td class="df">설정</td><td class="st">계정 메뉴</td><td><span class="p p1">P1</span></td><td class="st">언어·단위·로캘</td></tr>
+<tr><td class="id">SCR-G12</td><td class="nm">도움말·온보딩 투어</td><td class="df">시스템</td><td class="st">전역</td><td><span class="p p2">P2</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-G13</td><td class="nm">403 권한없음</td><td class="df">상태</td><td class="st">전역</td><td><span class="p p1">P1</span></td><td class="st">사유 표시</td></tr>
+<tr><td class="id">SCR-G14</td><td class="nm">404 / 500 / 점검</td><td class="df">상태</td><td class="st">전역</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-G15</td><td class="nm">빈 상태 템플릿</td><td class="df">상태</td><td class="st">전역</td><td><span class="p p0">P0</span></td><td class="st">CTA 포함</td></tr>
+
+<tr class="grp"><td colspan="6"><b>ONBOARD · 조직 셋업 마법사</b><span class="ent">최초 1회, 단계별</span></td></tr>
+<tr><td class="id">SCR-O01</td><td class="nm">① 조직 기본정보</td><td class="df">마법사</td><td class="st">최초 로그인</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-O02</td><td class="nm">② 연결기준 선택</td><td class="df">마법사</td><td class="st">O01</td><td><span class="p p0">P0</span></td><td class="st">지분/통제</td></tr>
+<tr><td class="id">SCR-O03</td><td class="nm">③ 사업장 등록·import</td><td class="df">마법사</td><td class="st">O02</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-O04</td><td class="nm">④ 보고연도·기준연도</td><td class="df">마법사</td><td class="st">O03</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-O05</td><td class="nm">⑤ 팀 초대·역할 배정</td><td class="df">마법사</td><td class="st">O04</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+
+<tr class="grp"><td colspan="6"><b>SETTINGS · 설정·관리자</b><span class="ent">조직·사용자·연동·계수·정책</span></td></tr>
+<tr><td class="id">SCR-S01</td><td class="nm">조직 설정</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-S02</td><td class="nm">사용자 관리(목록)</td><td class="df">목록</td><td class="st">설정</td><td><span class="p p0">P0</span></td><td class="st">SC-18</td></tr>
+<tr><td class="id">SCR-S03</td><td class="nm">사용자 상세·권한</td><td class="df">상세</td><td class="st">S02</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-S04</td><td class="nm">역할·권한 매트릭스</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p0">P0</span></td><td class="st">SoD</td></tr>
+<tr><td class="id">SCR-S05</td><td class="nm">연동 관리(목록)</td><td class="df">목록</td><td class="st">설정</td><td><span class="p p1">P1</span></td><td class="st">ERP·미터·레지스트리</td></tr>
+<tr><td class="id">SCR-S06</td><td class="nm">연동 상세·인증 설정</td><td class="df">상세</td><td class="st">S05</td><td><span class="p p1">P1</span></td><td class="st">secret·매핑</td></tr>
+<tr><td class="id">SCR-S07</td><td class="nm">계수 라이브러리 관리</td><td class="df">목록</td><td class="st">설정</td><td><span class="p p0">P0</span></td><td class="st">SC-05</td></tr>
+<tr><td class="id">SCR-S08</td><td class="nm">GWP·표준 정책 설정</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p0">P0</span></td><td class="st">AR 버전</td></tr>
+<tr><td class="id">SCR-S09</td><td class="nm">알림 규칙 설정</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p2">P2</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-S10</td><td class="nm">감사로그 뷰어</td><td class="df">목록</td><td class="st">설정</td><td><span class="p p0">P0</span></td><td class="st">SC-17·읽기전용</td></tr>
+<tr><td class="id">SCR-S11</td><td class="nm">보안·데이터 보존 설정</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p1">P1</span></td><td class="st">FS-14</td></tr>
+<tr><td class="id">SCR-S12</td><td class="nm">구독·청구</td><td class="df">설정</td><td class="st">설정</td><td><span class="p p2">P2</span></td><td class="st">제품 정책 종속</td></tr>
+
+<tr class="grp"><td colspan="6"><b>A 설정·경계</b><span class="ent">SC-01~03 분해</span></td></tr>
+<tr><td class="id">SCR-A01</td><td class="nm">조직경계 워크스페이스(트리)</td><td class="df">워크스페이스</td><td class="st">A영역</td><td><span class="p p0">P0</span></td><td class="st">SC-01</td></tr>
+<tr><td class="id">SCR-A02</td><td class="nm">시설 상세·편집</td><td class="df">상세/폼</td><td class="st">A01</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-A03</td><td class="nm">보고연도 목록</td><td class="df">목록</td><td class="st">A영역</td><td><span class="p p0">P0</span></td><td class="st">SC-02</td></tr>
+<tr><td class="id">SCR-A04</td><td class="nm">보고연도 상세·확정</td><td class="df">상세</td><td class="st">A03</td><td><span class="p p0">P0</span></td><td class="st">잠금</td></tr>
+<tr><td class="id">SCR-A05</td><td class="nm">배출원 목록</td><td class="df">목록</td><td class="st">A영역</td><td><span class="p p0">P0</span></td><td class="st">SC-03</td></tr>
+<tr><td class="id">SCR-A06</td><td class="nm">배출원 상세·Scope 매핑</td><td class="df">상세/폼</td><td class="st">A05</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-A07</td><td class="nm">배출원 일괄 import</td><td class="df">마법사</td><td class="st">A05</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+
+<tr class="grp"><td colspan="6"><b>B 데이터 수집</b><span class="ent">SC-04·10·11 분해</span></td></tr>
+<tr><td class="id">SCR-B01</td><td class="nm">활동자료 목록·필터</td><td class="df">목록</td><td class="st">B영역</td><td><span class="p p0">P0</span></td><td class="st">SC-04</td></tr>
+<tr><td class="id">SCR-B02</td><td class="nm">활동자료 입력·수정 폼</td><td class="df">폼</td><td class="st">B01</td><td><span class="p p0">P0</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-B03</td><td class="nm">활동자료 상세·증빙</td><td class="df">상세</td><td class="st">B01</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-B04</td><td class="nm">CSV 업로드 마법사(매핑)</td><td class="df">마법사</td><td class="st">B01</td><td><span class="p p0">P0</span></td><td class="st">3-step</td></tr>
+<tr><td class="id">SCR-B05</td><td class="nm">미터·ERP 수집 데이터 뷰</td><td class="df">목록</td><td class="st">B영역</td><td><span class="p p1">P1</span></td><td class="st">연동</td></tr>
+<tr><td class="id">SCR-B06</td><td class="nm">공급사 PCF 요청 목록</td><td class="df">목록</td><td class="st">B영역</td><td><span class="p p1">P1</span></td><td class="st">SC-10</td></tr>
+<tr><td class="id">SCR-B07</td><td class="nm">PCF 요청 작성</td><td class="df">폼</td><td class="st">B06</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-B08</td><td class="nm">공급사 제출 포털(외부)</td><td class="df">폼</td><td class="st">초대 링크</td><td><span class="p p1">P1</span></td><td class="st">테넌트 격리</td></tr>
+<tr><td class="id">SCR-B09</td><td class="nm">PCF 검토·승인</td><td class="df">상세</td><td class="st">B06</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-B10</td><td class="nm">데이터 품질 대시보드</td><td class="df">대시보드</td><td class="st">B영역</td><td><span class="p p1">P1</span></td><td class="st">SC-11</td></tr>
+
+<tr class="grp"><td colspan="6"><b>C 계수·산정</b><span class="ent">SC-05·06 분해</span></td></tr>
+<tr><td class="id">SCR-C01</td><td class="nm">계수 브라우저·검색</td><td class="df">목록</td><td class="st">C영역</td><td><span class="p p0">P0</span></td><td class="st">SC-05</td></tr>
+<tr><td class="id">SCR-C02</td><td class="nm">계수 상세·버전 이력</td><td class="df">상세</td><td class="st">C01</td><td><span class="p p0">P0</span></td><td class="st">불변 버전</td></tr>
+<tr><td class="id">SCR-C03</td><td class="nm">커스텀 계수 등록 폼</td><td class="df">폼</td><td class="st">C01</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-C04</td><td class="nm">산정 실행·진행 모니터</td><td class="df">시스템</td><td class="st">C영역</td><td><span class="p p0">P0</span></td><td class="st">SC-06·async job</td></tr>
+<tr><td class="id">SCR-C05</td><td class="nm">산정 결과 상세·lineage</td><td class="df">상세</td><td class="st">C04</td><td><span class="p p0">P0</span></td><td class="st">역추적</td></tr>
+
+<tr class="grp"><td colspan="6"><b>D Scope 작업공간</b><span class="ent">SC-07~09 분해</span></td></tr>
+<tr><td class="id">SCR-D01</td><td class="nm">Scope 1 워크스페이스</td><td class="df">워크스페이스</td><td class="st">D영역</td><td><span class="p p0">P0</span></td><td class="st">SC-07</td></tr>
+<tr><td class="id">SCR-D02</td><td class="nm">Scope 2 이중장부</td><td class="df">워크스페이스</td><td class="st">D영역</td><td><span class="p p0">P0</span></td><td class="st">SC-08</td></tr>
+<tr><td class="id">SCR-D03</td><td class="nm">Scope 2 계약·인증서 관리</td><td class="df">목록</td><td class="st">D02</td><td><span class="p p1">P1</span></td><td class="st">REC·PPA</td></tr>
+<tr><td class="id">SCR-D04</td><td class="nm">Scope 3 카테고리 개요</td><td class="df">대시보드</td><td class="st">D영역</td><td><span class="p p0">P0</span></td><td class="st">SC-09</td></tr>
+<tr><td class="id">SCR-D05</td><td class="nm">Scope 3 카테고리 상세·산정</td><td class="df">워크스페이스</td><td class="st">D04</td><td><span class="p p0">P0</span></td><td class="st">카테고리별 방법</td></tr>
+
+<tr class="grp"><td colspan="6"><b>E 결과·관리</b><span class="ent">SC-12~14 분해</span></td></tr>
+<tr><td class="id">SCR-E01</td><td class="nm">인벤토리 대시보드</td><td class="df">대시보드</td><td class="st">E영역</td><td><span class="p p0">P0</span></td><td class="st">SC-12</td></tr>
+<tr><td class="id">SCR-E02</td><td class="nm">핫스팟 드릴다운</td><td class="df">상세</td><td class="st">E01</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-E03</td><td class="nm">감축목표 설정</td><td class="df">폼</td><td class="st">E영역</td><td><span class="p p2">P2</span></td><td class="st">SC-13</td></tr>
+<tr><td class="id">SCR-E04</td><td class="nm">시나리오 비교</td><td class="df">대시보드</td><td class="st">E03</td><td><span class="p p2">P2</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-E05</td><td class="nm">크레딧 목록·등록</td><td class="df">목록</td><td class="st">E영역</td><td><span class="p p1">P1</span></td><td class="st">SC-14</td></tr>
+<tr><td class="id">SCR-E06</td><td class="nm">크레딧 상세·무효화</td><td class="df">상세</td><td class="st">E05</td><td><span class="p p1">P1</span></td><td class="st">비가역</td></tr>
+<tr><td class="id">SCR-E07</td><td class="nm">경계 내 제거 계상</td><td class="df">폼</td><td class="st">E영역</td><td><span class="p p1">P1</span></td><td class="st">LSR</td></tr>
+
+<tr class="grp"><td colspan="6"><b>F 거버넌스</b><span class="ent">SC-15~17 분해</span></td></tr>
+<tr><td class="id">SCR-F01</td><td class="nm">검증 세션 워크스페이스</td><td class="df">워크스페이스</td><td class="st">F영역</td><td><span class="p p1">P1</span></td><td class="st">SC-15</td></tr>
+<tr><td class="id">SCR-F02</td><td class="nm">finding 상세·대응</td><td class="df">상세</td><td class="st">F01</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-F03</td><td class="nm">검증 의견서·서명</td><td class="df">상세</td><td class="st">F01</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-F04</td><td class="nm">보고서 빌더</td><td class="df">워크스페이스</td><td class="st">F영역</td><td><span class="p p1">P1</span></td><td class="st">SC-16·ISO/규제</td></tr>
+<tr><td class="id">SCR-F05</td><td class="nm">공시 서식 매핑</td><td class="df">폼</td><td class="st">F04</td><td><span class="p p1">P1</span></td><td class="st">—</td></tr>
+<tr><td class="id">SCR-F06</td><td class="nm">제출 패키지·이력</td><td class="df">목록</td><td class="st">F04</td><td><span class="p p1">P1</span></td><td class="st">불변</td></tr>
+</table></div>
+<p style="font-size:12px;color:var(--ink-soft);font-family:var(--mono)">※ 72개 = 셸 15 + 온보딩 5 + 설정 12 + 업무화면(A~F) 40. 각 화면의 오퍼레이션·필드는 아래 영역(A~K) 참조.</p>
+</section>
+
+<!-- ===================== AREA A ===================== -->
+<section id="a">
+<div class="s-head"><span class="s-code">AREA A</span><h2>설정·경계</h2></div>
+<p class="s-note">조직경계·보고기간·배출원 마스터 엔티티의 오퍼레이션.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-01</span><b>조직경계</b><span class="ent">Organization · Facility</span></td></tr>
+<tr><td class="id">CA-01-C1</td><td><span class="op c">C</span></td><td class="nm">법인·시설 생성</td><td class="df">법인명, 시설, 지분율, 통제유형</td><td class="st">중복 시설·고아 노드 차단</td><td class="pm">작성자</td><td class="st">초안 상태에서만</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-01-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">경계 트리 조회·목록</td><td class="df">필터(법인·계상여부)</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-01-U1</td><td><span class="op u">U</span></td><td class="nm">지분·통제 수정</td><td class="df">share%, control</td><td class="st">변경 시 재산정 경고·사유</td><td class="pm">작성자</td><td class="st">잠긴 연도 영향 시 경고</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-01-D1</td><td><span class="op d">D</span></td><td class="nm">시설 삭제</td><td class="df">facility_id</td><td class="st">데이터 연결 시 삭제 금지→비활성</td><td class="pm">작성자</td><td class="st">참조 무결성 제약</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-01-X1</td><td><span class="op x">CALC</span></td><td class="nm">계상·Scope 자동판정</td><td class="df">consol_basis</td><td class="st">오버라이드 시 사유 필수</td><td class="pm">작성자</td><td class="st">연결기준 종속</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-01-X2</td><td><span class="op x">VF</span></td><td class="nm">지분율 합 검증</td><td class="df">share_sum</td><td class="st">±0.5%p 밖 차단·하이라이트</td><td class="pm">—</td><td class="st">차단</td><td><span class="p p0">P0</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-01-X3</td><td><span class="op x">IM</span></td><td class="nm">시설·지분 일괄 import</td><td class="df">CSV(법인·시설·지분)</td><td class="st">매핑 실패 행 리포트</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-02</span><b>보고기간·기준연도</b><span class="ent">ReportingPeriod</span></td></tr>
+<tr><td class="id">CA-02-C1</td><td><span class="op c">C</span></td><td class="nm">보고연도 생성</td><td class="df">기간, fiscal_year</td><td class="st">기간 중복 생성 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-02-U1</td><td><span class="op u">U</span></td><td class="nm">기준연도 지정·변경</td><td class="df">base_year</td><td class="st">변경 시 이력·사유</td><td class="pm">승인자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">GHGP</td></tr>
+<tr><td class="id">CA-02-X1</td><td><span class="op x">LK</span></td><td class="nm">보고연도 확정·잠금</td><td class="df">period_id</td><td class="st">미해결 finding 시 차단</td><td class="pm">승인자</td><td class="st">잠금 후 편집=새 버전만</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-02-X2</td><td><span class="op x">CALC</span></td><td class="nm">기준연도 재산정</td><td class="df">trigger, threshold(5%)</td><td class="st">트리거 분류·유의성 임계</td><td class="pm">작성자</td><td class="st">의무 재산정 큐</td><td><span class="p p1">P1</span></td><td class="std">GHGP</td></tr>
+<tr><td class="id">CA-02-X3</td><td><span class="op x">IM</span></td><td class="nm">과거연도 backfill</td><td class="df">legacy 인벤토리</td><td class="st">매핑 검증</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-02-D1</td><td><span class="op d">D</span></td><td class="nm">보고연도 삭제</td><td class="df">period_id</td><td class="st">초안만 삭제 가능</td><td class="pm">작성자</td><td class="st">확정·공시본 삭제 금지</td><td><span class="p p1">P1</span></td><td class="std">CA-09</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-03</span><b>배출원</b><span class="ent">EmissionSource</span></td></tr>
+<tr><td class="id">CA-03-C1</td><td><span class="op c">C</span></td><td class="nm">배출원 등록</td><td class="df">source_type, facility</td><td class="st">미분류 소스 경고</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-03-RU</td><td><span class="op l">L</span><span class="op u">U</span></td><td class="nm">목록 조회·Scope 매핑 수정</td><td class="df">scope, category</td><td class="st">미매핑 소스 산정 제외 경고</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-03-D1</td><td><span class="op d">D</span></td><td class="nm">배출원 삭제</td><td class="df">source_id</td><td class="st">활동자료 연결 시 비활성만</td><td class="pm">작성자</td><td class="st">참조 무결성</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-03-IM</td><td><span class="op x">IM</span></td><td class="nm">배출원 일괄 등록</td><td class="df">CSV(소스 마스터)</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA B ===================== -->
+<section id="b">
+<div class="s-head"><span class="s-code">AREA B</span><h2>데이터 수집</h2></div>
+<p class="s-note">활동자료·공급사 PCF·데이터 품질 엔티티의 오퍼레이션.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-04</span><b>활동자료</b><span class="ent">ActivityData</span></td></tr>
+<tr><td class="id">CA-04-C1</td><td><span class="op c">C</span></td><td class="nm">활동자료 입력</td><td class="df">value, unit, period, 출처</td><td class="st">필수값·단위 미선택 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-04-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">조회·목록·필터</td><td class="df">기간·시설·소스 필터</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-04-U1</td><td><span class="op u">U</span></td><td class="nm">활동자료 수정</td><td class="df">value, evidence</td><td class="st">검증·잠금 후 수정 제한</td><td class="pm">작성자</td><td class="st">변경 시 감사로그</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-04-D1</td><td><span class="op d">D</span></td><td class="nm">활동자료 삭제</td><td class="df">ad_id, 사유</td><td class="st">산정 반영분 삭제 시 경고</td><td class="pm">작성자</td><td class="st">잠긴 연도 삭제 금지</td><td><span class="p p1">P1</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-04-IM</td><td><span class="op x">IM</span></td><td class="nm">CSV·미터·ERP import</td><td class="df">upload/connector, mapping</td><td class="st">행 단위 검증·부분 저장</td><td class="pm">작성자</td><td class="st">대용량=비동기</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-04-EX</td><td><span class="op x">EX</span></td><td class="nm">활동자료 export</td><td class="df">필터 범위</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-04-VF</td><td><span class="op x">VF</span></td><td class="nm">단위환산·이상치 검증</td><td class="df">unit_conv, outlier</td><td class="st">미환산 차단·이상치 플래그</td><td class="pm">—</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-04-AP</td><td><span class="op x">AP</span></td><td class="nm">활동자료 검토 승인</td><td class="df">review</td><td class="st">—</td><td class="pm">검토자</td><td class="st">상태: 입력→검증대기→승인</td><td><span class="p p1">P1</span></td><td class="std">CA-05</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-10</span><b>공급사 PCF</b><span class="ent">PCFRequest · SupplierPCF</span></td></tr>
+<tr><td class="id">CA-10-C1</td><td><span class="op c">C</span></td><td class="nm">PCF 요청 생성·발송</td><td class="df">품목, 기간, 기준</td><td class="st">—</td><td class="pm">작성자</td><td class="st">미응답 타임아웃·리마인드</td><td><span class="p p1">P1</span></td><td class="std">CA-04</td></tr>
+<tr><td class="id">CA-10-C2</td><td><span class="op c">C</span></td><td class="nm">PCF 제출(외부)</td><td class="df">pcf, boundary, method</td><td class="st">자사 제출분만(테넌트)</td><td class="pm">공급사</td><td class="st">scoped access</td><td><span class="p p1">P1</span></td><td class="std">PACT</td></tr>
+<tr><td class="id">CA-10-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">요청·제출 상태 조회</td><td class="df">status 필터</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-04</td></tr>
+<tr><td class="id">CA-10-VF</td><td><span class="op x">VF</span></td><td class="nm">경계 정규화·DQR 검증</td><td class="df">boundary_norm, dqr</td><td class="st">경계 미일치 시 사용 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">PACT</td></tr>
+<tr><td class="id">CA-10-AP</td><td><span class="op x">AP</span></td><td class="nm">PCF 승인·반려</td><td class="df">사유</td><td class="st">—</td><td class="pm">작성자</td><td class="st">상태머신: 요청→제출→검토→승인/반려</td><td><span class="p p1">P1</span></td><td class="std">CA-04</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-11</span><b>데이터 품질</b><span class="ent">DataQuality</span></td></tr>
+<tr><td class="id">CA-11-CALC</td><td><span class="op x">CALC</span></td><td class="nm">티어·불확실성 산출</td><td class="df">tier, distribution</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-11-R1</td><td><span class="op r">R</span></td><td class="nm">품질·완전성 조회</td><td class="df">completeness%</td><td class="st">미확정 항목 알림</td><td class="pm">검토자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-01</td></tr>
+<tr><td class="id">CA-11-U1</td><td><span class="op u">U</span></td><td class="nm">페디그리 점수 입력</td><td class="df">pedigree</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p2">P2</span></td><td class="std">CA-05</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA C ===================== -->
+<section id="c">
+<div class="s-head"><span class="s-code">AREA C</span><h2>계수·산정</h2></div>
+<p class="s-note">계수는 불변 버전 레코드, 산정 결과는 불변 스냅샷 — U·D 제약이 핵심.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-05</span><b>배출계수</b><span class="ent">EmissionFactor (버전)</span></td></tr>
+<tr><td class="id">CA-05-C1</td><td><span class="op c">C</span></td><td class="nm">커스텀 계수 생성</td><td class="df">ef, 출처, 지역, 유효기간</td><td class="st">출처·근거 의무</td><td class="pm">관리자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-05-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">계수 검색·필터·상세</td><td class="df">출처·연도·지역·티어</td><td class="st">단위 불일치 선택 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-05-U1</td><td><span class="op u">U</span></td><td class="nm">계수 갱신 = 새 버전</td><td class="df">new_value</td><td class="st">in-place 수정 금지</td><td class="pm">관리자</td><td class="st"><b>U=새 버전 발행</b>, 구버전 보존</td><td><span class="p p0">P0</span></td><td class="std">재현성</td></tr>
+<tr><td class="id">CA-05-D1</td><td><span class="op d">D</span></td><td class="nm">계수 폐기(deprecate)</td><td class="df">ef_version</td><td class="st">hard delete 금지</td><td class="pm">관리자</td><td class="st"><b>D=만료 표기만</b>, 사용 산정 보존</td><td><span class="p p0">P0</span></td><td class="std">재현성</td></tr>
+<tr><td class="id">CA-05-X1</td><td><span class="op x">CALC</span></td><td class="nm">GWP 세트 적용</td><td class="df">gwp_set, ar_version</td><td class="st">버전 미지정 산정 차단</td><td class="pm">관리자</td><td class="st">인벤토리 단위 잠금</td><td><span class="p p0">P0</span></td><td class="std">LCA-04</td></tr>
+<tr><td class="id">CA-05-X2</td><td><span class="op x">U</span></td><td class="nm">계수 정정(restatement)</td><td class="df">restatement, 사유</td><td class="st">영향 산정 재계산·재공시</td><td class="pm">관리자</td><td class="st">새 버전+사유, 원본 보존</td><td><span class="p p2">P2</span></td><td class="std">FS-13</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-06</span><b>산정 엔진</b><span class="ent">Calculation (스냅샷)</span></td></tr>
+<tr><td class="id">CA-06-X1</td><td><span class="op x">CALC</span></td><td class="nm">산정 실행</td><td class="df">AD×EF×보정×GWP</td><td class="st">미충족 입력 제외 리포트</td><td class="pm">작성자</td><td class="st">대용량=비동기 job</td><td><span class="p p0">P0</span></td><td class="std">CA-05</td></tr>
+<tr><td class="id">CA-06-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">결과 조회·목록·gas별</td><td class="df">per_gas, lineage</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-06-N1</td><td><span class="op u">U</span><span class="op d">D</span></td><td class="nm">결과 수정·삭제</td><td class="df">—</td><td class="st">불가</td><td class="pm">—</td><td class="st"><b>U·D 금지(불변 스냅샷)</b> — 재산정은 새 버전</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-06-EX</td><td><span class="op x">EX</span></td><td class="nm">결과 export</td><td class="df">범위</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA D ===================== -->
+<section id="d">
+<div class="s-head"><span class="s-code">AREA D</span><h2>Scope 작업공간</h2></div>
+<p class="s-note">Scope 1/2/3 엔티티의 오퍼레이션.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-07</span><b>Scope 1</b><span class="ent">Scope1 Source</span></td></tr>
+<tr><td class="id">CA-07-C1</td><td><span class="op c">C</span><span class="op u">U</span></td><td class="nm">연료·냉매 입력·수정</td><td class="df">fuel, refrigerant, leak</td><td class="st">고GWP 냉매 누락 경고</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-02</td></tr>
+<tr><td class="id">CA-07-X1</td><td><span class="op x">CALC</span></td><td class="nm">고정·이동·공정 산정</td><td class="df">combustion, process</td><td class="st">생물기원 분리 표기</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">ISO 14064-1</td></tr>
+<tr><td class="id">CA-07-D1</td><td><span class="op d">D</span></td><td class="nm">소스 삭제</td><td class="df">—</td><td class="st">—</td><td class="pm">작성자</td><td class="st">잠긴 연도 금지</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-08</span><b>Scope 2 이중장부</b><span class="ent">Scope2 Contract</span></td></tr>
+<tr><td class="id">CA-08-C1</td><td><span class="op c">C</span></td><td class="nm">REC·PPA 계약 등록</td><td class="df">contract, cert_id, vintage</td><td class="st">계약량>소비량 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-03</td></tr>
+<tr><td class="id">CA-08-R1</td><td><span class="op r">R</span></td><td class="nm">위치·시장 이중장부 조회</td><td class="df">dual_ledger</td><td class="st">두 결과 항상 동시 표시</td><td class="pm">전체</td><td class="st">한쪽만 표시 불가</td><td><span class="p p0">P0</span></td><td class="std">CA-03</td></tr>
+<tr><td class="id">CA-08-U1</td><td><span class="op u">U</span><span class="op d">D</span></td><td class="nm">계약 수정·삭제</td><td class="df">contract_id</td><td class="st">—</td><td class="pm">작성자</td><td class="st">잠금 후 제한</td><td><span class="p p1">P1</span></td><td class="std">CA-03</td></tr>
+<tr><td class="id">CA-08-VF</td><td><span class="op x">VF</span></td><td class="nm">품질기준·중복 검증</td><td class="df">quality_criteria, cert</td><td class="st">vintage·시장경계·중복무효화 검사</td><td class="pm">—</td><td class="st">미충족 차단·경고</td><td><span class="p p1">P1</span></td><td class="std">GHGP S2</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-09</span><b>Scope 3 카테고리</b><span class="ent">Scope3 CategoryConfig</span></td></tr>
+<tr><td class="id">CA-09-C1</td><td><span class="op c">C</span><span class="op u">U</span></td><td class="nm">관련성·방법 설정·변경</td><td class="df">relevance, method_per_cat</td><td class="st">제외 사유 필수</td><td class="pm">작성자</td><td class="st">카테고리별 method set</td><td><span class="p p0">P0</span></td><td class="std">CA-04</td></tr>
+<tr><td class="id">CA-09-R1</td><td><span class="op r">R</span></td><td class="nm">핫스팟·티어 조회</td><td class="df">hotspot, tier</td><td class="st">지출기반 한계 경고</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-04</td></tr>
+<tr><td class="id">CA-09-VF</td><td><span class="op x">VF</span></td><td class="nm">합산범위 검증</td><td class="df">total_scope3</td><td class="st">자사 15카테고리 합=정상, 타사·전경제 집계만 경고</td><td class="pm">—</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-04</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA E ===================== -->
+<section id="e">
+<div class="s-head"><span class="s-code">AREA E</span><h2>결과·관리</h2></div>
+<p class="s-note">대시보드(읽기 전용)·목표·크레딧/제거 엔티티.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-12</span><b>인벤토리 대시보드</b><span class="ent">Dashboard (read-only)</span></td></tr>
+<tr><td class="id">CA-12-R1</td><td><span class="op r">R</span></td><td class="nm">집계·핫스팟·추세 조회</td><td class="df">aggregate, trend</td><td class="st">미검증 초안 워터마크</td><td class="pm">전체</td><td class="st"><b>C·U·D 없음</b>(파생 뷰)</td><td><span class="p p0">P0</span></td><td class="std">CA-01</td></tr>
+<tr><td class="id">CA-12-EX</td><td><span class="op x">EX</span></td><td class="nm">대시보드 리포트 export</td><td class="df">PDF/이미지</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-13</span><b>감축목표·시나리오</b><span class="ent">Target · Scenario</span></td></tr>
+<tr><td class="id">CA-13-C1</td><td><span class="op c">C</span><span class="op u">U</span></td><td class="nm">목표 생성·수정</td><td class="df">target, sbti</td><td class="st">—</td><td class="pm">승인자</td><td class="st">—</td><td><span class="p p2">P2</span></td><td class="std">CA-08</td></tr>
+<tr><td class="id">CA-13-R1</td><td><span class="op r">R</span></td><td class="nm">진척·시나리오 조회</td><td class="df">pathway</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p2">P2</span></td><td class="std">CA-08</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-14</span><b>크레딧·제거</b><span class="ent">Credit · Removal</span></td></tr>
+<tr><td class="id">CA-14-C1</td><td><span class="op c">C</span></td><td class="nm">크레딧 등록</td><td class="df">registry, serial, vintage</td><td class="st">—</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-08</td></tr>
+<tr><td class="id">CA-14-LK</td><td><span class="op x">LK</span></td><td class="nm">무효화(retire)</td><td class="df">retire 증빙</td><td class="st">중복 무효화 차단</td><td class="pm">작성자</td><td class="st"><b>되돌릴 수 없음</b></td><td><span class="p p1">P1</span></td><td class="std">CA-08</td></tr>
+<tr><td class="id">CA-14-C2</td><td><span class="op c">C</span></td><td class="nm">경계 내 제거 계상</td><td class="df">removal, sink</td><td class="st">gross와 분리·구매크레딧 구분</td><td class="pm">작성자</td><td class="st">total·net 동시 표기</td><td><span class="p p1">P1</span></td><td class="std">GHGP LSR</td></tr>
+<tr><td class="id">CA-14-VF</td><td><span class="op x">VF</span></td><td class="nm">차감금지 검증</td><td class="df">separate_ledger</td><td class="st">총량 차감 시도 차단</td><td class="pm">—</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-08</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA F ===================== -->
+<section id="f">
+<div class="s-head"><span class="s-code">AREA F</span><h2>거버넌스</h2></div>
+<p class="s-note">검증·공시·감사로그·권한 — 불변·서명·append-only 제약이 집중된 영역.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-15</span><b>검증·보증</b><span class="ent">Verification · Finding</span></td></tr>
+<tr><td class="id">CA-15-C1</td><td><span class="op c">C</span></td><td class="nm">검증 세션 개설</td><td class="df">assurance, materiality</td><td class="st">독립성 conflict 체크</td><td class="pm">검증인</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">ISO 14064-3</td></tr>
+<tr><td class="id">CA-15-C2</td><td><span class="op c">C</span></td><td class="nm">finding 등록</td><td class="df">finding, 근거</td><td class="st">—</td><td class="pm">검증인</td><td class="st">검증인=원본 변경 불가</td><td><span class="p p1">P1</span></td><td class="std">CA-06</td></tr>
+<tr><td class="id">CA-15-U1</td><td><span class="op u">U</span></td><td class="nm">finding 대응</td><td class="df">response</td><td class="st">—</td><td class="pm">작성자</td><td class="st">상태: 등록→대응→재검토→해결/기각</td><td><span class="p p1">P1</span></td><td class="std">CA-06</td></tr>
+<tr><td class="id">CA-15-LK</td><td><span class="op x">LK</span></td><td class="nm">의견서 서명·잠금</td><td class="df">opinion, signature</td><td class="st">GHG statement와 분리</td><td class="pm">검증인</td><td class="st">완료본 잠금</td><td><span class="p p1">P1</span></td><td class="std">ISO 14064-3</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-16</span><b>공시·내보내기</b><span class="ent">Disclosure · Submission</span></td></tr>
+<tr><td class="id">CA-16-C1</td><td><span class="op c">C</span><span class="op x">CALC</span></td><td class="nm">ISO 14064-1 보고서 생성</td><td class="df">경계·기간·gas·base year·불확실성</td><td class="st">필수 항목 누락 차단</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">ISO 14064-1</td></tr>
+<tr><td class="id">CA-16-C2</td><td><span class="op c">C</span></td><td class="nm">규제 서식 매핑·생성</td><td class="df">template(K-ETS·CBAM·공시)</td><td class="st">서식별 경계·가정 차이 표시</td><td class="pm">작성자</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-07</td></tr>
+<tr><td class="id">CA-16-LK</td><td><span class="op x">LK</span><span class="op x">EX</span></td><td class="nm">제출 패키지 고정·내보내기</td><td class="df">submission</td><td class="st">—</td><td class="pm">승인자</td><td class="st"><b>공시본 불변</b>(재계산돼도)</td><td><span class="p p1">P1</span></td><td class="std">CA-07</td></tr>
+<tr><td class="id">CA-16-U1</td><td><span class="op u">U</span></td><td class="nm">정정 재제출(restatement)</td><td class="df">restatement</td><td class="st">새 버전+사유, 원본 보존</td><td class="pm">승인자</td><td class="st">—</td><td><span class="p p2">P2</span></td><td class="std">FS-13</td></tr>
+<tr><td class="id">CA-16-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">제출 이력 조회</td><td class="df">version</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">CA-07</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-17</span><b>감사추적·버전</b><span class="ent">AuditEvent · Snapshot (불변)</span></td></tr>
+<tr><td class="id">CA-17-C1</td><td><span class="op c">C</span></td><td class="nm">이벤트 로그 자동 생성</td><td class="df">who/when/what/why</td><td class="st">append-only·hash-chain</td><td class="pm">시스템</td><td class="st">자동, 수기 생성 불가</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-17-N1</td><td><span class="op u">U</span><span class="op d">D</span></td><td class="nm">로그 수정·삭제</td><td class="df">—</td><td class="st">불가</td><td class="pm">—</td><td class="st"><b>U·D 금지(위변조 방지)</b></td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-17-R1</td><td><span class="op r">R</span></td><td class="nm">로그·lineage 역추적</td><td class="df">lineage</td><td class="st">결과→AD·계수 버전 추적</td><td class="pm">검증인+</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-17-X1</td><td><span class="op r">R</span></td><td class="nm">버전 스냅샷 diff</td><td class="df">snapshot, diff</td><td class="st">—</td><td class="pm">작성자</td><td class="st">재계산=새 버전</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+
+<tr class="grp"><td colspan="9"><span class="scid">SC-18</span><b>사용자·역할</b><span class="ent">User · Role (RBAC)</span></td></tr>
+<tr><td class="id">CA-18-C1</td><td><span class="op c">C</span><span class="op u">U</span></td><td class="nm">사용자·역할 생성·권한 수정</td><td class="df">role, permission</td><td class="st">—</td><td class="pm">관리자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">CA-09</td></tr>
+<tr><td class="id">CA-18-D1</td><td><span class="op d">D</span></td><td class="nm">사용자 비활성화</td><td class="df">user_id</td><td class="st">hard delete 대신 비활성</td><td class="pm">관리자</td><td class="st">감사 이력 보존</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-18-VF</td><td><span class="op x">VF</span></td><td class="nm">역할 분리(SoD) 검증</td><td class="df">sod_rule</td><td class="st">작성자=승인자 겸직 경고</td><td class="pm">관리자</td><td class="st">—</td><td><span class="p p0">P0</span></td><td class="std">FS-07</td></tr>
+<tr><td class="id">CA-18-IM</td><td><span class="op x">IM</span></td><td class="nm">SCIM 프로비저닝·SSO</td><td class="df">idp, scim</td><td class="st">외부 사용자 scoped access</td><td class="pm">관리자</td><td class="st">테넌트 격리</td><td><span class="p p1">P1</span></td><td class="std">FS-14</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA X ===================== -->
+<section id="x">
+<div class="s-head"><span class="s-code">AREA X</span><h2>횡단 요소 (전 화면 공통)</h2></div>
+<p class="s-note">코멘트·알림·작업·검색 등 공통 엔티티의 오퍼레이션.</p>
+<div class="reg"><table class="dt">
+<tr><th>ID</th><th>OP</th><th>오퍼레이션</th><th>입력·파라미터</th><th>검증·규칙</th><th>권한</th><th>상태·제약</th><th>우선</th><th>표준</th></tr>
+<tr class="grp"><td colspan="9"><span class="scid">SC-X1</span><b>코멘트</b><span class="ent">Comment</span></td></tr>
+<tr><td class="id">CA-X1-CRUD</td><td><span class="op c">C</span><span class="op r">R</span><span class="op u">U</span><span class="op d">D</span></td><td class="nm">코멘트 작성·조회·수정·삭제</td><td class="df">target, @mention</td><td class="st">본인 코멘트만 U·D</td><td class="pm">전체</td><td class="st">검증 finding과 분리</td><td><span class="p p1">P1</span></td><td class="std">FS-10</td></tr>
+<tr class="grp"><td colspan="9"><span class="scid">SC-X2</span><b>알림</b><span class="ent">Notification</span></td></tr>
+<tr><td class="id">CA-X2-C1</td><td><span class="op c">C</span></td><td class="nm">이벤트 알림 생성(자동)</td><td class="df">기한·만료·미제출</td><td class="st">외부 통지 PII·테넌트 경계</td><td class="pm">시스템</td><td class="st">in-app·email</td><td><span class="p p1">P1</span></td><td class="std">FS-10</td></tr>
+<tr><td class="id">CA-X2-U1</td><td><span class="op r">R</span><span class="op u">U</span></td><td class="nm">조회·읽음 처리</td><td class="df">read_state</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">FS-10</td></tr>
+<tr class="grp"><td colspan="9"><span class="scid">SC-X3</span><b>작업·인박스</b><span class="ent">Task</span></td></tr>
+<tr><td class="id">CA-X3-C1</td><td><span class="op c">C</span><span class="op x">AS</span></td><td class="nm">작업 생성·담당자 배정</td><td class="df">assignee, due</td><td class="st">—</td><td class="pm">검토자+</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">FS-10</td></tr>
+<tr><td class="id">CA-X3-X1</td><td><span class="op l">L</span><span class="op x">LK</span></td><td class="nm">인박스 목록·완료 처리</td><td class="df">status 필터</td><td class="st">—</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">FS-10</td></tr>
+<tr class="grp"><td colspan="9"><span class="scid">SC-X4</span><b>검색·일괄작업</b><span class="ent">Search · Bulk</span></td></tr>
+<tr><td class="id">CA-X4-R1</td><td><span class="op r">R</span><span class="op l">L</span></td><td class="nm">전역 검색·필터</td><td class="df">query, filter</td><td class="st">권한 범위 내</td><td class="pm">전체</td><td class="st">—</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+<tr><td class="id">CA-X4-U1</td><td><span class="op u">U</span><span class="op d">D</span></td><td class="nm">일괄 편집·삭제</td><td class="df">selection</td><td class="st">잠긴 항목 제외</td><td class="pm">작성자</td><td class="st">감사로그 기록</td><td><span class="p p1">P1</span></td><td class="std">—</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA G — DATA DICTIONARY ===================== -->
+<section id="g">
+<div class="s-head"><span class="s-code">개발 G</span><h2>데이터 사전 — 필드 명세</h2></div>
+<p class="s-note">핵심 엔티티의 필드 단위 명세. 필수=● 선택=○ · 타입 · ENUM/FK/범위 · 검증 · 기본값. 오퍼레이션(상단)이 "무엇을"이라면 여기는 "어떤 데이터로".</p>
+<div class="reg"><table class="dt">
+<tr><th>필드</th><th>타입</th><th>필수</th><th>ENUM·FK·범위</th><th>검증·규칙</th><th>기본값</th></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-01</span><b>Facility</b><span class="ent">시설</span></td></tr>
+<tr><td class="nm">id</td><td class="std">uuid</td><td class="pm">●</td><td class="df">PK</td><td class="st">—</td><td class="pm">auto</td></tr>
+<tr><td class="nm">org_id</td><td class="std">uuid</td><td class="pm">●</td><td class="df">FK→Organization</td><td class="st">존재 검증</td><td class="pm">—</td></tr>
+<tr><td class="nm">name</td><td class="std">string(200)</td><td class="pm">●</td><td class="df">—</td><td class="st">조직 내 unique</td><td class="pm">—</td></tr>
+<tr><td class="nm">parent_id</td><td class="std">uuid</td><td class="pm">○</td><td class="df">FK→Facility(self)</td><td class="st">순환 금지</td><td class="pm">null</td></tr>
+<tr><td class="nm">share_pct</td><td class="std">decimal(5,2)</td><td class="pm">●</td><td class="df">0–100</td><td class="st">법인 내 합 ≈100±0.5</td><td class="pm">—</td></tr>
+<tr><td class="nm">control_type</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>control_type</code>(H)</td><td class="st">연결기준과 정합</td><td class="pm">—</td></tr>
+<tr><td class="nm">consolidated</td><td class="std">bool</td><td class="pm">●</td><td class="df">—</td><td class="st">자동판정+오버라이드</td><td class="pm">계산값</td></tr>
+<tr><td class="nm">status</td><td class="std">enum</td><td class="pm">●</td><td class="df"><code>active|inactive</code></td><td class="st">데이터 연결 시 inactive만</td><td class="pm">active</td></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-02</span><b>ReportingPeriod</b><span class="ent">보고연도</span></td></tr>
+<tr><td class="nm">id / org_id</td><td class="std">uuid</td><td class="pm">●</td><td class="df">PK / FK</td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">year</td><td class="std">int</td><td class="pm">●</td><td class="df">2000–2100</td><td class="st">org 내 기간 중복 금지</td><td class="pm">—</td></tr>
+<tr><td class="nm">start_date / end_date</td><td class="std">date</td><td class="pm">●</td><td class="df">—</td><td class="st">start&lt;end, 겹침 금지</td><td class="pm">—</td></tr>
+<tr><td class="nm">base_year</td><td class="std">int</td><td class="pm">○</td><td class="df">—</td><td class="st">변경 시 이력</td><td class="pm">—</td></tr>
+<tr><td class="nm">status</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>period_status</code>(H)</td><td class="st">상태 전이표(K)</td><td class="pm">draft</td></tr>
+<tr><td class="nm">locked_at / locked_by</td><td class="std">ts / uuid</td><td class="pm">○</td><td class="df">FK→User</td><td class="st">locked 후 set</td><td class="pm">null</td></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-04</span><b>ActivityData</b><span class="ent">활동자료</span></td></tr>
+<tr><td class="nm">id / source_id / period_id</td><td class="std">uuid</td><td class="pm">●</td><td class="df">PK / FK / FK</td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">value</td><td class="std">decimal(18,6)</td><td class="pm">●</td><td class="df">≥0</td><td class="st">이상치 ±3σ 플래그</td><td class="pm">—</td></tr>
+<tr><td class="nm">unit</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>unit</code>(H)</td><td class="st">차원 정합·환산 가능</td><td class="pm">—</td></tr>
+<tr><td class="nm">ncv_basis</td><td class="std">enum</td><td class="pm">○</td><td class="df"><code>gross|net</code></td><td class="st">에너지 환산 시 필수</td><td class="pm">net</td></tr>
+<tr><td class="nm">is_estimated</td><td class="std">bool</td><td class="pm">●</td><td class="df">—</td><td class="st">true면 사유 필수</td><td class="pm">false</td></tr>
+<tr><td class="nm">evidence_id</td><td class="std">uuid</td><td class="pm">○</td><td class="df">FK→File</td><td class="st">—</td><td class="pm">null</td></tr>
+<tr><td class="nm">status</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>ad_status</code>(H)</td><td class="st">전이표(K)</td><td class="pm">entered</td></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-05</span><b>EmissionFactor</b><span class="ent">배출계수(버전)</span></td></tr>
+<tr><td class="nm">id / version</td><td class="std">uuid / int</td><td class="pm">●</td><td class="df">PK / 버전</td><td class="st">불변, U=새 버전</td><td class="pm">1</td></tr>
+<tr><td class="nm">value</td><td class="std">decimal(18,8)</td><td class="pm">●</td><td class="df">≥0</td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">unit_num / unit_den</td><td class="std">enum</td><td class="pm">●</td><td class="df">kgCO2e / 활동단위</td><td class="st">AD 단위와 정합</td><td class="pm">—</td></tr>
+<tr><td class="nm">gas</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>gas</code>(H)</td><td class="st">—</td><td class="pm">CO2</td></tr>
+<tr><td class="nm">source / region</td><td class="std">string</td><td class="pm">●</td><td class="df">IPCC·국가계수 등</td><td class="st">커스텀=근거 의무</td><td class="pm">—</td></tr>
+<tr><td class="nm">gwp_version</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>gwp_version</code>(H)</td><td class="st">—</td><td class="pm">AR6</td></tr>
+<tr><td class="nm">valid_from / valid_to</td><td class="std">date</td><td class="pm">○</td><td class="df">—</td><td class="st">만료 사용 시 경고</td><td class="pm">—</td></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-06</span><b>Calculation</b><span class="ent">산정 결과(불변 스냅샷)</span></td></tr>
+<tr><td class="nm">id / period_id</td><td class="std">uuid</td><td class="pm">●</td><td class="df">PK / FK</td><td class="st">불변</td><td class="pm">—</td></tr>
+<tr><td class="nm">ad_id / ef_id / ef_version</td><td class="std">uuid / int</td><td class="pm">●</td><td class="df">FK (lineage)</td><td class="st">사용 버전 고정</td><td class="pm">—</td></tr>
+<tr><td class="nm">scope</td><td class="std">enum</td><td class="pm">●</td><td class="df"><code>1|2|3</code></td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">co2e</td><td class="std">decimal(18,6)</td><td class="pm">●</td><td class="df">계산값</td><td class="st">U·D 금지</td><td class="pm">—</td></tr>
+<tr><td class="nm">per_gas</td><td class="std">json</td><td class="pm">○</td><td class="df">{CO2,CH4,…}</td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">snapshot_version</td><td class="std">int</td><td class="pm">●</td><td class="df">—</td><td class="st">재계산=새 버전</td><td class="pm">1</td></tr>
+
+<tr class="grp"><td colspan="6"><span class="scid">SC-14</span><b>Credit</b><span class="ent">크레딧·제거</span></td></tr>
+<tr><td class="nm">id / registry / serial</td><td class="std">uuid / string</td><td class="pm">●</td><td class="df">serial unique</td><td class="st">중복 등록 차단</td><td class="pm">—</td></tr>
+<tr><td class="nm">vintage</td><td class="std">int</td><td class="pm">●</td><td class="df">연도</td><td class="st">—</td><td class="pm">—</td></tr>
+<tr><td class="nm">type</td><td class="std">enum</td><td class="pm">●</td><td class="df">→ <code>credit_type</code>(H)</td><td class="st">제거=durability 필수</td><td class="pm">—</td></tr>
+<tr><td class="nm">qty_tco2e</td><td class="std">decimal(18,4)</td><td class="pm">●</td><td class="df">&gt;0</td><td class="st">총량 차감 불가(분리)</td><td class="pm">—</td></tr>
+<tr><td class="nm">status</td><td class="std">enum</td><td class="pm">●</td><td class="df"><code>registered|held|retired</code></td><td class="st">retired 비가역</td><td class="pm">registered</td></tr>
+<tr><td class="nm">retire_evidence_id</td><td class="std">uuid</td><td class="pm">○</td><td class="df">FK→File</td><td class="st">retire 시 필수</td><td class="pm">null</td></tr>
+</table></div>
+<p style="font-size:12px;color:var(--ink-soft);font-family:var(--mono)">※ 핵심 6개 엔티티 발췌. 나머지(EmissionSource·Scope2Contract·SupplierPCF·Verification·Finding·AuditEvent·User·Role)도 동일 양식으로 상세설계에서 확장.</p>
+</section>
+
+<!-- ===================== AREA H — ENUM ===================== -->
+<section id="h">
+<div class="s-head"><span class="s-code">개발 H</span><h2>ENUM · 코드값 정의</h2></div>
+<p class="s-note">모든 열거형을 명시적으로 고정. ENUM 추가·변경은 마이그레이션 대상이므로 한곳에서 관리한다.</p>
+<div class="reg"><table class="dt">
+<tr><th>코드</th><th>값</th><th>설명·비고</th></tr>
+<tr><td class="nm">control_type</td><td class="df"><code>equity</code> · <code>operational_control</code> · <code>financial_control</code></td><td class="de">조직경계 연결기준. 기본값은 미확정(D-01)</td></tr>
+<tr><td class="nm">scope</td><td class="df"><code>1</code> · <code>2</code> · <code>3</code></td><td class="de">GHG Protocol Scope</td></tr>
+<tr><td class="nm">scope3_category</td><td class="df"><code>1</code>…<code>15</code> (+<code>16</code> facilitated 논의중)</td><td class="de">15 카테고리, 상호배타적</td></tr>
+<tr><td class="nm">period_status</td><td class="df"><code>draft</code>→<code>collecting</code>→<code>calculated</code>→<code>in_review</code>→<code>verification</code>→<code>locked</code>→<code>published</code></td><td class="de">보고연도 상태(K)</td></tr>
+<tr><td class="nm">ad_status</td><td class="df"><code>entered</code> · <code>pending_review</code> · <code>approved</code> · <code>rejected</code></td><td class="de">활동자료 상태</td></tr>
+<tr><td class="nm">pcf_request_status</td><td class="df"><code>requested</code> · <code>submitted</code> · <code>reviewing</code> · <code>approved</code> · <code>rejected</code></td><td class="de">공급사 PCF</td></tr>
+<tr><td class="nm">finding_status</td><td class="df"><code>open</code> · <code>responded</code> · <code>re_review</code> · <code>resolved</code> · <code>dismissed</code></td><td class="de">검증 finding</td></tr>
+<tr><td class="nm">credit_type</td><td class="df"><code>reduction</code> · <code>removal</code> · <code>avoidance</code></td><td class="de">removal은 durability 필수</td></tr>
+<tr><td class="nm">credit_status</td><td class="df"><code>registered</code> · <code>held</code> · <code>retired</code></td><td class="de">retired 비가역</td></tr>
+<tr><td class="nm">s2_method</td><td class="df"><code>location_based</code> · <code>market_based</code></td><td class="de">이중장부 동시 보고</td></tr>
+<tr><td class="nm">s3_method</td><td class="df"><code>spend</code> · <code>average</code> · <code>hybrid</code> · <code>supplier_specific</code></td><td class="de">카테고리별 적용(데이터 티어)</td></tr>
+<tr><td class="nm">ef_tier</td><td class="df"><code>tier1</code> · <code>tier2</code> · <code>tier3</code></td><td class="de">IPCC 방법론 티어(s3_method와 별개)</td></tr>
+<tr><td class="nm">gas</td><td class="df"><code>CO2</code> · <code>CH4</code> · <code>N2O</code> · <code>HFCs</code> · <code>PFCs</code> · <code>SF6</code> · <code>NF3</code></td><td class="de">교토 6대 + NF3</td></tr>
+<tr><td class="nm">gwp_version</td><td class="df"><code>AR5</code> · <code>AR6</code></td><td class="de">GWP100 기준</td></tr>
+<tr><td class="nm">biogenic_flag</td><td class="df"><code>fossil</code> · <code>biogenic</code> · <code>lulucf</code></td><td class="de">화석/생물기원 분리 보고</td></tr>
+<tr><td class="nm">unit</td><td class="df"><code>kg</code>·<code>t</code> / <code>kWh</code>·<code>MJ</code>·<code>GJ</code> / <code>L</code>·<code>m3</code> / <code>km</code> / <code>KRW</code>·<code>USD</code></td><td class="de">차원: mass·energy·volume·distance·currency</td></tr>
+<tr><td class="nm">assurance_level</td><td class="df"><code>limited</code> · <code>reasonable</code></td><td class="de">검증 보증수준</td></tr>
+<tr><td class="nm">role</td><td class="df"><code>preparer</code> · <code>reviewer</code> · <code>verifier</code> · <code>approver</code> · <code>supplier</code> · <code>admin</code></td><td class="de">RBAC·SoD</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA I — API ===================== -->
+<section id="i">
+<div class="s-head"><span class="s-code">개발 I</span><h2>API 엔드포인트 (예시)</h2></div>
+<p class="s-note">오퍼레이션→REST 매핑. 비동기 작업(:import, :calculate)은 job_id 반환 후 폴링/웹훅. 인증=Bearer, 멀티테넌트 org 스코프.</p>
+<div class="reg"><table class="dt">
+<tr><th>메서드·경로</th><th>OP</th><th>설명</th><th>권한</th><th>비고</th></tr>
+<tr><td class="nm">POST /facilities</td><td><span class="op c">C</span></td><td class="de">시설 생성</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">GET /facilities</td><td><span class="op l">L</span></td><td class="de">목록·필터</td><td class="pm">all</td><td class="st">tenant scope</td></tr>
+<tr><td class="nm">PATCH /facilities/{id}</td><td><span class="op u">U</span></td><td class="de">지분·통제 수정</td><td class="pm">preparer</td><td class="st">재산정 경고</td></tr>
+<tr><td class="nm">DELETE /facilities/{id}</td><td><span class="op d">D</span></td><td class="de">삭제(데이터 시 409)</td><td class="pm">preparer</td><td class="st">참조 무결성</td></tr>
+<tr><td class="nm">POST /periods/{id}:lock</td><td><span class="op x">LK</span></td><td class="de">확정·잠금</td><td class="pm">approver</td><td class="st">미해결 finding 시 409</td></tr>
+<tr><td class="nm">POST /periods/{id}:recalculate</td><td><span class="op x">CALC</span></td><td class="de">기준연도 재산정</td><td class="pm">preparer</td><td class="st">async job</td></tr>
+<tr><td class="nm">POST /activity-data</td><td><span class="op c">C</span></td><td class="de">활동자료 입력</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">POST /activity-data:import</td><td><span class="op x">IM</span></td><td class="de">CSV·미터 일괄</td><td class="pm">preparer</td><td class="st">async, 행 리포트</td></tr>
+<tr><td class="nm">GET /activity-data:export</td><td><span class="op x">EX</span></td><td class="de">내보내기</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">GET /emission-factors</td><td><span class="op l">L</span></td><td class="de">계수 검색</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">POST /emission-factors/{id}:new-version</td><td><span class="op u">U</span></td><td class="de">계수 갱신(새 버전)</td><td class="pm">admin</td><td class="st">in-place 불가</td></tr>
+<tr><td class="nm">POST /calculations:run</td><td><span class="op x">CALC</span></td><td class="de">산정 실행</td><td class="pm">preparer</td><td class="st">async job</td></tr>
+<tr><td class="nm">GET /calculations/{id}</td><td><span class="op r">R</span></td><td class="de">결과·lineage 조회</td><td class="pm">all</td><td class="st">불변</td></tr>
+<tr><td class="nm">POST /pcf-requests</td><td><span class="op c">C</span></td><td class="de">PCF 요청</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">POST /pcf-submissions</td><td><span class="op c">C</span></td><td class="de">공급사 제출(외부)</td><td class="pm">supplier</td><td class="st">scoped</td></tr>
+<tr><td class="nm">POST /credits/{id}:retire</td><td><span class="op x">LK</span></td><td class="de">무효화(비가역)</td><td class="pm">preparer</td><td class="st">증빙 필수</td></tr>
+<tr><td class="nm">POST /verifications · /findings</td><td><span class="op c">C</span></td><td class="de">검증 세션·finding</td><td class="pm">verifier</td><td class="st">—</td></tr>
+<tr><td class="nm">POST /reports:generate</td><td><span class="op c">C</span></td><td class="de">ISO/규제 보고서</td><td class="pm">preparer</td><td class="st">—</td></tr>
+<tr><td class="nm">POST /submissions:lock</td><td><span class="op x">LK</span></td><td class="de">제출 패키지 고정</td><td class="pm">approver</td><td class="st">불변</td></tr>
+<tr><td class="nm">GET /audit-events</td><td><span class="op r">R</span></td><td class="de">감사로그·lineage</td><td class="pm">reviewer+</td><td class="st">append-only</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA J — ERRORS ===================== -->
+<section id="j">
+<div class="s-head"><span class="s-code">개발 J</span><h2>검증·에러 코드</h2></div>
+<p class="s-note">expected failure를 코드·메시지로 카탈로그화. 차단(block)/경고(warn) 구분. UI는 코드별 일관 처리.</p>
+<div class="reg"><table class="dt">
+<tr><th>코드</th><th>조건</th><th>처리·메시지</th><th>유형</th></tr>
+<tr><td class="nm">E-UNIT-UNCONV</td><td class="de">단위 미환산·발열량 미지정</td><td class="st">산정 차단, "단위를 환산하세요"</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-PERIOD-DUP</td><td class="de">보고기간 중복</td><td class="st">생성 차단</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-SHARE-SUM</td><td class="de">지분율 합 ≠ 100±0.5%p</td><td class="st">산정 차단 + 불일치 법인 표시</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-S2-OVERCONTRACT</td><td class="de">계약 전력량 &gt; 소비량</td><td class="st">저장 차단</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-CERT-DUP</td><td class="de">인증서·크레딧 중복 무효화</td><td class="st">차단</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-CREDIT-DEDUCT</td><td class="de">총배출에서 크레딧 차감 시도</td><td class="st">차단, "분리 계상 필요"</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-IMMUTABLE</td><td class="de">불변 레코드(산정·로그) 수정·삭제</td><td class="st">차단, "새 버전으로"</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-LOCK-EDIT</td><td class="de">잠긴 보고연도 편집</td><td class="st">차단, "재개 필요(사유)"</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-PERM-DENIED</td><td class="de">역할 권한 없음</td><td class="st">403, 요소 비활성+사유</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-FINDING-OPEN</td><td class="de">미해결 finding으로 승인 시도</td><td class="st">승인 차단</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">E-PCF-BOUNDARY</td><td class="de">PCF 경계 불일치(gate vs grave)</td><td class="st">사용 차단</td><td><span class="op d">차단</span></td></tr>
+<tr><td class="nm">W-SOD</td><td class="de">작성자=승인자 겸직</td><td class="st">경고</td><td><span class="op u">경고</span></td></tr>
+<tr><td class="nm">W-EF-EXPIRED</td><td class="de">만료 계수 사용</td><td class="st">경고</td><td><span class="op u">경고</span></td></tr>
+<tr><td class="nm">W-S3-CROSS-SUM</td><td class="de">타사·전경제 Scope 3 집계</td><td class="st">경고(자사 합산은 정상)</td><td><span class="op u">경고</span></td></tr>
+<tr><td class="nm">W-ESTIMATE / W-COMPLETENESS</td><td class="de">추정값·완전성 미달</td><td class="st">경고 + 사유 요구</td><td><span class="op u">경고</span></td></tr>
+</table></div>
+</section>
+
+<!-- ===================== AREA K — STATE TRANSITIONS ===================== -->
+<section id="k">
+<div class="s-head"><span class="s-code">개발 K</span><h2>상태 전이표</h2></div>
+<p class="s-note">상태머신을 from→to·트리거·가드·주체로 명시. UI 버튼 활성화와 백엔드 가드의 단일 기준.</p>
+<div class="reg"><table class="dt">
+<tr><th>엔티티</th><th>from → to</th><th>트리거</th><th>가드(전제)</th><th>주체</th></tr>
+<tr class="grp"><td colspan="5"><b>ReportingPeriod</b></td></tr>
+<tr><td class="nm">Period</td><td class="df">draft → collecting</td><td class="de">데이터 수집 시작</td><td class="st">경계 확정</td><td class="pm">preparer</td></tr>
+<tr><td class="nm">Period</td><td class="df">collecting → calculated</td><td class="de">산정 실행</td><td class="st">필수 입력 충족</td><td class="pm">preparer</td></tr>
+<tr><td class="nm">Period</td><td class="df">calculated → in_review → verification</td><td class="de">검토·검증 요청</td><td class="st">—</td><td class="pm">reviewer/verifier</td></tr>
+<tr><td class="nm">Period</td><td class="df">verification → locked</td><td class="de">승인·확정</td><td class="st"><b>미해결 finding 0</b></td><td class="pm">approver</td></tr>
+<tr><td class="nm">Period</td><td class="df">locked → published</td><td class="de">공시</td><td class="st">제출 패키지 생성</td><td class="pm">approver</td></tr>
+<tr><td class="nm">Period</td><td class="df">locked → (new version)</td><td class="de">재개(re-open)</td><td class="st">사유 기록, 원본 보존</td><td class="pm">approver</td></tr>
+<tr class="grp"><td colspan="5"><b>ActivityData · PCFRequest · Finding · Credit</b></td></tr>
+<tr><td class="nm">ActivityData</td><td class="df">entered → pending_review → approved/rejected</td><td class="de">검토</td><td class="st">—</td><td class="pm">reviewer</td></tr>
+<tr><td class="nm">PCFRequest</td><td class="df">requested → submitted → reviewing → approved/rejected</td><td class="de">제출·검토</td><td class="st">경계·DQR 검증</td><td class="pm">supplier/preparer</td></tr>
+<tr><td class="nm">Finding</td><td class="df">open → responded → re_review → resolved/dismissed</td><td class="de">대응 루프</td><td class="st">—</td><td class="pm">verifier/preparer</td></tr>
+<tr><td class="nm">Credit</td><td class="df">registered → held → retired</td><td class="de">무효화</td><td class="st"><b>retired 비가역</b>, 증빙</td><td class="pm">preparer</td></tr>
+</table></div>
+</section>
+
+<footer>
+CARBON ACCOUNTING · CRUD OPERATION REGISTER · V1·R2 · 2026-06<br>
+TYPE : 엔티티별 오퍼레이션(CRUD+) 분해 — 불변성·SoD 제약 명시 · 도메인 표준 기반<br>
+COMPANION : 탄소회계 기능정의서(SPEC-CA-01) · 도메인 핸드북 · LCA 상세 목록(REG-LCA-01)
+</footer>
+
+</main>
+</div>
+</body>
+</html>

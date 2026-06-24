@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>번들링·렌더링·메모이제이션 핸드북</title></head>
+<body><div class="shell"><nav aria-label="목차">
+  <div class="nav-brand">RENDERING OPTIMIZATION</div>
+  <div class="nav-title">번들링·렌더링·메모이제이션</div>
+  <a href="#ch1"><span class="code">RO-01</span>최적화의 순서</a>
+  <a href="#ch2"><span class="code">RO-02</span>번들링과 code splitting</a>
+  <a href="#ch3"><span class="code">RO-03</span>React 렌더링 모델</a>
+  <a href="#ch4"><span class="code">RO-04</span>메모이제이션 판단</a>
+  <a href="#ch5"><span class="code">RO-05</span>큰 목록과 무거운 UI</a>
+  <a href="#ch6"><span class="code">RO-06</span>치트시트</a>
+</nav><main>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : FE-RENDERING-V1</span><span>SCOPE : BUNDLE · REACT RENDER · MEMO · VIRTUALIZATION</span><span>LANG : KO</span></div>
+  <h1>번들링·렌더링·메모이제이션<br>핸드북</h1>
+  <p class="hero-sub">성능 최적화는 <strong>덜 보내고, 덜 실행하고, 덜 다시 그리는 것</strong>입니다. 하지만 무엇을 줄일지는 측정 후 결정해야 합니다.</p>
+  <div class="hero-meta">STACK : Vite · React · TypeScript · Browser Performance</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">RO-01</span><h2>최적화의 순서</h2></div>
+<p class="lede">최적화는 기법 목록이 아니라 병목을 찾는 절차입니다. 번들이 큰데 memo를 넣거나, 렌더링이 병목인데 CDN을 바꾸면 효과가 없습니다.</p>
+<table>
+<tr><th>질문</th><th>확인 도구</th><th>대표 조치</th></tr>
+<tr><td>초기 로드가 느린가?</td><td>Network, Lighthouse</td><td>code splitting, 이미지 최적화, font 전략</td></tr>
+<tr><td>클릭 후 반응이 느린가?</td><td>Performance, React Profiler</td><td>렌더 경계 조정, 긴 작업 분할</td></tr>
+<tr><td>스크롤이 버벅이나?</td><td>Performance FPS, Layers</td><td>virtualization, layout thrash 제거</td></tr>
+<tr><td>상태 변경마다 전체가 다시 그려지나?</td><td>React Profiler</td><td>state 위치 조정, memo 검토</td></tr>
+</table>
+<div class="callout"><span class="co-label">ORDER</span><p>대부분의 제품은 초기에는 번들/이미지/네트워크가, 기능이 복잡해지면 렌더링 경계와 상태 구조가 병목이 됩니다. 최적화 대상도 제품 단계에 따라 달라집니다.</p></div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">RO-02</span><h2>번들링과 code splitting</h2></div>
+<p class="lede">번들러는 여러 모듈을 브라우저가 받을 수 있는 산출물로 묶습니다. Vite는 개발 중 ESM 기반으로 빠르게 제공하고, 빌드 시 Rollup 계열 최적화를 수행합니다.</p>
+<table>
+<tr><th>전략</th><th>사용 기준</th><th>주의</th></tr>
+<tr><td>route splitting</td><td>페이지별 코드 분리</td><td>첫 진입 시 loading 상태 필요</td></tr>
+<tr><td>component lazy</td><td>무거운 차트, 에디터, 모달</td><td>자주 쓰는 작은 컴포넌트는 분리 이득 작음</td></tr>
+<tr><td>vendor split</td><td>큰 라이브러리 캐시 안정화</td><td>chunk 수가 너무 늘면 요청 관리 비용 증가</td></tr>
+<tr><td>tree shaking</td><td>안 쓰는 export 제거</td><td>side effect 있는 모듈은 제거 어려움</td></tr>
+</table>
+<p><code>code splitting</code>은 JS 크기만 줄이는 작업이 아닙니다. 새 route 진입 시 JS chunk, CSS chunk, 데이터 요청이 waterfall을 만들 수 있으므로 preload/modulepreload, route prefetch, shared chunk 중복, 캐시 무효화 단위를 함께 봅니다. 분리 후에는 treemap과 Network waterfall로 실제 초기 실행 비용과 전환 지연을 비교합니다.</p>
+<div class="serial-card"><span class="sc-label">SPLIT 기준</span>첫 화면에 필요 없음<br>크기가 큼<br>사용 빈도가 낮음<br>기능 경계가 명확함<br>loading fallback이 UX를 해치지 않음</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">RO-03</span><h2>React 렌더링 모델</h2></div>
+<p class="lede">React에서 렌더링은 컴포넌트 함수를 다시 실행해 UI 설명을 새로 만드는 과정입니다. DOM 업데이트와 같은 말이 아닙니다.</p>
+<table>
+<tr><th>개념</th><th>의미</th><th>실무 영향</th></tr>
+<tr><td>render</td><td>컴포넌트 함수 실행</td><td>비싼 계산을 render 안에 두면 반복 비용 증가</td></tr>
+<tr><td>reconciliation</td><td>이전 UI 설명과 새 설명 비교</td><td>key가 불안정하면 목록 상태가 꼬임</td></tr>
+<tr><td>commit</td><td>실제 DOM 반영</td><td>layout effect는 paint를 막을 수 있음</td></tr>
+<tr><td>state 위치</td><td>어디에 state를 두는가</td><td>상위 state 변경은 하위 render 범위를 키움</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">KEY</span><p>목록의 key는 index가 아니라 항목의 안정적인 id여야 합니다. 정렬/삭제/삽입이 있는 목록에서 index key는 상태를 잘못된 행에 붙일 수 있습니다.</p></div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">RO-04</span><h2>메모이제이션 판단</h2></div>
+<p class="lede">memoization은 공짜가 아닙니다. 비교 비용, 메모리, 코드 복잡도를 추가합니다.</p>
+<table>
+<tr><th>도구</th><th>좋은 사용</th><th>나쁜 사용</th></tr>
+<tr><td><code>React.memo</code></td><td>props가 같을 때 비싼 child render 차단</td><td>모든 컴포넌트에 습관적으로 감싸기</td></tr>
+<tr><td><code>useMemo</code></td><td>비싼 계산 결과 캐시</td><td>간단한 map/filter에 과도 적용</td></tr>
+<tr><td><code>useCallback</code></td><td>memoized child에 안정 함수 전달</td><td>dependency 관리만 복잡하게 만듦</td></tr>
+<tr><td><code>useTransition</code></td><td>긴 UI 업데이트를 낮은 우선순위로</td><td>네트워크 지연 자체를 해결한다고 착각</td></tr>
+</table>
+<p><code>React.memo</code>는 부모가 넘긴 props의 얕은 비교에만 관여합니다. memoized 컴포넌트도 자신의 state가 바뀌거나 구독한 context가 바뀌면 다시 렌더링됩니다. 객체·배열·함수 props를 매 렌더마다 새로 만들면 memo 효과가 사라지므로 props 형태와 context 경계를 먼저 줄입니다.</p>
+<p><code>useTransition</code>은 상태 업데이트를 non-urgent로 표시해 입력 같은 urgent update가 먼저 반영될 수 있게 합니다. 무거운 동기 계산이나 큰 DOM 작업을 자동으로 빠르게 만들지는 않으므로 작업 분할, virtualization, worker 이동과 함께 판단합니다.</p>
+<div class="callout risk"><span class="co-label">ANTI-PATTERN</span><p>"렌더링이 많다"는 것만으로 문제는 아닙니다. 느린 render가 문제입니다. Profiler에서 실제 시간을 보고, state 위치를 먼저 조정한 뒤 memo를 적용합니다.</p></div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">RO-05</span><h2>큰 목록과 무거운 UI</h2></div>
+<p class="lede">수천 행 테이블, 차트, 에디터는 일반 컴포넌트와 다른 전략이 필요합니다.</p>
+<table>
+<tr><th>문제</th><th>해법</th><th>주의</th></tr>
+<tr><td>큰 목록 DOM</td><td>virtualization</td><td>동적 높이와 keyboard navigation 고려</td></tr>
+<tr><td>무거운 차트</td><td>lazy load, data downsample</td><td>초기 dashboard 전체를 막지 않음</td></tr>
+<tr><td>입력 중 필터</td><td>debounce, deferred value</td><td>입력값 자체를 늦게 반영하지 않기</td></tr>
+<tr><td>큰 계산</td><td>worker, incremental processing</td><td>직렬화 비용과 취소 처리 고려</td></tr>
+</table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">RO-06</span><h2>치트시트</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Bundle Budget</b><span>size limit</span></div><div class="g-def">초기 JS/CSS 크기에 대한 팀 기준입니다. 초과 시 PR에서 논의합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Hydration Cost</b><span>SSR</span></div><div class="g-def">서버 HTML을 클라이언트 React와 연결하는 비용입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Virtualization</b><span>windowing</span></div><div class="g-def">보이는 항목만 렌더링해 DOM 수를 줄이는 기법입니다.</div></div>
+</div>
+</section>
+<footer>RENDERING OPTIMIZATION HANDBOOK · V1 · 2026-06</footer>
+</main></div></body></html>

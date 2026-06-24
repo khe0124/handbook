@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker & Deploy Handbook — 컨테이너·CI/CD·배포 전략 핸드북</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECEEF3}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono,td code{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#9DB6E8}
+.serial-card .dim{color:#9AA3B8}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">DOCKER & DEPLOY</div>
+  <div class="nav-title">Docker·배포 핸드북</div>
+  <a href="#ch1"><span class="code">OPS-01</span>컨테이너란</a>
+  <a href="#ch2"><span class="code">OPS-02</span>이미지와 레이어</a>
+  <a href="#ch3"><span class="code">OPS-03</span>Dockerfile 기초·베스트 프랙티스</a>
+  <a href="#ch4"><span class="code">OPS-04</span>멀티스테이지·이미지 최적화</a>
+  <a href="#ch5"><span class="code">OPS-05</span>컨테이너 실행과 구성</a>
+  <a href="#ch6"><span class="code">OPS-06</span>레지스트리와 태깅</a>
+  <a href="#ch7"><span class="code">OPS-07</span>12-factor 앱</a>
+  <a href="#ch8"><span class="code">OPS-08</span>CI/CD 파이프라인</a>
+  <a href="#ch9"><span class="code">OPS-09</span>배포 전략</a>
+  <a href="#ch10"><span class="code">OPS-10</span>오케스트레이션 개요</a>
+  <a href="#ch11"><span class="code">OPS-11</span>용어집</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : OPS-HANDBOOK-V1</span>
+    <span>SCOPE : CONTAINER · CI/CD · STRATEGY</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>Docker와 배포<br>핸드북</h1>
+  <p class="hero-sub">컨테이너는 <strong>"제 PC에선 됩니다"</strong>를 끝냅니다 — 코드·런타임·의존성을 한 이미지로 봉인해 어디서나 같게 돕니다. 이 핸드북은 명령어 나열이 아니라 <em>왜 이렇게 도는가</em>를 먼저 잡습니다 — 레이어 캐시가 왜 그 순서를 강요하는지, 배포 전략 사이의 트레이드오프가 무엇인지, 어디서 깨지는지.</p>
+  <div class="hero-meta">READER : 7년차 프론트엔드 → 풀스택 확장 · Java/Spring Boot/JPA foundational<br>COMPILED : 2026-06</div>
+</header>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">OPS-01</span><h2>컨테이너란</h2></div>
+<p class="lede">컨테이너의 핵심은 가상화가 아니라 <em>격리</em>입니다 — 하나의 OS 커널을 공유하면서, 프로세스가 자기만의 파일시스템·네트워크·프로세스 공간을 가진 것처럼 속이는 기술입니다. VM과 헷갈리면 무게도 한계도 잘못 잡게 됩니다.</p>
+<p>VM은 하이퍼바이저 위에 <strong>guest OS를 통째로</strong> 올립니다 — 커널, 시스템 데몬, 전부. 그래서 부팅에 수십 초가 걸리고 이미지가 기가바이트 단위입니다. 컨테이너는 그게 없습니다. host의 커널을 그대로 빌려 쓰고, Linux 커널의 두 기능으로 격리만 만듭니다 — <code>namespace</code>(무엇을 볼 수 있는가: PID·네트워크·마운트 공간 분리)와 <code>cgroup</code>(얼마나 쓸 수 있는가: CPU·메모리 한도). 그래서 컨테이너는 사실 <em>격리된 일반 프로세스</em>일 뿐입니다.</p>
+<table>
+<tr><th>축</th><th>가상머신(VM)</th><th>컨테이너</th></tr>
+<tr><td>격리 단위</td><td>guest OS 통째로 (커널 포함)</td><td>프로세스 (<code>namespace</code>·<code>cgroup</code>)</td></tr>
+<tr><td>커널</td><td>VM마다 독립 커널</td><td>host 커널 공유</td></tr>
+<tr><td>크기</td><td>GB 단위</td><td>MB 단위 (베이스에 따라 수~수백 MB)</td></tr>
+<tr><td>기동 시간</td><td>수십 초 (OS 부팅)</td><td>수백 ms (프로세스 시작)</td></tr>
+<tr><td>격리 강도</td><td>강함 (하드웨어 수준)</td><td>약함 (커널 공유 → 커널 취약점 공유)</td></tr>
+<tr><td>이식성</td><td>하이퍼바이저 의존</td><td>이미지 하나로 어디서나 동일</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">실패 모드 — 커널 공유의 함정</span>
+<p>컨테이너는 host 커널을 공유하므로, <em>커널이 다른 OS는 native로 못 돕니다</em>. macOS·Windows에서 Docker가 도는 건 사실 가벼운 Linux VM을 한 겹 깔고 그 안에서 컨테이너를 돌리는 것입니다 — 그래서 로컬(맥)과 서버(리눅스)의 동작이 미묘하게 다를 수 있습니다. 또 격리가 VM만큼 강하지 않으니, 멀티테넌트 환경에서 신뢰 못 할 코드를 돌릴 땐 컨테이너만으로 보안 경계를 삼지 마세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">OPS-02</span><h2>이미지와 레이어</h2></div>
+<p class="lede">세 단어를 정확히 구분하세요 — <em>이미지</em>는 불변 스냅샷(설계도), <em>레이어</em>는 그 이미지를 쌓아 올린 캐시 단위, <em>컨테이너</em>는 이미지를 실행한 인스턴스입니다. 클래스와 인스턴스의 관계를 떠올리면 정확합니다.</p>
+<p>이미지는 <strong>읽기 전용 레이어의 스택</strong>입니다. Dockerfile의 명령 하나(<code>RUN</code>, <code>COPY</code> 등)가 대체로 레이어 하나를 만들고, 각 레이어는 직전 상태에서 <em>바뀐 파일만</em> 담습니다. 컨테이너를 실행하면 이 읽기 전용 스택 위에 얇은 <strong>쓰기 가능 레이어</strong>가 한 장 얹히고, 실행 중 생기는 변경은 전부 거기로 갑니다. 컨테이너를 지우면 그 레이어도 사라집니다 — 그래서 상태는 컨테이너 안에 두면 안 됩니다(→ OPS-07).</p>
+<div class="serial-card">
+<span class="sc-label">LAYER STACK — 위로 갈수록 자주 바뀜</span>
+<span class="dim">┌─────────────────────────────┐</span><br>
+<span class="dim">│</span> <span class="seg">RW 레이어</span> (컨테이너 실행 중 변경)  <span class="dim">│ ← 컨테이너마다 1장</span><br>
+<span class="dim">├─────────────────────────────┤</span><br>
+<span class="dim">│</span> <span class="seg2">COPY . .</span>  (앱 소스)            <span class="dim">│ ← 매 빌드 바뀜</span><br>
+<span class="dim">│</span> <span class="seg2">RUN npm ci</span> (의존성)           <span class="dim">│ ← 가끔 바뀜</span><br>
+<span class="dim">│</span> <span class="seg2">COPY package.json</span>            <span class="dim">│ ← 드물게 바뀜</span><br>
+<span class="dim">│</span> <span class="seg2">FROM node:22-slim</span> (베이스)    <span class="dim">│ ← 거의 안 바뀜</span><br>
+<span class="dim">└─────────────────────────────┘  ↑ 읽기 전용, 공유·캐시됨</span>
+</div>
+<p>레이어가 캐시 단위라는 점이 빌드 속도의 전부를 결정합니다. Docker는 빌드 시 각 레이어를 위에서부터 검사해 <em>입력이 그대로면 캐시를 재사용</em>합니다. 그러나 한 레이어가 깨지면 그 <strong>아래(이후) 레이어는 전부 다시 빌드</strong>됩니다. 그래서 "자주 바뀌는 것을 아래쪽(나중)에" 두는 순서가 중요합니다(→ OPS-03). 여러 이미지가 같은 베이스 레이어를 쓰면 디스크에서 그 레이어를 <em>한 번만</em> 저장합니다 — content-addressable(해시 기반) 저장 덕입니다.</p>
+<div class="callout">
+<span class="co-label">멘탈 모델</span>
+<p>이미지 : 컨테이너 = 클래스 : 인스턴스. 한 이미지에서 컨테이너 100개를 띄워도 읽기 전용 레이어는 공유되고, 각자 얇은 RW 레이어만 따로 가집니다. <code>docker images</code>로 이미지를, <code>docker ps</code>로 실행 중 컨테이너를, <code>docker history &lt;image&gt;</code>로 레이어 구성을 봅니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">OPS-03</span><h2>Dockerfile 기초·베스트 프랙티스</h2></div>
+<p class="lede">Dockerfile은 이미지를 만드는 레시피입니다. 명령 몇 개만 알면 동작은 하지만, <em>순서와 선택</em>이 빌드 속도·이미지 크기·보안을 가릅니다.</p>
+<table>
+<tr><th>명령</th><th>역할 / 주의</th></tr>
+<tr><td><code>FROM</code></td><td>베이스 이미지 지정. 모든 Dockerfile의 첫 줄. 태그를 명시(<code>node:22-slim</code>)</td></tr>
+<tr><td><code>WORKDIR</code></td><td>이후 명령의 작업 디렉터리 설정(없으면 생성). <code>cd</code> 대신 이걸 쓴다</td></tr>
+<tr><td><code>COPY</code></td><td>host 파일을 이미지로 복사. <code>ADD</code>는 URL·자동 압축해제까지 하지만 의외성 때문에 보통 <code>COPY</code> 권장</td></tr>
+<tr><td><code>RUN</code></td><td>빌드 중 셸 명령 실행(레이어 생성). 패키지 설치·빌드 등</td></tr>
+<tr><td><code>CMD</code></td><td>컨테이너 기동 시 기본 명령. <code>docker run</code> 인자로 덮어쓸 수 있음</td></tr>
+<tr><td><code>ENTRYPOINT</code></td><td>고정 실행 진입점. <code>CMD</code>는 그 인자로 들어감 — 둘을 조합</td></tr>
+</table>
+<p>가장 큰 레버는 <strong>레이어 캐시를 살리는 명령 순서</strong>입니다. 의존성 설치(<code>npm ci</code>)는 소스 코드가 바뀌어도 <code>package.json</code>이 그대로면 다시 할 필요가 없습니다. 그래서 <em>의존성 매니페스트만 먼저 COPY → 설치 → 그다음 전체 소스 COPY</em> 순으로 짭니다. 이러면 코드 한 줄 고친 재빌드에서 의존성 설치 레이어가 캐시로 건너뛰어집니다.</p>
+<div class="serial-card">
+<span class="sc-label">DOCKERFILE — Node 앱 (캐시·보안 고려)</span>
+<span class="seg">FROM</span> node:22-slim<br>
+<span class="seg">WORKDIR</span> /app<br>
+<span class="dim"># 1) 의존성 매니페스트만 먼저 — 코드보다 드물게 바뀜</span><br>
+<span class="seg">COPY</span> package.json package-lock.json ./<br>
+<span class="seg">RUN</span> npm ci --omit=dev<br>
+<span class="dim"># 2) 그다음 소스 — 자주 바뀌므로 캐시 경계를 여기 둔다</span><br>
+<span class="seg">COPY</span> . .<br>
+<span class="dim"># 3) 비root 유저로 강등 (slim 이미지는 node 유저 내장)</span><br>
+<span class="seg">USER</span> node<br>
+<span class="seg">EXPOSE</span> 3000<br>
+<span class="seg">CMD</span> [<span class="seg2">"node"</span>, <span class="seg2">"server.js"</span>]
+</div>
+<p>두 가지를 더 챙깁니다. 첫째, <code>.dockerignore</code>로 <code>node_modules</code>·<code>.git</code>·로컬 빌드 산출물을 빌드 컨텍스트에서 제외하세요 — 안 그러면 거대한 컨텍스트를 daemon으로 통째로 전송하고, 로컬 <code>node_modules</code>가 이미지로 섞여 들어가 깨집니다. 둘째, <code>USER</code>로 <strong>비root</strong>로 떨어뜨리세요. 기본 root로 도는 컨테이너는 탈출 시 공격면이 커집니다.</p>
+<div class="callout warn">
+<span class="co-label">CMD vs ENTRYPOINT — 자주 틀리는 곳</span>
+<p><code>CMD</code>는 "기본값", <code>ENTRYPOINT</code>는 "고정 실행파일"입니다. <code>docker run myimg echo hi</code>를 하면 <code>CMD</code>는 통째로 <code>echo hi</code>로 교체되지만, <code>ENTRYPOINT</code>가 있으면 <code>echo hi</code>는 그 <em>인자</em>로 붙습니다. 또 <code>CMD node server.js</code>(셸 형식)는 <code>/bin/sh -c</code>로 감싸져 <strong>신호(SIGTERM)가 앱까지 안 전달</strong>될 수 있습니다 — graceful shutdown이 깨지는 단골 원인입니다. <code>CMD ["node","server.js"]</code>(exec 배열 형식)을 쓰세요(→ OPS-05의 신호 처리).</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">OPS-04</span><h2>멀티스테이지 빌드와 이미지 최적화</h2></div>
+<p class="lede">빌드에 필요한 것과 실행에 필요한 것은 다릅니다. 컴파일러·devDependencies·빌드 캐시는 <em>실행 시점엔 쓰레기</em>입니다. 멀티스테이지 빌드는 이 둘을 분리해 최종 이미지에서 빌드 도구를 통째로 들어냅니다.</p>
+<p>핵심 문법은 하나입니다 — Dockerfile 안에 <code>FROM</code>을 여러 번 써서 단계(stage)를 나누고, <code>COPY --from=&lt;stage&gt;</code>로 <em>앞 단계의 결과물만</em> 다음 단계로 가져옵니다. 빌드 단계는 무거운 SDK를 다 깔아 빌드하고, 런타임 단계는 가벼운 베이스에 산출물만 얹습니다. 빌드 단계는 최종 이미지에 포함되지 않습니다.</p>
+<div class="serial-card">
+<span class="sc-label">MULTI-STAGE — 빌드 / 런타임 분리</span>
+<span class="dim"># --- 1단계: 빌드 (무거운 SDK 포함) ---</span><br>
+<span class="seg">FROM</span> node:22 <span class="seg2">AS</span> build<br>
+<span class="seg">WORKDIR</span> /app<br>
+<span class="seg">COPY</span> package.json package-lock.json ./<br>
+<span class="seg">RUN</span> npm ci<br>
+<span class="seg">COPY</span> . .<br>
+<span class="seg">RUN</span> npm run build <span class="dim"># → /app/dist 생성</span><br>
+<br>
+<span class="dim"># --- 2단계: 런타임 (가벼운 베이스, 산출물만) ---</span><br>
+<span class="seg">FROM</span> node:22-slim<br>
+<span class="seg">WORKDIR</span> /app<br>
+<span class="seg">COPY</span> --from=build <span class="seg2">/app/dist</span> ./dist<br>
+<span class="seg">COPY</span> --from=build <span class="seg2">/app/node_modules</span> ./node_modules<br>
+<span class="seg">USER</span> node<br>
+<span class="seg">CMD</span> [<span class="seg2">"node"</span>, <span class="seg2">"dist/server.js"</span>]
+</div>
+<p>베이스 이미지 선택이 크기와 공격면을 함께 줄입니다. <code>node:22</code>(full, ~1GB)보다 <code>node:22-slim</code>(~200MB)이, 더 극단적으로는 <code>distroless</code>(셸·패키지매니저조차 없는 최소 런타임)나 Alpine 계열이 있습니다. 작을수록 <em>다운로드·기동이 빠르고, 깔린 패키지가 적으니 CVE 노출도 줄어듭니다</em>.</p>
+<table>
+<tr><th>베이스</th><th>크기 감</th><th>트레이드오프</th></tr>
+<tr><td><code>node:22</code> (full)</td><td>크다 (~1GB)</td><td>디버깅 편함(셸·도구 다 있음), 그러나 무겁고 공격면 큼</td></tr>
+<tr><td><code>node:22-slim</code></td><td>중간 (~200MB)</td><td>실전 기본값. glibc 기반이라 호환성 무난</td></tr>
+<tr><td>Alpine</td><td>작다 (~50MB)</td><td>musl libc — native 모듈 빌드 이슈가 가끔 터짐</td></tr>
+<tr><td>distroless</td><td>가장 작다</td><td>셸 없음 → <code>docker exec</code> 디버깅 불가, 보안 최상</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">왜 효과가 큰가</span>
+<p>멀티스테이지의 진짜 이득은 크기보다 <em>분리된 관심사</em>입니다 — 빌드 도구(컴파일러·devDeps)가 production 이미지에 절대 못 들어가니, 공급망 공격면이 구조적으로 줄어듭니다. 디버깅이 어려운 distroless가 부담되면 slim에서 출발하고, 이미지 취약점은 <code>docker scout</code>나 <code>trivy</code> 같은 스캐너로 CI에서 점검하세요(→ OPS-08).</p>
+</div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">OPS-05</span><h2>컨테이너 실행과 구성</h2></div>
+<p class="lede">이미지를 만들었으면 이제 <em>돌립니다</em>. 실행 시점의 4대 구성 축 — 포트·볼륨·환경변수·네트워크 — 만 잡으면 로컬에서 운영까지 같은 그림으로 다룹니다.</p>
+<table>
+<tr><th>축</th><th>플래그 / 의미</th></tr>
+<tr><td>포트 매핑</td><td><code>-p 3000:3000</code> — host:container. 컨테이너 안의 포트를 밖으로 노출</td></tr>
+<tr><td>볼륨</td><td><code>-v ./data:/app/data</code> — 컨테이너 밖에 상태 보존(named volume / bind mount)</td></tr>
+<tr><td>환경변수</td><td><code>-e NODE_ENV=production</code> 또는 <code>--env-file .env</code> — 설정 주입(→ OPS-07)</td></tr>
+<tr><td>네트워크</td><td><code>--network mynet</code> — 같은 네트워크의 컨테이너끼리 이름으로 통신</td></tr>
+<tr><td>실행/정리</td><td><code>-d</code>(백그라운드) <code>--rm</code>(종료 시 삭제) <code>--name</code>(이름 부여)</td></tr>
+</table>
+<p>로컬에서 DB·API·캐시 여러 서비스를 동시에 띄워야 하면 <code>docker run</code>을 손으로 여러 번 치는 대신 <strong>Docker Compose</strong>를 씁니다 — <code>compose.yaml</code>에 서비스·네트워크·볼륨을 선언하고 <code>docker compose up</code> 한 번으로 전부 띄웁니다. Compose가 자동으로 네트워크를 만들어, 서비스끼리 <em>서비스 이름을 호스트명처럼</em> 부를 수 있습니다(예: 앱에서 DB 호스트를 <code>db</code>로).</p>
+<div class="serial-card">
+<span class="sc-label">compose.yaml — 앱 + Postgres</span>
+<span class="seg2">services:</span><br>
+&nbsp;&nbsp;<span class="seg">app:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ports: [<span class="seg2">"3000:3000"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATABASE_URL: postgres://app:pw@<span class="seg">db</span>:5432/app<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depends_on: [db]<br>
+&nbsp;&nbsp;<span class="seg">db:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
+&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: pw<br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes: [<span class="seg2">"pgdata:/var/lib/postgresql/data"</span>] <span class="dim"># 상태 보존</span><br>
+<span class="seg2">volumes:</span><br>
+&nbsp;&nbsp;pgdata:
+</div>
+<div class="callout warn">
+<span class="co-label">신호와 graceful shutdown</span>
+<p>오케스트레이터(또는 <code>docker stop</code>)는 컨테이너에 <code>SIGTERM</code>을 보내고, 유예 시간(기본 10초) 안에 안 죽으면 <code>SIGKILL</code>로 강제 종료합니다. 앱이 PID 1로 돌면서 신호를 직접 처리해야 진행 중 요청을 마저 끝내고 연결을 정리합니다. <code>CMD</code>를 셸 형식으로 쓰면 신호가 <code>sh</code>에서 막혀 앱까지 안 갑니다(→ OPS-03). exec 배열 형식을 쓰고, 필요하면 <code>--init</code>으로 가벼운 init을 PID 1에 두세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">OPS-06</span><h2>레지스트리와 태깅</h2></div>
+<p class="lede">레지스트리는 이미지의 <em>원격 저장소</em>입니다 — git의 GitHub에 해당합니다. 로컬에서 빌드한 이미지를 <code>push</code>하고, 서버·CI가 <code>pull</code>해 실행합니다. 그 사이를 잇는 건 <strong>태그</strong>이고, 태그 전략이 배포 추적성을 좌우합니다.</p>
+<table>
+<tr><th>동작</th><th>명령 / 의미</th></tr>
+<tr><td>로그인</td><td><code>docker login &lt;registry&gt;</code> — Docker Hub, GHCR, AWS ECR 등</td></tr>
+<tr><td>태깅</td><td><code>docker tag app:local ghcr.io/org/app:1.4.2</code> — 레지스트리 경로 + 버전</td></tr>
+<tr><td>업로드</td><td><code>docker push ghcr.io/org/app:1.4.2</code> — 레이어 단위로 전송(있는 건 건너뜀)</td></tr>
+<tr><td>다운로드</td><td><code>docker pull ghcr.io/org/app:1.4.2</code> — 서버·CI가 가져와 실행</td></tr>
+</table>
+<p>태그 이름은 <code>레지스트리/네임스페이스/이미지:태그</code> 구조입니다. 태그는 같은 이미지에 여러 개 붙일 수 있는 <em>가변 포인터</em>입니다 — 진짜 불변 식별자는 내용 해시인 <strong>digest</strong>(<code>@sha256:...</code>)입니다. 버전 태그는 사람이 읽기 위한 것이고, "정확히 이 이미지"를 못 박으려면 digest로 고정합니다.</p>
+<div class="callout risk">
+<span class="co-label">안티패턴 — latest 태그</span>
+<p><code>latest</code>는 "최신"을 보장하지 않습니다 — 그저 태그를 안 붙이면 붙는 <em>기본 문자열</em>일 뿐입니다. production에서 <code>latest</code>로 배포하면 ① 지금 도는 게 어떤 커밋인지 추적 불가 ② 재시작·스케일아웃 시 노드마다 다른 이미지를 당겨와 버전이 갈라짐 ③ 롤백 대상이 모호해집니다. <strong>커밋 SHA나 시맨틱 버전(<code>1.4.2</code>)으로 불변 태깅</strong>하고, production 배포는 digest 고정을 권합니다. <code>latest</code>는 로컬 편의용으로만.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">OPS-07</span><h2>12-factor 앱</h2></div>
+<p class="lede">12-factor는 "컨테이너·클라우드에서 잘 도는 앱"의 설계 원칙 모음입니다. 전부 외울 필요는 없고, 컨테이너 배포에 직결되는 네 가지만 몸에 익히면 대부분의 사고를 피합니다.</p>
+<table>
+<tr><th>원칙</th><th>무엇을 / 왜</th></tr>
+<tr><td>설정 = 환경변수</td><td>DB URL·시크릿·플래그를 <em>코드 밖</em> 환경변수로. 같은 이미지를 dev/stage/prod에 그대로 재사용</td></tr>
+<tr><td>stateless 프로세스</td><td>프로세스는 상태를 안 가짐 — 세션·파일은 외부(DB·오브젝트 스토리지)로. 아무 인스턴스나 죽고 늘어도 무방</td></tr>
+<tr><td>로그 = stdout 스트림</td><td>앱은 파일에 안 쓰고 <code>stdout</code>으로 흘려보냄. 수집·라우팅은 플랫폼이 담당</td></tr>
+<tr><td>빌드/릴리즈/실행 분리</td><td>코드→이미지(빌드), 이미지+설정(릴리즈), 그 릴리즈 실행(실행)을 단계로 분리 → 롤백은 이전 릴리즈로</td></tr>
+</table>
+<p>왜 이게 컨테이너와 맞물리나. 컨테이너의 RW 레이어는 <em>휘발성</em>입니다(→ OPS-02) — 컨테이너가 죽으면 안에 쓴 파일은 사라집니다. 그러니 상태를 안에 두면 안 되고(stateless), 로그를 파일로 쓰면 수집 전에 증발합니다(stdout). 설정을 이미지에 굽으면 환경마다 이미지를 새로 빌드해야 하니, 환경변수로 빼서 <em>한 이미지를 모든 환경에서</em> 재사용합니다. 이 셋이 맞물려야 수평 확장·무중단 배포·빠른 롤백이 성립합니다.</p>
+<div class="callout warn">
+<span class="co-label">실패 모드 — 상태를 컨테이너에 둔 경우</span>
+<p>업로드 파일을 컨테이너 로컬 디스크에 저장하면, 스케일아웃해 인스턴스가 2개가 되는 순간 "방금 올린 파일이 안 보임"이 됩니다 — 요청이 다른 인스턴스로 갔기 때문입니다. 배포로 컨테이너가 교체되면 통째로 사라지기도 합니다. 파일은 S3 같은 외부 스토리지로, 세션은 Redis·DB로 빼야 합니다. 시크릿을 환경변수로 넣을 땐 <code>docker inspect</code>·로그에 노출되지 않게 secret manager 사용을 고려하세요(→ OPS-08의 시크릿 주입).</p>
+</div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">OPS-08</span><h2>CI/CD 파이프라인</h2></div>
+<p class="lede">CI(지속적 통합)는 코드가 합쳐질 때마다 자동으로 빌드·테스트하는 것, CD(지속적 배포)는 그 결과물을 자동으로 환경에 올리는 것입니다. 컨테이너가 CI/CD와 잘 맞는 이유는 <em>빌드 산출물이 이미지 하나</em>로 떨어져 그대로 배포되기 때문입니다 — 빌드와 배포 사이에 변형이 없습니다.</p>
+<div class="flow">
+<span class="step">commit / PR</span><span class="arr">→</span>
+<span class="step">빌드</span><span class="arr">→</span>
+<span class="step">테스트 · 스캔</span><span class="arr">→</span>
+<span class="step hl">이미지 빌드 · push</span><span class="arr">→</span>
+<span class="step">배포 (deploy)</span><span class="arr">→</span>
+<span class="step">헬스체크</span>
+</div>
+<p>각 단계 사이에는 <strong>게이트(gate)</strong>가 있습니다 — 테스트가 깨지면 거기서 멈추고 배포로 못 넘어갑니다. production 배포 앞에는 보통 사람의 수동 승인 게이트를 둡니다. 단계가 통과할 때마다 신뢰가 쌓이고, 깨지면 가장 싼 단계(테스트)에서 빨리 잡힙니다 — 이게 게이트의 핵심 가치입니다.</p>
+<table>
+<tr><th>단계</th><th>하는 일</th></tr>
+<tr><td>빌드</td><td>의존성 설치·컴파일. 캐시로 빠르게</td></tr>
+<tr><td>테스트</td><td>unit·integration. 실패 시 즉시 중단(게이트)</td></tr>
+<tr><td>스캔</td><td>이미지 취약점(<code>trivy</code>)·lint·SAST. 보안 게이트</td></tr>
+<tr><td>이미지 빌드·push</td><td>커밋 SHA로 태깅해 레지스트리에 push(→ OPS-06)</td></tr>
+<tr><td>배포</td><td>그 이미지를 환경에 롤아웃(전략은 → OPS-09)</td></tr>
+</table>
+<p><strong>GitOps</strong>는 한 걸음 더 갑니다 — 배포 상태를 명령으로 밀어넣는 대신, <em>원하는 상태를 git 저장소에 선언</em>하고 에이전트(예: Argo CD·Flux)가 실제 클러스터를 그 선언에 맞춰 끌어옵니다. git이 단일 진실 공급원이 되어, 배포 이력이 곧 git 이력이고 롤백은 revert입니다.</p>
+<div class="callout risk">
+<span class="co-label">시크릿 주입 — 절대 이미지에 굽지 마라</span>
+<p>API 키·DB 비밀번호를 Dockerfile의 <code>ENV</code>나 <code>COPY .env</code>로 넣으면 <em>이미지 레이어에 영구히 박혀</em>, 레지스트리에 접근 가능한 누구나 <code>docker history</code>로 꺼낼 수 있습니다 — 나중에 덮어써도 이전 레이어에 남습니다. 시크릿은 ① CI의 secret store(GitHub Actions Secrets 등)에서 빌드 시점에만 주입하거나 ② 런타임에 secret manager(Vault·클라우드 KMS)·오케스트레이터 시크릿으로 환경변수에 넣습니다. 빌드 중 일시적으로 필요하면 BuildKit의 <code>--mount=type=secret</code>으로 레이어에 안 남게 하세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">OPS-09</span><h2>배포 전략</h2></div>
+<p class="lede">"새 버전으로 어떻게 갈아끼우는가"의 문제입니다. 핵심 목표는 셋 — <em>무중단</em>(사용자가 끊김을 못 느낌), <em>빠른 롤백</em>(문제 시 즉시 되돌림), <em>위험 통제</em>(나쁜 버전의 폭발 반경 최소화). 전략마다 이 셋의 균형이 다릅니다.</p>
+<table>
+<tr><th>전략</th><th>방식</th><th>장점 / 트레이드오프</th></tr>
+<tr><td>롤링(rolling)</td><td>인스턴스를 몇 개씩 순차 교체</td><td>추가 자원 거의 없음 / 교체 중 신·구 버전 공존, 롤백이 느림</td></tr>
+<tr><td>블루그린</td><td>구(blue)·신(green) 환경을 통째로 띄워두고 트래픽을 한 번에 전환</td><td>즉시 전환·즉시 롤백(되돌리기=스위치 back) / 자원 2배, DB 마이그레이션 호환 필요</td></tr>
+<tr><td>카나리</td><td>신 버전에 트래픽을 5%→25%→100%로 점증, 지표 보며 확대</td><td>폭발 반경 최소·실데이터 검증 / 설정 복잡, 관측·자동 롤백 인프라 필요</td></tr>
+</table>
+<p>세 전략 모두 <strong>헬스체크</strong>가 안전판입니다. 새 인스턴스가 트래픽을 받기 전, 오케스트레이터는 <code>readiness</code> 프로브로 "받을 준비 됐는지"를 확인합니다 — 준비 안 된 인스턴스로 트래픽이 가지 않게. <code>liveness</code> 프로브는 "죽었는지"를 보고 죽었으면 재시작합니다. 카나리의 자동 확대·롤백은 이 헬스체크와 에러율·레이턴시 지표에 묶입니다(→ 로깅·모니터링·장애대응).</p>
+<div class="callout warn">
+<span class="co-label">트레이드오프 — DB 마이그레이션이 발목을 잡는다</span>
+<p>무중단 배포의 진짜 난점은 코드가 아니라 <em>스키마</em>입니다. 신·구 버전이 잠깐 공존하므로(롤링·카나리·블루그린 전환 순간), DB 스키마 변경은 <strong>양쪽 버전과 모두 호환</strong>돼야 합니다 — 컬럼 삭제·이름변경 같은 파괴적 변경을 코드 배포와 한 번에 하면 한쪽이 깨집니다. expand-and-contract 패턴(컬럼 추가→양쪽 호환 코드 배포→구 컬럼 제거를 다음 릴리즈로)으로 나눠야 안전합니다. 블루그린에서 green이 prod DB를 공유하면 "환경 통째 분리"의 환상이 여기서 깨집니다(→ 백엔드 개요의 트랜잭션·마이그레이션).</p>
+</div>
+</section>
+
+<!-- ============ CH 10 ============ -->
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">OPS-10</span><h2>오케스트레이션 개요</h2></div>
+<p class="lede">컨테이너 하나를 돌리는 건 <code>docker run</code>으로 끝입니다. 그러나 수십~수백 개를 여러 서버에 걸쳐 <em>띄우고·살피고·죽으면 되살리고·확장하고·배포</em>하는 건 손으로 못 합니다. 이걸 자동화하는 게 오케스트레이션이고, 사실상 표준이 <strong>Kubernetes(K8s)</strong>입니다.</p>
+<p>K8s를 왜 쓰나 — 핵심은 <em>선언적 자가복구</em>입니다. "이 앱을 3개 띄워라"라고 원하는 상태를 선언하면, K8s가 실제 상태를 거기에 맞춰 계속 끌어옵니다. 노드가 죽어 컨테이너가 2개로 줄면 자동으로 1개를 다른 노드에 다시 띄웁니다. 명령(어떻게)이 아니라 상태(무엇을)를 다룬다는 점이 OPS-08의 GitOps와 맞물립니다.</p>
+<table>
+<tr><th>리소스</th><th>역할 (개념만)</th></tr>
+<tr><td>Pod</td><td>배포의 최소 단위 — 컨테이너 1개(때로 몇 개)를 묶음. 가장 작은 "실행 단위"</td></tr>
+<tr><td>Deployment</td><td>Pod를 <em>몇 개</em> 유지할지 선언·관리. 롤링 업데이트·롤백을 담당</td></tr>
+<tr><td>Service</td><td>바뀌는 Pod들 앞의 안정적 진입점(가상 IP·DNS) — 로드밸런싱</td></tr>
+<tr><td>Ingress</td><td>클러스터 외부 HTTP(S) 트래픽을 내부 Service로 라우팅(도메인·경로 기반)</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">범위 — 여기까지만</span>
+<p>K8s의 깊이(스케줄링·네트워킹·오퍼레이터·헬름·RBAC 등)는 이 핸드북의 범위 밖입니다. 미들급 풀스택으로서 지금 필요한 건 <em>왜 존재하고 핵심 개념이 무엇인지</em>까지입니다 — Pod/Deployment/Service/Ingress 네 단어의 관계만 잡으면 팀의 매니페스트를 읽고 대화에 참여할 수 있습니다. 작은 서비스라면 K8s가 과합니다 — 관리형 PaaS(Cloud Run·ECS·Fly.io 등)나 Compose로 충분한 경우가 많고, 복잡성 비용을 정당화할 규모가 됐을 때 K8s로 갑니다. 실제 운영 디테일은 → 로깅·모니터링·장애대응, 백엔드 개요와 함께 보세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 11 ============ -->
+<section id="ch11">
+<div class="ch-head"><span class="ch-code">OPS-11</span><h2>용어집</h2></div>
+<p class="lede">이 핸드북에서 반복된 핵심 용어. 정의를 한 줄로 못 줄이면 아직 이해 못 한 것입니다 — 막힐 때 여기로.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>컨테이너</b><span>container</span></div><div class="g-def"><code>namespace</code>·<code>cgroup</code>로 격리된 프로세스. host 커널을 공유하는 이미지의 실행 인스턴스(→ OPS-01)</div></div>
+<div class="g-row"><div class="g-term"><b>이미지</b><span>image</span></div><div class="g-def">코드·런타임·의존성을 봉인한 불변(read-only) 스냅샷. 컨테이너의 "클래스"에 해당(→ OPS-02)</div></div>
+<div class="g-row"><div class="g-term"><b>레이어</b><span>layer</span></div><div class="g-def">이미지를 구성하는 읽기 전용 스택의 한 장 = 캐시·공유 단위. Dockerfile 명령 하나가 대체로 한 장(→ OPS-02)</div></div>
+<div class="g-row"><div class="g-term"><b>Dockerfile</b><span>build recipe</span></div><div class="g-def">이미지를 만드는 명령 스크립트. <code>FROM</code>/<code>RUN</code>/<code>COPY</code>/<code>CMD</code> 등. 순서가 캐시·크기를 결정(→ OPS-03)</div></div>
+<div class="g-row"><div class="g-term"><b>.dockerignore</b><span>build context</span></div><div class="g-def">빌드 컨텍스트에서 제외할 파일 목록. <code>node_modules</code>·<code>.git</code> 제외로 전송량·오염 방지(→ OPS-03)</div></div>
+<div class="g-row"><div class="g-term"><b>멀티스테이지 빌드</b><span>multi-stage</span></div><div class="g-def">한 Dockerfile에 빌드·런타임 단계를 나눠, 산출물만 <code>COPY --from</code>으로 가져옴. 크기·공격면↓(→ OPS-04)</div></div>
+<div class="g-row"><div class="g-term"><b>distroless / slim</b><span>minimal base</span></div><div class="g-def">패키지를 최소화한 베이스 이미지. 작고 안전하지만 디버깅 도구가 적거나 없음(→ OPS-04)</div></div>
+<div class="g-row"><div class="g-term"><b>볼륨</b><span>volume</span></div><div class="g-def">컨테이너 밖에 상태를 보존하는 마운트. 휘발성 RW 레이어 문제를 우회(→ OPS-05, OPS-07)</div></div>
+<div class="g-row"><div class="g-term"><b>Compose</b><span>docker compose</span></div><div class="g-def">여러 컨테이너를 <code>compose.yaml</code>로 선언해 한 번에 띄우는 로컬 다중 서비스 도구(→ OPS-05)</div></div>
+<div class="g-row"><div class="g-term"><b>레지스트리</b><span>registry</span></div><div class="g-def">이미지의 원격 저장소. <code>push</code>/<code>pull</code>로 주고받음(Docker Hub·GHCR·ECR)(→ OPS-06)</div></div>
+<div class="g-row"><div class="g-term"><b>태그 / digest</b><span>tag · @sha256</span></div><div class="g-def">태그는 가변 포인터(<code>1.4.2</code>), digest는 내용 해시로 고정한 불변 식별자. <code>latest</code>는 안티패턴(→ OPS-06)</div></div>
+<div class="g-row"><div class="g-term"><b>12-factor</b><span>config·stateless·logs</span></div><div class="g-def">클라우드 친화 앱 설계 원칙. 설정=환경변수, stateless, 로그=stdout, 빌드/릴리즈/실행 분리(→ OPS-07)</div></div>
+<div class="g-row"><div class="g-term"><b>CI/CD</b><span>pipeline</span></div><div class="g-def">빌드→테스트→이미지→배포를 게이트로 자동화. 산출물=이미지 하나라 변형 없이 배포(→ OPS-08)</div></div>
+<div class="g-row"><div class="g-term"><b>GitOps</b><span>declarative deploy</span></div><div class="g-def">원하는 상태를 git에 선언하고 에이전트가 클러스터를 동기화. 롤백=revert(→ OPS-08, OPS-10)</div></div>
+<div class="g-row"><div class="g-term"><b>롤링</b><span>rolling update</span></div><div class="g-def">인스턴스를 순차 교체하는 무중단 배포. 자원 절약하나 신·구 공존·롤백 느림(→ OPS-09)</div></div>
+<div class="g-row"><div class="g-term"><b>블루그린</b><span>blue-green</span></div><div class="g-def">신·구 환경을 통째로 띄워두고 트래픽을 한 번에 전환. 즉시 롤백, 자원 2배(→ OPS-09)</div></div>
+<div class="g-row"><div class="g-term"><b>카나리</b><span>canary</span></div><div class="g-def">신 버전에 트래픽을 점증하며 지표 관찰. 폭발 반경 최소, 관측 인프라 필요(→ OPS-09)</div></div>
+<div class="g-row"><div class="g-term"><b>헬스체크</b><span>readiness · liveness</span></div><div class="g-def">readiness=트래픽 받을 준비됐나, liveness=살아있나. 무중단 배포의 안전판(→ OPS-09)</div></div>
+<div class="g-row"><div class="g-term"><b>Kubernetes</b><span>K8s</span></div><div class="g-def">선언적 자가복구 오케스트레이터. 원하는 상태를 선언하면 실제 상태를 맞춰줌(→ OPS-10)</div></div>
+<div class="g-row"><div class="g-term"><b>Pod / Deployment</b><span>K8s 리소스</span></div><div class="g-def">Pod=실행 최소 단위(컨테이너 묶음), Deployment=Pod 개수·롤링·롤백 관리(→ OPS-10)</div></div>
+<div class="g-row"><div class="g-term"><b>Service / Ingress</b><span>K8s 네트워킹</span></div><div class="g-def">Service=Pod 앞 안정적 진입점·LB, Ingress=외부 HTTP를 내부 Service로 라우팅(→ OPS-10)</div></div>
+</div>
+<div class="callout gm">
+<span class="co-label">학습 순서 제안</span>
+<p>전부 한 번에 익히려 하지 마세요. 먼저 손에 붙일 것: <code>docker build</code> → <code>docker run -p</code> → 멀티스테이지 Dockerfile 한 장 → <code>docker compose up</code>으로 로컬 풀스택. 이 네 단계로 OPS-01~05가 몸에 들어옵니다. 그다음 CI에서 이미지를 빌드·push해보고(OPS-06·08), 배포 전략(OPS-09)은 팀의 실제 파이프라인을 읽으며 익히세요. K8s(OPS-10)는 규모가 정당화할 때 갑니다 — 그전엔 개념만으로 충분합니다. 런타임 관측은 → 로깅·모니터링·장애대응, 데이터 계층은 → 백엔드 개요와 함께.</p>
+</div>
+</section>
+
+<footer>
+DOCKER & DEPLOY HANDBOOK · V1 · 2026-06<br>
+SCOPE : CONTAINER · CI/CD · DEPLOYMENT STRATEGY · READER : FE → FULLSTACK<br>
+NOTE : 명령·문법은 실재 Docker 기준 · COMPANION : LINUX/SHELL · BACKEND ENGINEERING · LOGGING/MONITORING HANDBOOK
+</footer>
+
+</main>
+</div>
+</body>
+</html>

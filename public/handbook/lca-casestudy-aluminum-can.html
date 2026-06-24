@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCA 사례연구 — 알루미늄 음료캔의 전과정</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F8F8;--panel:#FFFFFF;--ink:#152226;--ink-soft:#445559;--line:#D6E0E0;
+  --green:#0A5F66;--green-deep:#073E43;--green-tint:#E5F1F1;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.nav-back{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-decoration:none;margin-bottom:20px;letter-spacing:.04em}
+.nav-back:hover{color:var(--green)}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:680px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECF0F0}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E4EEEF;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#7BAAB0;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#8BCBD4}
+.serial-card .dim{color:#9CAFB3}
+.bar{display:grid;grid-template-columns:190px 1fr 76px;align-items:center;gap:12px;margin:9px 0;font-size:13.5px}
+.bar .lab{line-height:1.35}
+.bar .track{background:var(--green-tint);border-radius:3px;height:18px;overflow:hidden}
+.bar .fill{background:var(--green);height:100%;border-radius:3px}
+.bar .fill.soft{background:#7FB2B7}
+.bar .val{font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--ink-soft)}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}.bar{grid-template-columns:130px 1fr 64px}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">LCA CASE STUDY</div>
+  <div class="nav-title">알루미늄 음료캔의 전과정</div>
+  <a class="nav-back" href="lca-handbook.html">← LCA 도메인 핸드북</a>
+  <a href="#ch0"><span class="code">CS-00</span>왜 알루미늄 캔인가</a>
+  <a href="#ch1"><span class="code">CS-01</span>목적·범위 — 기능단위와 경계</a>
+  <a href="#ch2"><span class="code">CS-02</span>인벤토리 — 8단계 전과정</a>
+  <a href="#ch3"><span class="code">CS-03</span>배분 전장 — 재활용 알루미늄</a>
+  <a href="#ch4"><span class="code">CS-04</span>영향평가 — CO₂e로의 환산</a>
+  <a href="#ch5"><span class="code">CS-05</span>해석 — 전력망이 결론을 가른다</a>
+  <a href="#ch6"><span class="code">CS-06</span>결과 종합 — 캔 1개의 분해</a>
+  <a href="#ch7"><span class="code">CS-07</span>핸드북 매핑 · 읽는 법</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : CASE-LCA-01</span>
+    <span>OBJECT : 330mL ALUMINIUM CAN</span>
+    <span>BOUNDARY : CRADLE-TO-GRAVE</span>
+  </div>
+  <h1>알루미늄 음료캔의<br>전과정을 따라가다</h1>
+  <p class="hero-sub">LCA 핸드북의 방법론을 <strong>제품 하나</strong>에 끝까지 적용해 봅니다. 보크사이트 광산에서 시작해 다시 새 캔으로 돌아오기까지 — 기능단위를 정의하고, 8단계의 인벤토리를 세우고, 재활용 배분이라는 최대 쟁점을 통과시키고, 전력망 하나가 결론을 3~4배 흔드는 것을 직접 봅니다. 알루미늄 캔은 LCA 교과서가 가장 자주 펴는 페이지입니다.</p>
+  <div class="hero-meta">METHOD : ISO 14040/14044/14067 / GHG PROTOCOL PRODUCT STANDARD<br>FIGURES : 공개 문헌의 대표값·범위(IAI · ecoinvent · 학술 LCA) — 특정 제품 의뢰 LCA 아님</div>
+</header>
+
+<!-- ============ CH 0 ============ -->
+<section id="ch0">
+<div class="ch-head"><span class="ch-code">CS-00</span><h2>왜 알루미늄 캔인가</h2></div>
+<p class="lede">교육용 사례에는 자격이 있습니다. 알루미늄 캔은 LCA가 가르치려는 거의 모든 쟁점을 한 몸에 담고 있어서, 한 제품을 끝까지 따라가는 것만으로 방법론 전체가 복습됩니다.</p>
+<ul>
+<li><strong>전력 집약 공정의 교과서</strong> — 1차 알루미늄 제련(Hall-Héroult 전해)은 알루미늄 1kg당 약 <code>13~15 kWh</code>의 전기를 먹습니다. 발자국의 향방이 전력에 달려 있어, "어느 전력망이냐"가 결과를 지배하는 구조를 가장 선명하게 보여줍니다(→ CS-05).</li>
+<li><strong>재활용 배분의 최대 쟁점</strong> — 재생 알루미늄은 1차 대비 에너지를 약 <code>95%</code> 절감합니다. 그래서 "재활용 크레딧을 누구에게 줄 것인가"라는 배분 방식 선택이 발자국을 통째로 바꿉니다 — 알루미늄이 표준마다 다른 숫자를 내는 핵심 이유(→ CS-03).</li>
+<li><strong>닫힌 루프(closed loop)</strong> — 캔은 다시 캔으로 돌아오는 대표적 순환 소재라, cradle-to-grave와 cradle-to-cradle의 차이를 실물로 비교할 수 있습니다.</li>
+<li><strong>풍부한 공개 데이터</strong> — 국제알루미늄협회(IAI)와 ecoinvent가 단계별 계수를 공개해, 추측 없이 문헌값으로 전 과정을 채울 수 있습니다.</li>
+</ul>
+<div class="callout">
+<span class="co-label">이 페이지의 숫자에 대하여</span>
+<p>아래의 모든 수치는 <strong>특정 캔 한 제품을 의뢰받아 측정한 값이 아니라</strong>, 공개 문헌(IAI 글로벌 평균, ecoinvent, 학술 LCA)의 <em>대표값과 범위</em>입니다. LCA 핸드북이 경고한 "유효숫자 환상"(→ LCA-05)을 이 페이지가 스스로 어기지 않도록, 단일 정밀값 대신 <strong>범위와 가정</strong>으로 적습니다. 목적은 "정답 숫자"가 아니라 <em>숫자가 만들어지고 흔들리는 경로</em>를 보는 것입니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">CS-01</span><h2>목적·범위 — 기능단위와 경계</h2></div>
+<p class="lede">계산을 시작하기 전에 무엇을, 어디까지 잴지 못 박습니다. LCA의 절반이 여기서 결정됩니다(→ LCA-02).</p>
+
+<h3><span class="h3-tag">1.1</span>목적(Goal)</h3>
+<p>이 사례의 목적은 <em>"한 번의 음료 제공에 쓰이는 알루미늄 캔 용기가 야기하는 기후변화 영향(탄소발자국)을 단계별로 분해해 핫스팟을 찾는다"</em>입니다. 용도는 교육·내부 개선 탐색이고, 공개 비교 주장(다른 용기와의 우열 광고)이 아닙니다 — 이 구분이 중요한 이유는, 공개 비교에는 3인 패널 비판적 검토 같은 강화 요건이 붙기 때문입니다(→ LCA-08).</p>
+
+<h3><span class="h3-tag">1.2</span>기능단위(Functional Unit)</h3>
+<p>"캔 1개"가 아니라 <em>"330mL 음료 1회를 소비자에게 제공"</em>으로 잡습니다. 캔 자체가 아니라 <strong>캔이 수행하는 기능</strong>이 기준입니다. 이 기능단위를 충족하는 데 필요한 물량 — 캔 본체 알루미늄 약 <code>13~15 g</code> + 뚜껑(end) — 이 <strong>기준흐름(reference flow)</strong>입니다. 만약 유리병·PET와 비교하려 했다면, 같은 "330mL 1회 제공"으로 양쪽을 묶어야 공정합니다(→ LCA-02). 여기서는 캔 단일 제품만 분해하므로 비교 함정은 비껴갑니다.</p>
+
+<h3><span class="h3-tag">1.3</span>시스템 경계</h3>
+<p><strong>Cradle-to-grave</strong>로 잡습니다 — 원료 채취부터 사용·폐기까지 전부. 그래야 "캔은 재활용되니까 깨끗하다"는 폐기 단계의 주장과 "제련 전기가 더럽다"는 원료 단계의 부담을 같은 저울에 올릴 수 있습니다.</p>
+<div class="flow">
+<span class="step hl">① 보크사이트 채굴</span><span class="arr">→</span>
+<span class="step hl">② 알루미나 정련</span><span class="arr">→</span>
+<span class="step hl">③ 전해 제련</span><span class="arr">→</span>
+<span class="step hl">④ 압연·제관</span><span class="arr">→</span>
+<span class="step">⑤ 충전·포장</span><span class="arr">→</span>
+<span class="step">⑥ 유통</span><span class="arr">→</span>
+<span class="step">⑦ 사용(냉장)</span><span class="arr">→</span>
+<span class="step">⑧ 폐기·재활용</span>
+</div>
+<table>
+<tr><th>범위 축</th><th>이 사례의 선택</th><th>왜</th></tr>
+<tr><td><b>경계</b></td><td>Cradle-to-grave</td><td>재활용 편익과 제련 부담을 한 저울에</td></tr>
+<tr><td><b>컷오프</b></td><td>질량·환경 유의성 누적 1% 미만 흐름 제외</td><td>잉크·라벨 코팅 등 미량 흐름은 제외하되 명시</td></tr>
+<tr><td><b>자본재</b></td><td>제련소·설비 제조는 본 계산 제외(민감도에서 언급)</td><td>표준마다 갈리는 쟁점(→ LCA-02), 가정 명시가 의무</td></tr>
+<tr><td><b>시간/지리</b></td><td>전력망 계수는 시나리오로 분리(CS-05)</td><td>단일 국가 평균이 결론을 숨길 수 있어서</td></tr>
+<tr><td><b>LCIA 방법론</b></td><td>기후변화 단일범주 · GWP100 · IPCC AR6</td><td>탄소발자국(CFP)은 LCA의 부분집합(→ LCA-06)</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">AUDIT POINT</span>
+<p>이 사례는 <strong>기후변화 한 범주만</strong> 봅니다. 따라서 정확히는 LCA가 아니라 <em>탄소발자국(CFP)</em>입니다(→ LCA-06). 알루미늄의 진짜 환경 부담에는 보크사이트 채굴의 토지·생태계 영향, 적니(red mud) 폐기물, 제련 불소 배출 등 탄소로 안 잡히는 항목이 큽니다. "캔의 CO₂e가 낮다 = 친환경"이라고 말하는 순간 부담 전가(burden shifting)를 놓칩니다(→ LCA-01).</p>
+</div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">CS-02</span><h2>인벤토리(LCI) — 8단계 전과정</h2></div>
+<p class="lede">경계 안의 모든 단위공정에서 무엇이 들어가고 무엇이 나오는지를 적습니다. 작업량의 7할이 여기 들어가고(→ LCA-03), 캔의 경우 그 7할의 대부분이 ②~③ 두 단계에 몰려 있습니다.</p>
+
+<table>
+<tr><th>단계</th><th>핵심 투입</th><th>핵심 산출·배출</th><th>탄소 관점 메모</th></tr>
+<tr><td><b>① 보크사이트 채굴</b></td><td>광석, 디젤(중장비)</td><td>보크사이트 원광, 토지교란</td><td>탄소 비중은 작음 — 다범주에선 큰 항목</td></tr>
+<tr><td><b>② 알루미나 정련<br>(Bayer 공정)</b></td><td>보크사이트, 가성소다, <em>공정 열(증기)</em></td><td>알루미나(Al₂O₃), 적니</td><td>열원이 석탄/가스면 배출 큼 — 1차 핫스팟 후보</td></tr>
+<tr><td><b>③ 전해 제련<br>(Hall-Héroult)</b></td><td>알루미나, <em>전력 13~15 kWh/kg</em>, 탄소 양극</td><td>1차 알루미늄, CO₂, <em>PFC(과불화탄소)</em></td><td><strong>최대 핫스팟.</strong> 전력 배출 + 양극의 직접 CO₂ + 이상현상 시 PFC</td></tr>
+<tr><td><b>④ 압연·제관</b></td><td>알루미늄 슬래브, 전력, 윤활·세정</td><td>캔 본체·뚜껑, 스크랩(공정 회수)</td><td>공정 스크랩은 곧장 재용해 — 내부 순환</td></tr>
+<tr><td><b>⑤ 충전·포장</b></td><td>음료, 세척수, 전력, 라벨·잉크</td><td>완제품 캔, 폐수</td><td>캔 용기 관점에선 작은 비중</td></tr>
+<tr><td><b>⑥ 유통</b></td><td>트럭·해운 운송, 창고 전력</td><td>운송 배출</td><td>거리·수단에 민감하나 보통 한 자리 %</td></tr>
+<tr><td><b>⑦ 사용(냉장)</b></td><td>가정·매장 냉장 전력</td><td>냉장 배출</td><td>가정(allocation) 의존 — 변동 큼, 가정 명시 필수</td></tr>
+<tr><td><b>⑧ 폐기·재활용</b></td><td>수거·선별·재용해 전력</td><td>재생 잉곳(루프 복귀) 또는 매립</td><td>여기서 발생하는 <em>크레딧</em>의 귀속이 CS-03의 쟁점</td></tr>
+</table>
+
+<h3><span class="h3-tag">2.1</span>전경 데이터와 배경 데이터</h3>
+<p>캔 제조사가 직접 통제하는 <strong>④ 압연·제관, ⑤ 충전</strong>은 전경(foreground)이라 계량기·구매기록 같은 1차 데이터로 채웁니다. 반면 <strong>①~③ 1차 알루미늄 생산</strong>은 대개 통제 밖이라 배경(background) 데이터 — IAI 글로벌/지역 평균이나 ecoinvent 단위공정 — 를 끌어다 씁니다(→ LCA-03). 그런데 캔 발자국의 80% 이상이 바로 이 배경 영역에 있다는 게 함정입니다: <em>내가 통제하는 데이터는 정밀한데, 결과를 지배하는 데이터는 평균 추정치</em>라는 비대칭. 그래서 공급사로부터 실제 제련 전력원을 1차 데이터로 받는 것이 발자국 정밀화의 핵심 레버가 됩니다.</p>
+
+<div class="callout">
+<span class="co-label">CORE INSIGHT — 직접 배출이라는 함정</span>
+<p>제련의 탄소 양극은 알루미나의 산소와 반응해 <strong>전기와 무관하게 CO₂를 직접 배출</strong>합니다(약 <code>1.5~1.7 kg CO₂/kg-Al</code> 수준의 공정 직접 배출). 즉 100% 재생에너지로 제련해도 알루미늄 1차 생산의 배출이 0이 되지는 않습니다 — 무탄소 양극(inert anode)이 차세대 기술 쟁점인 이유입니다. "재생에너지 알루미늄 = 탄소중립"이라는 단순화가 빗나가는 지점.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">CS-03</span><h2>배분 전장 — 재활용 알루미늄</h2></div>
+<p class="lede">캔 LCA에서 결과를 가장 크게 흔드는 건 계산이 아니라 <strong>방법론 선택</strong> 하나입니다: 재활용의 편익을 누구의 장부에 적느냐. LCA 최대의 논쟁(→ LCA-03)이 알루미늄에서 가장 첨예합니다.</p>
+
+<h3><span class="h3-tag">3.1</span>왜 알루미늄에서 첨예한가</h3>
+<p>재생 알루미늄(scrap 재용해)은 1차 생산 대비 에너지를 약 <strong>95% 절감</strong>합니다. 1차 알루미늄이 약 <code>16~18 kg CO₂e/kg</code>(글로벌 평균)인데 재생 알루미늄은 <code>0.5~1 kg CO₂e/kg</code> 수준입니다 — 한 자릿수가 아니라 <em>한 자릿수 대 두 자릿수</em>의 차이. 따라서 "이 캔이 재생 알루미늄을 얼마나 담았는가"와 "이 캔이 다음에 얼마나 재활용되는가"를 회계에 어떻게 반영하느냐가 발자국을 통째로 바꿉니다.</p>
+
+<h3><span class="h3-tag">3.2</span>세 가지 배분 접근</h3>
+<table>
+<tr><th>접근</th><th>논리</th><th>이 캔에 적용하면</th></tr>
+<tr><td><b>Recycled-content<br>(컷오프, 100:0)</b></td><td>투입한 재생 함량만큼만 편익 인정. 폐기 후 재활용은 <em>다음 제품</em>의 몫</td><td>재생 함량 비율로 1차/재생 배출을 가중평균. 폐기 단계 크레딧 없음</td></tr>
+<tr><td><b>End-of-life recycling<br>(회피부담, 0:100)</b></td><td>폐기 후 재활용으로 회피한 1차 생산 부담을 <em>이 제품</em>에 크레딧</td><td>높은 수거율이 큰 음(−)의 크레딧으로 들어와 발자국 급감</td></tr>
+<tr><td><b>순환발자국공식<br>(CFF, EU)</b></td><td>두 접근을 가중치 A로 절충 + 시장·품질 손실 반영</td><td>중간값. PEF·EPD에서 사실상 표준</td></tr>
+</table>
+<p>같은 캔, 같은 물리적 사실인데 <strong>접근만 바꿔도 보고 발자국이 두 배 가까이 벌어질 수 있습니다.</strong> 어떤 것도 틀리지 않았습니다 — 묻는 질문이 다를 뿐입니다. Recycled-content는 "지금 이 캔에 무엇이 들어갔나"를, End-of-life는 "이 캔이 시스템에 무엇을 돌려주나"를 묻습니다.</p>
+
+<div class="callout">
+<span class="co-label">CORE INSIGHT — 정답이 아니라 정합성</span>
+<p>핸드북의 원칙이 그대로 적용됩니다(→ LCA-03): 배분에는 <strong>정답이 없고 정합성만 있습니다.</strong> ① 어떤 방식을 쓰든 시스템 전체 부담의 합은 보존돼야 하고(같은 1톤 재활용의 크레딧을 이 캔과 다음 캔이 <em>둘 다</em> 가져가면 이중계상), ② 한 연구 안에서 일관 적용하며, ③ 다른 배분 방식이었을 때의 결과를 민감도로 함께 보여야 합니다. EPD가 PCR로 배분 방식을 못 박는 이유가 이것 — <em>유리한 방식을 고르는 재량</em>을 없애 같은 제품군의 비교 가능성을 만드는 것입니다(→ LCA-08).</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">CS-04</span><h2>영향평가(LCIA) — CO₂e로의 환산</h2></div>
+<p class="lede">②~⑧ 단계가 내놓은 수백 줄의 흐름 목록(CO₂, CH₄, PFC…)을 하나의 지표 kg CO₂e로 압축합니다. 이 환산이 LCIA이고, 여기엔 정해진 규칙이 있습니다(→ LCA-04).</p>
+
+<h3><span class="h3-tag">4.1</span>분류 → 특성화</h3>
+<p><strong>분류</strong>는 각 배출을 기후변화 범주에 할당하고(CO₂·CH₄·PFC 모두 온실가스), <strong>특성화</strong>는 기준물질 CO₂=1 대비 환산계수(GWP)를 곱해 합산합니다. 캔에서 결정적인 건 두 가지 비(非)-CO₂ 가스입니다:</p>
+<table>
+<tr><th>가스</th><th>발생 단계</th><th>GWP100 (AR6, 근사)</th><th>함의</th></tr>
+<tr><td>CO₂</td><td>전력·연소·양극</td><td>1</td><td>대부분의 질량</td></tr>
+<tr><td>CH₄</td><td>전력망 상류(가스)</td><td>약 27~30</td><td>전력망 구성에 종속</td></tr>
+<tr><td><b>PFC</b> (CF₄·C₂F₆)</td><td>제련 양극효과(anode effect)</td><td>수천~만 단위</td><td>소량이라도 큰 CO₂e — 제련 관리의 핵심 지표</td></tr>
+</table>
+<p>PFC는 배출 질량이 극히 작아도 GWP가 수천 배라 무시하면 제련 발자국을 과소평가합니다. "양을 곱하기 전에 무게(GWP)를 곱한다"는 LCIA의 본질이 여기서 드러납니다.</p>
+
+<h3><span class="h3-tag">4.2</span>버전을 명시한다</h3>
+<p>같은 배출이라도 <strong>GWP100/AR6</strong>로 환산한 값과 GWP20으로 환산한 값은 다릅니다 — 시간지평은 과학이 아니라 정책적 합의입니다(→ LCA-04). 이 사례는 IPCC AR6의 100년 GWP를 명시합니다. 보고서에 "GWP100, AR6"가 없다면 그 kg CO₂e는 재현 불가능한 숫자입니다.</p>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">CS-05</span><h2>해석 — 전력망이 결론을 가른다</h2></div>
+<p class="lede">"몇 kg CO₂e"는 답의 절반입니다. 나머지 절반은 "그 숫자가 무엇에 가장 민감한가"입니다. 캔의 답은 한 단어로 압축됩니다 — <strong>전력망</strong>.</p>
+
+<h3><span class="h3-tag">5.1</span>기여도 분석 — 핫스팟</h3>
+<p>전형적인 캔 CFP를 단계별로 분해하면 ②~③ <strong>1차 알루미늄 생산이 전체의 약 60% 이상</strong>을 차지하고, 그 안에서도 제련 전력이 단일 최대 항목입니다. 데이터 개선과 감축 투자를 어디에 쏟을지가 이 분해 하나로 정해집니다 — 충전 공정 라벨 잉크를 줄이는 것보다 제련 전력원을 바꾸는 것이 두 자릿수 배 더 효과적입니다.</p>
+<div class="bar"><div class="lab">① 채굴 + ② 정련</div><div class="track"><div class="fill soft" style="width:22%"></div></div><div class="val">~20%</div></div>
+<div class="bar"><div class="lab">③ 전해 제련(전력+양극)</div><div class="track"><div class="fill" style="width:48%"></div></div><div class="val">~45%</div></div>
+<div class="bar"><div class="lab">④ 압연·제관</div><div class="track"><div class="fill soft" style="width:14%"></div></div><div class="val">~13%</div></div>
+<div class="bar"><div class="lab">⑤~⑥ 충전·유통</div><div class="track"><div class="fill soft" style="width:10%"></div></div><div class="val">~9%</div></div>
+<div class="bar"><div class="lab">⑦~⑧ 사용·폐기(순)</div><div class="track"><div class="fill soft" style="width:13%"></div></div><div class="val">~13%</div></div>
+<p style="font-size:12.5px;color:var(--ink-soft);font-family:var(--mono)">※ 재생 함량·전력망·배분 가정에 따라 비율은 크게 변동. 모양(제련이 지배)이 핵심이고 정확한 %는 가정 의존.</p>
+
+<h3><span class="h3-tag">5.2</span>민감도 — 같은 캔, 다른 전력망</h3>
+<p>제련을 어느 나라 전력으로 돌리느냐만 바꿔도 1차 알루미늄 배출이 몇 배로 갈립니다. 이것이 캔 사례의 가장 중요한 교훈입니다 — <em>"알루미늄 캔의 발자국"이라는 단일 숫자는 존재하지 않습니다.</em></p>
+<table>
+<tr><th>제련 전력원</th><th>1차 알루미늄 배출(근사)</th><th>상대</th></tr>
+<tr><td>석탄 중심 전력망(예: 일부 아시아)</td><td class="mono">약 18~20 kg CO₂e/kg</td><td>높음 ▲</td></tr>
+<tr><td>글로벌 평균</td><td class="mono">약 16~17 kg CO₂e/kg</td><td>기준</td></tr>
+<tr><td>수력·지열 중심(예: 아이슬란드·노르웨이)</td><td class="mono">약 4~5 kg CO₂e/kg</td><td>낮음 ▼ (약 1/4)</td></tr>
+</table>
+<p>같은 채굴, 같은 제관 공정인데 제련 전력 한 변수로 발자국이 <strong>3~4배</strong> 벌어집니다. 그래서 "그린 알루미늄"은 마케팅 수사가 아니라 <em>제련 전력 계약(수력 PPA 등)</em>이라는 물리적 사실을 가리키는 말입니다.</p>
+
+<div class="callout risk">
+<span class="co-label">FAILURE MODE</span>
+<p>흔한 실패 둘. ① <strong>유효숫자 환상</strong> — 배경 데이터 불확실성이 ±20~30%인데 "0.107 kg CO₂e"처럼 보고하는 것. 정밀도는 가장 약한 입력(여기선 제련 전력망 추정)을 넘을 수 없습니다(→ LCA-05). ② <strong>단일 숫자 인용</strong> — 위 표를 보고도 "캔 = X kg"이라고 한 줄로 옮겨 적는 것. 전력망·재생함량·배분 가정이라는 세 변수를 명시하지 않은 캔 발자국은 비교에 쓸 수 없습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">CS-06</span><h2>결과 종합 — 캔 1개의 분해</h2></div>
+<p class="lede">앞의 모든 단계를 하나의 식으로 모읍니다. 캔 한 개의 발자국은 단일 숫자가 아니라 <em>가정의 함수</em>라는 것을 식 자체가 드러내게 적습니다.</p>
+
+<div class="serial-card">
+<span class="sc-label">PER-CAN CARBON FOOTPRINT (330mL, ILLUSTRATIVE)</span>
+캔 1개 CO₂e = <span class="seg2">캔 알루미늄 질량(≈13~15g)</span> × <span class="seg">[ (1−r)·1차계수 + r·재생계수 ]</span> × <span class="seg2">제관·공정 손실</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="dim">충전·유통·사용·폐기(순)</span><br>
+<span class="dim">└ r = 재생 함량 비율, 1차계수 = 제련 전력망의 함수(4~20 kg/kg)</span><br>
+<span class="dim">└ 대표 범위 결과 ≈ 0.08 ~ 0.20 kg CO₂e / 캔 — 단일값 아님</span>
+</div>
+
+<p>이 식이 말하는 것은 분명합니다: 캔 발자국을 좌우하는 두 손잡이는 <strong>재생 함량 r</strong>과 <strong>제련 전력망(1차계수)</strong>입니다. 라벨·잉크·운송 거리는 소수점 뒤를 만질 뿐입니다.</p>
+
+<table>
+<tr><th>시나리오</th><th>재생 함량 r</th><th>제련 전력</th><th>캔 1개 근사</th></tr>
+<tr><td>저(低)순환 · 석탄망</td><td>낮음(~30%)</td><td>석탄 중심</td><td class="mono">상단(~0.18~0.20)</td></tr>
+<tr><td>글로벌 평균</td><td>중간(~50%)</td><td>평균</td><td class="mono">중간(~0.12~0.15)</td></tr>
+<tr><td>고(高)순환 · 청정망</td><td>높음(~70%+)</td><td>수력·지열</td><td class="mono">하단(~0.08 내외)</td></tr>
+</table>
+<p style="font-size:12.5px;color:var(--ink-soft);font-family:var(--mono)">※ 캔 용기 기준의 대표 범위. 배분 방식(CS-03)·자본재 포함 여부·사용단계 가정에 따라 추가 변동. 음료 내용물·2차 포장 제외.</p>
+
+<div class="callout">
+<span class="co-label">한 줄 요약</span>
+<p>알루미늄 캔의 탄소발자국은 <strong>"얼마나 재생 알루미늄을 담았고, 그 알루미늄을 어떤 전기로 만들었는가"</strong>로 거의 결정됩니다. 나머지는 디테일입니다. 이 한 문장에 도달하기 위해 LCA의 4단계 전체가 필요했습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">CS-07</span><h2>핸드북 매핑 · 읽는 법</h2></div>
+<p class="lede">이 사례가 LCA 핸드북의 각 장을 어떻게 구체화했는지의 대조표입니다. 추상 개념이 한 제품에서 어떻게 살로 붙는지 되짚습니다.</p>
+<table>
+<tr><th>핸드북 장</th><th>개념</th><th>이 사례에서</th></tr>
+<tr><td class="mono">LCA-01</td><td>부담 전가 · 다범주</td><td>탄소만 보면 캔이 깨끗해 보이지만 적니·불소 등 비탄소 부담은 안 잡힘(CS-01 audit)</td></tr>
+<tr><td class="mono">LCA-02</td><td>기능단위 · 경계</td><td>"330mL 1회 제공", cradle-to-grave, 컷오프·자본재 명시(CS-01)</td></tr>
+<tr><td class="mono">LCA-03</td><td>배분의 위계</td><td>재활용 배분 3접근으로 발자국이 2배 갈림(CS-03)</td></tr>
+<tr><td class="mono">LCA-04</td><td>특성화 · GWP</td><td>PFC를 GWP로 가중, AR6/GWP100 명시(CS-04)</td></tr>
+<tr><td class="mono">LCA-05</td><td>기여도·민감도·불확실성</td><td>제련 핫스팟, 전력망으로 3~4배, 유효숫자 환상 경고(CS-05)</td></tr>
+<tr><td class="mono">LCA-06</td><td>CFP는 부분집합</td><td>이 사례가 LCA가 아니라 CFP임을 자인(CS-01)</td></tr>
+<tr><td class="mono">LCA-08</td><td>EPD · PCR · 검증</td><td>PCR이 배분 방식을 못 박아 비교 가능성을 만든다(CS-03)</td></tr>
+</table>
+
+<div class="callout gm">
+<span class="co-label">옆 사례와의 연결 — PCF가 흘러가는 곳</span>
+<p>이 페이지가 계산한 <strong>캔의 제품탄소발자국(PCF)</strong>은 그 자체로 끝나지 않습니다. 캔을 사서 음료를 파는 기업의 장부에서는 이 PCF가 곧 <em>구매 제품·서비스(Scope 3 카테고리 1)</em> 데이터가 됩니다 — 공급사의 cradle-to-gate 발자국이 구매자의 Scope 3 입력이 되는 것(→ LCA-06). 같은 논리를 조직 회계 쪽에서 끝까지 따라가는 사례가 <a href="carbon-accounting-casestudy-cotton-tshirt.html" style="color:var(--green);font-weight:600">탄소회계 사례연구 — 면 티셔츠 브랜드</a>입니다. 한쪽은 제품 1단위를(LCA), 다른 쪽은 조직 전체를(탄소회계) 봅니다.</p>
+</div>
+
+<div class="callout warn">
+<span class="co-label">이 사례를 인용할 때</span>
+<ul style="margin-bottom:0">
+<li>"알루미늄 캔 = X kg CO₂e"로 단일값을 옮기지 말 것 — <strong>재생 함량·전력망·배분 가정</strong>을 함께 적지 않으면 비교 불가(CS-05).</li>
+<li>이 페이지 숫자는 <strong>공개 문헌의 대표 범위</strong>이지 특정 제품 측정값이 아님 — 실제 의사결정엔 1차 데이터 기반 LCA 필요.</li>
+<li>탄소 한 범주만 본 결과 — "친환경" 결론으로 확장하지 말 것(다범주 미평가).</li>
+</ul>
+</div>
+</section>
+
+<footer>
+LCA CASE STUDY · ALUMINIUM CAN · V1 · 2026-06<br>
+FIGURES : 공개 문헌 대표값·범위 — INTERNATIONAL ALUMINIUM INSTITUTE / ECOINVENT / 학술 LCA · 특정 제품 의뢰 LCA 아님<br>
+METHOD : ISO 14040/14044/14067 · GWP100 (IPCC AR6) · COMPANION : LCA 도메인 핸드북
+</footer>
+
+</main>
+</div>
+</body>
+</html>

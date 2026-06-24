@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker 예시 사례 — Spring Boot · Postgres · Redis · nginx 실전 레시피</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;
+  --amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}
+main{min-width:0;padding:0 56px 120px;background:var(--paper)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
+.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a:hover{background:var(--green-tint);color:var(--green-deep)}
+nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
+header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
+.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
+.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
+.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
+section{padding-top:72px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}
+.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}
+h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}
+h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}
+p{margin-bottom:14px}
+p.lede{font-size:17px;color:var(--ink-soft)}
+em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:7px}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
+.callout.risk{border-left-color:var(--red);background:var(--red-tint)}
+.callout.gm{border-left-color:var(--ink);background:#ECEEF3}
+.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}
+.callout.warn .co-label{color:var(--amber)}
+.callout.risk .co-label{color:var(--red)}
+.callout.gm .co-label{color:var(--ink)}
+.callout p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td .mono,td code{font-family:var(--mono);font-size:12.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
+.flow .arr{color:var(--ink-soft)}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
+.serial-card .seg{color:#FACC6B}
+.serial-card .seg2{color:#9DB6E8}
+.serial-card .dim{color:#9AA3B8}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
+.g-row:last-child{border-bottom:none}
+.g-term{padding:13px 18px;background:var(--green-tint)}
+.g-term b{display:block;font-size:14px}
+.g-term span{font-family:var(--mono);font-size:11px;color:var(--green-deep)}
+.g-def{padding:13px 18px;font-size:14px;line-height:1.65}
+@media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">DOCKER</div>
+  <div class="nav-title">Docker 예시 사례</div>
+  <a href="#ch1"><span class="code">DOCKER-01</span>Spring Boot Dockerfile</a>
+  <a href="#ch2"><span class="code">DOCKER-02</span>.dockerignore·이미지 최적화</a>
+  <a href="#ch3"><span class="code">DOCKER-03</span>compose — 이 스택 한 파일</a>
+  <a href="#ch4"><span class="code">DOCKER-04</span>환경변수·설정 주입</a>
+  <a href="#ch5"><span class="code">DOCKER-05</span>데이터 영속 — 볼륨</a>
+  <a href="#ch6"><span class="code">DOCKER-06</span>서비스 간 네트워크</a>
+  <a href="#ch7"><span class="code">DOCKER-07</span>헬스체크·기동 순서</a>
+  <a href="#ch8"><span class="code">DOCKER-08</span>자주 쓰는 명령</a>
+  <a href="#ch9"><span class="code">DOCKER-09</span>치트시트</a>
+</nav>
+<main>
+
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DOCKER-EXAMPLES-V1</span>
+    <span>STACK : SPRING BOOT · POSTGRES · REDIS · NGINX</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>Docker<br>예시 사례</h1>
+  <p class="hero-sub">이 스택을 한 번에 띄우는 실전 Dockerfile·compose 레시피. 개념은 Docker·배포 핸드북에. 여기서는 <strong>바로 복사해 쓰는 설정</strong>만 — 멀티스테이지 빌드, compose 한 파일, 볼륨·네트워크·헬스체크까지 실재 문법으로.</p>
+  <div class="hero-meta">NOTE : 버전 태그는 예시 — 실제 프로젝트의 JDK·이미지 버전에 맞춰 고정할 것<br>COMPILED : 2026-06</div>
+</header>
+
+<!-- ============ CH 1 ============ -->
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">DOCKER-01</span><h2>Spring Boot Dockerfile</h2></div>
+<p class="lede">언제·왜: jar 하나를 이미지로 굽는 가장 표준적인 방법. <em>멀티스테이지</em>로 빌드 도구(Gradle·JDK)는 빌드 스테이지에만 두고, 런타임 이미지엔 JRE와 jar만 남깁니다. 이미지가 수백 MB 작아지고 공격 표면도 줄어듭니다.</p>
+<div class="serial-card">
+<span class="sc-label">Dockerfile — 멀티스테이지 (build → runtime)</span>
+<span class="seg"># ---- build stage ----</span><br>
+<span class="seg2">FROM</span> gradle:8.7-jdk21 <span class="seg2">AS</span> build<br>
+<span class="seg2">WORKDIR</span> /app<br>
+<span class="dim"># 의존성 먼저 복사 → 레이어 캐시 (DOCKER-02 참조)</span><br>
+<span class="seg2">COPY</span> build.gradle settings.gradle ./<br>
+<span class="seg2">COPY</span> gradle ./gradle<br>
+<span class="seg2">RUN</span> gradle dependencies --no-daemon || true<br>
+<span class="seg2">COPY</span> src ./src<br>
+<span class="seg2">RUN</span> gradle bootJar --no-daemon<br>
+<br>
+<span class="seg"># ---- runtime stage ----</span><br>
+<span class="seg2">FROM</span> eclipse-temurin:21-jre<br>
+<span class="seg2">WORKDIR</span> /app<br>
+<span class="dim"># 비root 사용자 생성 후 전환</span><br>
+<span class="seg2">RUN</span> useradd --system --no-create-home spring<br>
+<span class="seg2">USER</span> spring<br>
+<span class="dim"># build 스테이지에서 jar만 가져옴</span><br>
+<span class="seg2">COPY</span> --from=build /app/build/libs/*.jar app.jar<br>
+<span class="seg2">EXPOSE</span> 8080<br>
+<span class="seg2">ENTRYPOINT</span> [<span class="seg">"java"</span>, <span class="seg">"-jar"</span>, <span class="seg">"/app/app.jar"</span>]
+</div>
+<table>
+<tr><th>키워드</th><th>이 Dockerfile에서의 역할</th></tr>
+<tr><td><code>FROM ... AS build</code></td><td>빌드 전용 스테이지에 이름 부여. 런타임에서 <code>--from=build</code>로 참조</td></tr>
+<tr><td><code>COPY --from=build</code></td><td>build 스테이지의 산출물(jar)만 런타임 이미지로 복사 — Gradle·소스는 안 따라옴</td></tr>
+<tr><td><code>USER spring</code></td><td>이후 명령·컨테이너 프로세스를 비root로 실행. 권한 최소화</td></tr>
+<tr><td><code>ENTRYPOINT</code></td><td>컨테이너의 고정 실행 명령. <code>CMD</code>와 달리 인자로 잘 안 덮임 — 메인 프로세스에 적합</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">ENTRYPOINT vs CMD</span>
+<p><code>ENTRYPOINT</code>는 "이 컨테이너는 무엇인가"(여기선 자바 앱), <code>CMD</code>는 "기본 인자"입니다. exec 형식(<code>["java","-jar",...]</code>, 대괄호+JSON)을 쓰세요 — shell 형식(<code>java -jar ...</code>)은 PID 1이 셸이 되어 <code>SIGTERM</code>이 자바 프로세스에 전달되지 않아 graceful shutdown이 깨집니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">DOCKER-02</span><h2>.dockerignore와 이미지 최적화</h2></div>
+<p class="lede">언제·왜: <code>docker build</code>는 먼저 빌드 컨텍스트(현재 디렉터리 전체)를 데몬으로 전송합니다. <code>.gradle</code>·<code>build</code>·<code>node_modules</code>가 딸려가면 느리고, 캐시도 무의미하게 깨집니다. <em>컨텍스트를 줄이고, 잘 안 바뀌는 것부터 COPY</em>가 캐시의 핵심.</p>
+<div class="serial-card">
+<span class="sc-label">.dockerignore — Dockerfile과 같은 위치</span>
+.git<br>
+.gradle<br>
+build<br>
+*.md<br>
+.env<br>
+.idea<br>
+node_modules<br>
+Dockerfile<br>
+compose.yaml
+</div>
+<p>레이어 캐시는 <em>위에서부터 한 줄씩</em> 검증됩니다. 어떤 줄의 입력이 바뀌면 그 줄부터 아래 레이어가 전부 다시 빌드됩니다. 그래서 <strong>거의 안 바뀌는 의존성 정의를 먼저 COPY·다운로드하고, 자주 바뀌는 소스는 맨 나중에</strong> 복사합니다 (DOCKER-01의 순서가 그 이유). 소스만 고친 빌드에서 의존성 다운로드 단계가 캐시로 건너뛰어집니다.</p>
+<div class="serial-card">
+<span class="sc-label">캐시 친화적 순서 (요지)</span>
+<span class="seg2">COPY</span> build.gradle settings.gradle ./  <span class="dim"># 1. 의존성 정의 (드물게 변경)</span><br>
+<span class="seg2">RUN</span> gradle dependencies --no-daemon    <span class="dim"># 2. 의존성 받기 → 캐시됨</span><br>
+<span class="seg2">COPY</span> src ./src                          <span class="dim"># 3. 소스 (자주 변경)</span><br>
+<span class="seg2">RUN</span> gradle bootJar --no-daemon          <span class="dim"># 4. 빌드</span>
+</div>
+<div class="callout">
+<span class="co-label">실전 팁</span>
+<p>이미지 크기를 더 줄이려면 런타임 베이스를 <code>eclipse-temurin:21-jre</code>처럼 <em>JRE</em> 변형으로(JDK 아님), 또는 <code>-alpine</code>/<code>-jammy</code> 슬림 태그로. 단 alpine은 glibc가 아니라 musl이라 일부 네이티브 라이브러리에서 문제가 날 수 있으니, 검증 없이 alpine으로 바꾸지 마세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">DOCKER-03</span><h2>compose — 이 스택 한 파일</h2></div>
+<p class="lede">언제·왜: app(Spring Boot) + postgres + redis + nginx를 한 명령으로 띄우고 내립니다. 아래가 네 서비스를 다 담은 <code>compose.yaml</code> 골격 — 이후 챕터(환경변수·볼륨·네트워크·헬스체크)가 이 파일을 한 조각씩 채웁니다.</p>
+<div class="serial-card">
+<span class="sc-label">compose.yaml — 전체 골격</span>
+<span class="seg2">services:</span><br>
+&nbsp;&nbsp;<span class="seg">app:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/carbon<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_USERNAME: carbon<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATA_REDIS_HOST: redis<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;postgres:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redis:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy<br>
+<br>
+&nbsp;&nbsp;<span class="seg">postgres:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
+&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_DB: carbon<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_USER: carbon<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- pgdata:/var/lib/postgresql/data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD-SHELL"</span>, <span class="seg">"pg_isready -U carbon"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5<br>
+<br>
+&nbsp;&nbsp;<span class="seg">redis:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: redis:7<br>
+&nbsp;&nbsp;&nbsp;&nbsp;command: redis-server --appendonly yes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- redisdata:/data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD"</span>, <span class="seg">"redis-cli"</span>, <span class="seg">"ping"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5<br>
+<br>
+&nbsp;&nbsp;<span class="seg">nginx:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: nginx:1.27<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ports:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="seg">"80:80"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ./nginx.conf:/etc/nginx/conf.d/default.conf:ro<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- app<br>
+<br>
+<span class="seg2">volumes:</span><br>
+&nbsp;&nbsp;pgdata:<br>
+&nbsp;&nbsp;redisdata:
+</div>
+<div class="callout warn">
+<span class="co-label">포트 노출 범위</span>
+<p>외부로 여는 포트는 <code>nginx</code>의 <code>80:80</code> 하나뿐입니다. app·postgres·redis는 <code>ports</code>를 두지 않아 호스트로 노출되지 않고, compose 내부 네트워크에서만 서로 통신합니다(DOCKER-06). DB 포트를 호스트로 굳이 열지 마세요 — 로컬 디버깅이 꼭 필요할 때만 <code>"5432:5432"</code>를 한시적으로 추가하세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">DOCKER-04</span><h2>환경변수·설정 주입</h2></div>
+<p class="lede">언제·왜: 같은 이미지를 환경(local·staging·prod)별로 다르게 띄우려면 설정을 코드가 아니라 <em>환경변수</em>로 주입해야 합니다. Spring Boot는 <code>SPRING_</code> 접두 환경변수를 properties로 자동 매핑합니다.</p>
+<table>
+<tr><th>환경변수</th><th>매핑되는 Spring 설정 / 용도</th></tr>
+<tr><td><code>SPRING_PROFILES_ACTIVE</code></td><td>활성 프로파일 (<code>local</code>/<code>prod</code>). <code>application-prod.yml</code> 선택</td></tr>
+<tr><td><code>SPRING_DATASOURCE_URL</code></td><td>JDBC URL — <code>jdbc:postgresql://postgres:5432/carbon</code></td></tr>
+<tr><td><code>SPRING_DATASOURCE_USERNAME</code></td><td>DB 사용자</td></tr>
+<tr><td><code>SPRING_DATASOURCE_PASSWORD</code></td><td>DB 비밀번호 — <code>.env</code>·secret으로 주입</td></tr>
+<tr><td><code>SPRING_DATA_REDIS_HOST</code></td><td>Redis 호스트 — 서비스명 <code>redis</code></td></tr>
+</table>
+<p>compose는 같은 디렉터리의 <code>.env</code> 파일을 자동으로 읽어 <code>${VAR}</code> 치환에 씁니다. 비밀값은 yaml에 직접 박지 말고 <code>.env</code>로 분리하고, <code>.env</code>는 git에서 제외하세요(<code>.gitignore</code>·<code>.dockerignore</code> 둘 다).</p>
+<div class="serial-card">
+<span class="sc-label">.env — compose.yaml과 같은 위치 (git 제외)</span>
+POSTGRES_PASSWORD=change-me-in-secret-manager<br>
+SPRING_PROFILES_ACTIVE=prod
+</div>
+<div class="serial-card">
+<span class="sc-label">app 서비스 — .env 값 참조 + 파일째 주입</span>
+&nbsp;&nbsp;<span class="seg">app:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;env_file:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- .env<br>
+&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+</div>
+<div class="callout risk">
+<span class="co-label">secret을 이미지에 굽지 마라</span>
+<p>비밀번호·토큰을 <code>Dockerfile</code>의 <code>ENV</code>나 빌드 인자로 넣으면 이미지 레이어에 영구히 남아 <code>docker history</code>로 노출됩니다. 비밀은 <em>런타임에</em> 환경변수·secret으로 주입하고, 운영에서는 <code>.env</code>가 아니라 secret manager를 쓰세요. <code>.env</code>는 반드시 <code>.dockerignore</code>·<code>.gitignore</code>에 둘 것.</p>
+</div>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">DOCKER-05</span><h2>데이터 영속 — 볼륨</h2></div>
+<p class="lede">언제·왜: 컨테이너는 지워지면 안의 데이터도 사라집니다. DB 데이터가 컨테이너 수명과 함께 증발하면 안 되니, <em>named volume</em>에 데이터를 두어 컨테이너를 재생성해도 살아남게 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">postgres·redis 볼륨 매핑</span>
+&nbsp;&nbsp;<span class="seg">postgres:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- pgdata:/var/lib/postgresql/data   <span class="dim"># PG 데이터 디렉터리</span><br>
+<br>
+&nbsp;&nbsp;<span class="seg">redis:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: redis:7<br>
+&nbsp;&nbsp;&nbsp;&nbsp;command: redis-server --appendonly yes  <span class="dim"># AOF 영속 켜기</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- redisdata:/data                  <span class="dim"># AOF/RDB 저장 위치</span><br>
+<br>
+<span class="dim"># 파일 맨 아래 — named volume 선언</span><br>
+<span class="seg2">volumes:</span><br>
+&nbsp;&nbsp;pgdata:<br>
+&nbsp;&nbsp;redisdata:
+</div>
+<table>
+<tr><th>구분</th><th>형태 / 설명</th></tr>
+<tr><td>named volume</td><td><code>pgdata:/var/lib/postgresql/data</code> — Docker가 관리. DB 데이터에 권장</td></tr>
+<tr><td>bind mount</td><td><code>./nginx.conf:/etc/...:ro</code> — 호스트 파일 직결. 설정 파일·소스에 적합. <code>:ro</code>는 읽기전용</td></tr>
+<tr><td>Redis AOF</td><td><code>--appendonly yes</code> — 모든 쓰기를 append-only 로그로 기록해 재기동 시 복원</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">데이터를 지우는 명령 구분</span>
+<p><code>docker compose down</code>은 컨테이너·네트워크만 지우고 named volume은 <em>남깁니다</em>. <code>docker compose down -v</code>는 볼륨까지 삭제 — DB 데이터가 통째로 날아갑니다. 캐시(redis)는 날려도 무방하지만, postgres 볼륨에 <code>-v</code>를 거는 건 운영에서 사고의 지름길입니다. 캐시 용도면 redis는 영속을 끄는 선택도 있습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">DOCKER-06</span><h2>서비스 간 네트워크</h2></div>
+<p class="lede">언제·왜: compose는 프로젝트마다 기본 네트워크를 만들고, 모든 서비스를 거기에 붙입니다. 같은 네트워크 안에서는 <em>서비스명이 곧 호스트명</em>(내부 DNS)이라, <code>localhost</code>가 아니라 서비스명으로 서로를 찾습니다.</p>
+<table>
+<tr><th>출발 → 도착</th><th>연결 주소 (서비스명 = 호스트)</th></tr>
+<tr><td>app → postgres</td><td><code>jdbc:postgresql://postgres:5432/carbon</code></td></tr>
+<tr><td>app → redis</td><td>host=<code>redis</code>, port=<code>6379</code></td></tr>
+<tr><td>nginx → app</td><td><code>proxy_pass http://app:8080;</code></td></tr>
+<tr><td>호스트(브라우저) → nginx</td><td><code>http://localhost</code> (nginx의 <code>80:80</code>만 외부 노출)</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">nginx.conf — app으로 리버스 프록시</span>
+<span class="seg2">server</span> {<br>
+&nbsp;&nbsp;listen 80;<br>
+&nbsp;&nbsp;<span class="seg2">location</span> / {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim"># 서비스명 app = compose 내부 DNS</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;proxy_pass http://app:8080;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;proxy_set_header Host $host;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;proxy_set_header X-Real-IP $remote_addr;<br>
+&nbsp;&nbsp;}<br>
+}
+</div>
+<div class="callout warn">
+<span class="co-label">localhost 함정</span>
+<p>컨테이너 안에서 <code>localhost</code>는 <em>그 컨테이너 자신</em>이지 호스트나 다른 서비스가 아닙니다. app의 DB URL을 <code>jdbc:postgresql://localhost:5432</code>로 두면 app 컨테이너 안에서 자기 자신을 찾다가 실패합니다 — 반드시 서비스명 <code>postgres</code>를 쓰세요. 별도 <code>networks:</code> 선언 없이도 같은 compose 파일의 서비스끼리는 기본 네트워크로 자동 연결됩니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">DOCKER-07</span><h2>헬스체크·기동 순서</h2></div>
+<p class="lede">언제·왜: <code>depends_on</code>만으로는 "postgres 컨테이너가 <em>시작</em>됐다"까지만 보장하지, "DB가 <em>접속 받을 준비</em>가 됐다"는 보장하지 않습니다. app이 DB보다 먼저 붙어 죽는 경쟁을 막으려면 <code>healthcheck</code> + <code>condition: service_healthy</code>가 필요합니다.</p>
+<div class="flow">
+<span class="step">컨테이너 start</span><span class="arr">→</span><span class="step">healthcheck 통과</span><span class="arr">→</span><span class="step hl">service_healthy</span><span class="arr">→</span><span class="step">app 기동</span>
+</div>
+<div class="serial-card">
+<span class="sc-label">healthcheck + depends_on (조건부)</span>
+&nbsp;&nbsp;<span class="seg">postgres:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
+&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD-SHELL"</span>, <span class="seg">"pg_isready -U carbon"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s    <span class="dim"># 검사 주기</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout: 5s      <span class="dim"># 한 번 검사 제한시간</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5       <span class="dim"># 실패 N회면 unhealthy</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_period: 30s <span class="dim"># 초기 유예 (실패로 안 셈)</span><br>
+<br>
+&nbsp;&nbsp;<span class="seg">app:</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;postgres:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy  <span class="dim"># healthy 될 때까지 대기</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redis:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy
+</div>
+<table>
+<tr><th>condition 값</th><th>의미</th></tr>
+<tr><td><code>service_started</code></td><td>컨테이너가 시작되기만 하면 (기본값, 약한 보장)</td></tr>
+<tr><td><code>service_healthy</code></td><td>healthcheck가 통과해 healthy 상태일 때까지 대기</td></tr>
+<tr><td><code>service_completed_successfully</code></td><td>해당 서비스가 정상 종료(exit 0)했을 때 — 마이그레이션 잡 등</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실전 팁</span>
+<p>그래도 앱은 DB 연결 실패에 <em>재시도</em>로 대응하도록 짜는 게 안전합니다 — healthcheck는 경쟁을 줄여줄 뿐 모든 일시 장애를 막진 못합니다. <code>pg_isready</code>는 postgres 이미지에 기본 포함, <code>redis-cli ping</code>은 redis 이미지에 기본 포함이라 추가 설치가 필요 없습니다.</p>
+</div>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">DOCKER-08</span><h2>자주 쓰는 명령</h2></div>
+<p class="lede">언제·왜: 일상의 띄우기·내리기·로그·디버깅·정리. compose 명령과 단일 컨테이너 명령을 나눠 손에 붙입니다.</p>
+<table>
+<tr><th>compose 명령</th><th>의미 / 형태</th></tr>
+<tr><td><code>docker compose up -d</code></td><td>전체 스택을 백그라운드(<code>-d</code>)로 기동. <code>--build</code>로 이미지 재빌드 동반</td></tr>
+<tr><td><code>docker compose down</code></td><td>컨테이너·네트워크 정리(볼륨 유지). <code>-v</code>면 볼륨까지 삭제</td></tr>
+<tr><td><code>docker compose logs -f app</code></td><td>app 서비스 로그 실시간 추적(<code>-f</code>). 서비스명 빼면 전체</td></tr>
+<tr><td><code>docker compose ps</code></td><td>이 프로젝트 서비스 상태(포트·health) 확인</td></tr>
+<tr><td><code>docker compose exec app sh</code></td><td>실행 중인 app 컨테이너에 셸로 진입(디버깅)</td></tr>
+<tr><td><code>docker compose restart app</code></td><td>app만 재기동</td></tr>
+</table>
+<table>
+<tr><th>단일 컨테이너·이미지</th><th>의미 / 형태</th></tr>
+<tr><td><code>docker build -t carbon-app .</code></td><td>현재 Dockerfile로 이미지 빌드 + 태그(<code>-t</code>)</td></tr>
+<tr><td><code>docker run --rm -p 8080:8080 carbon-app</code></td><td>이미지를 단독 실행. <code>--rm</code> 종료 시 자동 삭제</td></tr>
+<tr><td><code>docker ps</code> / <code>docker ps -a</code></td><td>실행 중 / 멈춘 것 포함 전체 컨테이너</td></tr>
+<tr><td><code>docker images</code></td><td>로컬 이미지 목록·크기</td></tr>
+<tr><td><code>docker exec -it &lt;id&gt; sh</code></td><td>임의 컨테이너에 인터랙티브 셸 진입</td></tr>
+<tr><td><code>docker logs -f &lt;id&gt;</code></td><td>임의 컨테이너 로그 추적</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">정리(prune)는 무엇을 지우는지 보고</span>
+<p><code>docker system prune</code>은 멈춘 컨테이너·미사용 네트워크·dangling 이미지를 지웁니다. <code>-a</code>를 붙이면 <em>사용 중이 아닌 모든 이미지</em>까지, <code>--volumes</code>면 미사용 볼륨까지 삭제됩니다 — DB 볼륨이 미사용으로 잡혀 날아갈 수 있으니 운영 머신에서 <code>--volumes</code>는 신중히. 디스크가 부족할 때 <code>docker system df</code>로 먼저 무엇이 용량을 먹는지 확인하세요.</p>
+</div>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">DOCKER-09</span><h2>치트시트</h2></div>
+<p class="lede">Dockerfile 키워드·compose 구조·자주 쓰는 명령을 한 곳에. 외우기보다 "이런 게 있다"를 알고 필요할 때 찾으세요.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>FROM</b><span>base image</span></div><div class="g-def">베이스 이미지 지정. <code>FROM img AS name</code>으로 멀티스테이지 스테이지 이름 부여</div></div>
+<div class="g-row"><div class="g-term"><b>WORKDIR</b><span>작업 디렉터리</span></div><div class="g-def">이후 명령의 기준 경로 설정·생성. <code>cd</code> 대신 이걸로</div></div>
+<div class="g-row"><div class="g-term"><b>COPY</b><span>파일 복사</span></div><div class="g-def">빌드 컨텍스트→이미지. <code>COPY --from=build /src dst</code>로 다른 스테이지에서 가져오기</div></div>
+<div class="g-row"><div class="g-term"><b>RUN</b><span>빌드 시 실행</span></div><div class="g-def">이미지 빌드 중 명령 실행(의존성 설치·빌드). 결과가 레이어로 남음</div></div>
+<div class="g-row"><div class="g-term"><b>USER</b><span>실행 사용자</span></div><div class="g-def">이후 명령·런타임 프로세스를 지정 사용자로. 비root 권장</div></div>
+<div class="g-row"><div class="g-term"><b>ENTRYPOINT / CMD</b><span>실행 명령</span></div><div class="g-def">ENTRYPOINT=고정 실행, CMD=기본 인자. exec 형식 <code>["java","-jar",..]</code> 권장</div></div>
+<div class="g-row"><div class="g-term"><b>멀티스테이지</b><span>build → runtime</span></div><div class="g-def">빌드 도구는 빌드 스테이지에만, 런타임 이미지엔 산출물만. 이미지 슬림화</div></div>
+<div class="g-row"><div class="g-term"><b>services</b><span>compose 최상위</span></div><div class="g-def">각 컨테이너를 정의. <code>build</code>(직접 빌드) 또는 <code>image</code>(공개 이미지)</div></div>
+<div class="g-row"><div class="g-term"><b>environment / env_file</b><span>설정 주입</span></div><div class="g-def">환경변수 직접 지정 / <code>.env</code> 파일째 주입. <code>${VAR}</code> 치환은 <code>.env</code>에서</div></div>
+<div class="g-row"><div class="g-term"><b>ports</b><span>호스트:컨테이너</span></div><div class="g-def"><code>"80:80"</code> 호스트 포트를 컨테이너에 매핑. 안 쓰면 외부 비노출</div></div>
+<div class="g-row"><div class="g-term"><b>volumes</b><span>데이터 영속</span></div><div class="g-def">named volume(<code>pgdata:/path</code>) / bind mount(<code>./f:/path:ro</code>). 파일 하단에 named volume 선언</div></div>
+<div class="g-row"><div class="g-term"><b>depends_on</b><span>기동 순서</span></div><div class="g-def"><code>condition: service_healthy</code>로 healthcheck 통과까지 대기</div></div>
+<div class="g-row"><div class="g-term"><b>healthcheck</b><span>준비 상태 검사</span></div><div class="g-def"><code>test</code>·<code>interval</code>·<code>retries</code>·<code>start_period</code>. <code>pg_isready</code>, <code>redis-cli ping</code></div></div>
+<div class="g-row"><div class="g-term"><b>서비스명 = DNS</b><span>내부 네트워크</span></div><div class="g-def">같은 compose 안에서 <code>postgres</code>·<code>redis</code>·<code>app</code>이 곧 호스트명. localhost 아님</div></div>
+<div class="g-row"><div class="g-term"><b>up -d / down</b><span>기동 / 정리</span></div><div class="g-def"><code>docker compose up -d --build</code> 띄우기, <code>down</code> 내리기(<code>-v</code> 볼륨까지)</div></div>
+<div class="g-row"><div class="g-term"><b>logs -f / exec</b><span>로그 / 진입</span></div><div class="g-def"><code>docker compose logs -f app</code> 추적, <code>docker compose exec app sh</code> 셸 진입</div></div>
+<div class="g-row"><div class="g-term"><b>ps / images</b><span>상태 확인</span></div><div class="g-def"><code>docker compose ps</code> 서비스 상태, <code>docker images</code> 이미지 목록·크기</div></div>
+<div class="g-row"><div class="g-term"><b>system prune</b><span>정리</span></div><div class="g-def"><code>docker system prune</code>(미사용 정리), <code>-a</code> 미사용 이미지까지, <code>--volumes</code> 신중히</div></div>
+<div class="g-row"><div class="g-term"><b>.dockerignore</b><span>컨텍스트 축소</span></div><div class="g-def"><code>.git</code>·<code>build</code>·<code>.env</code> 제외. 빌드 빨라지고 캐시 안정·secret 유출 방지</div></div>
+</div>
+<div class="callout gm">
+<span class="co-label">레시피 사용 순서</span>
+<p>처음 띄울 때 동선: ① <code>Dockerfile</code>·<code>.dockerignore</code> 작성(DOCKER-01·02) → ② <code>compose.yaml</code>에 네 서비스 골격(DOCKER-03) → ③ <code>.env</code>로 비밀·프로파일 분리(DOCKER-04) → ④ 볼륨·네트워크·헬스체크 채우기(DOCKER-05~07) → ⑤ <code>docker compose up -d --build</code>로 기동, <code>logs -f</code>로 확인(DOCKER-08). 개념·운영 배포는 Docker·배포 핸드북에서 이어 보세요.</p>
+</div>
+</section>
+
+<footer>
+DOCKER EXAMPLES · V1 · 2026-06<br>
+STACK : SPRING BOOT · POSTGRES · REDIS · NGINX · COMPOSE<br>
+NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : DOCKER·배포 핸드북
+</footer>
+
+</main>
+</div>
+</body>
+</html>
