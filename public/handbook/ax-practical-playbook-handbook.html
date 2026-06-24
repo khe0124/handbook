@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AX Handbook — AX 실무 플레이북</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">AX 실무 플레이북</div>
+  <a href="#ch1"><span class="code">PLAY-01</span>AI Coding Workflow</a>
+  <a href="#ch2"><span class="code">PLAY-02</span>리뷰 루프</a>
+  <a href="#ch3"><span class="code">PLAY-03</span>테스트·마이그레이션 루프</a>
+  <a href="#ch4"><span class="code">PLAY-04</span>프롬프트 템플릿</a>
+  <a href="#ch5"><span class="code">PLAY-05</span>Capstone</a>
+  <a href="#ch6"><span class="code">PLAY-06</span>업무 자동화 운영</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : AX-PRACTICAL-V1</span>
+    <span>SCOPE : CODING · REVIEW · TEST · MIGRATION · SECURITY</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AX 실무 플레이북</h1>
+  <p class="hero-sub">이 문서는 AI를 매일 개발 업무에 넣을 때 쓰는 실행 절차입니다. 목표는 빠른 생성이 아니라 <strong>제한된 시간과 비용 안에서 검증 가능한 변경을 만드는 것</strong>입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">PLAY-01</span><h2>AI Coding Workflow</h2></div>
+<div class="flow">
+  <span class="step">Scope</span><span class="arr">→</span>
+  <span class="step">Context</span><span class="arr">→</span>
+  <span class="step">Plan</span><span class="arr">→</span>
+  <span class="step">Test</span><span class="arr">→</span>
+  <span class="step">Implement</span><span class="arr">→</span>
+  <span class="step hl">Verify</span><span class="arr">→</span>
+  <span class="step">Review</span><span class="arr">→</span>
+  <span class="step">Reflect</span><span class="arr">→</span>
+  <span class="step">Ship</span>
+</div>
+<table>
+<tr><th>단계</th><th>좋은 기준</th></tr>
+<tr><td>Scope</td><td>목표, 비목표, 성공 조건, 중단 조건을 쓴다</td></tr>
+<tr><td>Context</td><td>관련 파일, 실패 로그, 설정, 최근 diff를 좁힌다</td></tr>
+<tr><td>Plan</td><td>원인 가설, 추가할 테스트, 검증 명령, 리스크를 적는다</td></tr>
+<tr><td>Test</td><td>가능하면 실패 테스트를 먼저 만든다</td></tr>
+<tr><td>Implement</td><td>한 번에 하나의 원인 가설만 수정한다</td></tr>
+<tr><td>Verify</td><td>테스트, 빌드, 수동 시나리오, 보안 속성을 확인한다</td></tr>
+<tr><td>Review</td><td>고위험 변경은 독립 리뷰를 거친다</td></tr>
+<tr><td>Reflect</td><td>틀린 가설과 효과적 검증을 기록한다</td></tr>
+<tr><td>Ship</td><td>변경 이유, 검증 결과, 남은 위험을 짧게 설명한다</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">PLAY-02</span><h2>리뷰 루프</h2></div>
+<ol>
+<li>변경 목적을 한 문장으로 고정합니다.</li>
+<li>diff만 주지 말고 관련 요구사항과 금지사항을 함께 줍니다.</li>
+<li>먼저 risk map을 요구합니다: authZ, data migration, user-visible behavior, concurrency, external API.</li>
+<li>findings는 severity, evidence, affected path, reproduction으로 받습니다.</li>
+<li>AI의 finding을 그대로 믿지 말고 코드 위치와 실행 가능성을 확인합니다.</li>
+<li>accepted, rejected, needs follow-up으로 triage합니다.</li>
+<li>episode package로 남깁니다.</li>
+</ol>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">PLAY-03</span><h2>테스트·마이그레이션 루프</h2></div>
+<table>
+<tr><th>시나리오</th><th>실행 흐름</th></tr>
+<tr><td>버그 수정</td><td>재현 테스트 먼저 → agent 수정 → 독립 테스트 → regression episode 저장</td></tr>
+<tr><td>리팩터링</td><td>불변조건 선언 → 작은 diff → behavior test → public API 확인</td></tr>
+<tr><td>테스트 작성</td><td>기존 failure mode 수집 → edge case 생성 → adversarial 관점 추가</td></tr>
+<tr><td>마이그레이션</td><td>expand-contract 확인 → rollback/forward plan → staging dry-run → 승인</td></tr>
+<tr><td>보안 점검</td><td>source/sink 추적 → exploitability 판단 → false positive 근거 기록</td></tr>
+<tr><td>운영 런북</td><td>증상 → 진단 → 완화 → 복구 확인 → audit trail</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">PLAY-04</span><h2>프롬프트 템플릿</h2></div>
+<div class="serial-card">
+<span class="sc-label">TASK PROMPT TEMPLATE</span>
+목표: [구체적 목표]<br>
+범위: [관련 파일/모듈], [수정하지 말아야 할 부분]<br>
+성공 조건: [테스트, 동작, 성능, 보안 조건]<br>
+작업 방식:<br>
+1. 먼저 관련 컨텍스트를 요약해라.<br>
+2. 원인 가설을 3개 이하로 제시해라.<br>
+3. 구현 전 계획을 작성해라.<br>
+4. 가능한 경우 실패 테스트를 먼저 추가해라.<br>
+5. 검증 결과 없이는 완료라고 말하지 마라.<br>
+중단 조건: [반복 횟수, 실패 조건, 비용 한계]
+</div>
+<div class="serial-card">
+<span class="sc-label">REVIEW PROMPT TEMPLATE</span>
+너는 독립 코드 리뷰어다. 이 변경을 작성하지 않았다고 가정해라.<br>
+요약보다 결함 탐지를 우선해라.<br>
+검토 기준: 실제 버그, 회귀 가능성, 보안/권한 문제, 누락 테스트, 과도한 변경, 요구사항 불일치<br>
+출력: Findings, Required Fixes, Test Gaps, Residual Risk
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">PLAY-05</span><h2>Capstone</h2></div>
+<table>
+<tr><th>과제</th><th>목표</th><th>검증</th></tr>
+<tr><td>Trace-based Eval Harness</td><td>10개 AI 작업 episode 수집</td><td>goal, context, diff, test result, failure class 비교</td></tr>
+<tr><td>Prompt Injection 방어</td><td>README, issue, CSV에 악성 지시문 삽입</td><td>untrusted data로 처리되는지 확인</td></tr>
+<tr><td>AI Code Review Pipeline</td><td>risk classifier → test gap detector → security reviewer</td><td>false positive/negative와 audit log 기록</td></tr>
+<tr><td>Autonomy Ladder</td><td>제안, 테스트 생성, 수정, PR, merge, deploy 단계 정의</td><td>각 단계의 permission, verification, human gate 명시</td></tr>
+<tr><td>Failure Taxonomy 운영</td><td>한 달간 AI 사용 실패 수집</td><td>prompt 개선보다 workflow 개선으로 줄일 항목 식별</td></tr>
+</table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">PLAY-06</span><h2>업무 자동화 운영</h2></div>
+<p class="lede">실무에서 AX 자동화는 한 번에 완성하지 않습니다. 반복 업무를 수집하고, 작은 하네스로 실험하고, 검증 지표를 보고, 팀 표준으로 남길 것만 확장합니다.</p>
+<table>
+<tr><th>단계</th><th>소규모 셀</th><th>대규모 조직</th></tr>
+<tr><td>업무 수집</td><td>스프린트마다 반복 업무 1개 선정</td><td>여러 팀의 toil, review latency, incident pattern 수집</td></tr>
+<tr><td>하네스 작성</td><td>task template, context checklist, test command로 시작</td><td>공통 context builder, policy gate, model gateway 제공</td></tr>
+<tr><td>실행 범위</td><td>read-only 분석과 작은 diff부터</td><td>업무 위험도별 Autonomy ladder 운영</td></tr>
+<tr><td>검증</td><td>테스트, 빌드, 수동 시나리오, 팀 리뷰</td><td>CI, eval set, audit log, risk-based approval</td></tr>
+<tr><td>확산</td><td>잘 된 template만 팀 문서에 저장</td><td>golden workflow로 제품군/부서에 확장</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">2-WEEK AX AUTOMATION SPRINT</span>
+Day 1: 반복 업무 1개 선정, baseline 측정<br>
+Day 2: task spec, context package, permission policy 작성<br>
+Day 3-5: read-only 분석 하네스 실행, 실패 원인 기록<br>
+Day 6-8: 작은 write 권한 또는 PR draft 허용<br>
+Day 9: verification gate와 review rubric 보강<br>
+Day 10: lead time, review latency, rework, cost per episode로 지속 여부 결정
+</div>
+<div class="callout warn">
+<span class="co-label">중단 기준</span>
+<p>AI 자동화가 리뷰 시간을 늘리거나, rework를 만들거나, 팀이 결과를 설명하지 못하면 확장하지 않습니다. 이 경우 모델을 바꾸기 전에 업무 분해, 컨텍스트, 검증 기준을 먼저 고칩니다.</p>
+</div>
+</section>
+
+<footer>
+AX PRACTICAL PLAYBOOK · V1 · 2026-06<br>
+PRINCIPLE : 검증되지 않은 항목을 완료된 것처럼 쓰지 않는다
+</footer>
+</main>
+</div>
+</body>
+</html>

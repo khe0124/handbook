@@ -3,13 +3,14 @@
   grid-template-columns: 264px minmax(0, 1fr);
   max-width: 1280px;
   margin: 0 auto;
+  padding-top: 105px;
   background: var(--paper);
 }
 
 .handbook-toc {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: 105px;
+  height: calc(100vh - 105px);
   overflow-y: auto;
   border-right: 1px solid var(--line);
   padding: 32px 20px 48px;
@@ -438,26 +439,174 @@
 @media (max-width: 900px) {
   .handbook-shell {
     grid-template-columns: 1fr;
+    padding-top: 0;
   }
 
   .handbook-toc {
     position: static;
     height: auto;
+    max-height: 36vh;
     border-right: none;
     border-bottom: 1px solid var(--line);
+    padding: 18px 20px;
   }
 
   .handbook-main {
-    padding: 0 20px 80px;
+    padding: 0 20px 96px;
   }
 }
 
 @media (max-width: 700px) {
+  .handbook-toc {
+    max-height: 176px;
+    padding: 14px 16px;
+    overflow-y: auto;
+  }
+
+  .handbook-toc .nav-title {
+    margin-bottom: 12px;
+  }
+
+  .handbook-toc a {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+
+  .handbook-main {
+    padding: 0 16px 110px;
+  }
+
+  .handbook-main .hero {
+    padding: 38px 0 30px;
+  }
+
+  .handbook-main .hero-serial {
+    gap: 8px;
+    margin-bottom: 18px;
+    font-size: 10.5px;
+  }
+
+  .handbook-main .hero-sub,
+  .handbook-main p.lede {
+    font-size: 15.5px;
+  }
+
+  .handbook-main .hero-meta {
+    margin-top: 18px;
+    font-size: 10.5px;
+  }
+
+  .handbook-main h1 {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+
+  .handbook-main h2 {
+    font-size: 22px;
+  }
+
+  .handbook-main h3 {
+    margin-top: 28px;
+    font-size: 17px;
+  }
+
+  .handbook-main section {
+    padding-top: 48px;
+  }
+
+  .handbook-main .ch-head {
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+  }
+
+  .handbook-main p,
+  .handbook-main li,
+  .handbook-main td {
+    overflow-wrap: anywhere;
+  }
+
+  .handbook-main ul,
+  .handbook-main ol {
+    margin-left: 18px;
+  }
+
+  .handbook-main .callout {
+    padding: 14px 16px;
+    margin: 18px 0;
+  }
+
+  .handbook-main table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+    font-size: 13px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .handbook-main th,
+  .handbook-main td {
+    min-width: 132px;
+    padding: 9px 10px;
+  }
+
+  .handbook-main .flow {
+    align-items: stretch;
+    flex-direction: column;
+    font-size: 12px;
+  }
+
+  .handbook-main .flow .arr {
+    display: none;
+  }
+
+  .handbook-main .serial-card {
+    padding: 46px 16px 16px;
+    margin: 18px 0;
+    font-size: 12.5px;
+    line-height: 1.8;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .handbook-main .serial-card-copy {
+    top: 10px;
+    right: 10px;
+    height: 28px;
+  }
+
   .handbook-main .g-row {
     grid-template-columns: 1fr;
   }
 
   .handbook-main .g-term {
     border-bottom: 1px dashed var(--line);
+  }
+
+  .handbook-main .g-term,
+  .handbook-main .g-def {
+    padding: 11px 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .handbook-main {
+    padding-inline: 14px;
+  }
+
+  .handbook-main .hero {
+    padding-top: 32px;
+  }
+
+  .handbook-main h1 {
+    font-size: 27px;
+  }
+
+  .handbook-main h2 {
+    font-size: 20px;
+  }
+
+  .handbook-main .ch-code {
+    font-size: 10.5px;
   }
 }

@@ -105,8 +105,8 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
     <span>LANG : KO</span>
   </div>
   <h1>로깅·모니터링<br>장애대응 핸드북</h1>
-  <p class="hero-sub">운영을 책임질 수 있느냐가 미들급의 분기점 — <em>"안 돼요"를 "여기가 이래서 안 됩니다"로 바꾸는 능력</em>. 코드를 짜는 것과, 그 코드가 새벽 3시에 죽었을 때 무슨 일이 일어났는지 5분 안에 말하는 것은 다른 기술입니다. 이 핸드북은 후자를 다룹니다.</p>
-  <div class="hero-meta">FOR : 프론트엔드 → 풀스택 확장 중인 미들급 지망 / Java·Spring Boot·JPA foundational<br>COMPILED : 2026-06</div>
+  <p class="hero-sub">운영을 책임진다는 것은 <em>"안 돼요"를 "여기가 이래서 안 됩니다"로 바꾸는 능력</em>입니다. 코드를 짜는 것과, 그 코드가 새벽 3시에 죽었을 때 무슨 일이 일어났는지 5분 안에 말하는 것은 다른 기술입니다. 이 핸드북은 후자를 다룹니다.</p>
+  <div class="hero-meta">FOR : 프론트엔드 기반 풀스택 확장 / Java·Spring Boot·JPA foundational<br>COMPILED : 2026-06</div>
 </header>
 
 <!-- ============ CH 1 ============ -->
@@ -375,7 +375,7 @@ SLO 99.9% (30일 기준)<br>
 <!-- ============ CH 12 ============ -->
 <section id="ch12">
 <div class="ch-head"><span class="ch-code">OBS-12</span><h2>용어집</h2></div>
-<p class="lede">앞 장들의 핵심 용어를 한자리에. 면접·온콜·포스트모템에서 정확한 단어로 말하는 것이 미들급의 기본기입니다.</p>
+<p class="lede">앞 장들의 핵심 용어를 한자리에. 면접·온콜·포스트모템에서 정확한 단어로 말하는 것이 운영 커뮤니케이션의 기본기입니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>관측가능성</b><span>observability</span></div><div class="g-def">외부 신호만으로 시스템 내부를 추론하는 정도. monitoring(아는 질문)과 달리 <em>모르는 질문도 사후 탐색</em> 가능하게 하는 것이 목표</div></div>
 <div class="g-row"><div class="g-term"><b>세 기둥</b><span>three pillars</span></div><div class="g-def">로그(logs)·메트릭(metrics)·트레이스(traces). 각각 "무슨 일이 있었나 / 얼마나 / 어디서 느렸나"에 답하며, trace id로 서로 이어야 진가가 남</div></div>
@@ -399,8 +399,25 @@ SLO 99.9% (30일 기준)<br>
 <div class="g-row"><div class="g-term"><b>포스트모템</b><span>blameless postmortem</span></div><div class="g-def">비난 없는 장애 회고. 타임라인·근본원인(5 whys)·실행 가능한 액션아이템으로 재발 방지. 사람이 아닌 시스템을 고침</div></div>
 </div>
 <div class="callout gm">
-<span class="co-label">미들급으로 가는 한 문장</span>
+<span class="co-label">운영 품질의 한 문장</span>
 <p>운영 책임의 본질은 도구가 아니라 <em>사고의 순서</em>입니다 — 증상(메트릭)에서 시작해, 트레이스로 좁히고, 로그로 확정하고, 복구를 원인 분석보다 앞에 두고, 끝나면 사람이 아닌 시스템을 고친다. "안 돼요" 대신 "결제 API p99가 OBS-05 기준으로 튀었고, trace 보니 DB 커넥션 풀 포화(OBS-04 USE-Saturation)라 직전 배포를 롤백했습니다"라고 말할 수 있으면 — 그게 분기점을 넘은 것입니다(→ 백엔드 핸드북 BE-08 네트워킹 · Docker·배포 핸드북과 함께 보면 진단 도구가 손에 붙습니다).</p>
+</div>
+</section>
+
+<section id="ch13">
+<div class="ch-head"><span class="ch-code">OBS-13</span><h2>관측성 운영 심화</h2></div>
+<p class="lede">좋은 관측성은 로그를 많이 남기는 것이 아니라 장애 판단에 필요한 신호를 빠르게 찾게 만드는 것입니다.</p>
+<table>
+<tr><th>주제</th><th>실무 기준</th><th>위험 신호</th></tr>
+<tr><td>RED</td><td>Rate, Errors, Duration으로 요청 기반 서비스를 관찰</td><td>CPU만 보고 사용자 오류율을 놓침</td></tr>
+<tr><td>USE</td><td>Utilization, Saturation, Errors로 리소스를 관찰</td><td>DB connection pool saturation을 늦게 발견</td></tr>
+<tr><td>high-cardinality</td><td>userId, requestId 같은 폭발적 label은 metric label로 남용하지 않음</td><td>메트릭 저장소 비용과 쿼리 성능 급락</td></tr>
+<tr><td>SLO burn rate</td><td>에러 예산이 얼마나 빠르게 소모되는지로 알림</td><td>순간 오류와 장기 오류를 같은 심각도로 처리</td></tr>
+<tr><td>incident command</td><td>장애 시 의사결정자, 기록자, 커뮤니케이션 담당을 분리</td><td>모두가 로그만 보며 고객 공지가 늦어짐</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>API p95 latency가 정상인데 고객은 느리다고 말할 수 있습니다. 특정 고객사의 요청만 DB lock wait로 지연되고, 전체 평균에는 묻힐 수 있기 때문입니다. trace context, tenant 단위 샘플링, slow query 로그, SLO burn rate를 함께 보면 “전체 정상, 일부 고객 장애”를 더 빨리 찾을 수 있습니다.</p>
 </div>
 </section>
 

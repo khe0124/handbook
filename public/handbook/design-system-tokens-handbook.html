@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Handbook — 디자인 시스템과 토큰</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">디자인 시스템과 토큰</div>
+  <a href="#ch1"><span class="code">SYS-01</span>시스템의 목적</a>
+  <a href="#ch2"><span class="code">SYS-02</span>토큰 구조</a>
+  <a href="#ch3"><span class="code">SYS-03</span>컴포넌트 가이드</a>
+  <a href="#ch4"><span class="code">SYS-04</span>운영 모델</a>
+  <a href="#ch5"><span class="code">SYS-05</span>성숙도</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DESIGN-SYSTEM-TOKENS-V1</span>
+    <span>SCOPE : DESIGN SYSTEM · TOKENS · GOVERNANCE · COMPONENTS</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>디자인 시스템과 토큰</h1>
+  <p class="hero-sub">디자인 시스템은 UI 키트가 아니라 제품 경험을 일관되게 만드는 운영 체계입니다. 토큰, 컴포넌트, 문서, 코드, 변경 절차가 함께 있어야 실제 제품 속도와 품질을 높입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">SYS-01</span><h2>시스템의 목적</h2></div>
+<table>
+<tr><th>목적</th><th>설명</th><th>측정 신호</th></tr>
+<tr><td>일관성</td><td>같은 문제에 같은 해결 방식을 사용</td><td>페이지별 UI 차이 감소</td></tr>
+<tr><td>속도</td><td>반복 UI를 빠르게 설계하고 구현</td><td>디자인/개발 리드타임 감소</td></tr>
+<tr><td>품질</td><td>접근성, 반응형, 상태를 기본 품질로 포함</td><td>QA 반복 지적 감소</td></tr>
+<tr><td>확장성</td><td>브랜드, 테마, 제품 확장에 대응</td><td>토큰 변경으로 다수 화면 업데이트</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">SYS-02</span><h2>토큰 구조</h2></div>
+<p class="lede">토큰은 값의 별칭이 아니라 디자인 결정의 이름입니다.</p>
+<table>
+<tr><th>계층</th><th>예시</th><th>역할</th></tr>
+<tr><td>Primitive</td><td>blue-600, gray-100, space-8</td><td>원시 값 팔레트</td></tr>
+<tr><td>Semantic</td><td>color-bg-surface, color-text-danger</td><td>제품 의미를 가진 토큰</td></tr>
+<tr><td>Component</td><td>button-primary-bg, input-border-error</td><td>컴포넌트 맥락의 결정</td></tr>
+<tr><td>Alias</td><td>theme별 semantic mapping</td><td>브랜드와 모드 전환 지원</td></tr>
+</table>
+<div class="serial-card">
+<span class="serial-label">Token naming example</span>
+<pre><code>color.background.surface
+color.background.surface-hover
+color.text.primary
+color.text.danger
+space.2
+radius.control</code></pre>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">SYS-03</span><h2>컴포넌트 가이드</h2></div>
+<table>
+<tr><th>문서 항목</th><th>필요한 이유</th></tr>
+<tr><td>Usage</td><td>언제 쓰고 언제 쓰지 않는지 설명</td></tr>
+<tr><td>Anatomy</td><td>구성 요소와 슬롯을 정의</td></tr>
+<tr><td>Variants</td><td>의미 있는 변형과 제한을 명시</td></tr>
+<tr><td>States</td><td>hover, focus, disabled, loading, error를 포함</td></tr>
+<tr><td>Accessibility</td><td>키보드, aria, focus, contrast 요구사항을 명시</td></tr>
+<tr><td>Content guideline</td><td>라벨, 오류, 빈 상태 문구의 원칙 제공</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">SYS-04</span><h2>운영 모델</h2></div>
+<table>
+<tr><th>영역</th><th>운영 기준</th><th>위험 신호</th></tr>
+<tr><td>Ownership</td><td>디자인과 프론트엔드 공동 소유</td><td>한쪽만 관리해 문서와 코드가 분리</td></tr>
+<tr><td>Contribution</td><td>요청, 검토, 승인, 배포 흐름 정의</td><td>제품팀이 임의 컴포넌트를 계속 생성</td></tr>
+<tr><td>Versioning</td><td>breaking change와 migration 안내</td><td>변경 후 기존 화면이 조용히 깨짐</td></tr>
+<tr><td>Audit</td><td>사용률, 중복, 접근성 회귀 점검</td><td>시스템보다 예외 CSS가 더 많아짐</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">SYS-05</span><h2>성숙도</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Level 1</b><span>kit</span></div><div class="g-def">Figma 컴포넌트와 일부 코드 컴포넌트가 존재합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Level 2</b><span>shared</span></div><div class="g-def">디자인과 코드가 같은 토큰과 variant를 공유합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Level 3</b><span>governed</span></div><div class="g-def">기여, 버전, 마이그레이션, 품질 기준이 운영됩니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Level 4</b><span>measured</span></div><div class="g-def">사용률, 회귀, 접근성, 제품 속도를 지표로 관리합니다.</div></div>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">SYS-06</span><h2>토큰 파이프라인과 거버넌스</h2></div>
+<p class="lede">디자인 시스템이 커질수록 Figma, 코드, 문서, 릴리스가 어긋나는 문제가 생깁니다. 이를 줄이려면 design token pipeline과 변경 관리가 필요합니다.</p>
+<table>
+<tr><th>단계</th><th>역할</th><th>실무 기준</th></tr>
+<tr><td>Source</td><td>Figma variables 또는 token repository에서 원천 관리</td><td>primitive와 semantic token을 분리</td></tr>
+<tr><td>Transform</td><td>플랫폼별 CSS variable, TS constant, Android/iOS token 생성</td><td>단위, 색상 포맷, theme mapping 자동화</td></tr>
+<tr><td>Validate</td><td>contrast, naming, breaking change 검사</td><td>WCAG 기준과 deprecated token 사용 검사</td></tr>
+<tr><td>Release</td><td>버전 태그와 migration note 제공</td><td>제품팀이 언제 어떤 변경을 적용할지 판단 가능</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>다크 모드를 추가할 때 hex 색상을 화면별로 바꾸면 유지보수가 불가능해집니다. semantic token을 먼저 정의하고 component token이 이를 참조하게 만들면 테마 전환은 매핑 변경으로 처리되고, contrast 검증도 파이프라인에서 반복할 수 있습니다.</p>
+</div>
+</section>
+
+<footer>
+DESIGN SYSTEM · V1 · 2026-06<br>
+PRINCIPLE : 디자인 시스템은 컴포넌트 모음이 아니라 변경을 통제하는 제품 인프라다
+</footer>
+</main>
+</div>
+</body>
+</html>

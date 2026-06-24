@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AX Handbook — AX 업무 자동화 설계</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">AX 업무 자동화 설계</div>
+  <a href="#ch1"><span class="code">AUTO-01</span>자동화의 단위</a>
+  <a href="#ch2"><span class="code">AUTO-02</span>후보 선정 매트릭스</a>
+  <a href="#ch3"><span class="code">AUTO-03</span>자동화 패턴</a>
+  <a href="#ch4"><span class="code">AUTO-04</span>측정 지표</a>
+  <a href="#ch5"><span class="code">AUTO-05</span>도입 체크리스트</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : AX-AUTOMATION-DESIGN-V1</span>
+    <span>SCOPE : WORKFLOW · CANDIDATE · METRIC · CONTROL</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AX 업무 자동화 설계</h1>
+  <p class="hero-sub">업무 자동화의 핵심은 AI에게 일을 맡기는 것이 아니라, <strong>업무를 검증 가능한 단위로 쪼개고 위험도에 맞는 자동화 수준을 정하는 것</strong>입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">AUTO-01</span><h2>자동화의 단위</h2></div>
+<p class="lede">AX 자동화는 전체 직무를 대체하는 방식보다 작은 workflow를 안정화하는 방식이 실무적입니다. 좋은 자동화 단위는 입력, 판단, 행동, 검증, 예외 처리가 명확합니다.</p>
+<table>
+<tr><th>단위</th><th>예</th><th>자동화 설계 포인트</th></tr>
+<tr><td>정보 수집</td><td>로그, PR diff, API spec, 이슈, 배포 기록 요약</td><td>출처와 시간 범위, 신뢰도 표시</td></tr>
+<tr><td>후보 생성</td><td>테스트 케이스, 리뷰 finding, migration risk 후보</td><td>AI가 결론이 아니라 후보와 근거를 제시</td></tr>
+<tr><td>정책 검사</td><td>보안 규칙, 접근성 기준, 릴리즈 체크리스트</td><td>정적 규칙과 AI 판단을 분리</td></tr>
+<tr><td>수정 제안</td><td>작은 버그 수정, 문서 업데이트, 타입 보강</td><td>작은 diff와 자동 검증 필수</td></tr>
+<tr><td>승인 보조</td><td>배포 승인, 보안 예외, 데이터 마이그레이션 검토</td><td>자동 승인 금지, 증거 패키지 생성</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">AUTO-02</span><h2>후보 선정 매트릭스</h2></div>
+<p class="lede">자동화 후보는 감으로 고르지 않습니다. 반복성, 검증 가능성, 실패 비용, 권한 위험, 컨텍스트 안정성을 점수화합니다.</p>
+<table>
+<tr><th>업무</th><th>반복성</th><th>검증 가능성</th><th>실패 비용</th><th>권장 수준</th></tr>
+<tr><td>릴리즈 노트 초안</td><td>높음</td><td>중간</td><td>낮음</td><td>자동 생성 + 사람 리뷰</td></tr>
+<tr><td>테스트 케이스 후보 생성</td><td>높음</td><td>높음</td><td>낮음</td><td>반자동, 테스트 통과 필수</td></tr>
+<tr><td>코드 리뷰 finding 생성</td><td>높음</td><td>중간</td><td>중간</td><td>AI 후보 + 독립 triage</td></tr>
+<tr><td>DB migration 적용</td><td>중간</td><td>높음</td><td>높음</td><td>분석 자동화, 실행은 승인</td></tr>
+<tr><td>운영 장애 완화</td><td>중간</td><td>중간</td><td>매우 높음</td><td>진단 자동화, 조치 승인</td></tr>
+<tr><td>고객 데이터 수정</td><td>낮음</td><td>중간</td><td>매우 높음</td><td>자동화 금지 또는 read-only 분석</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">AUTOMATION DECISION RULE</span>
+if repeatability high and verifiability high and failure_cost low:<br>
+  allow semi-automation or guarded automation<br>
+if failure_cost high or permission_risk high:<br>
+  generate evidence only, require human approval<br>
+if context unstable or evaluation impossible:<br>
+  do not automate, improve workflow first
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">AUTO-03</span><h2>자동화 패턴</h2></div>
+<table>
+<tr><th>패턴</th><th>구조</th><th>적합한 업무</th></tr>
+<tr><td>Copilot Pattern</td><td>사람이 주도하고 AI가 제안</td><td>코드 작성, 문서 초안, 테스트 아이디어</td></tr>
+<tr><td>Reviewer Pattern</td><td>AI가 독립 검토자로 위험 후보 생성</td><td>PR 리뷰, 보안 점검, 접근성 리뷰</td></tr>
+<tr><td>Research Assistant Pattern</td><td>AI가 자료를 수집·요약하고 출처 표시</td><td>장애 분석, 기술 조사, 의존성 변경 검토</td></tr>
+<tr><td>Guarded Agent Pattern</td><td>AI가 제한된 도구로 작은 작업 수행 후 검증</td><td>문서 동기화, 타입 보강, 단순 리팩터링</td></tr>
+<tr><td>Orchestrated Workflow Pattern</td><td>여러 agent가 역할별로 작업하고 최종 통합</td><td>대규모 마이그레이션, 릴리즈 준비, 보안 triage</td></tr>
+<tr><td>Policy Gate Pattern</td><td>AI 판단을 정책 엔진과 결합해 승인 보조</td><td>배포 승인, 개인정보 접근, 라이선스 점검</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">AUTO-04</span><h2>측정 지표</h2></div>
+<p class="lede">AX 자동화의 성과는 생성량으로 측정하면 왜곡됩니다. 시간, 품질, 재작업, 통합 비용, 사람의 부담을 함께 봐야 합니다.</p>
+<table>
+<tr><th>지표</th><th>의미</th><th>주의점</th></tr>
+<tr><td>Lead time delta</td><td>업무 시작부터 완료까지 시간이 줄었는가</td><td>리뷰 지연과 rework 시간을 포함</td></tr>
+<tr><td>Review latency</td><td>AI 산출물 검토에 걸린 시간</td><td>생성 시간이 줄어도 리뷰가 늘면 실패</td></tr>
+<tr><td>Acceptance rate</td><td>AI 제안 중 실제 반영 비율</td><td>높을수록 좋지만 검증 약화와 혼동 금지</td></tr>
+<tr><td>Rework rate</td><td>AI 산출물 수정·되돌림·재리뷰 비율</td><td>숨은 비용을 드러내는 핵심 지표</td></tr>
+<tr><td>Defect escape</td><td>AI 관련 변경이 운영 결함으로 이어진 비율</td><td>저빈도 고위험 사건을 별도 추적</td></tr>
+<tr><td>Cost per episode</td><td>토큰, 도구, 사람 검토 시간을 포함한 비용</td><td>작은 업무를 과도하게 agent화하지 않도록 제어</td></tr>
+<tr><td>Learning retention</td><td>팀이 업무 지식을 잃지 않는가</td><td>완전 위임은 단기 속도와 장기 역량을 교환할 수 있음</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">측정 원칙</span>
+<p>PR 수, 생성된 코드 줄 수, 프롬프트 횟수만으로는 AX 성과를 판단할 수 없습니다. 통합 시간과 리뷰 부담이 늘면 표면 생산성은 좋아 보여도 실제 전달 성능은 나빠질 수 있습니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">AUTO-05</span><h2>도입 체크리스트</h2></div>
+<ol>
+<li>반복 업무를 episode 10개 이상 수집합니다.</li>
+<li>각 episode의 입력, 출력, 검증, 실패 원인을 표준 형식으로 정리합니다.</li>
+<li>자동화 후보를 scorecard로 평가합니다.</li>
+<li>read-only 분석부터 시작하고, write 권한은 작은 범위부터 엽니다.</li>
+<li>테스트·빌드·정책 검사를 자동 게이트로 연결합니다.</li>
+<li>사람 승인 지점과 escalation 조건을 명시합니다.</li>
+<li>2주 단위로 acceptance, rework, review latency, defect escape를 봅니다.</li>
+<li>성과가 없으면 프롬프트보다 업무 분해와 컨텍스트 품질을 먼저 고칩니다.</li>
+</ol>
+</section>
+
+<footer>
+AX WORK AUTOMATION DESIGN · V1 · 2026-06<br>
+PRINCIPLE : 자동화는 맡기는 범위를 넓히는 일이 아니라 검증 가능한 단위를 늘리는 일이다.
+</footer>
+</main>
+</div>
+</body>
+</html>

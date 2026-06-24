@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AX Handbook — Multi-Agent Workflow</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">Multi-Agent Workflow</div>
+  <a href="#ch1"><span class="code">MA-01</span>역할 분리</a>
+  <a href="#ch2"><span class="code">MA-02</span>언제 쓰는가</a>
+  <a href="#ch3"><span class="code">MA-03</span>워크트리 전략</a>
+  <a href="#ch4"><span class="code">MA-04</span>도구 조합</a>
+  <a href="#ch5"><span class="code">MA-05</span>통합과 리뷰</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : AX-MULTI-AGENT-V1</span>
+    <span>SCOPE : ORCHESTRATOR · IMPLEMENTER · REVIEWER · WORKTREE</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>Multi-Agent Workflow</h1>
+  <p class="hero-sub">멀티 에이전트 워크플로우는 많은 에이전트를 돌리는 기술이 아니라 <strong>서로 다른 책임과 관점을 분리해 자기검열의 약점을 줄이는 운영 방식</strong>입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">MA-01</span><h2>역할 분리</h2></div>
+<p class="lede">코드를 작성한 에이전트에게 최종 평가까지 맡기지 않습니다. 작성자는 구현 의도에 끌리고, 리뷰어는 실제 동작과 위험에 집중해야 합니다.</p>
+<table>
+<tr><th>역할</th><th>책임</th><th>출력</th></tr>
+<tr><td>Planner</td><td>문제를 쪼개고 범위와 성공 조건 정의</td><td>task breakdown</td></tr>
+<tr><td>Explorer</td><td>코드베이스와 원인 후보 조사</td><td>facts, relevant files, hypotheses</td></tr>
+<tr><td>Implementer</td><td>제한된 범위 안에서 구현</td><td>patch, notes, tests</td></tr>
+<tr><td>Verifier</td><td>테스트, 타입체크, 실행 결과 확인</td><td>verification report</td></tr>
+<tr><td>Reviewer</td><td>작성자와 독립적으로 위험과 누락 탐지</td><td>findings, residual risk</td></tr>
+<tr><td>Integrator</td><td>결과 통합, 충돌 제거, 최종 판단</td><td>merged change, final rationale</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">MA-02</span><h2>언제 쓰는가</h2></div>
+<table>
+<tr><th>적합</th><th>부적합</th></tr>
+<tr><td>인증, 결제, 권한, 데이터 마이그레이션처럼 실패 비용이 큰 변경</td><td>한 파일의 작은 문구 수정</td></tr>
+<tr><td>여러 접근법을 비교해야 하는 설계 판단</td><td>요구사항이 불명확한 상태</td></tr>
+<tr><td>프론트엔드, 백엔드, DB, 테스트 작업이 독립적으로 나뉨</td><td>검증 기준이 없는 작업</td></tr>
+<tr><td>작성과 리뷰를 분리해야 하는 고위험 변경</td><td>통합 비용이 작업 자체보다 큰 경우</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">MA-03</span><h2>워크트리 전략</h2></div>
+<p class="lede">여러 에이전트가 같은 브랜치에서 동시에 수정하면 충돌과 책임 혼란이 생깁니다. 독립 워크트리는 실험, 구현, 리뷰, 회귀 확인을 분리합니다.</p>
+<div class="serial-card">
+<span class="sc-label">WORKTREE LAYOUT</span>
+main<br>
+feature/auth-session-fix<br>
+worktree/a-repro-test<br>
+worktree/b-cookie-policy-fix<br>
+worktree/c-review
+</div>
+<ol>
+<li>기준 브랜치를 고정합니다.</li>
+<li>각 에이전트에게 독립 워크트리를 줍니다.</li>
+<li>각 워크트리는 하나의 목표만 가집니다.</li>
+<li>결과는 patch, test result, risk memo로 제출합니다.</li>
+<li>통합자는 하나의 최종 변경만 선택하거나 병합합니다.</li>
+</ol>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">MA-04</span><h2>도구 조합</h2></div>
+<table>
+<tr><th>도구</th><th>언제 쓰나</th><th>주의점</th></tr>
+<tr><td>Skill</td><td>반복 가능한 절차가 중요할 때</td><td>절차가 낡으면 계속 같은 실수 반복</td></tr>
+<tr><td>Plugin</td><td>특정 도구 묶음과 워크플로우가 필요할 때</td><td>권한과 side effect 확인</td></tr>
+<tr><td>Connector</td><td>GitHub, Jira, DB, 이메일 등 외부 데이터가 필요할 때</td><td>외부 콘텐츠는 untrusted로 취급</td></tr>
+<tr><td>Subagent</td><td>독립적인 분석·구현·리뷰가 필요할 때</td><td>입력 범위와 출력 형식을 좁힘</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Rule</span>
+<p>반복 절차가 중요하면 skill, 외부 도구 실행이 필요하면 plugin, 외부 데이터가 필요하면 connector, 독립 판단이 필요하면 subagent를 씁니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">MA-05</span><h2>통합과 리뷰</h2></div>
+<p class="lede">병렬 작업의 성패는 에이전트 수가 아니라 통합 기준에 달려 있습니다. 각 결과에 검증 증거가 없으면 통합하지 않습니다.</p>
+<div class="serial-card">
+<span class="sc-label">INDEPENDENT REVIEW PROMPT</span>
+너는 이 변경을 작성하지 않은 독립 리뷰어다.<br>
+목표는 칭찬이나 요약이 아니라 결함 탐지다.<br>
+1. 실제 버그 또는 회귀 가능성<br>
+2. 보안, 인증, 권한, 데이터 손실 위험<br>
+3. 누락된 테스트<br>
+4. 요구사항과 구현의 불일치<br>
+5. 과도한 변경 또는 불필요한 추상화
+</div>
+<table>
+<tr><th>실패</th><th>대응</th></tr>
+<tr><td>모든 에이전트가 같은 가정을 공유</td><td>역할별 입력과 질문을 다르게 설계</td></tr>
+<tr><td>subagent 결과를 검증 없이 합침</td><td>검증 증거 없는 결과는 통합 보류</td></tr>
+<tr><td>여러 에이전트를 돌려 비용만 증가</td><td>병렬화 가치와 통합자를 사전에 지정</td></tr>
+<tr><td>워크트리 없이 같은 파일 동시 수정</td><td>파일 소유권과 write scope 분리</td></tr>
+</table>
+</section>
+
+<footer>
+MULTI-AGENT WORKFLOW · V1 · 2026-06<br>
+PRINCIPLE : 작성자와 리뷰어를 분리해야 AI 작업의 자기검열 한계를 줄일 수 있다
+</footer>
+</main>
+</div>
+</body>
+</html>

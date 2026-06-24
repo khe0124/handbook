@@ -22,7 +22,8 @@
   <a href="#ch10"><span class="code">FE-10</span>테스트 전략</a>
   <a href="#ch11"><span class="code">FE-11</span>배포와 관측가능성</a>
   <a href="#ch12"><span class="code">FE-12</span>보안: XSS·CSRF·토큰 저장</a>
-  <a href="#ch13"><span class="code">FE-13</span>용어집</a>
+  <a href="#ch13"><span class="code">FE-13</span>대규모 제품 운영</a>
+  <a href="#ch14"><span class="code">FE-14</span>용어집</a>
 </nav>
 <main>
 
@@ -41,7 +42,7 @@
 <div class="ch-head"><span class="ch-code">FE-01</span><h2>실무 프론트엔드의 역할</h2></div>
 <p class="lede">프론트엔드의 성공 기준은 "화면이 보인다"가 아닙니다. 사용자가 의도한 일을 끝낼 수 있고, 실패했을 때 이유를 이해할 수 있으며, 팀이 기능을 계속 바꿔도 UI가 무너지지 않는 것입니다.</p>
 <table>
-<tr><th>관점</th><th>초급</th><th>실무형</th><th>시니어</th></tr>
+<tr><th>관점</th><th>기본 구현</th><th>제품 기능</th><th>시스템 품질</th></tr>
 <tr><td><b>성공 기준</b></td><td>디자인과 비슷하게 구현</td><td>상태·에러·권한·빈 화면까지 흐름을 완성</td><td>제품과 팀이 유지 가능한 UI 시스템 설계</td></tr>
 <tr><td><b>컴포넌트</b></td><td>props를 받아 화면 출력</td><td>역할·소유 상태·합성 경계를 명확히 함</td><td>도메인 변화와 디자인 시스템 확장을 흡수</td></tr>
 <tr><td><b>네트워크</b></td><td>API 호출 후 데이터 표시</td><td>로딩·재시도·낙관 업데이트·캐시 무효화 설계</td><td>사용자 경험과 백엔드 계약을 함께 조율</td></tr>
@@ -265,7 +266,29 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </section>
 
 <section id="ch13">
-<div class="ch-head"><span class="ch-code">FE-13</span><h2>용어집</h2></div>
+<div class="ch-head"><span class="ch-code">FE-13</span><h2>대규모 제품 운영</h2></div>
+<p class="lede">프론트엔드가 커질수록 어려운 문제는 컴포넌트 작성이 아니라 제품 전체의 변경 비용을 통제하는 일입니다. 성능, 접근성, 디자인 시스템, API 계약, 배포 전략이 하나의 운영 체계로 묶여야 합니다.</p>
+<table>
+<tr><th>영역</th><th>고급 판단 기준</th><th>실패 신호</th></tr>
+<tr><td>모듈 경계</td><td>도메인, route, 권한, 데이터 소유권 기준으로 분리</td><td>공통 폴더가 모든 것을 알고 순환 의존이 생김</td></tr>
+<tr><td>디자인 시스템</td><td>토큰, 컴포넌트 API, 접근성, release note를 함께 관리</td><td>Figma와 코드가 어긋나고 화면마다 예외 스타일 증가</td></tr>
+<tr><td>성능 예산</td><td>route별 JS/CSS/image budget과 Web Vitals 목표를 둠</td><td>차트, 에디터, 관리자 기능이 초기 번들에 섞임</td></tr>
+<tr><td>실사용자 관측</td><td>RUM으로 route, browser, release, API latency를 연결</td><td>Lighthouse는 통과하지만 실제 모바일 사용자는 느림</td></tr>
+<tr><td>API 계약</td><td>breaking change, fallback, partial data, error code를 문서화</td><td>백엔드 문자열 메시지에 프론트 분기가 의존</td></tr>
+<tr><td>실험과 분석</td><td>이벤트 이름, 속성, 노출 기준, 개인정보 범위를 표준화</td><td>AB 테스트 결과를 신뢰할 수 없거나 재현 불가</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>관리자 테이블이 느릴 때 먼저 React memo를 붙이는 것은 순서가 아닙니다. Network waterfall로 API 지연과 payload 크기를 보고, Performance 탭으로 main thread long task를 확인하고, React Profiler로 실제 re-render 원인을 봅니다. 그 다음 서버 페이지네이션, column virtualization, row memoization, 필터 debounce, URL state 정리를 선택합니다.</p>
+</div>
+<div class="callout warn">
+<span class="co-label">Micro-frontend 판단</span>
+<p>마이크로 프론트엔드는 기술 유행이 아니라 조직 경계가 강하고 배포 독립성이 실제 병목일 때 검토합니다. 장점은 독립 배포와 팀 자율성이지만, 단점은 shared dependency, 디자인 일관성, routing, 인증, observability, 성능 예산 관리가 어려워지는 것입니다. 단일 팀·단일 제품에서는 모듈 경계와 monorepo discipline만으로 충분한 경우가 많습니다.</p>
+</div>
+</section>
+
+<section id="ch14">
+<div class="ch-head"><span class="ch-code">FE-14</span><h2>용어집</h2></div>
 <p class="lede">실무에서 자주 부딪히는 프론트엔드 용어를 의사결정 관점으로 정리합니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Hydration</b><span>SSR → client 연결</span></div><div class="g-def">서버가 만든 HTML에 클라이언트 JS 이벤트와 상태를 연결하는 과정. hydration 전 UI는 보이지만 상호작용이 제한될 수 있습니다.</div></div>

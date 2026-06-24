@@ -14,6 +14,8 @@
   <a href="#ch3"><span class="code">REL-03</span>공급망 보안</a>
   <a href="#ch4"><span class="code">REL-04</span>백업과 복구</a>
   <a href="#ch5"><span class="code">REL-05</span>신뢰성 목표</a>
+  <a href="#ch6"><span class="code">REL-06</span>위협 모델링</a>
+  <a href="#ch7"><span class="code">REL-07</span>운영 리허설</a>
 </nav>
 <main>
 <header class="hero">
@@ -97,6 +99,41 @@
 <div class="g-row"><div class="g-term"><b>SLO</b><span>objective</span></div><div class="g-def">SLI가 만족해야 하는 목표입니다. 예: 30일 동안 요청 성공률 99.9%.</div></div>
 <div class="g-row"><div class="g-term"><b>SLA</b><span>agreement</span></div><div class="g-def">고객과 약속한 계약 수준입니다. 보상과 책임이 따를 수 있습니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Error budget</b><span>변경 여유</span></div><div class="g-def">허용 가능한 실패량입니다. 소진 속도에 따라 배포 속도를 조절합니다.</div></div>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">REL-06</span><h2>위협 모델링</h2></div>
+<p class="lede">보안은 취약점 목록을 외우는 것이 아니라 신뢰 경계와 공격자의 행동을 모델링하는 일입니다. 설계 초기에 위협 모델을 만들면 뒤늦은 보안 패치를 줄일 수 있습니다.</p>
+<table>
+<tr><th>STRIDE</th><th>질문</th><th>예시 대응</th></tr>
+<tr><td>Spoofing</td><td>누가 누구인 척할 수 있는가</td><td>MFA, OIDC 검증, token audience/issuer 확인</td></tr>
+<tr><td>Tampering</td><td>데이터나 artifact가 중간에 바뀔 수 있는가</td><td>서명, checksum, immutable artifact, DB 제약</td></tr>
+<tr><td>Repudiation</td><td>누가 무엇을 했는지 부인할 수 있는가</td><td>감사 로그, traceId, 관리자 행위 기록</td></tr>
+<tr><td>Information Disclosure</td><td>민감정보가 로그, 응답, 번들, backup에 새는가</td><td>마스킹, 최소 응답, secret scanning, 암호화</td></tr>
+<tr><td>Denial of Service</td><td>저렴한 요청으로 비싼 일을 반복시킬 수 있는가</td><td>rate limit, quota, timeout, backpressure</td></tr>
+<tr><td>Elevation of Privilege</td><td>낮은 권한이 높은 권한으로 올라갈 수 있는가</td><td>RBAC/ABAC, 서버 측 인가, privileged action 재검증</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실무 적용</span>
+<p>새 기능을 설계할 때 데이터 흐름도를 그리고, 사용자 브라우저, API, DB, queue, storage, CI/CD, 외부 SaaS 사이의 신뢰 경계를 표시합니다. 경계를 넘는 입력마다 인증, 인가, 검증, 로깅, 암호화, rate limit 중 무엇이 필요한지 결정합니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">REL-07</span><h2>운영 리허설</h2></div>
+<p class="lede">신뢰성은 문서에 적힌 계획이 아니라 실제로 반복 가능한 절차입니다. 백업, 롤백, 장애 대응은 평상시에 연습하지 않으면 장애 때 처음 실행하게 됩니다.</p>
+<table>
+<tr><th>리허설</th><th>목표</th><th>합격 기준</th></tr>
+<tr><td>Rollback drill</td><td>직전 release로 안전하게 되돌리기</td><td>DB migration 호환성과 feature flag 경로가 확인됨</td></tr>
+<tr><td>Restore drill</td><td>백업에서 새 환경으로 복구</td><td>RTO/RPO 안에 데이터와 앱이 복구됨</td></tr>
+<tr><td>Secret rotation</td><td>API key, DB password, signing key 교체</td><td>무중단 또는 계획된 짧은 영향 안에서 완료</td></tr>
+<tr><td>Dependency upgrade</td><td>취약점 패치와 회귀 검증</td><td>SBOM, changelog, compatibility test가 남음</td></tr>
+<tr><td>Incident game day</td><td>지연, 5xx, queue lag, DNS 장애를 모의</td><td>알림, 대시보드, runbook, 담당자 escalation이 동작</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">Senior bar</span>
+<p>고급 개발자는 “장애가 나지 않게”만 말하지 않습니다. 어떤 장애는 반드시 난다고 가정하고, 감지 시간, 완화 시간, 복구 시간, 재발 방지 액션을 줄이는 체계를 만듭니다. 그래서 신뢰성은 코드 품질이면서 동시에 운영 루틴입니다.</p>
 </div>
 </section>
 

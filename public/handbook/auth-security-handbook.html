@@ -105,7 +105,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   </div>
   <h1>인증과 보안<br>핸드북</h1>
   <p class="hero-sub">보안은 나중에 붙이는 기능이 아니라 <strong>기본값</strong>입니다 — 제1원칙은 <em>"모든 사용자 입력은 적대적이라고 가정한다"</em>. 이 핸드북은 패턴 암기가 아니라 <strong>왜 그렇게 하는가, 무엇을 포기하는가, 어떻게 실패하는가</strong>에 초점을 둡니다. 프론트엔드에서 풀스택으로 넘어오며 마주칠 인증·인가·취약점의 사고 모델을 잡습니다.</p>
-  <div class="hero-meta">AUDIENCE : 풀스택 전환 중인 7년차 · Java/Spring Boot/JPA foundational<br>COMPILED : 2026-06 · COMPANION : 백엔드 개요 핸드북 · DB 핸드북</div>
+  <div class="hero-meta">AUDIENCE : 프론트엔드 기반 풀스택 확장 · Java/Spring Boot/JPA foundational<br>COMPILED : 2026-06 · COMPANION : 백엔드 개요 핸드북 · DB 핸드북</div>
 </header>
 
 <!-- ============ CH 1 ============ -->
@@ -384,6 +384,23 @@ sig == sign(<span class="seg">header</span> + <span class="seg2">payload</span>,
 <div class="callout gm">
 <span class="co-label">하나만 가져간다면</span>
 <p>모든 장을 관통하는 한 문장 — <strong>"모든 사용자 입력은 적대적이라고 가정한다."</strong> 인증·인가를 분리해 매 요청 검사하고(SEC-01·06), 입력은 데이터로만 다루고(SEC-08), 출력은 이스케이프하고(SEC-09), secret은 코드 밖에 두는 것(SEC-10) — 전부 이 원칙의 변주입니다. 보안은 기능이 아니라 기본값이고, 사고는 거의 항상 "검사 한 번 빠뜨림"에서 납니다(→ 백엔드 개요, → DB 핸드북).</p>
+</div>
+</section>
+
+<section id="ch12">
+<div class="ch-head"><span class="ch-code">SEC-12</span><h2>실무 인증·인가 심화</h2></div>
+<p class="lede">인증은 로그인 성공으로 끝나지 않습니다. 탈취, 재사용, 권한 변경, 감사 가능성까지 포함해야 제품 보안이 됩니다.</p>
+<table>
+<tr><th>주제</th><th>실무 기준</th><th>놓치기 쉬운 위험</th></tr>
+<tr><td>refresh token rotation</td><td>갱신할 때마다 refresh token을 교체하고 이전 토큰 재사용을 탐지</td><td>탈취된 refresh token이 장기간 재사용됨</td></tr>
+<tr><td>session fixation</td><td>로그인 성공 후 session id를 재발급</td><td>공격자가 미리 심은 세션이 인증 세션으로 승격</td></tr>
+<tr><td>RBAC</td><td>역할 기반으로 큰 권한 묶음을 관리</td><td>역할이 늘어나면 예외 권한이 폭증</td></tr>
+<tr><td>ABAC</td><td>사용자, 리소스, 환경 속성으로 세밀한 정책 판단</td><td>정책이 코드 곳곳에 흩어지면 추적 불가</td></tr>
+<tr><td>audit log</td><td>누가, 언제, 어떤 리소스에, 어떤 변경을 했는지 남김</td><td>개인정보와 secret을 로그에 남김</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>관리자가 사용자 권한을 낮췄는데 기존 access token이 계속 유효하면 몇 분 동안 초과 권한이 남습니다. 짧은 access token, refresh token rotation, 권한 버전 claim, 중요 작업의 서버 측 재검증을 조합해야 권한 변경과 세션 경험의 균형을 맞출 수 있습니다.</p>
 </div>
 </section>
 

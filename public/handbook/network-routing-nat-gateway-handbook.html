@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Handbook — 라우팅·NAT·Internet Gateway</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">라우팅·NAT·Internet Gateway</div>
+  <a href="#ch1"><span class="code">RT-01</span>route table</a>
+  <a href="#ch2"><span class="code">RT-02</span>Longest Prefix Match</a>
+  <a href="#ch3"><span class="code">RT-03</span>IGW와 NAT</a>
+  <a href="#ch4"><span class="code">RT-04</span>return path</a>
+  <a href="#ch5"><span class="code">RT-05</span>장애 패턴</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : NETWORK-ROUTING-NAT-V1</span>
+    <span>SCOPE : ROUTE TABLE · LPM · IGW · NAT · RETURN PATH</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>라우팅·NAT·Internet Gateway</h1>
+  <p class="hero-sub">라우팅은 패킷의 내비게이션입니다. 방화벽이 허용해도 route table에 목적지로 가는 경로가 없으면 패킷은 도착하지 않습니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">RT-01</span><h2>route table</h2></div>
+<table>
+<tr><th>Destination</th><th>Target</th><th>의미</th></tr>
+<tr><td>10.0.0.0/16</td><td>local</td><td>VPC 내부 대역은 내부 라우팅</td></tr>
+<tr><td>0.0.0.0/0</td><td>igw-001</td><td>그 외 모든 IPv4는 Internet Gateway로</td></tr>
+<tr><td>0.0.0.0/0</td><td>nat-001</td><td>private subnet outbound는 NAT Gateway로</td></tr>
+<tr><td>172.16.0.0/16</td><td>vpn-gw-001</td><td>고객사 사설 대역은 VPN Gateway로</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">RT-02</span><h2>Longest Prefix Match</h2></div>
+<p class="lede">여러 route가 동시에 맞으면 가장 구체적인 CIDR이 선택됩니다.</p>
+<div class="serial-card">
+<span class="serial-label">Longest Prefix Match</span>
+<pre><code>172.16.0.0/16  → vpn-gw-a
+172.16.1.0/24  → vpn-gw-b
+
+목적지 172.16.1.10은 /24가 더 구체적이므로
+vpn-gw-b로 라우팅된다.</code></pre>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">RT-03</span><h2>IGW와 NAT</h2></div>
+<table>
+<tr><th>요소</th><th>역할</th><th>대표 사용</th></tr>
+<tr><td>Internet Gateway</td><td>VPC와 공인 인터넷을 연결</td><td>public subnet의 inbound/outbound</td></tr>
+<tr><td>NAT Gateway</td><td>private subnet의 outbound 인터넷 통신 대리</td><td>패키지 설치, 외부 API 호출</td></tr>
+<tr><td>공인 IP</td><td>인터넷에서 도달 가능한 주소</td><td>LB, bastion, NAT outbound IP</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">NAT는 inbound가 아니다</span>
+<p>NAT Gateway는 private 서버가 인터넷으로 나갈 때 source IP를 바꿔주는 장치입니다. 인터넷에서 private 서버로 직접 들어오는 경로를 만들어주지 않습니다.</p>
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">RT-04</span><h2>return path</h2></div>
+<p class="lede">네트워크는 왕복입니다. 요청 경로만 맞고 응답 경로가 없으면 통신은 실패합니다.</p>
+<table>
+<tr><th>상황</th><th>요청 경로</th><th>응답 경로 확인</th></tr>
+<tr><td>우리 → 고객사 DB</td><td>Private App → VPN → 고객 DB</td><td>고객사 라우터가 우리 CIDR을 VPN으로 돌려보내는가</td></tr>
+<tr><td>Private App → 외부 API</td><td>Private App → NAT → Internet</td><td>외부 API가 NAT 공인 IP를 허용하는가</td></tr>
+<tr><td>사용자 → LB</td><td>Internet → IGW → LB</td><td>LB 응답 경로와 보안 정책이 맞는가</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">RT-05</span><h2>장애 패턴</h2></div>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>VPN 터널이 UP이고 우리 route table도 고객사 CIDR을 VPN으로 보내는데 DB 접속이 안 될 수 있습니다. 고객사 쪽 return path가 우리 CIDR을 인터넷 기본 경로로 보내면 응답이 돌아오지 않습니다. VPN 장애에서는 양쪽 route table을 동시에 확인해야 합니다.</p>
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>default route</b><span>0.0.0.0/0</span></div><div class="g-def">더 구체적인 경로가 없을 때 사용하는 마지막 경로입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>return path</b><span>응답 경로</span></div><div class="g-def">요청이 도착한 뒤 응답 패킷이 다시 source로 돌아가는 경로입니다.</div></div>
+</div>
+</section>
+
+<footer>
+NETWORK ROUTING NAT HANDBOOK · V1 · 2026-06<br>
+PRINCIPLE : 라우팅은 destination 기준이고, 통신은 request path와 return path가 모두 맞아야 한다
+</footer>
+</main>
+</div>
+</body>
+</html>

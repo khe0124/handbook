@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Handbook — 디자인 핸드오프와 QA</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">디자인 핸드오프와 QA</div>
+  <a href="#ch1"><span class="code">QA-01</span>핸드오프의 목적</a>
+  <a href="#ch2"><span class="code">QA-02</span>스펙 구성</a>
+  <a href="#ch3"><span class="code">QA-03</span>개발 협업</a>
+  <a href="#ch4"><span class="code">QA-04</span>디자인 QA</a>
+  <a href="#ch5"><span class="code">QA-05</span>출시 전 점검</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DESIGN-HANDOFF-QA-V1</span>
+    <span>SCOPE : HANDOFF · SPEC · DESIGN QA · RELEASE CHECK</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>디자인 핸드오프와 QA</h1>
+  <p class="hero-sub">핸드오프는 디자인 파일을 넘기는 이벤트가 아니라 제품 의도를 구현 가능한 계약으로 바꾸는 과정입니다. 좋은 QA는 픽셀 차이만 보는 것이 아니라 상태, 접근성, 반응형, 오류 흐름까지 확인합니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">QA-01</span><h2>핸드오프의 목적</h2></div>
+<table>
+<tr><th>목적</th><th>설명</th><th>누락 시 문제</th></tr>
+<tr><td>의도 전달</td><td>왜 이 구조와 패턴을 선택했는지 설명</td><td>구현자가 임의 해석</td></tr>
+<tr><td>범위 고정</td><td>이번 릴리스에 포함되는 상태와 예외 정의</td><td>개발 중 요구사항 증가</td></tr>
+<tr><td>기술 제약 확인</td><td>데이터, 권한, 성능, 브라우저 제약 반영</td><td>완성 후 구현 불가 발견</td></tr>
+<tr><td>품질 기준 합의</td><td>QA에서 볼 항목을 사전에 공유</td><td>출시 직전 반복 수정</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">QA-02</span><h2>스펙 구성</h2></div>
+<table>
+<tr><th>스펙</th><th>포함 내용</th><th>예시</th></tr>
+<tr><td>Flow</td><td>진입, 완료, 취소, 실패, 재개</td><td>초대 발송 → 대기 → 수락/만료</td></tr>
+<tr><td>State</td><td>loading, empty, error, disabled, dirty</td><td>저장 실패 후 재시도</td></tr>
+<tr><td>Data</td><td>실제 길이, null, 권한별 노출</td><td>긴 회사명, 값 없음</td></tr>
+<tr><td>Responsive</td><td>breakpoint별 배치와 우선순위</td><td>테이블 → 카드 또는 horizontal scroll</td></tr>
+<tr><td>Interaction</td><td>keyboard, focus, modal, toast, undo</td><td>Esc 닫기, focus 복귀</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">QA-03</span><h2>개발 협업</h2></div>
+<p class="lede">디자인과 개발의 간극은 “완성 후 검수”가 아니라 “구현 전 계약”에서 줄어듭니다.</p>
+<table>
+<tr><th>협업 지점</th><th>확인 질문</th></tr>
+<tr><td>API 계약</td><td>UI가 필요한 상태와 오류 코드가 API에 있는가</td></tr>
+<tr><td>권한</td><td>숨김, 비활성, 접근 거부 중 어떤 패턴을 쓰는가</td></tr>
+<tr><td>성능</td><td>목록 크기, 이미지, skeleton, pagination 기준이 있는가</td></tr>
+<tr><td>컴포넌트</td><td>기존 시스템으로 구현 가능한가, 새 패턴이 필요한가</td></tr>
+<tr><td>분석</td><td>어떤 사용자 행동을 이벤트로 남길 것인가</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">QA-04</span><h2>디자인 QA</h2></div>
+<table>
+<tr><th>범주</th><th>점검 항목</th><th>도구/방법</th></tr>
+<tr><td>Visual</td><td>간격, 정렬, 타이포그래피, 색, 상태</td><td>시안 비교, screenshot review</td></tr>
+<tr><td>Responsive</td><td>모바일, 태블릿, 데스크톱, 긴 텍스트</td><td>브라우저 viewport 테스트</td></tr>
+<tr><td>Interaction</td><td>hover, focus, loading, error, modal</td><td>수동 시나리오 테스트</td></tr>
+<tr><td>Accessibility</td><td>키보드, contrast, aria label, focus order</td><td>axe, Lighthouse, 수동 확인</td></tr>
+<tr><td>Content</td><td>문구, 용어, 숫자/날짜 포맷, 빈 상태</td><td>실제 데이터 기반 리뷰</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">QA-05</span><h2>출시 전 점검</h2></div>
+<div class="serial-card">
+<span class="serial-label">Design QA checklist</span>
+<pre><code>핵심 흐름 happy path와 실패 경로 확인
+loading/empty/error/permission 상태 확인
+모바일과 긴 데이터에서 레이아웃 깨짐 확인
+키보드만으로 주요 액션 수행 확인
+시스템 컴포넌트와 토큰 이탈 여부 확인
+분석 이벤트와 성공 지표 확인</code></pre>
+</div>
+<div class="callout">
+<span class="co-label">릴리스 후</span>
+<p>출시 후에는 디자인이 끝난 것이 아닙니다. 사용 로그, 문의, 오류율, 전환율, 세션 리플레이, 고객 피드백을 보고 흐름이 실제로 작동하는지 확인해야 합니다.</p>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">QA-06</span><h2>실무 QA와 회귀 관리</h2></div>
+<p class="lede">디자인 QA는 시안과 픽셀을 맞추는 일을 넘어 제품 계약이 구현됐는지 확인하는 과정입니다.</p>
+<table>
+<tr><th>QA 유형</th><th>목적</th><th>실무 방법</th></tr>
+<tr><td>visual diff</td><td>공통 컴포넌트와 핵심 화면의 시각 회귀 탐지</td><td>Storybook/Playwright screenshot baseline 관리</td></tr>
+<tr><td>Scenario QA</td><td>happy path와 실패 경로 검증</td><td>실제 데이터와 권한 조합으로 테스트</td></tr>
+<tr><td>Content QA</td><td>용어, 날짜, 숫자, 오류 문구 검증</td><td>운영팀과 고객지원팀 용어까지 확인</td></tr>
+<tr><td>Analytics QA</td><td>개선 여부를 측정할 이벤트 확인</td><td>클릭보다 완료, 실패, 재시도, 이탈 이벤트 중심</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>디자인 QA에서 “버튼 위치가 4px 다르다”만 잡고 loading, empty, permission denied, long text 상태를 놓치면 출시 후 더 큰 문제가 생깁니다. 핸드오프에는 정상 화면뿐 아니라 상태별 스크린, 데이터 예시, 권한별 차이, 측정 이벤트가 포함되어야 합니다.</p>
+</div>
+</section>
+
+<footer>
+DESIGN HANDOFF QA · V1 · 2026-06<br>
+PRINCIPLE : 핸드오프는 파일 전달이 아니라 구현 가능한 의사결정 계약이다
+</footer>
+</main>
+</div>
+</body>
+</html>

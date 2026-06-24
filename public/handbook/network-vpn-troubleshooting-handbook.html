@@ -9,116 +9,82 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">VPN 트러블슈팅</div>
-  <a href="#ch1"><span class="code">TS-01</span>기본 원칙</a>
+  <a href="#ch1"><span class="code">TS-01</span>분리 원칙</a>
   <a href="#ch2"><span class="code">TS-02</span>터널 DOWN</a>
-  <a href="#ch3"><span class="code">TS-03</span>ping 실패</a>
+  <a href="#ch3"><span class="code">TS-03</span>터널 UP·통신 실패</a>
   <a href="#ch4"><span class="code">TS-04</span>특정 서비스 실패</a>
   <a href="#ch5"><span class="code">TS-05</span>간헐 장애</a>
-  <a href="#ch6"><span class="code">TS-06</span>DNS 실패</a>
 </nav>
 <main>
 <header class="hero">
   <div class="hero-serial">
-    <span>DOC : NETWORK-VPN-TROUBLESHOOTING-V1</span>
-    <span>SCOPE : VPN DOWN · ROUTING · FIREWALL · DNS · MTU</span>
+    <span>DOC : NETWORK-VPN-TS-V2</span>
+    <span>SCOPE : TUNNEL · ROUTE · FIREWALL · DNS · SERVICE</span>
     <span>LANG : KO</span>
   </div>
   <h1>VPN 트러블슈팅</h1>
-  <p class="hero-sub">VPN 장애는 터널, 라우팅, 방화벽, DNS, 애플리케이션 문제가 같은 “timeout”으로 보입니다. 증상을 계층별로 분리하고, 양쪽 네트워크에서 동시에 근거를 모아야 합니다.</p>
-  <div class="hero-meta">GOAL : 증상별로 확인 순서를 고정해 장애 시간을 줄이기</div>
+  <p class="hero-sub">VPN 장애는 “터널이 내려감”과 “터널은 올라왔지만 서비스 통신이 안 됨”을 먼저 분리해야 합니다.</p>
 </header>
 
 <section id="ch1">
-<div class="ch-head"><span class="ch-code">TS-01</span><h2>기본 원칙</h2></div>
-<p class="lede">설정을 감으로 바꾸지 않습니다. 먼저 어느 계층에서 실패하는지 좁힙니다.</p>
-<div class="flow">
-  <span class="step">Tunnel</span><span class="arr">→</span>
-  <span class="step">Route</span><span class="arr">→</span>
-  <span class="step">Firewall</span><span class="arr">→</span>
-  <span class="step">Port</span><span class="arr">→</span>
-  <span class="step hl">App</span>
-</div>
+<div class="ch-head"><span class="ch-code">TS-01</span><h2>분리 원칙</h2></div>
 <table>
-<tr><th>증상</th><th>먼저 볼 것</th><th>피해야 할 오판</th></tr>
-<tr><td>터널 DOWN</td><td>IKE Phase 1/2 로그</td><td>라우팅을 먼저 만지는 것</td></tr>
-<tr><td>ping 실패</td><td>ICMP 차단 여부</td><td>ping만 보고 VPN 장애 확정</td></tr>
-<tr><td>포트 실패</td><td>ACG, 고객사 방화벽, 서비스 listen</td><td>터널 UP이면 방화벽도 OK라고 가정</td></tr>
-<tr><td>간헐 실패</td><td>rekey, MTU, 장비 failover</td><td>애플리케이션 timeout만 조정</td></tr>
+<tr><th>상태</th><th>의미</th><th>다음 확인</th></tr>
+<tr><td>Phase 1 DOWN</td><td>상대 인증/관리 채널 협상 실패</td><td>peer IP, PSK, IKE policy</td></tr>
+<tr><td>Phase 2 DOWN</td><td>데이터 터널 협상 실패</td><td>local/remote CIDR, PFS, lifetime</td></tr>
+<tr><td>Tunnel UP, ping 실패</td><td>라우팅/방화벽/ICMP 정책 문제 가능</td><td>route table, return path, ICMP allow</td></tr>
+<tr><td>ping 가능, 포트 실패</td><td>L4 방화벽 또는 서비스 리스닝 문제</td><td>nc, server listen, ACG</td></tr>
 </table>
 </section>
 
 <section id="ch2">
 <div class="ch-head"><span class="ch-code">TS-02</span><h2>터널 DOWN</h2></div>
-<p class="lede">터널이 DOWN이면 애플리케이션 테스트 전에 IKE 협상부터 봅니다.</p>
 <table>
-<tr><th>확인</th><th>의심 원인</th><th>조치</th></tr>
-<tr><td>Peer public IP</td><td>IP 오기입 또는 고객사 IP 변경</td><td>양쪽 공인 IP 재확인</td></tr>
-<tr><td>PSK</td><td>한쪽 값 불일치</td><td>보안 채널로 재공유 후 재입력</td></tr>
-<tr><td>Phase 1 proposal</td><td>암호화, hash, DH group 불일치</td><td>양쪽 설정표 대조</td></tr>
-<tr><td>UDP 500/4500</td><td>외곽 방화벽 차단</td><td>IKE/NAT-T 포트 허용</td></tr>
-<tr><td>Phase 2 selector</td><td>Local/Peer CIDR 불일치</td><td>보호 대상 대역 재합의</td></tr>
+<tr><th>원인</th><th>확인</th></tr>
+<tr><td>Peer public IP 불일치</td><td>양쪽 endpoint IP 재확인</td></tr>
+<tr><td>PSK 불일치</td><td>공유 방식과 앞뒤 공백 확인</td></tr>
+<tr><td>IKE policy 불일치</td><td>암호화, hash, DH group, lifetime 비교</td></tr>
+<tr><td>Traffic selector 불일치</td><td>Phase 2 local/remote CIDR 비교</td></tr>
 </table>
 </section>
 
 <section id="ch3">
-<div class="ch-head"><span class="ch-code">TS-03</span><h2>ping 실패</h2></div>
-<div class="serial-card">
-<span class="sc-label">CHECK ORDER</span>
-1. 콘솔에서 터널 상태 UP 확인<br>
-2. 우리 route table에 고객사 대역 → VPN Gateway 확인<br>
-3. 고객사 쪽 return route 확인 요청<br>
-4. 양쪽 방화벽에서 ICMP 허용 여부 확인<br>
-5. <code>nc -zv 대상IP 포트</code>로 실제 서비스 포트 테스트
+<div class="ch-head"><span class="ch-code">TS-03</span><h2>터널 UP·통신 실패</h2></div>
+<div class="flow">
+  <span class="step">우리 route</span><span class="arr">→</span>
+  <span class="step">고객 return path</span><span class="arr">→</span>
+  <span class="step">우리 firewall</span><span class="arr">→</span>
+  <span class="step">고객 firewall</span>
 </div>
-<div class="callout warn">
-<span class="co-label">ICMP 차단</span>
-<p>보안 정책상 ICMP를 막는 고객사가 많습니다. ping은 실패하지만 TCP 443이나 5432는 열려 있을 수 있습니다. 운영 검증 기준은 ping보다 실제 서비스 포트 연결이어야 합니다.</p>
-</div>
+<p>터널 UP은 충분조건이 아닙니다. 양쪽 라우팅과 방화벽이 모두 맞아야 실제 패킷이 왕복합니다.</p>
 </section>
 
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">TS-04</span><h2>특정 서비스 실패</h2></div>
 <table>
-<tr><th>증상</th><th>가능성</th><th>확인 명령</th></tr>
-<tr><td>다른 포트는 되는데 DB만 실패</td><td>TCP 5432 방화벽 누락</td><td><code>nc -zv 172.16.1.10 5432</code></td></tr>
-<tr><td>포트는 열리는데 HTTP 503</td><td>앱 또는 프록시 업스트림 문제</td><td><code>curl -v http://host:port/health</code></td></tr>
-<tr><td>특정 서브넷에서만 실패</td><td>Phase 2 selector 또는 route 누락</td><td>출발지 서브넷별 route table 비교</td></tr>
-<tr><td>고객사에서 우리 API만 실패</td><td>우리 ACG inbound 또는 LB target 문제</td><td>ACG, LB health, app log 확인</td></tr>
+<tr><th>증상</th><th>가능 원인</th><th>확인</th></tr>
+<tr><td>DB만 실패</td><td>5432 방화벽 미허용, DB bind address</td><td>nc -zv host 5432</td></tr>
+<tr><td>HTTP만 실패</td><td>앱 오류, proxy, TLS/SNI 문제</td><td>curl -v, app logs</td></tr>
+<tr><td>도메인만 실패</td><td>DNS resolver/zone 문제</td><td>dig @resolver name</td></tr>
+<tr><td>대량 전송만 실패</td><td>MTU/MSS 문제 가능</td><td>fragmentation, PMTUD 확인</td></tr>
 </table>
 </section>
 
 <section id="ch5">
 <div class="ch-head"><span class="ch-code">TS-05</span><h2>간헐 장애</h2></div>
-<p class="lede">어제 되던 연결이 오늘 끊기거나, 한 시간마다 timeout이 난다면 rekey, lifetime, DPD, MTU를 의심합니다.</p>
-<table>
-<tr><th>패턴</th><th>의심</th><th>확인</th></tr>
-<tr><td>정해진 주기로 끊김</td><td>SA lifetime/rekey 불일치</td><td>VPN 로그의 rekey 시각</td></tr>
-<tr><td>큰 응답만 실패</td><td>MTU/MSS 문제</td><td>작은 요청과 큰 응답 비교, MSS clamping 검토</td></tr>
-<tr><td>상대 장애 후 복구 안 됨</td><td>DPD 또는 stale SA</td><td>터널 재시작, DPD 설정</td></tr>
-<tr><td>한쪽에서만 패킷 보임</td><td>return route 또는 방화벽</td><td>양쪽 tcpdump 동시 캡처</td></tr>
-</table>
-</section>
-
-<section id="ch6">
-<div class="ch-head"><span class="ch-code">TS-06</span><h2>DNS 실패</h2></div>
-<p class="lede">IP로는 되는데 도메인으로 안 되면 VPN보다 DNS 경로와 resolver 설정을 봅니다.</p>
-<div class="serial-card">
-<span class="sc-label">DNS DEBUG</span>
-dig customer-db.internal.example.com<br>
-dig @172.16.0.2 customer-db.internal.example.com<br>
-nslookup customer-db.internal.example.com 172.16.0.2
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>어제는 됐는데 오늘 VPN이 끊겼다면 SA lifetime 만료 후 재협상 실패, 고객사 공인 IP 변경, 장비 재부팅, 방화벽 정책 변경을 의심합니다. “터널 재시작”으로 임시 복구하더라도 Phase 1/2 로그와 변경 이력을 확인해야 같은 장애를 줄일 수 있습니다.</p>
 </div>
-<table>
-<tr><th>증상</th><th>가능성</th><th>조치</th></tr>
-<tr><td>기본 dig 실패, @내부DNS 성공</td><td>resolver 설정 누락</td><td>VPC DNS forwarding 또는 서버 resolver 설정</td></tr>
-<tr><td>@내부DNS도 timeout</td><td>DNS 서버 route/firewall 문제</td><td>UDP/TCP 53 허용, route 확인</td></tr>
-<tr><td>잘못된 IP 반환</td><td>split-horizon DNS</td><td>질의 위치별 응답 비교</td></tr>
-</table>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>터널 로그</b><span>evidence</span></div><div class="g-def">DOWN 시각, 재협상 실패 이유, peer IP 변경 여부를 기록합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>변경 이력</b><span>change</span></div><div class="g-def">방화벽, route, VPN parameter 변경을 장애 시간대와 대조합니다.</div></div>
+</div>
 </section>
 
 <footer>
-NETWORK VPN TROUBLESHOOTING · V1 · 2026-06<br>
-PRINCIPLE : 터널 상태와 서비스 통신은 별개로 검증한다
+NETWORK VPN TROUBLESHOOTING · V2 · 2026-06<br>
+PRINCIPLE : 터널 상태, 라우팅, 방화벽, DNS, 서비스 포트를 분리해서 본다
 </footer>
 </main>
 </div>

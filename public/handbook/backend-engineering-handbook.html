@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Backend Engineering Handbook — 백엔드 엔지니어링 핸드북 (미들급 핵심)</title>
+  <title>Backend Engineering Handbook — 백엔드 엔지니어링 핸드북</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -82,8 +82,8 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-brand">BACKEND ENGINEERING</div>
-  <div class="nav-title">백엔드 엔지니어링 핸드북 · 미들급 핵심</div>
-  <a href="#ch1"><span class="code">BE-01</span>무엇이 미들급을 만드는가</a>
+  <div class="nav-title">백엔드 엔지니어링 핸드북</div>
+  <a href="#ch1"><span class="code">BE-01</span>무엇이 실무형 백엔드를 만드는가</a>
   <a href="#ch2"><span class="code">BE-02</span>HTTP·API 설계 — 계약으로서의 인터페이스</a>
   <a href="#ch3"><span class="code">BE-03</span>관계형 DB — 트랜잭션·인덱스·격리</a>
   <a href="#ch4"><span class="code">BE-04</span>ORM·JPA — 추상화의 비용</a>
@@ -96,6 +96,8 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch11"><span class="code">BE-11</span>테스트 전략</a>
   <a href="#ch12"><span class="code">BE-12</span>시스템 설계 사고</a>
   <a href="#ch13"><span class="code">BE-13</span>용어집</a>
+  <a href="#ch14"><span class="code">BE-14</span>실무 API 설계 심화</a>
+  <a href="#ch15"><span class="code">BE-15</span>대규모 운영 판단</a>
 </nav>
 <main>
 
@@ -105,26 +107,26 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
     <span>SCOPE : HTTP/API · RDBMS · CONCURRENCY · DISTRIBUTED · OPS</span>
     <span>LANG : KO</span>
   </div>
-  <h1>백엔드 엔지니어링 핸드북<br>미들급 핵심</h1>
-  <p class="hero-sub">주니어와 미들을 가르는 것은 <strong>기능 구현이 아니라 설계 판단</strong>입니다. 같은 CRUD라도 트랜잭션 경계·인덱스·실패 처리·관측가능성에서 갈립니다. 이 핸드북은 "되게 만드는 법"이 아니라 <strong>틀려도 안전하고, 바뀌어도 견디고, 터지면 추적 가능한</strong> 백엔드를 만드는 판단의 지도입니다.</p>
-  <div class="hero-meta">AUDIENCE : 7Y 프론트엔드 → 풀스택 확장 · JAVA/SPRING/JPA · AI NATIVE<br>STANCE : 개념 이해 중심 — 왜 존재하는가 · 무엇과 무엇의 트레이드오프인가 · COMPILED 2026-06</div>
+  <h1>백엔드 엔지니어링 핸드북</h1>
+  <p class="hero-sub">백엔드 역량의 핵심은 <strong>기능 구현을 운영 가능한 시스템으로 바꾸는 설계 판단</strong>입니다. 같은 CRUD라도 트랜잭션 경계·인덱스·실패 처리·관측가능성에서 품질이 갈립니다. 이 핸드북은 "되게 만드는 법"이 아니라 <strong>틀려도 안전하고, 바뀌어도 견디고, 터지면 추적 가능한</strong> 백엔드를 만드는 판단의 지도입니다.</p>
+  <div class="hero-meta">AUDIENCE : 프론트엔드 기반 풀스택 확장 · JAVA/SPRING/JPA<br>STANCE : 개념 이해 중심 — 왜 존재하는가 · 무엇과 무엇의 트레이드오프인가 · COMPILED 2026-06</div>
 </header>
 
 <!-- ============ CH 1 ============ -->
 <section id="ch1">
-<div class="ch-head"><span class="ch-code">BE-01</span><h2>무엇이 미들급을 만드는가</h2></div>
-<p class="lede">"미들급 백엔드"는 더 많은 기능을 짜는 사람이 아니라, 모든 선택에 대해 <em>"이 결정의 비용은 무엇인가"</em>를 묻는 사람입니다. 코드가 도는 것은 시작점일 뿐입니다.</p>
+<div class="ch-head"><span class="ch-code">BE-01</span><h2>무엇이 실무형 백엔드를 만드는가</h2></div>
+<p class="lede">실무형 백엔드 엔지니어는 더 많은 기능을 짜는 사람이 아니라, 모든 선택에 대해 <em>"이 결정의 비용은 무엇인가"</em>를 묻는 사람입니다. 코드가 도는 것은 시작점일 뿐입니다.</p>
 <table>
-<tr><th>관점</th><th>주니어</th><th>미들</th><th>시니어</th></tr>
+<tr><th>관점</th><th>기능 구현</th><th>운영 가능한 시스템</th><th>지속 가능한 구조</th></tr>
 <tr><td><b>성공 기준</b></td><td>기능이 동작한다</td><td>틀려도 안전하고, 부하·동시성·장애에서 견딘다</td><td>시스템·팀·로드맵이 견딘다</td></tr>
-<tr><td><b>DB</b></td><td>쿼리가 결과를 준다</td><td>트랜잭션 경계·인덱스·N+1·격리수준을 본다</td><td>데이터 모델이 도메인 변화를 흡수하게 설계</td></tr>
-<tr><td><b>실패</b></td><td>해피패스</td><td>타임아웃·재시도·멱등·부분실패를 설계</td><td>장애 모드와 폭발 반경을 사전 격리</td></tr>
-<tr><td><b>운영</b></td><td>"제 PC에선 됩니다"</td><td>로그·메트릭·트레이스로 원인을 짚는다</td><td>SLO·용량·온콜 문화를 만든다</td></tr>
+<tr><td><b>DB</b></td><td>쿼리가 결과를 준다</td><td>트랜잭션 경계·인덱스·N+1·격리수준을 본다</td><td>데이터 모델이 도메인 변화를 흡수하게 설계한다</td></tr>
+<tr><td><b>실패</b></td><td>해피패스를 만든다</td><td>타임아웃·재시도·멱등·부분실패를 설계한다</td><td>장애 모드와 폭발 반경을 사전 격리한다</td></tr>
+<tr><td><b>운영</b></td><td>로컬에서 동작을 확인한다</td><td>로그·메트릭·트레이스로 원인을 짚는다</td><td>SLO·용량·온콜 기준까지 연결한다</td></tr>
 </table>
-<p>프론트엔드 7년의 자산은 그대로 옮겨옵니다 — <strong>계약(인터페이스) 사고, 상태 관리, 사용자 관점</strong>은 백엔드의 API 설계·일관성·에러 응답으로 직결됩니다. 새로 장착할 근육은 <em>지속성(persistence)과 동시성</em>입니다: 프론트는 대개 한 사용자의 한 세션을 다루지만, 백엔드는 같은 데이터를 동시에 만지는 수천 개의 요청과 영구 저장된 상태를 다룹니다. 이 핸드북의 무게중심이 DB(BE-03·04)와 동시성(BE-05)에 쏠린 이유입니다.</p>
+<p>프론트엔드 경험의 자산은 그대로 옮겨옵니다 — <strong>계약(인터페이스) 사고, 상태 관리, 사용자 관점</strong>은 백엔드의 API 설계·일관성·에러 응답으로 직결됩니다. 새로 장착할 근육은 <em>지속성(persistence)과 동시성</em>입니다: 프론트는 대개 한 사용자의 한 세션을 다루지만, 백엔드는 같은 데이터를 동시에 만지는 수천 개의 요청과 영구 저장된 상태를 다룹니다. 이 핸드북의 무게중심이 DB(BE-03·04)와 동시성(BE-05)에 쏠린 이유입니다.</p>
 <div class="callout">
 <span class="co-label">CORE STANCE</span>
-<p>미들급의 표식은 <strong>트레이드오프를 언어화하는 능력</strong>입니다. "JWT 쓸게요"가 아니라 "stateless라 확장은 쉽지만 즉시 무효화가 안 되니, 짧은 access + refresh로 가겠습니다"라고 말할 수 있는가. 정답을 외우는 게 아니라 <em>비용과 대안을 같이 제시</em>하는 것 — 면접도 실무도 여기서 갈립니다.</p>
+<p>숙련된 백엔드의 표식은 <strong>트레이드오프를 언어화하는 능력</strong>입니다. "JWT 쓸게요"가 아니라 "stateless라 확장은 쉽지만 즉시 무효화가 안 되니, 짧은 access + refresh로 가겠습니다"라고 말할 수 있는가. 정답을 외우는 게 아니라 <em>비용과 대안을 같이 제시</em>하는 것 — 면접도 실무도 여기서 갈립니다.</p>
 </div>
 </section>
 
@@ -162,7 +164,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <!-- ============ CH 3 ============ -->
 <section id="ch3">
 <div class="ch-head"><span class="ch-code">BE-03</span><h2>관계형 DB — 트랜잭션·인덱스·격리</h2></div>
-<p class="lede">백엔드 미들급의 진짜 시험장. 성능 문제의 대부분과 정합성 버그의 거의 전부가 여기서 납니다. ORM 뒤에 숨지 말고 직접 봐야 하는 층입니다.</p>
+<p class="lede">백엔드 실무의 진짜 시험장. 성능 문제의 대부분과 정합성 버그의 거의 전부가 여기서 납니다. ORM 뒤에 숨지 말고 직접 봐야 하는 층입니다.</p>
 
 <h3><span class="h3-tag">3.1</span>ACID — 트랜잭션의 4가지 약속</h3>
 <ul>
@@ -173,7 +175,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </ul>
 
 <h3><span class="h3-tag">3.2</span>인덱스 — B-tree가 빠른 이유</h3>
-<p>인덱스는 <strong>정렬된 사본</strong>입니다. B-tree는 균형 트리라 <em>O(log n)</em>에 값을 찾고, 정렬되어 있어 범위 검색(<code>BETWEEN</code>, <code>ORDER BY</code>)과 접두 매칭에도 강합니다. 미들급이 알아야 할 함정:</p>
+<p>인덱스는 <strong>정렬된 사본</strong>입니다. B-tree는 균형 트리라 <em>O(log n)</em>에 값을 찾고, 정렬되어 있어 범위 검색(<code>BETWEEN</code>, <code>ORDER BY</code>)과 접두 매칭에도 강합니다. 실무에서 자주 밟는 함정:</p>
 <table>
 <tr><th>규칙</th><th>이유</th></tr>
 <tr><td>복합 인덱스는 <b>선두 컬럼</b>부터</td><td><code>(a,b)</code> 인덱스는 <code>a</code> 또는 <code>a,b</code> 검색엔 쓰이지만 <code>b</code> 단독엔 안 쓰인다 (전화번호부 정렬과 같음)</td></tr>
@@ -209,7 +211,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <p>JPA의 핵심은 <strong>영속성 컨텍스트(persistence context)</strong>라는 1차 캐시입니다. 트랜잭션 동안 조회한 엔티티를 들고 있다가, <em>변경을 감지(dirty checking)</em>해 커밋 시점에 자동으로 <code>UPDATE</code>를 날립니다 — 그래서 <code>save()</code>를 명시 안 해도 필드만 바꾸면 반영됩니다. 이게 강력하면서 동시에 혼란의 원천입니다: "내가 안 부른 쿼리가 왜 나가지?"의 답이 대개 dirty checking과 <code>flush</code> 타이밍입니다.</p>
 
 <h3><span class="h3-tag">4.2</span>지연 로딩과 트랜잭션 경계</h3>
-<p><code>@Transactional</code>의 범위 = 영속성 컨텍스트의 생명주기입니다. 지연 로딩(lazy)된 연관을 <em>트랜잭션 밖에서</em> 접근하면 그 유명한 <code>LazyInitializationException</code>이 납니다 — 컨텍스트가 이미 닫혀서 추가 쿼리를 못 날리는 거죠. 미들급의 판단:</p>
+<p><code>@Transactional</code>의 범위 = 영속성 컨텍스트의 생명주기입니다. 지연 로딩(lazy)된 연관을 <em>트랜잭션 밖에서</em> 접근하면 그 유명한 <code>LazyInitializationException</code>이 납니다 — 컨텍스트가 이미 닫혀서 추가 쿼리를 못 날리는 거죠. 실무 판단:</p>
 <ul>
 <li>기본은 <strong>lazy</strong> — 필요할 때만 로딩. <code>@ManyToOne</code>의 기본이 eager인 함정 주의.</li>
 <li>화면에서 함께 쓸 연관은 <strong>fetch join</strong>으로 한 번에 (N+1 회피).</li>
@@ -217,7 +219,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </ul>
 <div class="callout warn">
 <span class="co-label">RULE</span>
-<p><strong>ORM을 SQL 없이 쓰지 마라.</strong> JPA를 배우는 가장 빠른 길은 SQL 로그를 켜놓고(<code>show_sql</code>, p6spy) "내 코드 한 줄이 어떤 쿼리를 만드는가"를 눈으로 확인하는 것입니다. 복잡한 조회·통계는 ORM을 고집하지 말고 네이티브 쿼리·QueryDSL로 내려가는 게 미들급의 판단입니다 — 추상화는 도구지 신앙이 아닙니다.</p>
+<p><strong>ORM을 SQL 없이 쓰지 마라.</strong> JPA를 배우는 가장 빠른 길은 SQL 로그를 켜놓고(<code>show_sql</code>, p6spy) "내 코드 한 줄이 어떤 쿼리를 만드는가"를 눈으로 확인하는 것입니다. 복잡한 조회·통계는 ORM을 고집하지 말고 네이티브 쿼리·QueryDSL로 내려가는 게 실무 판단입니다 — 추상화는 도구지 신앙이 아닙니다.</p>
 </div>
 </section>
 
@@ -235,7 +237,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </table>
 
 <h3><span class="h3-tag">5.2</span>멱등성 — 분산의 안전벨트</h3>
-<p>네트워크·메시지큐·재시도가 있는 한 <em>"정확히 한 번"은 보장되지 않습니다</em>(→ BE-07). 그래서 미들급은 <strong>같은 작업이 두 번 실행돼도 결과가 같도록</strong> 설계합니다 — 멱등성 키(BE-02), 유니크 제약으로 중복 삽입 차단, "이미 처리된 주문인가" 상태 검사. 멱등성은 기능이 아니라 <em>분산 환경의 기본 자세</em>입니다.</p>
+<p>네트워크·메시지큐·재시도가 있는 한 <em>"정확히 한 번"은 보장되지 않습니다</em>(→ BE-07). 그래서 백엔드는 <strong>같은 작업이 두 번 실행돼도 결과가 같도록</strong> 설계합니다 — 멱등성 키(BE-02), 유니크 제약으로 중복 삽입 차단, "이미 처리된 주문인가" 상태 검사. 멱등성은 기능이 아니라 <em>분산 환경의 기본 자세</em>입니다.</p>
 <div class="callout">
 <span class="co-label">CORE INSIGHT</span>
 <p>동시성 버그의 공통 뿌리는 <strong>"읽고-판단하고-쓰는" 사이의 틈</strong>입니다. 그 틈에 남이 끼어듭니다. 해법은 항상 둘 중 하나 — 틈을 <em>잠그거나</em>(비관적), 틈에서 바뀌었는지 <em>나중에 확인하거나</em>(낙관적). DB의 원자적 연산(<code>UPDATE ... SET n=n-1 WHERE n&gt;0</code>) 한 줄로 틈 자체를 없애는 것이 가장 단순한 정답일 때도 많습니다.</p>
@@ -308,7 +310,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <!-- ============ CH 9 ============ -->
 <section id="ch9">
 <div class="ch-head"><span class="ch-code">BE-09</span><h2>관측가능성 — 운영 책임</h2></div>
-<p class="lede">운영을 책임질 수 있느냐가 미들급의 분기점입니다. 관측가능성은 <em>"안 돼요"를 "여기가 이래서 안 됩니다"로</em> 바꾸는 능력입니다.</p>
+<p class="lede">운영을 책임질 수 있느냐가 백엔드 품질의 분기점입니다. 관측가능성은 <em>"안 돼요"를 "여기가 이래서 안 됩니다"로</em> 바꾸는 능력입니다.</p>
 <table>
 <tr><th>기둥</th><th>답하는 질문</th><th>형태</th></tr>
 <tr><td><b>로그 Logs</b></td><td>"이 요청에 정확히 무슨 일이</td><td>구조화 로그(JSON) + 상관관계 ID</td></tr>
@@ -334,7 +336,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td><b>민감정보 노출</b></td><td>로그·응답에 PII·토큰 유출</td><td>로그 마스킹, 최소 응답, 전송(TLS)·저장 암호화</td></tr>
 <tr><td><b>XSS / CSRF</b></td><td>브라우저 신뢰 악용</td><td>출력 이스케이프, CSP, SameSite 쿠키, CSRF 토큰</td></tr>
 </table>
-<p>이것들은 OWASP Top 10의 골자입니다. 미들급이 외울 것은 항목 이름이 아니라 <em>패턴</em>입니다 — <strong>신뢰 경계를 넘는 모든 데이터는 검증·이스케이프·파라미터화한다.</strong> 그리고 secret(키·비밀번호)은 코드·git에 절대 박지 말고 환경변수·secret manager로(이건 당신의 작업 원칙과도 일치합니다).</p>
+<p>이것들은 OWASP Top 10의 골자입니다. 외울 것은 항목 이름이 아니라 <em>패턴</em>입니다 — <strong>신뢰 경계를 넘는 모든 데이터는 검증·이스케이프·파라미터화한다.</strong> 그리고 secret(키·비밀번호)은 코드·git에 절대 박지 말고 환경변수·secret manager로 관리합니다.</p>
 <div class="callout risk">
 <span class="co-label">MOST COMMON BREACH</span>
 <p>화려한 공격보다 <strong>인가 누락</strong>이 가장 흔한 실제 사고입니다 — <code>GET /orders/12345</code>에서 "이 주문이 이 사용자 것인가"를 검사 안 해, <code>12346</code>으로 남의 주문을 봅니다. 인증만 통과시키고 인가를 빠뜨리는 실수. 모든 자원 핸들러에서 <em>"이 사람이 이걸 볼/바꿀 권한이 있는가"</em>를 기계적으로 물으세요.</p>
@@ -357,7 +359,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td><b>계약 contract</b></td><td>서비스 간 인터페이스</td><td>소비자-제공자 계약 검증(Pact 등). MSA에서 중요</td></tr>
 <tr><td><b>E2E</b></td><td>전체 플로우</td><td>느리고 깨지기 쉬움 — 핵심 경로만 소수</td></tr>
 </table>
-<p>미들급의 테스트 원칙(당신의 작업 규칙과 정합): <strong>구현이 아니라 동작을 테스트</strong>하라 — "내부 함수를 몇 번 호출했나"가 아니라 "이 입력에 이 결과가 나오나". 구현 디테일을 검증하면 리팩토링할 때마다 테스트가 깨져 오히려 변경을 막습니다. 그리고 <strong>flaky test는 즉시 격리하거나 고쳐라</strong> — 가끔 실패하는 테스트 하나를 용인하면 팀이 빨간불을 무시하기 시작하고, 그 순간 테스트 스위트 전체의 신뢰가 무너집니다.</p>
+<p>테스트 원칙: <strong>구현이 아니라 동작을 테스트</strong>하라 — "내부 함수를 몇 번 호출했나"가 아니라 "이 입력에 이 결과가 나오나". 구현 디테일을 검증하면 리팩토링할 때마다 테스트가 깨져 오히려 변경을 막습니다. 그리고 <strong>flaky test는 즉시 격리하거나 고쳐라</strong> — 가끔 실패하는 테스트 하나를 용인하면 팀이 빨간불을 무시하기 시작하고, 그 순간 테스트 스위트 전체의 신뢰가 무너집니다.</p>
 <div class="callout">
 <span class="co-label">TDD as DESIGN</span>
 <p>버그를 고칠 땐 <strong>먼저 그 버그를 재현하는 실패 테스트</strong>를 쓰세요 — 고친 뒤 그 테스트가 통과하면 "정말 고쳤다"의 증거이자, 재발을 막는 회귀 방어선이 됩니다. 테스트를 먼저 쓰면 자연스럽게 "이 코드를 어떻게 호출할까(인터페이스)"를 먼저 설계하게 됩니다 — TDD의 진짜 가치는 커버리지가 아니라 설계 압력입니다.</p>
@@ -367,7 +369,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <!-- ============ CH 12 ============ -->
 <section id="ch12">
 <div class="ch-head"><span class="ch-code">BE-12</span><h2>시스템 설계 사고</h2></div>
-<p class="lede">미들급의 최종 시험은 "정답을 아는가"가 아니라 <em>"트레이드오프를 설명하는가"</em>입니다. 시스템 설계엔 정답이 없고, 제약에 맞는 선택과 그 비용의 명시가 있을 뿐입니다.</p>
+<p class="lede">백엔드 설계의 최종 시험은 "정답을 아는가"가 아니라 <em>"트레이드오프를 설명하는가"</em>입니다. 시스템 설계엔 정답이 없고, 제약에 맞는 선택과 그 비용의 명시가 있을 뿐입니다.</p>
 
 <h3><span class="h3-tag">12.1</span>먼저 묻는 질문 — 비기능 요구</h3>
 <p>기능("무엇을")보다 <strong>비기능 요구("얼마나")</strong>가 설계를 결정합니다: 예상 트래픽(읽기:쓰기 비율, peak), 지연 목표(p99), 가용성 목표, 데이터 규모와 증가율, 일관성 요구(강한가 최종이어도 되나). 이걸 안 묻고 그린 설계는 추측입니다 — 당신의 작업 원칙 "요구사항이 모호하면 채우지 말고 질문하라"가 그대로 적용됩니다.</p>
@@ -380,7 +382,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </ul>
 
 <h3><span class="h3-tag">12.3</span>장애를 전제로 설계</h3>
-<p>"무엇이 깨질 수 있는가"를 먼저 그리는 게 미들급입니다 — 단일 장애점(SPOF) 제거, 우아한 성능저하(graceful degradation: 추천이 죽어도 상품은 보이게), 백프레셔(과부하 시 받지 않고 거절), 격벽(한 기능의 자원 고갈이 다른 기능을 안 죽이게).</p>
+<p>"무엇이 깨질 수 있는가"를 먼저 그리는 것이 실무 설계입니다 — 단일 장애점(SPOF) 제거, 우아한 성능저하(graceful degradation: 추천이 죽어도 상품은 보이게), 백프레셔(과부하 시 받지 않고 거절), 격벽(한 기능의 자원 고갈이 다른 기능을 안 죽이게).</p>
 <div class="callout">
 <span class="co-label">측정 없는 최적화 금지</span>
 <p>"이게 더 빠를 것 같아서"는 근거가 아닙니다 — 병목은 <em>측정한 뒤</em> 잡으세요(프로파일링·메트릭). 명확성과 성능이 충돌하면 명확성을 먼저 택하고, 측정이 정당화할 때 최적화하세요. 예외는 알고리즘 복잡도 — <code>O(n²)</code>가 될 게 명백하면 처음부터 피합니다. 용량 산정은 정밀할 필요 없이 <em>back-of-envelope</em>(자릿수 추정)면 충분합니다: "초당 만 건 × 1KB = 10MB/s, 하루 ~860GB" 수준의 감각이 설계 방향을 가릅니다.</p>
@@ -415,10 +417,48 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </div>
 </section>
 
+<section id="ch14">
+<div class="ch-head"><span class="ch-code">BE-14</span><h2>실무 API 설계 심화</h2></div>
+<p class="lede">백엔드 API는 기능 호출점이 아니라 장기적으로 유지되는 제품 계약입니다. 클라이언트가 늘고 배포 주기가 갈라질수록 backward compatibility가 핵심 품질이 됩니다.</p>
+<table>
+<tr><th>주제</th><th>실무 기준</th><th>실패 신호</th></tr>
+<tr><td>idempotency key</td><td>결제, 주문, 포인트 적립처럼 중복 실행이 위험한 POST에 적용</td><td>네트워크 timeout 후 사용자가 재시도하면 중복 생성됨</td></tr>
+<tr><td>pagination</td><td>offset은 단순 목록, cursor는 대량·실시간 목록에 사용</td><td>페이지 이동 중 데이터 삽입으로 누락/중복 발생</td></tr>
+<tr><td>error contract</td><td>code, message, field, retryable, traceId를 구조화</td><td>프론트가 문자열 파싱으로 분기</td></tr>
+<tr><td>API versioning</td><td>필드 추가는 호환, 의미 변경과 삭제는 버전 또는 migration 필요</td><td>모바일 앱 구버전이 갑자기 깨짐</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>주문 생성 API가 timeout을 냈을 때 클라이언트는 성공인지 실패인지 알 수 없습니다. 이때 같은 idempotency key로 재요청하면 서버는 이전 처리 결과를 반환해야 합니다. key 저장소에는 요청 fingerprint, 응답, 만료 시간을 함께 저장하고, 같은 key에 다른 payload가 오면 충돌로 거절해야 합니다.</p>
+</div>
+</section>
+
+<section id="ch15">
+<div class="ch-head"><span class="ch-code">BE-15</span><h2>대규모 운영 판단</h2></div>
+<p class="lede">시스템이 커지면 “어떤 기술을 쓸까”보다 “어디까지 단순하게 버티고, 언제 복잡도를 받아들일까”가 중요해집니다. 고급 백엔드 판단은 규모, 위험, 팀 역량, 운영 비용을 함께 놓고 결정합니다.</p>
+<table>
+<tr><th>상황</th><th>먼저 할 일</th><th>복잡도를 받아들일 신호</th></tr>
+<tr><td>조회가 느림</td><td>EXPLAIN, slow query, cardinality, index hit ratio 확인</td><td>인덱스와 쿼리 재작성 후에도 p95 목표를 못 맞춤</td></tr>
+<tr><td>쓰기 충돌 증가</td><td>unique 제약, 낙관적 락, 원자적 UPDATE 검토</td><td>충돌이 정상 트래픽에서 빈번하고 재시도 비용이 큼</td></tr>
+<tr><td>DB 부하 집중</td><td>캐시, read replica, pagination, batch size 조정</td><td>읽기/쓰기 분리와 샤딩 없이는 성장률을 못 감당</td></tr>
+<tr><td>외부 API 장애 전파</td><td>timeout, retry budget, circuit breaker, fallback 적용</td><td>하류 장애가 핵심 사용자 여정을 반복적으로 멈춤</td></tr>
+<tr><td>큐 적체</td><td>consumer lag, 처리 시간, poison message, DLQ 확인</td><td>생산 속도와 소비 속도의 구조적 차이가 지속됨</td></tr>
+<tr><td>릴리스 위험 증가</td><td>feature flag, expand-contract migration, canary 적용</td><td>한 번의 배포가 여러 서비스와 DB 계약을 동시에 바꿈</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Capacity thinking</span>
+<p>용량 산정은 완벽한 예측이 아니라 자릿수 감각입니다. 예를 들어 초당 2,000요청, 평균 응답 20KB면 egress만 약 40MB/s입니다. 요청당 DB 쿼리 5개면 DB는 초당 10,000쿼리를 받습니다. 이 숫자가 connection pool, CPU, index, cache, network 비용을 압박하는지 먼저 계산해야 합니다.</p>
+</div>
+<div class="callout warn">
+<span class="co-label">Case study</span>
+<p>관리자 검색 화면이 느려졌다고 바로 Elasticsearch를 붙이면 운영 복잡도가 커집니다. 먼저 실제 검색 조건, 정렬 기준, total count 필요 여부, keyset pagination 가능 여부, 부분 인덱스와 covering index를 확인합니다. 검색어 형태가 전문 검색이고 필터 조합이 많으며 DB가 OLTP 부하를 침해할 때 별도 검색 엔진을 검토합니다.</p>
+</div>
+</section>
+
 <footer>
 BACKEND ENGINEERING HANDBOOK · V1 · 2026-06<br>
 SCOPE : HTTP/API DESIGN · RELATIONAL DB (TX·INDEX·ISOLATION) · ORM/JPA · CONCURRENCY · CACHING · MESSAGING · NETWORKING · OBSERVABILITY · SECURITY · TESTING · SYSTEM DESIGN<br>
-STANCE : 개념 이해 중심 — 트레이드오프를 언어화하는 미들급 사고
+STANCE : 개념 이해 중심 — 트레이드오프를 언어화하는 실무형 사고
 </footer>
 
 </main>

@@ -3,115 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Handbook — VPC·서브넷·CIDR</title>
+  <title>Network Handbook — IP 주소·CIDR·서브넷</title>
 </head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">VPC·서브넷·CIDR</div>
-  <a href="#ch1"><span class="code">VPC-01</span>VPC와 서브넷</a>
-  <a href="#ch2"><span class="code">VPC-02</span>CIDR 표기법</a>
-  <a href="#ch3"><span class="code">VPC-03</span>대역 설계</a>
-  <a href="#ch4"><span class="code">VPC-04</span>충돌 방지</a>
-  <a href="#ch5"><span class="code">VPC-05</span>심화 포인트</a>
+  <div class="nav-title">IP 주소·CIDR·서브넷</div>
+  <a href="#ch1"><span class="code">IP-01</span>IP 주소와 사설 대역</a>
+  <a href="#ch2"><span class="code">IP-02</span>CIDR 읽는 법</a>
+  <a href="#ch3"><span class="code">IP-03</span>서브넷 설계</a>
+  <a href="#ch4"><span class="code">IP-04</span>대역 충돌</a>
+  <a href="#ch5"><span class="code">IP-05</span>실무 기준</a>
 </nav>
 <main>
 <header class="hero">
   <div class="hero-serial">
-    <span>DOC : NETWORK-VPC-V1</span>
-    <span>SCOPE : VPC · SUBNET · CIDR · RFC1918</span>
+    <span>DOC : NETWORK-IP-CIDR-V2</span>
+    <span>SCOPE : IP · RFC 1918 · CIDR · SUBNET · ADDRESS PLAN</span>
     <span>LANG : KO</span>
   </div>
-  <h1>VPC·서브넷·CIDR</h1>
-  <p class="hero-sub">VPC는 클라우드 안의 사설 네트워크이고, 서브넷은 그 안을 역할별로 나눈 IP 구간입니다. CIDR은 이 구간의 크기를 표현하는 표기법입니다.</p>
-  <div class="hero-meta">GOAL : IP 대역을 읽고, 나누고, 충돌을 피하는 실무 감각 만들기</div>
+  <h1>IP 주소·CIDR·서브넷</h1>
+  <p class="hero-sub">네트워크 설계의 첫 질문은 “어떤 주소 범위를 쓸 것인가”입니다. CIDR을 잘못 잡으면 서버 생성은 되더라도 VPN, 라우팅, 확장, 고객사 연동에서 되돌리기 어려운 문제가 생깁니다.</p>
 </header>
 
 <section id="ch1">
-<div class="ch-head"><span class="ch-code">VPC-01</span><h2>VPC와 서브넷</h2></div>
-<p class="lede">Docker Compose의 network가 한 서버 안의 가상 네트워크라면, VPC는 클라우드 리전 안에서 계정 단위로 격리된 가상 네트워크입니다.</p>
-<div class="serial-card">
-<span class="sc-label">BASIC STRUCTURE</span>
-VPC: <span class="seg">10.0.0.0/16</span><br>
-├── Public Subnet: &nbsp;<span class="seg2">10.0.1.0/24</span> <span class="dim">로드밸런서, bastion</span><br>
-├── Private Subnet: <span class="seg2">10.0.2.0/24</span> <span class="dim">API 서버, WAS</span><br>
-└── DB Subnet: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">10.0.3.0/24</span> <span class="dim">DB, Redis</span>
-</div>
+<div class="ch-head"><span class="ch-code">IP-01</span><h2>IP 주소와 사설 대역</h2></div>
+<p class="lede">클라우드 VPC는 보통 인터넷에 직접 라우팅되지 않는 사설 IP 대역을 사용합니다.</p>
 <table>
-<tr><th>온프레미스 경험</th><th>클라우드 VPC 매핑</th></tr>
-<tr><td>bastion 서버</td><td>Public Subnet의 bastion VM</td></tr>
-<tr><td>target 서버</td><td>Private Subnet의 VM</td></tr>
-<tr><td>SSH 키 접근 제어</td><td>ACG + SSH key</td></tr>
-<tr><td>Docker bridge network</td><td>서브넷과 라우팅</td></tr>
+<tr><th>대역</th><th>CIDR</th><th>실무 사용</th></tr>
+<tr><td>10.0.0.0 대역</td><td>10.0.0.0/8</td><td>큰 조직, 클라우드 VPC에서 자주 사용</td></tr>
+<tr><td>172.16.0.0 대역</td><td>172.16.0.0/12</td><td>온프레미스·사내망에서 자주 사용</td></tr>
+<tr><td>192.168.0.0 대역</td><td>192.168.0.0/16</td><td>가정/소규모 네트워크에서 흔함</td></tr>
 </table>
+<div class="callout">
+<span class="co-label">RFC 1918</span>
+<p>위 세 범위가 RFC 1918 사설 IP 대역입니다. 인터넷 라우터는 이 주소를 공인 인터넷으로 전달하지 않습니다. 외부 인터넷과 통신하려면 NAT 또는 공인 IP가 필요합니다.</p>
+</div>
 </section>
 
 <section id="ch2">
-<div class="ch-head"><span class="ch-code">VPC-02</span><h2>CIDR 표기법</h2></div>
-<p class="lede"><code>10.0.0.0/16</code>에서 <code>/16</code>은 앞 16비트가 네트워크 주소로 고정된다는 뜻입니다. 뒤쪽 비트가 호스트 주소로 쓰입니다.</p>
-<div class="serial-card">
-<span class="sc-label">CIDR READING</span>
-IP 주소: &nbsp;<span class="seg">10 . 0 . 0 . 0</span><br>
-2진수: &nbsp;&nbsp;00001010 . 00000000 . 00000000 . 00000000<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|______ <span class="seg2">/16 = 앞 16비트 고정</span> ______| |__ 나머지 자유 __|
-</div>
+<div class="ch-head"><span class="ch-code">IP-02</span><h2>CIDR 읽는 법</h2></div>
 <table>
-<tr><th>CIDR</th><th>사용 가능 IP 수</th><th>용도 예시</th></tr>
-<tr><td><code>/16</code></td><td>65,534개</td><td>VPC 전체 대역</td></tr>
-<tr><td><code>/24</code></td><td>254개</td><td>서브넷 하나</td></tr>
-<tr><td><code>/28</code></td><td>14개</td><td>작은 관리용 서브넷</td></tr>
-<tr><td><code>/32</code></td><td>1개</td><td>특정 서버 한 대</td></tr>
+<tr><th>CIDR</th><th>의미</th><th>사용 가능 IP 감각</th><th>용도</th></tr>
+<tr><td>/16</td><td>앞 16비트 고정</td><td>약 65K</td><td>VPC 전체</td></tr>
+<tr><td>/20</td><td>앞 20비트 고정</td><td>약 4K</td><td>중간 규모 VPC 또는 큰 subnet</td></tr>
+<tr><td>/24</td><td>앞 24비트 고정</td><td>254개 수준</td><td>일반 subnet</td></tr>
+<tr><td>/28</td><td>앞 28비트 고정</td><td>14개 수준</td><td>관리용 작은 subnet</td></tr>
+<tr><td>/32</td><td>단일 IP</td><td>1개</td><td>특정 서버 허용</td></tr>
 </table>
-<div class="callout">
-<span class="co-label">실무 감각</span>
-<p><code>/24</code>는 <code>.0</code>부터 <code>.255</code> 범위를 가진다고 생각하면 됩니다. 단, 네트워크 주소와 브로드캐스트 주소, 클라우드 예약 IP 때문에 실제 사용 가능 IP는 더 적습니다. 클라우드별 예약 개수는 다르므로 작은 서브넷을 잡을 때는 콘솔 문서를 확인해야 합니다.</p>
-</div>
+<p>클라우드별로 subnet의 일부 IP는 reserved IP로 예약됩니다. 예를 들어 네트워크 주소, 브로드캐스트 성격의 주소, 게이트웨이, DNS 용도 IP가 빠질 수 있으므로 문서상 사용 가능 개수와 실제 할당 가능 개수가 다를 수 있습니다.</p>
 </section>
 
 <section id="ch3">
-<div class="ch-head"><span class="ch-code">VPC-03</span><h2>대역 설계</h2></div>
-<p class="lede">처음 설계에서는 너무 빡빡하게 잡지 않습니다. 나중에 서브넷과 서비스가 늘어날 여지를 남겨야 합니다.</p>
+<div class="ch-head"><span class="ch-code">IP-03</span><h2>서브넷 설계</h2></div>
+<p class="lede">서브넷은 보안, 라우팅, 가용 영역, 역할 경계를 표현합니다.</p>
 <table>
-<tr><th>대역</th><th>권장 용도</th><th>비고</th></tr>
-<tr><td><code>10.0.0.0/16</code></td><td>일반적인 프로젝트 VPC</td><td>서브넷을 여러 개 나누기 쉬움</td></tr>
-<tr><td><code>10.0.1.0/24</code></td><td>Public Subnet</td><td>LB, bastion, NAT Gateway</td></tr>
-<tr><td><code>10.0.2.0/24</code></td><td>Private App Subnet</td><td>API 서버, worker</td></tr>
-<tr><td><code>10.0.3.0/24</code></td><td>DB Subnet</td><td>DB, Redis, internal storage</td></tr>
+<tr><th>서브넷</th><th>예시 CIDR</th><th>배치 리소스</th><th>라우팅 성격</th></tr>
+<tr><td>Public</td><td>10.0.1.0/24</td><td>Load Balancer, bastion</td><td>Internet Gateway 경로 보유</td></tr>
+<tr><td>Private App</td><td>10.0.2.0/24</td><td>API, WAS, worker</td><td>NAT 또는 VPN 경로 사용</td></tr>
+<tr><td>Private DB</td><td>10.0.3.0/24</td><td>DB, Redis</td><td>인터넷 직접 경로 없음</td></tr>
+<tr><td>Management</td><td>10.0.10.0/28</td><td>관리 장비, endpoint</td><td>제한적 접근</td></tr>
 </table>
-<div class="callout warn">
-<span class="co-label">작게 잡는 것의 비용</span>
-<p><code>/28</code> 같은 작은 서브넷은 관리용으로는 가능하지만, 운영 서비스 서브넷으로는 금방 부족해질 수 있습니다. Auto Scaling, blue-green 배포, managed resource ENI까지 고려하면 “서버 수”보다 더 많은 IP가 필요합니다.</p>
-</div>
 </section>
 
 <section id="ch4">
-<div class="ch-head"><span class="ch-code">VPC-04</span><h2>충돌 방지</h2></div>
-<p class="lede">VPN 연결에서 IP 대역 충돌은 가장 치명적인 설계 오류입니다. 양쪽이 같은 목적지를 다르게 해석하면 라우팅이 성립하지 않습니다.</p>
-<table>
-<tr><th>사설 대역</th><th>범위</th><th>실무 메모</th></tr>
-<tr><td><code>10.0.0.0/8</code></td><td>10.0.0.0 ~ 10.255.255.255</td><td>클라우드 VPC에서 흔함</td></tr>
-<tr><td><code>172.16.0.0/12</code></td><td>172.16.0.0 ~ 172.31.255.255</td><td>고객사·Docker에서 자주 만남</td></tr>
-<tr><td><code>192.168.0.0/16</code></td><td>192.168.0.0 ~ 192.168.255.255</td><td>사무실·가정용 라우터에서 흔함</td></tr>
-</table>
-<div class="callout risk">
-<span class="co-label">VPN 전 필수 확인</span>
-<p>우리 VPC, 고객사 내부망, Docker bridge, Kubernetes Pod/Service CIDR까지 겹치지 않는지 확인합니다. 특히 사내망이 <code>10.0.0.0/8</code>처럼 넓게 잡혀 있으면 클라우드 VPC 대역 선택지가 크게 줄어듭니다.</p>
+<div class="ch-head"><span class="ch-code">IP-04</span><h2>대역 충돌</h2></div>
+<p class="lede">VPN에서 가장 치명적인 초기 설계 오류는 양쪽 네트워크가 같은 CIDR을 쓰는 것입니다.</p>
+<div class="serial-card">
+<span class="serial-label">충돌 예시</span>
+<pre><code>우리 VPC:      10.0.0.0/16
+고객사 VPC:    10.0.0.0/16
+
+10.0.2.10으로 가는 패킷은 우리 쪽 서버인가,
+고객사 서버인가? 라우터가 구분할 수 없다.</code></pre>
 </div>
+<table>
+<tr><th>상황</th><th>대응</th></tr>
+<tr><td>새 VPC 설계 전</td><td>고객사, 사내망, 다른 클라우드 VPC 대역을 먼저 수집</td></tr>
+<tr><td>이미 충돌</td><td>한쪽 CIDR 재설계, NAT 기반 우회, 프록시/중계망 검토</td></tr>
+<tr><td>여러 고객사 연동</td><td>고객사별 격리 VPC 또는 충분한 주소 계획 필요</td></tr>
+</table>
 </section>
 
 <section id="ch5">
-<div class="ch-head"><span class="ch-code">VPC-05</span><h2>심화 포인트</h2></div>
+<div class="ch-head"><span class="ch-code">IP-05</span><h2>실무 기준</h2></div>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>VPN 프로젝트에서 우리 VPC를 10.0.0.0/16으로 만들었는데 고객사도 같은 대역을 쓰면, 터널을 만들어도 트래픽이 어디로 가야 하는지 결정할 수 없습니다. 실제 프로젝트에서는 VPC 생성 전에 고객사 사설 대역, 사내망 대역, 다른 클라우드 대역을 표로 받아 충돌 검사를 먼저 해야 합니다.</p>
+</div>
 <div class="glossary">
-<div class="g-row"><div class="g-term"><b>Subnet sizing</b><span>용량</span></div><div class="g-def">현재 서버 수가 아니라 확장, 배포 중복, 관리형 리소스의 IP 소비까지 계산합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>Multi-AZ</b><span>가용성</span></div><div class="g-def">고가용성을 요구하면 같은 역할의 서브넷을 AZ별로 나눕니다. 예: public-a/public-c, private-a/private-c.</div></div>
-<div class="g-row"><div class="g-term"><b>/32 rule</b><span>정밀 허용</span></div><div class="g-def">관리자 PC, 특정 모니터링 서버처럼 한 IP만 허용할 때 <code>x.x.x.x/32</code>를 씁니다.</div></div>
-<div class="g-row"><div class="g-term"><b>예약 IP</b><span>cloud reserved</span></div><div class="g-def">클라우드 사업자마다 서브넷 안에서 예약하는 IP가 있습니다. 작은 서브넷에서는 이 차이가 큽니다.</div></div>
+<div class="g-row"><div class="g-term"><b>주소 계획</b><span>address plan</span></div><div class="g-def">지금 필요한 IP 수가 아니라 향후 AZ, 환경, 고객사 연동까지 고려해 잡습니다.</div></div>
+<div class="g-row"><div class="g-term"><b>서브넷 크기</b><span>capacity</span></div><div class="g-def">너무 작게 잡으면 확장 때 재구성이 필요하고, 너무 크게 잡으면 대역 낭비와 충돌 가능성이 커집니다.</div></div>
 </div>
 </section>
 
 <footer>
-NETWORK VPC / SUBNET / CIDR · V1 · 2026-06<br>
-PRINCIPLE : 대역은 넉넉하게, 고객사와 겹치지 않게, 역할별로 분리
+NETWORK IP CIDR HANDBOOK · V2 · 2026-06<br>
+PRINCIPLE : CIDR은 서버 개수가 아니라 라우팅과 연동 가능성을 결정한다
 </footer>
 </main>
 </div>

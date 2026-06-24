@@ -105,7 +105,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   </div>
   <h1>비동기 처리와<br>메시지 큐 핸드북</h1>
   <p class="hero-sub">동기 호출은 두 서비스를 시간으로 묶는다 — 큐는 그 결합을 끊어 시간과 장애를 분리한다. 이 핸드북은 명령어가 아니라 <strong>사고 모델</strong>을 다룹니다: 왜 비동기로 가는가, 무엇을 포기하는 대가인가, 그리고 어디서 깨지는가.</p>
-  <div class="hero-meta">FOR : 7년차 프론트엔드→풀스택 · Java/Spring Boot/JPA foundational · 목표 미들급<br>COMPANION : BACKEND ENGINEERING HANDBOOK(BE-07 메시징·비동기) · COMPILED : 2026-06</div>
+  <div class="hero-meta">FOR : 프론트엔드→풀스택 확장 · Java/Spring Boot/JPA foundational<br>COMPANION : BACKEND ENGINEERING HANDBOOK(BE-07 메시징·비동기) · COMPILED : 2026-06</div>
 </header>
 
 <!-- ============ CH 1 ============ -->
@@ -258,7 +258,7 @@ key=<span class="seg2">"account-9"</span> ─▶ hash ─▶ partition 2 : [ e4 
 <!-- ============ CH 7 ============ -->
 <section id="ch7">
 <div class="ch-head"><span class="ch-code">MSG-07</span><h2>이중 쓰기 문제와 Outbox 패턴</h2></div>
-<p class="lede">미들급을 가르는 함정 하나: <em>"DB에 저장하고, 그다음 메시지를 발행한다"</em>는 두 줄의 코드는 원자적이지 않습니다. 둘 사이에서 프로세스가 죽으면 DB는 바뀌었는데 메시지는 안 나갔거나, 그 반대가 됩니다.</p>
+<p class="lede">비동기 설계의 핵심 함정 하나: <em>"DB에 저장하고, 그다음 메시지를 발행한다"</em>는 두 줄의 코드는 원자적이지 않습니다. 둘 사이에서 프로세스가 죽으면 DB는 바뀌었는데 메시지는 안 나갔거나, 그 반대가 됩니다.</p>
 <div class="serial-card">
 <span class="sc-label">DUAL WRITE — 두 시스템에 쓰는데 트랜잭션이 하나가 아니다</span>
 db.save(order)        <span class="dim">→ commit OK</span><br>
@@ -356,7 +356,7 @@ consumer ──"천천히"──▶ producer <span class="dim">(요청 거절 / 
 <!-- ============ CH 11 ============ -->
 <section id="ch11">
 <div class="ch-head"><span class="ch-code">MSG-11</span><h2>용어집</h2></div>
-<p class="lede">한 번 더 압축한 정의. 면접·설계 리뷰에서 이 단어들을 정확히 구분해 쓰면 미들급의 신호입니다.</p>
+<p class="lede">한 번 더 압축한 정의. 면접·설계 리뷰에서 이 단어들을 정확히 구분해 쓰면 설계 논의가 훨씬 명확해집니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>메시지 큐</b><span>message queue</span></div><div class="g-def">작업을 분배하는 work queue. 소비자가 ack하면 메시지가 큐에서 제거됨(경쟁 소비). RabbitMQ·SQS(→ MSG-03)</div></div>
 <div class="g-row"><div class="g-term"><b>이벤트 스트림</b><span>event stream / log</span></div><div class="g-def">append-only 로그. 소비해도 남고, consumer group마다 독립 오프셋으로 읽으며 재생 가능. Kafka·Kinesis</div></div>
@@ -381,6 +381,23 @@ consumer ──"천천히"──▶ producer <span class="dim">(요청 거절 / 
 <div class="callout gm">
 <span class="co-label">한 장으로 다시 — 비동기의 거래 조건</span>
 <p>큐는 시간 결합을 끊어 가용성·확장성·장애 격리를 줍니다. 그 대가로 <strong>중복·순서 흐트러짐·최종 일관성</strong>을 직접 책임지게 됩니다. 이 핸드북의 거의 모든 패턴은 그 대가를 갚는 도구입니다 — at-least-once를 가정하고(MSG-04), 멱등하게 소비하고(MSG-05), 엔티티 단위 순서만 지키고(MSG-06), 이중 쓰기를 Outbox로 막고(MSG-07), 실패를 백오프·DLQ로 다루고(MSG-08), 과부하를 백프레셔로 제어하고(MSG-09), 분산 작업을 사가로 조율한다(MSG-10). "비동기로 바꾸자"는 결정 전에 MSG-01의 질문으로 돌아가세요 — 정말 시간을 분리해야 하는가(→ 백엔드 개요 BE-07 · 아키텍처 패턴 BE-12 · DB 트랜잭션 BE-03).</p>
+</div>
+</section>
+
+<section id="ch12">
+<div class="ch-head"><span class="ch-code">MSG-12</span><h2>운영 가능한 메시징 설계</h2></div>
+<p class="lede">메시징은 큐를 붙이는 순간 끝나는 것이 아니라 중복, 지연, 독성 메시지, 재처리, 관측성을 설계해야 운영 가능합니다.</p>
+<table>
+<tr><th>주제</th><th>실무 기준</th><th>실패 신호</th></tr>
+<tr><td>outbox</td><td>DB 변경과 발행할 이벤트를 같은 트랜잭션에 저장</td><td>DB는 바뀌었는데 메시지가 유실됨</td></tr>
+<tr><td>inbox</td><td>소비한 메시지 ID를 기록해 중복 처리를 방지</td><td>재시도 때 포인트 적립, 메일 발송이 중복됨</td></tr>
+<tr><td>poison message</td><td>항상 실패하는 메시지는 DLQ로 격리</td><td>한 메시지가 파티션 전체 처리를 막음</td></tr>
+<tr><td>consumer lag</td><td>생산 속도와 소비 속도의 차이를 모니터링</td><td>큐 적체가 고객 지연으로 번진 뒤에야 인지</td></tr>
+<tr><td>ordering key</td><td>순서가 필요한 단위만 같은 파티션에 배치</td><td>전체 순서를 요구해 처리량이 급락</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>주문 완료 이벤트를 소비해 쿠폰을 발급하는 서비스가 있습니다. consumer가 쿠폰 DB 저장 후 ack 전에 죽으면 같은 메시지가 다시 옵니다. inbox 테이블에 message id와 처리 결과를 저장하고, 쿠폰에는 주문 ID 기준 unique constraint를 둬야 at-least-once 전달에서도 effectively-once 결과를 만들 수 있습니다.</p>
 </div>
 </section>
 

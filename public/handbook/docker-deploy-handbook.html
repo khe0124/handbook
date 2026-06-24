@@ -105,7 +105,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   </div>
   <h1>Docker와 배포<br>핸드북</h1>
   <p class="hero-sub">컨테이너는 <strong>"제 PC에선 됩니다"</strong>를 끝냅니다 — 코드·런타임·의존성을 한 이미지로 봉인해 어디서나 같게 돕니다. 이 핸드북은 명령어 나열이 아니라 <em>왜 이렇게 도는가</em>를 먼저 잡습니다 — 레이어 캐시가 왜 그 순서를 강요하는지, 배포 전략 사이의 트레이드오프가 무엇인지, 어디서 깨지는지.</p>
-  <div class="hero-meta">READER : 7년차 프론트엔드 → 풀스택 확장 · Java/Spring Boot/JPA foundational<br>COMPILED : 2026-06</div>
+  <div class="hero-meta">READER : 프론트엔드 기반 풀스택 확장 · Java/Spring Boot/JPA foundational<br>COMPILED : 2026-06</div>
 </header>
 
 <!-- ============ CH 1 ============ -->
@@ -354,7 +354,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </table>
 <div class="callout gm">
 <span class="co-label">범위 — 여기까지만</span>
-<p>K8s의 깊이(스케줄링·네트워킹·오퍼레이터·헬름·RBAC 등)는 이 핸드북의 범위 밖입니다. 미들급 풀스택으로서 지금 필요한 건 <em>왜 존재하고 핵심 개념이 무엇인지</em>까지입니다 — Pod/Deployment/Service/Ingress 네 단어의 관계만 잡으면 팀의 매니페스트를 읽고 대화에 참여할 수 있습니다. 작은 서비스라면 K8s가 과합니다 — 관리형 PaaS(Cloud Run·ECS·Fly.io 등)나 Compose로 충분한 경우가 많고, 복잡성 비용을 정당화할 규모가 됐을 때 K8s로 갑니다. 실제 운영 디테일은 → 로깅·모니터링·장애대응, 백엔드 개요와 함께 보세요.</p>
+<p>K8s의 깊이(스케줄링·네트워킹·오퍼레이터·헬름·RBAC 등)는 이 핸드북의 범위 밖입니다. 지금 필요한 건 <em>왜 존재하고 핵심 개념이 무엇인지</em>까지입니다 — Pod/Deployment/Service/Ingress 네 단어의 관계만 잡으면 팀의 매니페스트를 읽고 대화에 참여할 수 있습니다. 작은 서비스라면 K8s가 과합니다 — 관리형 PaaS(Cloud Run·ECS·Fly.io 등)나 Compose로 충분한 경우가 많고, 복잡성 비용을 정당화할 규모가 됐을 때 K8s로 갑니다. 실제 운영 디테일은 → 로깅·모니터링·장애대응, 백엔드 개요와 함께 보세요.</p>
 </div>
 </section>
 
@@ -388,6 +388,23 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="callout gm">
 <span class="co-label">학습 순서 제안</span>
 <p>전부 한 번에 익히려 하지 마세요. 먼저 손에 붙일 것: <code>docker build</code> → <code>docker run -p</code> → 멀티스테이지 Dockerfile 한 장 → <code>docker compose up</code>으로 로컬 풀스택. 이 네 단계로 OPS-01~05가 몸에 들어옵니다. 그다음 CI에서 이미지를 빌드·push해보고(OPS-06·08), 배포 전략(OPS-09)은 팀의 실제 파이프라인을 읽으며 익히세요. K8s(OPS-10)는 규모가 정당화할 때 갑니다 — 그전엔 개념만으로 충분합니다. 런타임 관측은 → 로깅·모니터링·장애대응, 데이터 계층은 → 백엔드 개요와 함께.</p>
+</div>
+</section>
+
+<section id="ch12">
+<div class="ch-head"><span class="ch-code">OPS-12</span><h2>운영 가능한 배포 심화</h2></div>
+<p class="lede">배포는 이미지를 올리는 일이 아니라 트래픽 전환, 종료 처리, 설정 일관성, 롤백 가능성을 관리하는 일입니다.</p>
+<table>
+<tr><th>주제</th><th>실무 기준</th><th>실패 신호</th></tr>
+<tr><td>graceful shutdown</td><td>SIGTERM을 받으면 새 요청을 막고 진행 중 요청을 마무리</td><td>배포 때 간헐적인 502/connection reset 발생</td></tr>
+<tr><td>readiness</td><td>트래픽을 받아도 되는 상태인지 확인</td><td>앱 시작 직후 DB 연결 전부터 트래픽 유입</td></tr>
+<tr><td>liveness</td><td>프로세스가 복구 불능 상태인지 확인</td><td>느린 의존성 때문에 정상 앱이 계속 재시작</td></tr>
+<tr><td>config drift</td><td>환경별 설정 차이를 코드/템플릿으로 추적</td><td>운영만 수동 hotfix 설정이 남아 재현 불가</td></tr>
+<tr><td>rollback</td><td>앱, DB, 메시지 schema가 되돌릴 수 있는지 사전 확인</td><td>배포 후 DB 변경 때문에 이전 버전이 실행 불가</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>롤링 배포 중 새 컨테이너가 뜨자마자 readiness가 성공하면 아직 connection pool이 준비되지 않은 상태에서 요청이 들어올 수 있습니다. startup probe, readiness probe, graceful shutdown, termination grace period를 함께 설계해야 배포 중 오류율을 낮출 수 있습니다.</p>
 </div>
 </section>
 

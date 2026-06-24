@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Handbook — 프로토타입과 사용성 테스트</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">프로토타입과 사용성 테스트</div>
+  <a href="#ch1"><span class="code">TEST-01</span>프로토타입 목적</a>
+  <a href="#ch2"><span class="code">TEST-02</span>충실도 선택</a>
+  <a href="#ch3"><span class="code">TEST-03</span>테스트 설계</a>
+  <a href="#ch4"><span class="code">TEST-04</span>관찰과 분석</a>
+  <a href="#ch5"><span class="code">TEST-05</span>의사결정</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DESIGN-PROTOTYPING-TESTING-V1</span>
+    <span>SCOPE : PROTOTYPE · USABILITY TEST · RESEARCH · DECISION</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>프로토타입과<br>사용성 테스트</h1>
+  <p class="hero-sub">프로토타입은 완성도를 보여주기 위한 산출물이 아니라 위험한 가정을 싸게 검증하는 도구입니다. 사용성 테스트는 사용자를 평가하는 일이 아니라 설계가 사용자의 목표 달성을 돕는지 확인하는 과정입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">TEST-01</span><h2>프로토타입 목적</h2></div>
+<table>
+<tr><th>목적</th><th>검증 질문</th><th>적합한 산출물</th></tr>
+<tr><td>개념 검증</td><td>이 문제가 실제로 중요한가</td><td>스토리보드, low-fi wireframe</td></tr>
+<tr><td>흐름 검증</td><td>사용자가 목표까지 도달하는가</td><td>Clickable prototype</td></tr>
+<tr><td>상호작용 검증</td><td>상태와 피드백이 이해되는가</td><td>Interactive prototype</td></tr>
+<tr><td>핸드오프 검증</td><td>개발 가능한 구조인가</td><td>Component spec, responsive variant</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">TEST-02</span><h2>충실도 선택</h2></div>
+<table>
+<tr><th>충실도</th><th>좋은 사용</th><th>주의점</th></tr>
+<tr><td>Low fidelity</td><td>문제 정의, 흐름, 정보구조 검증</td><td>시각 완성도 논의로 흐르지 않게 함</td></tr>
+<tr><td>Mid fidelity</td><td>레이아웃, 우선순위, 폼 구조 검증</td><td>실제 데이터 길이를 넣어야 함</td></tr>
+<tr><td>High fidelity</td><td>브랜드, 상호작용, 최종 QA 근접 검증</td><td>만들기 전에 핵심 가정이 검증되어야 함</td></tr>
+<tr><td>Code prototype</td><td>성능, 복잡한 interaction, 기술 제약 검증</td><td>제품 코드로 착각하지 않도록 범위 명시</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">TEST-03</span><h2>테스트 설계</h2></div>
+<p class="lede">좋은 사용성 테스트는 “마음에 드세요?”가 아니라 사용자가 실제 과업을 수행하게 합니다.</p>
+<table>
+<tr><th>항목</th><th>설계 기준</th><th>예시</th></tr>
+<tr><td>Participant</td><td>실제 사용자 특성과 업무 맥락 반영</td><td>신규 운영자, 숙련 관리자</td></tr>
+<tr><td>Task</td><td>제품 목표와 연결된 현실적인 과업</td><td>실패한 결제 3건을 찾아 재처리</td></tr>
+<tr><td>Scenario</td><td>정답 버튼을 암시하지 않는 상황 설명</td><td>“고객 문의가 들어왔습니다”</td></tr>
+<tr><td>Metric</td><td>완료 여부, 시간, 오류, 확신도 관찰</td><td>성공률, 도움 요청 횟수</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">TEST-04</span><h2>관찰과 분석</h2></div>
+<table>
+<tr><th>관찰 신호</th><th>해석</th><th>후속 질문</th></tr>
+<tr><td>멈춤</td><td>다음 행동이 명확하지 않음</td><td>무엇을 찾고 있었나요</td></tr>
+<tr><td>오클릭</td><td>레이블이나 affordance 혼동</td><td>왜 그 요소를 선택했나요</td></tr>
+<tr><td>뒤로가기 반복</td><td>정보구조나 탐색 위치 문제</td><td>어디에 있을 거라고 예상했나요</td></tr>
+<tr><td>확신 없음</td><td>결과 피드백 부족</td><td>완료됐다고 느꼈나요</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">실무 팁</span>
+<p>사용자가 말한 선호보다 실제 행동을 더 신뢰합니다. “괜찮다”고 말해도 과업 중 헤매거나 되묻는다면 설계 문제로 기록해야 합니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">TEST-05</span><h2>의사결정</h2></div>
+<div class="serial-card">
+<span class="serial-label">Usability finding format</span>
+<pre><code>Issue: 사용자가 필터 적용 여부를 인지하지 못함
+Evidence: 5명 중 3명이 같은 필터를 반복 클릭
+Impact: 검색 결과 신뢰 저하, 처리 시간 증가
+Recommendation: 적용된 필터 영역과 reset action 노출</code></pre>
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Severity</b><span>심각도</span></div><div class="g-def">사용자 목표 달성 실패, 반복 빈도, 비즈니스 영향으로 판단합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Confidence</b><span>확신도</span></div><div class="g-def">참여자 수보다 관찰의 일관성과 맥락 적합성을 봅니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Next step</b><span>조치</span></div><div class="g-def">수정, 추가 검증, 보류 중 하나로 의사결정을 남깁니다.</div></div>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">TEST-06</span><h2>사용성 테스트 심화</h2></div>
+<p class="lede">테스트 결과는 “좋다/나쁘다”가 아니라 어떤 가정이 깨졌고 어떤 의사결정을 해야 하는지로 정리해야 합니다.</p>
+<table>
+<tr><th>지표</th><th>의미</th><th>주의점</th></tr>
+<tr><td>Task success rate</td><td>과업을 완료한 비율</td><td>도움을 받아 성공한 경우는 별도 표시</td></tr>
+<tr><td>Time on task</td><td>목표 달성까지 걸린 시간</td><td>업무 숙련도와 데이터 복잡도를 함께 기록</td></tr>
+<tr><td>Error count</td><td>오클릭, 잘못된 해석, 반복 시도 횟수</td><td>사용자 실수로 돌리지 말고 설계 신호로 봄</td></tr>
+<tr><td>System Usability Scale</td><td>전반적 사용성 인식 점수</td><td>소규모 테스트에서는 정성 관찰과 함께 해석</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Case study</span>
+<p>결제 실패 복구 플로우를 테스트할 때 성공 결제만 보여주면 핵심 위험을 놓칩니다. 카드 승인 실패, 네트워크 timeout, 중복 결제 의심, 영수증 재발급처럼 실제 문의로 이어지는 실패 시나리오를 포함해야 제품 리스크를 줄일 수 있습니다.</p>
+</div>
+</section>
+
+<footer>
+DESIGN PROTOTYPING · V1 · 2026-06<br>
+PRINCIPLE : 프로토타입은 예쁘게 보여주는 산출물이 아니라 위험한 가정을 검증하는 도구다
+</footer>
+</main>
+</div>
+</body>
+</html>
