@@ -264,11 +264,11 @@ test("app exposes an accessible fixed bottom document navigation bar", async () 
   assert.match(cssSource, /\.mobile-menu-group-trigger/);
   assert.match(cssSource, /\.mobile-menu-group-trigger\[aria-expanded="true"\] svg/);
   assert.match(cssSource, /\.mobile-menu-items\[hidden\]/);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.app-header \.menubar\s*\{[\s\S]*display: none/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.mobile-menu-toggle\s*\{[\s\S]*display: flex/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*padding-bottom: calc\(82px \+ env\(safe-area-inset-bottom\)\)/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*grid-template-columns: 46px minmax\(0, 1fr\) 46px minmax\(0, 1fr\)/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*max-height: min\(70dvh, calc\(100dvh - 126px\)\)/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header \.menubar\s*\{[\s\S]*display: none/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.mobile-menu-toggle\s*\{[\s\S]*display: flex/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*padding-bottom: calc\(82px \+ env\(safe-area-inset-bottom\)\)/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*grid-template-columns: 46px minmax\(0, 1fr\) 46px minmax\(0, 1fr\)/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*max-height: min\(62dvh, calc\(100dvh - 146px\)\)/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.doc-nav-label\s*\{[\s\S]*display: none/s);
 });
 
@@ -301,13 +301,19 @@ test("app uses the Dev Handbook title with fixed top navigation", async () => {
 test("handbook layout includes mobile responsive reading refinements", async () => {
   const cssSource = await readFile("src/handbook/handbook.css", "utf8");
 
-  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*max-height: 36vh/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*max-height: 176px/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-main \.hero\s*\{[\s\S]*padding: 38px 0 30px/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*display: block/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*overflow-x: auto/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-main \.flow\s*\{[\s\S]*flex-direction: column/s);
-  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*\.handbook-main \.serial-card\s*\{[\s\S]*padding: 46px 16px 16px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*position: sticky/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*overflow-x: auto/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc \.nav-title\s*\{[\s\S]*display: none/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc a\s*\{[\s\S]*display: inline-flex/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*scroll-snap-type: x proximity/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc a\s*\{[\s\S]*max-width: 78vw/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main\s*\{[\s\S]*padding: 0 16px 128px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.hero\s*\{[\s\S]*padding: 38px 0 30px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*display: block/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*overflow-x: auto/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.flow\s*\{[\s\S]*flex-direction: column/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.serial-card\s*\{[\s\S]*padding: 46px 16px 16px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.ch-head\s*\{[\s\S]*flex-direction: column/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.handbook-main h1\s*\{[\s\S]*font-size: 27px/s);
 });
 

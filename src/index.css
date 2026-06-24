@@ -32,13 +32,21 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 24px;
+  /* Clear the fixed header so anchor jumps don't land behind it. */
+  scroll-padding-top: 132px;
   background: var(--paper);
 }
 
 body {
   margin: 0;
   background: var(--paper);
+}
+
+/* Mobile: fixed compact header + sticky horizontal TOC strip both obstruct. */
+@media (max-width: 900px) {
+  html {
+    scroll-padding-top: 150px;
+  }
 }
 
 button,

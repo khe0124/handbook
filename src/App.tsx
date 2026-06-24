@@ -75,9 +75,13 @@ export default function App() {
       }
     };
 
+    const scroller = document.documentElement;
+    const previousOverflow = scroller.style.overflow;
+    scroller.style.overflow = "hidden";
     window.addEventListener("keydown", closeOnEscape);
 
     return () => {
+      scroller.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileMenuOpen]);
@@ -172,6 +176,16 @@ export default function App() {
       </header>
 
       <HandbookPage item={activeItem} />
+
+      {mobileMenuOpen ? (
+        <button
+          type="button"
+          className="mobile-menu-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="전체 메뉴 닫기"
+          tabIndex={-1}
+        />
+      ) : null}
 
       <div className="bottom-doc-nav" role="navigation" aria-label="문서 이동">
         {mobileMenuOpen ? (

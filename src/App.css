@@ -265,6 +265,10 @@
   display: none;
 }
 
+.mobile-menu-backdrop {
+  display: none;
+}
+
 .doc-nav-button:hover,
 .scroll-top-button:hover,
 .mobile-menu-toggle:hover,
@@ -291,36 +295,31 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 900px) {
-  .app-shell {
-    padding-top: 138px;
+@keyframes mobile-menu-backdrop-in {
+  from {
+    opacity: 0;
   }
-
-  .app-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 14px;
-    padding: 24px 20px 18px;
-  }
-
-  .menubar {
-    justify-content: flex-start;
-  }
-
-  .menu-panel {
-    left: 0;
-    right: auto;
+  to {
+    opacity: 1;
   }
 }
 
-@media (max-width: 700px) {
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-backdrop {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
   .app-shell {
-    padding-top: 90px;
+    padding-top: 78px;
     padding-bottom: calc(82px + env(safe-area-inset-bottom));
   }
 
   .app-header {
-    padding: 18px 16px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px 12px;
     gap: 0;
   }
 
@@ -330,6 +329,10 @@
 
   .app-header p {
     font-size: 12px;
+    max-width: min(100%, 72vw);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .app-header .menubar {
@@ -362,10 +365,24 @@
     color: #ffffff;
   }
 
+  .mobile-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 75;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(22, 29, 43, 0.42);
+    cursor: pointer;
+    animation: mobile-menu-backdrop-in 0.16s ease;
+  }
+
   .mobile-menu-sheet {
     display: block;
     width: min(100%, 560px);
-    max-height: min(70dvh, calc(100dvh - 126px));
+    max-height: min(62dvh, calc(100dvh - 146px));
     margin: 0 auto 8px;
     overflow: auto;
     overscroll-behavior: contain;
@@ -404,8 +421,8 @@
 
   .mobile-menu-groups {
     display: grid;
-    gap: 8px;
-    padding: 12px;
+    gap: 6px;
+    padding: 10px;
   }
 
   .mobile-menu-group h2 {
@@ -414,14 +431,14 @@
 
   .mobile-menu-group-trigger {
     width: 100%;
-    min-height: 40px;
+    min-height: 38px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     border: 1px solid var(--line);
     border-radius: 9px;
-    padding: 10px 11px;
+    padding: 9px 10px;
     background: var(--paper);
     color: var(--ink-soft);
     font-family: var(--mono);
@@ -466,10 +483,10 @@
   }
 
   .mobile-menu-item {
-    min-height: 38px;
+    min-height: 36px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 9px 11px;
+    padding: 8px 10px;
     background: var(--panel);
     color: var(--ink);
     font-family: var(--sans);
@@ -524,10 +541,7 @@
   }
 
   .app-header p {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 74vw;
   }
 
   .bottom-doc-nav {
