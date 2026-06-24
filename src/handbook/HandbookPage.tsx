@@ -1,6 +1,7 @@
 import { createRoot, type Root } from "react-dom/client";
 import { useEffect, useRef, useState } from "react";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
+import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
 import type { HandbookDocumentContent } from "./types";
 import "./handbook.css";
@@ -19,6 +20,8 @@ export function HandbookPage({ item }: HandbookPageProps) {
   const [document, setDocument] = useState<HandbookDocumentContent | null>(null);
   const [failed, setFailed] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
+  const practicalExample = PRACTICAL_EXAMPLES[item.id];
+  const practicalLens = getPracticalExampleLens(item.id);
 
   useEffect(() => {
     let cancelled = false;
@@ -97,8 +100,64 @@ export function HandbookPage({ item }: HandbookPageProps) {
       <main
         ref={mainRef}
         className="handbook-main"
-        dangerouslySetInnerHTML={{ __html: document.mainHtml }}
-      />
+      >
+        <div dangerouslySetInnerHTML={{ __html: document.mainHtml }} />
+        {practicalExample ? (
+          <section className="handbook-practical-example" aria-labelledby="practical-example-title">
+            <div className="ch-head">
+              <span className="ch-code">PRACTICE</span>
+              <h2 id="practical-example-title">실무 예시</h2>
+            </div>
+            <p className="lede">{practicalExample.scenario}</p>
+            <div className="practical-example-grid">
+              <div className="practical-example-block" aria-labelledby="practical-constraints-title">
+                <h3 id="practical-constraints-title">현장 조건</h3>
+                <ul>
+                  {practicalLens.constraints.map((constraint) => (
+                    <li key={constraint}>{constraint}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="practical-example-block" aria-labelledby="practical-actions-title">
+                <h3 id="practical-actions-title">실행 절차</h3>
+                <ol>
+                  {practicalExample.actions.map((action) => (
+                    <li key={action}>{action}</li>
+                  ))}
+                </ol>
+              </div>
+              <div className="practical-example-block" aria-labelledby="practical-artifacts-title">
+                <h3 id="practical-artifacts-title">검증 증거</h3>
+                <ul>
+                  {practicalLens.artifacts.map((artifact) => (
+                    <li key={artifact}>{artifact}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="practical-example-block" aria-labelledby="practical-failure-title">
+                <h3 id="practical-failure-title">실패 신호</h3>
+                <ul>
+                  {practicalLens.failureSignals.map((failureSignal) => (
+                    <li key={failureSignal}>{failureSignal}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="callout">
+              <span className="co-label">완료 기준</span>
+              <p>{practicalExample.outcome}</p>
+            </div>
+            <div className="practical-example-review">
+              <span className="co-label">리뷰 질문</span>
+              <ul>
+                {practicalLens.reviewQuestions.map((question) => (
+                  <li key={question}>{question}</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ) : null}
+      </main>
     </div>
   );
 }

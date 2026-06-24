@@ -199,6 +199,48 @@ test("catalog items have source files, generated modules, and loader entries", a
   }
 });
 
+test("every handbook item has a rendered practical example", async () => {
+  const [examplesSource, pageSource, cssSource] = await Promise.all([
+    readFile("src/handbook/practicalExamples.ts", "utf8"),
+    readFile("src/handbook/HandbookPage.tsx", "utf8"),
+    readFile("src/handbook/handbook.css", "utf8"),
+  ]);
+
+  assert.match(pageSource, /PRACTICAL_EXAMPLES/);
+  assert.match(pageSource, /getPracticalExampleLens/);
+  assert.match(pageSource, /className="handbook-practical-example"/);
+  assert.match(pageSource, /className="practical-example-grid"/);
+  assert.match(pageSource, /className="practical-example-block"/);
+  assert.match(pageSource, /className="practical-example-review"/);
+  assert.match(pageSource, /실무 예시/);
+  assert.match(pageSource, /현장 조건/);
+  assert.match(pageSource, /실행 절차/);
+  assert.match(pageSource, /검증 증거/);
+  assert.match(pageSource, /실패 신호/);
+  assert.match(pageSource, /완료 기준/);
+  assert.match(pageSource, /리뷰 질문/);
+  assert.match(cssSource, /\.handbook-main \.handbook-practical-example/);
+  assert.match(cssSource, /\.handbook-main \.practical-example-grid/);
+  assert.match(cssSource, /\.handbook-main \.practical-example-block/);
+  assert.match(cssSource, /\.handbook-main \.practical-example-review/);
+  assert.match(examplesSource, /LENS_BY_ITEM_ID/);
+  assert.match(examplesSource, /failureSignals/);
+  assert.match(examplesSource, /reviewQuestions/);
+
+  for (const item of HANDBOOK_ITEMS) {
+    assert.match(
+      examplesSource,
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*example\\(`),
+      `${item.id} should have a practical example`,
+    );
+    assert.match(
+      examplesSource,
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|backend|frontend|network|devops|ax|design|examples|practical)"`),
+      `${item.id} should have a practical example lens`,
+    );
+  }
+});
+
 test("generateHandbookDocuments leaves existing output intact when source extraction fails", async () => {
   const rootDir = await mkdtemp(path.join(os.tmpdir(), "handbook-generate-"));
   const publicDir = path.join(rootDir, "public", "handbook");
