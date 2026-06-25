@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 분산 시스템 면접</title></head>
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 분산 시스템 면접</title></head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
@@ -16,6 +16,7 @@
   <a href="#q9"><span class="code">DS-09</span>Degraded Mode</a>
   <a href="#q10"><span class="code">DS-10</span>Microservices 판단</a>
   <a href="#q11"><span class="code">DS-11</span>Read Your Writes</a>
+  <a href="#q12"><span class="code">DS-12</span>핵심 질문 20선</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-DISTRIBUTED-QA-V1</span><span>SCOPE : CACHE · QUEUE · RETRY · CONSISTENCY · SAGA · OUTBOX</span><span>LANG : KO</span></div><h1>분산 시스템 면접</h1><p class="hero-sub">분산 시스템 질문은 CAP 같은 용어 암기가 아니라 <strong>네트워크 실패, 중복 처리, 순서 보장, 최신성, 보상 처리</strong>를 현실적으로 설명할 수 있는지 봅니다.</p></header>
@@ -123,6 +124,26 @@
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>replica lag은?</td><td>primary와 replica 동기화 지연으로 오래된 값을 읽는 문제입니다.</td></tr><tr><td>optimistic UI 위험은?</td><td>서버 실패 시 rollback과 오류 안내가 필요합니다.</td></tr><tr><td>언제 중요한가요?</td><td>프로필 수정, 결제 상태, 권한 변경처럼 사용자 신뢰가 걸린 경우입니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>replica lag metric, 쓰기 직후 primary read 정책, pending UI, rollback 케이스를 말합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>eventual consistency를 쓰면 UX 보정까지 설계해야 합니다.</p></div>
+</section>
+
+<section id="q12">
+<div class="ch-head"><span class="ch-code">DS-12</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
+<p class="lede">분산 시스템 면접에서는 정답보다 “어떤 일관성을 포기하고 어떤 복구 장치를 둘 것인가”를 봅니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
+<tr><td>캐시</td><td>cache-aside, TTL, invalidation, stampede, stale data</td><td>정합성 요구와 비용 절감의 균형</td></tr>
+<tr><td>메시징</td><td>queue, stream, ordering, retry, dead letter queue</td><td>중복 처리와 순서 보장 범위</td></tr>
+<tr><td>일관성</td><td>eventual consistency, read-your-writes, saga, outbox, idempotency</td><td>사용자 체감과 데이터 정합성의 경계</td></tr>
+<tr><td>복원력</td><td>timeout, circuit breaker, degraded mode, bulkhead, backpressure</td><td>downstream 장애가 전체 장애로 번지지 않게 하는 방법</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">압박 꼬리질문</span>
+<p>“메시지가 두 번 처리되면?”, “캐시 삭제와 DB commit 사이에 실패하면?”, “MSA로 나누면 트랜잭션은 어떻게 하나요?”를 준비합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">흔한 오답</span>
+<p>Kafka를 쓰면 해결된다, retry를 늘리면 된다, eventual consistency라 괜찮다처럼 실패 복구와 사용자 경험이 빠진 답변은 위험합니다.</p>
+</div>
 </section>
 
 <footer>DISTRIBUTED SYSTEMS INTERVIEW Q&A · V1 · 2026-06</footer>

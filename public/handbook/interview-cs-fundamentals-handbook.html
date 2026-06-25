@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — CS 기본기 면접</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">CS 기본기 면접</div>
+  <a href="#q1"><span class="code">CS-01</span>Big-O</a>
+  <a href="#q2"><span class="code">CS-02</span>자료구조</a>
+  <a href="#q3"><span class="code">CS-03</span>Hash collision</a>
+  <a href="#q4"><span class="code">CS-04</span>BFS/DFS</a>
+  <a href="#q5"><span class="code">CS-05</span>동시성</a>
+  <a href="#q6"><span class="code">CS-06</span>OS 기본</a>
+  <a href="#q7"><span class="code">CS-07</span>답변 비교</a>
+</nav>
+<main>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-CS-FUNDAMENTALS-V1</span><span>SCOPE : COMPLEXITY · DATA STRUCTURES · CONCURRENCY · OS</span><span>LANG : KO</span></div><h1>CS 기본기 면접</h1><p class="hero-sub">CS 기본기 질문은 이론 암기가 아니라 <strong>코드 선택, 성능 병목, 동시성 버그, 운영 현상</strong>을 설명하는 기반입니다.</p></header>
+
+<section id="q1">
+<div class="ch-head"><span class="ch-code">CS-01</span><h2>Q. Big-O 시간/공간 복잡도는 어떻게 설명하나요?</h2></div>
+<h3>핵심 개념</h3><p>Big-O는 입력 크기가 커질 때 실행 시간이나 메모리 사용량이 어떻게 증가하는지 상한 관점으로 표현합니다.</p>
+<h3>30초 답변</h3><div class="serial-card">Big-O는 입력 n이 커질 때 비용 증가 추세를 보는 표기입니다. O(1), O(log n), O(n), O(n log n), O(n²)처럼 표현하며, 실무에서는 데이터가 커졌을 때 현재 알고리즘이 버틸 수 있는지 판단하는 데 씁니다.</div>
+<h3>90초 답변</h3><p>상수 시간도 실제로는 상수가 크면 느릴 수 있고, O(n)도 n이 작으면 충분할 수 있습니다. 면접에서는 “이중 루프라 O(n²)입니다”보다 입력 크기, 호출 빈도, 메모리 trade-off, 캐시/DB 같은 외부 비용을 함께 말하면 좋습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>공간 복잡도?</td><td>추가 자료구조나 recursion stack이 쓰는 메모리 증가량입니다.</td></tr><tr><td>O(log n) 예?</td><td>정렬된 배열 binary search, balanced tree 탐색입니다.</td></tr><tr><td>실무 연결?</td><td>대용량 grid filtering, API pagination, DB scan 비용으로 연결합니다.</td></tr></table>
+</section>
+
+<section id="q2">
+<div class="ch-head"><span class="ch-code">CS-02</span><h2>Q. Array/List/Map/Set/Heap/Queue/Stack/Tree/Graph는 언제 쓰나요?</h2></div>
+<h3>핵심 개념</h3><p>자료구조 선택은 접근 패턴, 삽입/삭제 비용, 정렬 필요성, 중복 허용, 우선순위, 관계 표현에 따라 달라집니다.</p>
+<h3>30초 답변</h3><div class="serial-card">순서 기반 index 접근은 Array/List, key 기반 조회는 Map, 중복 제거와 membership check는 Set, 우선순위 처리는 Heap, FIFO는 Queue, LIFO는 Stack, 계층은 Tree, 복잡한 관계는 Graph를 씁니다.</div>
+<h3>90초 답변</h3><p>면접에서는 자료구조 이름보다 비용을 말해야 합니다. HashMap 조회는 평균 O(1)이지만 hash collision과 resize 비용이 있고, TreeMap은 O(log n)이지만 정렬 순서를 유지합니다. Queue는 작업 처리, Stack은 call stack/undo, Heap은 top-k나 scheduler에 연결할 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Set 중복 기준?</td><td>equals/hashCode 또는 비교 기준에 따라 달라집니다.</td></tr><tr><td>Heap 정렬?</td><td>최솟값/최댓값을 빠르게 꺼내는 데 유리합니다.</td></tr><tr><td>Graph 저장?</td><td>인접 리스트와 인접 행렬을 규모와 밀도에 따라 선택합니다.</td></tr></table>
+</section>
+
+<section id="q3">
+<div class="ch-head"><span class="ch-code">CS-03</span><h2>Q. Hash collision은 무엇이고 왜 중요한가요?</h2></div>
+<h3>핵심 개념</h3><p>Hash collision은 서로 다른 key가 같은 hash bucket에 배치되는 현상입니다. 충돌이 많으면 HashMap의 평균 O(1) 성능이 나빠집니다.</p>
+<h3>30초 답변</h3><div class="serial-card">HashMap은 hashCode로 bucket을 찾고 equals로 실제 key를 비교합니다. 서로 다른 key가 같은 bucket에 몰리는 Hash collision이 많으면 조회 성능이 떨어지고, equals/hashCode 계약이 깨지면 조회 자체가 실패할 수 있습니다.</div>
+<h3>90초 답변</h3><p>좋은 hash 함수는 key를 bucket에 고르게 분산시켜야 합니다. Java HashMap은 충돌이 심하면 bucket 구조를 tree로 바꾸는 최적화가 있지만, 기본적으로 equals/hashCode를 올바르게 구현해야 합니다. 보안 관점에서는 의도적인 hash flooding 공격도 고려할 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>equals가 true면?</td><td>hashCode도 반드시 같아야 합니다.</td></tr><tr><td>hashCode 같으면 equals true?</td><td>아닙니다. 충돌 가능성이 있습니다.</td></tr><tr><td>mutable key?</td><td>Map에 넣은 뒤 hash 기준 값이 바뀌면 찾지 못할 수 있습니다.</td></tr></table>
+</section>
+
+<section id="q4">
+<div class="ch-head"><span class="ch-code">CS-04</span><h2>Q. BFS/DFS는 언제 쓰나요?</h2></div>
+<h3>핵심 개념</h3><p>BFS는 가까운 노드부터 넓게 탐색하고, DFS는 한 경로를 깊게 탐색합니다. 그래프/트리 탐색의 기본입니다.</p>
+<h3>30초 답변</h3><div class="serial-card">BFS는 queue를 사용해 최단 거리나 단계별 탐색에 유리하고, DFS는 stack 또는 recursion으로 깊은 경로 탐색, cycle detection, backtracking에 자주 씁니다.</div>
+<h3>90초 답변</h3><p>무가중치 그래프의 최단 경로는 BFS가 적합합니다. DFS는 모든 조합 탐색이나 dependency graph에서 cycle을 찾는 데 유용합니다. 실무에서는 메뉴 트리, 권한 그래프, 빌드 dependency, 조직도, workflow graph 같은 문제로 연결해 설명할 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>visited가 왜 필요?</td><td>cycle이 있는 그래프에서 무한 반복을 막기 위해 필요합니다.</td></tr><tr><td>DFS recursion 위험?</td><td>깊이가 크면 stack overflow가 날 수 있어 iterative 방식이 필요할 수 있습니다.</td></tr><tr><td>가중치 최단 경로?</td><td>Dijkstra 같은 알고리즘을 검토합니다.</td></tr></table>
+</section>
+
+<section id="q5">
+<div class="ch-head"><span class="ch-code">CS-05</span><h2>Q. race condition, deadlock, mutex/semaphore를 설명해보세요.</h2></div>
+<h3>핵심 개념</h3><p>race condition은 실행 순서에 따라 결과가 달라지는 문제입니다. deadlock은 둘 이상의 작업이 서로가 가진 자원을 기다리며 멈추는 상태입니다. mutex는 상호 배제, semaphore는 제한된 개수의 permit으로 동시 접근을 제어합니다.</p>
+<h3>30초 답변</h3><div class="serial-card">공유 상태를 여러 thread가 동시에 수정하면 race condition이 생길 수 있어 lock, atomic operation, transaction으로 보호합니다. deadlock은 lock 순서 불일치가 대표 원인이고, mutex는 하나만 들어가게, semaphore는 정해진 수만 들어가게 제어합니다.</div>
+<h3>90초 답변</h3><p>실무에서는 중복 클릭, 중복 결제, 재고 차감, DB row lock, thread pool 고갈 같은 문제로 나타납니다. deadlock 예방은 lock 순서 통일, lock 범위 축소, timeout, retry가 기본입니다. 동시성 문제는 재현이 어렵기 때문에 테스트와 로그, transaction isolation 이해가 필요합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>atomic?</td><td>중간 상태를 다른 작업이 볼 수 없는 단위 연산입니다.</td></tr><tr><td>semaphore 예?</td><td>DB connection pool처럼 동시에 사용할 수 있는 자원 수 제한입니다.</td></tr><tr><td>frontend 연결?</td><td>중복 요청, stale response, optimistic update 충돌로 나타날 수 있습니다.</td></tr></table>
+</section>
+
+<section id="q6">
+<div class="ch-head"><span class="ch-code">CS-06</span><h2>Q. process vs thread, context switching, memory, file descriptor를 설명해보세요.</h2></div>
+<h3>핵심 개념</h3><p>process는 독립된 실행 단위와 주소 공간을 가지고, thread는 process 안에서 메모리를 공유하는 실행 흐름입니다. context switching은 CPU가 실행 대상을 바꾸며 상태를 저장/복원하는 비용입니다. file descriptor는 열린 파일, socket 같은 OS resource를 가리키는 핸들입니다.</p>
+<h3>30초 답변</h3><div class="serial-card">process는 메모리 공간이 분리되어 안정적이지만 생성/전환 비용이 크고, thread는 같은 process 메모리를 공유해 가볍지만 동시성 버그가 생길 수 있습니다. context switching이 많으면 CPU가 실제 작업보다 전환에 시간을 쓰고, file descriptor가 누수되면 파일이나 socket을 더 열 수 없습니다.</div>
+<h3>90초 답변</h3><p>웹 서버에서 thread pool이 고갈되면 요청이 대기하고, DB connection pool이 작거나 누수되면 API가 멈춘 것처럼 보입니다. socket도 file descriptor로 관리되므로 connection leak은 FD 고갈로 이어질 수 있습니다. OS 기본기를 알면 “서버가 느리다”를 CPU, memory, thread, FD, network로 나눠 볼 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>memory leak?</td><td>더 이상 필요 없는 객체나 resource가 참조/해제되지 않아 계속 남는 상태입니다.</td></tr><tr><td>context switching 비용?</td><td>register/cache 상태 전환 비용과 scheduler overhead가 있습니다.</td></tr><tr><td>FD 확인?</td><td>lsof, ulimit, proc filesystem 등으로 확인할 수 있습니다.</td></tr></table>
+</section>
+
+<section id="q7">
+<div class="ch-head"><span class="ch-code">CS-07</span><h2>나쁜 답변 / 좋은 답변 비교</h2></div>
+<table>
+<tr><th>질문</th><th>나쁜 답변</th><th>좋은 답변</th></tr>
+<tr><td>Big-O</td><td>빠른지 느린지 보는 겁니다.</td><td>입력 증가에 따른 비용 증가율을 보고, 실제 입력 크기와 호출 빈도, 메모리 trade-off까지 함께 판단합니다.</td></tr>
+<tr><td>deadlock</td><td>프로그램이 멈추는 겁니다.</td><td>서로의 lock을 기다리는 상태이며 lock 순서 통일, timeout, retry, transaction 범위 축소로 예방합니다.</td></tr>
+<tr><td>process vs thread</td><td>process가 크고 thread가 작습니다.</td><td>process는 주소 공간이 분리되고 thread는 메모리를 공유하므로 성능과 격리, 동시성 위험이 달라집니다.</td></tr>
+</table>
+</section>
+
+<footer>CS FUNDAMENTALS INTERVIEW · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>

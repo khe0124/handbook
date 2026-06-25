@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 보안 심화 면접</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">보안 심화 면접</div>
+  <a href="#ch1"><span class="code">SEC-00</span>답변 프레임</a>
+  <a href="#ch2"><span class="code">SEC-01</span>OWASP Top 10</a>
+  <a href="#ch3"><span class="code">SEC-02</span>IDOR·접근 제어</a>
+  <a href="#ch4"><span class="code">SEC-03</span>XSS·CSRF·SQLi·SSRF</a>
+  <a href="#ch5"><span class="code">SEC-04</span>OAuth2/OIDC</a>
+  <a href="#ch6"><span class="code">SEC-05</span>비밀번호·토큰·시크릿</a>
+  <a href="#ch7"><span class="code">SEC-06</span>감사 로그·사고 대응</a>
+</nav>
+<main>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-SECURITY-DEEP-DIVE-V1</span><span>SCOPE : OWASP · AUTH · TOKEN · LOGGING</span><span>LANG : KO</span></div><h1>보안 심화 면접</h1><p class="hero-sub">보안 면접은 공격 이름 암기가 아니라 <strong>신뢰 경계, 공격 전제, 서버 방어선, 탐지 증거</strong>를 연결해 설명하는 자리입니다.</p></header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">SEC-00</span><h2>답변 프레임</h2></div>
+<div class="serial-card"><span class="sc-label">SECURITY ANSWER</span>1. 보호할 자산과 신뢰 경계 정의<br>2. 공격자가 조작할 수 있는 입력 식별<br>3. 서버 측 검증과 권한 확인 설명<br>4. 방어 우회 가능성과 잔여 위험 언급<br>5. audit log, alert, rate limit, 테스트로 검증</div>
+<p class="lede">좋은 답변은 “프론트에서 막습니다”로 끝나지 않습니다. 클라이언트 제어는 UX 보조일 뿐이고, 최종 방어선은 서버 검증, 권한 모델, 로그, 모니터링입니다.</p>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">SEC-01</span><h2>OWASP Top 10</h2></div>
+<p>OWASP Top 10은 웹 취약점 목록이면서 면접에서 사고 구조를 보여주는 지도입니다. Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Vulnerable Components처럼 제품 개발 전 과정에 걸친 위험을 다룹니다.</p>
+<table><tr><th>질문</th><th>좋은 답변 방향</th></tr><tr><td>Top 10을 어떻게 활용하나요?</td><td>체크리스트로만 쓰지 않고 요구사항, 설계 리뷰, 코드 리뷰, 테스트 케이스의 기준으로 씁니다.</td></tr><tr><td>가장 자주 보는 위험은?</td><td>권한 누락, 입력 검증 누락, 로그에 민감정보 노출, 잘못된 CORS/쿠키 설정을 예로 듭니다.</td></tr></table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">SEC-02</span><h2>IDOR·접근 제어</h2></div>
+<p>IDOR는 사용자가 URL이나 body의 id를 바꿔 다른 사용자의 리소스에 접근하는 취약점입니다. 방어는 id를 숨기는 것이 아니라 모든 API에서 actor, action, resource의 관계를 서버에서 확인하는 것입니다.</p>
+<div class="serial-card"><span class="sc-label">30초 답변</span>IDOR는 식별자 직접 참조가 권한 검증 없이 노출될 때 발생합니다. 프론트 버튼 숨김이나 UUID만으로 막을 수 없고, 서버가 현재 사용자에게 해당 resource를 read/update/delete할 권한이 있는지 매 요청마다 검증해야 합니다.</div>
+<table><tr><th>꼬리질문</th><th>답변 방향</th></tr><tr><td>admin 화면이면?</td><td>role만 보지 말고 tenant, organization, project 단위 scope를 같이 확인합니다.</td></tr><tr><td>테스트는?</td><td>다른 사용자 소유 id로 요청하는 negative test와 audit log 검증을 둡니다.</td></tr></table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">SEC-03</span><h2>XSS·CSRF·SQL Injection·SSRF</h2></div>
+<table><tr><th>취약점</th><th>핵심</th><th>방어</th></tr><tr><td>XSS</td><td>공격자 입력이 브라우저에서 스크립트로 실행됩니다.</td><td>escaping, sanitization, CSP, dangerous HTML 사용 제한을 둡니다.</td></tr><tr><td>CSRF</td><td>사용자 인증 쿠키를 이용해 원치 않는 상태 변경 요청을 보냅니다.</td><td>SameSite cookie, CSRF token, Origin/Referer 검증을 씁니다.</td></tr><tr><td>SQL Injection</td><td>입력이 쿼리 구조를 바꿉니다.</td><td>prepared statement, ORM parameter binding, allowlist validation을 적용합니다.</td></tr><tr><td>SSRF</td><td>서버가 공격자가 지정한 내부/외부 URL로 요청합니다.</td><td>URL allowlist, private IP 차단, redirect 제한, metadata endpoint 차단을 둡니다.</td></tr></table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">SEC-04</span><h2>OAuth2/OIDC</h2></div>
+<p>OAuth2는 권한 위임 프레임워크이고 OIDC는 그 위에 identity layer를 얹어 로그인 정보를 표준화합니다. 면접에서는 authorization code flow, PKCE, access token, id token, refresh token의 역할을 구분해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">토큰 답변</span>access token은 API 접근 권한을 나타내며 짧게 유지합니다. refresh token은 재발급 권한이므로 저장 위치와 탈취 대응이 중요하고, refresh token rotation과 reuse detection으로 탈취 신호를 잡을 수 있습니다.</div>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>JWT는 어디에 저장하나요?</td><td>XSS와 CSRF threat model을 비교하고, cookie 사용 시 HttpOnly/SameSite/Secure를 함께 말합니다.</td></tr><tr><td>로그아웃은?</td><td>클라이언트 삭제뿐 아니라 refresh token revoke, session invalidate, device 목록 정리를 봅니다.</td></tr></table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">SEC-05</span><h2>비밀번호·토큰·시크릿</h2></div>
+<p>비밀번호는 복호화 가능한 암호화가 아니라 bcrypt, scrypt, Argon2 같은 password hashing으로 저장합니다. bcrypt는 salt와 cost factor를 통해 brute force 비용을 높입니다.</p>
+<table><tr><th>항목</th><th>면접 포인트</th></tr><tr><td>password hashing</td><td>salt, work factor, hash migration, password reset token 만료를 설명합니다.</td></tr><tr><td>token</td><td>짧은 만료, rotation, revoke, audience/scope 검증, clock skew를 봅니다.</td></tr><tr><td>secret</td><td>환경변수만으로 끝내지 말고 secret manager, rotation, 로그 마스킹을 말합니다.</td></tr><tr><td>rate limit</td><td>login, password reset, OTP, refresh endpoint에 계정·IP·디바이스 기준 제한을 둡니다.</td></tr></table>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">SEC-06</span><h2>감사 로그·사고 대응</h2></div>
+<p>audit log는 디버깅 로그가 아니라 누가, 언제, 어떤 권한으로, 어떤 대상에, 어떤 변경을 했는지 추적하는 보안 증거입니다. 민감정보 원문을 남기지 않고 actor, target, action, result, traceId, before/after summary를 남깁니다.</p>
+<div class="serial-card"><span class="sc-label">사고 대응</span>탐지 → 격리 → 영향 범위 산정 → 토큰/시크릿 회전 → 패치 → 사용자 고지 판단 → 사후 회고 순서로 말합니다. 면접에서는 완벽한 예방보다 탐지와 복구 체계를 같이 말하는 편이 신뢰도가 높습니다.</div>
+</section>
+
+<footer>SECURITY DEEP DIVE INTERVIEW · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>

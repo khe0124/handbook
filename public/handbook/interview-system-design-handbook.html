@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 시스템 설계 면접</title></head>
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 시스템 설계 면접</title></head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
@@ -15,6 +15,9 @@
   <a href="#q7"><span class="code">SD-07</span>무한 스크롤 피드</a>
   <a href="#q8"><span class="code">SD-08</span>운영 장애 복구 도구</a>
   <a href="#q9"><span class="code">SD-09</span>다국어 서비스</a>
+  <a href="#ch2"><span class="code">SD-10</span>화이트보드 진행 순서</a>
+  <a href="#ch3"><span class="code">SD-11</span>Capacity estimation</a>
+  <a href="#ch4"><span class="code">SD-12</span>고가용성·DR</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-SYSTEM-DESIGN-QA-V1</span><span>SCOPE : REQUIREMENTS · DATA · API · STATE · OBSERVABILITY</span><span>LANG : KO</span></div><h1>시스템 설계 면접</h1><p class="hero-sub">시스템 설계 면접은 완벽한 구조를 바로 그리는 시험이 아닙니다. <strong>요구사항을 묻고, 제약을 세우고, trade-off를 설명하며, 위험을 검증 가능한 단위로 줄이는 과정</strong>을 보여주는 자리입니다.</p></header>
@@ -108,6 +111,79 @@
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>key 관리 기준은?</td><td>도메인 namespace와 재사용 기준을 정합니다.</td></tr><tr><td>시간대는?</td><td>저장은 UTC, 표시는 사용자 timezone 기준으로 합니다.</td></tr><tr><td>번역 누락은?</td><td>fallback, CI check, QA 리포트로 관리합니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>i18n key 구조, locale routing, missing key 리포트, 날짜/통화 테스트 케이스를 말합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>다국어를 텍스트 파일 교체로만 보면 날짜, 숫자, SEO, QA 비용을 놓칩니다.</p></div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">SD-10</span><h2>화이트보드 진행 순서</h2></div>
+<p class="lede">시스템 설계 면접은 바로 컴포넌트를 그리는 시험이 아닙니다. 면접관 신호를 보면서 요구사항을 좁히고, 비기능 요구사항과 운영 리스크를 구조화하는 과정입니다.</p>
+<table>
+<tr><th>순서</th><th>말할 내용</th><th>면접관 신호</th></tr>
+<tr><td>1. 요구사항 정리</td><td>사용자, 핵심 시나리오, 제외 범위, 성공 기준을 질문한다</td><td>“그 부분은 가정해도 됩니다”라고 하면 다음 단계로 이동</td></tr>
+<tr><td>2. 비기능 요구사항</td><td>트래픽, 지연, 정합성, 보안, 접근성, 운영 권한을 확인한다</td><td>성능이나 장애를 물으면 운영 관점으로 확장</td></tr>
+<tr><td>3. 데이터 모델</td><td>핵심 entity, 상태 전이, 소유권, 감사 로그 필요성을 정리한다</td><td>DB나 API 질문이 나오면 계약과 제약 조건을 구체화</td></tr>
+<tr><td>4. API와 화면 흐름</td><td>읽기/쓰기 API, pagination, validation, error recovery를 연결한다</td><td>프론트 중심 질문이면 상태 구조와 UX 복구를 깊게 설명</td></tr>
+<tr><td>5. 병목과 장애 대응</td><td>캐시, 큐, retry, idempotency, rollback, observability를 붙인다</td><td>scale 질문이 나오면 병목 하나를 골라 trade-off를 말한다</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">답변 흐름</span>
+요구사항 정리 → 비기능 요구사항 → 데이터 모델 → API와 화면 흐름 → 병목과 장애 대응 → 검증 계획 순서로 말합니다.<br>
+화이트보드에는 모든 것을 그리지 말고, 선택 기준이 드러나는 경계와 데이터 흐름만 남깁니다.
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">SD-11</span><h2>Capacity estimation</h2></div>
+<p class="lede">시스템 설계에서 Capacity estimation은 정확한 숫자 맞히기가 아니라, 어떤 가정으로 병목을 추정하고 어떤 지점부터 구조가 달라지는지 말하는 훈련입니다.</p>
+<table>
+<tr><th>항목</th><th>질문</th><th>답변 포인트</th></tr>
+<tr><td>QPS</td><td>평균과 peak traffic은 얼마인가</td><td>DAU, 사용자당 요청 수, peak factor로 대략 산정합니다.</td></tr>
+<tr><td>read/write ratio</td><td>읽기와 쓰기 비율은 어떻게 다른가</td><td>읽기가 많으면 cache/replica, 쓰기가 많으면 partition/queue/lock을 봅니다.</td></tr>
+<tr><td>storage size</td><td>하루 데이터 증가량은 얼마인가</td><td>row 크기 × 생성량 × 보관 기간으로 추정하고 index 크기도 고려합니다.</td></tr>
+<tr><td>latency budget</td><td>사용자가 허용할 응답 시간은 얼마인가</td><td>frontend, gateway, app, DB, external API 예산으로 나눕니다.</td></tr>
+<tr><td>DB connection pool</td><td>동시 요청을 DB가 감당할 수 있는가</td><td>요청 시간, 쿼리 시간, pool 대기, transaction 길이를 함께 봅니다.</td></tr>
+<tr><td>queue worker 수</td><td>비동기 작업이 밀리지 않는가</td><td>생산 속도, 처리 시간, queue lag 목표로 worker 수를 계산합니다.</td></tr>
+<tr><td>고가용성·DR</td><td>장애가 났을 때 얼마나 빨리 복구해야 하는가</td><td>SPOF를 제거하고 RPO/RTO, active-active 필요성, failover 절차를 정합니다.</td></tr>
+<tr><td>load shedding</td><td>과부하 때 무엇을 포기할 수 있는가</td><td>비핵심 요청 차단, degraded mode, queue backpressure로 핵심 흐름을 보호합니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">간단 산정 예시</span>
+DAU 100,000명 × 사용자당 20 요청 = 2,000,000 requests/day<br>
+평균 QPS ≈ 2,000,000 / 86,400 = 23 QPS, peak factor 10이면 약 230 QPS<br>
+쓰기 비율이 10%라면 peak write는 약 23 QPS입니다. 이 정도는 단일 DB와 cache로 충분할 수 있지만, query가 느리거나 transaction이 길면 connection pool이 먼저 병목이 됩니다.
+</div>
+<div class="serial-card">
+<span class="sc-label">HA/DR 답변</span>
+고가용성·DR 질문에서는 먼저 SPOF를 찾고, RPO/RTO 목표를 정한 뒤 active-active가 필요한지 판단합니다. 모든 요청을 지키려 하기보다 load shedding으로 핵심 사용자 흐름을 보호할 수 있는지도 함께 말합니다.
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">SD-12</span><h2>고가용성·DR</h2></div>
+<p class="lede">고가용성·DR 질문은 “서버를 여러 대 둔다”보다 어떤 실패를 가정하고, 어느 수준의 중단과 데이터 손실을 허용하는지 설명하는 문제입니다. 먼저 SPOF를 찾고 RPO/RTO를 숫자로 합의한 뒤 구조를 선택합니다.</p>
+<table>
+<tr><th>주제</th><th>면접에서 말할 기준</th><th>주의점</th></tr>
+<tr><td>SPOF 제거</td><td>load balancer, app instance, DB primary, cache, queue, DNS, external API 중 단일 장애 지점을 찾습니다.</td><td>컴퓨트만 이중화하고 DB, 배포, 운영 권한을 빼면 답변이 얕아집니다.</td></tr>
+<tr><td>active-passive</td><td>평상시 한쪽이 처리하고 장애 시 failover합니다. 운영이 단순하고 비용이 낮지만 전환 시간이 있습니다.</td><td>자동 failover 기준과 split-brain 방지를 설명해야 합니다.</td></tr>
+<tr><td>active-active</td><td>여러 region 또는 zone이 동시에 트래픽을 처리합니다. 가용성은 높지만 데이터 정합성, routing, 비용이 복잡합니다.</td><td>쓰기 충돌, session affinity, global rate limit을 함께 봅니다.</td></tr>
+<tr><td>RPO/RTO</td><td>RPO는 허용 가능한 데이터 손실 시간, RTO는 복구까지 허용 가능한 시간입니다.</td><td>“장애가 나면 복구합니다”가 아니라 수치 기준을 먼저 말해야 합니다.</td></tr>
+<tr><td>backup vs replication</td><td>replication은 빠른 전환에 유리하고 backup은 논리적 삭제·오염 복구에 필요합니다.</td><td>replication만 있으면 잘못 삭제된 데이터도 빠르게 복제됩니다.</td></tr>
+<tr><td>부하 방어</td><td>rate limit, backpressure, graceful degradation, load shedding으로 핵심 기능을 보호합니다.</td><td>모든 요청을 끝까지 처리하려 하면 장애가 연쇄적으로 커집니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">30초 답변</span>
+고가용성 설계에서는 먼저 SPOF를 찾고, 서비스가 허용하는 RPO/RTO를 정합니다. 그 기준에 따라 multi-AZ active-passive, multi-region active-active, backup/restore, replication, failover를 선택합니다. 장애 중에는 graceful degradation, rate limit, backpressure, load shedding으로 핵심 경로를 보호합니다.
+</div>
+<div class="serial-card">
+<span class="sc-label">90초 답변</span>
+예를 들어 B2B admin 서비스라면 결제 승인처럼 즉시성이 큰 기능과 리포트 다운로드처럼 지연 가능한 기능을 나눕니다. 앱 서버는 multi-AZ로 수평 확장하고, DB는 primary/replica와 automated backup을 둡니다. RTO가 짧아야 하면 failover 자동화와 health check를 강화하고, RPO가 거의 0이어야 하면 동기 복제나 쓰기 경로 제약을 검토합니다. 반대로 비용이 중요하면 일부 기능은 read-only mode나 degraded mode로 낮춰 운영할 수 있습니다.
+</div>
+<table>
+<tr><th>꼬리질문</th><th>답변 방향</th></tr>
+<tr><td>replication lag가 있으면?</td><td>read-after-write가 필요한 요청은 primary로 보내고, lag metric을 보고 replica routing을 제한합니다.</td></tr>
+<tr><td>DB primary 장애는?</td><td>failover, connection 재시도, idempotency, transaction 중단 복구, 운영 알림을 함께 설계합니다.</td></tr>
+<tr><td>외부 API 장애는?</td><td>timeout, circuit breaker, fallback, queueing, 사용자 고지, 재처리 runbook을 둡니다.</td></tr>
+<tr><td>장애 훈련은?</td><td>backup restore drill, failover rehearsal, runbook review, alert threshold 검증을 정기적으로 합니다.</td></tr>
+</table>
 </section>
 
 <footer>SYSTEM DESIGN INTERVIEW Q&A · V1 · 2026-06</footer>

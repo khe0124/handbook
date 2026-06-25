@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Frontend Cheat Sheet</title>
 </head>
 <body>
@@ -13,6 +13,9 @@
   <a href="#ch3"><span class="code">FE-CS-03</span>판단 기준</a>
   <a href="#ch4"><span class="code">FE-CS-04</span>자주 나는 실수</a>
   <a href="#ch5"><span class="code">FE-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#ch6"><span class="code">FE-CS-06</span>Red Flags</a>
+  <a href="#ch7"><span class="code">FE-CS-07</span>Review Gate</a>
+  <a href="#ch8"><span class="code">FE-CS-08</span>Failure Playbook</a>
 </nav>
 <main>
   <header class="hero">
@@ -27,47 +30,51 @@
   </header>
   <section id="ch1">
     <div class="ch-head"><span class="ch-code">FE-CS-01</span><h2>개요</h2></div>
-    <p class="lede">구현 중 결정을 빠르게 확인할 때 보는 문서입니다. 긴 원리 설명은 프론트엔드 핸드북을 보고, 여기서는 선택 기준과 실수 방지에 집중합니다.</p>
+    <p class="lede">프론트엔드 문제는 “화면이 안 나옴”으로 보이지만 실제 원인은 렌더링, 네트워크, 상태 소유권, 접근성, 보안 경계 중 하나입니다. 먼저 증상을 계층으로 나눠야 빠르게 고칩니다.</p>
     <table>
-      <tr><th>상황</th><th>먼저 확인할 것</th></tr>
-      <tr><td>화면이 느림</td><td>렌더 횟수, 큰 DOM, 네트워크 waterfall, 이미지와 번들 크기</td></tr>
-      <tr><td>상태가 꼬임</td><td>서버 상태와 UI 상태가 섞였는지, derived state를 저장했는지</td></tr>
-      <tr><td>SSR 오류</td><td>서버/클라이언트 렌더 결과 차이, 브라우저 전용 API 접근 시점</td></tr>
-      <tr><td>접근성 누락</td><td>키보드 이동, focus, label, semantic element, contrast</td></tr>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>실패 신호</th></tr>
+      <tr><td>화면이 느림</td><td>렌더 횟수, 큰 DOM, 네트워크 waterfall, 이미지와 번들 크기</td><td>interaction마다 전체 목록 재렌더, LCP 이미지 지연</td></tr>
+      <tr><td>상태가 꼬임</td><td>서버 상태와 UI 상태가 섞였는지, derived state를 저장했는지</td><td>새로고침 후 값이 바뀌거나 탭 간 값이 어긋남</td></tr>
+      <tr><td>SSR 오류</td><td>서버/클라이언트 렌더 결과 차이, 브라우저 전용 API 접근 시점</td><td>hydration mismatch, 날짜·랜덤값·localStorage 차이</td></tr>
+      <tr><td>접근성 누락</td><td>키보드 이동, focus, label, semantic element, contrast</td><td>Tab으로 닿지 않거나 screen reader 이름이 없음</td></tr>
+      <tr><td>보안 리뷰</td><td>HTML 삽입, token 저장, CSRF, dependency, CSP</td><td>사용자 입력이 escape 없이 DOM에 들어감</td></tr>
     </table>
   </section>
   <section id="ch2">
     <div class="ch-head"><span class="ch-code">FE-CS-02</span><h2>핵심 명령/개념</h2></div>
     <table>
-      <tr><th>개념</th><th>압축 설명</th></tr>
-      <tr><td>Reflow</td><td>레이아웃 계산. 크기와 위치 변경이 원인이라 비용이 큼</td></tr>
-      <tr><td>Repaint</td><td>색, 그림자 같은 픽셀 다시 그리기</td></tr>
-      <tr><td>Composite</td><td>이미 그린 레이어를 합성. transform/opacity 최적화와 관련</td></tr>
-      <tr><td>Server state</td><td>서버가 소유한 캐시 가능한 비동기 데이터</td></tr>
-      <tr><td>Client state</td><td>모달, 탭, 입력 중 값처럼 UI가 소유한 즉시성 상태</td></tr>
-      <tr><td>Hydration mismatch</td><td>서버 HTML과 클라이언트 첫 렌더 결과가 달라 생기는 불일치</td></tr>
+      <tr><th>개념</th><th>압축 설명</th><th>실무 해석</th></tr>
+      <tr><td>Reflow</td><td>레이아웃 계산. 크기와 위치 변경이 원인이라 비용이 큼</td><td>반복 측정/쓰기, 큰 table/list에서 체감됨</td></tr>
+      <tr><td>Repaint</td><td>색, 그림자 같은 픽셀 다시 그리기</td><td>box-shadow, filter, 큰 배경 변경은 비용이 커질 수 있음</td></tr>
+      <tr><td>Composite</td><td>이미 그린 레이어를 합성</td><td>animation은 가능하면 transform/opacity 위주로 설계</td></tr>
+      <tr><td>Server state</td><td>서버가 소유한 캐시 가능한 비동기 데이터</td><td>freshness, invalidate, retry, loading/error 상태가 핵심</td></tr>
+      <tr><td>Client state</td><td>모달, 탭, 입력 중 값처럼 UI가 소유한 즉시성 상태</td><td>URL에 남길지, 컴포넌트에 둘지, 전역화할지 결정</td></tr>
+      <tr><td>Hydration mismatch</td><td>서버 HTML과 클라이언트 첫 렌더 결과 불일치</td><td>서버에서 결정 불가능한 값은 effect 이후로 미룸</td></tr>
+      <tr><td>Core Web Vitals</td><td>LCP, INP, CLS 중심 사용자 체감 지표</td><td>LCP는 로딩, INP는 반응성, CLS는 레이아웃 안정성 문제</td></tr>
     </table>
     <div class="serial-card"><span class="sc-label">FAST CHECK</span><code>npm run build</code>로 번들 오류를 먼저 잡고, DevTools Performance와 Network 탭으로 병목을 나눠 봅니다.</div>
   </section>
   <section id="ch3">
     <div class="ch-head"><span class="ch-code">FE-CS-03</span><h2>판단 기준</h2></div>
     <table>
-      <tr><th>선택</th><th>기준</th></tr>
-      <tr><td>CSR</td><td>로그인 뒤 내부 도구, SEO 영향 작음, 인터랙션 중심</td></tr>
-      <tr><td>SSR</td><td>초기 표시와 SEO가 중요하고 사용자별 데이터가 있음</td></tr>
-      <tr><td>SSG</td><td>콘텐츠가 거의 고정이고 빠른 CDN 제공이 중요함</td></tr>
-      <tr><td>memoization</td><td>계산 비용이 크거나 props 안정성이 보장될 때만 적용</td></tr>
-      <tr><td>E2E test</td><td>단위 테스트보다 사용자 흐름 자체가 더 중요한 핵심 경로</td></tr>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>CSR</td><td>로그인 뒤 내부 도구, SEO 영향 작음, 인터랙션 중심</td><td>초기 빈 화면과 큰 JS 번들 관리 필요</td></tr>
+      <tr><td>SSR</td><td>초기 표시와 SEO가 중요하고 사용자별 데이터가 있음</td><td>서버 비용, cache 전략, hydration 안정성 필요</td></tr>
+      <tr><td>SSG</td><td>콘텐츠가 거의 고정이고 빠른 CDN 제공이 중요함</td><td>데이터 변경 주기와 재생성 전략 확인</td></tr>
+      <tr><td>memoization</td><td>계산 비용이 크거나 props 안정성이 보장될 때만 적용</td><td>측정 없이 남발하면 코드 복잡도만 증가</td></tr>
+      <tr><td>URL state</td><td>공유, 뒤로가기, 새로고침 복원이 필요한 필터/검색</td><td>입력 중 값과 확정된 query를 분리</td></tr>
+      <tr><td>E2E test</td><td>사용자 흐름 자체가 더 중요한 핵심 경로</td><td>모든 edge를 E2E로 밀면 느리고 불안정해짐</td></tr>
     </table>
   </section>
   <section id="ch4">
     <div class="ch-head"><span class="ch-code">FE-CS-04</span><h2>자주 나는 실수</h2></div>
     <ul>
-      <li>API 응답 전체를 컴포넌트 상태로 복사해 서버 상태와 UI 상태를 동시에 관리한다.</li>
-      <li>성능 문제를 보기 전에 무조건 <code>memo</code>, <code>useMemo</code>, <code>useCallback</code>을 추가한다.</li>
-      <li>버튼 역할을 하는 <code>div</code>를 만들고 keyboard/focus 처리를 빼먹는다.</li>
-      <li>토큰 저장 위치를 보안 위협 모델 없이 관성으로 결정한다.</li>
-      <li>hydration 문제를 suppress 옵션으로 숨기고 원인을 제거하지 않는다.</li>
+      <li>API 응답 전체를 컴포넌트 상태로 복사해 서버 상태와 UI 상태를 동시에 관리한다. stale data와 동기화 버그가 생긴다.</li>
+      <li>성능 문제를 보기 전에 무조건 <code>memo</code>, <code>useMemo</code>, <code>useCallback</code>을 추가한다. 실제 병목이 네트워크나 이미지면 효과가 없다.</li>
+      <li>버튼 역할을 하는 <code>div</code>를 만들고 keyboard/focus 처리를 빼먹는다. 접근성과 테스트 가능성이 동시에 나빠진다.</li>
+      <li>토큰 저장 위치를 보안 위협 모델 없이 관성으로 결정한다. XSS, CSRF, 세션 폐기 요구가 선택을 바꾼다.</li>
+      <li>hydration 문제를 suppress 옵션으로 숨기고 원인을 제거하지 않는다. 날짜, locale, 랜덤값, 브라우저 API 접근을 먼저 의심한다.</li>
+      <li>loading, empty, error, permission denied, offline 상태를 나중에 붙인다. 핵심 UI 구조가 뒤늦게 흔들린다.</li>
     </ul>
   </section>
   <section id="ch5">
@@ -76,7 +83,44 @@
       <div class="g-row"><div class="g-term"><b>상태 분리</b><span>state boundary</span></div><div class="g-def">서버 상태는 캐시와 동기화 문제이고, 클라이언트 상태는 즉시 UI 반응 문제라 lifecycle과 소유자가 다릅니다.</div></div>
       <div class="g-row"><div class="g-term"><b>성능 최적화</b><span>performance</span></div><div class="g-def">먼저 측정으로 병목을 렌더링, 네트워크, 번들, 이미지 중 어디인지 나눈 뒤 가장 큰 비용부터 줄입니다.</div></div>
       <div class="g-row"><div class="g-term"><b>접근성</b><span>a11y</span></div><div class="g-def">접근성은 추가 기능이 아니라 키보드, 스크린리더, semantic markup까지 포함한 기본 사용성입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>SSR</b><span>hydration</span></div><div class="g-def">SSR의 핵심 위험은 서버가 만든 HTML과 클라이언트 첫 렌더가 달라지는 것이므로 비결정적 값은 분리해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>보안</b><span>browser risk</span></div><div class="g-def">브라우저는 사용자가 조작 가능한 환경이므로 입력 escape, 권한 재검증, 토큰 저장, 의존성 위험을 함께 봐야 합니다.</div></div>
     </div>
+  </section>
+  <section id="ch6">
+    <div class="ch-head"><span class="ch-code">FE-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">프론트엔드 품질은 정상 화면보다 빈 화면, 실패 화면, 느린 상호작용, 접근성, 브라우저 보안에서 드러납니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>loading, empty, error, permission 상태가 없음</td><td>실제 운영 데이터에서는 UI가 쉽게 깨집니다.</td><td>상태별 스냅샷, story, E2E 경로를 추가합니다.</td></tr>
+      <tr><td><code>dangerouslySetInnerHTML</code> 또는 <code>innerHTML</code> 사용</td><td>XSS가 DOM 실행으로 이어질 수 있습니다.</td><td>escape/sanitize, CSP, 입력 출처를 확인합니다.</td></tr>
+      <tr><td>토큰 저장 위치를 관성으로 결정</td><td>XSS와 CSRF 위협 모델에 따라 선택이 달라집니다.</td><td>HttpOnly, SameSite, refresh 흐름, logout/revoke를 비교합니다.</td></tr>
+      <tr><td>측정 전 memoization 남발</td><td>렌더 원인보다 참조 안정성 코드가 복잡해집니다.</td><td>React Profiler와 Network waterfall을 먼저 봅니다.</td></tr>
+      <tr><td>hydration 경고를 suppress로 숨김</td><td>서버·클라이언트 초기 상태 차이가 계속 남습니다.</td><td>날짜, locale, random, browser API 접근을 분리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="ch7">
+    <div class="ch-head"><span class="ch-code">FE-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>화면 추가</td><td>빈 상태, 오류 상태, 권한 없음, 모바일 폭에서 레이아웃이 없음</td><td>상태별 캡처와 주요 viewport 확인이 있습니다.</td></tr>
+      <tr><td>폼·입력</td><td>서버 validation 오류를 사용자 행동으로 복구할 수 없음</td><td>필드별 오류, submit 중복 방지, 재시도 흐름이 있습니다.</td></tr>
+      <tr><td>성능 변경</td><td>LCP/INP/CLS 또는 번들 영향이 측정되지 않음</td><td>전후 수치와 병목 근거가 있습니다.</td></tr>
+      <tr><td>접근성</td><td>키보드로 핵심 액션에 도달할 수 없음</td><td>focus order, label, semantic element, contrast를 확인했습니다.</td></tr>
+      <tr><td>보안 경계</td><td>사용자 입력 HTML, 토큰, redirect URL 검증이 불명확함</td><td>sanitize, allowlist, SameSite/CSP 정책이 명시돼 있습니다.</td></tr>
+    </table>
+  </section>
+  <section id="ch8">
+    <div class="ch-head"><span class="ch-code">FE-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">BROKEN SCREEN TRIAGE</span>깨진 화면은 코드부터 고치기보다 route, role, API, runtime error, hydration, cache 순서로 증거를 모읍니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>어떤 route, user role, browser, viewport에서만 재현되는가?</td><td>재현 조건, session, feature flag</td></tr>
+      <tr><td>2</td><td>Console error와 Network 실패가 먼저인가?</td><td>DevTools Console, Network status, response body</td></tr>
+      <tr><td>3</td><td>API contract 변경 또는 cache stale이 있는가?</td><td>response schema, ETag/cache-control, deploy SHA</td></tr>
+      <tr><td>4</td><td>hydration, date/locale/random, browser-only API 차이인가?</td><td>SSR log, client stack trace, hydration warning</td></tr>
+      <tr><td>5</td><td>flag off, rollback, CDN purge 중 어떤 복구가 가장 안전한가?</td><td>사용자 영향 범위와 데이터 변경 여부</td></tr>
+    </table>
   </section>
 </main>
 </body>

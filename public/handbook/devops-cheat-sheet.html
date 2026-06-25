@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><title>DevOps Cheat Sheet</title></head>
+<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>DevOps Cheat Sheet</title></head>
 <body>
 <nav aria-label="목차">
   <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">DevOps</div>
@@ -9,6 +9,9 @@
   <a href="#ch3"><span class="code">DO-CS-03</span>판단 기준</a>
   <a href="#ch4"><span class="code">DO-CS-04</span>자주 나는 실수</a>
   <a href="#ch5"><span class="code">DO-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#ch6"><span class="code">DO-CS-06</span>Red Flags</a>
+  <a href="#ch7"><span class="code">DO-CS-07</span>Review Gate</a>
+  <a href="#ch8"><span class="code">DO-CS-08</span>Failure Playbook</a>
 </nav>
 <main>
   <header class="hero">
@@ -21,44 +24,48 @@
     <div class="ch-head"><span class="ch-code">DO-CS-01</span><h2>개요</h2></div>
     <p class="lede">DevOps의 핵심은 자동화 자체가 아니라 변경을 작게 만들고, 검증하고, 문제가 생기면 빠르게 멈추거나 되돌리는 운영 체계입니다.</p>
     <table>
-      <tr><th>상황</th><th>먼저 확인할 것</th></tr>
-      <tr><td>배포 전</td><td>artifact digest, test gate, approval, rollback plan</td></tr>
-      <tr><td>배포 중</td><td>error rate, latency, saturation, health check</td></tr>
-      <tr><td>장애 대응</td><td>recent change, blast radius, log/metric/trace</td></tr>
-      <tr><td>인프라 변경</td><td>plan diff, drift, secret exposure, dependency</td></tr>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>운영 질문</th></tr>
+      <tr><td>배포 전</td><td>artifact digest, test gate, approval, rollback plan</td><td>정확히 무엇이 운영에 올라가는가?</td></tr>
+      <tr><td>배포 중</td><td>error rate, latency, saturation, health check</td><td>어떤 지표가 나빠지면 멈출 것인가?</td></tr>
+      <tr><td>장애 대응</td><td>recent change, blast radius, log/metric/trace</td><td>사용자 영향 범위와 최근 변경은 무엇인가?</td></tr>
+      <tr><td>인프라 변경</td><td>plan diff, drift, secret exposure, dependency</td><td>이 변경이 어떤 리소스를 교체/삭제하는가?</td></tr>
+      <tr><td>Secret 변경</td><td>rotation, consumer rollout, revocation, audit</td><td>구버전 앱이 새 secret을 읽을 수 있는가?</td></tr>
     </table>
   </section>
   <section id="ch2">
     <div class="ch-head"><span class="ch-code">DO-CS-02</span><h2>핵심 명령/개념</h2></div>
     <table>
-      <tr><th>개념</th><th>압축 설명</th></tr>
-      <tr><td>CI</td><td>merge 전후 빌드, 테스트, 정적 검사로 통합 위험을 낮춤</td></tr>
-      <tr><td>CD</td><td>검증된 artifact를 환경에 배포하고 승격함</td></tr>
-      <tr><td>Blue-green</td><td>신/구 환경을 동시에 두고 트래픽을 전환</td></tr>
-      <tr><td>Canary</td><td>일부 트래픽부터 점진적으로 확대</td></tr>
-      <tr><td>RED</td><td>Rate, Errors, Duration 중심 서비스 지표</td></tr>
-      <tr><td>USE</td><td>Utilization, Saturation, Errors 중심 리소스 지표</td></tr>
+      <tr><th>개념</th><th>압축 설명</th><th>실무 체크</th></tr>
+      <tr><td>CI</td><td>merge 전후 빌드, 테스트, 정적 검사로 통합 위험을 낮춤</td><td>빠르고 결정적이며 실패 원인이 읽혀야 함</td></tr>
+      <tr><td>CD</td><td>검증된 artifact를 환경에 배포하고 승격함</td><td>환경별 재빌드보다 동일 artifact 승격이 바람직</td></tr>
+      <tr><td>Blue-green</td><td>신/구 환경을 동시에 두고 트래픽을 전환</td><td>DB schema와 background job 중복 실행 주의</td></tr>
+      <tr><td>Canary</td><td>일부 트래픽부터 점진적으로 확대</td><td>중단 기준과 자동/수동 rollback 기준 필요</td></tr>
+      <tr><td>RED</td><td>Rate, Errors, Duration 중심 서비스 지표</td><td>API와 사용자 흐름의 품질 확인</td></tr>
+      <tr><td>USE</td><td>Utilization, Saturation, Errors 중심 리소스 지표</td><td>CPU, memory, disk, network 병목 확인</td></tr>
+      <tr><td>Drift</td><td>코드에 선언된 인프라와 실제 상태의 차이</td><td>수동 변경이 누적되면 재현성과 복구성이 깨짐</td></tr>
     </table>
   </section>
   <section id="ch3">
     <div class="ch-head"><span class="ch-code">DO-CS-03</span><h2>판단 기준</h2></div>
     <table>
-      <tr><th>선택</th><th>기준</th></tr>
-      <tr><td>Rolling</td><td>자원 추가가 어렵고 신/구 버전 공존이 안전함</td></tr>
-      <tr><td>Blue-green</td><td>빠른 전환과 빠른 rollback이 중요하고 자원 2배를 감당함</td></tr>
-      <tr><td>Canary</td><td>사용자 영향 반경을 작게 시작하고 지표 기반 확대가 가능함</td></tr>
-      <tr><td>Manual gate</td><td>운영 영향이 크고 사람의 판단이 필요한 release</td></tr>
-      <tr><td>IaC</td><td>인프라 상태를 재현 가능하게 version control 해야 함</td></tr>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>Rolling</td><td>자원 추가가 어렵고 신/구 버전 공존이 안전함</td><td>중간 상태에서 호환성이 깨지면 장애 발생</td></tr>
+      <tr><td>Blue-green</td><td>빠른 전환과 빠른 rollback이 중요하고 자원 2배를 감당함</td><td>DB와 queue consumer는 단순 전환이 어려움</td></tr>
+      <tr><td>Canary</td><td>사용자 영향 반경을 작게 시작하고 지표 기반 확대가 가능함</td><td>트래픽 분할과 지표 민감도가 충분해야 함</td></tr>
+      <tr><td>Manual gate</td><td>운영 영향이 크고 사람의 판단이 필요한 release</td><td>승인자가 볼 diff와 위험 요약이 있어야 함</td></tr>
+      <tr><td>IaC</td><td>인프라 상태를 재현 가능하게 version control 해야 함</td><td>plan 검토, state 보호, secret 분리 필요</td></tr>
+      <tr><td>Feature flag</td><td>배포와 기능 공개를 분리해야 함</td><td>flag cleanup을 안 하면 코드 경로가 복잡해짐</td></tr>
     </table>
   </section>
   <section id="ch4">
     <div class="ch-head"><span class="ch-code">DO-CS-04</span><h2>자주 나는 실수</h2></div>
     <ul>
-      <li>CI가 통과했지만 어떤 artifact가 운영에 배포됐는지 추적하지 않는다.</li>
-      <li>rollback을 문서로만 두고 실제 리허설하지 않는다.</li>
-      <li>secret을 이미지, 로그, build argument에 남긴다.</li>
-      <li>배포 후 볼 지표와 중단 기준 없이 canary를 시작한다.</li>
-      <li>IaC plan diff를 검토하지 않고 apply한다.</li>
+      <li>CI가 통과했지만 어떤 artifact가 운영에 배포됐는지 추적하지 않는다. commit, image digest, config version이 연결돼야 한다.</li>
+      <li>rollback을 문서로만 두고 실제 리허설하지 않는다. DB migration, message schema, external side effect는 단순 되돌리기가 아니다.</li>
+      <li>secret을 이미지, 로그, build argument에 남긴다. secret은 빌드 산출물에 들어가면 회수 비용이 커진다.</li>
+      <li>배포 후 볼 지표와 중단 기준 없이 canary를 시작한다. canary는 “조금 배포”가 아니라 “증거 기반 확대”다.</li>
+      <li>IaC plan diff를 검토하지 않고 apply한다. replacement, deletion, security rule broadening은 반드시 눈으로 확인한다.</li>
+      <li>알람을 많이 만들면 안전하다고 생각한다. action 없는 알람은 피로만 만들고 진짜 장애 신호를 묻는다.</li>
     </ul>
   </section>
   <section id="ch5">
@@ -67,7 +74,44 @@
       <div class="g-row"><div class="g-term"><b>CI/CD</b><span>pipeline</span></div><div class="g-def">CI/CD는 빠른 배포가 아니라 같은 입력에서 같은 artifact를 만들고 검증된 변경만 환경에 승격하는 체계입니다.</div></div>
       <div class="g-row"><div class="g-term"><b>Rollback</b><span>recovery</span></div><div class="g-def">rollback은 버튼이 아니라 앱, DB, 메시지, 설정이 이전 버전과 호환되는지 확인한 운영 절차입니다.</div></div>
       <div class="g-row"><div class="g-term"><b>관측성</b><span>observability</span></div><div class="g-def">로그, 메트릭, 트레이스는 장애가 난 뒤 원인을 좁히기 위한 증거 체계입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>IaC</b><span>reproducibility</span></div><div class="g-def">IaC는 클릭을 코드로 바꾸는 것이 아니라 인프라 변경을 리뷰, 재현, 복구 가능한 절차로 만드는 것입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>배포 전략</b><span>release</span></div><div class="g-def">배포 전략은 속도보다 영향 범위, 관측 가능성, 되돌릴 수 있는지를 기준으로 고릅니다.</div></div>
     </div>
+  </section>
+  <section id="ch6">
+    <div class="ch-head"><span class="ch-code">DO-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">DevOps 리스크는 자동화 여부보다 변경의 추적성, 롤백 가능성, 관측 가능성, secret 노출 여부로 판단합니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>rollback 절차가 없거나 리허설되지 않음</td><td>장애 때 배포 중단과 복구 판단이 늦어집니다.</td><td>앱, DB, queue, config를 각각 되돌릴 수 있는지 확인합니다.</td></tr>
+      <tr><td>운영 artifact digest를 모름</td><td>어떤 코드와 설정이 실행 중인지 추적할 수 없습니다.</td><td>commit SHA, image digest, config version을 연결합니다.</td></tr>
+      <tr><td>운영 변경이 IaC 밖에서 수동으로 수행됨</td><td>drift가 누적되어 재현과 복구가 깨집니다.</td><td>plan diff와 실제 리소스 상태를 비교합니다.</td></tr>
+      <tr><td>secret이 CI 로그나 build artifact에 노출</td><td>폐기와 재발급이 전체 공급망 이슈가 됩니다.</td><td>log masking, build arg, image layer, rotation 이력을 봅니다.</td></tr>
+      <tr><td>알람에 owner와 action이 없음</td><td>소음이 쌓이고 실제 장애 신호가 묻힙니다.</td><td>알람별 runbook, severity, paging 기준을 정리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="ch7">
+    <div class="ch-head"><span class="ch-code">DO-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>Pipeline</td><td>테스트 결과는 있으나 어떤 artifact가 승격되는지 불명확함</td><td>동일 artifact promotion과 digest 기록이 있습니다.</td></tr>
+      <tr><td>Deployment</td><td>중단 기준, rollback 기준, 사용자 영향 범위가 없음</td><td>canary/rolling 지표와 복구 절차가 정의돼 있습니다.</td></tr>
+      <tr><td>Migration</td><td>앱 구버전과 신버전이 동시에 동작할 수 없음</td><td>expand/contract, backfill, rollback 계획이 있습니다.</td></tr>
+      <tr><td>Secret</td><td>rotation 순서와 consumer rollout 순서가 없음</td><td>dual-read, revocation, audit 기준이 있습니다.</td></tr>
+      <tr><td>Observability</td><td>장애 때 봐야 할 dashboard와 log query가 없음</td><td>RED/USE 지표와 trace 연결이 준비돼 있습니다.</td></tr>
+    </table>
+  </section>
+  <section id="ch8">
+    <div class="ch-head"><span class="ch-code">DO-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">DEPLOYMENT FAILURE TRIAGE</span>배포 실패는 “재시도”보다 먼저 artifact, 변경 범위, 사용자 영향, 데이터 변경 여부를 고정합니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>현재 운영 중인 SHA, image digest, config version은 무엇인가?</td><td>deploy log, registry, release record</td></tr>
+      <tr><td>2</td><td>사용자 영향은 error rate, latency, 특정 tenant 중 어디에 나타나는가?</td><td>dashboard, alert, support ticket</td></tr>
+      <tr><td>3</td><td>DB migration, queue schema, feature flag가 함께 변경됐는가?</td><td>migration log, consumer lag, flag audit</td></tr>
+      <tr><td>4</td><td>rollback이 data loss나 compatibility break를 만들지 않는가?</td><td>schema 호환성, background job 상태, side effect</td></tr>
+      <tr><td>5</td><td>rollback, canary pause, traffic drain, flag off 중 무엇을 먼저 실행할 것인가?</td><td>runbook과 on-call 승인 기록</td></tr>
+    </table>
   </section>
 </main>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>환경변수·설정 관리 가이드</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -114,7 +114,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="serial-card">
 <span class="sc-label">ANTI-PATTERN — 하드코딩</span>
 <span class="dim">// 환경이 바뀌면 코드를 고치고 다시 빌드해야 함</span><br>
-String url = <span class="seg">"jdbc:postgresql://prod-db:5432/carbon"</span>;<br>
+String url = <span class="seg">"jdbc:postgresql://prod-db:5432/shop"</span>;<br>
 String pw  = <span class="seg">"P@ssw0rd!"</span>; <span class="dim">// git에 비밀번호가 그대로 박힘</span><br>
 <br>
 <span class="sc-label">PATTERN — 외부화</span>
@@ -143,14 +143,14 @@ spring:<br>
 <div class="serial-card">
 <span class="sc-label">SAME CONFIG, TWO SYNTAXES</span>
 <span class="dim"># application.properties — 점 표기, 한 줄 한 키</span><br>
-spring.datasource.url=<span class="seg">jdbc:postgresql://localhost:5432/carbon</span><br>
+spring.datasource.url=<span class="seg">jdbc:postgresql://localhost:5432/shop</span><br>
 spring.datasource.username=<span class="seg">app</span><br>
 spring.jpa.hibernate.ddl-auto=<span class="seg">validate</span><br>
 <br>
 <span class="dim"># application.yml — 계층 들여쓰기, 공통 prefix를 묶음</span><br>
 spring:<br>
 &nbsp;&nbsp;datasource:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg">jdbc:postgresql://localhost:5432/carbon</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg">jdbc:postgresql://localhost:5432/shop</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;username: <span class="seg">app</span><br>
 &nbsp;&nbsp;jpa:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;hibernate:<br>
@@ -221,7 +221,7 @@ java -jar app.jar --spring.profiles.active=<span class="seg">prod</span>
 <span class="sc-label">PLACEHOLDER — yml 안에서 환경변수 참조 + 기본값</span>
 spring:<br>
 &nbsp;&nbsp;datasource:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg2">${DB_URL:jdbc:postgresql://localhost:5432/carbon}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg2">${DB_URL:jdbc:postgresql://localhost:5432/shop}</span><br>
 <span class="dim">&nbsp;&nbsp;&nbsp;&nbsp;#     ${변수명:기본값} — 변수 없으면 콜론 뒤 기본값 사용</span>
 </div>
 <p>두 가지 방식이 있습니다. <strong>① relaxed binding</strong>은 yml에 안 적어도 <code>SPRING_DATASOURCE_URL</code> 환경변수만 있으면 <code>spring.datasource.url</code>로 바인딩됩니다 — Spring이 정의한 프로퍼티에 직접 꽂는 방식. <strong>② placeholder <code>${...}</code></strong>는 yml 안에서 명시적으로 환경변수를 참조하고 <code>:기본값</code>으로 fallback을 줍니다 — 커스텀 프로퍼티나 기본값이 필요할 때.</p>
@@ -344,7 +344,7 @@ application-local.yml <span class="dim"># 개인 시크릿이 들어간다면</s
 <span class="dim"># application-local.yml — 로컬 공통 기본값</span><br>
 spring:<br>
 &nbsp;&nbsp;datasource:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg2">${DB_URL:jdbc:postgresql://localhost:5432/carbon}</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="seg2">${DB_URL:jdbc:postgresql://localhost:5432/shop}</span><br>
 &nbsp;&nbsp;jpa:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;show-sql: <span class="seg">true</span> <span class="dim"># 로컬에선 SQL 보기</span><br>
 <br>

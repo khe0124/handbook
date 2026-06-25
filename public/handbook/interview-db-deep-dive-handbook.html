@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — DB 심화 면접</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">DB 심화 면접</div>
+  <a href="#ch1"><span class="code">DBD-00</span>답변 프레임</a>
+  <a href="#ch2"><span class="code">DBD-01</span>MVCC·격리 수준</a>
+  <a href="#ch3"><span class="code">DBD-02</span>락·lost update</a>
+  <a href="#ch4"><span class="code">DBD-03</span>query planner</a>
+  <a href="#ch5"><span class="code">DBD-04</span>인덱스 심화</a>
+  <a href="#ch6"><span class="code">DBD-05</span>WAL·복제·백업</a>
+  <a href="#ch7"><span class="code">DBD-06</span>무중단 마이그레이션</a>
+</nav>
+<main>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-DB-DEEP-DIVE-V1</span><span>SCOPE : MVCC · PLANNER · INDEX · REPLICATION · MIGRATION</span><span>LANG : KO</span></div><h1>DB 심화 면접</h1><p class="hero-sub">DB 심화 면접은 SQL 문법보다 <strong>정합성, 실행 계획, 장애 복구, 변경 운영</strong>을 얼마나 현실적으로 이해하는지 확인합니다.</p></header>
+
+<section id="ch1"><div class="ch-head"><span class="ch-code">DBD-00</span><h2>답변 프레임</h2></div><div class="serial-card"><span class="sc-label">DB ANSWER</span>1. 데이터 정합성 요구 정의<br>2. 읽기/쓰기 패턴과 cardinality 확인<br>3. transaction, lock, isolation 선택<br>4. 실행 계획과 인덱스 근거 제시<br>5. 백업, 복제, migration 운영 리스크 설명</div></section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">DBD-01</span><h2>MVCC·격리 수준</h2></div>
+<p>MVCC는 읽기와 쓰기의 동시성을 높이기 위해 row version을 관리하는 방식입니다. 독자는 일관된 snapshot을 보고, 작성자는 새 version을 만들며, vacuum 또는 cleanup이 오래된 version을 정리합니다.</p>
+<table><tr><th>격리 수준</th><th>설명</th><th>주의할 anomaly</th></tr><tr><td>Read Committed</td><td>statement마다 최신 commit snapshot을 봅니다.</td><td>non-repeatable read, lost update 가능성을 봅니다.</td></tr><tr><td>Repeatable Read</td><td>transaction 시작 시점 snapshot을 유지합니다.</td><td>DB 구현에 따라 phantom, serialization failure 처리가 다릅니다.</td></tr><tr><td>Serializable</td><td>직렬 실행과 같은 결과를 목표로 합니다.</td><td>성능과 retry 설계가 필요합니다.</td></tr></table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">DBD-02</span><h2>락·lost update</h2></div>
+<p>lost update는 두 transaction이 같은 값을 읽고 각각 수정해 한쪽 변경이 사라지는 문제입니다. 해결은 optimistic locking(version column), pessimistic lock, atomic update, isolation level 조정 중 요구사항에 맞게 고릅니다.</p>
+<div class="serial-card"><span class="sc-label">30초 답변</span>동시 수정이 가능한 도메인에서는 lost update를 막기 위해 version 기반 optimistic locking을 자주 씁니다. 충돌 시 사용자가 최신 상태를 보고 재시도하도록 하고, 재고 차감처럼 경쟁이 높은 작업은 조건부 update나 row lock을 검토합니다.</div>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>deadlock은?</td><td>락 획득 순서 통일, transaction 짧게 유지, timeout/retry를 둡니다.</td></tr><tr><td>lock wait가 길면?</td><td>긴 transaction, 누락 인덱스, 외부 API 호출 포함 여부를 확인합니다.</td></tr></table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">DBD-03</span><h2>query planner</h2></div>
+<p>query planner는 통계, cardinality, selectivity, cost model을 기반으로 scan 방식과 join 순서를 고릅니다. 느린 쿼리는 감으로 인덱스를 추가하기보다 EXPLAIN ANALYZE로 실제 row 수와 예상 row 수 차이를 봐야 합니다.</p>
+<table><tr><th>신호</th><th>해석</th></tr><tr><td>estimated rows와 actual rows 차이</td><td>통계가 부정확하거나 조건 상관관계를 planner가 모를 수 있습니다.</td></tr><tr><td>Seq Scan</td><td>항상 나쁜 것은 아니며 작은 테이블이나 낮은 selectivity에서는 합리적입니다.</td></tr><tr><td>Nested Loop 폭증</td><td>외부 row 수가 많거나 join key 인덱스가 없을 수 있습니다.</td></tr></table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">DBD-04</span><h2>인덱스 심화</h2></div>
+<p>covering index는 쿼리에 필요한 컬럼을 인덱스만으로 충족해 table lookup을 줄이는 전략입니다. partial index는 특정 조건의 row에만 인덱스를 만들어 크기와 write 비용을 줄입니다.</p>
+<table><tr><th>인덱스</th><th>적합한 상황</th><th>주의점</th></tr><tr><td>composite index</td><td>WHERE, JOIN, ORDER BY가 함께 쓰이는 패턴</td><td>컬럼 순서와 range 조건 이후 활용도를 봅니다.</td></tr><tr><td>covering index</td><td>읽기 빈도가 높고 projection이 제한된 쿼리</td><td>인덱스 크기와 write 비용이 증가합니다.</td></tr><tr><td>partial index</td><td>active=true, deleted_at is null처럼 일부 row만 자주 조회</td><td>쿼리 조건이 인덱스 predicate와 맞아야 합니다.</td></tr></table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">DBD-05</span><h2>WAL·복제·백업</h2></div>
+<p>WAL은 변경 내용을 데이터 파일에 반영하기 전에 로그로 남겨 crash recovery와 replication의 기반이 됩니다. replication lag가 커지면 replica read가 오래된 데이터를 반환하고, failover 시 데이터 손실 위험도 커집니다.</p>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>backup과 replication 차이는?</td><td>replication은 가용성, backup은 과거 시점 복구와 논리적 삭제 복구에 필요합니다.</td></tr><tr><td>read replica 주의점은?</td><td>read-after-write, lag metric, stale data 허용 범위를 봅니다.</td></tr><tr><td>복구 검증은?</td><td>backup restore drill과 RPO/RTO 측정을 정기적으로 합니다.</td></tr></table>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">DBD-06</span><h2>zero-downtime migration</h2></div>
+<p>zero-downtime migration은 배포 중에도 구버전과 신버전 애플리케이션이 동시에 DB를 사용할 수 있게 변경을 나누는 방식입니다. expand-contract 패턴으로 nullable column 추가, backfill, dual write/read fallback, 검증, not null/constraint 적용, 구컬럼 제거 순서로 진행합니다.</p>
+<div class="serial-card"><span class="sc-label">면접 답변</span>위험한 변경은 한 번에 하지 않습니다. 먼저 backward compatible schema를 추가하고, 애플리케이션을 새 schema를 읽고 쓸 수 있게 배포한 뒤, backfill과 검증을 거쳐 마지막에 제약과 삭제를 적용합니다. 큰 테이블의 index는 가능하면 concurrently 만들고 lock 시간을 관찰합니다.</div>
+</section>
+
+<footer>DB DEEP DIVE INTERVIEW · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>

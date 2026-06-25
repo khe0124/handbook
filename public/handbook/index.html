@@ -1,421 +1,91 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>탄소 도메인 핸드북 — 4권을 잇는 지도</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Dev Handbook — 풀스택 개발자 성장 핸드북</title>
 <style>
 :root{
-  --paper:#F4F6F5;--panel:#FFFFFF;--ink:#15211C;--ink-soft:#46544C;--line:#D6DED8;
-  --accent:#0B6B45;--accent-deep:#08442D;--tint:#E7F1EB;
-  --acc-ca:#22418A;--acc-comp:#1F5C40;--acc-lca:#0A5F66;--acc-vcm:#0B6B45;
-  --mono:'IBM Plex Mono',ui-monospace,monospace;
-  --sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif;
+  --paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;
+  --accent:#22418A;--accent-deep:#15294F;--tint:#E8EDF7;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 24px 120px}
-header.hero{padding:80px 0 44px;border-bottom:1px solid var(--ink)}
-.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
-h1{font-size:clamp(30px,4.6vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.16}
-.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:680px}
-section{padding-top:64px}
-.s-head{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--accent);border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:26px}
-h2{font-size:23px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
-p{margin-bottom:14px}
-em{font-style:normal;background:linear-gradient(transparent 62%,var(--tint) 62%);padding:0 1px}
-
-/* interlock diagram */
-.map{background:var(--panel);border:1.5px solid var(--ink);border-radius:10px;padding:30px 26px;margin:8px 0 6px;overflow-x:auto}
-.map-grid{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:center;gap:14px 0;min-width:680px}
-.node{border:1.5px solid var(--line);border-radius:8px;padding:16px 16px;background:var(--paper)}
-.node .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:600;display:block;margin-bottom:6px}
-.node b{font-size:15.5px;display:block;letter-spacing:-.01em}
-.node p{font-size:12.5px;color:var(--ink-soft);margin:6px 0 0;line-height:1.5}
-.node.lca{border-left:4px solid var(--acc-lca)} .node.lca .tag{color:var(--acc-lca)}
-.node.ca{border-left:4px solid var(--acc-ca)} .node.ca .tag{color:var(--acc-ca)}
-.node.comp{border-left:4px solid var(--acc-comp)} .node.comp .tag{color:var(--acc-comp)}
-.node.vcm{border-left:4px solid var(--acc-vcm)} .node.vcm .tag{color:var(--acc-vcm)}
-.arrow{font-family:var(--mono);color:var(--ink-soft);text-align:center;font-size:18px;font-weight:600}
-.arrow small{display:block;font-size:9.5px;letter-spacing:.04em;line-height:1.3;margin-top:2px;color:var(--ink-soft)}
-.map-note{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:18px;line-height:1.7}
-@media(max-width:740px){.map-grid{grid-template-columns:1fr;min-width:0}.arrow{transform:rotate(90deg);padding:4px 0}.arrow small{transform:rotate(-90deg);white-space:nowrap}}
-
-/* handbook cards */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
-@media(max-width:740px){.cards{grid-template-columns:1fr}}
-.card{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px 24px;transition:border-color .15s,transform .15s}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:56px 24px 96px}
+.hero{border-bottom:1px solid var(--ink);padding-bottom:36px}
+.serial{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--accent)}
+.serial span{border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:4px 9px}
+h1{margin:0;font-size:clamp(32px,5vw,52px);line-height:1.12;letter-spacing:-.03em}
+.sub{max-width:720px;margin:18px 0 0;color:var(--ink-soft);font-size:17px}
+.section-title{margin:56px 0 18px;border-bottom:2px solid var(--ink);padding-bottom:10px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{display:block;min-height:154px;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;transition:border-color .15s,transform .15s}
 .card:hover{border-color:var(--ink);transform:translateY(-2px)}
-.card .code{font-family:var(--mono);font-size:11px;letter-spacing:.1em;font-weight:600;color:var(--accent)}
-.card.ca .code{color:var(--acc-ca)} .card.comp .code{color:var(--acc-comp)} .card.lca .code{color:var(--acc-lca)} .card.vcm .code{color:var(--acc-vcm)}
-.card h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px}
-.card .one{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
-.card .learn{font-size:12.5px;color:var(--ink);line-height:1.65}
-.card .learn b{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-soft);display:block;margin-bottom:4px;font-weight:600}
-.card .go{font-family:var(--mono);font-size:11.5px;color:var(--accent);margin-top:16px;font-weight:600}
-
-/* reading order */
-.order{counter-reset:step;margin-top:8px}
-.step-row{display:grid;grid-template-columns:42px 1fr;gap:16px;padding:16px 0;border-bottom:1px dashed var(--line)}
-.step-row:last-child{border-bottom:none}
-.step-row .n{counter-increment:step;font-family:var(--mono);font-weight:600;color:var(--accent);font-size:20px}
-.step-row .n::before{content:counter(step)}
-.step-row b{font-size:15px}
-.step-row p{font-size:13.5px;color:var(--ink-soft);margin:4px 0 0}
-footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+.code{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);font-weight:700;margin-bottom:8px}
+h2{font-size:19px;margin:0 0 8px;letter-spacing:-.02em}
+p{margin:0;color:var(--ink-soft);font-size:14px}
+.primary{border-color:var(--accent);box-shadow:0 0 0 3px var(--tint)}
+.path{display:grid;gap:10px;margin-top:16px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.step b{display:block;margin-bottom:2px}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em}
+@media(max-width:820px){.cards{grid-template-columns:1fr}.wrap{padding:38px 18px 72px}.card{min-height:auto}}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <header class="hero">
+    <div class="serial">
+      <span>DOC : DEV-HANDBOOK-INDEX</span>
+      <span>SCOPE : FULLSTACK · FRONTEND · BACKEND · DEVOPS</span>
+      <span>LANG : KO</span>
+    </div>
+    <h1>Dev Handbook</h1>
+    <p class="sub">역량 있는 풀스택 개발자가 되기 위해 필요한 지식과 실무 판단 기준을 모은 핸드북입니다. 화면, API, 데이터, 네트워크, 배포, 운영, 디자인, AI 작업 루프를 하나의 제품 책임 관점으로 연결합니다.</p>
+  </header>
 
-<header class="hero">
-  <div class="hero-serial">
-    <span>DOC : DOCS-INDEX-V1</span>
-    <span>SET : 탄소회계 / LCA · 산출물 + 핸드북</span>
-    <span>LANG : KO</span>
-  </div>
-  <h1>탄소 플랫폼 문서 포털<br>— 도메인별 산출물 · 핸드북</h1>
-  <p class="hero-sub">두 도메인(<strong>탄소회계 · LCA</strong>)의 산출물과 개념 설명서(<strong>핸드북</strong>)를 한 곳에서. 각 도메인은 <em>사례연구 · 기획 기능정의서 · 상세목록 · 전체화면</em>으로 정리했고, 핸드북은 도메인 지식부터 엔지니어링 역량까지 모았습니다.</p>
-</header>
-
-<!-- ====== 탄소회계 산출물 ====== -->
-<section>
-  <div class="s-head">탄소회계 · CARBON ACCOUNTING — 산출물</div>
+  <div class="section-title">START HERE</div>
   <div class="cards">
-
-    <a class="card ca" href="carbon-accounting-casestudy-cotton-tshirt.html">
-      <span class="code">CASE STUDY · 사례연구</span>
-      <h3>사례연구</h3>
-      <p class="one">면 티셔츠 브랜드의 조직 인벤토리 — 경계·Scope·계수를 실제 사례로 따라간다.</p>
-      <div class="go">→ 열기</div>
+    <a class="card primary" href="home-handbook.html">
+      <span class="code">00 HOME</span>
+      <h2>핸드북 홈</h2>
+      <p>전체 로드맵, 학습 순서, 메뉴별 목적, 실전 루프를 먼저 확인합니다.</p>
     </a>
-
-    <a class="card ca" href="carbon-accounting-functional-spec.html">
-      <span class="code">FUNCTIONAL SPEC · 기능정의서</span>
-      <h3>기획 기능정의서</h3>
-      <p class="one">UI/UX 기능정의서 — 화면별 동작·규칙·상태를 정의한 기획 문서.</p>
-      <div class="go">→ 열기</div>
+    <a class="card primary" href="fullstack-growth-roadmap-handbook.html">
+      <span class="code">ROADMAP</span>
+      <h2>풀스택 성장 로드맵</h2>
+      <p>기능을 화면, 계약, 데이터, 배포, 운영 신호까지 연결하는 기준을 봅니다.</p>
     </a>
-
-    <a class="card ca" href="carbon-accounting-screen-register.html">
-      <span class="code">SCREEN REGISTER · 상세목록</span>
-      <h3>상세목록 (CRUD 분해)</h3>
-      <p class="one">상세 화면·기능 목록 — 오퍼레이션·CRUD 단위로 분해한 레지스터.</p>
-      <div class="go">→ 열기</div>
+    <a class="card" href="developer-faq-troubleshooting-guide.html">
+      <span class="code">PRACTICAL</span>
+      <h2>개발자 FAQ·트러블슈팅</h2>
+      <p>반복되는 실무 문제를 증상, 진단, 처치, 검증 기준으로 정리합니다.</p>
     </a>
-
-    <a class="card ca" href="carbon-accounting-screens.html">
-      <span class="code">SCREEN INVENTORY · 전체화면</span>
-      <h3>전체 화면 목록</h3>
-      <p class="one">Master Screen Inventory — 인증·셸·도메인·거버넌스까지 모든 화면을 망라.</p>
-      <div class="go">→ 열기</div>
-    </a>
-
   </div>
-</section>
 
-<!-- ====== LCA 산출물 ====== -->
-<section>
-  <div class="s-head">LCA · LIFE CYCLE ASSESSMENT — 산출물</div>
+  <div class="section-title">CORE AREAS</div>
   <div class="cards">
-
-    <a class="card lca" href="lca-casestudy-aluminum-can.html">
-      <span class="code">CASE STUDY · 사례연구</span>
-      <h3>사례연구</h3>
-      <p class="one">알루미늄 음료캔의 전과정 — 기능단위·경계·배분·LCIA를 실제 사례로.</p>
-      <div class="go">→ 열기</div>
-    </a>
-
-    <a class="card lca" href="lca-functional-spec.html">
-      <span class="code">FUNCTIONAL SPEC · 기능정의서</span>
-      <h3>기획 기능정의서</h3>
-      <p class="one">UI/UX 기능정의서 — 모델링·계산·해석 화면의 동작·규칙 정의.</p>
-      <div class="go">→ 열기</div>
-    </a>
-
-    <a class="card lca" href="lca-screen-register.html">
-      <span class="code">SCREEN REGISTER · 상세목록</span>
-      <h3>상세목록 (CRUD 분해)</h3>
-      <p class="one">상세 화면·기능 목록 — 오퍼레이션·CRUD 단위로 분해한 레지스터.</p>
-      <div class="go">→ 열기</div>
-    </a>
-
-    <a class="card lca" href="lca-screens.html">
-      <span class="code">SCREEN INVENTORY · 전체화면</span>
-      <h3>전체 화면 목록</h3>
-      <p class="one">Master Screen Inventory — 연구·모델링·결과·산출·거버넌스 전 화면 망라.</p>
-      <div class="go">→ 열기</div>
-    </a>
-
+    <a class="card" href="frontend-engineering-handbook.html"><span class="code">FRONTEND</span><h2>프론트엔드</h2><p>브라우저, 상태, 접근성, 성능, 보안, 테스트, 배포를 다룹니다.</p></a>
+    <a class="card" href="backend-engineering-handbook.html"><span class="code">BACKEND</span><h2>백엔드</h2><p>API, DB, 인증, 동시성, 메시징, 관측 가능성, 시스템 설계를 다룹니다.</p></a>
+    <a class="card" href="network-infrastructure-handbook.html"><span class="code">NETWORK</span><h2>네트워크 인프라</h2><p>IP, CIDR, 라우팅, DNS, 방화벽, VPN, L3-L7 디버깅을 다룹니다.</p></a>
+    <a class="card" href="devops-handbook.html"><span class="code">DEVOPS</span><h2>DevOps</h2><p>CI/CD, IaC, 컨테이너, 오케스트레이션, 장애 대응, 신뢰성을 다룹니다.</p></a>
+    <a class="card" href="design-handbook.html"><span class="code">DESIGN</span><h2>디자인</h2><p>UX 사고, 정보구조, 사용자 흐름, UI 패턴, 디자인 시스템을 다룹니다.</p></a>
+    <a class="card" href="ax-handbook.html"><span class="code">AX</span><h2>AX</h2><p>AI 작업을 하네스, 컨텍스트, 검증, 거버넌스 루프로 운영합니다.</p></a>
   </div>
-</section>
 
-<!-- ====== 탄소핸드북 ====== -->
-<section>
-  <div class="s-head">탄소핸드북 · CARBON — 도메인 개념 설명서</div>
-  <div class="cards">
-
-    <a class="card ca" href="carbon-accounting-handbook.html">
-      <span class="code">CA · CARBON ACCOUNTING</span>
-      <h3>탄소회계 도메인 핸드북</h3>
-      <p class="one">"이 조직(또는 제품)이 야기한 배출은 얼마인가" — 세고, 보고하고, 검증받는 회계 체계.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>경계 설정(지분·통제) · Scope 2 이중장부 · Scope 3 15+1 카테고리 · 계수·티어·불확실성 · ISO 14064 검증 · K-ETS·CBAM·공시 · 크레딧의 회계 처리</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card comp" href="carbon-compliance-handbook.html">
-      <span class="code">COMPLIANCE INFRA</span>
-      <h3>탄소시장 컴플라이언스 인프라 핸드북</h3>
-      <p class="one">비전공자를 위한 큰 그림 — VC의 유행이 아니라 규제 일정표가 수요를 만드는 시장.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>탄소 1톤의 생애주기 · 규제 vs 자발적 시장 · KAU·KCU·KOC · K-ETS 4기 · CBAM · 공시 의무화 · 2026 글로벌 흐름</div>
-      <div class="go">→ 펼치기 (도메인 입문 권장)</div>
-    </a>
-
-    <a class="card vcm" href="vcm-registry-handbook.html">
-      <span class="code">VCM REGISTRY</span>
-      <h3>VCM 레지스트리 도메인 핸드북</h3>
-      <p class="one">크레딧 한 장이 태어나서 소각되기까지 — 레지스트리를 설계·운영하는 사람의 관점.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>크레딧 품질 5기둥 · 프로젝트·크레딧 생애주기 · 버퍼풀 · 방법론 버저닝 · dMRV · 이중계상 방지 · 시스템·DB 설계</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card lca" href="lca-handbook.html">
-      <span class="code">LCA · LIFE CYCLE ASSESSMENT</span>
-      <h3>전과정평가(LCA) 도메인 핸드북</h3>
-      <p class="one">"이 숫자는 어떻게 계산된 것인가" — 요람에서 무덤까지 환경영향을 정량화하는 방법론.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>ISO 14040 4단계 · 기능단위와 경계 · 배분 문제 · LCIA와 CO₂e · 불확실성·민감도 · ISO 14067 발자국 · CDR 정량화(Isometric)</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
+  <div class="section-title">RECOMMENDED PATH</div>
+  <div class="path">
+    <div class="step"><b>1. 제품 표면</b><p>프론트엔드와 디자인으로 사용 흐름, 상태, 접근성, 성능 기준을 잡습니다.</p></div>
+    <div class="step"><b>2. 시스템 중심</b><p>백엔드, DB, 인증, 테스트로 API 계약과 정합성, 실패 처리를 설계합니다.</p></div>
+    <div class="step"><b>3. 운영 경계</b><p>네트워크와 DevOps로 배포, 관측 가능성, 복구, 보안 경계를 연결합니다.</p></div>
+    <div class="step"><b>4. 실전 반복</b><p>실무 가이드와 예시 사례로 작은 기능을 끝까지 만들고 검증합니다.</p></div>
   </div>
-</section>
 
-<!-- ====== 개발핸드북 ====== -->
-<section>
-  <div class="s-head">개발핸드북 · DEV — 실무형 백엔드 역량</div>
-  <div class="cards">
-
-    <a class="card" href="backend-engineering-handbook.html">
-      <span class="code">BE · 백엔드 개요</span>
-      <h3>백엔드 엔지니어링 (개요)</h3>
-      <p class="one">7개 심화 핸드북을 잇는 지도 — 주니어와 미들을 가르는 설계 판단의 큰 그림.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>HTTP·API 계약 · RDBMS · ORM/JPA · 동시성 · 캐싱·메시징 · 네트워킹 · 관측가능성 · 보안 · 테스트 · 시스템 설계 사고</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="db-handbook.html">
-      <span class="code">DB · DATABASE</span>
-      <h3>데이터베이스 핸드북</h3>
-      <p class="one">성능·정합성 문제의 대부분이 나는 층 — 트랜잭션·격리·인덱스·실행계획.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>정규화 · ACID · 격리수준·MVCC · 락·데드락 · B-tree 인덱스 · 실행계획·N+1 · 커넥션풀 · 마이그레이션 · 복제·샤딩 · NoSQL 선택</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="auth-security-handbook.html">
-      <span class="code">SEC · AUTH & SECURITY</span>
-      <h3>인증·보안 핸드북</h3>
-      <p class="one">보안은 기본값 — 모든 입력은 적대적이라고 가정한다.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>authN vs authZ · 세션 vs JWT · OAuth2/OIDC · 해싱(bcrypt) · RBAC/IDOR · OWASP · injection · XSS/CSRF · TLS·secret 관리</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="architecture-handbook.html">
-      <span class="code">ARCH · ARCHITECTURE</span>
-      <h3>아키텍처 패턴 핸드북</h3>
-      <p class="one">정답이 아니라 트레이드오프 — 변경 비용을 낮추는 구조를 제약에 맞게.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>결합도·응집도 · 계층형 · 헥사고날·클린 · DDD 기초 · 모놀리스 vs MSA · 서비스 경계 · CQRS · 회복탄력성 · 패턴 선택 기준</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="async-messaging-handbook.html">
-      <span class="code">MSG · ASYNC & MESSAGING</span>
-      <h3>비동기·메시지 큐 핸드북</h3>
-      <p class="one">동기 호출은 시간으로 묶는다 — 큐는 그 결합을 끊는다.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>동기 vs 비동기 · 큐 vs 스트림(Kafka) · 전달보장 · 멱등 소비 · 순서·파티션 · Outbox · DLQ·재시도 · 백프레셔 · 사가 패턴</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="testing-handbook.html">
-      <span class="code">TEST · TESTING</span>
-      <h3>테스트 핸드북</h3>
-      <p class="one">목적은 커버리지 숫자가 아니라 변경의 자신감.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>테스트 피라미드 · 단위·통합·E2E · TDD · 테스트 더블 · Testcontainers · 행동 vs 구현 · 커버리지 함정 · flaky · Spring 테스트</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="docker-deploy-handbook.html">
-      <span class="code">OPS · DOCKER & DEPLOY</span>
-      <h3>Docker·배포 핸드북</h3>
-      <p class="one">"제 PC에선 됩니다"를 끝낸다 — 코드·런타임을 한 이미지로 봉인.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>컨테이너 vs VM · 이미지·레이어 · Dockerfile 베스트 · 멀티스테이지 · compose · 레지스트리 · 12-factor · CI/CD · 배포 전략 · K8s 개요</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="observability-handbook.html">
-      <span class="code">OBS · OBSERVABILITY</span>
-      <h3>로깅·모니터링·장애대응 핸드북</h3>
-      <p class="one">운영 책임이 백엔드 품질의 분기점 — "안 돼요"를 "여기가 이래서"로.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>3기둥(로그·메트릭·트레이스) · 구조화 로그 · 상관관계 ID · RED/USE · p99 · 헬스체크 · SLI/SLO·에러버짓 · 알림 · 장애대응 · 포스트모템</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="linux-commands-handbook.html">
-      <span class="code">LX · LINUX / SHELL</span>
-      <h3>리눅스 / 셸 명령어 핸드북</h3>
-      <p class="one">명령어 암기가 아니라 사고 모델 — 작은 도구를 파이프로 잇는 한 가지 철학.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>셸 스트림·종료코드 · 탐색·검색(rg·fd) · 권한 모델 · 프로세스·시그널 · 파이프·텍스트 가공 · curl·dig·lsof · tar·rsync·ssh · zsh·mise·chezmoi · 치트시트</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="vi-shortcuts-handbook.html">
-      <span class="code">VI · vi / VIM</span>
-      <h3>vi / Vim 단축키 핸드북</h3>
-      <p class="one">단축키 목록이 아니라 언어 — 모드 위에서 "연산자 × 모션"을 조합한다.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>모드·전환 · 이동 모션(w·f·% 등) · 연산자(d·c·y) · 텍스트 객체(ciw·ci") · 검색·치환(:%s) · 비주얼·블록 · 저장/종료(:wq·:q!) · 반복(.)·매크로 · 치트시트</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-  </div>
-</section>
-
-<!-- ====== 예시 사례 ====== -->
-<section>
-  <div class="s-head">예시 사례 · STACK RECIPES — 바로 쓰는 코드·설정</div>
-  <div class="cards">
-
-    <a class="card" href="java-examples.html">
-      <span class="code">JAVA · 예시 사례</span>
-      <h3>Java 예시 사례</h3>
-      <p class="one">JS/TS 하던 손에 Java 문법을 붙이는 레시피 — 컬렉션·스트림·Optional·record.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="jpa-examples.html">
-      <span class="code">JPA · 예시 사례</span>
-      <h3>JPA 예시 사례</h3>
-      <p class="one">엔티티 매핑부터 N+1 회피·페이징까지 — 바로 복붙하는 Spring Data JPA 코드.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="spring-boot-examples.html">
-      <span class="code">SPRING BOOT · 예시 사례</span>
-      <h3>Spring Boot 예시 사례</h3>
-      <p class="one">컨트롤러·서비스·예외·검증·테스트 — 한 기능을 끝까지 짜는 레시피.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="docker-examples.html">
-      <span class="code">DOCKER · 예시 사례</span>
-      <h3>Docker 예시 사례</h3>
-      <p class="one">Spring Boot+Postgres+Redis+nginx를 한 compose로 — Dockerfile·compose 레시피.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="nginx-examples.html">
-      <span class="code">NGINX · 예시 사례</span>
-      <h3>nginx 예시 사례</h3>
-      <p class="one">리버스 프록시·SPA fallback·TLS·로드밸런싱 — 바로 쓰는 nginx.conf.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="redis-examples.html">
-      <span class="code">REDIS · 예시 사례</span>
-      <h3>Redis 예시 사례</h3>
-      <p class="one">캐시·세션·분산 락·rate limit — Spring Boot에서 Redis 쓰는 코드.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="postgresql-examples.html">
-      <span class="code">POSTGRESQL · 예시 사례</span>
-      <h3>PostgreSQL 예시 사례</h3>
-      <p class="one">psql·upsert·JSONB·윈도우 함수·EXPLAIN — 바로 쓰는 SQL 레시피.</p>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-  </div>
-</section>
-
-<!-- ====== 실무 가이드 ====== -->
-<section>
-  <div class="s-head">실무 가이드 · PRACTICAL — 워크플로우·운영 how-to</div>
-  <div class="cards">
-
-    <a class="card" href="machine-setup-guide.html">
-      <span class="code">SETUP · 실무 가이드</span>
-      <h3>새 PC 환경 설정</h3>
-      <p class="one">새 맥/윈도우를 0부터 — brew·런타임·에이전트·dotfiles, cmux 멀티 에이전트까지.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>Homebrew·Brewfile · Claude Code·MCP · zsh+cmux·Ghostty · Obsidian · mise 런타임(node·java·python) · Git·SSH·chezmoi 1줄 재현 · Windows(winget·WSL2) · 검증</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="dev-playbook-handbook.html">
-      <span class="code">PLAY · 실무 플레이북</span>
-      <h3>실무 플레이북</h3>
-      <p class="one">"이럴 때 이렇게" — 막힐 때마다 박제하는 런북. 평소/비상/금지를 분리한다.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>실무 감각 기르는 법 · 로컬 DB 리셋 · 포트 꼬임 · 마이그레이션 드리프트 · 빌드·런타임 · "느려요" 추적 · 장애 런북 · git 복구 · 환경·시크릿 · 체크리스트</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="gradle-guide.html">
-      <span class="code">GRADLE · 실무 가이드</span>
-      <h3>Gradle 의존성·빌드</h3>
-      <p class="one">라이브러리를 추가·고정·갱신하는 법 — npm/package.json 감각을 Gradle로.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>build.gradle 구조 · 의존성 추가·스코프 · BOM·version catalog · 플러그인 · dependencies 조회·충돌 · 자주 쓰는 task · 멀티모듈</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="package-managers-guide.html">
-      <span class="code">PACKAGE & VERSION · 실무 가이드</span>
-      <h3>패키지·버전 매니저</h3>
-      <p class="one">npm·pnpm(패키지) vs nvm·mise(런타임 버전) — 자주 혼동되는 두 범주를 가른다.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>패키지 vs 버전 매니저 구분 · npm 기본·semver · pnpm 장점 · npm/pnpm/yarn 선택 · lockfile·재현성(npm ci) · 워크스페이스 · nvm · mise(.mise.toml·activate)</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="config-management-guide.html">
-      <span class="code">CONFIG · 실무 가이드</span>
-      <h3>환경변수·설정 관리</h3>
-      <p class="one">같은 빌드, 다른 환경 — 설정을 코드 밖으로 빼고 환경별로 분리.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>외부화 이유 · yml vs properties · profiles · 환경변수 바인딩 · 설정 우선순위 · @Value/@ConfigurationProperties · 시크릿 분리 · 로컬 설정</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="db-migration-seeding-guide.html">
-      <span class="code">SCHEMA & SEED · 실무 가이드</span>
-      <h3>DB 스키마·로컬 시딩</h3>
-      <p class="one">스키마를 안전하게 관리하고 로컬 데이터를 자동 복구하는 법.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>ddl-auto 위험성 · Flyway 마이그레이션 · expand-contract · 시딩 방법 비교 · 멱등 시더 · 로컬 리셋 워크플로우 · Testcontainers</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="cicd-guide.html">
-      <span class="code">CI/CD · 실무 가이드</span>
-      <h3>CI/CD 배포</h3>
-      <p class="one">푸시하면 자동으로 빌드·테스트·배포 — 파이프라인을 손으로 짜보는 법.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>CI/CD 개념 · GitHub Actions 기본 · 빌드·테스트 워크플로우 · 이미지 빌드·푸시 · Secrets · 배포 트리거·전략·롤백 · 파이프라인 베스트</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-    <a class="card" href="logs-tooling-guide.html">
-      <span class="code">LOGS & TOOLING · 실무 가이드</span>
-      <h3>로그 조회·커스텀 명령</h3>
-      <p class="one">로그에서 원인을 빠르게 찾고, 반복 작업을 명령 한 줄로 만드는 법.</p>
-      <div class="learn"><b>WHAT YOU LEARN</b>환경별 로그 조회 · grep/rg/jq 필터 · 구조화 로그·상관관계 ID · 런타임 로그 레벨 · 셸 alias·함수 · 스크립트화 · Gradle task·Makefile</div>
-      <div class="go">→ 펼치기</div>
-    </a>
-
-  </div>
-</section>
-
-<footer>
-  DOCS PORTAL · 탄소(4) · LCA(4) · 핸드북(13) · 예시 사례(7) · 실무 가이드(6) · INDEX · V1 · 2026-06<br>
-  COMPILED FOR : GWANGMYEONG CARBON TRADING PLATFORM
-</footer>
-
+  <footer>
+    DEV HANDBOOK INDEX · UPDATED 2026-06 · PRINCIPLE : 지식은 메뉴별로 배우되 실무 판단은 경계면에서 연결한다.
+  </footer>
 </div>
 </body>
 </html>

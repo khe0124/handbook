@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 프로젝트 심층 면접</title></head>
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 프로젝트 심층 면접</title></head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
@@ -17,6 +17,8 @@
   <a href="#q10"><span class="code">PJ-10</span>파일 업로드·다운로드</a>
   <a href="#q11"><span class="code">PJ-11</span>i18n·Storybook</a>
   <a href="#q12"><span class="code">PJ-12</span>백엔드 질문 대응</a>
+  <a href="#q13"><span class="code">PJ-13</span>프로젝트 답변 템플릿</a>
+  <a href="#q14"><span class="code">PJ-14</span>실제 샘플 답변</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-PROJECT-DEEP-DIVE-V1</span><span>SCOPE : PROJECT STORY · GRID · FLOW EDITOR · API MIGRATION · DEBUGGING</span><span>LANG : KO</span></div><h1>프로젝트 심층 면접</h1><p class="hero-sub">프로젝트 질문은 기술 목록이 아니라 <strong>문제 정의, 제약, 선택, 결과, 본인 역할, 배운 점</strong>을 확인합니다. 답변은 구체적이어야 하지만 과장 없이 경험의 경계를 지켜야 합니다.</p></header>
@@ -134,6 +136,43 @@
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>직접 DB 튜닝했나요?</td><td>직접 범위를 말하고 실행 계획/인덱스 개념 이해를 분리합니다.</td></tr><tr><td>백엔드 설계 가능한가요?</td><td>API contract와 데이터 흐름 중심으로 기여 가능 범위를 말합니다.</td></tr><tr><td>운영 경험은?</td><td>로그, trace, 재현 조건, 장애 영향 파악 경험을 말합니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>API mapping 표, error contract, Network trace, 백엔드와 합의한 질문 목록을 준비합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>경험을 부풀리기보다 프론트와 서버 경계를 정확히 이해했다는 신뢰를 주는 편이 강합니다.</p></div>
+</section>
+
+<section id="q13">
+<div class="ch-head"><span class="ch-code">PJ-13</span><h2>프로젝트 답변 템플릿</h2></div>
+<p class="lede">프로젝트 심층 면접은 “무엇을 만들었나”보다 “왜 그렇게 판단했고, 무엇을 검증했나”를 봅니다. 답변은 <strong>문제 → 제약 → 선택지 → 선택 이유 → 실패/트레이드오프 → 검증 결과</strong> 순서로 준비합니다.</p>
+<table>
+<tr><th>단계</th><th>말할 내용</th><th>증거 자료</th></tr>
+<tr><td>문제</td><td>사용자나 팀이 실제로 겪은 불편, 비용, 위험</td><td>요구사항, VOC, QA ticket, 장애 기록</td></tr>
+<tr><td>제약</td><td>일정, 기존 API, 브라우저, 데이터 크기, 운영 권한</td><td>스펙 변경 이력, 레거시 구조, 배포 조건</td></tr>
+<tr><td>선택지</td><td>가능했던 대안 2~3개와 버린 이유</td><td>ADR, 회의 메모, PoC 결과</td></tr>
+<tr><td>선택 이유</td><td>팀이 유지할 수 있고 실패 시 복구 가능한 방식</td><td>PR, 설계 문서, 테스트 범위</td></tr>
+<tr><td>실패/트레이드오프</td><td>놓친 점, 성능/복잡도/운영 비용, 다음 개선</td><td>회고, 버그 기록, known limitation</td></tr>
+<tr><td>검증 결과</td><td>전후 수치, 재현 테스트, 사용자 흐름 개선, 운영 안정성</td><td>로그, 지표, E2E, 스크린샷, 릴리즈 노트</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">깊이 파고드는 질문</span>
+<p>“그 선택 말고 다른 방법은?”, “실패하면 어떻게 복구했나요?”, “직접 한 부분은 어디까지인가요?”, “수치가 없으면 어떻게 증명하나요?”를 반드시 준비합니다.</p>
+</div>
+</section>
+
+<section id="q14">
+<div class="ch-head"><span class="ch-code">PJ-14</span><h2>실제 샘플 답변</h2></div>
+<h3>Data Grid 프로젝트</h3>
+<div class="serial-card">
+<span class="sc-label">90초 샘플</span>
+Data Grid 프로젝트에서 어려웠던 점은 Excel 업로드, 직접 입력, cell edit가 서로 다른 입력 경로였지만 최종 저장 모델은 하나여야 했다는 점입니다. 저는 raw input과 domain row를 분리하고, column definition에 parser, formatter, validator를 모아 같은 규칙을 재사용하게 했습니다. validation은 cell, row, submit 단계로 나눴고 서버 오류도 row/cell path로 매핑해 사용자가 바로 수정할 수 있게 했습니다. trade-off는 column definition이 커질 수 있다는 점이었고, 반복 규칙만 공통화하고 도메인 예외는 명시적으로 분리했습니다.
+</div>
+<h3>API 전환 프로젝트</h3>
+<div class="serial-card">
+<span class="sc-label">90초 샘플</span>
+API 전환에서 핵심은 endpoint 교체가 아니라 데이터 계약 변경이었습니다. 기존 화면이 raw response에 강하게 묶여 있으면 nullable, enum, error format 변화가 화면 곳곳을 깨뜨릴 수 있어 service adapter에서 view model로 변환했습니다. 변경 전에는 field mapping, pagination, error code, 권한 조건을 표로 정리했고, MSW mock과 adapter unit test로 화면 영향을 먼저 검증했습니다. 직접 한 범위는 프론트 상태 구조와 adapter, 오류 상태 처리였고 백엔드 내부 구현은 contract 합의 중심으로 협업했습니다.
+</div>
+<h3>React Flow 프로젝트</h3>
+<div class="serial-card">
+<span class="sc-label">90초 샘플</span>
+React Flow 프로젝트에서는 domain graph와 view graph를 분리하는 것이 중요했습니다. 서버에는 도메인 id와 관계, 순서, 좌표처럼 복원 가능한 데이터만 저장하고, 화면에서는 selected, dragging, viewport 같은 UI 상태를 따로 관리했습니다. 성능 문제는 Profiler로 custom node가 불필요하게 rerender되는지 확인했고, node props와 callback 참조 안정화, 저장 payload 변환 시점 분리로 대응했습니다. 다시 한다면 처음부터 graph validation과 저장 스키마를 더 명확히 문서화했을 것입니다.
+</div>
 </section>
 
 <footer>PROJECT DEEP DIVE INTERVIEW · V1 · 2026-06</footer>

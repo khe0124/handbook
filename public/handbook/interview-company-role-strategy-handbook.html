@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 회사·직무별 면접 전략</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">회사·직무별 면접 전략</div>
+  <a href="#ch1"><span class="code">STR-00</span>전략 프레임</a>
+  <a href="#ch2"><span class="code">STR-01</span>SI/SM</a>
+  <a href="#ch3"><span class="code">STR-02</span>SaaS 스타트업</a>
+  <a href="#ch4"><span class="code">STR-03</span>B2B 어드민</a>
+  <a href="#ch5"><span class="code">STR-04</span>핀테크</a>
+  <a href="#ch6"><span class="code">STR-05</span>대규모 트래픽</a>
+  <a href="#ch7"><span class="code">STR-06</span>백엔드 전환 포지션</a>
+</nav>
+<main>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-COMPANY-ROLE-STRATEGY-V1</span><span>SCOPE : COMPANY TYPE · ROLE FIT · PROJECT STORY</span><span>LANG : KO</span></div><h1>회사·직무별 면접 전략</h1><p class="hero-sub">같은 기술 답변도 회사 유형과 직무 기대치에 따라 강조점이 달라집니다. 이 문서는 <strong>경험을 과장하지 않으면서 역할 적합도를 선명하게 보여주는 전략</strong>을 정리합니다.</p></header>
+
+<section id="ch1"><div class="ch-head"><span class="ch-code">STR-00</span><h2>전략 프레임</h2></div><div class="serial-card"><span class="sc-label">ROLE FIT</span>1. 회사가 돈을 버는 방식과 제품 리스크 파악<br>2. 직무가 해결해야 하는 병목 추정<br>3. 내 프로젝트 경험을 문제-판단-결과로 매핑<br>4. 부족한 경험은 학습 계획이 아니라 검증 가능한 접근법으로 설명<br>5. 질문 마지막에 입사 후 30일 과제를 역질문</div></section>
+
+<section id="ch2"><div class="ch-head"><span class="ch-code">STR-01</span><h2>SI/SM</h2></div><p>SI/SM 면접에서는 빠른 기능 구현만큼 요구사항 해석, 레거시 이해, 장애 없이 변경하는 능력이 중요합니다. 고객 커뮤니케이션, 운영 배포, 권한, 데이터 정합성 경험을 강조합니다.</p><table><tr><th>강조할 경험</th><th>답변 방향</th></tr><tr><td>레거시 개선</td><td>한 번에 갈아엎지 않고 위험을 나눠 개선한 사례</td></tr><tr><td>운영 대응</td><td>장애 재현, 로그 확인, hotfix, 재발 방지</td></tr><tr><td>요구사항 조율</td><td>불명확한 요청을 화면, API, 데이터 규칙으로 구체화</td></tr></table></section>
+
+<section id="ch3"><div class="ch-head"><span class="ch-code">STR-02</span><h2>SaaS 스타트업</h2></div><p>SaaS 스타트업은 제품 속도와 품질 균형을 봅니다. 작은 팀에서 frontend, backend, infra 경계를 넘나들 수 있는지, 지표를 보고 개선할 수 있는지, feature flag와 staged rollout으로 위험을 줄일 수 있는지 말합니다.</p><div class="serial-card"><span class="sc-label">답변 포인트</span>고객 문제 → 빠른 실험 → 관측 지표 → 기술 부채 관리 → 다음 개선 순서로 말하면 제품형 개발자 신호가 강해집니다.</div></section>
+
+<section id="ch4"><div class="ch-head"><span class="ch-code">STR-03</span><h2>B2B 어드민</h2></div><p>B2B 어드민은 화려한 UI보다 정확한 권한, 대량 데이터 처리, 감사 로그, 업무 흐름 안정성이 중요합니다. Data Grid, Excel 업로드, validation, audit trail, 관리자 action 실패 복구 경험을 연결합니다.</p><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>어드민에서 중요한 품질은?</td><td>정확성, 추적성, 권한, 대량 처리, 오류 복구</td></tr><tr><td>성능 최적화는?</td><td>서버 pagination, filtering, virtualization, batch job 분리</td></tr></table></section>
+
+<section id="ch5"><div class="ch-head"><span class="ch-code">STR-04</span><h2>핀테크</h2></div><p>핀테크 면접은 보안, 정합성, 감사 가능성, 규제 대응 태도가 중요합니다. 금액, 계좌, 거래 상태처럼 되돌리기 어려운 데이터는 transaction, idempotency, audit log, 접근 권한을 함께 말해야 합니다.</p><div class="serial-card"><span class="sc-label">주의</span>“빠르게 만들 수 있습니다”보다 “중복 결제, lost update, 권한 오남용, 개인정보 노출을 어떻게 막겠습니다”가 더 강한 답변입니다.</div></section>
+
+<section id="ch6"><div class="ch-head"><span class="ch-code">STR-05</span><h2>대규모 트래픽</h2></div><p>대규모 트래픽 회사는 알고리즘 지식뿐 아니라 병목을 측정하고 단계적으로 제거하는 능력을 봅니다. cache, queue, shard, CDN을 나열하기보다 어떤 지표에서 어떤 구조가 필요한지 말합니다.</p><table><tr><th>면접 질문</th><th>답변 방향</th></tr><tr><td>트래픽이 10배 늘면?</td><td>QPS, DB connection, slow query, cache hit rate, queue lag부터 측정합니다.</td></tr><tr><td>장애를 줄이려면?</td><td>SLO, alert, rate limit, backpressure, load shedding, runbook을 연결합니다.</td></tr></table></section>
+
+<section id="ch7"><div class="ch-head"><span class="ch-code">STR-06</span><h2>백엔드 전환 포지션</h2></div><p>백엔드 전환 포지션에서는 “프론트만 했습니다”가 아니라 API 계약, 상태 모델, validation, DB schema, 배포/운영을 어떻게 다뤘는지로 풀스택 확장 가능성을 보여줘야 합니다.</p><table><tr><th>강점 전환</th><th>말하는 방식</th></tr><tr><td>프론트 상태 설계</td><td>서버 데이터 계약과 cache invalidation까지 이해한다고 연결</td></tr><tr><td>폼·validation</td><td>클라이언트 UX 검증과 서버 도메인 검증의 차이를 설명</td></tr><tr><td>운영 경험 부족</td><td>로그, 지표, migration, rollback을 어떤 순서로 검증할지 말함</td></tr></table></section>
+
+<footer>COMPANY ROLE STRATEGY · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DB 스키마·로컬 시딩 실무 가이드</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -268,7 +268,7 @@ ALTER TABLE credit<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">// 이미 있으면 건너뜀 -&gt; 재실행해도 행이 안 늘어남</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">if</span> (projects.existsByCode(<span class="seg2">"GM-001"</span>)) <span class="seg">return</span>;<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;projects.save(<span class="seg">new</span> Project(<span class="seg2">"GM-001"</span>, <span class="seg2">"광명시 탄소거래 시범"</span>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;projects.save(<span class="seg">new</span> Project(<span class="seg2">"GM-001"</span>, <span class="seg2">"지역 포인트 정산 시범"</span>));<br>
 &nbsp;&nbsp;}<br>
 }
 </div>

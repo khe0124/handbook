@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spring Boot 예시 사례 — 한 기능을 끝까지 짜는 레시피</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -115,9 +115,9 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="serial-card">
 <span class="sc-label">Application.java — 진입점</span>
 <span class="seg2">@SpringBootApplication</span><br>
-<span class="seg">public class</span> CarbonTradingApplication {<br>
+<span class="seg">public class</span> AdminWorkflowApplication {<br>
 &nbsp;&nbsp;<span class="seg">public static void</span> main(String[] args) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;SpringApplication.run(CarbonTradingApplication.class, args);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SpringApplication.run(AdminWorkflowApplication.class, args);<br>
 &nbsp;&nbsp;}<br>
 }
 </div>
@@ -218,7 +218,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <span class="seg">public class</span> AppConfig {<br>
 <br>
 &nbsp;&nbsp;<span class="seg2">@Bean</span><br>
-&nbsp;&nbsp;<span class="seg">public</span> RestClient carbonApiClient() {<br>
+&nbsp;&nbsp;<span class="seg">public</span> RestClient paymentApiClient() {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">return</span> RestClient.builder()<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.baseUrl(<span class="dim">"https://api.example.com"</span>)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.build();<br>
@@ -239,24 +239,24 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <span class="sc-label">application.yml</span>
 <span class="seg2">spring:</span><br>
 &nbsp;&nbsp;<span class="seg2">application:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;name: carbon-trading<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name: payment-service<br>
 &nbsp;&nbsp;<span class="seg2">profiles:</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;active: <span class="seg">${SPRING_PROFILES_ACTIVE:local}</span>&nbsp;&nbsp;<span class="dim"># 환경변수 없으면 local</span><br>
 <br>
-<span class="seg2">carbon:</span><br>
+<span class="seg2">payment:</span><br>
 &nbsp;&nbsp;trading:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;max-credit-per-tx: 10000<br>
-&nbsp;&nbsp;&nbsp;&nbsp;api-key: <span class="seg">${CARBON_API_KEY}</span>&nbsp;&nbsp;<span class="dim"># secret은 환경변수로</span>
+&nbsp;&nbsp;&nbsp;&nbsp;api-key: <span class="seg">${PARTNER_API_KEY}</span>&nbsp;&nbsp;<span class="dim"># secret은 환경변수로</span>
 </div>
 <h3><span class="h3-tag">4.1</span>값 읽기 — @Value vs @ConfigurationProperties</h3>
 <table>
 <tr><th>방식</th><th>언제</th></tr>
-<tr><td><code>@Value("${carbon.trading.api-key}")</code></td><td>값 한두 개를 필드에 바로 꽂을 때. 간단하지만 흩어짐</td></tr>
-<tr><td><code>@ConfigurationProperties("carbon.trading")</code></td><td>관련 값 묶음을 <em>타입 안전한 객체</em>로. 묶음이 커지면 이쪽</td></tr>
+<tr><td><code>@Value("${payment.service.api-key}")</code></td><td>값 한두 개를 필드에 바로 꽂을 때. 간단하지만 흩어짐</td></tr>
+<tr><td><code>@ConfigurationProperties("payment.service")</code></td><td>관련 값 묶음을 <em>타입 안전한 객체</em>로. 묶음이 커지면 이쪽</td></tr>
 </table>
 <div class="serial-card">
 <span class="sc-label">@ConfigurationProperties — 묶음을 객체로</span>
-<span class="seg2">@ConfigurationProperties(prefix = </span><span class="dim">"carbon.trading"</span><span class="seg2">)</span><br>
+<span class="seg2">@ConfigurationProperties(prefix = </span><span class="dim">"payment.service"</span><span class="seg2">)</span><br>
 <span class="seg">public record</span> TradingProperties(<br>
 &nbsp;&nbsp;<span class="seg">int</span> maxCreditPerTx,<br>
 &nbsp;&nbsp;String apiKey<br>
@@ -270,7 +270,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </div>
 <div class="callout risk">
 <span class="co-label">SECRET</span>
-<p>API 키·DB 비밀번호를 <code>application.yml</code>에 <em>직접 박지 마세요</em>. <code>${CARBON_API_KEY}</code>처럼 환경변수나 secret manager를 참조하고, 실제 값은 저장소 밖에 둡니다. yml에 평문으로 커밋된 secret은 git 히스토리에 영원히 남습니다.</p>
+<p>API 키·DB 비밀번호를 <code>application.yml</code>에 <em>직접 박지 마세요</em>. <code>${PARTNER_API_KEY}</code>처럼 환경변수나 secret manager를 참조하고, 실제 값은 저장소 밖에 둡니다. yml에 평문으로 커밋된 secret은 git 히스토리에 영원히 남습니다.</p>
 </div>
 </section>
 

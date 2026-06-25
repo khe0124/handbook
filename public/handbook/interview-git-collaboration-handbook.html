@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — Git·협업·코드리뷰 면접</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">Git·협업·코드리뷰 면접</div>
+  <a href="#ch1"><span class="code">GIT-00</span>답변 프레임</a>
+  <a href="#ch2"><span class="code">GIT-01</span>rebase vs merge</a>
+  <a href="#ch3"><span class="code">GIT-02</span>revert vs reset</a>
+  <a href="#ch4"><span class="code">GIT-03</span>PR 크기·리뷰</a>
+  <a href="#ch5"><span class="code">GIT-04</span>ADR·의사결정</a>
+  <a href="#ch6"><span class="code">GIT-05</span>technical debt</a>
+</nav>
+<main>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-GIT-COLLABORATION-V1</span><span>SCOPE : GIT · PR · REVIEW · ADR · DELIVERY</span><span>LANG : KO</span></div><h1>Git·협업·코드리뷰 면접</h1><p class="hero-sub">협업 면접은 좋은 사람처럼 보이는 말보다 <strong>변경을 작게 만들고, 리뷰 가능하게 설명하며, 위험을 단계적으로 배포하는 습관</strong>을 확인합니다.</p></header>
+
+<section id="ch1"><div class="ch-head"><span class="ch-code">GIT-00</span><h2>답변 프레임</h2></div><div class="serial-card"><span class="sc-label">COLLABORATION ANSWER</span>1. 변경 목적과 위험을 분리<br>2. commit/PR 단위를 리뷰 가능한 크기로 유지<br>3. 의사결정은 ADR 또는 이슈에 남김<br>4. feature flag, staged rollout, rollback으로 배포 위험 축소<br>5. technical debt는 비용과 제거 계획으로 설명</div></section>
+
+<section id="ch2"><div class="ch-head"><span class="ch-code">GIT-01</span><h2>rebase vs merge</h2></div><p>rebase vs merge 질문의 핵심은 히스토리 모양이 아니라 팀이 어떤 이력을 보존하고 어떤 충돌 비용을 감당할지입니다. rebase는 선형 히스토리에 유리하고, merge는 브랜치 통합 맥락을 보존합니다.</p><table><tr><th>선택</th><th>적합한 상황</th><th>주의점</th></tr><tr><td>rebase</td><td>개인 feature branch를 최신 main 위로 정리할 때</td><td>공유된 commit을 rewrite하지 않습니다.</td></tr><tr><td>merge</td><td>여러 사람의 작업 맥락을 보존하거나 release branch를 합칠 때</td><td>merge commit이 많으면 흐름이 복잡해질 수 있습니다.</td></tr></table></section>
+
+<section id="ch3"><div class="ch-head"><span class="ch-code">GIT-02</span><h2>revert vs reset</h2></div><p>revert vs reset은 복구 전략 질문입니다. revert는 기존 이력을 유지하면서 반대 변경 commit을 만들고, reset은 브랜치 포인터를 옮겨 이력을 바꿉니다.</p><div class="serial-card"><span class="sc-label">면접 답변</span>이미 원격에 공유된 변경을 되돌릴 때는 보통 revert를 씁니다. reset은 로컬 정리나 아직 공유되지 않은 branch에서 조심스럽게 사용합니다. 운영 장애 복구에서는 이력 보존과 추적 가능성이 중요하므로 revert 또는 hotfix commit을 우선 검토합니다.</div></section>
+
+<section id="ch4"><div class="ch-head"><span class="ch-code">GIT-03</span><h2>PR 크기·리뷰</h2></div><p>PR 크기는 코드 줄 수보다 리뷰어가 한 번에 이해할 수 있는 의사결정 수로 판단합니다. schema 변경, 리팩터링, 기능 변경, UI 변경, 테스트 변경을 한 PR에 섞으면 결함을 찾기 어렵습니다.</p><table><tr><th>좋은 PR</th><th>설명</th></tr><tr><td>목적 명확</td><td>무엇을 왜 바꾸는지 첫 문단에 적습니다.</td></tr><tr><td>위험 표시</td><td>권한, 마이그레이션, 성능, 호환성 위험을 표시합니다.</td></tr><tr><td>검증 증거</td><td>테스트, 스크린샷, 로그, 마이그레이션 dry-run 결과를 남깁니다.</td></tr></table></section>
+
+<section id="ch5"><div class="ch-head"><span class="ch-code">GIT-04</span><h2>ADR·의사결정</h2></div><p>ADR은 Architecture Decision Record입니다. 모든 토론을 문서화하는 것이 아니라 나중에 되돌아볼 비용이 큰 기술 선택의 맥락, 대안, 결정, 결과를 짧게 남깁니다.</p><table><tr><th>항목</th><th>내용</th></tr><tr><td>Context</td><td>왜 지금 결정이 필요한지</td></tr><tr><td>Options</td><td>검토한 대안과 trade-off</td></tr><tr><td>Decision</td><td>선택한 방법과 이유</td></tr><tr><td>Consequences</td><td>얻는 것, 포기하는 것, 나중에 확인할 것</td></tr></table></section>
+
+<section id="ch6"><div class="ch-head"><span class="ch-code">GIT-05</span><h2>technical debt·feature flag</h2></div><p>technical debt는 마음에 들지 않는 코드가 아니라 미래 변경 비용을 증가시키는 설계 부채입니다. 좋은 답변은 “나중에 고치겠습니다”가 아니라 영향 범위, 비용, 우선순위, 제거 조건을 말합니다.</p><div class="serial-card"><span class="sc-label">배포 전략</span>위험한 변경은 feature flag로 숨기고 staged rollout으로 일부 사용자 또는 내부 조직에 먼저 켭니다. 문제가 생기면 flag off, rollback, hotfix 중 어떤 경로가 가능한지 미리 정합니다.</div></section>
+
+<footer>GIT COLLABORATION INTERVIEW · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>

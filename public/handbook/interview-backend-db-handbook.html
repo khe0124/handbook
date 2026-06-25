@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interview — 백엔드·DB 면접</title>
 </head>
@@ -25,6 +25,7 @@
   <a href="#q14"><span class="code">BD-14</span>API Versioning</a>
   <a href="#q15"><span class="code">BD-15</span>DB 제약과 애플리케이션 검증</a>
   <a href="#q16"><span class="code">BD-16</span>Slow Query 대응</a>
+  <a href="#q17"><span class="code">BD-17</span>핵심 질문 20선</a>
 </nav>
 <main>
 <header class="hero">
@@ -234,6 +235,26 @@
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>estimate가 틀리면?</td><td>통계 최신성, 데이터 분포, parameter skew를 봅니다.</td></tr><tr><td>offset이 느리면?</td><td>cursor pagination이나 keyset pagination을 검토합니다.</td></tr><tr><td>인덱스 배포는?</td><td>lock 위험과 쓰기 비용을 보고 안전한 생성 방식을 씁니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>slow query log, APM trace, 실행 계획 전후, index hit, endpoint latency p95를 말합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>느리면 인덱스부터 추가한다는 답은 원인 분리가 약해 보입니다.</p></div>
+</section>
+
+<section id="q17">
+<div class="ch-head"><span class="ch-code">BD-17</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
+<p class="lede">백엔드·DB 면접은 “정답”보다 정합성, 동시성, 장애, 변경 관리의 판단 기준을 봅니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
+<tr><td>API</td><td>REST, validation, error format, API versioning, OpenAPI 계약</td><td>하위 호환, client 영향, contract test</td></tr>
+<tr><td>인증·권한</td><td>Session vs JWT, RBAC vs ABAC, token rotation, CSRF, audit log</td><td>위협 모델과 운영 정책</td></tr>
+<tr><td>DB</td><td>트랜잭션, 격리 수준, 인덱스, 실행 계획, N+1, 락</td><td>데이터 분포, lock wait, p95 지연, 마이그레이션 위험</td></tr>
+<tr><td>분산 경계</td><td>idempotency key, retry, outbox, cache invalidation, read-your-writes</td><td>중복 처리, 순서 보장, 실패 복구</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">압박 꼬리질문</span>
+<p>“동시 요청이 들어오면 어떻게 보장하나요?”, “인덱스 추가의 부작용은?”, “DB 제약이 있는데 서버 검증이 왜 필요하죠?”에 답변을 준비합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">흔한 오답</span>
+<p>“트랜잭션을 걸면 됩니다”, “JWT가 더 안전합니다”, “느리면 인덱스를 추가합니다”처럼 조건과 부작용이 빠진 답변은 깊이가 부족해 보입니다.</p>
+</div>
 </section>
 
 <footer>BACKEND & DB INTERVIEW Q&A · V1 · 2026-06</footer>

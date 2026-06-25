@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 인프라·운영 면접</title></head>
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Interview — 인프라·운영 면접</title></head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
@@ -17,6 +17,7 @@
   <a href="#q10"><span class="code">IO-10</span>RED·USE·Golden Signals</a>
   <a href="#q11"><span class="code">IO-11</span>장애 초동 대응</a>
   <a href="#q12"><span class="code">IO-12</span>Postmortem</a>
+  <a href="#q13"><span class="code">IO-13</span>핵심 질문 20선</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-INFRA-OPS-QA-V1</span><span>SCOPE : NETWORK · CDN · CONTAINER · DELIVERY · OBSERVABILITY</span><span>LANG : KO</span></div><h1>인프라·운영 면접</h1><p class="hero-sub">인프라·운영 질문은 특정 클라우드 콘솔 사용법보다 <strong>요청이 지나가는 경로, 배포가 사용자에게 도달하는 과정, 장애를 좁히는 순서</strong>를 설명할 수 있는지 확인합니다.</p></header>
@@ -134,6 +135,26 @@
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>5 whys는?</td><td>표면 원인에서 시스템 원인까지 깊게 들어가는 방법입니다.</td></tr><tr><td>action item 기준?</td><td>owner, due date, 검증 방법이 있어야 합니다.</td></tr><tr><td>비난 방지는?</td><td>개인 실수보다 프로세스와 방어선 부재를 봅니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>타임라인, 감지 지연, action item 완료 확인, alert 조정 전후를 말합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“다음부터 조심하겠습니다”는 재발 방지 action이 아닙니다.</p></div>
+</section>
+
+<section id="q13">
+<div class="ch-head"><span class="ch-code">IO-13</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
+<p class="lede">인프라·운영 면접은 “어디서 장애가 났는가”를 계층별로 좁히는 사고를 봅니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
+<tr><td>요청 경로</td><td>DNS, TCP, TLS, HTTP, CDN, proxy, CORS</td><td>브라우저에서 서버까지 어느 계층에서 실패했는지 분리</td></tr>
+<tr><td>배포</td><td>CI/CD, blue-green, canary, rollback, feature flag</td><td>실패 시 되돌리는 기준과 검증 지표</td></tr>
+<tr><td>컨테이너</td><td>Docker image, Kubernetes pod, readiness, liveness, resource limit</td><td>시작 실패와 트래픽 수신 실패를 구분</td></tr>
+<tr><td>관측성</td><td>로그, 메트릭, 트레이스, RED, USE, Golden Signals, postmortem</td><td>사용자 영향 감지와 원인 추적의 연결</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">압박 꼬리질문</span>
+<p>“서버는 살아있는데 사용자는 접속이 안 된다면?”, “rollback 기준은 누가 정하나요?”, “CPU가 낮은데 timeout이 나는 이유는?”에 계층적으로 답합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">흔한 오답</span>
+<p>장애를 코드 문제로만 보거나, Docker와 Kubernetes를 배포 도구 이름으로만 설명하거나, alert 기준을 사용자 영향과 연결하지 못하는 답변입니다.</p>
+</div>
 </section>
 
 <footer>INFRA & OPERATIONS INTERVIEW Q&A · V1 · 2026-06</footer>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Network Infrastructure Handbook — 개요</title>
 </head>
@@ -9,11 +9,11 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">네트워크 인프라 개요</div>
-  <a href="#ch1"><span class="code">NET-01</span>필수지식 로드맵</a>
-  <a href="#ch2"><span class="code">NET-02</span>네트워크 사고 순서</a>
-  <a href="#ch3"><span class="code">NET-03</span>클라우드 구성 요소</a>
-  <a href="#ch4"><span class="code">NET-04</span>VPN 구축 지도</a>
-  <a href="#ch5"><span class="code">NET-05</span>실무 체크포인트</a>
+  <a href="#ch1"><span class="code">NET-01</span>학습 경로</a>
+  <a href="#ch2"><span class="code">NET-02</span>패킷 사고 순서</a>
+  <a href="#ch3"><span class="code">NET-03</span>구성 요소 지도</a>
+  <a href="#ch4"><span class="code">NET-04</span>VPN 구축 흐름</a>
+  <a href="#ch5"><span class="code">NET-05</span>운영 체크포인트</a>
 </nav>
 <main>
 <header class="hero">
@@ -22,47 +22,53 @@
     <span>SCOPE : IP · VPC · ROUTE · FIREWALL · DNS · VPN · OPS</span>
     <span>LANG : KO</span>
   </div>
-  <h1>네트워크 인프라<br>필수지식 로드맵</h1>
-  <p class="hero-sub">네트워크 인프라는 콘솔 메뉴를 외우는 일이 아니라 <strong>패킷이 어디서 출발해 어떤 경로와 보안 정책을 지나 목적지에 도착하는지</strong> 설명하는 일입니다. VPN도 결국 IP 대역, route table, 방화벽, DNS, 디버깅의 조합입니다.</p>
-  <div class="hero-meta">TARGET : 프론트엔드·Docker 경험자가 클라우드/VPN 인프라를 이해하기 위한 필수 순서</div>
+  <h1>네트워크 인프라<br>로드맵과 패킷 사고</h1>
+  <p class="hero-sub">네트워크 인프라는 콘솔 메뉴를 외우는 일이 아니라 <strong>패킷이 어디서 출발해 어떤 주소, 경로, 이름 해석, 보안 정책을 지나 목적지에 도착하는지</strong> 설명하는 일입니다. VPN도 결국 IP 대역, route table, DNS, 방화벽, 디버깅의 조합입니다.</p>
+  <div class="hero-meta">TARGET : 프론트엔드·Docker 경험자가 클라우드/VPN 인프라를 단계적으로 이해하기 위한 기준 지도</div>
 </header>
 
 <section id="ch1">
-<div class="ch-head"><span class="ch-code">NET-01</span><h2>필수지식 로드맵</h2></div>
-<p class="lede">학습 순서는 기술 이름이 아니라 의존 관계를 따라야 합니다. IP를 모르면 CIDR을 못 잡고, CIDR을 모르면 라우팅과 VPN 협의를 못 합니다.</p>
+<div class="ch-head"><span class="ch-code">NET-01</span><h2>학습 경로</h2></div>
+<p class="lede">필수지식 로드맵은 기술 이름이 아니라 의존 관계를 따라야 합니다. 주소 계획을 모르면 라우팅을 설명할 수 없고, 라우팅을 모르면 방화벽이나 VPN 장애를 제대로 좁힐 수 없습니다.</p>
 <table>
-<tr><th>순서</th><th>필수 질문</th><th>다음 문서</th></tr>
-<tr><td>1. IP·CIDR·서브넷</td><td>이 서버와 네트워크는 어떤 주소 범위에 있는가</td><td>IP 주소·CIDR·서브넷</td></tr>
-<tr><td>2. VPC와 Public/Private</td><td>이 리소스는 인터넷에서 직접 접근 가능한가</td><td>VPC와 Public·Private 구조</td></tr>
-<tr><td>3. 라우팅·NAT·IGW</td><td>목적지 IP로 가는 다음 홉은 무엇인가</td><td>라우팅·NAT·Internet Gateway</td></tr>
-<tr><td>4. 방화벽</td><td>경로가 있어도 정책이 허용하는가</td><td>방화벽·Security Group·NACL</td></tr>
-<tr><td>5. DNS</td><td>이름이 어떤 IP로 해석되는가</td><td>DNS와 이름 해석</td></tr>
-<tr><td>6. VPN</td><td>사설 대역 간 트래픽을 암호화 터널로 보낼 수 있는가</td><td>IPsec VPN 원리</td></tr>
-<tr><td>7. 운영</td><td>장애 시 L3/L4/L7 중 어디서 막혔는가</td><td>네트워크 디버깅·트러블슈팅</td></tr>
+<tr><th>단계</th><th>핵심 질문</th><th>문서</th></tr>
+<tr><td>00. 로드맵</td><td>패킷을 주소, 경로, 이름, 정책, 서비스로 나눠 설명할 수 있는가</td><td>로드맵과 패킷 사고</td></tr>
+<tr><td>01. 주소 계획</td><td>이 서버와 네트워크는 어떤 CIDR 범위에 있는가</td><td>IP·CIDR·서브넷 설계</td></tr>
+<tr><td>02. 배치 구조</td><td>이 리소스는 인터넷에서 직접 접근 가능한가</td><td>VPC와 Public·Private 배치</td></tr>
+<tr><td>03. 경로</td><td>목적지 IP로 가는 다음 홉은 무엇인가</td><td>Route Table·NAT·IGW</td></tr>
+<tr><td>04. 이름 해석</td><td>서비스 이름이 어떤 IP로 해석되는가</td><td>DNS와 이름 해석</td></tr>
+<tr><td>05. 보안 경계</td><td>경로가 있어도 정책이 source, destination, port를 허용하는가</td><td>SG·NACL·방화벽</td></tr>
+<tr><td>06. 하이브리드 연결</td><td>클라우드와 고객사/사내망을 어떤 gateway로 연결하는가</td><td>클라우드 VPN Gateway</td></tr>
+<tr><td>07. 터널 협상</td><td>IPsec Phase 1/2와 traffic selector가 양쪽에서 일치하는가</td><td>IPsec VPN 협상 원리</td></tr>
+<tr><td>08-10. 운영</td><td>L3/L4/L7 중 어디서 막혔고, 어떤 체크리스트로 재현할 것인가</td><td>디버깅·트러블슈팅·체크리스트</td></tr>
 </table>
 </section>
 
 <section id="ch2">
-<div class="ch-head"><span class="ch-code">NET-02</span><h2>네트워크 사고 순서</h2></div>
+<div class="ch-head"><span class="ch-code">NET-02</span><h2>패킷 사고 순서</h2></div>
 <div class="flow">
   <span class="step">주소</span><span class="arr">→</span>
   <span class="step">경로</span><span class="arr">→</span>
-  <span class="step">정책</span><span class="arr">→</span>
   <span class="step">이름</span><span class="arr">→</span>
+  <span class="step">정책</span><span class="arr">→</span>
   <span class="step">서비스</span>
 </div>
 <table>
 <tr><th>단계</th><th>확인할 것</th><th>대표 도구</th></tr>
 <tr><td>주소</td><td>source/destination IP, CIDR, 대역 충돌</td><td>ip addr, 콘솔 서브넷</td></tr>
 <tr><td>경로</td><td>route table, default route, return path</td><td>traceroute, route table</td></tr>
-<tr><td>정책</td><td>Security Group, NACL, 고객사 방화벽</td><td>nc, tcpdump</td></tr>
 <tr><td>이름</td><td>DNS record, private zone, TTL</td><td>dig, nslookup</td></tr>
+<tr><td>정책</td><td>Security Group, NACL, 고객사 방화벽</td><td>nc, tcpdump</td></tr>
 <tr><td>서비스</td><td>프로세스, 포트, HTTP/TLS 응답</td><td>curl, logs</td></tr>
 </table>
+<div class="callout">
+<span class="co-label">메뉴를 읽는 방법</span>
+<p>처음 학습할 때는 00부터 10까지 순서대로 읽고, 장애 대응 중에는 08 디버깅 도구에서 시작해 주소·경로·DNS·정책 문서로 거슬러 올라가면 됩니다. VPN 작업은 06 Gateway에서 구축 절차를 잡고 07 IPsec에서 협상 파라미터를 맞춥니다.</p>
+</div>
 </section>
 
 <section id="ch3">
-<div class="ch-head"><span class="ch-code">NET-03</span><h2>클라우드 구성 요소</h2></div>
+<div class="ch-head"><span class="ch-code">NET-03</span><h2>구성 요소 지도</h2></div>
 <table>
 <tr><th>요소</th><th>역할</th><th>Docker 경험과의 비유</th></tr>
 <tr><td>VPC</td><td>클라우드 안의 격리된 사설 네트워크</td><td>docker compose의 networks 묶음</td></tr>
@@ -71,31 +77,35 @@
 <tr><td>Internet Gateway</td><td>public subnet이 인터넷과 통신하는 출입구</td><td>host network 밖으로 나가는 경로</td></tr>
 <tr><td>NAT Gateway</td><td>private subnet의 outbound 인터넷 통신 대리</td><td>사설 컨테이너가 host를 통해 외부 접근</td></tr>
 <tr><td>Security Group/ACG</td><td>서버 단위 허용 방화벽</td><td>컨테이너 포트 expose 정책</td></tr>
+<tr><td>Private DNS</td><td>사설망 안에서만 해석되는 이름</td><td>compose service name 또는 내부 alias</td></tr>
+<tr><td>VPN Gateway</td><td>사설망 간 암호화 터널의 클라우드쪽 끝</td><td>외부 network와 연결되는 gateway</td></tr>
 </table>
 </section>
 
 <section id="ch4">
-<div class="ch-head"><span class="ch-code">NET-04</span><h2>VPN 구축 지도</h2></div>
+<div class="ch-head"><span class="ch-code">NET-04</span><h2>VPN 구축 흐름</h2></div>
 <p class="lede">VPN 구축은 터널 생성이 전부가 아닙니다. 터널이 UP이어도 라우팅, 방화벽, DNS, 서비스 포트가 맞지 않으면 통신은 실패합니다.</p>
 <table>
-<tr><th>작업</th><th>확인 질문</th><th>실패 시 흔한 원인</th></tr>
-<tr><td>대역 협의</td><td>우리 CIDR과 고객사 CIDR이 겹치지 않는가</td><td>양쪽 모두 10.0.0.0/16 사용</td></tr>
-<tr><td>터널 협상</td><td>Phase 1/Phase 2 파라미터가 일치하는가</td><td>PSK, DH group, lifetime 불일치</td></tr>
-<tr><td>라우팅</td><td>고객사 대역으로 가는 route가 VPN을 향하는가</td><td>route table 누락, return path 누락</td></tr>
-<tr><td>방화벽</td><td>출발지/목적지/포트가 양쪽에서 허용되는가</td><td>우리 ACG 또는 고객사 방화벽 차단</td></tr>
-<tr><td>검증</td><td>L3, L4, L7 순서로 어디까지 되는가</td><td>ping만 보고 서비스 장애로 오판</td></tr>
+<tr><th>단계</th><th>확인 질문</th><th>연결 문서</th></tr>
+<tr><td>1. 대역 협의</td><td>우리 CIDR과 고객사 CIDR이 겹치지 않는가</td><td>01 IP·CIDR·서브넷 설계</td></tr>
+<tr><td>2. Gateway 구성</td><td>peer public IP, local/remote CIDR, tunnel 수가 맞는가</td><td>06 클라우드 VPN Gateway</td></tr>
+<tr><td>3. 터널 협상</td><td>Phase 1/Phase 2 파라미터가 일치하는가</td><td>07 IPsec VPN 협상 원리</td></tr>
+<tr><td>4. 라우팅</td><td>고객사 대역으로 가는 route와 return path가 있는가</td><td>03 Route Table·NAT·IGW</td></tr>
+<tr><td>5. DNS/방화벽</td><td>이름 해석과 양쪽 source/destination/port 허용이 맞는가</td><td>04 DNS, 05 보안 경계</td></tr>
+<tr><td>6. 검증</td><td>L3, L4, L7 순서로 어디까지 되는가</td><td>08-10 운영 문서</td></tr>
 </table>
 </section>
 
 <section id="ch5">
-<div class="ch-head"><span class="ch-code">NET-05</span><h2>실무 체크포인트</h2></div>
+<div class="ch-head"><span class="ch-code">NET-05</span><h2>운영 체크포인트</h2></div>
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>VPN 터널은 UP인데 고객사 DB 접속이 안 되는 사례의 대부분은 IPsec 자체보다 route table 또는 방화벽 문제입니다. 우리 private subnet에서 고객사 CIDR로 가는 route가 없거나, 고객사 방화벽이 우리 NAT IP만 허용하고 실제 source CIDR을 허용하지 않은 경우가 많습니다. 터널 상태와 서비스 통신은 별개로 검증해야 합니다.</p>
 </div>
 <div class="glossary">
-<div class="g-row"><div class="g-term"><b>필수 순서</b><span>roadmap</span></div><div class="g-def">IP/CIDR → VPC/Subnet → route table → firewall → DNS → VPN → debugging 순서로 학습합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>필수 순서</b><span>roadmap</span></div><div class="g-def">로드맵 → IP/CIDR → VPC/Subnet → route table → DNS → firewall → VPN Gateway → IPsec → debugging 순서로 학습합니다.</div></div>
 <div class="g-row"><div class="g-term"><b>핵심 질문</b><span>packet path</span></div><div class="g-def">이 패킷의 source, destination, next hop, policy, response path를 설명할 수 있는가.</div></div>
+<div class="g-row"><div class="g-term"><b>운영 진입점</b><span>ops</span></div><div class="g-def">장애 대응은 디버깅 도구에서 시작하고, 원인 후보에 따라 주소·경로·DNS·정책 문서로 되돌아갑니다.</div></div>
 </div>
 </section>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Database Handbook — 백엔드를 위한 데이터베이스 핸드북</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -94,6 +94,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch9"><span class="code">DB-09</span>확장 — 복제·파티셔닝·샤딩</a>
   <a href="#ch10"><span class="code">DB-10</span>NoSQL은 언제</a>
   <a href="#ch11"><span class="code">DB-11</span>용어집</a>
+  <a href="#ch12"><span class="code">DB-12</span>실무 DB 운영 심화</a>
 </nav>
 <main>
 
@@ -348,7 +349,7 @@ T2: lock <span class="seg2">B</span> ───▶ wants <span class="seg">A</spa
 </div>
 <div class="callout gm">
 <span class="co-label">선택 기준 — 폴리글랏 퍼시스턴스</span>
-<p>현실의 답은 보통 "둘 중 하나"가 아니라 <strong>폴리글랏 퍼시스턴스(polyglot persistence)</strong> — 데이터 성격에 맞는 저장소를 섞어 씁니다. 핵심 거래·정합성이 중요한 데이터는 RDBMS, 캐시·세션은 Redis, 전문 검색은 Elasticsearch처럼. 기본값은 여전히 RDBMS로 두는 게 안전합니다 — <em>조인·트랜잭션·강한 일관성이 필요한지부터 묻고</em>, 그게 필요 없고 특정 차원(쓰기 확장·스키마 유연·그래프 탐색)이 지배적일 때 NoSQL을 더하세요. 탄소거래 같은 거래·감사 추적 도메인은 RDBMS가 자연스러운 중심입니다.</p>
+<p>현실의 답은 보통 "둘 중 하나"가 아니라 <strong>폴리글랏 퍼시스턴스(polyglot persistence)</strong> — 데이터 성격에 맞는 저장소를 섞어 씁니다. 핵심 거래·정합성이 중요한 데이터는 RDBMS, 캐시·세션은 Redis, 전문 검색은 Elasticsearch처럼. 기본값은 여전히 RDBMS로 두는 게 안전합니다 — <em>조인·트랜잭션·강한 일관성이 필요한지부터 묻고</em>, 그게 필요 없고 특정 차원(쓰기 확장·스키마 유연·그래프 탐색)이 지배적일 때 NoSQL을 더하세요. 주문·정산 같은 거래·감사 추적 도메인은 RDBMS가 자연스러운 중심입니다.</p>
 </div>
 </section>
 
