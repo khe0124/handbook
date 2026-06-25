@@ -410,14 +410,14 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
   assert.deepEqual(axLabels, [
     "AX 개요",
     "AX 엔지니어 역량 모델",
-    "AX 업무 자동화 설계",
-    "AI Harness Engineering",
-    "Context Engineering",
-    "Loop Engineering",
-    "Multi-Agent Workflow",
-    "검증과 평가",
-    "AI Governance & Security",
     "AX 조직 적용 패턴",
+    "AX 업무 자동화 설계",
+    "Context Engineering",
+    "AI Harness Engineering",
+    "Loop Engineering",
+    "검증과 평가",
+    "Multi-Agent Workflow",
+    "AI Governance & Security",
     "AX 실전 적용 사례",
     "AX 실무 플레이북",
   ]);
@@ -465,6 +465,17 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
   assert.match(source, /백엔드 셀의 장애 회고 자동화/);
   assert.match(source, /2-WEEK AX AUTOMATION SPRINT/);
   assert.match(source, /Trace-based Eval Harness/);
+  assert.match(source, /교육 과정/);
+  assert.match(source, /파일럿/);
+  assert.match(source, /조직 진단/);
+  assert.match(source, /표준 산출물/);
+  assert.match(source, /task spec/i);
+  assert.match(source, /context package/i);
+  assert.match(source, /harness policy/i);
+  assert.match(source, /eval rubric/i);
+  assert.match(source, /운영 지표/);
+  assert.match(source, /거버넌스/);
+  assert.match(source, /capstone/i);
 });
 
 test("backend handbook includes practical senior-level backend guidance without level-label wording", async () => {
