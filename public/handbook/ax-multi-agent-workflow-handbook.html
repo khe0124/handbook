@@ -8,7 +8,7 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">Multi-Agent Workflow</div>
+<div class="nav-title">Multi-Agent Workflow</div>
   <a href="#ch1"><span class="code">MA-01</span>역할 분리</a>
   <a href="#ch2"><span class="code">MA-02</span>언제 쓰는가</a>
   <a href="#ch3"><span class="code">MA-03</span>워크트리 전략</a>
@@ -28,7 +28,7 @@
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">MA-01</span><h2>역할 분리</h2></div>
-<p class="lede">코드를 작성한 에이전트에게 최종 평가까지 맡기지 않습니다. 작성자는 구현 의도에 끌리고, 리뷰어는 실제 동작과 위험에 집중해야 합니다.</p>
+<p class="lede">코드를 작성한 에이전트에게 최종 평가까지 맡기지 않습니다. 작성자는 구현 의도에 끌리고, 리뷰어는 실제 동작과 위험에 집중해야 합니다. independent roles reduce risk: 독립 역할은 같은 착각을 반복하는 자기검열 위험을 낮춥니다.</p>
 <table>
 <tr><th>역할</th><th>책임</th><th>출력</th></tr>
 <tr><td>Planner</td><td>문제를 쪼개고 범위와 성공 조건 정의</td><td>task breakdown</td></tr>
@@ -69,6 +69,10 @@ worktree/c-review
 <li>결과는 patch, test result, risk memo로 제출합니다.</li>
 <li>통합자는 하나의 최종 변경만 선택하거나 병합합니다.</li>
 </ol>
+<div class="callout">
+<span class="co-label">worktree isolation</span>
+<p>worktree isolation은 에이전트별 파일 소유권, 검증 로그, 폐기 가능한 실험 공간을 분리해 통합자가 원인과 책임을 추적하게 합니다.</p>
+</div>
 </section>
 
 <section id="ch4">
@@ -88,7 +92,7 @@ worktree/c-review
 
 <section id="ch5">
 <div class="ch-head"><span class="ch-code">MA-05</span><h2>통합과 리뷰</h2></div>
-<p class="lede">병렬 작업의 성패는 에이전트 수가 아니라 통합 기준에 달려 있습니다. 각 결과에 검증 증거가 없으면 통합하지 않습니다.</p>
+<p class="lede">병렬 작업의 성패는 에이전트 수가 아니라 integration checklist와 conflict-handling 기준에 달려 있습니다. 각 결과에 검증 증거가 없으면 통합하지 않습니다.</p>
 <div class="serial-card">
 <span class="sc-label">INDEPENDENT REVIEW PROMPT</span>
 너는 이 변경을 작성하지 않은 독립 리뷰어다.<br>
@@ -97,7 +101,8 @@ worktree/c-review
 2. 보안, 인증, 권한, 데이터 손실 위험<br>
 3. 누락된 테스트<br>
 4. 요구사항과 구현의 불일치<br>
-5. 과도한 변경 또는 불필요한 추상화
+5. 과도한 변경 또는 불필요한 추상화<br>
+parallel review exercise: 같은 diff를 Reviewer와 Verifier가 독립 검토한 뒤 finding 차이를 비교
 </div>
 <table>
 <tr><th>실패</th><th>대응</th></tr>

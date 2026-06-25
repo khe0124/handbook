@@ -8,7 +8,7 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">AX 실전 적용 사례</div>
+<div class="nav-title">AX 실전 적용 사례</div>
   <a href="#ch1"><span class="code">CASE-01</span>사례 읽는 법</a>
   <a href="#ch2"><span class="code">CASE-02</span>대규모 조직</a>
   <a href="#ch3"><span class="code">CASE-03</span>소규모 셀</a>
@@ -44,81 +44,44 @@
 <div class="ch-head"><span class="ch-code">CASE-02</span><h2>대규모 조직</h2></div>
 <div class="callout">
 <span class="co-label">Case A · 전사 PR Review Assistant</span>
-<p>대규모 조직에서 PR 수가 늘며 리뷰 병목이 커지는 상황입니다. AI가 merge를 결정하지 않고, risk map과 test gap 후보를 먼저 생성합니다. 보안, 데이터 마이그레이션, public API 변경, 성능 위험은 별도 reviewer에게 라우팅합니다.</p>
+<p><strong>Problem</strong>: PR 수가 늘며 reviewer가 핵심 위험보다 스타일 noise에 시간을 씁니다. <strong>Workflow</strong>: diff 수집, risk map 생성, reviewer triage, owner 승인 순서로 운영합니다. <strong>Harness</strong>: PR diff, ownership, 테스트 결과, 최근 장애를 묶습니다. <strong>Context</strong>: 보안, migration review, public API 변경을 별도 신호로 제공합니다. <strong>Permission</strong>: read-only와 comment draft만 허용합니다. <strong>Verification</strong>: path, line, evidence, 재현 가능성을 사람이 확인합니다. <strong>Metrics</strong>: review latency, false positive rate, missed defect, reviewer load를 봅니다. <strong>Failure Mode</strong>: 사소한 finding이 늘고 중요한 위험을 놓칩니다. <strong>Rollout Lesson</strong>: merge 권한을 주기 전에 severity rubric과 reviewer workshop을 먼저 맞춥니다.</p>
 </div>
-<table>
-<tr><th>요소</th><th>설계</th></tr>
-<tr><td>Harness</td><td>PR diff, 관련 테스트, ownership, 최근 장애, coding standard를 context package로 제공</td></tr>
-<tr><td>Permission</td><td>read-only, comment draft만 허용. approve/merge 금지</td></tr>
-<tr><td>Verification</td><td>AI finding의 path/line/evidence/repro를 사람이 triage</td></tr>
-<tr><td>Metrics</td><td>review latency, false positive rate, missed defect, reviewer load</td></tr>
-<tr><td>Failure Mode</td><td>사소한 스타일 지적 증가, 중요한 위험 누락, reviewer 피로</td></tr>
-</table>
 <div class="callout">
-<span class="co-label">Case B · 엔터프라이즈 문서/런북 동기화</span>
-<p>서비스가 많아 API 변경, 배포 절차, 장애 런북이 오래되는 문제를 다룹니다. AI는 code/API diff를 읽고 영향을 받는 문서를 찾은 뒤 patch를 제안합니다.</p>
+<span class="co-label">Case B · 문서 동기화</span>
+<p><strong>Problem</strong>: API 변경과 런북 변경이 문서에 늦게 반영됩니다. <strong>Workflow</strong>: code/API diff 감지, 영향 문서 검색, patch 제안, owner review로 흐릅니다. <strong>Harness</strong>: OpenAPI spec, route diff, ADR, runbook, changelog를 검색합니다. <strong>Context</strong>: 문서 독자, 배포 단계, 운영 절차의 차이를 함께 제공합니다. <strong>Permission</strong>: 문서 PR 생성만 허용하고 운영 런북 자동 반영은 막습니다. <strong>Verification</strong>: 링크 체크, 예제 요청 검증, owner review를 통과시킵니다. <strong>Metrics</strong>: stale doc count, doc update lead time, incident runbook accuracy를 봅니다. <strong>Failure Mode</strong>: 코드 요약은 맞지만 실제 운영 절차가 빠집니다. <strong>Rollout Lesson</strong>: 문서 자동화는 출처 링크와 owner 승인 없이는 배포하지 않습니다.</p>
 </div>
-<table>
-<tr><th>요소</th><th>설계</th></tr>
-<tr><td>Harness</td><td>OpenAPI spec, route diff, ADR, runbook, changelog를 검색</td></tr>
-<tr><td>Permission</td><td>문서 PR 생성만 허용, 운영 runbook 자동 반영은 owner 승인</td></tr>
-<tr><td>Verification</td><td>링크 체크, 예제 요청 검증, owner review</td></tr>
-<tr><td>Metrics</td><td>stale doc count, doc update lead time, incident runbook accuracy</td></tr>
-<tr><td>Failure Mode</td><td>코드는 맞지만 운영 절차가 빠진 문서, 출처 없는 요약</td></tr>
-</table>
 </section>
 
 <section id="ch3">
 <div class="ch-head"><span class="ch-code">CASE-03</span><h2>소규모 셀</h2></div>
 <div class="callout">
 <span class="co-label">Case C · 프론트엔드 셀의 접근성·성능 점검</span>
-<p>작은 제품 셀에서 매 PR마다 접근성, Lighthouse, 핵심 사용자 흐름 점검이 누락되는 문제입니다. AI는 화면 변경 diff와 스토리북/테스트 결과를 바탕으로 위험 체크리스트를 만들고, 개발자는 우선순위를 결정합니다.</p>
+<p><strong>Problem</strong>: 작은 제품 셀에서 접근성, 성능, 핵심 사용자 흐름 점검이 PR마다 흔들립니다. <strong>Workflow</strong>: 변경 화면 식별, screenshot 비교, axe/Lighthouse 실행, 수정 후보 triage로 운영합니다. <strong>Harness</strong>: changed components, route, screenshots, axe result, Lighthouse result를 묶습니다. <strong>Context</strong>: 디자인 의도, 지원 브라우저, 키보드 탐색 경로를 제공합니다. <strong>Permission</strong>: 테스트 제안과 작은 aria label 수정만 허용합니다. <strong>Verification</strong>: Playwright, axe, Lighthouse threshold, 수동 키보드 탐색을 병행합니다. <strong>Metrics</strong>: a11y issue count, performance regression, test gap closure를 봅니다. <strong>Failure Mode</strong>: 시각적으로 맞지만 스크린리더나 키보드 흐름을 놓칩니다. <strong>Rollout Lesson</strong>: 자동 finding은 스냅샷보다 실제 사용자 경로 검증과 함께 써야 합니다.</p>
 </div>
-<table>
-<tr><th>요소</th><th>설계</th></tr>
-<tr><td>Harness</td><td>changed components, route, screenshots, axe result, Lighthouse result</td></tr>
-<tr><td>Permission</td><td>테스트 제안과 간단한 aria label 수정만 허용</td></tr>
-<tr><td>Verification</td><td>Playwright, axe, Lighthouse threshold, 수동 키보드 탐색</td></tr>
-<tr><td>Metrics</td><td>a11y issue count, performance regression, test gap closure</td></tr>
-<tr><td>Failure Mode</td><td>시각적으로만 맞고 키보드/스크린리더 흐름을 놓침</td></tr>
-</table>
 <div class="callout">
 <span class="co-label">Case D · 백엔드 셀의 장애 회고 자동화</span>
-<p>장애 후 회고가 늦고 원인 분석 품질이 일정하지 않은 문제입니다. AI는 로그, 메트릭, 배포 기록, PR diff를 모아 timeline 초안을 만들고, 사람은 원인과 액션 아이템을 확정합니다.</p>
+<p><strong>Problem</strong>: 장애 후 회고가 늦고 timeline 품질이 사람마다 다릅니다. <strong>Workflow</strong>: ticket, 로그, 배포 기록, metric을 모아 초안을 만들고 owner가 원인과 액션을 확정합니다. <strong>Harness</strong>: incident ticket, deploy history, logs, traces, dashboards, ownership map을 연결합니다. <strong>Context</strong>: 알림 시각, 배포 시각, 고객 영향, 완화 조치를 분리합니다. <strong>Permission</strong>: read-only 분석만 허용하고 mitigation 실행은 금지합니다. <strong>Verification</strong>: source link, metric screenshot, owner confirmation을 요구합니다. <strong>Metrics</strong>: MTTR, postmortem lead time, action item completion, repeat incident rate를 봅니다. <strong>Failure Mode</strong>: 상관관계를 원인으로 오판하거나 최근 배포에 과도하게 귀인합니다. <strong>Rollout Lesson</strong>: AI 초안은 빠른 정리 도구이지 원인 판정자가 아닙니다.</p>
 </div>
-<table>
-<tr><th>요소</th><th>설계</th></tr>
-<tr><td>Harness</td><td>incident ticket, deploy history, logs, traces, dashboards, ownership map</td></tr>
-<tr><td>Permission</td><td>read-only 분석. mitigation 실행 금지</td></tr>
-<tr><td>Verification</td><td>timeline source link, metric screenshot, owner confirmation</td></tr>
-<tr><td>Metrics</td><td>MTTR, postmortem lead time, action item completion, repeat incident rate</td></tr>
-<tr><td>Failure Mode</td><td>상관관계를 원인으로 오판, 최근 배포에 과도하게 귀인</td></tr>
-</table>
 </section>
 
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">CASE-04</span><h2>업무별 사례</h2></div>
-<table>
-<tr><th>업무</th><th>AX 적용</th><th>검증</th><th>자동화 수준</th></tr>
-<tr><td>테스트 생성</td><td>edge case와 regression test 후보 생성</td><td>테스트가 실제로 실패 후 통과하는지 확인</td><td>반자동</td></tr>
-<tr><td>DB migration 검토</td><td>lock risk, expand-contract, rollback/forward plan 분석</td><td>staging dry-run, schema diff, explain, approval</td><td>분석 자동화</td></tr>
-<tr><td>보안 triage</td><td>source/sink, exploitability, boundary crossing 분석</td><td>재현 가능성, counterevidence, severity calibration</td><td>후보 자동화</td></tr>
-<tr><td>릴리즈 준비</td><td>change summary, risk map, rollback checklist 생성</td><td>owner review, canary metric, deployment gate</td><td>반자동</td></tr>
-<tr><td>디자인 QA</td><td>Figma spec과 구현 화면 차이, 상태 누락 탐지</td><td>visual diff, interaction checklist, accessibility pass</td><td>보조 자동화</td></tr>
-<tr><td>고객 문의 분석</td><td>문의 클러스터링, 관련 로그와 릴리즈 연결</td><td>support owner validation, privacy redaction</td><td>read-only 분석</td></tr>
-</table>
+<div class="callout">
+<span class="co-label">Case E · migration review</span>
+<p><strong>Problem</strong>: DB migration이 lock, backward compatibility, rollback 위험을 충분히 드러내지 못합니다. <strong>Workflow</strong>: schema diff 분석, expand-contract 확인, dry-run, 승인으로 진행합니다. <strong>Harness</strong>: migration SQL, table size, query plan, app version matrix를 제공합니다. <strong>Context</strong>: 배포 순서, 읽기/쓰기 경로, 데이터 보존 요구를 포함합니다. <strong>Permission</strong>: 분석과 staging dry-run만 허용합니다. <strong>Verification</strong>: schema diff, explain, rollback/forward plan, owner approval을 확인합니다. <strong>Metrics</strong>: migration lead time, lock incident, rollback frequency를 봅니다. <strong>Failure Mode</strong>: 개발 DB에서는 통과하지만 운영 데이터 크기에서 잠깁니다. <strong>Rollout Lesson</strong>: migration review는 코드 리뷰와 별도 gate로 운영합니다.</p>
+</div>
+<div class="callout">
+<span class="co-label">Case F · security triage onboarding</span>
+<p><strong>Problem</strong>: security triage와 onboarding 과정에서 취약점 후보의 심각도 판단이 일관되지 않습니다. <strong>Workflow</strong>: source/sink 분석, exploitability 판단, counterevidence 기록, reviewer 승인으로 흐릅니다. <strong>Harness</strong>: alert, code path, dependency metadata, threat model을 묶습니다. <strong>Context</strong>: 신뢰 경계, tenant boundary, 과거 false positive를 제공합니다. <strong>Permission</strong>: write 없이 분석과 ticket draft만 허용합니다. <strong>Verification</strong>: 재현 가능성, severity calibration, 보안 reviewer 확인을 요구합니다. <strong>Metrics</strong>: triage latency, true positive rate, onboarding completion, repeated mistake를 봅니다. <strong>Failure Mode</strong>: 그럴듯한 설명이 exploitability 없이 high severity로 승격됩니다. <strong>Rollout Lesson</strong>: 신규 엔지니어 onboarding에는 판단 근거 예시와 반례를 함께 훈련시킵니다.</p>
+</div>
 </section>
 
 <section id="ch5">
 <div class="ch-head"><span class="ch-code">CASE-05</span><h2>실패 사례</h2></div>
-<table>
-<tr><th>실패</th><th>증상</th><th>근본 원인</th><th>수정</th></tr>
-<tr><td>AI 리뷰가 병목을 늘림</td><td>finding은 많지만 reviewer 시간이 증가</td><td>false positive와 severity 기준 부재</td><td>risk classifier와 triage rubric 도입</td></tr>
-<tr><td>생성 코드가 rework를 늘림</td><td>초기 구현은 빠르지만 수정과 회귀가 증가</td><td>컨텍스트 부족, 테스트 부재, 큰 diff</td><td>작은 task, 실패 테스트, acceptance rate/rework 추적</td></tr>
-<tr><td>조직 도입이 도구 배포로 끝남</td><td>사용률은 높은데 delivery 성능이 개선되지 않음</td><td>업무 workflow와 지표 미정의</td><td>workflow별 golden path와 DORA/quality metric 연결</td></tr>
-<tr><td>셀 단위 실험이 공유되지 않음</td><td>팀마다 같은 prompt와 실패를 반복</td><td>episode 저장소와 커뮤니티 부재</td><td>주간 episode review와 reusable template 운영</td></tr>
-<tr><td>자동화가 지식 형성을 막음</td><td>팀이 결과는 쓰지만 원리를 설명하지 못함</td><td>완전 위임과 검증 생략</td><td>explain-before-apply, review notes, learning retention 확인</td></tr>
-</table>
+<div class="callout warn">
+<span class="co-label">Case G · 실패 사례</span>
+<p><strong>Problem</strong>: AI 리뷰와 생성 코드가 도입됐지만 delivery 품질은 좋아지지 않았습니다. <strong>Workflow</strong>: 도구 배포 후 각 팀이 자유롭게 사용했고 공통 gate가 없었습니다. <strong>Harness</strong>: episode 저장소, eval set, 실패 taxonomy가 없었습니다. <strong>Context</strong>: 업무별 위험도와 승인 경계가 빠졌습니다. <strong>Permission</strong>: 일부 팀이 대량 변경과 generated file 수정을 허용했습니다. <strong>Verification</strong>: lint 통과를 충분한 검증으로 오해했습니다. <strong>Metrics</strong>: acceptance rate, rework rate, defect escape, learning retention을 뒤늦게 추적했습니다. <strong>Failure Mode</strong>: reviewer 시간이 늘고 팀이 결과 원리를 설명하지 못했습니다. <strong>Rollout Lesson</strong>: AX 도입은 도구 배포가 아니라 작은 workflow, 명확한 permission, 검증 가능한 metric으로 시작해야 합니다.</p>
+</div>
 </section>
 
 <footer>
