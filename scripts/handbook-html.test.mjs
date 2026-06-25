@@ -860,7 +860,7 @@ test("handbook layout includes mobile responsive reading refinements", async () 
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*display: block/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*overflow-x: auto/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.flow\s*\{[\s\S]*flex-direction: column/s);
-  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.serial-card\s*\{[\s\S]*padding: 46px 16px 16px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.serial-card\s*\{[\s\S]*padding: 16px/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.ch-head\s*\{[\s\S]*flex-direction: column/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.handbook-main h1\s*\{[\s\S]*font-size: 27px/s);
 });
