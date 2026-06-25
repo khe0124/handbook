@@ -7,6 +7,28 @@ import test from "node:test";
 import { HANDBOOK_GROUPS, HANDBOOK_ITEMS } from "../src/handbook/catalog.mjs";
 import { extractHandbookDocument, generateHandbookDocuments } from "./handbook-html.mjs";
 
+const GENERATED_HTML_LITERAL_PATTERN = /(?:navHtml|mainHtml):\s*(`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*")/g;
+
+function parseGeneratedHtmlLiteral(literal) {
+  if (literal.startsWith('"')) {
+    return JSON.parse(literal);
+  }
+
+  return literal
+    .slice(1, -1)
+    .replace(/\\`/g, "`")
+    .replace(/\\\$/g, "$");
+}
+
+function extractGeneratedDocument(moduleSource) {
+  const [navMatch, mainMatch] = [...moduleSource.matchAll(GENERATED_HTML_LITERAL_PATTERN)];
+
+  return {
+    navHtml: navMatch ? parseGeneratedHtmlLiteral(navMatch[1]) : null,
+    mainHtml: mainMatch ? parseGeneratedHtmlLiteral(mainMatch[1]) : null,
+  };
+}
+
 test("extractHandbookDocument pulls nav and main markup without page chrome", () => {
   const html = `<!doctype html>
 <html lang="ko">
@@ -222,19 +244,11 @@ test("generated document modules match public handbook sources", async () => {
     const html = await readFile(path.join("public", "handbook", item.file), "utf8");
     const extracted = extractHandbookDocument(html);
     const moduleSource = await readFile(path.join("src", "handbook", "documents", `${item.id}.ts`), "utf8");
-    const navMatch = moduleSource.match(/navHtml:\s*("(?:\\.|[^"\\])*")/);
-    const mainMatch = moduleSource.match(/mainHtml:\s*("(?:\\.|[^"\\])*")/);
+    const generated = extractGeneratedDocument(moduleSource);
 
-    assert.ok(navMatch, `${item.id} generated module is missing navHtml`);
-    assert.ok(mainMatch, `${item.id} generated module is missing mainHtml`);
-    assert.deepEqual(
-      {
-        navHtml: JSON.parse(navMatch[1]),
-        mainHtml: JSON.parse(mainMatch[1]),
-      },
-      extracted,
-      `${item.id} is out of sync with ${item.file}`,
-    );
+    assert.ok(generated.navHtml, `${item.id} generated module is missing navHtml`);
+    assert.ok(generated.mainHtml, `${item.id} generated module is missing mainHtml`);
+    assert.deepEqual(generated, extracted, `${item.id} is out of sync with ${item.file}`);
   }
 });
 
