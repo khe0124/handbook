@@ -8,14 +8,13 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">AX 실무 플레이북</div>
+<div class="nav-title">AX 실무 플레이북</div>
   <a href="#ch1"><span class="code">PLAY-01</span>AI Coding Workflow</a>
   <a href="#ch2"><span class="code">PLAY-02</span>리뷰 루프</a>
   <a href="#ch3"><span class="code">PLAY-03</span>테스트·마이그레이션 루프</a>
   <a href="#ch4"><span class="code">PLAY-04</span>프롬프트 템플릿</a>
   <a href="#ch5"><span class="code">PLAY-05</span>Capstone</a>
   <a href="#ch6"><span class="code">PLAY-06</span>업무 자동화 운영</a>
-  <a href="#ch7"><span class="code">PLAY-07</span>교육과 롤아웃 체크리스트</a>
 </nav>
 <main>
 <header class="hero">
@@ -25,7 +24,7 @@
     <span>LANG : KO</span>
   </div>
   <h1>AX 실무 플레이북</h1>
-  <p class="hero-sub">이 문서는 AI를 매일 개발 업무에 넣을 때 쓰는 실행 절차입니다. 목표는 빠른 생성이 아니라 <strong>제한된 시간과 비용 안에서 검증 가능한 변경을 만드는 것</strong>입니다.</p>
+  <p class="hero-sub">이 문서는 AI를 매일 개발 업무에 넣을 때 쓰는 실행 절차와 교육 과정입니다. 목표는 빠른 생성이 아니라 <strong>제한된 시간과 비용 안에서 검증 가능한 변경을 만드는 것</strong>입니다.</p>
 </header>
 
 <section id="ch1">
@@ -84,7 +83,7 @@
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">PLAY-04</span><h2>프롬프트 템플릿</h2></div>
 <div class="serial-card">
-<span class="sc-label">TASK SPEC TEMPLATE</span>
+<span class="sc-label">TASK PROMPT TEMPLATE</span>
 목표: [구체적 목표]<br>
 범위: [관련 파일/모듈], [수정하지 말아야 할 부분]<br>
 성공 조건: [테스트, 동작, 성능, 보안 조건]<br>
@@ -95,21 +94,6 @@
 4. 가능한 경우 실패 테스트를 먼저 추가해라.<br>
 5. 검증 결과 없이는 완료라고 말하지 마라.<br>
 중단 조건: [반복 횟수, 실패 조건, 비용 한계]
-</div>
-<div class="serial-card">
-<span class="sc-label">CONTEXT PACKAGE TEMPLATE</span>
-목표: [이번 판단에 필요한 업무 목표]<br>
-필수 자료: 관련 파일, API 계약, 정책, 로그, 테스트, 최근 diff<br>
-제외 자료: 관련 없는 전체 레포 요약, 출처 없는 추정, 오래된 문서<br>
-출처: 파일 경로, 커밋, 티켓, 문서 버전, 담당자 확인 기록<br>
-신뢰 수준: source of truth, 참고 자료, untrusted input을 분리
-</div>
-<div class="serial-card">
-<span class="sc-label">HARNESS DESIGN WORKSHEET</span>
-도구 권한: read-only, proposal, patch, PR draft, merge/deploy 금지<br>
-harness policy: 허용 도구, 금지 입력, human gate, audit log를 명시<br>
-검증: 테스트 명령, eval rubric, review owner, 실패 시 중단 조건<br>
-루프: 각 반복은 loop log에 가설, 실행, 검증 결과, 실패 분류를 남김
 </div>
 <div class="serial-card">
 <span class="sc-label">REVIEW PROMPT TEMPLATE</span>
@@ -152,25 +136,25 @@ Day 6-8: 작은 write 권한 또는 PR draft 허용<br>
 Day 9: verification gate와 review rubric 보강<br>
 Day 10: lead time, review latency, rework, cost per episode로 지속 여부 결정
 </div>
-<div class="callout warn">
-<span class="co-label">중단 기준</span>
-<p>AI 자동화가 리뷰 시간을 늘리거나, rework를 만들거나, 팀이 결과를 설명하지 못하면 확장하지 않습니다. 이 경우 모델을 바꾸기 전에 업무 분해, 컨텍스트, 검증 기준을 먼저 고칩니다.</p>
-</div>
-</section>
-
-<section id="ch7">
-<div class="ch-head"><span class="ch-code">PLAY-07</span><h2>교육과 롤아웃 체크리스트</h2></div>
 <div class="serial-card">
 <span class="sc-label">4-WEEK AX ENGINEER TRAINING</span>
-Week 1: 업무 흐름과 task spec 작성<br>
-Week 2: context package와 harness policy 설계<br>
-Week 3: eval rubric, loop log, integration checklist 운영<br>
-Week 4: pilot launch checklist로 파일럿 승인과 확산 판단
+Week 1 교육 과정: developer workshop과 reviewer workshop으로 scope, context, review loop 실습<br>
+Week 2: security workshop에서 Prompt Injection 방어와 permission boundary 실습<br>
+Week 3: manager workshop과 platform owner workshop으로 metric, governance, rollout 운영 설계<br>
+Week 4 Capstone: Trace-based Eval Harness, AI Code Review Pipeline, Autonomy Ladder, Failure Taxonomy 중 하나를 실제 팀 workflow에 적용
 </div>
 <div class="serial-card">
 <span class="sc-label">TEMPLATES INDEX</span>
-TASK SPEC TEMPLATE · CONTEXT PACKAGE TEMPLATE · HARNESS DESIGN WORKSHEET · REVIEW PROMPT TEMPLATE<br>
-pilot launch checklist: baseline, 파일럿 업무, 승인 지점, 검증 지표, 중단 조건, Rollout Lesson 기록
+developer workshop: task prompt, context checklist, verification note<br>
+reviewer workshop: risk map, finding rubric, residual risk note<br>
+manager workshop: rollout metric, cost per episode, adoption review<br>
+security workshop: Prompt Injection 방어, secret handling, exception approval<br>
+platform owner workshop: model gateway, audit log, permission policy<br>
+Capstone: Trace-based Eval Harness, AI Code Review Pipeline, Autonomy Ladder, Failure Taxonomy
+</div>
+<div class="callout warn">
+<span class="co-label">중단 기준</span>
+<p>AI 자동화가 리뷰 시간을 늘리거나, rework를 만들거나, 팀이 결과를 설명하지 못하면 확장하지 않습니다. 이 경우 모델을 바꾸기 전에 업무 분해, 컨텍스트, 검증 기준을 먼저 고칩니다.</p>
 </div>
 </section>
 

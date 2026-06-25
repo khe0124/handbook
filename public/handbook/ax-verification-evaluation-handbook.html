@@ -8,7 +8,7 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">검증과 평가</div>
+<div class="nav-title">검증과 평가</div>
   <a href="#ch1"><span class="code">EVAL-01</span>검증의 목적</a>
   <a href="#ch2"><span class="code">EVAL-02</span>Episode Package</a>
   <a href="#ch3"><span class="code">EVAL-03</span>Failure Classification</a>
@@ -53,6 +53,16 @@ tool_trace: commands, exit codes, relevant outputs<br>
 expected_invariants: 기존 로그인 플로우 유지, 재사용 탐지, 만료 정책 불변<br>
 verification: unit, integration, manual attack scenario<br>
 failure_notes: 놓친 edge case, 추가 검증 필요 영역
+</div>
+<div class="serial-card">
+<span class="sc-label">EVAL RUBRIC</span>
+eval set: 대표 episode, 회귀 episode, adversarial episode를 섞어 구성<br>
+functional check: 요구 동작이 실제 사용자 흐름에서 맞는지 확인<br>
+regression check: 기존 계약, public API, 저장 데이터 호환성 확인<br>
+security check: 인증, 권한, secret 노출, injection 위험 확인<br>
+policy check: 라이선스, 데이터 사용, 조직 승인 정책 확인<br>
+human-review check: reviewer가 근거와 남은 위험을 확인<br>
+training cohort: 같은 eval rubric으로 실습하고 판정 차이를 보정
 </div>
 </section>
 
@@ -99,12 +109,13 @@ failure_notes: 놓친 edge case, 추가 검증 필요 영역
 <p class="lede">AX 자동화는 “AI가 만든 양”이 아니라 업무 흐름이 실제로 좋아졌는지로 평가합니다. 특히 리뷰 부담과 재작업은 생성 속도 뒤에 숨어 있는 비용입니다.</p>
 <table>
 <tr><th>지표</th><th>좋아지는 신호</th><th>나빠지는 신호</th></tr>
-<tr><td>Lead time delta</td><td>작업 완료 시간이 줄고 대기 시간이 줄어듦</td><td>생성은 빠른데 리뷰와 수정이 길어짐</td></tr>
-<tr><td>Review latency</td><td>리뷰어가 핵심 위험에 더 빨리 도달</td><td>AI finding이 많아져 triage 비용 증가</td></tr>
-<tr><td>Rework rate</td><td>AI 산출물 수정·되돌림 비율 감소</td><td>초안 품질이 낮아 반복 수정 증가</td></tr>
-<tr><td>Defect escape</td><td>운영 결함 또는 회귀가 증가하지 않음</td><td>AI 변경 이후 rollback, hotfix, incident 증가</td></tr>
-<tr><td>Cost per episode</td><td>토큰·도구·사람 검토 비용이 업무 가치보다 낮음</td><td>작은 일에 agent orchestration 비용이 과도함</td></tr>
-<tr><td>Learning retention</td><td>팀원이 변경 이유와 원리를 설명 가능</td><td>AI가 처리한 영역을 팀이 이해하지 못함</td></tr>
+<tr><td>lead time</td><td>작업 완료 시간이 줄고 대기 시간이 줄어듦</td><td>생성은 빠른데 리뷰와 수정이 길어짐</td></tr>
+<tr><td>review latency</td><td>리뷰어가 핵심 위험에 더 빨리 도달</td><td>AI finding이 많아져 triage 비용 증가</td></tr>
+<tr><td>acceptance rate</td><td>AI 제안 중 실제 반영되는 비율이 안정적으로 상승</td><td>초안은 많지만 대부분 폐기됨</td></tr>
+<tr><td>rework rate</td><td>AI 산출물 수정·되돌림 비율 감소</td><td>초안 품질이 낮아 반복 수정 증가</td></tr>
+<tr><td>defect escape</td><td>운영 결함 또는 회귀가 증가하지 않음</td><td>AI 변경 이후 rollback, hotfix, incident 증가</td></tr>
+<tr><td>cost per episode</td><td>토큰·도구·사람 검토 비용이 업무 가치보다 낮음</td><td>작은 일에 agent orchestration 비용이 과도함</td></tr>
+<tr><td>learning retention</td><td>팀원이 변경 이유와 원리를 설명 가능</td><td>AI가 처리한 영역을 팀이 이해하지 못함</td></tr>
 </table>
 <div class="callout">
 <span class="co-label">실무 해석</span>
