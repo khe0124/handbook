@@ -1,8 +1,130 @@
 import type { HandbookDocumentContent } from "../types";
 
 const document: HandbookDocumentContent = {
-  navHtml: "<div class=\"nav-title\">AX 개요</div>\n  <a href=\"#ch1\"><span class=\"code\">AX-01</span>AX의 정의</a>\n  <a href=\"#ch2\"><span class=\"code\">AX-02</span>Model·Harness·Environment</a>\n  <a href=\"#ch3\"><span class=\"code\">AX-03</span>고급 개발자의 역할</a>\n  <a href=\"#ch4\"><span class=\"code\">AX-04</span>실패 모드</a>\n  <a href=\"#ch5\"><span class=\"code\">AX-05</span>업무 자동화 관점</a>",
-  mainHtml: "<header class=\"hero\">\n  <div class=\"hero-serial\">\n    <span>DOC : AX-HANDBOOK-V1</span>\n    <span>SCOPE : AI · HARNESS · CONTEXT · LOOP · GOVERNANCE</span>\n    <span>LANG : KO</span>\n  </div>\n  <h1>AX 개요</h1>\n  <p class=\"hero-sub\">AX는 AI 도구 사용법이 아니라 <strong>AI가 개발 작업 안에서 안전하게 실행되고, 검증되고, 기록되도록 만드는 운영 역량</strong>입니다. 핵심은 더 긴 프롬프트가 아니라 더 좋은 작업 시스템입니다.</p>\n  <div class=\"hero-meta\">STANCE : 생성보다 검증 · 프롬프트보다 컨텍스트 · 자동화보다 책임 경계 · COMPILED 2026-06</div>\n</header>\n\n<section id=\"ch1\">\n<div class=\"ch-head\"><span class=\"ch-code\">AX-01</span><h2>AX의 정의</h2></div>\n<p class=\"lede\">AX는 AI Experience, Agent Experience, AI-augmented eXecution으로 해석할 수 있습니다. 이름보다 중요한 것은 관점입니다. AI를 채팅창으로 보면 프롬프트 품질만 보이지만, 실무에서는 명세, 컨텍스트, 도구, 권한, 검증, 기록이 함께 결과를 만듭니다.</p>\n<table>\n<tr><th>관점</th><th>낮은 수준의 AI 활용</th><th>AX 관점</th></tr>\n<tr><td>목표</td><td>코드를 빨리 생성</td><td>검증 가능한 변경을 반복적으로 생산</td></tr>\n<tr><td>입력</td><td>자연어 요청</td><td>목표, 비목표, 컨텍스트, 제약, 성공 기준</td></tr>\n<tr><td>실행</td><td>단발 프롬프트</td><td>Plan → Act → Verify → Reflect 루프</td></tr>\n<tr><td>검증</td><td>AI의 자기 요약</td><td>테스트, 리뷰, trace, episode package</td></tr>\n<tr><td>책임</td><td>AI가 해줬다</td><td>개발자가 하네스와 승인 경계를 운영한다</td></tr>\n</table>\n<div class=\"callout\">\n<span class=\"co-label\">핵심 문장</span>\n<p>AX의 목표는 AI에게 더 많은 일을 시키는 것이 아닙니다. 작업을 더 작게 나누고, 검증을 더 명확히 하며, 실패했을 때 더 빨리 멈추는 것입니다.</p>\n</div>\n</section>\n\n<section id=\"ch2\">\n<div class=\"ch-head\"><span class=\"ch-code\">AX-02</span><h2>Model·Harness·Environment</h2></div>\n<p class=\"lede\">AI 개발 성과는 모델 단독 능력이 아니라 모델, 하네스, 환경의 합성 결과입니다. 같은 모델도 어떤 작업 명세와 도구, 어떤 검증 루프 위에 놓이느냐에 따라 완전히 다른 개발자가 됩니다.</p>\n<table>\n<tr><th>구성요소</th><th>의미</th><th>실무에서 보는 것</th></tr>\n<tr><td>Model</td><td>추론·생성 능력</td><td>코드 이해, 요약, 계획, 패턴 인식, 언어 생성</td></tr>\n<tr><td>Harness</td><td>모델을 감싸는 작업 실행 계층</td><td>작업 명세, 컨텍스트 선택, 도구 호출, 권한, 검증, 관측</td></tr>\n<tr><td>Environment</td><td>모델이 작동하는 실제 세계</td><td>코드베이스, 테스트, CI, DB, 배포 환경, 조직 규칙, 보안 경계</td></tr>\n</table>\n<div class=\"serial-card\">\n<span class=\"sc-label\">AX SYSTEM MODEL</span>\ntask spec + context + tools + permissions<br>\n<span class=\"dim\">→</span> model<br>\n<span class=\"dim\">→</span> patch / analysis / decision<br>\n<span class=\"dim\">→</span> verification + review + audit trail<br>\n<span class=\"dim\">→</span> accepted change or classified failure\n</div>\n</section>\n\n<section id=\"ch3\">\n<div class=\"ch-head\"><span class=\"ch-code\">AX-03</span><h2>고급 개발자의 역할</h2></div>\n<p class=\"lede\">고급 개발자는 AI에게 일을 많이 시키는 사람이 아니라, AI가 하는 일을 제한된 위험 안에서 반복 가능한 산출물로 수렴시키는 사람입니다.</p>\n<table>\n<tr><th>역할</th><th>하는 일</th><th>산출물</th></tr>\n<tr><td>작업 설계자</td><td>목표, 범위, 금지사항, 성공 기준 정의</td><td>task spec, acceptance criteria</td></tr>\n<tr><td>컨텍스트 큐레이터</td><td>관련 파일·문서·규칙을 선별하고 출처 기록</td><td>context package</td></tr>\n<tr><td>권한 관리자</td><td>read/write/network/exec/deploy 경계 설정</td><td>permission policy</td></tr>\n<tr><td>검증 책임자</td><td>테스트, 리뷰, 수동 검증, 보안 체크 연결</td><td>verification report</td></tr>\n<tr><td>실패 분석자</td><td>모델 오류, 컨텍스트 누락, 도구 실패, 테스트 부재를 분리</td><td>failure taxonomy</td></tr>\n</table>\n</section>\n\n<section id=\"ch4\">\n<div class=\"ch-head\"><span class=\"ch-code\">AX-04</span><h2>실패 모드</h2></div>\n<table>\n<tr><th>실패</th><th>실제 원인</th><th>예방</th></tr>\n<tr><td>그럴듯하지만 틀린 구현</td><td>도메인 규칙과 반례가 컨텍스트에 없음</td><td>상태 전이, 예외, 수용 기준을 함께 제공</td></tr>\n<tr><td>지나친 리팩터링</td><td>작업 경계가 불명확함</td><td>수정 범위와 건드리지 않을 것을 명시</td></tr>\n<tr><td>False green</td><td>테스트는 통과하지만 핵심 케이스가 없음</td><td>AI가 만든 테스트와 독립 검증을 분리</td></tr>\n<tr><td>권한 오남용</td><td>도구와 실행 권한이 과함</td><td>destructive action, network, deploy에 승인 게이트</td></tr>\n<tr><td>감사 불가</td><td>AI 개입 내역과 검증 결과가 남지 않음</td><td>episode package와 audit log 저장</td></tr>\n</table>\n<div class=\"callout warn\">\n<span class=\"co-label\">운영 기준</span>\n<p>“AI가 틀렸다”는 분석이 아닙니다. 작업 명세가 모호했는지, 컨텍스트가 부족했는지, 도구가 실패했는지, 검증이 약했는지까지 분리해야 다음 루프가 좋아집니다.</p>\n</div>\n</section>\n\n<section id=\"ch5\">\n<div class=\"ch-head\"><span class=\"ch-code\">AX-05</span><h2>업무 자동화 관점</h2></div>\n<p class=\"lede\">AX를 실무에 적용한다는 것은 업무를 “AI에게 질문하기 좋은 형태”가 아니라 “AI가 제한된 권한 안에서 실행하고 검증할 수 있는 형태”로 바꾸는 것입니다.</p>\n<table>\n<tr><th>질문</th><th>낮은 수준의 접근</th><th>AX 자동화 접근</th></tr>\n<tr><td>무엇을 자동화할까</td><td>귀찮은 업무를 AI에게 맡김</td><td>반복성, 검증 가능성, 실패 비용, 권한 위험으로 후보 선정</td></tr>\n<tr><td>어디까지 맡길까</td><td>AI가 할 수 있으면 맡김</td><td>read-only, proposal, patch, PR, deploy 단계별 Autonomy ladder 운영</td></tr>\n<tr><td>어떻게 안전하게 할까</td><td>사람이 마지막에 대충 확인</td><td>tool permission, policy gate, independent review, episode audit 적용</td></tr>\n<tr><td>효과를 어떻게 볼까</td><td>시간이 줄었는지 감으로 판단</td><td>lead time, review latency, rework rate, defect escape, cost per episode 측정</td></tr>\n<tr><td>어떻게 확장할까</td><td>잘 된 prompt를 공유</td><td>업무별 golden workflow, context package, eval set, rollout playbook으로 확산</td></tr>\n</table>\n<div class=\"callout\">\n<span class=\"co-label\">핵심 전환</span>\n<p>AX 엔지니어링은 prompt engineering을 포함하지만 거기에 머물지 않습니다. 실제 성과는 업무 분해, 검증 가능한 산출물, 권한 경계, 조직 내 확산 구조가 함께 있을 때 나옵니다.</p>\n</div>\n</section>\n\n<footer>\nAX HANDBOOK · V1 · 2026-06<br>\nPRINCIPLE : AI는 작업자가 될 수 있지만 책임자는 될 수 없다. 책임은 루프를 설계하고 검증 기준을 정한 개발자에게 남는다.\n</footer>",
+  navHtml: `<div class="nav-title">AX 개요</div>
+  <a href="#ch1"><span class="code">AX-01</span>AX의 정의</a>
+  <a href="#ch2"><span class="code">AX-02</span>AX 시스템 모델</a>
+  <a href="#ch3"><span class="code">AX-03</span>도입 학습 지도</a>
+  <a href="#ch4"><span class="code">AX-04</span>전문가의 책임 경계</a>
+  <a href="#ch5"><span class="code">AX-05</span>표준 산출물</a>
+  <a href="#ch6"><span class="code">AX-06</span>도입 체크포인트</a>`,
+  mainHtml: `<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : AX-HANDBOOK-V1</span>
+    <span>SCOPE : AI · HARNESS · CONTEXT · LOOP · GOVERNANCE</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AX 개요</h1>
+  <p class="hero-sub">AX는 프롬프트 작성 기술이 아니라 업무를 검증 가능한 실행 시스템으로 바꾸는 운영 역량입니다. 핵심은 더 긴 요청문이 아니라 더 좋은 작업 명세, 컨텍스트, 권한, 검증 루프입니다.</p>
+  <div class="hero-meta">STANCE : 생성보다 검증 · 프롬프트보다 컨텍스트 · 자동화보다 책임 경계 · COMPILED 2026-06</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">AX-01</span><h2>AX의 정의</h2></div>
+<p class="lede">AX는 AI Experience, Agent Experience, AI-augmented eXecution을 모두 포괄하지만, 실무에서의 의미는 분명합니다. AX는 업무를 AI에게 말로 맡기는 방식이 아니라 사람이 책임지는 실행 체계 안에서 AI가 작업하고, 검증받고, 기록되도록 만드는 운영 방식입니다.</p>
+<table>
+<tr><th>관점</th><th>낮은 수준의 AI 활용</th><th>AX 관점</th></tr>
+<tr><td>목표</td><td>코드를 빨리 생성</td><td>검증 가능한 변경을 반복적으로 생산</td></tr>
+<tr><td>입력</td><td>자연어 요청</td><td>목표, 비목표, 컨텍스트, 제약, 성공 기준</td></tr>
+<tr><td>실행</td><td>단발 프롬프트</td><td>Plan → Act → Verify → Reflect 루프</td></tr>
+<tr><td>검증</td><td>AI의 자기 요약</td><td>테스트, 리뷰, trace, verification report</td></tr>
+<tr><td>책임</td><td>AI가 해줬다</td><td>사람이 하네스와 승인 경계를 운영한다</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">핵심 문장</span>
+<p>AX의 목표는 AI에게 더 많은 일을 시키는 것이 아닙니다. 작업을 더 작게 나누고, 검증을 더 명확히 하며, 실패했을 때 더 빨리 멈추는 것입니다.</p>
+</div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">AX-02</span><h2>AX 시스템 모델</h2></div>
+<p class="lede">AI 개발 성과는 모델 단독 능력이 아니라 명세, 컨텍스트, 권한, 도구, 검증, 기록이 결합된 시스템의 결과입니다. 같은 모델도 어떤 업무 구조 위에 놓이느냐에 따라 위험한 자동완성 도구가 되기도 하고, 통제 가능한 실행 파트너가 되기도 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">AX SYSTEM MODEL</span>
+task spec<br>
+context package<br>
+tool permission<br>
+model execution<br>
+verification report<br>
+audit trail
+</div>
+<table>
+<tr><th>구성요소</th><th>의미</th><th>운영 질문</th></tr>
+<tr><td>task spec</td><td>AI가 수행할 작업의 목표, 범위, 금지사항</td><td>작업이 성공했는지 독립적으로 판단할 수 있는가</td></tr>
+<tr><td>context package</td><td>관련 파일, 정책, 로그, 예외, 의사결정 기록</td><td>필요한 근거가 포함되고 불필요한 잡음은 제거되었는가</td></tr>
+<tr><td>tool permission</td><td>읽기, 쓰기, 실행, 네트워크, 배포 권한 경계</td><td>실패 비용에 맞게 권한이 제한되어 있는가</td></tr>
+<tr><td>verification report</td><td>테스트, 리뷰, 수동 확인, 미검증 항목의 기록</td><td>승인자가 무엇을 믿고 무엇을 의심해야 하는가</td></tr>
+<tr><td>audit trail</td><td>작업 요청, 도구 사용, 변경, 판단 근거의 추적</td><td>문제가 생겼을 때 episode를 재구성할 수 있는가</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">AX-03</span><h2>도입 학습 지도</h2></div>
+<p class="lede">AX 도입 학습 지도는 개인이 프롬프트를 더 잘 쓰게 만드는 과정이 아니라 조직이 반복 업무를 발견하고, 작은 파일럿으로 검증하고, 표준 산출물로 남기는 과정입니다.</p>
+<table>
+<tr><th>단계</th><th>학습 질문</th><th>산출물</th></tr>
+<tr><td>조직 진단</td><td>어떤 업무가 반복되고 검증 가능하며 실패 비용이 낮은가</td><td>workflow inventory, risk baseline</td></tr>
+<tr><td>파일럿</td><td>작은 팀에서 read-only 또는 low-risk 업무를 안전하게 실험할 수 있는가</td><td>pilot brief, guarded workflow</td></tr>
+<tr><td>표준 산출물</td><td>성공한 업무를 다른 팀이 재사용할 수 있는 형태로 남겼는가</td><td>task spec, context package, eval checklist</td></tr>
+<tr><td>확산</td><td>교육, 권한, 지표, governance가 함께 준비되었는가</td><td>rollout note, 운영 지표, audit rule</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">학습 원칙</span>
+<p>도입은 “AI를 써보자”에서 시작하지 않습니다. 조직 진단으로 후보 업무를 고르고, 파일럿으로 실패 비용을 제한하며, 표준 산출물로 재현 가능한 학습을 남깁니다.</p>
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">AX-04</span><h2>전문가의 책임 경계</h2></div>
+<p class="lede">전문가는 AI보다 더 많은 문장을 쓰는 사람이 아니라 AI가 실행할 수 있는 경계와 멈춰야 할 조건을 정하는 사람입니다. AX 책임 원칙은 명확합니다. AI는 작업자가 될 수 있지만 책임자는 될 수 없습니다.</p>
+<table>
+<tr><th>책임 영역</th><th>AI가 할 수 있는 일</th><th>전문가가 남겨야 하는 일</th></tr>
+<tr><td>판단</td><td>후보안, 비교표, 위험 신호 제안</td><td>최종 의사결정과 승인 기준 설정</td></tr>
+<tr><td>실행</td><td>제한된 권한 안에서 diff, 문서, 분석 작성</td><td>권한 범위와 destructive action 승인</td></tr>
+<tr><td>검증</td><td>테스트 실행, 로그 요약, 실패 후보 분류</td><td>검증 충분성 판단과 미검증 위험 공개</td></tr>
+<tr><td>책임</td><td>작업 흔적과 근거 제공</td><td>품질, 보안, 법무, 고객 영향에 대한 책임</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">AX 책임 원칙</span>
+<p>AI는 작업자가 될 수 있지만 책임자는 될 수 없습니다. 책임은 작업을 명세화하고, 권한을 부여하고, 검증 결과를 승인한 사람과 조직에 남습니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">AX-05</span><h2>표준 산출물</h2></div>
+<p class="lede">AX는 말로 전파되지 않습니다. 반복 가능한 산출물로 전파됩니다. 산출물은 AI가 다음 episode에서 같은 품질로 일하도록 만드는 최소 운영 단위입니다.</p>
+<table>
+<tr><th>산출물</th><th>내용</th><th>사용 시점</th></tr>
+<tr><td>task spec</td><td>목표, 범위, 비목표, 성공 기준, 중단 조건</td><td>작업 시작 전</td></tr>
+<tr><td>context package</td><td>관련 파일, 정책, 데이터 계약, 예외 사례</td><td>모델 실행 전</td></tr>
+<tr><td>tool permission</td><td>허용 도구, 금지 도구, 승인 필요 작업</td><td>자동화 수준 결정 시</td></tr>
+<tr><td>verification report</td><td>실행한 검증, 실패한 검증, 남은 위험</td><td>리뷰와 승인 전</td></tr>
+<tr><td>audit trail</td><td>요청, 판단, 도구 호출, 변경, 승인 내역</td><td>사후 분석과 governance review</td></tr>
+</table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">AX-06</span><h2>도입 체크포인트</h2></div>
+<p class="lede">AX 도입은 도구 설치 여부가 아니라 업무가 검증 가능한 실행 시스템으로 바뀌었는지로 판단합니다.</p>
+<div class="serial-card">
+<span class="sc-label">ADOPTION CHECKPOINTS</span>
+1. 반복 업무가 업무 단위와 episode 단위로 분해되었는가<br>
+2. 각 업무에 task spec과 context package가 있는가<br>
+3. tool permission과 승인 게이트가 위험도에 맞는가<br>
+4. verification report가 리뷰의 입력으로 쓰이는가<br>
+5. audit trail이 사후 학습과 책임 추적에 충분한가<br>
+6. 표준 산출물이 교육과 확산에 재사용되는가
+</div>
+<div class="callout">
+<span class="co-label">운영 기준</span>
+<p>좋은 AX 도입은 더 많은 AI 사용량을 만드는 것이 아니라, 더 적은 혼란으로 더 많은 검증 가능한 업무 결과를 만드는 것입니다.</p>
+</div>
+</section>
+
+<footer>
+AX HANDBOOK · V1 · 2026-06<br>
+PRINCIPLE : AI는 작업자가 될 수 있지만 책임자는 될 수 없습니다. 책임은 루프를 설계하고 검증 기준을 정한 전문가와 조직에게 남는다.
+</footer>`,
 };
 
 export default document;

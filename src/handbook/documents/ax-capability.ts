@@ -1,8 +1,103 @@
 import type { HandbookDocumentContent } from "../types";
 
 const document: HandbookDocumentContent = {
-  navHtml: "<div class=\"nav-title\">AX 엔지니어 역량 모델</div>\n  <a href=\"#ch1\"><span class=\"code\">CAP-01</span>역할 정의</a>\n  <a href=\"#ch2\"><span class=\"code\">CAP-02</span>역량 지도</a>\n  <a href=\"#ch3\"><span class=\"code\">CAP-03</span>업무 분해 관점</a>\n  <a href=\"#ch4\"><span class=\"code\">CAP-04</span>자동화 판단 기준</a>\n  <a href=\"#ch5\"><span class=\"code\">CAP-05</span>성장 루틴</a>",
-  mainHtml: "<header class=\"hero\">\n  <div class=\"hero-serial\">\n    <span>DOC : AX-CAPABILITY-V1</span>\n    <span>SCOPE : ROLE · SKILL · DECISION · AUTOMATION</span>\n    <span>LANG : KO</span>\n  </div>\n  <h1>AX 엔지니어<br>역량 모델</h1>\n  <p class=\"hero-sub\">AX 엔지니어는 AI를 잘 쓰는 사람이 아니라 <strong>업무를 AI가 안전하게 수행할 수 있는 실행 시스템으로 바꾸는 사람</strong>입니다. 핵심 역량은 프롬프트 작성보다 업무 분해, 컨텍스트 설계, 검증, 권한 통제, 효과 측정에 있습니다.</p>\n  <div class=\"hero-meta\">STANCE : AUTOMATION ARCHITECT · VERIFICATION OWNER · SOCIOTECHNICAL OPERATOR</div>\n</header>\n\n<section id=\"ch1\">\n<div class=\"ch-head\"><span class=\"ch-code\">CAP-01</span><h2>역할 정의</h2></div>\n<p class=\"lede\">AX 엔지니어의 산출물은 “AI가 만든 코드”가 아니라 “AI가 반복 가능한 업무를 수행하고, 실패하면 멈추고, 결과가 검증되는 운영 체계”입니다.</p>\n<table>\n<tr><th>구분</th><th>AI 사용자</th><th>AX 엔지니어</th></tr>\n<tr><td>문제 인식</td><td>어떤 프롬프트를 넣을까</td><td>이 업무는 자동화해도 되는가, 어디까지 맡길 수 있는가</td></tr>\n<tr><td>입력 설계</td><td>요청을 자연어로 설명</td><td>목표, 비목표, 컨텍스트, 권한, 검증, 중단 조건을 명세화</td></tr>\n<tr><td>실행 방식</td><td>채팅 또는 IDE 보조</td><td>하네스, 루프, 작업 큐, 리뷰 게이트, 감사 로그로 운영</td></tr>\n<tr><td>품질 보증</td><td>결과를 읽어보고 판단</td><td>테스트, 정적 분석, 독립 리뷰, adversarial case, rollout metric 연결</td></tr>\n<tr><td>조직 적용</td><td>개인 생산성 향상</td><td>팀의 업무 흐름, 정책, 지표, 지식 저장소, 교육 체계까지 설계</td></tr>\n</table>\n</section>\n\n<section id=\"ch2\">\n<div class=\"ch-head\"><span class=\"ch-code\">CAP-02</span><h2>역량 지도</h2></div>\n<table>\n<tr><th>역량</th><th>설명</th><th>확인 질문</th></tr>\n<tr><td>Workflow Mining</td><td>반복 업무를 단계, 입력, 출력, 승인 지점으로 분해</td><td>이 업무의 반복 패턴과 예외를 설명할 수 있는가</td></tr>\n<tr><td>Task Specification</td><td>AI가 실행 가능한 단위로 업무 명세 작성</td><td>성공 조건과 중단 조건이 테스트 가능하게 쓰였는가</td></tr>\n<tr><td>Context Engineering</td><td>필요한 지식과 불필요한 잡음을 분리</td><td>모델이 봐야 할 파일, 정책, 로그, 계약이 선별되었는가</td></tr>\n<tr><td>Harness Design</td><td>도구, 권한, 상태, 메모리, 검증을 묶은 실행 계층 설계</td><td>AI가 어떤 도구를 어떤 순서와 권한으로 쓰는가</td></tr>\n<tr><td>Evaluation</td><td>자동화 결과를 episode 단위로 평가</td><td>정확도, 비용, 시간, rework, escaped defect를 측정하는가</td></tr>\n<tr><td>Governance</td><td>보안, 개인정보, 라이선스, 감사, 승인 경계 관리</td><td>데이터와 권한이 업무 위험도에 맞게 제한되는가</td></tr>\n<tr><td>Change Management</td><td>팀의 일하는 방식을 점진적으로 바꿈</td><td>파일럿, 교육, 피드백, 확산 계획이 있는가</td></tr>\n</table>\n</section>\n\n<section id=\"ch3\">\n<div class=\"ch-head\"><span class=\"ch-code\">CAP-03</span><h2>업무 분해 관점</h2></div>\n<p class=\"lede\">업무 자동화는 “이 일을 AI에게 시킬 수 있나”가 아니라 “이 일을 어떤 단위로 나누면 각 단위가 검증 가능한가”에서 시작합니다.</p>\n<div class=\"serial-card\">\n<span class=\"sc-label\">WORKFLOW DECOMPOSITION</span>\nTrigger: 언제 시작되는가<br>\nInput: 어떤 파일, 티켓, 로그, 지표, 정책을 읽는가<br>\nDecision: 어떤 판단이 필요한가<br>\nAction: 어떤 도구를 실행하고 무엇을 수정하는가<br>\nVerification: 무엇이 통과해야 하는가<br>\nEscalation: 언제 사람에게 넘기는가<br>\nAudit: 어떤 근거를 남기는가\n</div>\n<table>\n<tr><th>예시 업무</th><th>좋은 분해</th><th>나쁜 분해</th></tr>\n<tr><td>코드 리뷰</td><td>risk classification → test gap → security check → finding triage</td><td>이 PR 리뷰해줘</td></tr>\n<tr><td>장애 분석</td><td>symptom → blast radius → recent change → log/metric correlation → mitigation</td><td>왜 장애 났는지 찾아줘</td></tr>\n<tr><td>마이그레이션 검토</td><td>schema diff → lock risk → rollback/forward → staging dry-run → approval</td><td>이 migration 괜찮아?</td></tr>\n<tr><td>문서 동기화</td><td>API diff → affected docs → example validation → changelog update</td><td>문서 최신화해줘</td></tr>\n</table>\n</section>\n\n<section id=\"ch4\">\n<div class=\"ch-head\"><span class=\"ch-code\">CAP-04</span><h2>자동화 판단 기준</h2></div>\n<p class=\"lede\">AX 엔지니어는 모든 업무를 자동화하려 하지 않습니다. 자동화가 적합한 업무, 보조만 해야 하는 업무, 금지해야 하는 업무를 구분합니다.</p>\n<table>\n<tr><th>기준</th><th>높으면 좋은가</th><th>해석</th></tr>\n<tr><td>반복성</td><td>높을수록 자동화 후보</td><td>같은 입력/출력 구조가 반복될수록 하네스화 가치가 큼</td></tr>\n<tr><td>검증 가능성</td><td>높을수록 자동화 후보</td><td>테스트, lint, policy check, metric으로 판정 가능해야 함</td></tr>\n<tr><td>컨텍스트 안정성</td><td>높을수록 자동화 후보</td><td>규칙과 자료 위치가 자주 바뀌지 않을수록 안정적</td></tr>\n<tr><td>권한 위험</td><td>낮을수록 자동화 후보</td><td>DB write, deploy, customer data 접근은 승인 게이트 필요</td></tr>\n<tr><td>실패 비용</td><td>낮을수록 자동화 후보</td><td>실패가 운영 장애나 보안 사고로 이어지면 자동 실행 금지</td></tr>\n<tr><td>전문가 병목</td><td>높으면 반자동 후보</td><td>전문가 검토는 남기되 초안, 후보, 증거 수집을 자동화</td></tr>\n</table>\n<div class=\"callout warn\">\n<span class=\"co-label\">판단 원칙</span>\n<p>반복성과 검증 가능성이 높고 실패 비용이 낮은 업무부터 자동화합니다. 실패 비용이 높지만 반복성이 큰 업무는 “자동 실행”이 아니라 “자동 분석 + 사람 승인” 패턴으로 시작합니다.</p>\n</div>\n</section>\n\n<section id=\"ch5\">\n<div class=\"ch-head\"><span class=\"ch-code\">CAP-05</span><h2>성장 루틴</h2></div>\n<table>\n<tr><th>주기</th><th>훈련</th><th>산출물</th></tr>\n<tr><td>매일</td><td>AI 사용 업무를 episode로 남김</td><td>goal, context, prompt, diff, verification, failure class</td></tr>\n<tr><td>매주</td><td>반복 업무 1개를 자동화 후보로 평가</td><td>automation scorecard</td></tr>\n<tr><td>격주</td><td>하나의 업무를 하네스화</td><td>task template, tool policy, eval checklist</td></tr>\n<tr><td>매월</td><td>자동화 효과와 부작용 리뷰</td><td>time saved, review burden, defect trend, cost per episode</td></tr>\n<tr><td>분기</td><td>팀 표준으로 확산할 항목 선별</td><td>golden workflow, training note, governance update</td></tr>\n</table>\n</section>\n\n<footer>\nAX ENGINEER CAPABILITY MODEL · V1 · 2026-06<br>\nPRINCIPLE : AX 역량은 프롬프트 기술이 아니라 업무를 검증 가능한 실행 시스템으로 바꾸는 능력이다.\n</footer>",
+  navHtml: `<div class="nav-title">AX 엔지니어 역량 모델</div>
+  <a href="#ch1"><span class="code">CAP-01</span>역할 정의</a>
+  <a href="#ch2"><span class="code">CAP-02</span>역량 지도</a>
+  <a href="#ch3"><span class="code">CAP-03</span>성장 레벨</a>
+  <a href="#ch4"><span class="code">CAP-04</span>훈련 루브릭</a>
+  <a href="#ch5"><span class="code">CAP-05</span>포트폴리오 산출물</a>`,
+  mainHtml: `<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : AX-CAPABILITY-V1</span>
+    <span>SCOPE : ROLE · SKILL · DECISION · AUTOMATION</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AX 엔지니어<br>역량 모델</h1>
+  <p class="hero-sub">AX 엔지니어는 AI를 잘 쓰는 사람이 아니라 <strong>업무를 AI가 안전하게 수행할 수 있는 실행 시스템으로 바꾸는 사람</strong>입니다. 핵심 역량은 프롬프트 작성보다 업무 분해, 컨텍스트 설계, 검증, 권한 통제, 효과 측정에 있습니다.</p>
+  <div class="hero-meta">STANCE : AUTOMATION ARCHITECT · VERIFICATION OWNER · SOCIOTECHNICAL OPERATOR</div>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">CAP-01</span><h2>역할 정의</h2></div>
+<p class="lede">AX 역량은 개인 사용자, 업무 책임자, 플랫폼 리더가 서로 다른 책임을 나누어 가질 때 조직 역량이 됩니다. 한 사람이 모든 것을 해내는 구조가 아니라 역할별 산출물과 승인 경계를 명확히 하는 구조가 필요합니다.</p>
+<table>
+<tr><th>역할</th><th>책임</th><th>대표 산출물</th></tr>
+<tr><td>Practitioner</td><td>자신의 반복 업무를 episode로 기록하고 작은 자동화를 실험</td><td>task spec, episode log, verification note</td></tr>
+<tr><td>Workflow Owner</td><td>팀 업무를 표준 workflow로 정의하고 품질 기준을 관리</td><td>eval rubric, automation scorecard, rollout note</td></tr>
+<tr><td>Platform/Adoption Lead</td><td>공통 하네스, 권한 정책, 교육 과정, governance를 설계</td><td>governance memo, training path, platform standard</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">역할 기준</span>
+<p>AX 엔지니어는 AI 산출물을 대신 믿어주는 사람이 아닙니다. 업무를 명세화하고 검증 가능하게 만들며, 팀이 재사용할 수 있는 운영 자산으로 남기는 사람입니다.</p>
+</div>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">CAP-02</span><h2>역량 지도</h2></div>
+<table>
+<tr><th>역량</th><th>설명</th><th>확인 질문</th></tr>
+<tr><td>Workflow Mining</td><td>반복 업무를 단계, 입력, 출력, 승인 지점으로 분해</td><td>이 업무의 반복 패턴과 예외를 설명할 수 있는가</td></tr>
+<tr><td>Task Specification</td><td>AI가 실행 가능한 단위로 업무 명세 작성</td><td>성공 조건과 중단 조건이 테스트 가능하게 쓰였는가</td></tr>
+<tr><td>Context Engineering</td><td>필요한 지식과 불필요한 잡음을 분리</td><td>모델이 봐야 할 파일, 정책, 로그, 계약이 선별되었는가</td></tr>
+<tr><td>Harness Design</td><td>도구, 권한, 상태, 메모리, 검증을 묶은 실행 계층 설계</td><td>AI가 어떤 도구를 어떤 순서와 권한으로 쓰는가</td></tr>
+<tr><td>Evaluation</td><td>자동화 결과를 episode 단위로 평가</td><td>정확도, 비용, 시간, rework, escaped defect를 측정하는가</td></tr>
+<tr><td>Governance</td><td>보안, 개인정보, 라이선스, 감사, 승인 경계 관리</td><td>데이터와 권한이 업무 위험도에 맞게 제한되는가</td></tr>
+<tr><td>Change Management</td><td>팀의 일하는 방식을 점진적으로 바꿈</td><td>파일럿, 교육, 피드백, 확산 계획이 있는가</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">CAP-03</span><h2>성장 레벨</h2></div>
+<p class="lede">AX 성장 레벨은 더 복잡한 모델을 쓰는 순서가 아니라 더 넓은 책임 경계를 다루는 순서입니다. 개인 episode에서 팀 workflow, 조직 governance로 이동할수록 산출물의 품질과 추적 가능성이 중요해집니다.</p>
+<table>
+<tr><th>레벨</th><th>초점</th><th>증거</th></tr>
+<tr><td>L1 Practitioner</td><td>개인 업무의 task spec과 검증 루틴 작성</td><td>episode log, 작은 diff, 검증 기록</td></tr>
+<tr><td>L2 Workflow Owner</td><td>팀 반복 업무를 표준 workflow로 전환</td><td>eval rubric, automation scorecard, 팀 템플릿</td></tr>
+<tr><td>L3 Platform/Adoption Lead</td><td>권한, 교육 과정, 지표, governance를 연결</td><td>governance memo, rollout note, adoption metric</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">LEVEL-UP SIGNAL</span>
+개인이 AI를 잘 쓰는가 → 팀이 같은 업무를 같은 방식으로 검증하는가 → 조직이 위험과 효과를 같은 언어로 판단하는가
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">CAP-04</span><h2>훈련 루브릭</h2></div>
+<p class="lede">훈련은 도구 기능 소개보다 실제 업무 episode를 기준으로 평가해야 합니다. 교육 과정은 실습자가 자신의 업무를 가져와 명세, 컨텍스트, 검증, 기록으로 바꾸는 방식이 가장 효과적입니다.</p>
+<table>
+<tr><th>훈련 항목</th><th>초급</th><th>숙련</th><th>평가 산출물</th></tr>
+<tr><td>Workflow Mining</td><td>업무를 큰 요청으로 설명</td><td>trigger, input, action, verification, escalation으로 분해</td><td>workflow map</td></tr>
+<tr><td>Task Specification</td><td>원하는 결과만 작성</td><td>비목표, 중단 조건, 승인 기준까지 포함</td><td>task spec</td></tr>
+<tr><td>Context Engineering</td><td>많은 파일을 한 번에 제공</td><td>필수 근거와 제외 근거를 구분</td><td>context package</td></tr>
+<tr><td>Harness Design</td><td>AI에게 자유롭게 실행시킴</td><td>권한과 tool permission을 위험도에 맞춤</td><td>harness checklist</td></tr>
+<tr><td>Evaluation</td><td>결과를 읽고 감으로 판단</td><td>eval rubric과 반례로 판정</td><td>eval rubric</td></tr>
+<tr><td>Governance</td><td>정책을 사후에 확인</td><td>security, legal, data rule을 사전에 반영</td><td>governance memo</td></tr>
+<tr><td>Change Management</td><td>잘 된 프롬프트를 공유</td><td>교육 과정과 rollout note로 확산</td><td>rollout note</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">CAP-05</span><h2>포트폴리오 산출물</h2></div>
+<p class="lede">AX 포트폴리오는 데모 영상보다 운영 증거가 중요합니다. 어떤 업무를 선택했고, 어떻게 권한을 제한했으며, 어떤 검증으로 승인했는지 보여주는 산출물이 역량을 증명합니다.</p>
+<table>
+<tr><th>산출물</th><th>담는 내용</th><th>보여주는 역량</th></tr>
+<tr><td>episode log</td><td>목표, 컨텍스트, 도구 사용, 결과, 실패 분류</td><td>작업 추적과 회고</td></tr>
+<tr><td>eval rubric</td><td>성공 기준, 반례, 허용 오차, 중단 기준</td><td>Evaluation</td></tr>
+<tr><td>automation scorecard</td><td>반복성, 검증 가능성, 실패 비용, 권한 위험</td><td>자동화 판단</td></tr>
+<tr><td>governance memo</td><td>데이터 등급, 승인 경계, 감사 필요성</td><td>Governance</td></tr>
+<tr><td>rollout note</td><td>대상 팀, 교육 과정, 지원 채널, 확산 조건</td><td>Change Management</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">포트폴리오 기준</span>
+<p>좋은 AX 포트폴리오는 “AI가 만든 결과”가 아니라 “AI가 어떤 경계 안에서 일했고 사람이 어떤 근거로 승인했는지”를 설명합니다.</p>
+</div>
+</section>
+
+<footer>
+AX ENGINEER CAPABILITY MODEL · V1 · 2026-06<br>
+PRINCIPLE : AX 역량은 프롬프트 기술이 아니라 업무를 검증 가능한 실행 시스템으로 바꾸는 능력이다.
+</footer>`,
 };
 
 export default document;
