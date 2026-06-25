@@ -184,12 +184,17 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
 test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {
   const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
+  const personalFiles = new Set(HANDBOOK_ITEMS.filter((item) => item.kind === "개인화").map((item) => item.file));
   const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file));
 
   assert.deepEqual(extraFiles, []);
 
   for (const file of publicFiles) {
     assert.doesNotMatch(file, /carbon|lca|vcm/i);
+    if (personalFiles.has(file)) {
+      continue;
+    }
+
     const source = await readFile(path.join("public", "handbook", file), "utf8");
     assert.doesNotMatch(
       source,
@@ -263,7 +268,7 @@ test("each public handbook nav links all main sections", async () => {
 
 test("selected handbook content is positioned as a neutral full-stack growth guide", async () => {
   const sources = await Promise.all(
-    HANDBOOK_ITEMS.map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+    HANDBOOK_ITEMS.filter((item) => item.kind !== "개인화").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
   );
   const source = sources.join("\n");
   const roadmap = await readFile("public/handbook/fullstack-growth-roadmap-handbook.html", "utf8");
@@ -552,6 +557,7 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(overview, /대표 프로젝트 맵/);
   assert.match(overview, /포지션별 우선순위/);
   assert.match(overview, /경험 경계 문장/);
+  assert.match(overview, /탄소·에너지\/투자 서비스/);
   assert.match(overview, /프로젝트별 실전 답변 카드/);
   assert.match(overview, /690 작업 커밋/);
   assert.match(overview, /573 개인 커밋/);
@@ -565,6 +571,7 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(frontend, /성장 서사/);
   assert.match(frontend, /Data Grid/);
   assert.match(frontend, /지도·차트/);
+  assert.match(frontend, /탄소·에너지 서비스/);
   assert.match(frontend, /i18n/);
   assert.match(frontend, /SEO\/AEO/);
   assert.match(frontend, /성능 최적화/);
