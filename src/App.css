@@ -172,8 +172,7 @@
   bottom: 0;
   z-index: 80;
   padding: 12px 20px;
-  background:
-    linear-gradient(to top, var(--paper) 72%, rgba(255, 255, 255, 0));
+  background: linear-gradient(to top, var(--paper) 72%, rgba(255, 255, 255, 0));
   pointer-events: none;
 }
 
@@ -208,7 +207,10 @@
   justify-content: center;
   font-family: var(--sans);
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .doc-nav-button {
@@ -484,7 +486,7 @@
 
   .mobile-menu-item {
     min-height: 36px;
-    border: 1px solid var(--line);
+    border: 0;
     border-radius: 8px;
     padding: 8px 10px;
     background: var(--panel);

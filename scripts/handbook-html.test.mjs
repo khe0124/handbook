@@ -41,7 +41,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "backend", "frontend", "network", "devops", "ax", "design", "cheats", "examples", "practical"],
+    ["home", "interview", "backend", "frontend", "network", "devops", "ax", "design", "cheats", "examples", "practical"],
   );
 
   const labels = [
@@ -49,8 +49,17 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
     ...HANDBOOK_ITEMS.map((item) => item.label),
   ].join("\n");
 
-  assert.equal(HANDBOOK_ITEMS.length, 90);
+  assert.equal(HANDBOOK_ITEMS.length, 98);
   assert.ok(labels.includes("홈"));
+  assert.ok(labels.includes("기술면접"));
+  assert.ok(labels.includes("기술면접 개요"));
+  assert.ok(labels.includes("프론트엔드 면접"));
+  assert.ok(labels.includes("백엔드·DB 면접"));
+  assert.ok(labels.includes("인프라·운영 면접"));
+  assert.ok(labels.includes("분산 시스템 면접"));
+  assert.ok(labels.includes("시스템 설계 면접"));
+  assert.ok(labels.includes("프로젝트 심층 면접"));
+  assert.ok(labels.includes("컬처·압박 면접"));
   assert.ok(labels.includes("백엔드"));
   assert.ok(labels.includes("프론트엔드"));
   assert.ok(labels.includes("네트워크 인프라"));
@@ -244,7 +253,7 @@ test("every handbook item has a rendered practical example", async () => {
     );
     assert.match(
       examplesSource,
-      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|backend|frontend|network|devops|ax|design|examples|practical)"`),
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|backend|frontend|network|devops|ax|design|examples|practical)"`),
       `${item.id} should have a practical example lens`,
     );
   }
@@ -350,10 +359,22 @@ test("app uses the Dev Handbook title with fixed top navigation", async () => {
 });
 
 test("handbook layout includes mobile responsive reading refinements", async () => {
-  const cssSource = await readFile("src/handbook/handbook.css", "utf8");
+  const [cssSource, globalCssSource] = await Promise.all([
+    readFile("src/handbook/handbook.css", "utf8"),
+    readFile("src/index.css", "utf8"),
+  ]);
 
+  assert.match(globalCssSource, /html\s*\{[\s\S]*scrollbar-gutter: stable/s);
+  assert.match(globalCssSource, /html\s*\{[\s\S]*overflow-x: clip/s);
+  assert.match(globalCssSource, /body\s*\{[\s\S]*overflow-x: clip/s);
+  assert.match(globalCssSource, /#root\s*\{[\s\S]*overflow-x: clip/s);
+  assert.match(cssSource, /\.handbook-shell\s*\{[\s\S]*overflow-x: clip/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*position: sticky/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*width: 100%/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*margin-inline: 0/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*overflow-x: auto/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*scrollbar-width: none/s);
+  assert.match(cssSource, /\.handbook-toc::\-webkit-scrollbar\s*\{[\s\S]*display: none/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc \.nav-title\s*\{[\s\S]*display: none/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc a\s*\{[\s\S]*display: inline-flex/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-toc\s*\{[\s\S]*scroll-snap-type: x proximity/s);

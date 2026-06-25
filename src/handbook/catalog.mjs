@@ -2,6 +2,17 @@ export const HOME_HANDBOOKS = [
   { id: "home", label: "홈", kind: "Dev Handbook", file: "home-handbook.html" },
 ];
 
+export const INTERVIEW_HANDBOOKS = [
+  { id: "interview", label: "기술면접 개요", kind: "Interview", file: "interview-handbook.html" },
+  { id: "interview-frontend", label: "프론트엔드 면접", kind: "Interview", file: "interview-frontend-handbook.html" },
+  { id: "interview-backend-db", label: "백엔드·DB 면접", kind: "Interview", file: "interview-backend-db-handbook.html" },
+  { id: "interview-infra-ops", label: "인프라·운영 면접", kind: "Interview", file: "interview-infra-ops-handbook.html" },
+  { id: "interview-distributed", label: "분산 시스템 면접", kind: "Interview", file: "interview-distributed-handbook.html" },
+  { id: "interview-system-design", label: "시스템 설계 면접", kind: "Interview", file: "interview-system-design-handbook.html" },
+  { id: "interview-project", label: "프로젝트 심층 면접", kind: "Interview", file: "interview-project-handbook.html" },
+  { id: "interview-behavioral", label: "컬처·압박 면접", kind: "Interview", file: "interview-behavioral-handbook.html" },
+];
+
 export const BACKEND_HANDBOOKS = [
   { id: "backend", label: "백엔드 개요", kind: "개발 핸드북", file: "backend-engineering-handbook.html" },
   { id: "db", label: "DB", kind: "개발 핸드북", file: "db-handbook.html" },
@@ -120,6 +131,7 @@ export const PRACTICAL_GUIDES = [
 
 export const HANDBOOK_GROUPS = [
   { key: "home", label: "홈", items: HOME_HANDBOOKS },
+  { key: "interview", label: "기술면접", items: INTERVIEW_HANDBOOKS },
   { key: "backend", label: "백엔드", items: BACKEND_HANDBOOKS },
   { key: "frontend", label: "프론트엔드", items: FRONTEND_HANDBOOKS },
   { key: "network", label: "네트워크 인프라", items: NETWORK_HANDBOOKS },
@@ -133,6 +145,7 @@ export const HANDBOOK_GROUPS = [
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
+  ...INTERVIEW_HANDBOOKS,
   ...BACKEND_HANDBOOKS,
   ...FRONTEND_HANDBOOKS,
   ...NETWORK_HANDBOOKS,

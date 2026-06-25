@@ -5,6 +5,14 @@ export const HANDBOOK_DOCUMENT_LOADERS: Record<
   () => Promise<{ default: HandbookDocumentContent }>
 > = {
   "home": () => import("./documents/home"),
+  "interview": () => import("./documents/interview"),
+  "interview-frontend": () => import("./documents/interview-frontend"),
+  "interview-backend-db": () => import("./documents/interview-backend-db"),
+  "interview-infra-ops": () => import("./documents/interview-infra-ops"),
+  "interview-distributed": () => import("./documents/interview-distributed"),
+  "interview-system-design": () => import("./documents/interview-system-design"),
+  "interview-project": () => import("./documents/interview-project"),
+  "interview-behavioral": () => import("./documents/interview-behavioral"),
   "backend": () => import("./documents/backend"),
   "db": () => import("./documents/db"),
   "auth-security": () => import("./documents/auth-security"),

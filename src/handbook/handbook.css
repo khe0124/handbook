@@ -5,6 +5,7 @@
   margin: 0 auto;
   padding-top: 105px;
   background: var(--paper);
+  overflow-x: clip;
 }
 
 .handbook-toc {
@@ -500,17 +501,26 @@
     position: sticky;
     top: 78px;
     z-index: 20;
+    width: 100%;
+    max-width: 100%;
     height: auto;
-    margin-inline: -16px;
+    margin-inline: 0;
     border-right: none;
     border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     padding: 9px 16px 10px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .handbook-toc::-webkit-scrollbar {
+    display: none;
   }
 
   .handbook-main {

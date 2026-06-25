@@ -43,6 +43,12 @@ const LENSES: Record<string, PracticalExampleLens> = {
     ["문서를 많이 읽었지만 실제 작업 산출물이 없다.", "메뉴를 순서대로 소비하느라 현재 병목을 놓친다."],
     ["이번 주 작업의 가장 약한 경계면은 어디인가?", "읽은 내용을 어떤 PR이나 운영 절차에 반영했는가?"],
   ),
+  interview: lens(
+    ["답변은 실제 경험, 일부 경험, 설계 지식의 경계를 먼저 지킨다.", "기술명보다 선택 기준, trade-off, 실패 모드, 검증 증거를 우선한다."],
+    ["핵심 20문항 답변", "프로젝트 증거 ledger", "꼬리질문 대응표", "녹음 회고"],
+    ["답변이 길지만 결론과 판단 기준이 없다.", "직접 해본 일과 이론으로 아는 일을 같은 톤으로 말한다."],
+    ["이 답변은 30초 안에 핵심이 전달되는가?", "꼬리질문이 들어오면 어떤 기준과 증거로 깊이를 열 수 있는가?"],
+  ),
   backend: lens(
     ["API 계약, 트랜잭션, 권한, 관측 가능성을 한 세트로 본다.", "운영 중 재시도와 중복 요청을 정상 입력으로 가정한다."],
     ["API contract", "테스트 케이스", "트랜잭션/멱등성 메모", "로그 필드 목록"],
@@ -95,6 +101,14 @@ const LENSES: Record<string, PracticalExampleLens> = {
 
 const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   home: "home",
+  interview: "interview",
+  "interview-frontend": "interview",
+  "interview-backend-db": "interview",
+  "interview-infra-ops": "interview",
+  "interview-distributed": "interview",
+  "interview-system-design": "interview",
+  "interview-project": "interview",
+  "interview-behavioral": "interview",
   backend: "backend",
   db: "backend",
   "auth-security": "backend",
@@ -191,6 +205,14 @@ export const getPracticalExampleLens = (itemId: string): PracticalExampleLens =>
 
 export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   home: example("새 프로젝트를 맡았을 때 핸드북을 읽는 순서를 정한다.", ["홈의 로드맵에서 현재 약한 영역을 표시한다.", "이번 스프린트 작업과 연결되는 메뉴 2개를 고른다.", "작업 전 수용 기준과 검증 명령을 노트로 남긴다."], "학습이 독서로 끝나지 않고 실제 작업의 체크리스트가 된다."),
+  interview: example("기술면접 핵심 질문 20개를 실전 답변으로 압축한다.", ["각 질문을 30초, 90초, 3분 답변으로 나눠 녹음한다.", "답변마다 직접 경험, 일부 경험, 설계 지식의 경계를 표시한다.", "압박 꼬리질문 2개를 붙여 선택 기준과 실패 모드를 말한다."], "면접장에서 기술명을 나열하지 않고 판단 구조와 검증 가능한 경험으로 답한다."),
+  "interview-frontend": example("프론트엔드 핵심 질문을 브라우저와 제품 품질 관점으로 연습한다.", ["렌더링, 상태관리, 성능, 접근성, 보안 질문을 30초 답변으로 압축한다.", "각 질문마다 꼬리질문 3개를 붙여 trade-off를 말한다.", "직접 경험이 없는 영역은 안전한 표현으로 경계를 표시한다."], "React API 암기가 아니라 브라우저 비용과 사용자 경험 기준으로 답한다."),
+  "interview-backend-db": example("백엔드와 DB 질문을 계약, 정합성, 운영성 기준으로 정리한다.", ["API, 인증, validation, 인덱스, 트랜잭션 질문을 개념과 실무 기준으로 나눈다.", "실행 계획, 락, idempotency 같은 꼬리질문 답변을 준비한다.", "프론트엔드 중심 경험과 설계 지식의 경계를 명확히 둔다."], "백엔드 깊이 질문에서 과장하지 않고 정확한 설계 판단을 말한다."),
+  "interview-infra-ops": example("인프라와 운영 질문을 요청 흐름과 장애 대응 순서로 연습한다.", ["DNS, TCP, TLS, CDN, Docker, CI/CD, 관측성 질문을 계층별로 정리한다.", "장애 상황에서 영향 범위, 최근 변경, metric, log, trace 순서로 답한다.", "배포와 rollback 질문은 검증 가능한 절차로 말한다."], "운영 질문에서 로그를 본다는 답을 넘어 원인을 좁히는 순서를 설명한다."),
+  "interview-distributed": example("분산 시스템 질문을 실패 모드 중심으로 대비한다.", ["캐시, 큐, retry, consistency, Saga, Outbox 질문을 정리한다.", "각 답변에 중복, 순서, 지연, 무효화, 보상 처리 위험을 포함한다.", "도구 이름보다 왜 필요한지와 언제 과한지까지 말한다."], "분산 시스템 질문에서 이론 용어보다 현실의 실패와 보정 전략을 설명한다."),
+  "interview-system-design": example("시스템 설계 질문을 요구사항 확인부터 trade-off까지 반복한다.", ["관리자, Data Grid, 실시간, 인증, 복잡한 폼 시나리오를 10분 답변으로 연습한다.", "각 시나리오에 데이터 모델, API 계약, 상태 전략, 운영 지표를 붙인다.", "요구사항을 묻기 전에 기술부터 말하는 습관을 제거한다."], "시스템 설계 면접에서 완벽한 그림보다 합리적인 질문과 선택 기준을 보여준다."),
+  "interview-project": example("대표 프로젝트 답변을 심층 꼬리질문에 버티게 다듬는다.", ["프로젝트마다 문제, 제약, 선택, 결과, 배운 점을 1분 답변으로 만든다.", "Data Grid, Excel, validation, Flow Editor, API 전환 질문을 증거와 연결한다.", "정량 수치가 없는 부분은 재현 조건과 품질 개선 증거로 말한다."], "프로젝트 질문에서 기술 목록이 아니라 문제 해결 구조와 본인 역할이 드러난다."),
+  "interview-behavioral": example("컬처와 압박 질문에서 경계 있는 답변을 연습한다.", ["자기소개, 이직 사유, 실패, 갈등, 일정 압박 답변을 STAR 형태로 쓴다.", "직접 해봤는지, 수치가 있는지, 과한 설계인지 묻는 압박 질문을 붙인다.", "방어적 답변 대신 전제와 안전한 표현으로 재정리한다."], "행동 질문에서도 과장 없이 판단력과 협업 방식을 보여준다."),
   backend: example("신규 주문 API를 운영 가능한 기능으로 설계한다.", ["요청/응답 계약과 실패 응답을 먼저 정의한다.", "트랜잭션 경계, 멱등성 키, 로그 필드를 같이 설계한다.", "부하·장애·중복 요청 시나리오를 테스트에 넣는다."], "단순 CRUD가 아니라 추적 가능하고 되돌릴 수 있는 API가 된다."),
   db: example("느린 주문 목록 쿼리를 개선한다.", ["실제 실행 계획과 cardinality를 확인한다.", "필터·정렬·페이지네이션에 맞는 복합 인덱스를 검토한다.", "변경 전후 latency와 lock 위험을 기록한다."], "인덱스를 감으로 추가하지 않고 쿼리 패턴과 운영 비용을 함께 판단한다."),
   "auth-security": example("관리자 전용 기능의 인가 누락을 점검한다.", ["라우트 보호와 서버 측 권한 검사를 분리해 확인한다.", "소유자 변경, 역할 변경, 만료 토큰 케이스를 테스트한다.", "감사 로그에 actor, target, action, result를 남긴다."], "프론트 가드에 의존하지 않는 서버 중심 보안 경계가 생긴다."),
