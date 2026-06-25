@@ -199,6 +199,27 @@ test("catalog items have source files, generated modules, and loader entries", a
   }
 });
 
+test("generated document modules match public handbook sources", async () => {
+  for (const item of HANDBOOK_ITEMS) {
+    const html = await readFile(path.join("public", "handbook", item.file), "utf8");
+    const extracted = extractHandbookDocument(html);
+    const moduleSource = await readFile(path.join("src", "handbook", "documents", `${item.id}.ts`), "utf8");
+    const navMatch = moduleSource.match(/navHtml:\s*("(?:\\.|[^"\\])*")/);
+    const mainMatch = moduleSource.match(/mainHtml:\s*("(?:\\.|[^"\\])*")/);
+
+    assert.ok(navMatch, `${item.id} generated module is missing navHtml`);
+    assert.ok(mainMatch, `${item.id} generated module is missing mainHtml`);
+    assert.deepEqual(
+      {
+        navHtml: JSON.parse(navMatch[1]),
+        mainHtml: JSON.parse(mainMatch[1]),
+      },
+      extracted,
+      `${item.id} is out of sync with ${item.file}`,
+    );
+  }
+});
+
 test("every handbook item has a rendered practical example", async () => {
   const [examplesSource, pageSource, cssSource] = await Promise.all([
     readFile("src/handbook/practicalExamples.ts", "utf8"),
