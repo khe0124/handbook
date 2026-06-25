@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><title>Database Cheat Sheet</title></head>
+<body>
+<nav aria-label="목차">
+  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Database</div>
+  <a href="#ch1"><span class="code">DB-CS-01</span>개요</a>
+  <a href="#ch2"><span class="code">DB-CS-02</span>핵심 명령/개념</a>
+  <a href="#ch3"><span class="code">DB-CS-03</span>판단 기준</a>
+  <a href="#ch4"><span class="code">DB-CS-04</span>자주 나는 실수</a>
+  <a href="#ch5"><span class="code">DB-CS-05</span>면접/리뷰용 한 줄 답변</a>
+</nav>
+<main>
+  <header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-DATABASE-V1</span><span>SCOPE : SQL · INDEX · PLAN · MIGRATION</span><span>LANG : KO</span></div>
+    <h1>Database<br>Cheat Sheet</h1>
+    <p class="hero-sub">쿼리와 스키마 변경을 빠르게 점검하기 위한 참조입니다. SQL 문법보다 인덱스, 실행 계획, lock, 마이그레이션 안전성을 우선합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="ch1">
+    <div class="ch-head"><span class="ch-code">DB-CS-01</span><h2>개요</h2></div>
+    <p class="lede">DB 문제는 대부분 잘못된 접근 경로, 과한 lock, 되돌릴 수 없는 migration에서 시작합니다. 변경 전 실행 계획과 rollback을 확인합니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th></tr>
+      <tr><td>느린 쿼리</td><td>filter, join, sort, row estimate, actual rows</td></tr>
+      <tr><td>인덱스 추가</td><td>WHERE/JOIN/ORDER BY와 column order</td></tr>
+      <tr><td>스키마 변경</td><td>table rewrite, lock level, default, backfill</td></tr>
+      <tr><td>정합성 이슈</td><td>transaction boundary, isolation, lost update</td></tr>
+    </table>
+  </section>
+  <section id="ch2">
+    <div class="ch-head"><span class="ch-code">DB-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념/명령</th><th>압축 설명</th></tr>
+      <tr><td><code>EXPLAIN ANALYZE</code></td><td>계획과 실제 실행 시간을 함께 확인</td></tr>
+      <tr><td>Sequential scan</td><td>테이블 전체를 읽음. 작으면 정상, 크면 위험 신호</td></tr>
+      <tr><td>Index scan</td><td>인덱스로 후보를 좁히고 row를 읽음</td></tr>
+      <tr><td>Covering index</td><td>쿼리에 필요한 컬럼을 인덱스에서 대부분 해결</td></tr>
+      <tr><td>Isolation level</td><td>동시 트랜잭션이 서로 어떻게 보이는지 정하는 규칙</td></tr>
+      <tr><td>Backfill</td><td>새 컬럼이나 파생 데이터를 기존 row에 채우는 작업</td></tr>
+    </table>
+  </section>
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">DB-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th></tr>
+      <tr><td>정규화</td><td>쓰기 정합성과 중복 제거가 중요함</td></tr>
+      <tr><td>비정규화</td><td>읽기 성능이 중요하고 중복 갱신 비용을 통제할 수 있음</td></tr>
+      <tr><td>복합 인덱스</td><td>동등 조건, 범위 조건, 정렬 순서가 반복됨</td></tr>
+      <tr><td>Partial index</td><td>특정 상태나 subset만 자주 조회함</td></tr>
+      <tr><td>단계적 migration</td><td>운영 데이터가 크고 신/구 코드가 공존함</td></tr>
+    </table>
+  </section>
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">DB-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>인덱스를 추가하면 모든 쿼리가 빨라진다고 생각한다.</li>
+      <li>실행 계획의 estimated rows와 actual rows 차이를 보지 않는다.</li>
+      <li>큰 테이블에 default와 not null을 한 번에 추가해 lock 위험을 만든다.</li>
+      <li>마이그레이션 rollback은 코드 rollback과 별개라는 점을 놓친다.</li>
+      <li>pagination에서 offset이 커질수록 비용이 커지는 문제를 무시한다.</li>
+    </ul>
+  </section>
+  <section id="ch5">
+    <div class="ch-head"><span class="ch-code">DB-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>인덱스</b><span>index</span></div><div class="g-def">인덱스는 읽기를 빠르게 하지만 쓰기 비용과 저장 공간을 늘리므로 쿼리 패턴에 맞춰 설계해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>실행 계획</b><span>plan</span></div><div class="g-def">실행 계획은 DB가 데이터를 어떤 경로로 읽고 조인하고 정렬하는지 보여주는 비용 지도입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>마이그레이션</b><span>migration</span></div><div class="g-def">운영 마이그레이션은 DDL이 아니라 lock, backfill, rollback, 신구 코드 호환성까지 포함한 변경 절차입니다.</div></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

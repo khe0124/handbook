@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Frontend Cheat Sheet</title>
+</head>
+<body>
+<nav aria-label="목차">
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Frontend</div>
+  <a href="#ch1"><span class="code">FE-CS-01</span>개요</a>
+  <a href="#ch2"><span class="code">FE-CS-02</span>핵심 명령/개념</a>
+  <a href="#ch3"><span class="code">FE-CS-03</span>판단 기준</a>
+  <a href="#ch4"><span class="code">FE-CS-04</span>자주 나는 실수</a>
+  <a href="#ch5"><span class="code">FE-CS-05</span>면접/리뷰용 한 줄 답변</a>
+</nav>
+<main>
+  <header class="hero">
+    <div class="hero-serial">
+      <span>DOC : CHEAT-FRONTEND-V1</span>
+      <span>SCOPE : RENDERING · STATE · PERFORMANCE · SECURITY</span>
+      <span>LANG : KO</span>
+    </div>
+    <h1>Frontend<br>Cheat Sheet</h1>
+    <p class="hero-sub">프론트엔드 판단을 빠르게 복기하기 위한 압축 참조입니다. 렌더링, 상태 경계, 성능, 접근성, 보안, 테스트를 긴 설명 대신 실무 체크 기준으로 정리합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="ch1">
+    <div class="ch-head"><span class="ch-code">FE-CS-01</span><h2>개요</h2></div>
+    <p class="lede">구현 중 결정을 빠르게 확인할 때 보는 문서입니다. 긴 원리 설명은 프론트엔드 핸드북을 보고, 여기서는 선택 기준과 실수 방지에 집중합니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th></tr>
+      <tr><td>화면이 느림</td><td>렌더 횟수, 큰 DOM, 네트워크 waterfall, 이미지와 번들 크기</td></tr>
+      <tr><td>상태가 꼬임</td><td>서버 상태와 UI 상태가 섞였는지, derived state를 저장했는지</td></tr>
+      <tr><td>SSR 오류</td><td>서버/클라이언트 렌더 결과 차이, 브라우저 전용 API 접근 시점</td></tr>
+      <tr><td>접근성 누락</td><td>키보드 이동, focus, label, semantic element, contrast</td></tr>
+    </table>
+  </section>
+  <section id="ch2">
+    <div class="ch-head"><span class="ch-code">FE-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념</th><th>압축 설명</th></tr>
+      <tr><td>Reflow</td><td>레이아웃 계산. 크기와 위치 변경이 원인이라 비용이 큼</td></tr>
+      <tr><td>Repaint</td><td>색, 그림자 같은 픽셀 다시 그리기</td></tr>
+      <tr><td>Composite</td><td>이미 그린 레이어를 합성. transform/opacity 최적화와 관련</td></tr>
+      <tr><td>Server state</td><td>서버가 소유한 캐시 가능한 비동기 데이터</td></tr>
+      <tr><td>Client state</td><td>모달, 탭, 입력 중 값처럼 UI가 소유한 즉시성 상태</td></tr>
+      <tr><td>Hydration mismatch</td><td>서버 HTML과 클라이언트 첫 렌더 결과가 달라 생기는 불일치</td></tr>
+    </table>
+    <div class="serial-card"><span class="sc-label">FAST CHECK</span><code>npm run build</code>로 번들 오류를 먼저 잡고, DevTools Performance와 Network 탭으로 병목을 나눠 봅니다.</div>
+  </section>
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">FE-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th></tr>
+      <tr><td>CSR</td><td>로그인 뒤 내부 도구, SEO 영향 작음, 인터랙션 중심</td></tr>
+      <tr><td>SSR</td><td>초기 표시와 SEO가 중요하고 사용자별 데이터가 있음</td></tr>
+      <tr><td>SSG</td><td>콘텐츠가 거의 고정이고 빠른 CDN 제공이 중요함</td></tr>
+      <tr><td>memoization</td><td>계산 비용이 크거나 props 안정성이 보장될 때만 적용</td></tr>
+      <tr><td>E2E test</td><td>단위 테스트보다 사용자 흐름 자체가 더 중요한 핵심 경로</td></tr>
+    </table>
+  </section>
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">FE-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>API 응답 전체를 컴포넌트 상태로 복사해 서버 상태와 UI 상태를 동시에 관리한다.</li>
+      <li>성능 문제를 보기 전에 무조건 <code>memo</code>, <code>useMemo</code>, <code>useCallback</code>을 추가한다.</li>
+      <li>버튼 역할을 하는 <code>div</code>를 만들고 keyboard/focus 처리를 빼먹는다.</li>
+      <li>토큰 저장 위치를 보안 위협 모델 없이 관성으로 결정한다.</li>
+      <li>hydration 문제를 suppress 옵션으로 숨기고 원인을 제거하지 않는다.</li>
+    </ul>
+  </section>
+  <section id="ch5">
+    <div class="ch-head"><span class="ch-code">FE-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>상태 분리</b><span>state boundary</span></div><div class="g-def">서버 상태는 캐시와 동기화 문제이고, 클라이언트 상태는 즉시 UI 반응 문제라 lifecycle과 소유자가 다릅니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>성능 최적화</b><span>performance</span></div><div class="g-def">먼저 측정으로 병목을 렌더링, 네트워크, 번들, 이미지 중 어디인지 나눈 뒤 가장 큰 비용부터 줄입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>접근성</b><span>a11y</span></div><div class="g-def">접근성은 추가 기능이 아니라 키보드, 스크린리더, semantic markup까지 포함한 기본 사용성입니다.</div></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

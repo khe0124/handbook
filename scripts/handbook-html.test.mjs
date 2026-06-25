@@ -41,7 +41,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "backend", "frontend", "network", "devops", "ax", "design", "examples", "practical"],
+    ["home", "backend", "frontend", "network", "devops", "ax", "design", "cheats", "examples", "practical"],
   );
 
   const labels = [
@@ -49,7 +49,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
     ...HANDBOOK_ITEMS.map((item) => item.label),
   ].join("\n");
 
-  assert.equal(HANDBOOK_ITEMS.length, 82);
+  assert.equal(HANDBOOK_ITEMS.length, 90);
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("백엔드"));
   assert.ok(labels.includes("프론트엔드"));
@@ -57,6 +57,15 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("DevOps"));
   assert.ok(labels.includes("AX"));
   assert.ok(labels.includes("디자인"));
+  assert.ok(labels.includes("Cheat Sheet"));
+  assert.ok(labels.includes("Frontend"));
+  assert.ok(labels.includes("Backend"));
+  assert.ok(labels.includes("Database"));
+  assert.ok(labels.includes("Network"));
+  assert.ok(labels.includes("DevOps"));
+  assert.ok(labels.includes("Linux"));
+  assert.ok(labels.includes("Docker"));
+  assert.ok(labels.includes("Interview"));
   assert.ok(labels.includes("프론트엔드 개요"));
   assert.ok(labels.includes("브라우저 동작 원리"));
   assert.ok(labels.includes("웹접근성"));

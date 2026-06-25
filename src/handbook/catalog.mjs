@@ -85,6 +85,17 @@ export const DESIGN_HANDBOOKS = [
   { id: "design-handoff-qa", label: "디자인 핸드오프와 QA", kind: "디자인 핸드북", file: "design-handoff-qa-handbook.html" },
 ];
 
+export const CHEAT_SHEETS = [
+  { id: "cheat-frontend", label: "Frontend", kind: "Cheat Sheet", file: "frontend-cheat-sheet.html" },
+  { id: "cheat-backend", label: "Backend", kind: "Cheat Sheet", file: "backend-cheat-sheet.html" },
+  { id: "cheat-database", label: "Database", kind: "Cheat Sheet", file: "database-cheat-sheet.html" },
+  { id: "cheat-network", label: "Network", kind: "Cheat Sheet", file: "network-cheat-sheet.html" },
+  { id: "cheat-devops", label: "DevOps", kind: "Cheat Sheet", file: "devops-cheat-sheet.html" },
+  { id: "cheat-linux", label: "Linux", kind: "Cheat Sheet", file: "linux-cheat-sheet.html" },
+  { id: "cheat-docker", label: "Docker", kind: "Cheat Sheet", file: "docker-cheat-sheet.html" },
+  { id: "cheat-interview", label: "Interview", kind: "Cheat Sheet", file: "interview-cheat-sheet.html" },
+];
+
 export const DEV_EXAMPLES = [
   { id: "ex-java", label: "Java", kind: "예시 사례", file: "java-examples.html" },
   { id: "ex-jpa", label: "JPA", kind: "예시 사례", file: "jpa-examples.html" },
@@ -115,6 +126,7 @@ export const HANDBOOK_GROUPS = [
   { key: "devops", label: "DevOps", items: DEVOPS_HANDBOOKS },
   { key: "ax", label: "AX", items: AX_HANDBOOKS },
   { key: "design", label: "디자인", items: DESIGN_HANDBOOKS },
+  { key: "cheats", label: "Cheat Sheet", items: CHEAT_SHEETS },
   { key: "examples", label: "예시 사례", items: DEV_EXAMPLES },
   { key: "practical", label: "실무 가이드", items: PRACTICAL_GUIDES },
 ];
@@ -127,6 +139,7 @@ export const HANDBOOK_ITEMS = [
   ...DEVOPS_HANDBOOKS,
   ...AX_HANDBOOKS,
   ...DESIGN_HANDBOOKS,
+  ...CHEAT_SHEETS,
   ...DEV_EXAMPLES,
   ...PRACTICAL_GUIDES,
 ];

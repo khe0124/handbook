@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><title>Docker Cheat Sheet</title></head>
+<body>
+<nav aria-label="목차">
+  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Docker</div>
+  <a href="#ch1"><span class="code">DK-CS-01</span>개요</a>
+  <a href="#ch2"><span class="code">DK-CS-02</span>핵심 명령/개념</a>
+  <a href="#ch3"><span class="code">DK-CS-03</span>판단 기준</a>
+  <a href="#ch4"><span class="code">DK-CS-04</span>자주 나는 실수</a>
+  <a href="#ch5"><span class="code">DK-CS-05</span>면접/리뷰용 한 줄 답변</a>
+</nav>
+<main>
+  <header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-DOCKER-V1</span><span>SCOPE : IMAGE · CONTAINER · NETWORK · VOLUME · COMPOSE</span><span>LANG : KO</span></div>
+    <h1>Docker<br>Cheat Sheet</h1>
+    <p class="hero-sub">Docker 실행 오류를 이미지, 컨테이너, 포트, 볼륨, 네트워크, Compose 기준으로 빠르게 좁히는 참조입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="ch1">
+    <div class="ch-head"><span class="ch-code">DK-CS-01</span><h2>개요</h2></div>
+    <p class="lede">이미지는 불변 실행 패키지이고 컨테이너는 그 이미지를 실행한 프로세스입니다. 런타임 문제는 build와 run 단계를 분리해 봅니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th></tr>
+      <tr><td>빌드 실패</td><td>Dockerfile 순서, build context, cache, secret 노출</td></tr>
+      <tr><td>실행 실패</td><td>entrypoint, env, port, volume, working directory</td></tr>
+      <tr><td>연결 실패</td><td>container network, service name, port mapping</td></tr>
+      <tr><td>데이터 사라짐</td><td>container layer와 volume/bind mount 구분</td></tr>
+    </table>
+  </section>
+  <section id="ch2">
+    <div class="ch-head"><span class="ch-code">DK-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>명령</th><th>압축 설명</th></tr>
+      <tr><td><code>docker build -t app .</code></td><td>현재 context로 이미지 빌드</td></tr>
+      <tr><td><code>docker run --rm -p 3000:3000 app</code></td><td>컨테이너 실행 후 종료 시 삭제</td></tr>
+      <tr><td><code>docker ps -a</code></td><td>실행/종료 컨테이너 확인</td></tr>
+      <tr><td><code>docker logs -f name</code></td><td>컨테이너 로그 추적</td></tr>
+      <tr><td><code>docker exec -it name sh</code></td><td>실행 중 컨테이너 내부 진입</td></tr>
+      <tr><td><code>docker compose up</code></td><td>여러 서비스를 선언 파일 기준으로 실행</td></tr>
+    </table>
+  </section>
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">DK-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th></tr>
+      <tr><td>bind mount</td><td>로컬 개발에서 파일 변경을 즉시 반영해야 함</td></tr>
+      <tr><td>named volume</td><td>DB 데이터처럼 컨테이너 교체 뒤에도 보존해야 함</td></tr>
+      <tr><td>multi-stage build</td><td>빌드 도구와 런타임 산출물을 분리해야 함</td></tr>
+      <tr><td>slim image</td><td>운영 이미지 크기와 취약점 노출을 줄여야 함</td></tr>
+      <tr><td>compose</td><td>앱, DB, 캐시 등 로컬 다중 서비스를 함께 띄워야 함</td></tr>
+    </table>
+  </section>
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">DK-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li><code>.dockerignore</code> 없이 <code>node_modules</code>와 <code>.git</code>을 build context에 포함한다.</li>
+      <li>Dockerfile에 secret을 굽거나 build arg로 남긴다.</li>
+      <li>container port와 host port 방향을 헷갈린다.</li>
+      <li>컨테이너 내부 파일을 영속 데이터로 믿는다.</li>
+      <li><code>latest</code> 태그를 production 배포 식별자로 사용한다.</li>
+    </ul>
+  </section>
+  <section id="ch5">
+    <div class="ch-head"><span class="ch-code">DK-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>이미지와 컨테이너</b><span>model</span></div><div class="g-def">이미지는 불변 스냅샷이고 컨테이너는 그 이미지를 실행한 격리된 프로세스입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>레이어 캐시</b><span>cache</span></div><div class="g-def">Dockerfile은 자주 바뀌지 않는 의존성 레이어를 앞에 두고 자주 바뀌는 소스를 뒤에 둬야 빌드가 빨라집니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>볼륨</b><span>volume</span></div><div class="g-def">컨테이너 파일시스템은 휘발성이므로 보존해야 하는 상태는 volume이나 외부 스토리지로 빼야 합니다.</div></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
