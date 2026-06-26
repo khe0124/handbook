@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>AX Interaction and Motion Design Handbook</title>
+</head>
+<body>
+<nav aria-label="목차">
+  <div class="nav-brand">DESIGN · AX INTERACTION</div>
+  <div class="nav-title">AX 인터랙션·마이크로인터랙션</div>
+  <a href="#ch1"><span class="code">AXI-01</span>인터랙션 설계 개요</a>
+  <a href="#ch2"><span class="code">AXI-02</span>AX 인터랙션 원칙</a>
+  <a href="#ch3"><span class="code">AXI-03</span>입력과 응답 패턴</a>
+  <a href="#ch4"><span class="code">AXI-04</span>AI 처리 상태 디자인</a>
+  <a href="#ch5"><span class="code">AXI-05</span>마이크로인터랙션</a>
+  <a href="#ch6"><span class="code">AXI-06</span>애니메이션 원칙</a>
+  <a href="#ch7"><span class="code">AXI-07</span>결과 검토 인터랙션</a>
+  <a href="#ch8"><span class="code">AXI-08</span>오류와 불확실성</a>
+  <a href="#ch9"><span class="code">AXI-09</span>접근성과 모션 안전성</a>
+  <a href="#ch10"><span class="code">AXI-10</span>실무 패턴 라이브러리</a>
+  <a href="#ch11"><span class="code">AXI-11</span>리뷰 체크리스트</a>
+  <a href="#ch12"><span class="code">AXI-12</span>실전 사례</a>
+</nav>
+<main>
+  <header class="hero">
+    <div class="hero-serial">
+      <span>DOC : DESIGN-AX-INTERACTION-MOTION-V1</span>
+      <span>SCOPE : AX · INTERACTION · MICROINTERACTION · MOTION</span>
+      <span>LANG : KO</span>
+    </div>
+    <h1>AX 인터랙션과<br>마이크로인터랙션</h1>
+    <p class="hero-sub">AX 디자인에서 인터랙션은 “AI가 뭔가 하는 느낌”을 꾸미는 장식이 아닙니다. 사용자가 시스템의 상태를 이해하고, AI 결과를 검토하고, 위험한 자동화를 멈추거나 되돌릴 수 있게 만드는 신뢰 설계입니다.</p>
+    <div class="hero-meta">FOR : PRODUCT DESIGN · FRONTEND · AX WORKFLOW · UPDATED 2026-06</div>
+  </header>
+
+  <section id="ch1">
+    <div class="ch-head"><span class="ch-code">AXI-01</span><h2>인터랙션 설계 개요</h2></div>
+    <p class="lede">AX 제품의 인터랙션은 사용자 의도, AI 처리 상태, 결과 검토, 승인과 복구를 하나의 흐름으로 연결합니다. 일반 UI보다 “시스템이 지금 무엇을 알고 무엇을 모르는가”를 더 명확히 드러내야 합니다.</p>
+    <table>
+      <tr><th>구분</th><th>일반 인터랙션</th><th>AX 인터랙션</th></tr>
+      <tr><td>입력</td><td>정해진 폼, 버튼, 메뉴</td><td>자연어, 파일, 컨텍스트, 추천 명령, 반복 수정 요청</td></tr>
+      <tr><td>응답</td><td>즉시 완료 또는 오류</td><td>분석 중, 부분 결과, confidence, 검토 필요, 승인 대기</td></tr>
+      <tr><td>통제</td><td>취소, 뒤로가기, undo</td><td>stop generation, rollback, diff 검토, human approval</td></tr>
+      <tr><td>신뢰</td><td>일관된 UI와 오류 처리</td><td>근거, 한계, 출처, 변경 범위, 실패 시 복구 절차</td></tr>
+    </table>
+  </section>
+
+  <section id="ch2">
+    <div class="ch-head"><span class="ch-code">AXI-02</span><h2>AX 인터랙션 원칙</h2></div>
+    <table>
+      <tr><th>원칙</th><th>설계 질문</th><th>나쁜 신호</th></tr>
+      <tr><td>예측 가능성</td><td>누르면 어떤 작업이 시작되고 어디까지 바뀌는가</td><td>“AI 실행” 버튼만 있고 영향 범위가 없음</td></tr>
+      <tr><td>통제 가능성</td><td>사용자가 중단, 수정, 승인, 거절할 수 있는가</td><td>생성 결과가 바로 적용됨</td></tr>
+      <tr><td>복구 가능성</td><td>실패하거나 잘못 적용했을 때 되돌릴 수 있는가</td><td>undo, version, rollback이 없음</td></tr>
+      <tr><td>설명 가능성</td><td>AI가 왜 이 결과를 냈는지 검토 단서가 있는가</td><td>근거와 입력 컨텍스트가 숨겨짐</td></tr>
+      <tr><td>비례성</td><td>위험한 작업일수록 더 강한 확인이 있는가</td><td>삭제, 권한 변경, 배포가 일반 저장과 같은 마찰</td></tr>
+    </table>
+    <div class="callout">
+      <span class="co-label">Principle</span>
+      <p>AX 인터랙션의 목표는 사용자를 놀라게 하는 것이 아니라 사용자가 시스템을 믿고 통제할 수 있게 만드는 것입니다.</p>
+    </div>
+  </section>
+
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">AXI-03</span><h2>입력과 응답 패턴</h2></div>
+    <table>
+      <tr><th>패턴</th><th>쓸 때</th><th>필수 피드백</th></tr>
+      <tr><td>명령형 입력</td><td>작업 범위가 명확하고 반복 가능한 경우</td><td>대상, 영향 범위, 예상 결과</td></tr>
+      <tr><td>자연어 입력</td><td>사용자 의도가 다양하거나 탐색적인 경우</td><td>해석된 의도, 부족한 정보, 수정 가능성</td></tr>
+      <tr><td>추천/자동완성</td><td>다음 행동 후보가 제한된 경우</td><td>추천 이유, 적용 전 preview, 거절 옵션</td></tr>
+      <tr><td>제안 수락·거절</td><td>AI 결과를 사람이 검토해야 하는 경우</td><td>diff, confidence, accept/reject/edit</td></tr>
+      <tr><td>수정 요청</td><td>첫 결과가 부분적으로 맞는 경우</td><td>이전 조건 유지 여부, 변경된 부분 표시</td></tr>
+    </table>
+  </section>
+
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">AXI-04</span><h2>AI 처리 상태 디자인</h2></div>
+    <p class="lede">AI 작업은 즉시 끝나지 않거나 부분적으로 진행될 수 있습니다. 상태 디자인은 기다림을 예쁘게 포장하는 것이 아니라 현재 작업이 살아 있는지, 멈췄는지, 사용자가 뭘 할 수 있는지 알려주는 장치입니다.</p>
+    <table>
+      <tr><th>상태</th><th>표현</th><th>사용자 행동</th></tr>
+      <tr><td>대기</td><td>입력 검토, queue position, 예상 시작</td><td>취소, 입력 수정</td></tr>
+      <tr><td>분석 중</td><td>현재 단계, 사용 중인 컨텍스트, 진행 단서</td><td>중단, 백그라운드 전환</td></tr>
+      <tr><td>부분 결과</td><td>streaming answer, progressive disclosure</td><td>일시 중지, 추가 질문, 세부 보기</td></tr>
+      <tr><td>검토 필요</td><td>diff, 근거, confidence, 위험 표시</td><td>승인, 반려, 수정 요청</td></tr>
+      <tr><td>실패</td><td>원인 분류, 재시도 가능 여부, 보존된 입력</td><td>retry, edit, support handoff</td></tr>
+    </table>
+  </section>
+
+  <section id="ch5">
+    <div class="ch-head"><span class="ch-code">AXI-05</span><h2>마이크로인터랙션</h2></div>
+    <p class="lede">마이크로인터랙션은 작은 피드백이지만 AX에서는 신뢰의 단서가 됩니다. 복사됨, 저장됨, 적용 대기, 자동화 중단 같은 짧은 상태가 누락되면 사용자는 AI 작업이 실제로 반영됐는지 알 수 없습니다.</p>
+    <table>
+      <tr><th>요소</th><th>좋은 피드백</th><th>주의</th></tr>
+      <tr><td>버튼</td><td>idle → loading → success/fail 상태가 분리됨</td><td>클릭 후 아무 변화가 없으면 중복 실행을 유발</td></tr>
+      <tr><td>복사</td><td>아이콘 변화, 짧은 “복사됨”, focus 유지</td><td>toast만 띄우면 스크린리더나 빠른 흐름에서 놓침</td></tr>
+      <tr><td>저장</td><td>저장 중, 저장됨, 저장 실패, retry</td><td>자동 저장은 마지막 저장 시각과 실패 상태가 필요</td></tr>
+      <tr><td>적용</td><td>preview, apply pending, applied, rollback</td><td>AI 결과가 즉시 적용되면 검토권을 잃음</td></tr>
+      <tr><td>되돌리기</td><td>undo window, 변경 요약, version link</td><td>위험한 변경에는 단순 toast undo만으로 부족</td></tr>
+    </table>
+  </section>
+
+  <section id="ch6">
+    <div class="ch-head"><span class="ch-code">AXI-06</span><h2>애니메이션 원칙</h2></div>
+    <table>
+      <tr><th>목적</th><th>권장 사용</th><th>피해야 할 사용</th></tr>
+      <tr><td>상태 전환 이해</td><td>panel open/close, step transition, diff reveal</td><td>의미 없는 bounce, 과한 delay</td></tr>
+      <tr><td>처리 중 피드백</td><td>progress, skeleton, streaming cursor</td><td>끝나지 않는 shimmer만 보여줌</td></tr>
+      <tr><td>공간 변화 안내</td><td>새 항목 삽입, reorder, expand/collapse</td><td>layout shift를 애니메이션으로 숨김</td></tr>
+      <tr><td>주의 환기</td><td>위험 변경 confirmation, conflict highlight</td><td>색과 모션만으로 위험 전달</td></tr>
+    </table>
+    <div class="callout warn">
+      <span class="co-label">Motion rule</span>
+      <p>AX에서 애니메이션은 “AI가 똑똑해 보이게” 만드는 장식이 아닙니다. 시스템 상태, 변경 위치, 사용자 다음 행동을 더 잘 이해하게 만들 때만 사용합니다. 기본 duration은 짧게 유지하고, 장시간 작업은 progress와 단계 설명으로 보완합니다.</p>
+    </div>
+  </section>
+
+  <section id="ch7">
+    <div class="ch-head"><span class="ch-code">AXI-07</span><h2>결과 검토 인터랙션</h2></div>
+    <p class="lede">AX 결과물은 생성보다 검토가 중요합니다. 사용자가 결과를 믿을 수 있으려면 변경 전후, 근거, 위험, 승인 상태가 같은 화면에서 연결되어야 합니다.</p>
+    <table>
+      <tr><th>패턴</th><th>핵심 요소</th><th>검증 질문</th></tr>
+      <tr><td>diff 보기</td><td>변경 전/후, 추가/삭제, 영향 범위</td><td>사용자가 무엇이 바뀌는지 즉시 알 수 있는가</td></tr>
+      <tr><td>미리보기</td><td>preview mode, sample data, 권한별 결과</td><td>적용 전 실제 결과를 충분히 확인할 수 있는가</td></tr>
+      <tr><td>승인 큐</td><td>요청자, 변경 요약, risk level, reviewer</td><td>누가 왜 승인해야 하는지 명확한가</td></tr>
+      <tr><td>수정 요청</td><td>comment, regenerate, keep/discard 조건</td><td>기존 검토 맥락이 유지되는가</td></tr>
+      <tr><td>rollback</td><td>version, 이전 상태, 영향 알림</td><td>되돌린 뒤 성공 여부를 확인할 수 있는가</td></tr>
+    </table>
+  </section>
+
+  <section id="ch8">
+    <div class="ch-head"><span class="ch-code">AXI-08</span><h2>오류와 불확실성</h2></div>
+    <table>
+      <tr><th>상황</th><th>표현 방식</th><th>다음 행동</th></tr>
+      <tr><td>정보 부족</td><td>부족한 입력을 구체적으로 질문</td><td>필드 보완, 컨텍스트 추가</td></tr>
+      <tr><td>낮은 confidence</td><td>불확실한 항목 표시, 근거 링크</td><td>사람 검토, 비교안 선택</td></tr>
+      <tr><td>hallucination 위험</td><td>출처 없음, 추정, 검증 필요 라벨</td><td>원문 확인, 자동 적용 차단</td></tr>
+      <tr><td>권한 부족</td><td>실행 불가 이유와 요청 경로</td><td>권한 요청, 관리자 승인</td></tr>
+      <tr><td>위험 작업</td><td>영향 범위, irreversible 여부, confirmation</td><td>이중 확인, staged rollout</td></tr>
+    </table>
+  </section>
+
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">AXI-09</span><h2>접근성과 모션 안전성</h2></div>
+    <p class="lede">AX 인터랙션이 복잡해질수록 접근성은 더 중요합니다. 처리 상태, 스트리밍 결과, 승인 대기, 오류는 시각적 애니메이션만으로 전달하면 안 됩니다.</p>
+    <table>
+      <tr><th>항목</th><th>기준</th><th>확인 방법</th></tr>
+      <tr><td>Keyboard</td><td>입력, 제안 선택, 승인/반려, 중단이 키보드로 가능</td><td>Tab order, Enter/Escape 동작 확인</td></tr>
+      <tr><td>Focus</td><td>결과 생성 후 focus가 예측 가능한 위치로 이동</td><td>screen reader와 키보드 흐름 테스트</td></tr>
+      <tr><td>Status</td><td>처리 중/완료/실패가 live region 또는 명확한 text로 전달</td><td>시각 효과 제거 후 의미 유지 확인</td></tr>
+      <tr><td>Reduced motion</td><td><code>prefers-reduced-motion</code>에서 불필요한 모션 제거</td><td>OS 설정 변경 후 확인</td></tr>
+      <tr><td>Color</td><td>색상과 모션만으로 상태를 전달하지 않음</td><td>아이콘, 텍스트, 패턴 병행</td></tr>
+    </table>
+  </section>
+
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">AXI-10</span><h2>실무 패턴 라이브러리</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>AI 입력창</b><span>prompt box</span></div><div class="g-def">placeholder보다 예시 prompt, scope selector, 첨부 컨텍스트, 제출 전 영향 범위가 중요합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Prompt suggestion</b><span>starter</span></div><div class="g-def">사용자 빈 화면을 줄이되, 추천 이유와 편집 가능성을 함께 둡니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Streaming answer</b><span>progressive</span></div><div class="g-def">빠른 체감은 주지만 최종 확정 전 액션 가능 여부를 명확히 분리해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Generated content card</b><span>review</span></div><div class="g-def">결과, 근거, 출처, 수정 요청, 적용 버튼이 한 카드에서 연결되어야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Approval queue</b><span>human-in-the-loop</span></div><div class="g-def">요청자, 변경 요약, 위험도, reviewer, 만료 시점을 보여줍니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Automation status</b><span>run state</span></div><div class="g-def">running, paused, waiting approval, failed, rolled back 상태를 구분합니다.</div></div>
+    </div>
+  </section>
+
+  <section id="ch11">
+    <div class="ch-head"><span class="ch-code">AXI-11</span><h2>리뷰 체크리스트</h2></div>
+    <ul>
+      <li>사용자가 지금 AI가 무엇을 하는지 알 수 있는가.</li>
+      <li>사용자가 실행을 멈추거나 결과를 되돌릴 수 있는가.</li>
+      <li>AI 결과를 검토할 근거, 출처, diff, confidence가 있는가.</li>
+      <li>실패했을 때 입력이 보존되고 다음 행동이 보이는가.</li>
+      <li>마이크로인터랙션이 중복 실행과 불확실성을 줄이는가.</li>
+      <li>애니메이션이 상태 이해를 돕는가, 아니면 장식으로 신뢰를 흐리는가.</li>
+      <li><code>prefers-reduced-motion</code>, keyboard, focus, live status가 반영됐는가.</li>
+    </ul>
+  </section>
+
+  <section id="ch12">
+    <div class="ch-head"><span class="ch-code">AXI-12</span><h2>실전 사례</h2></div>
+    <table>
+      <tr><th>사례</th><th>핵심 인터랙션</th><th>품질 기준</th></tr>
+      <tr><td>AI 문서 요약</td><td>원문 출처, 요약 confidence, 원문 대조</td><td>출처 없는 문장은 자동 확정하지 않음</td></tr>
+      <tr><td>디자인 시안 생성</td><td>variant 비교, prompt history, 선택 이유</td><td>선택된 안과 버려진 안의 기준이 기록됨</td></tr>
+      <tr><td>업무 자동화 실행</td><td>run state, stop, retry, approval checkpoint</td><td>장시간 작업이 방치되지 않고 상태가 관측됨</td></tr>
+      <tr><td>관리자 승인 플로우</td><td>risk level, diff, reviewer comment, audit log</td><td>승인자가 변경 영향과 책임을 이해함</td></tr>
+      <tr><td>위험 작업 confirmation</td><td>대상, irreversible 여부, typed confirmation</td><td>실수 방지 마찰이 위험도에 비례함</td></tr>
+    </table>
+    <div class="serial-card">
+      <span class="sc-label">AX INTERACTION REVIEW</span>
+      Intent: 사용자가 하려는 일이 무엇인가<br>
+      State: AI가 지금 무엇을 처리 중인가<br>
+      Evidence: 결과를 검토할 근거가 있는가<br>
+      Control: 중단, 수정, 승인, rollback이 가능한가<br>
+      Motion: 애니메이션이 의미를 전달하는가
+    </div>
+  </section>
+
+  <footer>
+    AX INTERACTION DESIGN HANDBOOK · V1 · 2026-06<br>
+    PRINCIPLE : AX 인터랙션은 생성의 속도보다 신뢰, 통제, 검증을 먼저 설계한다
+  </footer>
+</main>
+</body>
+</html>

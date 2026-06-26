@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">UX-04</span>리서치 신호</a>
   <a href="#ch5"><span class="code">UX-05</span>의사결정 프레임</a>
   <a href="#ch6"><span class="code">UX-06</span>문제 정의 심화</a>
+  <a href="#ch7"><span class="code">UX-07</span>Discovery 시스템</a>
+  <a href="#ch8"><span class="code">UX-08</span>가정·리스크 매핑</a>
 </nav>
 <main>
 <header class="hero">
@@ -117,6 +119,42 @@
 [사용자 세그먼트]는 [목표]를 하려고 하지만
 [장애물] 때문에 [측정 가능한 손실]이 발생한다.
 우리는 [행동 변화]가 일어나면 문제가 개선됐다고 판단한다.</code></pre>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">UX-07</span><h2>Discovery 시스템</h2></div>
+<p class="lede">Discovery는 인터뷰 몇 번 하고 결론 내는 단계가 아닙니다. 제품이 풀 문제를 계속 갱신하기 위한 운영 시스템입니다. 정성 신호, 정량 신호, 지원 티켓, 세일즈 피드백, 사용 로그를 같은 문제 저장소로 모아야 합니다.</p>
+<table>
+<tr><th>활동</th><th>목적</th><th>좋은 산출물</th><th>나쁜 신호</th></tr>
+<tr><td>Continuous discovery</td><td>문제의 빈도와 변화 추적</td><td>주간 learnings, opportunity backlog</td><td>큰 프로젝트 전에만 리서치함</td></tr>
+<tr><td>Interview synthesis</td><td>발화가 아니라 행동 패턴 도출</td><td>quote → interpretation → opportunity</td><td>고객 말을 그대로 기능 요구로 바꿈</td></tr>
+<tr><td>Behavior analytics</td><td>규모와 반복성 확인</td><td>funnel, cohort, segment 비교</td><td>평균값만 보고 세그먼트 차이를 놓침</td></tr>
+<tr><td>Support mining</td><td>실패 언어와 예외 흐름 발견</td><td>ticket taxonomy, severity, workaround</td><td>문의량을 UX debt로 연결하지 않음</td></tr>
+<tr><td>Research repository</td><td>팀 기억을 자산화</td><td>problem evidence, decision log, invalidated assumptions</td><td>리서치 결과가 발표 자료로 끝남</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Advanced practice</span>
+<p>좋은 Discovery는 “무엇을 만들까”보다 “무엇을 더 이상 믿지 말아야 하는가”를 빠르게 업데이트합니다. 반증된 가정, 포기한 대안, 여전히 불확실한 리스크가 남아 있어야 다음 의사결정의 품질이 올라갑니다.</p>
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">UX-08</span><h2>가정·리스크 매핑</h2></div>
+<p class="lede">제품 디자인의 위험은 대부분 “사용자가 원할 것이다”, “이해할 것이다”, “운영 가능할 것이다”, “기술적으로 쉽게 될 것이다” 같은 검증되지 않은 가정에서 생깁니다. 가정은 명시하고, 위험도에 따라 검증 비용을 다르게 써야 합니다.</p>
+<table>
+<tr><th>가정 유형</th><th>질문</th><th>검증 방법</th><th>실패 신호</th></tr>
+<tr><td>Value risk</td><td>사용자가 이 문제를 충분히 중요하게 여기는가</td><td>인터뷰, willingness-to-pay, 사용 빈도</td><td>있으면 좋지만 지금 안 써도 됨</td></tr>
+<tr><td>Usability risk</td><td>사용자가 이 흐름을 이해하고 완료할 수 있는가</td><td>prototype test, first-click test, task success</td><td>설명 없이는 다음 행동을 못 찾음</td></tr>
+<tr><td>Feasibility risk</td><td>데이터, API, 권한, 성능 제약 안에서 가능한가</td><td>technical spike, contract review</td><td>디자인 상태가 시스템 상태와 맞지 않음</td></tr>
+<tr><td>Viability risk</td><td>비용, 정책, 운영 모델과 맞는가</td><td>business review, support simulation</td><td>출시 후 수동 운영 비용이 폭증</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">ASSUMPTION MAP</span>
+High impact + low confidence: 지금 검증한다<br>
+High impact + high confidence: 설계 기준으로 고정한다<br>
+Low impact + low confidence: 작은 실험으로 처리한다<br>
+Low impact + high confidence: 과도한 리서치를 피한다
 </div>
 </section>
 

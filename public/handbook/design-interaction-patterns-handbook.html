@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">INT-04</span>비동기 상태</a>
   <a href="#ch5"><span class="code">INT-05</span>패턴 선택</a>
   <a href="#ch6"><span class="code">INT-06</span>고급 인터랙션 판단</a>
+  <a href="#ch7"><span class="code">INT-07</span>분산 상태와 낙관적 UI</a>
+  <a href="#ch8"><span class="code">INT-08</span>위험 행동 인터랙션</a>
 </nav>
 <main>
 <header class="hero">
@@ -108,6 +110,41 @@
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>이메일 클라이언트의 “보내기 취소”는 실제 전송을 취소한다기보다 몇 초간 전송을 지연시키는 설계입니다. 제품은 사용자가 느끼는 통제감을 높이지만 시스템은 내부적으로 지연 큐와 상태 표시를 가져야 합니다. 인터랙션은 UI와 백엔드 처리 모델이 함께 설계될 때 안전해집니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">INT-07</span><h2>분산 상태와 낙관적 UI</h2></div>
+<p class="lede">현대 제품의 인터랙션은 브라우저 상태, 서버 상태, 캐시, 큐, 다른 사용자의 변경이 동시에 얽힙니다. 낙관적 UI는 단순히 빠르게 보이게 하는 기술이 아니라 실패와 충돌을 설계할 때만 안전합니다.</p>
+<table>
+<tr><th>상황</th><th>권장 패턴</th><th>필수 계약</th><th>차단 기준</th></tr>
+<tr><td>좋아요, 즐겨찾기</td><td>Optimistic update</td><td>실패 시 rollback, retry</td><td>사용자 손실이 큰 작업에 무조건 적용</td></tr>
+<tr><td>권한/요금 변경</td><td>Pessimistic submit</td><td>서버 확정 후 반영, audit log</td><td>실패했는데 성공처럼 보임</td></tr>
+<tr><td>협업 편집</td><td>Conflict resolution</td><td>version, merge, last saved 표시</td><td>마지막 저장자가 조용히 덮어씀</td></tr>
+<tr><td>긴 비동기 작업</td><td>Job status interaction</td><td>job id, polling/webhook, cancel</td><td>브라우저 닫으면 상태를 잃음</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">OPTIMISTIC UI CHECK</span>
+Failure probability: 실패 가능성이 낮은가<br>
+Failure cost: 실패 시 사용자 손실이 작은가<br>
+Rollback path: UI와 데이터가 되돌아갈 수 있는가<br>
+User trust: 성공처럼 보였다가 실패할 때 설명 가능한가
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">INT-08</span><h2>위험 행동 인터랙션</h2></div>
+<p class="lede">삭제, 권한 변경, 대량 적용, 배포, 결제처럼 손실이 큰 행동은 마찰을 줄이는 것보다 실수 방지와 책임 추적이 먼저입니다.</p>
+<table>
+<tr><th>위험 유형</th><th>인터랙션 장치</th><th>복구 장치</th></tr>
+<tr><td>복구 가능한 변경</td><td>undo, 변경 요약, 짧은 지연</td><td>undo window, activity log</td></tr>
+<tr><td>복구 어려운 변경</td><td>confirmation, typed phrase, 영향 범위 표시</td><td>backup, approval, support escalation</td></tr>
+<tr><td>대량 작업</td><td>sample preview, selected count, dry run</td><td>partial failure table, retry failed only</td></tr>
+<tr><td>권한/보안</td><td>reviewer approval, reason required</td><td>audit trail, revoke, incident path</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">실패 모드</span>
+<p>위험 작업에서 가장 나쁜 UI는 “확인” 버튼 하나로 사용자의 책임만 늘리고 실제 영향 범위는 보여주지 않는 것입니다. 확인은 문구가 아니라 영향 범위, 복구 가능성, 검증 결과를 함께 제시해야 의미가 있습니다.</p>
 </div>
 </section>
 

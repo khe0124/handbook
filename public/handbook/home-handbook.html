@@ -23,19 +23,21 @@
     <span>LANG : KO</span>
   </div>
   <h1>Dev Handbook</h1>
-  <p class="hero-sub">이 핸드북은 프론트엔드 기반 개발자가 <strong>면접, 개발, 인프라 운영, AX, 디자인과 실무 루프까지 연결해서 제품을 끝까지 책임지는 역량</strong>을 기르기 위한 작업 지도입니다. 대메뉴는 5개로 줄이고, 세부 문서는 각 묶음 안에서 목적별로 찾도록 정리했습니다.</p>
+  <p class="hero-sub">이 핸드북은 프론트엔드 기반 개발자가 <strong>면접, 개발, 인프라 운영, AX 실행, 디자인 실무, 반복 작업 도구까지 연결해서 제품을 끝까지 책임지는 역량</strong>을 기르기 위한 작업 지도입니다. 대메뉴는 성격이 같은 문서끼리 묶고, 각 묶음 안에서 목적별로 찾도록 정리했습니다.</p>
   <div class="hero-meta">STANCE : 개념 → 구조 → 운영 → 검증 → 실전 반복 · UPDATED 2026-06</div>
 </header>
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">HOME-01</span><h2>전체 로드맵</h2></div>
-<p class="lede">전체 흐름은 화면을 만드는 능력에서 출발해, 데이터와 시스템 경계, 배포와 운영, AI 기반 작업 루프, 제품 경험 설계로 확장됩니다.</p>
+<p class="lede">전체 흐름은 화면을 만드는 능력에서 출발해, 데이터와 시스템 경계, 배포와 운영, AX 실행 체계, 제품 경험 설계, 실무 작업 도구로 확장됩니다.</p>
 <div class="flow">
   <span class="step hl">홈</span><span class="arr">→</span>
   <span class="step">면접·커리어</span><span class="arr">→</span>
   <span class="step">개발 핸드북</span><span class="arr">→</span>
   <span class="step">인프라·운영</span><span class="arr">→</span>
-  <span class="step hl">AX·디자인·실무</span>
+  <span class="step">AX 실무</span><span class="arr">→</span>
+  <span class="step">디자인 실무</span><span class="arr">→</span>
+  <span class="step hl">실무 도구</span>
 </div>
 <table>
 <tr><th>축</th><th>핵심 질문</th><th>도달해야 할 상태</th></tr>
@@ -43,8 +45,9 @@
 <tr><td>서버와 데이터</td><td>요청, 상태, 트랜잭션, 권한이 안전하게 설계되었는가</td><td>API 계약, DB, 인증, 아키텍처, 장애 대응을 연결</td></tr>
 <tr><td>인프라 경계</td><td>패킷이 어떤 주소, 경로, 정책을 거쳐 이동하는가</td><td>VPC, 라우팅, 방화벽, DNS, VPN 문제를 설명하고 디버깅</td></tr>
 <tr><td>전달 시스템</td><td>변경이 반복 가능하고 되돌릴 수 있게 배포되는가</td><td>CI/CD, IaC, 컨테이너, 관측 가능성, 신뢰성을 운영</td></tr>
-<tr><td>작업 증폭</td><td>AI와 도구가 검증 가능한 변경을 만들도록 통제되는가</td><td>하네스, 컨텍스트, 루프, 멀티 에이전트, 거버넌스 활용</td></tr>
-<tr><td>경험 설계</td><td>기능이 실제 사용 흐름과 의사결정 구조에 맞는가</td><td>UX 사고, 정보구조, UI 패턴, 디자인 시스템을 실무에 반영</td></tr>
+<tr><td>AX 실행</td><td>AI와 도구가 검증 가능한 변경을 만들도록 통제되는가</td><td>하네스, 컨텍스트, 루프, 멀티 에이전트, 거버넌스 활용</td></tr>
+<tr><td>디자인 실무</td><td>기능이 실제 사용 흐름과 의사결정 구조에 맞는가</td><td>문제 정의, IA, user flow에서 UI 시스템, AX 인터랙션, QA까지 연결</td></tr>
+<tr><td>실무 도구</td><td>반복 작업을 빠르고 안전하게 처리하는 절차가 있는가</td><td>치트시트, 환경 설정, 빌드, 설정, 릴리스 절차를 재사용</td></tr>
 </table>
 </section>
 
@@ -56,8 +59,10 @@
 <tr><td>1</td><td>면접·커리어</td><td>기술면접 답변, 프로젝트 설명, 직무별 포지셔닝 정리</td><td>대표 질문 하나를 30초·90초 답변과 꼬리질문으로 녹음</td></tr>
 <tr><td>2</td><td>개발 핸드북</td><td>프론트엔드와 백엔드의 화면·API·DB·보안 경계 이해</td><td>기능 하나를 UI 상태, API 계약, 트랜잭션, 실패 응답까지 설계</td></tr>
 <tr><td>3</td><td>인프라·운영</td><td>네트워크 경로, 배포, 관측, 장애 대응의 기본기 확보</td><td>서비스 요청이 브라우저에서 서버까지 가는 경로와 배포 후 확인 절차를 설명</td></tr>
-<tr><td>4</td><td>AX·디자인·실무</td><td>AI 작업 루프, 제품 경험 설계, 반복 실무 절차를 함께 운영</td><td>작업 하나를 Plan → Act → Verify → Reflect episode와 UI 검증 체크리스트로 기록</td></tr>
-<tr><td>5</td><td>홈</td><td>전체 흐름을 다시 보고 다음 학습 경로 선택</td><td>이번 주 작업에 필요한 세부 문서 2개를 연결해 읽기</td></tr>
+<tr><td>4</td><td>AX 실무</td><td>AI 작업을 검증 가능한 실행 루프와 거버넌스로 통제</td><td>작업 하나를 Plan → Act → Verify → Reflect episode로 기록</td></tr>
+<tr><td>5</td><td>디자인 실무</td><td>문제 정의·IA·Flow와 Layout·Form·Component·System·QA를 연결</td><td>핵심 흐름 하나를 IA, user flow, interaction checklist, QA gate로 검증</td></tr>
+<tr><td>6</td><td>실무 도구</td><td>치트시트, 환경 설정, 빌드·릴리스 절차를 작업 루프로 정리</td><td>반복 명령과 리뷰 체크리스트를 프로젝트 runbook에 반영</td></tr>
+<tr><td>7</td><td>홈</td><td>전체 흐름을 다시 보고 다음 학습 경로 선택</td><td>이번 주 작업에 필요한 세부 문서 2개를 연결해 읽기</td></tr>
 </table>
 </section>
 
@@ -68,7 +73,9 @@
 <div class="g-row"><div class="g-term"><b>면접·커리어</b><span>interview & positioning</span></div><div class="g-def">기술면접, 프로젝트 심층 답변, 컬처·압박 대응, 개인화 포지셔닝을 한곳에 묶었습니다. 면접 준비와 직무별 답변 조정은 여기서 시작합니다.</div></div>
 <div class="g-row"><div class="g-term"><b>개발 핸드북</b><span>product engineering</span></div><div class="g-def">프론트엔드와 백엔드를 함께 다룹니다. 브라우저, UI 품질, API, DB, 인증·인가, 아키텍처, 백엔드 예시를 제품 개발의 한 흐름으로 봅니다.</div></div>
 <div class="g-row"><div class="g-term"><b>인프라·운영</b><span>delivery & reliability</span></div><div class="g-def">네트워크 인프라와 DevOps를 묶었습니다. 요청 경로, VPC, DNS, VPN, CI/CD, 컨테이너, 관측 가능성, 장애 대응을 한 운영 흐름으로 정리합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>AX·디자인·실무</b><span>execution system</span></div><div class="g-def">AX, 디자인, Cheat Sheet, 실무 가이드를 묶었습니다. AI 작업 루프, 경험 설계, 빠른 참조표, 환경 설정과 배포 절차처럼 반복 작업을 처리합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>AX 실무</b><span>ai execution</span></div><div class="g-def">AI 작업을 조직, 자동화, 컨텍스트, 하네스, 루프, 거버넌스 관점으로 관리합니다. 생성 결과보다 검증 가능한 실행 체계를 다룹니다.</div></div>
+<div class="g-row"><div class="g-term"><b>디자인 실무</b><span>product experience</span></div><div class="g-def">문제 정의, 정보구조, 사용자 흐름을 먼저 잡고 레이아웃, 인터랙션, 폼, 컴포넌트, 디자인 시스템, AX 인터랙션, 접근성, QA로 실행 품질을 검증합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>실무 도구</b><span>working tools</span></div><div class="g-def">치트시트, 환경 설정, 빌드, 설정, DB 시딩, CI/CD, 로그처럼 매일 반복하는 작업 절차를 빠르게 찾는 메뉴입니다.</div></div>
 </div>
 </section>
 
@@ -79,7 +86,7 @@
 <tr><th>상황</th><th>사용 방식</th><th>남길 산출물</th></tr>
 <tr><td>새 기능 시작</td><td>관련 메뉴의 개요와 실패 모드를 먼저 읽고 범위를 정한다</td><td>요구사항, 비목표, 수용 기준, 리스크 목록</td></tr>
 <tr><td>설계 판단</td><td>각 메뉴의 트레이드오프 표를 보고 선택 근거를 적는다</td><td>ADR, API 계약, 데이터 모델, 운영 가정</td></tr>
-<tr><td>구현 중</td><td>개발 핸드북의 백엔드 예시와 AX·디자인·실무의 절차 문서를 참고한다</td><td>작은 diff, 테스트, 검증 로그</td></tr>
+<tr><td>구현 중</td><td>개발 핸드북의 예시, AX 실무의 루프, 디자인 실무의 상태 기준, 실무 도구의 명령어를 참고한다</td><td>작은 diff, 테스트, 검증 로그</td></tr>
 <tr><td>리뷰 전</td><td>보안, 접근성, 성능, 관측 가능성, 배포 위험을 점검한다</td><td>리뷰 체크리스트, 남은 리스크, 롤백 방법</td></tr>
 <tr><td>장애·버그</td><td>네트워크, 백엔드, 프론트엔드, DevOps 문서를 따라 계층별로 좁힌다</td><td>재현 조건, 원인 가설, 검증 결과, 재발 방지책</td></tr>
 </table>

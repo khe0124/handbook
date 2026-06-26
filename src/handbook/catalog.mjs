@@ -157,9 +157,10 @@ export const DESIGN_HANDBOOKS = [
   { id: "design-forms-input", label: "06 폼과 입력 경험", kind: "디자인 핸드북", file: "design-forms-input-handbook.html" },
   { id: "design-component-patterns", label: "07 컴포넌트 패턴", kind: "디자인 핸드북", file: "design-component-patterns-handbook.html" },
   { id: "design-system-tokens", label: "08 디자인 시스템과 토큰", kind: "디자인 핸드북", file: "design-system-tokens-handbook.html" },
-  { id: "design-accessibility-inclusive", label: "09 접근성과 인클루시브 디자인", kind: "디자인 핸드북", file: "design-accessibility-inclusive-handbook.html" },
-  { id: "design-prototyping-testing", label: "10 프로토타입과 사용성 테스트", kind: "디자인 핸드북", file: "design-prototyping-testing-handbook.html" },
-  { id: "design-handoff-qa", label: "11 디자인 핸드오프와 QA", kind: "디자인 핸드북", file: "design-handoff-qa-handbook.html" },
+  { id: "design-ax-interaction-motion", label: "09 AX 인터랙션·마이크로인터랙션", kind: "디자인 핸드북", file: "design-ax-interaction-motion-handbook.html" },
+  { id: "design-accessibility-inclusive", label: "10 접근성과 인클루시브 디자인", kind: "디자인 핸드북", file: "design-accessibility-inclusive-handbook.html" },
+  { id: "design-prototyping-testing", label: "11 프로토타입과 사용성 테스트", kind: "디자인 핸드북", file: "design-prototyping-testing-handbook.html" },
+  { id: "design-handoff-qa", label: "12 디자인 핸드오프와 QA", kind: "디자인 핸드북", file: "design-handoff-qa-handbook.html" },
 ];
 
 export const CHEAT_SHEETS = [
@@ -187,15 +188,21 @@ export const PRACTICAL_GUIDES = [
   { id: "logs-tooling", label: "09 로그·커스텀 명령", kind: "실무 가이드", file: "logs-tooling-guide.html" },
 ];
 
+export const AX_PRACTICE_HANDBOOKS = [
+  { id: "practice-ax-foundation", label: "00 AX 기반·조직 적용", kind: "AX 실무", file: "practice-ax-foundation-handbook.html" },
+  { id: "practice-ax-workflow", label: "01 AX 실행 루프·자동화", kind: "AX 실무", file: "practice-ax-workflow-handbook.html" },
+  { id: "practice-ax-scale-governance", label: "02 AX 확장·거버넌스", kind: "AX 실무", file: "practice-ax-scale-governance-handbook.html" },
+];
+
+export const DESIGN_PRACTICE_HANDBOOKS = [
+  { id: "practice-design-foundation", label: "00 디자인 기반·사용자 흐름", kind: "디자인 실무", file: "practice-design-foundation-handbook.html" },
+  { id: "practice-design-systems", label: "01 디자인 실행·시스템 품질", kind: "디자인 실무", file: "practice-design-systems-handbook.html" },
+];
+
 export const PRACTICE_HANDBOOKS = [
-  { id: "practice-ax-foundation", label: "00 AX 기반·조직 적용", kind: "AX·디자인·실무", file: "practice-ax-foundation-handbook.html" },
-  { id: "practice-ax-workflow", label: "01 AX 실행 루프·자동화", kind: "AX·디자인·실무", file: "practice-ax-workflow-handbook.html" },
-  { id: "practice-ax-scale-governance", label: "02 AX 확장·거버넌스", kind: "AX·디자인·실무", file: "practice-ax-scale-governance-handbook.html" },
-  { id: "practice-design-foundation", label: "03 디자인 기반·사용자 흐름", kind: "AX·디자인·실무", file: "practice-design-foundation-handbook.html" },
-  { id: "practice-design-systems", label: "04 디자인 실행·시스템 품질", kind: "AX·디자인·실무", file: "practice-design-systems-handbook.html" },
-  { id: "practice-cheat-sheets", label: "05 실무 치트시트 모음", kind: "AX·디자인·실무", file: "practice-cheat-sheets-handbook.html" },
-  { id: "practice-workflow-setup", label: "06 실무 준비·작업 루프", kind: "AX·디자인·실무", file: "practice-workflow-setup-handbook.html" },
-  { id: "practice-build-release", label: "07 빌드·설정·릴리스 운영", kind: "AX·디자인·실무", file: "practice-build-release-handbook.html" },
+  { id: "practice-cheat-sheets", label: "00 실무 치트시트 모음", kind: "실무 도구", file: "practice-cheat-sheets-handbook.html" },
+  { id: "practice-workflow-setup", label: "01 실무 준비·작업 루프", kind: "실무 도구", file: "practice-workflow-setup-handbook.html" },
+  { id: "practice-build-release", label: "02 빌드·설정·릴리스 운영", kind: "실무 도구", file: "practice-build-release-handbook.html" },
 ];
 
 export const HANDBOOK_GROUPS = [
@@ -203,7 +210,9 @@ export const HANDBOOK_GROUPS = [
   { key: "career", label: "면접·커리어", items: CAREER_HANDBOOKS },
   { key: "engineering", label: "개발 핸드북", items: ENGINEERING_HANDBOOKS },
   { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
-  { key: "practice", label: "AX·디자인·실무", items: PRACTICE_HANDBOOKS },
+  { key: "ax", label: "AX 실무", items: AX_PRACTICE_HANDBOOKS },
+  { key: "design", label: "디자인 실무", items: DESIGN_PRACTICE_HANDBOOKS },
+  { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
 ];
 
 export const HANDBOOK_ITEMS = [
@@ -211,6 +220,8 @@ export const HANDBOOK_ITEMS = [
   ...CAREER_HANDBOOKS,
   ...ENGINEERING_HANDBOOKS,
   ...OPERATIONS_HANDBOOKS,
+  ...AX_PRACTICE_HANDBOOKS,
+  ...DESIGN_PRACTICE_HANDBOOKS,
   ...PRACTICE_HANDBOOKS,
 ];
 

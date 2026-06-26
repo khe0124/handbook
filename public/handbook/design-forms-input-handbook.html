@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">FORM-04</span>복잡한 폼</a>
   <a href="#ch5"><span class="code">FORM-05</span>체크리스트</a>
   <a href="#ch6"><span class="code">FORM-06</span>실무 폼 설계 심화</a>
+  <a href="#ch7"><span class="code">FORM-07</span>데이터 계약과 오류 모델</a>
+  <a href="#ch8"><span class="code">FORM-08</span>고위험 입력과 감사</a>
 </nav>
 <main>
 <header class="hero">
@@ -100,6 +102,35 @@
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>사업자 등록 폼에서 모든 오류를 제출 후 한 번에 보여주면 사용자는 긴 폼을 다시 훑어야 합니다. 형식 오류는 필드 단에서 즉시, 사업자번호 중복은 서버 검증 후, 제출 실패는 상단 요약과 첫 오류 focus 이동을 함께 제공해야 복구 시간이 줄어듭니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FORM-07</span><h2>데이터 계약과 오류 모델</h2></div>
+<p class="lede">고급 폼 설계는 필드 배치가 아니라 데이터 계약 설계입니다. 프론트 validation, 서버 validation, 비즈니스 rule, 권한 오류, 동시 수정 충돌이 사용자에게 어떻게 드러나는지 정의해야 합니다.</p>
+<table>
+<tr><th>오류 유형</th><th>예시</th><th>UI 표현</th><th>API 계약</th></tr>
+<tr><td>Field error</td><td>이메일 형식, 필수값 누락</td><td>필드 하단 메시지와 focus 이동</td><td>field, code, message</td></tr>
+<tr><td>Cross-field error</td><td>종료일이 시작일보다 빠름</td><td>관련 필드 그룹에 표시</td><td>fields[], rule code</td></tr>
+<tr><td>Business error</td><td>이미 사용 중인 이름, 한도 초과</td><td>해결 행동과 대안 제시</td><td>reason, recoverable, suggestion</td></tr>
+<tr><td>Permission error</td><td>권한 만료, 승인 필요</td><td>권한 요청 또는 관리자 안내</td><td>required permission, request path</td></tr>
+<tr><td>Conflict</td><td>다른 사용자가 먼저 수정</td><td>변경 비교, 덮어쓰기/새로고침 선택</td><td>version, latest snapshot</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">FORM-08</span><h2>고위험 입력과 감사</h2></div>
+<p class="lede">권한, 결제, 배포, 개인정보, 보안 설정 폼은 일반 입력과 다르게 설계합니다. 사용자가 값을 입력할 수 있는가보다 변경 영향과 책임을 이해하고 승인했는지가 중요합니다.</p>
+<table>
+<tr><th>요구</th><th>설계 패턴</th><th>검증 기준</th></tr>
+<tr><td>영향 범위</td><td>변경 전/후 diff, affected users/resources</td><td>사용자가 무엇이 바뀌는지 설명 가능</td></tr>
+<tr><td>승인</td><td>reviewer, reason required, approval status</td><td>누가 왜 승인했는지 추적 가능</td></tr>
+<tr><td>감사</td><td>audit log, timestamp, actor, previous value</td><td>사후 조사에서 변경 맥락 확인 가능</td></tr>
+<tr><td>복구</td><td>rollback, revoke, version restore</td><td>잘못된 변경의 복구 시간이 명확</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">고위험 폼 기준</span>
+<p>고위험 폼에서는 “저장” 버튼보다 변경 요약, 영향 범위, 감사 로그, 복구 경로가 더 중요합니다. 단순히 confirmation modal을 추가하는 것은 충분한 안전장치가 아닙니다.</p>
 </div>
 </section>
 

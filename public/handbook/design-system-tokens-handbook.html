@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">SYS-04</span>운영 모델</a>
   <a href="#ch5"><span class="code">SYS-05</span>성숙도</a>
   <a href="#ch6"><span class="code">SYS-06</span>토큰 파이프라인과 거버넌스</a>
+  <a href="#ch7"><span class="code">SYS-07</span>멀티 브랜드·테마 전략</a>
+  <a href="#ch8"><span class="code">SYS-08</span>시스템 지표와 ROI</a>
 </nav>
 <main>
 <header class="hero">
@@ -106,6 +108,34 @@ radius.control</code></pre>
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>다크 모드를 추가할 때 hex 색상을 화면별로 바꾸면 유지보수가 불가능해집니다. semantic token을 먼저 정의하고 component token이 이를 참조하게 만들면 테마 전환은 매핑 변경으로 처리되고, contrast 검증도 파이프라인에서 반복할 수 있습니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">SYS-07</span><h2>멀티 브랜드·테마 전략</h2></div>
+<p class="lede">토큰 시스템의 전문성은 다크 모드나 브랜드 색상 변경에서 드러납니다. primitive 값을 직접 화면에 쓰면 테마 확장이 불가능하고, semantic token을 통해 의미를 유지해야 합니다.</p>
+<table>
+<tr><th>전략</th><th>설명</th><th>적합한 상황</th><th>위험</th></tr>
+<tr><td>Single theme</td><td>하나의 브랜드와 모드만 운영</td><td>초기 제품, 내부 도구</td><td>나중에 확장 시 hard-coded style 부채</td></tr>
+<tr><td>Mode theme</td><td>light/dark/high contrast를 semantic token으로 전환</td><td>장시간 사용, 접근성 요구</td><td>contrast 자동 검증 없으면 회귀 발생</td></tr>
+<tr><td>Brand theme</td><td>브랜드별 alias mapping</td><td>화이트라벨, 멀티 제품</td><td>브랜드별 예외가 component token을 오염</td></tr>
+<tr><td>Density theme</td><td>compact/comfortable spacing과 typography</td><td>업무형 UI와 일반 UI 병행</td><td>동일 컴포넌트의 정보 구조가 깨질 수 있음</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">SYS-08</span><h2>시스템 지표와 ROI</h2></div>
+<p class="lede">디자인 시스템은 미학 프로젝트가 아니라 제품 인프라입니다. 따라서 채택률, 리드타임, 회귀 감소, 접근성 품질처럼 운영 지표로 가치를 증명해야 합니다.</p>
+<table>
+<tr><th>지표</th><th>의미</th><th>측정 방법</th><th>개선 액션</th></tr>
+<tr><td>Adoption rate</td><td>제품 화면이 시스템 컴포넌트를 쓰는 비율</td><td>코드 검색, design audit</td><td>migration guide, codemod, 교육</td></tr>
+<tr><td>Design-dev parity</td><td>Figma와 코드가 같은 상태/variant를 갖는지</td><td>component inventory diff</td><td>variant 정리, Storybook 문서화</td></tr>
+<tr><td>Lead time</td><td>반복 UI 제작 속도</td><td>디자인/개발 cycle time</td><td>패턴 문서와 템플릿 보강</td></tr>
+<tr><td>Quality defects</td><td>접근성, 반응형, 상태 누락 버그</td><td>QA ticket taxonomy</td><td>컴포넌트 내부 품질 기준 강화</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">System ROI</span>
+<p>시스템 지표는 “얼마나 예쁜가”가 아니라 제품팀이 더 적은 의사결정으로 더 일관된 품질을 낼 수 있는지를 보여줘야 합니다. 채택되지 않는 시스템은 존재해도 효과가 없습니다.</p>
 </div>
 </section>
 

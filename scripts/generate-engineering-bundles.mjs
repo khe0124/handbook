@@ -296,14 +296,17 @@ const BUNDLES = [
     navBrand: "PRACTICE · DESIGN SYSTEMS",
     navTitle: "디자인 실행 · UI 시스템과 QA",
     title: "디자인 실행과 시스템 품질",
-    subtitle: "UI 레이아웃, 인터랙션, 폼, 컴포넌트, 디자인 시스템, 접근성, 프로토타입, 핸드오프를 통합했습니다.",
-    scope: "UI · INTERACTION · SYSTEM · QA",
+    subtitle: "UI 레이아웃, 인터랙션, 폼, 컴포넌트, 디자인 시스템, AX 인터랙션, 접근성, 프로토타입, 핸드오프를 통합했습니다.",
+    scope: "UI · INTERACTION · AX MOTION · SYSTEM · QA",
+    compactNav: true,
+    indexDescription: "디자인 실행 문서는 세부 항목이 많으므로 왼쪽 목차는 문서 단위로 압축했습니다. 레이아웃과 인터랙션에서 시작해 폼, 컴포넌트, 시스템, AX, 접근성, 검증, 핸드오프 순서로 읽습니다.",
     sources: [
       { prefix: "designlayout", label: "UI 레이아웃과 시각 위계", file: "design-layout-hierarchy-handbook.html" },
       { prefix: "designinteraction", label: "인터랙션 디자인 패턴", file: "design-interaction-patterns-handbook.html" },
       { prefix: "designforms", label: "폼과 입력 경험", file: "design-forms-input-handbook.html" },
       { prefix: "designcomponents", label: "컴포넌트 패턴", file: "design-component-patterns-handbook.html" },
       { prefix: "designtokens", label: "디자인 시스템과 토큰", file: "design-system-tokens-handbook.html" },
+      { prefix: "designaxmotion", label: "AX 인터랙션·마이크로인터랙션", file: "design-ax-interaction-motion-handbook.html" },
       { prefix: "designa11y", label: "접근성과 인클루시브 디자인", file: "design-accessibility-inclusive-handbook.html" },
       { prefix: "designprototype", label: "프로토타입과 사용성 테스트", file: "design-prototyping-testing-handbook.html" },
       { prefix: "designhandoff", label: "디자인 핸드오프와 QA", file: "design-handoff-qa-handbook.html" },
@@ -414,6 +417,9 @@ function sourceJumpNav(sources) {
 function bundleIntro(bundle) {
   const sourceList = bundle.sources.map((source) => `<li>${source.label}</li>`).join("");
   const isCareer = bundle.id.startsWith("career-");
+  const defaultDescription = isCareer
+    ? "이 문서는 아래 원문을 면접 학습 흐름에 맞게 이어 읽도록 구성했습니다. 각 파트는 개념 이해, 압박 질문, 답변 근거를 확인하는 기준점으로 사용합니다."
+    : "아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.";
 
   return `<header class="hero">
   <div class="hero-serial">
@@ -428,7 +434,7 @@ function bundleIntro(bundle) {
 
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>${isCareer ? "학습 로드맵" : "통합 문서"}</h2></div>
-<p class="lede">${isCareer ? "이 문서는 아래 원문을 면접 학습 흐름에 맞게 이어 읽도록 구성했습니다. 각 파트는 개념 이해, 압박 질문, 답변 근거를 확인하는 기준점으로 사용합니다." : "아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다."}</p>
+<p class="lede">${bundle.indexDescription ?? defaultDescription}</p>
 <ul>${sourceList}</ul>
 </section>`;
 }
@@ -462,8 +468,10 @@ for (const bundle of BUNDLES) {
       ? stripNestedPageChrome(removeDomainSpecificCareerTerms(prefixAnchors(extractRegion(html, "main"), source.prefix)))
       : prefixAnchors(extractRegion(html, "main"), source.prefix);
 
-    navParts.push(`  <a href="#doc-${source.prefix}"><span class="code">${isCareer ? "PART" : "SRC"}</span>${source.label}</a>`);
-    navParts.push(nav);
+    if (!bundle.compactNav) {
+      navParts.push(`  <a href="#doc-${source.prefix}"><span class="code">${isCareer ? "PART" : "SRC"}</span>${source.label}</a>`);
+      navParts.push(nav);
+    }
     mainParts.push(sourceDivider(source, isCareer));
     mainParts.push(main);
   }

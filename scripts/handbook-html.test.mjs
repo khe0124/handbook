@@ -77,7 +77,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "career", "engineering", "operations", "practice"],
+    ["home", "career", "engineering", "operations", "ax", "design", "practice"],
   );
 
   const labels = [
@@ -87,18 +87,24 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
 
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
+  const axGroup = HANDBOOK_GROUPS.find((group) => group.key === "ax");
+  const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
   assert.equal(HANDBOOK_ITEMS.length, 38);
   assert.equal(careerGroup?.items.length, 8);
   assert.equal(engineeringGroup?.items.length, 8);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
-  assert.equal(practiceGroup?.items.length, 8);
+  assert.equal(axGroup?.items.length, 3);
+  assert.equal(designGroup?.items.length, 2);
+  assert.equal(practiceGroup?.items.length, 3);
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("면접·커리어"));
   assert.ok(labels.includes("개발 핸드북"));
   assert.ok(labels.includes("인프라·운영"));
-  assert.ok(labels.includes("AX·디자인·실무"));
+  assert.ok(labels.includes("AX 실무"));
+  assert.ok(labels.includes("디자인 실무"));
+  assert.ok(labels.includes("실무 도구"));
   assert.ok(labels.includes("00 면접 전략·커리어 포지셔닝"));
   assert.ok(labels.includes("01 프론트엔드·JS/TS 면접"));
   assert.ok(labels.includes("02 백엔드·Java/Spring 면접"));
@@ -120,11 +126,11 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("00 AX 기반·조직 적용"));
   assert.ok(labels.includes("01 AX 실행 루프·자동화"));
   assert.ok(labels.includes("02 AX 확장·거버넌스"));
-  assert.ok(labels.includes("03 디자인 기반·사용자 흐름"));
-  assert.ok(labels.includes("04 디자인 실행·시스템 품질"));
-  assert.ok(labels.includes("05 실무 치트시트 모음"));
-  assert.ok(labels.includes("06 실무 준비·작업 루프"));
-  assert.ok(labels.includes("07 빌드·설정·릴리스 운영"));
+  assert.ok(labels.includes("00 디자인 기반·사용자 흐름"));
+  assert.ok(labels.includes("01 디자인 실행·시스템 품질"));
+  assert.ok(labels.includes("00 실무 치트시트 모음"));
+  assert.ok(labels.includes("01 실무 준비·작업 루프"));
+  assert.ok(labels.includes("02 빌드·설정·릴리스 운영"));
   assert.ok(labels.includes("00 인프라·운영 로드맵"));
   assert.ok(labels.includes("01 서비스 요청 경로"));
   assert.ok(labels.includes("02 VPC·Subnet·Routing·NAT"));
@@ -299,9 +305,11 @@ test("engineering handbook menu consolidates all source documents into eight ite
   }
 });
 
-test("practice menu consolidates AX, design, cheat sheets, and guides into eight items", async () => {
+test("AX, design, and practical tool menus group consistent handbook bundles", async () => {
+  const axGroup = HANDBOOK_GROUPS.find((group) => group.key === "ax");
+  const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
-  const bundles = [
+  const axBundles = [
     {
       file: "practice-ax-foundation-handbook.html",
       sources: ["AX 개요", "AX 엔지니어 역량 모델", "AX 조직 적용 패턴"],
@@ -317,6 +325,8 @@ test("practice menu consolidates AX, design, cheat sheets, and guides into eight
       sources: ["Multi-Agent Workflow", "검증과 평가", "AI Governance & Security", "AX 실전 적용 사례", "AX 실무 플레이북"],
       evidence: ["Adversarial Verification", "Prompt Injection", "2-WEEK AX AUTOMATION SPRINT"],
     },
+  ];
+  const designBundles = [
     {
       file: "practice-design-foundation-handbook.html",
       sources: ["디자인 개요", "UX 사고와 문제 정의", "정보구조와 내비게이션", "사용자 흐름과 태스크 설계"],
@@ -324,9 +334,11 @@ test("practice menu consolidates AX, design, cheat sheets, and guides into eight
     },
     {
       file: "practice-design-systems-handbook.html",
-      sources: ["UI 레이아웃과 시각 위계", "인터랙션 디자인 패턴", "폼과 입력 경험", "컴포넌트 패턴", "디자인 시스템과 토큰", "접근성과 인클루시브 디자인", "프로토타입과 사용성 테스트", "디자인 핸드오프와 QA"],
-      evidence: ["시각 위계", "Design Token", "핸드오프"],
+      sources: ["UI 레이아웃과 시각 위계", "인터랙션 디자인 패턴", "폼과 입력 경험", "컴포넌트 패턴", "디자인 시스템과 토큰", "AX 인터랙션·마이크로인터랙션", "접근성과 인클루시브 디자인", "프로토타입과 사용성 테스트", "디자인 핸드오프와 QA"],
+      evidence: ["시각 위계", "Design Token", "핸드오프", "human-in-the-loop", "prefers-reduced-motion"],
     },
+  ];
+  const practiceBundles = [
     {
       file: "practice-cheat-sheets-handbook.html",
       sources: ["Frontend", "Backend", "Database", "Network", "DevOps", "Linux", "Docker", "Interview", "Tools·Shortcuts·Commands"],
@@ -343,11 +355,22 @@ test("practice menu consolidates AX, design, cheat sheets, and guides into eight
       evidence: ["Gradle", "패키지·버전 매니저", "CI/CD"],
     },
   ];
+  const bundles = [...axBundles, ...designBundles, ...practiceBundles];
 
-  assert.equal(practiceGroup?.items.length, 8);
+  assert.equal(axGroup?.items.length, 3);
+  assert.equal(designGroup?.items.length, 2);
+  assert.equal(practiceGroup?.items.length, 3);
+  assert.deepEqual(
+    axGroup?.items.map((item) => item.file),
+    axBundles.map((bundle) => bundle.file),
+  );
+  assert.deepEqual(
+    designGroup?.items.map((item) => item.file),
+    designBundles.map((bundle) => bundle.file),
+  );
   assert.deepEqual(
     practiceGroup?.items.map((item) => item.file),
-    bundles.map((bundle) => bundle.file),
+    practiceBundles.map((bundle) => bundle.file),
   );
 
   for (const bundle of bundles) {
@@ -438,11 +461,21 @@ test("README describes the handbook project instead of the Vite template", async
 });
 
 test("each public handbook nav links all main sections", async () => {
+  const compactNavFiles = new Set(["practice-design-systems-handbook.html"]);
+
   for (const item of HANDBOOK_ITEMS) {
     const html = await readFile(path.join("public", "handbook", item.file), "utf8");
     const { navHtml, mainHtml } = extractHandbookDocument(html);
     const navTargets = new Set([...navHtml.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]));
     const sectionIds = new Set([...mainHtml.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map((match) => match[1]));
+
+    if (compactNavFiles.has(item.file)) {
+      for (const target of navTargets) {
+        assert.ok(sectionIds.has(target), `${item.file} nav target ${target} should point to a main section`);
+      }
+      assert.ok(navTargets.size < sectionIds.size, `${item.file} should keep a compact document-level nav`);
+      continue;
+    }
 
     assert.deepEqual(
       [...navTargets].sort(),
@@ -520,7 +553,9 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /면접·커리어/);
   assert.match(homeSource, /개발 핸드북/);
   assert.match(homeSource, /인프라·운영/);
-  assert.match(homeSource, /AX·디자인·실무/);
+  assert.match(homeSource, /AX 실무/);
+  assert.match(homeSource, /디자인 실무/);
+  assert.match(homeSource, /실무 도구/);
   assert.match(homeSource, /프론트엔드/);
   assert.match(homeSource, /백엔드/);
   assert.match(homeSource, /네트워크 인프라/);
@@ -528,7 +563,7 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /AX/);
   assert.match(homeSource, /디자인/);
   assert.match(homeSource, /백엔드 예시/);
-  assert.match(homeSource, /Cheat Sheet/);
+  assert.match(homeSource, /치트시트/);
   assert.match(homeSource, /Plan → Act → Verify → Reflect/);
   assert.doesNotMatch(homeSource, /시니어급 성장/);
 });
@@ -1254,9 +1289,7 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
     readFile("public/handbook/ax-practical-playbook-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
-  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "practice").items
-    .filter((item) => item.id.startsWith("practice-ax-"))
-    .map((item) => item.label);
+  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "ax").items.map((item) => item.label);
 
   assert.deepEqual(axLabels, [
     "00 AX 기반·조직 적용",
@@ -1481,6 +1514,7 @@ test("design handbook includes practical senior-level product design guidance", 
     readFile("public/handbook/design-accessibility-inclusive-handbook.html", "utf8"),
     readFile("public/handbook/design-prototyping-testing-handbook.html", "utf8"),
     readFile("public/handbook/design-handoff-qa-handbook.html", "utf8"),
+    readFile("public/handbook/design-ax-interaction-motion-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
 
@@ -1500,6 +1534,34 @@ test("design handbook includes practical senior-level product design guidance", 
   assert.match(source, /component adoption/);
   assert.match(source, /System Usability Scale/);
   assert.match(source, /visual diff/);
+  assert.match(source, /DESIGN CRITIQUE TEMPLATE/);
+  assert.match(source, /ASSUMPTION MAP/);
+  assert.match(source, /Taxonomy governance/);
+  assert.match(source, /STATE TRANSITION SPEC/);
+  assert.match(source, /Information density|정보 밀도/);
+  assert.match(source, /OPTIMISTIC UI CHECK/);
+  assert.match(source, /데이터 계약과 오류 모델/);
+  assert.match(source, /Headless component/);
+  assert.match(source, /System ROI/);
+  assert.match(source, /DESIGN DEBT TRIAGE/);
+  assert.match(source, /마이크로인터랙션/);
+  assert.match(source, /human-in-the-loop/);
+  assert.match(source, /prefers-reduced-motion/);
+  assert.match(source, /Streaming answer/);
+  assert.match(source, /AX INTERACTION REVIEW/);
+});
+
+test("design practice navigation follows the intended learning order", async () => {
+  const [overview, systems] = await Promise.all([
+    readFile("public/handbook/design-handbook.html", "utf8"),
+    readFile("public/handbook/practice-design-systems-handbook.html", "utf8"),
+  ]);
+
+  assert.ok(overview.indexOf("제품 디자인 의사결정 프레임") < overview.indexOf("학습 순서"));
+  assert.ok(systems.indexOf("폼과 입력 경험") < systems.indexOf("AX 인터랙션·마이크로인터랙션"));
+  assert.ok(systems.indexOf("AX 인터랙션·마이크로인터랙션") < systems.indexOf("접근성과 인클루시브 디자인"));
+  assert.match(systems, /왼쪽 목차는 문서 단위로 압축했습니다/);
+  assert.doesNotMatch(systems.match(/<nav aria-label="목차">[\s\S]*?<\/nav>/)?.[0] ?? "", /designforms-ch1/);
 });
 
 test("serial cards expose lucide-powered copy buttons", async () => {

@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">CMP-04</span>복합 패턴</a>
   <a href="#ch5"><span class="code">CMP-05</span>API 관점</a>
   <a href="#ch6"><span class="code">CMP-06</span>컴포넌트 품질과 채택</a>
+  <a href="#ch7"><span class="code">CMP-07</span>Headless·Compound 패턴</a>
+  <a href="#ch8"><span class="code">CMP-08</span>제품 컴포넌트 거버넌스</a>
 </nav>
 <main>
 <header class="hero">
@@ -106,6 +108,37 @@
 <span class="co-label">Case study</span>
 <p>버튼 컴포넌트에 size, color, radius, shadow, iconPosition 조합을 모두 열어두면 제품팀은 시스템을 쓰면서도 각자 다른 UI를 만듭니다. 반대로 primary, secondary, danger, quiet처럼 의미 중심 variant를 제한하고 사용 예시를 문서화하면 디자인 QA와 코드 리뷰가 훨씬 명확해집니다.</p>
 </div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">CMP-07</span><h2>Headless·Compound 패턴</h2></div>
+<p class="lede">컴포넌트가 커질수록 prop을 계속 늘리는 방식은 한계가 옵니다. 복잡한 제품 UI는 behavior, accessibility, state는 재사용하되 layout composition은 열어두는 패턴이 필요합니다.</p>
+<table>
+<tr><th>패턴</th><th>쓸 때</th><th>장점</th><th>주의점</th></tr>
+<tr><td>Headless component</td><td>동작과 접근성은 같고 UI 표현이 다양할 때</td><td>behavior 재사용, 시각 자유도</td><td>디자인 일관성 가드가 약해질 수 있음</td></tr>
+<tr><td>Compound component</td><td>Modal, Tabs, Select처럼 하위 구조가 있는 컴포넌트</td><td>명확한 composition, slot 의미 보존</td><td>문서와 예시 없으면 사용 난이도 증가</td></tr>
+<tr><td>Controlled component</td><td>외부 상태와 URL, form library가 상태를 소유할 때</td><td>복잡한 흐름과 동기화 가능</td><td>상태 소유권이 불명확하면 버그 증가</td></tr>
+<tr><td>Uncontrolled component</td><td>단순 입력이나 독립 UI 상태</td><td>사용이 쉬움</td><td>서버 상태/폼 상태와 연결 시 한계</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">COMPONENT DECISION</span>
+Primitive: button, input처럼 낮은 수준인가<br>
+Pattern: table, command menu처럼 업무 흐름을 포함하는가<br>
+Product component: billing plan selector처럼 도메인 규칙을 포함하는가<br>
+Ownership: 디자인 시스템팀, 제품팀, 플랫폼팀 중 누가 소유하는가
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">CMP-08</span><h2>제품 컴포넌트 거버넌스</h2></div>
+<p class="lede">전문적인 컴포넌트 시스템은 “만들어두면 쓰겠지”로 운영되지 않습니다. 채택, 예외, deprecation, migration을 관리해야 제품 전체의 UI 부채를 줄일 수 있습니다.</p>
+<table>
+<tr><th>운영 항목</th><th>기준</th><th>측정 신호</th></tr>
+<tr><td>Contribution gate</td><td>새 컴포넌트가 primitive/pattern/product 중 어디인지 분류</td><td>중복 컴포넌트 생성률</td></tr>
+<tr><td>Deprecation</td><td>대체 컴포넌트, 마이그레이션 기간, 제거 버전 명시</td><td>deprecated 사용 잔여 수</td></tr>
+<tr><td>Accessibility baseline</td><td>keyboard, focus, ARIA, contrast가 기본 테스트에 포함</td><td>접근성 회귀 버그 수</td></tr>
+<tr><td>Design-code parity</td><td>Figma variant와 코드 prop이 같은 의미를 가짐</td><td>시안과 구현의 variant mismatch</td></tr>
+</table>
 </section>
 
 <footer>

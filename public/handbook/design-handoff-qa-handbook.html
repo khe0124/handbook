@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">QA-04</span>디자인 QA</a>
   <a href="#ch5"><span class="code">QA-05</span>출시 전 점검</a>
   <a href="#ch6"><span class="code">QA-06</span>실무 QA와 회귀 관리</a>
+  <a href="#ch7"><span class="code">QA-07</span>릴리스 품질 게이트</a>
+  <a href="#ch8"><span class="code">QA-08</span>디자인 부채 운영</a>
 </nav>
 <main>
 <header class="hero">
@@ -105,6 +107,40 @@ loading/empty/error/permission 상태 확인
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>디자인 QA에서 “버튼 위치가 4px 다르다”만 잡고 loading, empty, permission denied, long text 상태를 놓치면 출시 후 더 큰 문제가 생깁니다. 핸드오프에는 정상 화면뿐 아니라 상태별 스크린, 데이터 예시, 권한별 차이, 측정 이벤트가 포함되어야 합니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">QA-07</span><h2>릴리스 품질 게이트</h2></div>
+<p class="lede">디자인 QA는 출시 직전 감상평이 아니라 release gate여야 합니다. gate는 차단 기준, 예외 승인자, 출시 후 관측 기준이 함께 있어야 작동합니다.</p>
+<table>
+<tr><th>Gate</th><th>차단 기준</th><th>통과 증거</th><th>예외 승인</th></tr>
+<tr><td>State coverage</td><td>loading/empty/error/permission/partial success 누락</td><td>상태별 스크린샷 또는 Storybook</td><td>PM + Design + FE lead</td></tr>
+<tr><td>Responsive</td><td>핵심 액션이 모바일에서 가려지거나 겹침</td><td>320/768/1024px 캡처</td><td>Design lead</td></tr>
+<tr><td>Accessibility</td><td>키보드로 핵심 흐름 완료 불가</td><td>keyboard walkthrough, axe/Lighthouse</td><td>접근성 owner</td></tr>
+<tr><td>Analytics</td><td>성공/실패/이탈 이벤트가 없음</td><td>event spec, QA log</td><td>PM</td></tr>
+<tr><td>Rollback</td><td>위험 변경의 되돌림 또는 완화책 없음</td><td>runbook, feature flag, support plan</td><td>Release owner</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">QA-08</span><h2>디자인 부채 운영</h2></div>
+<p class="lede">디자인 부채는 “나중에 예쁘게”가 아닙니다. 상태 누락, 용어 불일치, 컴포넌트 이탈, 접근성 결함, 추적 불가능한 예외가 쌓이면 제품 변경 속도와 신뢰성이 떨어집니다.</p>
+<table>
+<tr><th>부채 유형</th><th>증상</th><th>운영 방식</th></tr>
+<tr><td>State debt</td><td>오류/권한/빈 상태가 화면마다 다름</td><td>상태 패턴을 컴포넌트와 템플릿으로 흡수</td></tr>
+<tr><td>Content debt</td><td>같은 개념의 용어가 화면마다 다름</td><td>controlled vocabulary와 content QA 운영</td></tr>
+<tr><td>System debt</td><td>제품팀별 one-off CSS와 variant 증가</td><td>component adoption audit와 migration backlog</td></tr>
+<tr><td>Research debt</td><td>결정 근거가 사라져 같은 논쟁 반복</td><td>decision log와 invalidated assumptions 기록</td></tr>
+<tr><td>Accessibility debt</td><td>키보드, focus, contrast 회귀 반복</td><td>release gate와 automated check에 포함</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">DESIGN DEBT TRIAGE</span>
+Impact: 사용자/운영/개발 속도에 미치는 영향<br>
+Frequency: 얼마나 자주 반복되는 문제인가<br>
+Blast radius: 몇 개 화면과 팀에 퍼져 있는가<br>
+System fix: 개별 수정이 아니라 시스템으로 흡수 가능한가<br>
+Owner: 누가 언제 제거할 것인가
 </div>
 </section>
 

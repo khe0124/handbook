@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">LAY-04</span>반응형 구조</a>
   <a href="#ch5"><span class="code">LAY-05</span>리뷰 기준</a>
   <a href="#ch6"><span class="code">LAY-06</span>인지 법칙과 업무 UI</a>
+  <a href="#ch7"><span class="code">LAY-07</span>정보 밀도와 스캔 전략</a>
+  <a href="#ch8"><span class="code">LAY-08</span>레이아웃 성능·운영 제약</a>
 </nav>
 <main>
 <header class="hero">
@@ -101,6 +103,34 @@
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>운영자가 하루 수백 건의 승인 요청을 처리하는 화면에서 카드형 큰 레이아웃은 보기 좋지만 처리 속도를 떨어뜨릴 수 있습니다. 테이블 밀도를 높이고, 상태 badge와 keyboard shortcut, 우측 상세 drawer를 결합하면 시각적 화려함보다 업무 처리량이 크게 개선됩니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">LAY-07</span><h2>정보 밀도와 스캔 전략</h2></div>
+<p class="lede">업무형 제품에서 좋은 레이아웃은 여백이 많은 화면이 아니라 사용자가 반복 판단을 빠르게 할 수 있는 화면입니다. 정보 밀도는 낮출수록 좋은 값이 아니라 업무 빈도, 위험도, 비교 필요성에 맞춰 조절해야 합니다.</p>
+<table>
+<tr><th>화면 유형</th><th>밀도 전략</th><th>핵심 패턴</th><th>나쁜 신호</th></tr>
+<tr><td>Dashboard</td><td>중요 지표와 이상 신호를 먼저 노출</td><td>summary, trend, alert, drill-down</td><td>모든 지표가 같은 크기와 색으로 나열됨</td></tr>
+<tr><td>Data table</td><td>비교 가능한 열과 고정 액션 유지</td><td>sticky header, column priority, density toggle</td><td>카드로 바꿔 비교와 bulk action이 어려워짐</td></tr>
+<tr><td>Detail page</td><td>핵심 상태, 주요 액션, 감사 이력을 분리</td><td>summary panel, section anchor, activity log</td><td>상세 정보가 긴 스크롤에 묻힘</td></tr>
+<tr><td>Review queue</td><td>판단 근거와 승인 액션을 가까이 배치</td><td>split view, keyboard shortcut, diff summary</td><td>항목을 열 때마다 목록 맥락을 잃음</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">LAY-08</span><h2>레이아웃 성능·운영 제약</h2></div>
+<p class="lede">레이아웃은 시각 구조인 동시에 프론트엔드 성능과 운영 데이터의 영향을 받습니다. 대량 목록, 동적 컬럼, 권한별 버튼, 긴 다국어 텍스트를 고려하지 않은 레이아웃은 실제 데이터에서 쉽게 깨집니다.</p>
+<table>
+<tr><th>제약</th><th>설계 대응</th><th>검증 데이터</th></tr>
+<tr><td>대량 데이터</td><td>pagination, virtualization, skeleton 범위 정의</td><td>1만 행, 느린 네트워크, 필터 조합</td></tr>
+<tr><td>긴 텍스트</td><td>wrap/truncate 규칙, tooltip, detail reveal</td><td>긴 회사명, 다국어, 긴 URL</td></tr>
+<tr><td>권한별 액션</td><td>숨김/disabled/request access 패턴 구분</td><td>관리자, 읽기 전용, 만료 권한</td></tr>
+<tr><td>반응형 표</td><td>column priority와 horizontal scroll 기준</td><td>320px, 768px, 1024px viewport</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">Layout QA</span>
+<p>레이아웃 QA는 디자인 시안 크기 하나로 끝나면 안 됩니다. 실제 운영 데이터의 최댓값, 권한 조합, 빈 상태, 오류 상태, 느린 로딩을 넣어도 정보 우선순위가 유지되는지 확인해야 합니다.</p>
 </div>
 </section>
 

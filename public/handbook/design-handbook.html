@@ -13,8 +13,10 @@
   <a href="#ch2"><span class="code">DES-02</span>UI와 UX</a>
   <a href="#ch3"><span class="code">DES-03</span>좋은 디자인의 기준</a>
   <a href="#ch4"><span class="code">DES-04</span>제품 팀 협업</a>
-  <a href="#ch5"><span class="code">DES-05</span>학습 순서</a>
-  <a href="#ch6"><span class="code">DES-06</span>제품 디자인 의사결정 프레임</a>
+  <a href="#ch5"><span class="code">DES-05</span>제품 디자인 의사결정 프레임</a>
+  <a href="#ch6"><span class="code">DES-06</span>경험 전략과 품질 모델</a>
+  <a href="#ch7"><span class="code">DES-07</span>디자인 크리틱 루브릭</a>
+  <a href="#ch8"><span class="code">DES-08</span>학습 순서</a>
 </nav>
 <main>
 <header class="hero">
@@ -84,18 +86,7 @@
 </section>
 
 <section id="ch5">
-<div class="ch-head"><span class="ch-code">DES-05</span><h2>학습 순서</h2></div>
-<div class="glossary">
-<div class="g-row"><div class="g-term"><b>문제 정의</b><span>why</span></div><div class="g-def">사용자가 겪는 문제와 제품 목표를 분리합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>정보구조</b><span>where</span></div><div class="g-def">정보가 어디에 있고 어떻게 이동하는지 설계합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>흐름</b><span>how</span></div><div class="g-def">사용자가 어떤 순서로 목표를 달성하는지 그립니다.</div></div>
-<div class="g-row"><div class="g-term"><b>UI 패턴</b><span>what</span></div><div class="g-def">레이아웃, 컴포넌트, 인터랙션, 폼을 구체화합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>검증과 전달</b><span>ship</span></div><div class="g-def">프로토타입, 사용성 테스트, 핸드오프, QA로 완성도를 확인합니다.</div></div>
-</div>
-</section>
-
-<section id="ch6">
-<div class="ch-head"><span class="ch-code">DES-06</span><h2>제품 디자인 의사결정 프레임</h2></div>
+<div class="ch-head"><span class="ch-code">DES-05</span><h2>제품 디자인 의사결정 프레임</h2></div>
 <p class="lede">심도 있는 디자인은 화면 취향이 아니라 제품 목표, 사용자 행동, 운영 제약을 함께 판단합니다.</p>
 <table>
 <tr><th>프레임</th><th>질문</th><th>실무 적용</th></tr>
@@ -107,6 +98,56 @@
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>B2B 관리자 화면에서 “사용자 초대” 버튼을 크게 만드는 것보다 초대 상태, 만료, 재발송, 권한 변경 이력을 한 화면에서 확인하게 만든 사례가 더 큰 개선을 만들 수 있습니다. 디자인의 핵심은 버튼 강조가 아니라 운영자가 초대 실패를 추적하고 복구하는 시간을 줄이는 것입니다.</p>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">DES-06</span><h2>경험 전략과 품질 모델</h2></div>
+<p class="lede">전문적인 제품 디자인은 화면 단위 산출물이 아니라 제품 전략, 사용자 행동, 운영 비용, 시스템 제약을 하나의 경험 모델로 연결합니다. “좋아 보이는가”보다 “어떤 행동 변화를 만들고 어떤 위험을 줄이는가”를 먼저 정의합니다.</p>
+<table>
+<tr><th>레이어</th><th>질문</th><th>산출물</th><th>품질 신호</th></tr>
+<tr><td>Strategy</td><td>이 경험이 어떤 사업/제품 지표에 기여하는가</td><td>North Star, KPI tree, opportunity brief</td><td>기능 요청이 아니라 행동 변화로 설명됨</td></tr>
+<tr><td>Behavior</td><td>사용자가 어떤 상황에서 어떤 결정을 해야 하는가</td><td>JTBD, scenario, decision journey</td><td>역할별 목표와 제약이 분리됨</td></tr>
+<tr><td>Structure</td><td>정보와 작업이 어떤 순서로 조직되는가</td><td>IA, user flow, state model</td><td>예외, 권한, 중단, 복구가 포함됨</td></tr>
+<tr><td>Interaction</td><td>행동 뒤 시스템 반응이 어떻게 신뢰를 주는가</td><td>interaction spec, feedback model</td><td>loading, partial success, undo, audit가 정의됨</td></tr>
+<tr><td>Operations</td><td>이 경험을 운영팀이 지속 처리할 수 있는가</td><td>runbook, support taxonomy, escalation rule</td><td>문의와 수동 처리 비용이 설계에 반영됨</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Advanced lens</span>
+<p>디자인 품질은 사용자가 보는 화면뿐 아니라 제품팀이 변경을 설명하고, 개발팀이 상태를 구현하고, 운영팀이 예외를 처리할 수 있는 정도까지 포함합니다. B2B SaaS, 관리자 도구, 금융·권한·배포 화면에서는 이 운영 가능성이 곧 UX 품질입니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">DES-07</span><h2>디자인 크리틱 루브릭</h2></div>
+<p class="lede">고급 디자인 리뷰는 취향 토론을 피하고 근거의 품질을 봅니다. 리뷰어는 “더 예쁘게”가 아니라 어떤 가정이 약하고 어떤 리스크가 검증되지 않았는지를 지적해야 합니다.</p>
+<table>
+<tr><th>리뷰 축</th><th>좋은 답변</th><th>차단 기준</th></tr>
+<tr><td>Problem fit</td><td>사용자 문제, 빈도, 손실, 현재 우회 방법이 설명됨</td><td>요청받은 UI를 그대로 그렸을 뿐 문제 증거가 없음</td></tr>
+<tr><td>Decision quality</td><td>대안과 trade-off, 선택하지 않은 이유가 남아 있음</td><td>한 가지 시안만 있고 결정 근거가 취향에 머묾</td></tr>
+<tr><td>State coverage</td><td>empty/loading/error/permission/partial success가 있음</td><td>happy path 화면만 있음</td></tr>
+<tr><td>System fit</td><td>API, 권한, 데이터 상태, 로그/감사 요구가 반영됨</td><td>디자인이 구현 계약과 분리됨</td></tr>
+<tr><td>Measurability</td><td>성공 지표와 실패 신호가 정의됨</td><td>출시 후 좋아졌는지 판단할 수 없음</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">DESIGN CRITIQUE TEMPLATE</span>
+Decision: 이번 디자인에서 결정한 것<br>
+Evidence: 이 결정을 뒷받침한 데이터/리서치/운영 신호<br>
+Alternatives: 버린 대안과 이유<br>
+Risks: 실패 가능성과 사용자/운영 영향<br>
+Validation: 출시 전후 검증 방법과 중단 기준
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">DES-08</span><h2>학습 순서</h2></div>
+<p class="lede">디자인 학습은 개별 화면 꾸미기보다 문제 정의에서 운영 검증까지 이어지는 순서로 익혀야 실무 판단으로 전환됩니다.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>문제 정의</b><span>why</span></div><div class="g-def">사용자가 겪는 문제와 제품 목표를 분리합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>정보구조</b><span>where</span></div><div class="g-def">정보가 어디에 있고 어떻게 이동하는지 설계합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>흐름</b><span>how</span></div><div class="g-def">사용자가 어떤 순서로 목표를 달성하는지 그립니다.</div></div>
+<div class="g-row"><div class="g-term"><b>UI 패턴</b><span>what</span></div><div class="g-def">레이아웃, 컴포넌트, 인터랙션, 폼을 구체화합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>검증과 전달</b><span>ship</span></div><div class="g-def">프로토타입, 사용성 테스트, 핸드오프, QA로 완성도를 확인합니다.</div></div>
 </div>
 </section>
 

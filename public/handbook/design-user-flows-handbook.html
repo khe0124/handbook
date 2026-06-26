@@ -15,6 +15,8 @@
   <a href="#ch4"><span class="code">FLOW-04</span>마찰과 안전장치</a>
   <a href="#ch5"><span class="code">FLOW-05</span>체크리스트</a>
   <a href="#ch6"><span class="code">FLOW-06</span>실패와 중복을 포함한 흐름</a>
+  <a href="#ch7"><span class="code">FLOW-07</span>상태 머신과 전이</a>
+  <a href="#ch8"><span class="code">FLOW-08</span>서비스 블루프린트</a>
 </nav>
 <main>
 <header class="hero">
@@ -98,6 +100,45 @@
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>대량 권한 변경 화면에서 “저장” 후 토스트만 보여주면 일부 실패를 놓칩니다. 100명 중 92명 성공, 8명 실패처럼 결과를 분리하고 실패 사유별 재시도 버튼을 제공해야 운영자가 엑셀로 다시 관리하지 않습니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FLOW-07</span><h2>상태 머신과 전이</h2></div>
+<p class="lede">복잡한 사용자 흐름은 화면 순서가 아니라 상태 전이로 설계해야 합니다. 특히 승인, 결제, 권한, 자동화, 배포처럼 되돌리기 어렵거나 비동기 처리가 있는 흐름은 상태 머신 없이 설계하면 예외가 누락됩니다.</p>
+<table>
+<tr><th>상태 설계 요소</th><th>질문</th><th>UI 계약</th><th>개발 계약</th></tr>
+<tr><td>State</td><td>현재 작업이 어떤 단계인가</td><td>badge, stepper, 상태 설명</td><td>enum, persisted status</td></tr>
+<tr><td>Transition</td><td>무슨 행동/이벤트가 다음 상태를 만드는가</td><td>가능한 액션만 노출</td><td>transition rule, validation</td></tr>
+<tr><td>Guard</td><td>어떤 조건에서 전이가 막히는가</td><td>disabled reason, permission request</td><td>authorization, invariant check</td></tr>
+<tr><td>Side effect</td><td>전이 후 어떤 알림/로그/외부 호출이 생기는가</td><td>완료 피드백, audit link</td><td>event, webhook, outbox</td></tr>
+<tr><td>Recovery</td><td>실패하거나 중단되면 어디로 돌아가는가</td><td>resume, retry, rollback</td><td>idempotency, job state</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">STATE TRANSITION SPEC</span>
+From: draft<br>
+Event: submit<br>
+Guard: required fields valid + reviewer selected + permission active<br>
+To: pending_review<br>
+Side effects: audit log, reviewer notification, draft lock<br>
+Recovery: validation error keeps draft, network failure allows retry
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">FLOW-08</span><h2>서비스 블루프린트</h2></div>
+<p class="lede">사용자 흐름이 화면 안에서만 끝난다고 보면 실무 품질이 낮아집니다. 실제 경험은 고객 행동, 프론트 스테이지 UI, 백오피스 작업, 시스템 처리, 지원팀 대응이 함께 만들어냅니다.</p>
+<table>
+<tr><th>레이어</th><th>설계 내용</th><th>누락 시 문제</th></tr>
+<tr><td>Customer action</td><td>사용자가 직접 하는 행동과 기대</td><td>화면은 맞지만 사용자의 목표와 어긋남</td></tr>
+<tr><td>Frontstage UI</td><td>사용자에게 보이는 화면, 메시지, 상태</td><td>기다림과 실패가 설명되지 않음</td></tr>
+<tr><td>Backstage operation</td><td>운영자 승인, 수동 보정, CS 대응</td><td>예외가 운영팀 수작업으로 전가됨</td></tr>
+<tr><td>System process</td><td>비동기 job, webhook, batch, notification</td><td>UI가 실제 처리 상태를 반영하지 못함</td></tr>
+<tr><td>Evidence</td><td>로그, audit trail, email, receipt</td><td>완료/실패를 증명할 수 없음</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">Advanced case</span>
+<p>관리자 승인 플로우에서 사용자가 제출한 뒤 “완료”라고 표시했지만 실제로는 운영자 승인 대기라면 UX는 거짓 상태를 보여준 것입니다. 화면 문구는 “제출 완료”와 “승인 완료”를 분리해야 하고, 시스템은 job id와 approval status를 별도로 제공해야 합니다.</p>
 </div>
 </section>
 
