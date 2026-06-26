@@ -5,61 +5,355 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">보안 심화 면접</div>
-  <a href="#ch1"><span class="code">SEC-00</span>답변 프레임</a>
-  <a href="#ch2"><span class="code">SEC-01</span>OWASP Top 10</a>
-  <a href="#ch3"><span class="code">SEC-02</span>IDOR·접근 제어</a>
-  <a href="#ch4"><span class="code">SEC-03</span>XSS·CSRF·SQLi·SSRF</a>
-  <a href="#ch5"><span class="code">SEC-04</span>OAuth2/OIDC</a>
-  <a href="#ch6"><span class="code">SEC-05</span>비밀번호·토큰·시크릿</a>
-  <a href="#ch7"><span class="code">SEC-06</span>감사 로그·사고 대응</a>
+  <a href="#q1"><span class="code">SEC-01</span>보안 답변 프레임</a>
+  <a href="#q2"><span class="code">SEC-02</span>Threat Modeling·OWASP Top 10</a>
+  <a href="#q3"><span class="code">SEC-03</span>접근 제어·IDOR</a>
+  <a href="#q4"><span class="code">SEC-04</span>인증·세션</a>
+  <a href="#q5"><span class="code">SEC-05</span>OAuth2/OIDC</a>
+  <a href="#q6"><span class="code">SEC-06</span>JWT</a>
+  <a href="#q7"><span class="code">SEC-07</span>XSS·CSRF</a>
+  <a href="#q8"><span class="code">SEC-08</span>Injection</a>
+  <a href="#q9"><span class="code">SEC-09</span>SSRF</a>
+  <a href="#q10"><span class="code">SEC-10</span>비밀번호·Secret</a>
+  <a href="#q11"><span class="code">SEC-11</span>Multi-tenant</a>
+  <a href="#q12"><span class="code">SEC-12</span>감사 로그</a>
+  <a href="#q13"><span class="code">SEC-13</span>사고 대응</a>
+  <a href="#q14"><span class="code">SEC-14</span>핵심 질문 40선</a>
+  <a href="#q15"><span class="code">SEC-15</span>Attack Path 답변</a>
+  <a href="#q16"><span class="code">SEC-16</span>Exploit Chain Validation</a>
+  <a href="#q17"><span class="code">SEC-17</span>개념 인과관계</a>
 </nav>
 <main>
-<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-SECURITY-DEEP-DIVE-V1</span><span>SCOPE : OWASP · AUTH · TOKEN · LOGGING</span><span>LANG : KO</span></div><h1>보안 심화 면접</h1><p class="hero-sub">보안 면접은 공격 이름 암기가 아니라 <strong>신뢰 경계, 공격 전제, 서버 방어선, 탐지 증거</strong>를 연결해 설명하는 자리입니다.</p></header>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : INTERVIEW-SECURITY-DEEP-DIVE-V2</span><span>SCOPE : THREAT MODEL · AUTH · ACCESS CONTROL · TOKEN · OWASP · INCIDENT</span><span>LANG : KO</span></div>
+  <h1>보안 심화 면접</h1>
+  <p class="hero-sub">보안 면접은 공격 이름 암기가 아니라 <strong>신뢰 경계, 공격 전제, 서버 방어선, 탐지 증거, 사고 대응</strong>을 연결해 설명하는 자리입니다.</p>
+</header>
 
-<section id="ch1">
-<div class="ch-head"><span class="ch-code">SEC-00</span><h2>답변 프레임</h2></div>
-<div class="serial-card"><span class="sc-label">SECURITY ANSWER</span>1. 보호할 자산과 신뢰 경계 정의<br>2. 공격자가 조작할 수 있는 입력 식별<br>3. 서버 측 검증과 권한 확인 설명<br>4. 방어 우회 가능성과 잔여 위험 언급<br>5. audit log, alert, rate limit, 테스트로 검증</div>
-<p class="lede">좋은 답변은 “프론트에서 막습니다”로 끝나지 않습니다. 클라이언트 제어는 UX 보조일 뿐이고, 최종 방어선은 서버 검증, 권한 모델, 로그, 모니터링입니다.</p>
+<section id="q1">
+<div class="ch-head"><span class="ch-code">SEC-01</span><h2>Q. 보안 질문은 어떤 프레임으로 답하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>보안 답변은 취약점 이름보다 보호할 자산, 공격자가 조작할 수 있는 입력, 신뢰 경계, 서버 방어선, 탐지와 복구를 함께 설명해야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>보안 답변은 취약점 이름을 나열하는 것이 아니라 asset, actor, trust boundary, attack path, control을 연결하는 일입니다. 무엇을 지키는지와 누가 어떤 경로로 침해할 수 있는지 정의해야 방어선이 의미를 가집니다. UI 제어, API 인증, DB 제약, 로그는 서로 다른 방어층입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">먼저 보호할 자산과 신뢰 경계를 정의합니다. 그 다음 공격자가 바꿀 수 있는 입력을 식별하고, 서버 측 검증과 권한 확인을 설명합니다. 마지막으로 방어 우회 가능성, audit log, rate limit, alert, 테스트로 어떻게 검증할지 말합니다.</div>
+<h3>90초 답변</h3>
+<p>예를 들어 “파일 다운로드 API가 안전한가”라는 질문은 URL을 숨겼는지보다 현재 사용자가 해당 파일을 읽을 권한이 있는지, tenant scope가 맞는지, presigned URL 만료가 짧은지, 다운로드 로그가 남는지, 민감 파일이 cache되지 않는지까지 봐야 합니다. 클라이언트 제어는 UX 보조일 뿐 최종 방어선은 서버입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>프론트에서 막으면 충분한가요?</td><td>아닙니다. 공격자는 API를 직접 호출할 수 있으므로 서버 검증이 필요합니다.</td></tr><tr><td>보안과 UX가 충돌하면?</td><td>위험도와 자산 중요도를 기준으로 단계적 인증, 세션 정책, 로깅을 설계합니다.</td></tr><tr><td>검증 증거는?</td><td>negative test, audit log, penetration test, dependency scan, alert를 말합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“암호화합니다”, “토큰을 씁니다”처럼 방어 이름만 말하면 약합니다. 무엇을 누구로부터 보호하는지 먼저 말해야 합니다.</p></div>
 </section>
 
-<section id="ch2">
-<div class="ch-head"><span class="ch-code">SEC-01</span><h2>OWASP Top 10</h2></div>
-<p>OWASP Top 10은 웹 취약점 목록이면서 면접에서 사고 구조를 보여주는 지도입니다. Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Vulnerable Components처럼 제품 개발 전 과정에 걸친 위험을 다룹니다.</p>
-<table><tr><th>질문</th><th>좋은 답변 방향</th></tr><tr><td>Top 10을 어떻게 활용하나요?</td><td>체크리스트로만 쓰지 않고 요구사항, 설계 리뷰, 코드 리뷰, 테스트 케이스의 기준으로 씁니다.</td></tr><tr><td>가장 자주 보는 위험은?</td><td>권한 누락, 입력 검증 누락, 로그에 민감정보 노출, 잘못된 CORS/쿠키 설정을 예로 듭니다.</td></tr></table>
+<section id="q2">
+<div class="ch-head"><span class="ch-code">SEC-02</span><h2>Q. Threat Modeling은 어떻게 하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Threat Modeling은 기능을 만들기 전에 공격자가 어떤 경로로 어떤 자산을 해칠 수 있는지 구조적으로 보는 활동입니다. OWASP Top 10은 이 위협을 코드 리뷰와 테스트 체크리스트로 구체화할 때 유용한 기준입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Threat Modeling은 완벽한 공격 목록을 만드는 행사가 아니라 설계 단계에서 신뢰 경계를 눈에 보이게 만드는 작업입니다. 데이터 흐름을 그리고 외부 입력, 권한 상승, 민감정보 저장, 외부 호출 지점을 찾습니다. STRIDE 같은 프레임은 누락을 줄이는 체크리스트이지 목적 자체가 아닙니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">먼저 자산, 사용자 역할, 데이터 흐름, 신뢰 경계를 그립니다. 그 다음 각 경계에서 조작 가능한 입력, 권한 상승, 데이터 유출, 위조, 재전송, 서비스 거부 가능성을 봅니다. 위험도에 따라 서버 검증, 권한 모델, 암호화, rate limit, 로그, 알림을 설계합니다.</div>
+<h3>90초 답변</h3>
+<p>예를 들어 multi-tenant 관리자 화면에서는 tenant A 사용자가 tenant B 데이터를 볼 수 있는지, URL id를 바꾸면 접근되는지, export 기능이 과도한 데이터를 내보내는지, audit log가 충분한지 봅니다. STRIDE 같은 프레임은 Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege로 위협을 빠짐없이 보는 데 도움을 줍니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>언제 해야 하나요?</td><td>권한, 결제, 개인정보, 외부 callback, 파일 처리처럼 위험한 기능 설계 시점에 합니다.</td></tr><tr><td>모든 기능에 하나요?</td><td>위험도 기반으로 깊이를 조절하고 checklist를 코드 리뷰에 반영합니다.</td></tr><tr><td>산출물은?</td><td>데이터 흐름, 신뢰 경계, 위협 목록, 완화책, 잔여 위험, 테스트 케이스입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>권한 기능, 파일 업로드, OAuth callback, webhook 같은 기능에서 threat model을 적용한 예를 준비합니다.</p>
 </section>
 
-<section id="ch3">
-<div class="ch-head"><span class="ch-code">SEC-02</span><h2>IDOR·접근 제어</h2></div>
-<p>IDOR는 사용자가 URL이나 body의 id를 바꿔 다른 사용자의 리소스에 접근하는 취약점입니다. 방어는 id를 숨기는 것이 아니라 모든 API에서 actor, action, resource의 관계를 서버에서 확인하는 것입니다.</p>
-<div class="serial-card"><span class="sc-label">30초 답변</span>IDOR는 식별자 직접 참조가 권한 검증 없이 노출될 때 발생합니다. 프론트 버튼 숨김이나 UUID만으로 막을 수 없고, 서버가 현재 사용자에게 해당 resource를 read/update/delete할 권한이 있는지 매 요청마다 검증해야 합니다.</div>
-<table><tr><th>꼬리질문</th><th>답변 방향</th></tr><tr><td>admin 화면이면?</td><td>role만 보지 말고 tenant, organization, project 단위 scope를 같이 확인합니다.</td></tr><tr><td>테스트는?</td><td>다른 사용자 소유 id로 요청하는 negative test와 audit log 검증을 둡니다.</td></tr></table>
+<section id="q3">
+<div class="ch-head"><span class="ch-code">SEC-03</span><h2>Q. IDOR와 접근 제어 취약점은 어떻게 막나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>IDOR는 사용자가 식별자를 바꿔 다른 사용자의 리소스에 접근하는 취약점입니다. 방어는 id를 숨기는 것이 아니라 서버가 actor, action, resource 관계를 검증하는 것입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>IDOR는 사용자가 인증됐다는 사실과 특정 객체에 접근할 권한이 있다는 사실을 혼동할 때 생깁니다. URL이나 body의 id를 신뢰하지 말고 서버에서 actor, resource, action 관계를 확인해야 합니다. tenant id 누락은 B2B SaaS에서 가장 치명적인 접근 제어 실수 중 하나입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">IDOR는 URL이나 body의 id를 바꿨을 때 권한 검증 없이 다른 리소스가 노출될 때 생깁니다. UUID를 쓰거나 버튼을 숨기는 것으로는 충분하지 않습니다. 모든 API에서 현재 사용자, 역할, tenant, resource owner, action 권한을 서버에서 검증해야 합니다.</div>
+<h3>90초 답변</h3>
+<p>접근 제어는 인증 후 한 번만 하는 것이 아니라 리소스마다 해야 합니다. 관리자 화면에서는 role만 보면 부족하고 organization, tenant, project, data scope를 함께 확인해야 합니다. 목록 API와 상세 API, export API, bulk action, 파일 다운로드 API 모두 같은 권한 모델을 적용해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>UUID면 안전한가요?</td><td>추측은 어려워도 권한 검증이 없으면 유출된 URL로 접근 가능합니다.</td></tr><tr><td>테스트는?</td><td>다른 사용자/tenant의 id로 negative test를 작성합니다.</td></tr><tr><td>캐시와 권한은?</td><td>사용자별/tenant별 cache key를 분리하고 민감 응답은 public cache하지 않습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“프론트에서 메뉴를 숨겼습니다”는 접근 제어가 아닙니다.</p></div>
 </section>
 
-<section id="ch4">
-<div class="ch-head"><span class="ch-code">SEC-03</span><h2>XSS·CSRF·SQL Injection·SSRF</h2></div>
-<table><tr><th>취약점</th><th>핵심</th><th>방어</th></tr><tr><td>XSS</td><td>공격자 입력이 브라우저에서 스크립트로 실행됩니다.</td><td>escaping, sanitization, CSP, dangerous HTML 사용 제한을 둡니다.</td></tr><tr><td>CSRF</td><td>사용자 인증 쿠키를 이용해 원치 않는 상태 변경 요청을 보냅니다.</td><td>SameSite cookie, CSRF token, Origin/Referer 검증을 씁니다.</td></tr><tr><td>SQL Injection</td><td>입력이 쿼리 구조를 바꿉니다.</td><td>prepared statement, ORM parameter binding, allowlist validation을 적용합니다.</td></tr><tr><td>SSRF</td><td>서버가 공격자가 지정한 내부/외부 URL로 요청합니다.</td><td>URL allowlist, private IP 차단, redirect 제한, metadata endpoint 차단을 둡니다.</td></tr></table>
+<section id="q4">
+<div class="ch-head"><span class="ch-code">SEC-04</span><h2>Q. 인증과 세션 관리는 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>인증은 사용자가 누구인지 확인하는 것이고, 세션 관리는 그 인증 상태를 안전하게 유지하고 종료하는 체계입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>세션 관리는 로그인 순간보다 로그인 이후의 수명 관리가 더 중요합니다. 세션 만료, rotation, revoke, device 관리, CSRF/XSS 위협, refresh token 재사용 탐지가 모두 포함됩니다. 인증 정보가 유출됐을 때 피해를 줄이는 설계가 안전한 세션 설계입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">세션은 발급, 저장, 만료, 갱신, 폐기, 탈취 대응을 함께 설계해야 합니다. Cookie를 쓴다면 HttpOnly, Secure, SameSite, CSRF 방어를 보고, server-side session이면 session store, device revoke, idle timeout, absolute timeout을 봅니다.</div>
+<h3>90초 답변</h3>
+<p>세션 fixation을 막으려면 로그인 성공 시 session id를 재발급해야 합니다. 로그아웃은 클라이언트 토큰 삭제뿐 아니라 server-side session invalidate나 refresh token revoke가 필요합니다. 민감 작업에는 step-up authentication이나 재인증을 적용할 수 있습니다. 여러 기기 로그인, 비밀번호 변경 후 세션 폐기 정책도 중요합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>session fixation은?</td><td>공격자가 정한 session id로 피해자가 로그인하게 하는 공격이며 로그인 시 재발급합니다.</td></tr><tr><td>remember me는?</td><td>장기 토큰 저장과 rotation, device revoke, 탈취 탐지를 설계해야 합니다.</td></tr><tr><td>로그아웃은?</td><td>클라이언트 삭제와 서버 revoke/invalidate를 함께 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>세션 만료 정책, cookie flag, refresh token revoke, device 관리 경험을 말합니다.</p>
 </section>
 
-<section id="ch5">
-<div class="ch-head"><span class="ch-code">SEC-04</span><h2>OAuth2/OIDC</h2></div>
-<p>OAuth2는 권한 위임 프레임워크이고 OIDC는 그 위에 identity layer를 얹어 로그인 정보를 표준화합니다. 면접에서는 authorization code flow, PKCE, access token, id token, refresh token의 역할을 구분해야 합니다.</p>
-<div class="serial-card"><span class="sc-label">토큰 답변</span>access token은 API 접근 권한을 나타내며 짧게 유지합니다. refresh token은 재발급 권한이므로 저장 위치와 탈취 대응이 중요하고, refresh token rotation과 reuse detection으로 탈취 신호를 잡을 수 있습니다.</div>
-<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>JWT는 어디에 저장하나요?</td><td>XSS와 CSRF threat model을 비교하고, cookie 사용 시 HttpOnly/SameSite/Secure를 함께 말합니다.</td></tr><tr><td>로그아웃은?</td><td>클라이언트 삭제뿐 아니라 refresh token revoke, session invalidate, device 목록 정리를 봅니다.</td></tr></table>
+<section id="q5">
+<div class="ch-head"><span class="ch-code">SEC-05</span><h2>Q. OAuth2와 OIDC는 어떻게 다르나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>OAuth2는 권한 위임 프레임워크이고, OIDC는 OAuth2 위에 identity layer를 얹어 로그인과 사용자 정보를 표준화한 프로토콜입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>OAuth2는 권한 위임 프레임워크이고, OIDC는 그 위에 identity layer를 얹어 사용자가 누구인지 확인하게 해줍니다. access token은 API 접근 권한을 나타내고, id token은 client가 사용자의 인증 정보를 확인하기 위한 token입니다. redirect URI, state, PKCE, nonce를 혼동하면 공격 표면이 커집니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">OAuth2의 access token은 API 접근 권한을 나타내고, OIDC의 id token은 사용자가 누구인지에 대한 인증 정보를 담습니다. 로그인에는 authorization code flow와 PKCE를 사용하고, redirect URI, state, nonce, token audience, scope 검증이 중요합니다.</div>
+<h3>90초 답변</h3>
+<p>보안상 implicit flow보다 authorization code + PKCE가 권장됩니다. state는 CSRF 방어, nonce는 id token replay 방어에 사용됩니다. redirect URI를 넓게 허용하면 authorization code 탈취 위험이 있고, id token을 API authorization에 쓰면 audience와 목적이 맞지 않을 수 있습니다. refresh token rotation과 reuse detection은 장기 토큰 탈취를 탐지하고 피해를 줄이는 핵심 방어선입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>PKCE는 왜 필요한가요?</td><td>authorization code를 탈취해도 code verifier 없이는 token 교환을 못 하게 합니다.</td></tr><tr><td>state와 nonce 차이는?</td><td>state는 요청 위조 방어, nonce는 id token replay 방어입니다.</td></tr><tr><td>refresh token은?</td><td>장기 권한이므로 rotation, reuse detection, revoke가 필요합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>OAuth를 “소셜 로그인”으로만 말하면 부족합니다. 권한 위임과 identity layer를 구분하세요.</p></div>
 </section>
 
-<section id="ch6">
-<div class="ch-head"><span class="ch-code">SEC-05</span><h2>비밀번호·토큰·시크릿</h2></div>
-<p>비밀번호는 복호화 가능한 암호화가 아니라 bcrypt, scrypt, Argon2 같은 password hashing으로 저장합니다. bcrypt는 salt와 cost factor를 통해 brute force 비용을 높입니다.</p>
-<table><tr><th>항목</th><th>면접 포인트</th></tr><tr><td>password hashing</td><td>salt, work factor, hash migration, password reset token 만료를 설명합니다.</td></tr><tr><td>token</td><td>짧은 만료, rotation, revoke, audience/scope 검증, clock skew를 봅니다.</td></tr><tr><td>secret</td><td>환경변수만으로 끝내지 말고 secret manager, rotation, 로그 마스킹을 말합니다.</td></tr><tr><td>rate limit</td><td>login, password reset, OTP, refresh endpoint에 계정·IP·디바이스 기준 제한을 둡니다.</td></tr></table>
+<section id="q6">
+<div class="ch-head"><span class="ch-code">SEC-06</span><h2>Q. JWT는 어떻게 검증해야 안전한가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>JWT는 서명된 claim 묶음이며, 안전하려면 서명뿐 아니라 issuer, audience, expiry, algorithm, key rotation, revoke 전략을 함께 검증해야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>JWT 검증은 서명만 확인하는 것으로 끝나지 않습니다. issuer, audience, expiration, not-before, algorithm, key id, clock skew, token type을 모두 검증해야 합니다. claim은 사용자가 바꿀 수 없도록 서명되어 있지만, 서버가 그 claim을 어떤 권한으로 해석할지는 별도 정책입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">JWT는 header, payload, signature로 구성됩니다. 서버는 signature를 검증하고 exp, nbf, iss, aud, scope를 확인해야 합니다. algorithm confusion을 막기 위해 허용 algorithm을 고정하고, key rotation과 JWKS cache, clock skew도 고려합니다.</div>
+<h3>90초 답변</h3>
+<p>JWT의 장점은 stateless 검증이지만 즉시 revoke가 어렵다는 단점이 있습니다. 그래서 access token은 짧게 유지하고 refresh token은 server-side 저장과 rotation을 둡니다. 민감 권한 변경이나 계정 차단 시에는 token version, denylist, introspection 같은 보완책을 검토합니다. payload는 암호화가 아니므로 민감정보를 넣지 않습니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>JWT를 localStorage에 저장하면?</td><td>XSS에 취약하므로 threat model을 보고 HttpOnly cookie 등 대안을 검토합니다.</td></tr><tr><td>audience 검증은 왜?</td><td>다른 API용 토큰이 우리 API에서 재사용되는 것을 막습니다.</td></tr><tr><td>서명만 맞으면 되나요?</td><td>아닙니다. 만료, 발급자, 대상, 권한, algorithm까지 검증해야 합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>JWT 검증 middleware에서 checked claim 목록과 실패 로그를 설명하면 좋습니다.</p>
 </section>
 
-<section id="ch7">
-<div class="ch-head"><span class="ch-code">SEC-06</span><h2>감사 로그·사고 대응</h2></div>
-<p>audit log는 디버깅 로그가 아니라 누가, 언제, 어떤 권한으로, 어떤 대상에, 어떤 변경을 했는지 추적하는 보안 증거입니다. 민감정보 원문을 남기지 않고 actor, target, action, result, traceId, before/after summary를 남깁니다.</p>
-<div class="serial-card"><span class="sc-label">사고 대응</span>탐지 → 격리 → 영향 범위 산정 → 토큰/시크릿 회전 → 패치 → 사용자 고지 판단 → 사후 회고 순서로 말합니다. 면접에서는 완벽한 예방보다 탐지와 복구 체계를 같이 말하는 편이 신뢰도가 높습니다.</div>
+<section id="q7">
+<div class="ch-head"><span class="ch-code">SEC-07</span><h2>Q. XSS와 CSRF는 어떻게 다르고 어떻게 막나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>XSS는 공격자 입력이 브라우저에서 스크립트로 실행되는 문제이고, CSRF는 사용자의 인증 상태를 이용해 원치 않는 요청을 보내는 문제입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>XSS는 공격자가 우리 origin에서 JavaScript를 실행하게 만드는 문제이고, CSRF는 사용자의 인증 상태를 이용해 원치 않는 요청을 보내게 하는 문제입니다. XSS 방어는 context-aware escaping, sanitization, CSP가 중심이고, CSRF 방어는 SameSite, CSRF token, origin 검증이 중심입니다. 둘은 원인과 방어선이 다릅니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">XSS는 output escaping, sanitization, CSP, dangerous HTML 제한으로 막고, CSRF는 SameSite cookie, CSRF token, Origin/Referer 검증으로 막습니다. XSS는 토큰 탈취와 사용자 대신 행동을 가능하게 하므로 CSRF 방어만으로는 부족합니다.</div>
+<h3>90초 답변</h3>
+<p>React는 기본적으로 문자열을 escape하지만 dangerouslySetInnerHTML, markdown/html rendering, third-party widget, URL injection에서는 위험이 남습니다. CSRF는 cookie 기반 인증에서 특히 중요합니다. JSON API라도 preflight가 항상 보안 장벽은 아니며 state-changing 요청은 서버에서 origin과 token을 검증해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>CSP는 만능인가요?</td><td>피해를 줄이는 방어선이지만 escaping과 sanitization을 대체하지 않습니다.</td></tr><tr><td>SameSite=Lax면 충분한가요?</td><td>요구사항과 browser 동작을 보고 민감 요청에는 token 검증도 고려합니다.</td></tr><tr><td>stored XSS와 reflected XSS는?</td><td>저장된 입력이 나중에 실행되는지, 요청에 반사되어 실행되는지 차이입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“React라 XSS가 없습니다”는 틀린 답변입니다. HTML 삽입과 URL, 외부 콘텐츠를 봐야 합니다.</p></div>
 </section>
 
-<footer>SECURITY DEEP DIVE INTERVIEW · V1 · 2026-06</footer>
+<section id="q8">
+<div class="ch-head"><span class="ch-code">SEC-08</span><h2>Q. SQL Injection과 Command Injection은 어떻게 막나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Injection은 사용자 입력이 명령이나 쿼리의 데이터가 아니라 구조로 해석될 때 발생합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Injection은 신뢰할 수 없는 입력이 명령이나 쿼리의 구조로 해석될 때 생깁니다. SQL은 parameterized query로 값과 쿼리 구조를 분리하고, command execution은 가능하면 shell 호출 자체를 피해야 합니다. allowlist validation은 입력 공간을 좁히는 보조 방어선입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">SQL Injection은 prepared statement와 parameter binding으로 막고, 동적 order by나 column name처럼 바인딩할 수 없는 부분은 allowlist를 씁니다. Command Injection은 shell 문자열 조합을 피하고, 인자 배열 API와 allowlist validation, 권한 제한, sandbox를 사용합니다.</div>
+<h3>90초 답변</h3>
+<p>ORM을 쓴다고 injection이 자동으로 사라지는 것은 아닙니다. raw query, string interpolation, 동적 검색 조건, report query에서 위험이 남습니다. 입력 검증은 보조 방어선이고 핵심은 코드와 데이터를 분리하는 것입니다. 에러 메시지에 SQL이나 내부 경로를 노출하지 않는 것도 중요합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>LIKE 검색은?</td><td>parameter binding과 wildcard escape를 함께 봅니다.</td></tr><tr><td>동적 정렬은?</td><td>사용자 입력을 column allowlist에 매핑합니다.</td></tr><tr><td>파일 변환 명령은?</td><td>shell=false, 인자 배열, 파일명 검증, 임시 디렉터리 격리를 씁니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>raw query 리뷰, allowlist validation, negative test, scanner 결과 대응 경험을 말합니다.</p>
+</section>
+
+<section id="q9">
+<div class="ch-head"><span class="ch-code">SEC-09</span><h2>Q. SSRF는 왜 위험하고 어떻게 방어하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>SSRF는 서버가 공격자가 지정한 URL로 요청을 보내게 되어 내부망, metadata endpoint, admin service에 접근할 수 있는 취약점입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>SSRF는 서버가 내부망이나 metadata endpoint에 접근할 수 있다는 점을 공격자가 악용하는 취약점입니다. URL allowlist, DNS rebinding 방어, private IP 차단, egress policy, metadata service 보호가 필요합니다. 단순히 client에서 URL 형식을 검사하는 것으로는 부족합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">SSRF는 URL fetch, webhook test, image import, PDF generation 같은 기능에서 생길 수 있습니다. 방어는 URL allowlist, private IP/link-local 차단, DNS rebinding 대응, redirect 제한, timeout, response size 제한, metadata endpoint 차단입니다.</div>
+<h3>90초 답변</h3>
+<p>단순히 문자열이 http로 시작하는지만 보면 우회됩니다. DNS 해석 결과가 private IP인지 확인하고, redirect 후 최종 주소도 검사해야 합니다. IPv6, decimal/hex IP, localhost alias, internal DNS 이름도 고려합니다. 가능하면 외부 fetch는 별도 egress 제한 환경에서 수행하고, 접근 가능한 네트워크를 최소화합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>metadata endpoint가 왜 위험한가요?</td><td>클라우드 credential이나 instance metadata가 유출될 수 있습니다.</td></tr><tr><td>allowlist와 blocklist 중?</td><td>가능하면 allowlist가 안전하고 blocklist는 우회가 많습니다.</td></tr><tr><td>redirect는?</td><td>초기 URL뿐 아니라 redirect 최종 URL도 검증해야 합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>SSRF는 “외부 URL 호출” 기능 전체의 egress 통제 문제로 봐야 합니다.</p></div>
+</section>
+
+<section id="q10">
+<div class="ch-head"><span class="ch-code">SEC-10</span><h2>Q. 비밀번호와 Secret은 어떻게 저장하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>비밀번호는 복호화 가능한 암호화가 아니라 password hashing으로 저장하고, secret은 저장·주입·회전·감사 체계를 갖춰야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>비밀번호는 복호화할 필요가 없는 secret이므로 느린 password hashing 함수와 salt로 저장해야 합니다. API key나 OAuth secret처럼 다시 사용해야 하는 secret은 암호화, 접근 제어, rotation, audit가 필요합니다. Secret은 코드, 로그, error report, analytics로 새어나가지 않게 경로를 점검해야 합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">비밀번호는 bcrypt, scrypt, Argon2 같은 password hashing을 사용하고 salt와 work factor를 둡니다. secret은 코드와 이미지에 넣지 않고 secret manager에서 관리하며, 접근 권한, rotation, 로그 마스킹, 유출 시 revoke 절차를 마련합니다.</div>
+<h3>90초 답변</h3>
+<p>비밀번호 reset token은 충분히 랜덤해야 하고 짧은 만료와 1회 사용 정책이 필요합니다. 로그인과 reset, OTP endpoint에는 rate limit과 abuse detection이 필요합니다. secret rotation은 새 secret과 구 secret이 잠시 공존할 수 있는지, 배포 순서가 안전한지까지 봐야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>암호화와 hashing 차이는?</td><td>암호화는 복호화 가능, password hashing은 검증만 가능하도록 설계합니다.</td></tr><tr><td>pepper는?</td><td>DB와 별도 저장소에 둔 추가 secret으로 hash 방어를 보강할 수 있습니다.</td></tr><tr><td>secret 유출 시?</td><td>revoke/rotate, 로그 확인, 영향 범위 산정, 재발 방지를 수행합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>secret scan, rotation runbook, log redaction, password reset abuse 방어를 말하면 좋습니다.</p>
+</section>
+
+<section id="q11">
+<div class="ch-head"><span class="ch-code">SEC-11</span><h2>Q. Multi-tenant SaaS에서 보안상 가장 중요한 것은 무엇인가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Multi-tenant 보안의 핵심은 tenant isolation입니다. 한 고객의 사용자나 관리자가 다른 고객의 데이터에 접근하지 못해야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Multi-tenant 보안의 핵심은 모든 데이터 접근 경로에 tenant boundary가 빠지지 않게 하는 것입니다. UI 메뉴, API query, background job, export, search index, cache key까지 tenant 조건이 들어가야 합니다. 한 곳의 누락이 다른 고객 데이터 노출로 이어질 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">모든 query와 API에서 tenant scope를 강제해야 합니다. URL id, filter, export, background job, cache key, search index, object storage path, audit log까지 tenant_id가 누락되지 않게 설계합니다. 권한 검증은 role뿐 아니라 tenant membership과 resource scope를 함께 봐야 합니다.</div>
+<h3>90초 답변</h3>
+<p>tenant isolation은 코드 리뷰만으로 보장하기 어렵습니다. repository layer에서 tenant filter를 기본 적용하거나 row-level security, scoped service API, integration test를 둡니다. cache key에 tenant가 빠지거나 object storage prefix 권한이 넓으면 DB 권한이 맞아도 데이터가 샐 수 있습니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>admin은 모든 tenant를 볼 수 있나요?</td><td>운영자 권한도 승인, 감사, 최소 권한, break-glass 절차가 필요합니다.</td></tr><tr><td>batch job은?</td><td>tenant별 범위와 실패 격리, audit log를 남겨야 합니다.</td></tr><tr><td>검색 인덱스는?</td><td>tenant filter가 index query에도 강제되어야 합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>tenant_id를 “프론트에서 넘겨준다”는 설계는 위험합니다. 서버가 세션과 권한에서 scope를 결정해야 합니다.</p></div>
+</section>
+
+<section id="q12">
+<div class="ch-head"><span class="ch-code">SEC-12</span><h2>Q. 감사 로그는 일반 로그와 어떻게 다르나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>감사 로그는 디버깅 로그가 아니라 누가, 언제, 어떤 권한으로, 어떤 대상에, 어떤 변경을 했는지 추적하는 보안 증거입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>감사 로그는 디버깅 로그가 아니라 나중에 누가 어떤 민감한 행동을 했는지 증명하는 기록입니다. actor, target, action, result, reason, before/after, request id, timestamp가 중요하고 임의 수정이 어려워야 합니다. 개인정보와 secret을 과하게 남기면 감사 로그 자체가 위험 자산이 됩니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">audit log에는 actor, action, target, tenant, result, reason, source IP, user agent, traceId, before/after summary를 남깁니다. 민감정보 원문은 남기지 않고 마스킹하며, 변경 불가능성, 보관 기간, 접근 권한도 관리해야 합니다.</div>
+<h3>90초 답변</h3>
+<p>감사 로그는 사고 대응과 고객 문의, 규제 대응에 필요합니다. 예를 들어 관리자가 권한을 바꾸거나 파일을 export하거나 결제 상태를 수정한 경우 누가 왜 했는지 확인할 수 있어야 합니다. 로그가 너무 많아도 찾기 어려우므로 중요 action을 정의하고 검색 가능한 구조로 남깁니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>민감정보는?</td><td>원문 저장을 피하고 tokenization/masking/redaction을 적용합니다.</td></tr><tr><td>위변조 방지는?</td><td>append-only 저장, 권한 제한, 별도 계정, checksum 또는 외부 로그 저장을 봅니다.</td></tr><tr><td>alert는?</td><td>권한 변경, 대량 export, 실패한 로그인, 비정상 지역 접근 같은 이벤트를 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>운영자 action, 권한 변경, 데이터 export에 audit log를 설계한 경험을 말합니다.</p>
+</section>
+
+<section id="q13">
+<div class="ch-head"><span class="ch-code">SEC-13</span><h2>Q. 보안 사고가 발생하면 어떤 순서로 대응하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>보안 사고 대응은 탐지, 격리, 영향 범위 산정, 증거 보존, 근절, 복구, 고지, 재발 방지의 순서로 진행합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>보안 사고 대응은 원인 분석보다 격리와 증거 보존이 먼저입니다. 영향 범위, 공격 경로, 노출 데이터, credential rotation, 임시 차단, 법적/고객 공지 기준을 순서대로 봐야 합니다. 로그를 지우거나 시스템을 성급히 재배포하면 포렌식 단서가 사라질 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">먼저 사고인지 확인하고 영향 범위를 좁힙니다. 유출된 token이나 secret은 revoke/rotate하고, 취약 endpoint나 계정을 격리합니다. 로그와 증거를 보존한 뒤 패치, 복구, 사용자 고지 판단, postmortem과 재발 방지 action을 진행합니다.</div>
+<h3>90초 답변</h3>
+<p>사고 대응에서는 원인 분석보다 확산 방지가 먼저일 수 있습니다. 예를 들어 access key 유출이면 즉시 비활성화하고 어떤 리소스에 접근했는지 audit log를 봅니다. 개인정보 가능성이 있으면 법무/보안/운영 커뮤니케이션 경로를 따르고, 임의로 로그를 지우면 증거가 사라질 수 있습니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>secret 유출이면?</td><td>rotate/revoke, 접근 로그 확인, downstream credential 재발급, scan rule 추가를 말합니다.</td></tr><tr><td>사용자 고지는?</td><td>영향 데이터, 법적 요구, 회사 프로세스에 따라 판단합니다.</td></tr><tr><td>postmortem에는?</td><td>timeline, detection gap, blast radius, root cause, action owner와 due date를 남깁니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“패치하면 끝”이 아닙니다. 영향 범위, 증거, 고지, 재발 방지까지 사고 대응입니다.</p></div>
+</section>
+
+<section id="q14">
+<div class="ch-head"><span class="ch-code">SEC-14</span><h2>핵심 질문 40선과 답변 훈련</h2></div>
+<p class="lede">보안 심화 면접은 방어 기술명을 외우는 것보다 공격 경로와 서버 방어선을 끝까지 추적하는 훈련입니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문</th><th>확장 포인트</th></tr>
+<tr><td>모델링</td><td>자산, 신뢰 경계, STRIDE, OWASP, abuse case</td><td>공격자가 조작 가능한 입력 찾기</td></tr>
+<tr><td>권한</td><td>IDOR, RBAC, ABAC, tenant isolation, admin access, audit</td><td>actor/action/resource/scope 검증</td></tr>
+<tr><td>인증</td><td>session, cookie, OAuth2, OIDC, JWT, refresh token, logout</td><td>발급, 저장, 검증, revoke, rotation</td></tr>
+<tr><td>웹 취약점</td><td>XSS, CSRF, SQLi, command injection, SSRF, file upload</td><td>서버 방어와 우회 가능성</td></tr>
+<tr><td>운영</td><td>secret, rate limit, dependency scan, log redaction, incident response</td><td>탐지와 복구 체계</td></tr>
+</table>
+<h3>구체 질문 12선</h3>
+<table>
+<tr><th>번호</th><th>구체 질문</th><th>답변 방향</th></tr>
+<tr><td>1</td><td>사용자가 URL을 입력하는 이미지 가져오기 기능에서 SSRF를 어떻게 negative test하나요?</td><td>localhost, link-local, private IP, redirect, DNS rebinding, IPv6 우회를 넣고 차단 로그를 확인합니다.</td></tr>
+<tr><td>2</td><td>OAuth callback에서 state가 빠졌을 때 공격자는 어떤 체인을 만들 수 있나요?</td><td>CSRF로 victim session에 attacker authorization code를 연결하는 login CSRF를 설명합니다.</td></tr>
+<tr><td>3</td><td>OIDC nonce는 state와 다르게 어떤 공격을 줄이나요?</td><td>id token replay와 요청-응답 바인딩 실패를 줄이며 state는 CSRF 방어임을 구분합니다.</td></tr>
+<tr><td>4</td><td>PKCE가 있으면 client secret이 없는 public client에서 무엇을 보호하나요?</td><td>authorization code 탈취 후 token 교환을 code verifier 없이는 실패하게 합니다.</td></tr>
+<tr><td>5</td><td>JWT alg confusion은 어떤 검증 실수에서 생기나요?</td><td>허용 algorithm을 고정하지 않거나 header alg를 그대로 신뢰할 때 생깁니다.</td></tr>
+<tr><td>6</td><td>JWT key confusion은 JWKS나 kid 처리에서 어떻게 발생하나요?</td><td>issuer별 key set 분리 실패, kid만 믿는 key 선택, 임의 JWKS URL 신뢰를 봅니다.</td></tr>
+<tr><td>7</td><td>tenant cache key에 tenant_id가 빠지면 DB 권한 검증이 맞아도 왜 유출이 생기나요?</td><td>첫 tenant의 응답이 공유 cache key로 다른 tenant에 재사용되는 경로를 설명합니다.</td></tr>
+<tr><td>8</td><td>IDOR 테스트는 상세 API만 보면 충분하지 않은 이유는 무엇인가요?</td><td>목록, export, bulk action, search, file download, background job까지 접근 경로가 다릅니다.</td></tr>
+<tr><td>9</td><td>보안 로그에서 blocked 이벤트만 보면 부족한 이유는 무엇인가요?</td><td>성공 이벤트, 실패율, actor/tenant/source IP, traceId, 탐지 누락을 함께 봐야 합니다.</td></tr>
+<tr><td>10</td><td>React 앱에서도 XSS가 생기는 대표 sink는 무엇인가요?</td><td>dangerouslySetInnerHTML, markdown HTML, URL scheme injection, third-party script를 봅니다.</td></tr>
+<tr><td>11</td><td>refresh token rotation에서 reuse detection이 필요한 이유는 무엇인가요?</td><td>탈취된 구 token 재사용을 침해 신호로 보고 session family를 revoke하기 위해서입니다.</td></tr>
+<tr><td>12</td><td>incident postmortem에서 detection gap을 어떻게 설명해야 하나요?</td><td>공격 시점, 최초 탐지, alert 부재, 로그 필드 부족, 새 탐지 룰을 시간순으로 정리합니다.</td></tr>
+</table>
+<div class="callout risk"><span class="co-label">압박 꼬리질문</span><p>“UUID면 IDOR가 막히나요?”, “JWT 서명만 검증하면 되나요?”, “React라 XSS가 없나요?”, “private URL fetch 기능에서 SSRF를 어떻게 막나요?”, “tenant_id를 프론트에서 넘기면 왜 위험하죠?”에 답할 수 있어야 합니다.</p></div>
+</section>
+
+<section id="q15">
+<div class="ch-head"><span class="ch-code">SEC-15</span><h2>공격 경로 기반 답변</h2></div>
+<p class="lede">보안 면접에서 전문성은 방어 기술명을 나열하는 데서 나오지 않습니다. 공격자가 어디서 들어와 어떤 권한 경계를 넘어 어떤 sink에 도달하는지 추적해야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">SECURITY ATTACK PATH ANSWER</span>
+답변은 source, trust boundary, authorization check, sink, impact, detection, mitigation 순서로 구성합니다. 예를 들어 SSRF는 사용자가 조작한 URL(source)이 서버 내부 네트워크 경계(boundary)를 넘어 metadata endpoint나 internal admin API(sink)에 닿는 문제입니다. 방어는 allowlist, DNS/IP 재검증, private range 차단, redirect 제한, egress policy, timeout, response filtering, audit log를 조합합니다.
+</div>
+<table>
+<tr><th>취약점</th><th>공격 경로로 설명할 핵심</th><th>방어선</th></tr>
+<tr><td>IDOR</td><td>사용자가 resource id를 바꿔 다른 tenant/user 자원에 접근합니다.</td><td>actor-action-resource-scope 검증, tenant boundary, 서버 권한 체크, 감사 로그</td></tr>
+<tr><td>XSS</td><td>untrusted input이 HTML/JS sink로 들어가 사용자 브라우저에서 실행됩니다.</td><td>context-aware escaping, CSP, sanitization, HttpOnly cookie, 위험 sink 금지</td></tr>
+<tr><td>CSRF</td><td>인증 cookie가 자동 전송되는 특성을 이용해 사용자의 의도 없는 state change를 만듭니다.</td><td>SameSite, CSRF token, origin 검증, idempotent GET 원칙</td></tr>
+<tr><td>Injection</td><td>입력이 query/command/template 문법으로 해석됩니다.</td><td>parameter binding, allowlist, least privilege, output validation, error masking</td></tr>
+<tr><td>JWT 오용</td><td>토큰 저장·검증·폐기 경계가 약해 탈취나 권한 상승으로 이어집니다.</td><td>issuer/audience/expiry 검증, key rotation, refresh token 보호, revoke 전략</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">면접 주의</span>
+<p>“프론트에서 막았습니다”, “UUID라 어렵습니다”, “JWT라 stateless입니다” 같은 답변은 보안 경계가 서버에 있다는 점을 놓칩니다. 방어는 우회 가능성을 전제로 서버 권한 검증과 운영 탐지를 포함해야 합니다.</p>
+</div>
+</section>
+
+<section id="q16">
+<div class="ch-head"><span class="ch-code">SEC-16</span><h2>EXPLOIT CHAIN VALIDATION</h2></div>
+<p class="lede">보안 심화 답변은 취약점 하나를 고립해서 말하지 않고, 공격자가 여러 약점을 연결해 실제 영향에 도달하는지 검증하는 방식으로 구성해야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">EXPLOIT CHAIN VALIDATION</span>
+검증 순서는 source, trust boundary, bypass, sink, impact, negative tests/detection logs입니다. SSRF DNS rebinding, OAuth state/nonce/PKCE 누락, JWT alg/key confusion, tenant cache key leak처럼 단일 실수보다 체인으로 이어질 때 실제 사고가 됩니다. 방어가 있다고 말하는 것보다 우회 입력이 차단되고 탐지 로그가 남는지 보여줘야 합니다.
+</div>
+<h3>대표 체인</h3>
+<table>
+<tr><th>체인</th><th>공격 흐름</th><th>검증해야 할 방어</th></tr>
+<tr><td>SSRF DNS rebinding</td><td>처음 DNS 해석은 허용 IP로 통과하고, 실제 연결 시 private IP나 metadata endpoint로 바뀝니다.</td><td>연결 직전 DNS/IP 재검증, private/link-local 차단, redirect 후 재검증, egress policy, 차단 로그</td></tr>
+<tr><td>OAuth/OIDC callback</td><td>state 누락은 login CSRF, nonce 누락은 id token replay, PKCE 누락은 code 탈취 후 token 교환으로 이어집니다.</td><td>state 세션 바인딩, nonce 검증, PKCE verifier 검증, redirect URI exact match, 실패 이벤트 로깅</td></tr>
+<tr><td>JWT alg/key confusion</td><td>header의 alg/kid를 과신하거나 issuer별 key를 분리하지 않아 공격자 token이 정상 검증됩니다.</td><td>허용 alg 고정, issuer/audience별 JWKS 분리, kid miss 실패 처리, none/HS-RS 혼동 negative test</td></tr>
+<tr><td>Tenant cache key leak</td><td>DB query는 tenant filter가 맞지만 cache key가 resource id만 써서 다른 tenant 응답이 재사용됩니다.</td><td>tenant/user/scope를 포함한 cache key, 민감 응답 no-store, cross-tenant negative test, cache hit 로그</td></tr>
+</table>
+<h3>Negative Tests와 Detection Logs</h3>
+<p>negative tests는 “정상 요청이 된다”가 아니라 “공격 입력이 실패하고 실패 이유가 관측된다”를 검증합니다. SSRF는 <code>127.0.0.1</code>, <code>169.254.169.254</code>, IPv6 loopback, decimal/hex IP, redirect, DNS rebinding 도메인을 넣고 차단 결과를 봅니다. OAuth는 state mismatch, nonce mismatch, PKCE verifier mismatch, redirect URI 변조를 넣습니다. JWT는 허용되지 않은 alg, 다른 issuer의 kid, 잘못된 audience, 만료 token, 서명 key 혼동을 테스트합니다. multi-tenant는 tenant A 세션으로 tenant B cache hit가 발생하지 않는지 확인합니다.</p>
+<p>detection logs에는 actor, tenant, source IP, user agent, request id, blocked reason, normalized target, token issuer/audience, cache key scope, decision을 남깁니다. 민감 원문 token이나 secret은 남기지 않습니다. 면접에서는 “막았습니다”보다 “어떤 우회 입력이 어떤 로그와 alert로 실패하는지”를 말해야 합니다.</p>
+<div class="callout risk"><span class="co-label">검증 기준</span><p>방어가 코드에 존재해도 체인의 다음 단계가 남아 있으면 취약합니다. 예를 들어 SSRF URL allowlist가 있어도 redirect 최종 URL과 DNS rebinding을 재검증하지 않으면 내부망 sink에 도달할 수 있습니다.</p></div>
+</section>
+
+<section id="q17">
+<div class="ch-head"><span class="ch-code">SEC-17</span><h2>보안 개념 인과관계</h2></div>
+<p class="lede">보안 답변은 취약점 이름을 맞히는 것이 아니라 공격자가 신뢰 경계를 어떻게 넘고, 어떤 sink에 도달하며, 어떤 통제로 그 경로를 끊는지 설명해야 깊어집니다.</p>
+<div class="serial-card"><span class="sc-label">SECURITY CAUSAL MODEL</span>취약점은 보통 “사용자 입력이 있다”만으로 생기지 않습니다. 입력이 신뢰 경계를 넘어 정규화되지 않은 채 권한 판단, URL fetch, SQL, HTML sink, file path, cache key 같은 민감한 지점에 도달할 때 문제가 됩니다. XSS는 untrusted string이 DOM execution sink에 들어가서 발생하고, IDOR는 resource id를 바꿨을 때 서버가 actor-resource 관계를 검증하지 않아 발생합니다. SSRF는 서버가 대신 네트워크 요청을 보내기 때문에 내부망 접근 권한이 공격자에게 빌려지는 구조입니다. 그래서 방어는 입력 검증 하나가 아니라 normalize, authorize, constrain, log, alert를 경로마다 둬야 합니다.</div>
+<table>
+<tr><th>취약점</th><th>원인</th><th>공격 결과</th><th>방어 논리</th></tr>
+<tr><td>IDOR</td><td>resource id는 바꿀 수 있는데 actor-resource 권한 검증이 없다</td><td>다른 사용자나 tenant 데이터 조회·수정</td><td>서버에서 owner/tenant/scope를 매 요청 검증하고 negative test를 둔다</td></tr>
+<tr><td>XSS</td><td>untrusted input이 escaping 없이 HTML/JS sink로 들어간다</td><td>세션 탈취, 임의 요청, 화면 변조</td><td>context-aware escaping, sanitization, CSP, Trusted Types를 조합한다</td></tr>
+<tr><td>SSRF</td><td>서버가 공격자가 준 URL로 내부 네트워크 요청을 보낸다</td><td>metadata 탈취, 내부 admin endpoint 접근</td><td>scheme/host/IP/redirect 재검증, private range 차단, egress policy를 둔다</td></tr>
+<tr><td>JWT 혼동</td><td>issuer, audience, alg, kid 검증이 약하다</td><td>다른 발급자 token이나 조작 token이 통과한다</td><td>허용 alg 고정, issuer별 key 분리, audience/scope 검증을 강제한다</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">암기 답변 교정</span>
+<p>“XSS는 script 삽입입니다”에서 멈추지 말고 “입력 위치에 따라 HTML, attribute, URL, JS context escaping이 다르고, React 기본 escaping으로 막히지 않는 dangerouslySetInnerHTML이나 third-party HTML renderer는 별도 sanitization이 필요합니다”까지 이어가야 합니다.</p>
+</div>
+</section>
+
+<footer>SECURITY DEEP DIVE INTERVIEW · V2 · 2026-06</footer>
 </main>
 </div>
 </body>

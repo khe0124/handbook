@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>실무 치트시트 모음</title>
+</head>
+<body>
+<nav aria-label="목차">
+<div class="nav-brand">PRACTICE · CHEAT SHEETS</div>
+  <div class="nav-title">치트시트 · 빠른 점검표</div>
+  <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#doc-cheatfe"><span class="code">DOC</span>Frontend</a>
+  <a href="#doc-cheatbe"><span class="code">DOC</span>Backend</a>
+  <a href="#doc-cheatdb"><span class="code">DOC</span>Database</a>
+  <a href="#doc-cheatnet"><span class="code">DOC</span>Network</a>
+  <a href="#doc-cheatdevops"><span class="code">DOC</span>DevOps</a>
+  <a href="#doc-cheatlinux"><span class="code">DOC</span>Linux</a>
+  <a href="#doc-cheatdocker"><span class="code">DOC</span>Docker</a>
+  <a href="#doc-cheatinterview"><span class="code">DOC</span>Interview</a>
+  <a href="#doc-cheattools"><span class="code">DOC</span>Tools·Shortcuts·Commands</a>
+  <a href="#doc-cheatfe"><span class="code">SRC</span>Frontend</a>
+<a href="#cheatfe-ch1"><span class="code">FE-CS-01</span>개요</a>
+  <a href="#cheatfe-ch2"><span class="code">FE-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatfe-ch3"><span class="code">FE-CS-03</span>판단 기준</a>
+  <a href="#cheatfe-ch4"><span class="code">FE-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatfe-ch5"><span class="code">FE-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatfe-ch6"><span class="code">FE-CS-06</span>Red Flags</a>
+  <a href="#cheatfe-ch7"><span class="code">FE-CS-07</span>Review Gate</a>
+  <a href="#cheatfe-ch8"><span class="code">FE-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatbe"><span class="code">SRC</span>Backend</a>
+<a href="#cheatbe-ch1"><span class="code">BE-CS-01</span>개요</a>
+  <a href="#cheatbe-ch2"><span class="code">BE-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatbe-ch3"><span class="code">BE-CS-03</span>판단 기준</a>
+  <a href="#cheatbe-ch4"><span class="code">BE-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatbe-ch5"><span class="code">BE-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatbe-ch6"><span class="code">BE-CS-06</span>Red Flags</a>
+  <a href="#cheatbe-ch7"><span class="code">BE-CS-07</span>Review Gate</a>
+  <a href="#cheatbe-ch8"><span class="code">BE-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatdb"><span class="code">SRC</span>Database</a>
+<a href="#cheatdb-ch1"><span class="code">DB-CS-01</span>개요</a>
+  <a href="#cheatdb-ch2"><span class="code">DB-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatdb-ch3"><span class="code">DB-CS-03</span>판단 기준</a>
+  <a href="#cheatdb-ch4"><span class="code">DB-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatdb-ch5"><span class="code">DB-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatdb-ch6"><span class="code">DB-CS-06</span>Red Flags</a>
+  <a href="#cheatdb-ch7"><span class="code">DB-CS-07</span>Review Gate</a>
+  <a href="#cheatdb-ch8"><span class="code">DB-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatnet"><span class="code">SRC</span>Network</a>
+<a href="#cheatnet-ch1"><span class="code">NW-CS-01</span>개요</a>
+  <a href="#cheatnet-ch2"><span class="code">NW-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatnet-ch3"><span class="code">NW-CS-03</span>판단 기준</a>
+  <a href="#cheatnet-ch4"><span class="code">NW-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatnet-ch5"><span class="code">NW-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatnet-ch6"><span class="code">NW-CS-06</span>Red Flags</a>
+  <a href="#cheatnet-ch7"><span class="code">NW-CS-07</span>Review Gate</a>
+  <a href="#cheatnet-ch8"><span class="code">NW-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatdevops"><span class="code">SRC</span>DevOps</a>
+<a href="#cheatdevops-ch1"><span class="code">DO-CS-01</span>개요</a>
+  <a href="#cheatdevops-ch2"><span class="code">DO-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatdevops-ch3"><span class="code">DO-CS-03</span>판단 기준</a>
+  <a href="#cheatdevops-ch4"><span class="code">DO-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatdevops-ch5"><span class="code">DO-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatdevops-ch6"><span class="code">DO-CS-06</span>Red Flags</a>
+  <a href="#cheatdevops-ch7"><span class="code">DO-CS-07</span>Review Gate</a>
+  <a href="#cheatdevops-ch8"><span class="code">DO-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatlinux"><span class="code">SRC</span>Linux</a>
+<a href="#cheatlinux-ch1"><span class="code">LX-CS-01</span>개요</a>
+  <a href="#cheatlinux-ch2"><span class="code">LX-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatlinux-ch3"><span class="code">LX-CS-03</span>판단 기준</a>
+  <a href="#cheatlinux-ch4"><span class="code">LX-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatlinux-ch5"><span class="code">LX-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatlinux-ch6"><span class="code">LX-CS-06</span>Red Flags</a>
+  <a href="#cheatlinux-ch7"><span class="code">LX-CS-07</span>Review Gate</a>
+  <a href="#cheatlinux-ch8"><span class="code">LX-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatdocker"><span class="code">SRC</span>Docker</a>
+<a href="#cheatdocker-ch1"><span class="code">DK-CS-01</span>개요</a>
+  <a href="#cheatdocker-ch2"><span class="code">DK-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatdocker-ch3"><span class="code">DK-CS-03</span>판단 기준</a>
+  <a href="#cheatdocker-ch4"><span class="code">DK-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatdocker-ch5"><span class="code">DK-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatdocker-ch6"><span class="code">DK-CS-06</span>Red Flags</a>
+  <a href="#cheatdocker-ch7"><span class="code">DK-CS-07</span>Review Gate</a>
+  <a href="#cheatdocker-ch8"><span class="code">DK-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheatinterview"><span class="code">SRC</span>Interview</a>
+<a href="#cheatinterview-ch1"><span class="code">IV-CS-01</span>개요</a>
+  <a href="#cheatinterview-ch2"><span class="code">IV-CS-02</span>핵심 명령/개념</a>
+  <a href="#cheatinterview-ch3"><span class="code">IV-CS-03</span>판단 기준</a>
+  <a href="#cheatinterview-ch4"><span class="code">IV-CS-04</span>자주 나는 실수</a>
+  <a href="#cheatinterview-ch5"><span class="code">IV-CS-05</span>면접/리뷰용 한 줄 답변</a>
+  <a href="#cheatinterview-ch6"><span class="code">IV-CS-06</span>Red Flags</a>
+  <a href="#cheatinterview-ch7"><span class="code">IV-CS-07</span>Review Gate</a>
+  <a href="#cheatinterview-ch8"><span class="code">IV-CS-08</span>Failure Playbook</a>
+  <a href="#doc-cheattools"><span class="code">SRC</span>Tools·Shortcuts·Commands</a>
+<a href="#cheattools-ch1"><span class="code">TOOL-CS-01</span>개요</a>
+  <a href="#cheattools-ch2"><span class="code">TOOL-CS-02</span>유용한 툴</a>
+  <a href="#cheattools-ch3"><span class="code">TOOL-CS-03</span>IDE·브라우저 단축키</a>
+  <a href="#cheattools-ch4"><span class="code">TOOL-CS-04</span>Git·터미널 명령어</a>
+  <a href="#cheattools-ch5"><span class="code">TOOL-CS-05</span>Node·API·DB 명령어</a>
+  <a href="#cheattools-ch6"><span class="code">TOOL-CS-06</span>Docker·운영 명령어</a>
+  <a href="#cheattools-ch7"><span class="code">TOOL-CS-07</span>Red Flags</a>
+  <a href="#cheattools-ch8"><span class="code">TOOL-CS-08</span>Review Gate</a>
+  <a href="#cheattools-ch9"><span class="code">TOOL-CS-09</span>Failure Playbook</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : PRACTICE-CHEAT-SHEETS</span>
+    <span>SCOPE : CHEAT SHEETS · REVIEW GATES · FAILURE PLAYBOOKS</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>실무 치트시트 모음</h1>
+  <p class="hero-sub">Frontend, Backend, Database, Network, DevOps, Linux, Docker, Interview, Tools·Shortcuts·Commands 치트시트를 통합했습니다.</p>
+  <div class="hero-meta">CURATED HANDBOOK PATH · SOURCES : 9 DOCUMENTS · UPDATED 2026-06</div>
+</header>
+
+<section id="bundle-index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
+<p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
+<ul><li>Frontend</li><li>Backend</li><li>Database</li><li>Network</li><li>DevOps</li><li>Linux</li><li>Docker</li><li>Interview</li><li>Tools·Shortcuts·Commands</li></ul>
+</section>
+
+<section id="doc-cheatfe">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Frontend</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial">
+      <span>DOC : CHEAT-FRONTEND-V1</span>
+      <span>SCOPE : RENDERING · STATE · PERFORMANCE · SECURITY</span>
+      <span>LANG : KO</span>
+    </div>
+    <h1>Frontend<br>Cheat Sheet</h1>
+    <p class="hero-sub">프론트엔드 판단을 빠르게 복기하기 위한 압축 참조입니다. 렌더링, 상태 경계, 성능, 접근성, 보안, 테스트를 긴 설명 대신 실무 체크 기준으로 정리합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatfe-ch1">
+    <div class="ch-head"><span class="ch-code">FE-CS-01</span><h2>개요</h2></div>
+    <p class="lede">프론트엔드 문제는 “화면이 안 나옴”으로 보이지만 실제 원인은 렌더링, 네트워크, 상태 소유권, 접근성, 보안 경계 중 하나입니다. 먼저 증상을 계층으로 나눠야 빠르게 고칩니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>실패 신호</th></tr>
+      <tr><td>화면이 느림</td><td>렌더 횟수, 큰 DOM, 네트워크 waterfall, 이미지와 번들 크기</td><td>interaction마다 전체 목록 재렌더, LCP 이미지 지연</td></tr>
+      <tr><td>상태가 꼬임</td><td>서버 상태와 UI 상태가 섞였는지, derived state를 저장했는지</td><td>새로고침 후 값이 바뀌거나 탭 간 값이 어긋남</td></tr>
+      <tr><td>SSR 오류</td><td>서버/클라이언트 렌더 결과 차이, 브라우저 전용 API 접근 시점</td><td>hydration mismatch, 날짜·랜덤값·localStorage 차이</td></tr>
+      <tr><td>접근성 누락</td><td>키보드 이동, focus, label, semantic element, contrast</td><td>Tab으로 닿지 않거나 screen reader 이름이 없음</td></tr>
+      <tr><td>보안 리뷰</td><td>HTML 삽입, token 저장, CSRF, dependency, CSP</td><td>사용자 입력이 escape 없이 DOM에 들어감</td></tr>
+    </table>
+  </section>
+  <section id="cheatfe-ch2">
+    <div class="ch-head"><span class="ch-code">FE-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념</th><th>압축 설명</th><th>실무 해석</th></tr>
+      <tr><td>Reflow</td><td>레이아웃 계산. 크기와 위치 변경이 원인이라 비용이 큼</td><td>반복 측정/쓰기, 큰 table/list에서 체감됨</td></tr>
+      <tr><td>Repaint</td><td>색, 그림자 같은 픽셀 다시 그리기</td><td>box-shadow, filter, 큰 배경 변경은 비용이 커질 수 있음</td></tr>
+      <tr><td>Composite</td><td>이미 그린 레이어를 합성</td><td>animation은 가능하면 transform/opacity 위주로 설계</td></tr>
+      <tr><td>Server state</td><td>서버가 소유한 캐시 가능한 비동기 데이터</td><td>freshness, invalidate, retry, loading/error 상태가 핵심</td></tr>
+      <tr><td>Client state</td><td>모달, 탭, 입력 중 값처럼 UI가 소유한 즉시성 상태</td><td>URL에 남길지, 컴포넌트에 둘지, 전역화할지 결정</td></tr>
+      <tr><td>Hydration mismatch</td><td>서버 HTML과 클라이언트 첫 렌더 결과 불일치</td><td>서버에서 결정 불가능한 값은 effect 이후로 미룸</td></tr>
+      <tr><td>Core Web Vitals</td><td>LCP, INP, CLS 중심 사용자 체감 지표</td><td>LCP는 로딩, INP는 반응성, CLS는 레이아웃 안정성 문제</td></tr>
+    </table>
+    <div class="serial-card"><span class="sc-label">FAST CHECK</span><code>npm run build</code>로 번들 오류를 먼저 잡고, DevTools Performance와 Network 탭으로 병목을 나눠 봅니다.</div>
+  </section>
+  <section id="cheatfe-ch3">
+    <div class="ch-head"><span class="ch-code">FE-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>CSR</td><td>로그인 뒤 내부 도구, SEO 영향 작음, 인터랙션 중심</td><td>초기 빈 화면과 큰 JS 번들 관리 필요</td></tr>
+      <tr><td>SSR</td><td>초기 표시와 SEO가 중요하고 사용자별 데이터가 있음</td><td>서버 비용, cache 전략, hydration 안정성 필요</td></tr>
+      <tr><td>SSG</td><td>콘텐츠가 거의 고정이고 빠른 CDN 제공이 중요함</td><td>데이터 변경 주기와 재생성 전략 확인</td></tr>
+      <tr><td>memoization</td><td>계산 비용이 크거나 props 안정성이 보장될 때만 적용</td><td>측정 없이 남발하면 코드 복잡도만 증가</td></tr>
+      <tr><td>URL state</td><td>공유, 뒤로가기, 새로고침 복원이 필요한 필터/검색</td><td>입력 중 값과 확정된 query를 분리</td></tr>
+      <tr><td>E2E test</td><td>사용자 흐름 자체가 더 중요한 핵심 경로</td><td>모든 edge를 E2E로 밀면 느리고 불안정해짐</td></tr>
+    </table>
+  </section>
+  <section id="cheatfe-ch4">
+    <div class="ch-head"><span class="ch-code">FE-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>API 응답 전체를 컴포넌트 상태로 복사해 서버 상태와 UI 상태를 동시에 관리한다. stale data와 동기화 버그가 생긴다.</li>
+      <li>성능 문제를 보기 전에 무조건 <code>memo</code>, <code>useMemo</code>, <code>useCallback</code>을 추가한다. 실제 병목이 네트워크나 이미지면 효과가 없다.</li>
+      <li>버튼 역할을 하는 <code>div</code>를 만들고 keyboard/focus 처리를 빼먹는다. 접근성과 테스트 가능성이 동시에 나빠진다.</li>
+      <li>토큰 저장 위치를 보안 위협 모델 없이 관성으로 결정한다. XSS, CSRF, 세션 폐기 요구가 선택을 바꾼다.</li>
+      <li>hydration 문제를 suppress 옵션으로 숨기고 원인을 제거하지 않는다. 날짜, locale, 랜덤값, 브라우저 API 접근을 먼저 의심한다.</li>
+      <li>loading, empty, error, permission denied, offline 상태를 나중에 붙인다. 핵심 UI 구조가 뒤늦게 흔들린다.</li>
+    </ul>
+  </section>
+  <section id="cheatfe-ch5">
+    <div class="ch-head"><span class="ch-code">FE-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>상태 분리</b><span>state boundary</span></div><div class="g-def">서버 상태는 캐시와 동기화 문제이고, 클라이언트 상태는 즉시 UI 반응 문제라 lifecycle과 소유자가 다릅니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>성능 최적화</b><span>performance</span></div><div class="g-def">먼저 측정으로 병목을 렌더링, 네트워크, 번들, 이미지 중 어디인지 나눈 뒤 가장 큰 비용부터 줄입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>접근성</b><span>a11y</span></div><div class="g-def">접근성은 추가 기능이 아니라 키보드, 스크린리더, semantic markup까지 포함한 기본 사용성입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>SSR</b><span>hydration</span></div><div class="g-def">SSR의 핵심 위험은 서버가 만든 HTML과 클라이언트 첫 렌더가 달라지는 것이므로 비결정적 값은 분리해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>보안</b><span>browser risk</span></div><div class="g-def">브라우저는 사용자가 조작 가능한 환경이므로 입력 escape, 권한 재검증, 토큰 저장, 의존성 위험을 함께 봐야 합니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatfe-ch6">
+    <div class="ch-head"><span class="ch-code">FE-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">프론트엔드 품질은 정상 화면보다 빈 화면, 실패 화면, 느린 상호작용, 접근성, 브라우저 보안에서 드러납니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>loading, empty, error, permission 상태가 없음</td><td>실제 운영 데이터에서는 UI가 쉽게 깨집니다.</td><td>상태별 스냅샷, story, E2E 경로를 추가합니다.</td></tr>
+      <tr><td><code>dangerouslySetInnerHTML</code> 또는 <code>innerHTML</code> 사용</td><td>XSS가 DOM 실행으로 이어질 수 있습니다.</td><td>escape/sanitize, CSP, 입력 출처를 확인합니다.</td></tr>
+      <tr><td>토큰 저장 위치를 관성으로 결정</td><td>XSS와 CSRF 위협 모델에 따라 선택이 달라집니다.</td><td>HttpOnly, SameSite, refresh 흐름, logout/revoke를 비교합니다.</td></tr>
+      <tr><td>측정 전 memoization 남발</td><td>렌더 원인보다 참조 안정성 코드가 복잡해집니다.</td><td>React Profiler와 Network waterfall을 먼저 봅니다.</td></tr>
+      <tr><td>hydration 경고를 suppress로 숨김</td><td>서버·클라이언트 초기 상태 차이가 계속 남습니다.</td><td>날짜, locale, random, browser API 접근을 분리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatfe-ch7">
+    <div class="ch-head"><span class="ch-code">FE-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>화면 추가</td><td>빈 상태, 오류 상태, 권한 없음, 모바일 폭에서 레이아웃이 없음</td><td>상태별 캡처와 주요 viewport 확인이 있습니다.</td></tr>
+      <tr><td>폼·입력</td><td>서버 validation 오류를 사용자 행동으로 복구할 수 없음</td><td>필드별 오류, submit 중복 방지, 재시도 흐름이 있습니다.</td></tr>
+      <tr><td>성능 변경</td><td>LCP/INP/CLS 또는 번들 영향이 측정되지 않음</td><td>전후 수치와 병목 근거가 있습니다.</td></tr>
+      <tr><td>접근성</td><td>키보드로 핵심 액션에 도달할 수 없음</td><td>focus order, label, semantic element, contrast를 확인했습니다.</td></tr>
+      <tr><td>보안 경계</td><td>사용자 입력 HTML, 토큰, redirect URL 검증이 불명확함</td><td>sanitize, allowlist, SameSite/CSP 정책이 명시돼 있습니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatfe-ch8">
+    <div class="ch-head"><span class="ch-code">FE-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">BROKEN SCREEN TRIAGE</span>깨진 화면은 코드부터 고치기보다 route, role, API, runtime error, hydration, cache 순서로 증거를 모읍니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>어떤 route, user role, browser, viewport에서만 재현되는가?</td><td>재현 조건, session, feature flag</td></tr>
+      <tr><td>2</td><td>Console error와 Network 실패가 먼저인가?</td><td>DevTools Console, Network status, response body</td></tr>
+      <tr><td>3</td><td>API contract 변경 또는 cache stale이 있는가?</td><td>response schema, ETag/cache-control, deploy SHA</td></tr>
+      <tr><td>4</td><td>hydration, date/locale/random, browser-only API 차이인가?</td><td>SSR log, client stack trace, hydration warning</td></tr>
+      <tr><td>5</td><td>flag off, rollback, CDN purge 중 어떤 복구가 가장 안전한가?</td><td>사용자 영향 범위와 데이터 변경 여부</td></tr>
+    </table>
+  </section>
+
+<section id="doc-cheatbe">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Backend</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-BACKEND-V1</span><span>SCOPE : API · AUTH · TRANSACTION · ASYNC</span><span>LANG : KO</span></div>
+    <h1>Backend<br>Cheat Sheet</h1>
+    <p class="hero-sub">API와 서버 변경을 리뷰할 때 contract, validation, auth, transaction, async, idempotency를 빠르게 확인하는 압축 참조입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatbe-ch1">
+    <div class="ch-head"><span class="ch-code">BE-CS-01</span><h2>개요</h2></div>
+    <p class="lede">백엔드 변경은 정상 응답보다 실패, 재시도, 권한, 정합성에서 깨집니다. 구현 전에 계약과 실패 모드를 먼저 고정합니다.</p>
+    <table>
+      <tr><th>리뷰 대상</th><th>먼저 볼 것</th><th>깨지는 지점</th></tr>
+      <tr><td>신규 API</td><td>request/response schema, status code, error shape</td><td>클라이언트가 실패 사유를 구분하지 못함</td></tr>
+      <tr><td>권한 기능</td><td>authentication과 authorization 책임 분리</td><td>로그인만 확인하고 소유권/역할 검사를 빠뜨림</td></tr>
+      <tr><td>쓰기 작업</td><td>transaction boundary, retry, idempotency</td><td>timeout 후 재시도로 중복 생성/중복 결제 발생</td></tr>
+      <tr><td>비동기 처리</td><td>timeout, backoff, duplicate message, dead letter</td><td>실패 메시지가 무한 재시도되거나 조용히 유실됨</td></tr>
+      <tr><td>외부 연동</td><td>rate limit, circuit breaker, fallback, audit log</td><td>외부 장애가 전체 요청 지연으로 전파됨</td></tr>
+    </table>
+  </section>
+  <section id="cheatbe-ch2">
+    <div class="ch-head"><span class="ch-code">BE-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념</th><th>압축 설명</th><th>실무 체크</th></tr>
+      <tr><td>Authentication</td><td>누구인지 확인</td><td>세션/JWT 만료, 재발급, 폐기 정책 확인</td></tr>
+      <tr><td>Authorization</td><td>무엇을 할 수 있는지 판단</td><td>role뿐 아니라 resource ownership 확인</td></tr>
+      <tr><td>Validation</td><td>입력 형식, 범위, 상태 전이 가능성 확인</td><td>client 검증은 UX, server 검증은 신뢰 경계</td></tr>
+      <tr><td>Transaction</td><td>함께 성공하거나 함께 실패해야 하는 변경 묶음</td><td>외부 API 호출과 긴 작업을 경계 밖으로 빼기</td></tr>
+      <tr><td>Idempotency key</td><td>같은 요청이 여러 번 와도 결과를 한 번처럼 만드는 식별자</td><td>POST, 결제, 주문, 메시지 소비에 우선 적용</td></tr>
+      <tr><td>Backpressure</td><td>처리량보다 입력이 클 때 시스템이 무너지지 않도록 제어</td><td>queue length, rate limit, reject 전략 필요</td></tr>
+      <tr><td>Timeout</td><td>응답을 무한히 기다리지 않기 위한 상한</td><td>client, server, DB, 외부 API timeout 정렬</td></tr>
+    </table>
+    <div class="serial-card"><span class="sc-label">API CHECK</span>읽기 API는 cache와 pagination, 쓰기 API는 validation, transaction, idempotency, audit log를 먼저 확인합니다.</div>
+  </section>
+  <section id="cheatbe-ch3">
+    <div class="ch-head"><span class="ch-code">BE-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>Session</td><td>서버 제어와 즉시 폐기가 중요하고 상태 저장 비용을 감당할 수 있음</td><td>scale-out 시 session store 필요</td></tr>
+      <tr><td>JWT</td><td>분산 검증과 stateless가 중요함</td><td>폐기, claim drift, 짧은 만료/refresh 설계 필요</td></tr>
+      <tr><td>RBAC</td><td>역할 단위 권한이 명확하고 조직이 단순함</td><td>예외가 늘면 role explosion 발생</td></tr>
+      <tr><td>ABAC</td><td>소유자, 조직, 상태, 시간 등 속성 기반 판단이 필요함</td><td>정책 테스트와 설명 가능성 확보 필요</td></tr>
+      <tr><td>Optimistic lock</td><td>충돌이 드물고 사용자에게 재시도 경험을 줄 수 있음</td><td>충돌 메시지와 재시도 흐름 필요</td></tr>
+      <tr><td>Pessimistic lock</td><td>충돌 비용이 크고 동시에 하나만 처리해야 함</td><td>lock wait, deadlock, 처리 시간 관리 필요</td></tr>
+      <tr><td>Queue</td><td>즉시 응답보다 평탄화, 재시도, 외부 연동 분리가 더 중요함</td><td>중복 소비와 순서 보장을 별도로 설계</td></tr>
+    </table>
+  </section>
+  <section id="cheatbe-ch4">
+    <div class="ch-head"><span class="ch-code">BE-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>프론트 validation이 있으니 서버 validation을 생략한다. 클라이언트는 신뢰 경계 밖에 있다.</li>
+      <li>권한 검사를 controller 일부 경로에만 넣고 service/data layer 기준을 만들지 않는다. 우회 경로가 생긴다.</li>
+      <li>POST 요청이 timeout 후 재시도될 수 있다는 점을 설계하지 않는다. 중복 요청은 예외가 아니라 정상 조건이다.</li>
+      <li>transaction 안에서 외부 API 호출이나 긴 작업을 수행한다. lock 시간이 길어지고 장애가 DB 정합성 문제로 번진다.</li>
+      <li>로그에 requestId, actor, target, result가 없어 장애 분석이 어렵다. 개인정보와 secret은 남기지 않는다.</li>
+      <li>에러 응답을 모두 500으로 뭉갠다. 클라이언트가 재시도/수정/권한 요청을 구분할 수 없다.</li>
+    </ul>
+  </section>
+  <section id="cheatbe-ch5">
+    <div class="ch-head"><span class="ch-code">BE-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>API 계약</b><span>contract</span></div><div class="g-def">API는 함수가 아니라 팀 간 계약이므로 성공 응답보다 실패 응답과 호환성을 먼저 고정합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>멱등성</b><span>idempotency</span></div><div class="g-def">네트워크와 클라이언트 재시도는 정상 입력이므로 쓰기 작업은 중복 요청을 견뎌야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>트랜잭션</b><span>transaction</span></div><div class="g-def">트랜잭션 경계는 데이터 정합성 단위이며, 오래 잡을수록 lock과 장애 전파 비용이 커집니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>인증/인가</b><span>auth</span></div><div class="g-def">인증은 신원 확인이고 인가는 특정 리소스에 대한 행동 권한 판단이라 둘을 분리해 설계해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>비동기 처리</b><span>async</span></div><div class="g-def">큐는 일을 나중에 하게 만드는 도구가 아니라 부하 평탄화, 재시도, 장애 격리를 위한 경계입니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatbe-ch6">
+    <div class="ch-head"><span class="ch-code">BE-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">아래 신호가 보이면 구현 디테일보다 장애·권한·정합성 경계를 먼저 재검토합니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>프론트에서 버튼을 숨기는 것으로 권한을 처리</td><td>API를 직접 호출하면 우회됩니다.</td><td>서버 authorization과 resource ownership 검사를 확인합니다.</td></tr>
+      <tr><td>transaction 안에서 외부 API 호출</td><td>lock 시간이 외부 장애 시간만큼 늘어납니다.</td><td>outbox, 사후 보상, 상태 전이 분리를 검토합니다.</td></tr>
+      <tr><td>쓰기 API에 idempotency 기준 없음</td><td>timeout, 새로고침, 모바일 재시도에서 중복 생성됩니다.</td><td>idempotency key, unique constraint, 재시도 응답 정책을 정합니다.</td></tr>
+      <tr><td>admin 작업 audit log 없음</td><td>장애·보안 사고 때 누가 무엇을 바꿨는지 추적할 수 없습니다.</td><td>actor, target, before/after, requestId, result를 남깁니다.</td></tr>
+      <tr><td>에러 응답 contract가 없음</td><td>클라이언트가 재시도, 사용자 수정, 권한 요청을 구분하지 못합니다.</td><td>status, machine-readable code, message, retryability를 고정합니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatbe-ch7">
+    <div class="ch-head"><span class="ch-code">BE-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>인증·인가</td><td>역할, 소유권, 조직 경계, 만료·폐기 정책이 불명확함</td><td>권한 matrix와 negative test가 있습니다.</td></tr>
+      <tr><td>쓰기 API</td><td>중복 요청, 부분 실패, 재시도 응답이 정의되지 않음</td><td>idempotency와 transaction 경계가 문서화돼 있습니다.</td></tr>
+      <tr><td>비동기 처리</td><td>중복 소비, poison message, dead letter 정책이 없음</td><td>retry 횟수, backoff, DLQ, 재처리 절차가 있습니다.</td></tr>
+      <tr><td>외부 연동</td><td>timeout, rate limit, circuit breaker, fallback이 없음</td><td>연동 장애 때 사용자 영향과 복구 절차가 설명됩니다.</td></tr>
+      <tr><td>운영 관측</td><td>requestId, actor, target, errorCode, latency가 추적되지 않음</td><td>로그·메트릭·trace에서 하나의 요청을 따라갈 수 있습니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatbe-ch8">
+    <div class="ch-head"><span class="ch-code">BE-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">API INCIDENT TRIAGE</span>장애 대응은 “최근 배포”만 보지 말고 요청 contract, 권한, DB, 외부 연동, retry를 같은 순서로 좁힙니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>어떤 route, status, errorCode, requestId가 증가했는가?</td><td>API gateway log, app log, dashboard</td></tr>
+      <tr><td>2</td><td>특정 actor, tenant, resource, payload에서만 실패하는가?</td><td>권한 로그, validation 실패, 샘플 요청</td></tr>
+      <tr><td>3</td><td>DB lock, slow query, connection pool 고갈이 있는가?</td><td>DB metric, query log, pool saturation</td></tr>
+      <tr><td>4</td><td>외부 API timeout/rate limit이 내부 장애로 전파됐는가?</td><td>trace span, upstream status, retry count</td></tr>
+      <tr><td>5</td><td>rollback, feature flag off, traffic shedding 중 무엇이 가장 빠른가?</td><td>변경 범위, data migration 여부, 사용자 영향</td></tr>
+    </table>
+  </section>
+
+<section id="doc-cheatdb">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Database</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-DATABASE-V1</span><span>SCOPE : SQL · INDEX · PLAN · MIGRATION</span><span>LANG : KO</span></div>
+    <h1>Database<br>Cheat Sheet</h1>
+    <p class="hero-sub">쿼리와 스키마 변경을 빠르게 점검하기 위한 참조입니다. SQL 문법보다 인덱스, 실행 계획, lock, 마이그레이션 안전성을 우선합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatdb-ch1">
+    <div class="ch-head"><span class="ch-code">DB-CS-01</span><h2>개요</h2></div>
+    <p class="lede">DB 문제는 대부분 잘못된 접근 경로, 과한 lock, 되돌릴 수 없는 migration에서 시작합니다. 변경 전 실행 계획과 rollback을 확인합니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>위험 신호</th></tr>
+      <tr><td>느린 쿼리</td><td>filter, join, sort, row estimate, actual rows</td><td>actual rows가 추정치와 크게 다름, sort/hash가 디스크 사용</td></tr>
+      <tr><td>인덱스 추가</td><td>WHERE/JOIN/ORDER BY와 column order</td><td>쓰기 많은 테이블에 사용 빈도 낮은 인덱스 추가</td></tr>
+      <tr><td>스키마 변경</td><td>table rewrite, lock level, default, backfill</td><td>큰 테이블에 NOT NULL/default/backfill을 한 번에 수행</td></tr>
+      <tr><td>정합성 이슈</td><td>transaction boundary, isolation, lost update</td><td>읽고 계산한 뒤 업데이트하는 로직에 충돌 제어 없음</td></tr>
+      <tr><td>페이지네이션</td><td>정렬 기준, index, offset 크기, cursor 후보</td><td>큰 offset에서 응답 시간이 선형 증가</td></tr>
+    </table>
+  </section>
+  <section id="cheatdb-ch2">
+    <div class="ch-head"><span class="ch-code">DB-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념/명령</th><th>압축 설명</th><th>볼 것</th></tr>
+      <tr><td><code>EXPLAIN ANALYZE</code></td><td>계획과 실제 실행 시간을 함께 확인</td><td>rows, loops, sort method, buffers, execution time</td></tr>
+      <tr><td>Sequential scan</td><td>테이블 전체를 읽음</td><td>작은 테이블이면 정상, 큰 테이블에서 반복되면 위험</td></tr>
+      <tr><td>Index scan</td><td>인덱스로 후보를 좁히고 row를 읽음</td><td>선택도가 낮으면 기대만큼 빨라지지 않음</td></tr>
+      <tr><td>Covering index</td><td>쿼리에 필요한 컬럼을 인덱스에서 대부분 해결</td><td>읽기는 빨라지지만 인덱스 크기와 쓰기 비용 증가</td></tr>
+      <tr><td>Isolation level</td><td>동시 트랜잭션이 서로 어떻게 보이는지 정하는 규칙</td><td>dirty read, non-repeatable read, phantom, serialization failure</td></tr>
+      <tr><td>Backfill</td><td>새 컬럼이나 파생 데이터를 기존 row에 채우는 작업</td><td>batch size, lock, retry, progress, 검증 쿼리</td></tr>
+      <tr><td>Constraint validation</td><td>기존 데이터가 새 규칙을 만족하는지 확인</td><td>운영에서는 NOT VALID 후 VALIDATE 같은 단계화 검토</td></tr>
+    </table>
+  </section>
+  <section id="cheatdb-ch3">
+    <div class="ch-head"><span class="ch-code">DB-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>정규화</td><td>쓰기 정합성과 중복 제거가 중요함</td><td>조회 시 join 비용과 쿼리 복잡도 증가</td></tr>
+      <tr><td>비정규화</td><td>읽기 성능이 중요하고 중복 갱신 비용을 통제할 수 있음</td><td>동기화 실패와 stale data 감시 필요</td></tr>
+      <tr><td>복합 인덱스</td><td>동등 조건, 범위 조건, 정렬 순서가 반복됨</td><td>컬럼 순서가 쿼리 패턴과 맞아야 함</td></tr>
+      <tr><td>Partial index</td><td>특정 상태나 subset만 자주 조회함</td><td>쿼리 조건이 index predicate와 맞아야 사용됨</td></tr>
+      <tr><td>Cursor pagination</td><td>큰 데이터에서 안정적인 다음 페이지가 중요함</td><td>고유하고 변하지 않는 정렬 키 필요</td></tr>
+      <tr><td>단계적 migration</td><td>운영 데이터가 크고 신/구 코드가 공존함</td><td>expand → deploy → backfill → validate → contract 순서</td></tr>
+    </table>
+  </section>
+  <section id="cheatdb-ch4">
+    <div class="ch-head"><span class="ch-code">DB-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>인덱스를 추가하면 모든 쿼리가 빨라진다고 생각한다. 읽기 패턴과 선택도가 맞지 않으면 쓰기 비용만 늘어난다.</li>
+      <li>실행 계획의 estimated rows와 actual rows 차이를 보지 않는다. 통계가 틀리면 optimizer가 잘못된 경로를 고른다.</li>
+      <li>큰 테이블에 default와 not null을 한 번에 추가해 lock 위험을 만든다. nullable 추가, backfill, 검증, NOT NULL 순서로 나눠야 한다.</li>
+      <li>마이그레이션 rollback은 코드 rollback과 별개라는 점을 놓친다. 데이터 변경은 되돌릴 스크립트나 보정 절차가 필요하다.</li>
+      <li>pagination에서 offset이 커질수록 비용이 커지는 문제를 무시한다. 무한 스크롤과 대량 목록은 cursor 방식을 검토한다.</li>
+      <li>foreign key와 unique constraint를 앱 로직으로만 보장한다. 경쟁 조건에서는 DB 제약이 최후의 방어선이다.</li>
+    </ul>
+  </section>
+  <section id="cheatdb-ch5">
+    <div class="ch-head"><span class="ch-code">DB-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>인덱스</b><span>index</span></div><div class="g-def">인덱스는 읽기를 빠르게 하지만 쓰기 비용과 저장 공간을 늘리므로 쿼리 패턴에 맞춰 설계해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>실행 계획</b><span>plan</span></div><div class="g-def">실행 계획은 DB가 데이터를 어떤 경로로 읽고 조인하고 정렬하는지 보여주는 비용 지도입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>마이그레이션</b><span>migration</span></div><div class="g-def">운영 마이그레이션은 DDL이 아니라 lock, backfill, rollback, 신구 코드 호환성까지 포함한 변경 절차입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>트랜잭션</b><span>isolation</span></div><div class="g-def">트랜잭션은 원자성만이 아니라 동시에 실행될 때 어떤 값을 볼 수 있는지까지 포함해 설계해야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>제약조건</b><span>constraint</span></div><div class="g-def">중복, 참조, 필수값 같은 핵심 정합성은 애플리케이션 검증뿐 아니라 DB 제약으로도 막아야 합니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatdb-ch6">
+    <div class="ch-head"><span class="ch-code">DB-CS-06</span><h2>Red Flags</h2></div>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>대용량 테이블에 한 번에 NOT NULL/default/backfill</td><td>table rewrite와 장시간 lock 위험</td><td>row count, lock level, 단계적 migration</td></tr>
+      <tr><td>EXPLAIN 없이 인덱스 추가</td><td>쓰기 비용만 늘고 쿼리는 그대로일 수 있음</td><td><code>EXPLAIN (ANALYZE, BUFFERS)</code></td></tr>
+      <tr><td>offset pagination이 깊어짐</td><td>페이지가 깊을수록 읽는 row가 선형 증가</td><td>cursor key, index order</td></tr>
+      <tr><td>앱 로직만으로 uniqueness 보장</td><td>동시 요청에서 중복 row 생성 가능</td><td>unique constraint, 409 처리</td></tr>
+      <tr><td>마이그레이션 rollback 미정</td><td>코드 rollback 후 데이터가 이전 형태와 맞지 않음</td><td>expand-contract 계획, 보정 SQL</td></tr>
+    </table>
+  </section>
+  <section id="cheatdb-ch7">
+    <div class="ch-head"><span class="ch-code">DB-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경</th><th>merge/deploy 차단 기준</th><th>필수 증거</th></tr>
+      <tr><td>DDL</td><td>lock, rewrite, rollback, 신/구 코드 호환성 설명 없음</td><td>migration plan, table size, dry run</td></tr>
+      <tr><td>쿼리 변경</td><td>실행 계획과 p95/p99 비교 없음</td><td>before/after EXPLAIN, latency</td></tr>
+      <tr><td>인덱스 추가</td><td>쿼리 패턴, 선택도, 쓰기 영향 미검토</td><td>query frequency, index size, write path</td></tr>
+      <tr><td>데이터 보정</td><td>idempotency, batch size, progress, 재시도 기준 없음</td><td>backfill script, verification query</td></tr>
+      <tr><td>삭제/soft delete</td><td>참조, export, audit, cache 영향 미검토</td><td>deletion policy, cascade 영향</td></tr>
+    </table>
+  </section>
+  <section id="cheatdb-ch8">
+    <div class="ch-head"><span class="ch-code">DB-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">SLOW QUERY FIRST LOOK</span>1. 느린 route와 query fingerprint 확인<br>2. <code>EXPLAIN (ANALYZE, BUFFERS)</code>로 실제 실행 확인<br>3. estimated rows와 actual rows 차이 확인<br>4. sort/hash spill, lock wait, sequential scan 분리<br>5. index 후보를 쿼리 조건/정렬 순서와 맞춤<br>6. 변경 전후 p95/p99와 write latency 기록</div>
+    <div class="callout warn"><span class="co-label">운영 원칙</span><p>DB 변경은 코드 변경보다 되돌리기 어렵습니다. "쿼리가 빨라질 것"이 아니라 어떤 실행 계획이 어떻게 바뀌고, lock과 rollback 위험이 어떤지 증거로 남겨야 합니다.</p></div>
+  </section>
+
+<section id="doc-cheatnet">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Network</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-NETWORK-V1</span><span>SCOPE : DNS · TCP · TLS · ROUTING · FIREWALL</span><span>LANG : KO</span></div>
+    <h1>Network<br>Cheat Sheet</h1>
+    <p class="hero-sub">연결 장애를 DNS, 경로, 포트, TLS, HTTP 단계로 좁히기 위한 빠른 참조입니다. 한 번에 추측하지 않고 계층별로 확인합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatnet-ch1">
+    <div class="ch-head"><span class="ch-code">NW-CS-01</span><h2>개요</h2></div>
+    <p class="lede">네트워크 디버깅은 source, destination, name, route, policy, protocol 순서로 좁히면 빠릅니다. ping 성공은 서비스 성공을 의미하지 않습니다.</p>
+    <table>
+      <tr><th>증상</th><th>먼저 확인할 것</th><th>분리 기준</th></tr>
+      <tr><td>도메인이 안 열림</td><td>DNS record, TTL, authoritative response</td><td>이름이 틀린 문제인지 IP 이후 문제인지 분리</td></tr>
+      <tr><td>포트 연결 실패</td><td>route table, security group, firewall, listening port</td><td>클라이언트에서 못 나가는지 서버가 안 듣는지 확인</td></tr>
+      <tr><td>TLS 오류</td><td>certificate chain, SNI, hostname, expiration</td><td>인증서 신뢰 문제인지 앱 HTTP 문제인지 분리</td></tr>
+      <tr><td>HTTP 오류</td><td>status code, header, proxy, upstream log</td><td>네트워크는 됐고 앱/프록시 계층 문제로 이동</td></tr>
+      <tr><td>간헐 장애</td><td>DNS cache, connection pool, load balancer target health</td><td>특정 AZ, 특정 upstream, 특정 클라이언트인지 비교</td></tr>
+    </table>
+  </section>
+  <section id="cheatnet-ch2">
+    <div class="ch-head"><span class="ch-code">NW-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>명령/개념</th><th>압축 설명</th><th>해석 포인트</th></tr>
+      <tr><td><code>dig example.com</code></td><td>DNS record와 TTL 확인</td><td>권위 응답, CNAME chain, split-horizon DNS 확인</td></tr>
+      <tr><td><code>curl -v https://host</code></td><td>TLS와 HTTP 요청/응답 흐름 확인</td><td>DNS, connect, TLS, status, redirect를 한 번에 관찰</td></tr>
+      <tr><td><code>nc -zv host 443</code></td><td>특정 host:port 연결 가능 여부 확인</td><td>HTTP 이전의 TCP 연결 여부만 빠르게 확인</td></tr>
+      <tr><td><code>traceroute host</code></td><td>패킷이 지나가는 hop 추정</td><td>방화벽/ICMP 정책 때문에 완전한 증거는 아님</td></tr>
+      <tr><td><code>ss -tlnp</code></td><td>서버에서 listening socket 확인</td><td>서비스가 어느 address/port에 bind됐는지 확인</td></tr>
+      <tr><td>CIDR</td><td>IP 범위를 prefix 길이로 표현하는 방식</td><td>route table과 firewall rule의 적용 범위를 결정</td></tr>
+      <tr><td>SNI</td><td>TLS handshake에서 접속하려는 hostname 전달</td><td>여러 인증서를 쓰는 LB/proxy에서 중요</td></tr>
+    </table>
+  </section>
+  <section id="cheatnet-ch3">
+    <div class="ch-head"><span class="ch-code">NW-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>Public subnet</td><td>인터넷에서 직접 들어와야 하고 public route가 필요함</td><td>public IP와 route만으로는 보안 허용이 아님</td></tr>
+      <tr><td>Private subnet</td><td>외부 직접 접근을 막고 NAT나 내부 경로만 허용함</td><td>outbound 필요 시 NAT/egress proxy 확인</td></tr>
+      <tr><td>NAT</td><td>private 자원이 외부로 나가야 하지만 외부에서 들어오면 안 됨</td><td>return path, port exhaustion, 비용 확인</td></tr>
+      <tr><td>Security group</td><td>instance 또는 interface 기준 stateful 정책</td><td>응답 트래픽은 상태 추적으로 허용됨</td></tr>
+      <tr><td>NACL/firewall</td><td>subnet 또는 경계 기준 stateless 정책이 필요함</td><td>inbound/outbound와 ephemeral port를 모두 봐야 함</td></tr>
+      <tr><td>Load balancer</td><td>target health, TLS termination, path routing이 필요함</td><td>client IP 전달, timeout, health check path 확인</td></tr>
+    </table>
+  </section>
+  <section id="cheatnet-ch4">
+    <div class="ch-head"><span class="ch-code">NW-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>DNS가 맞는지 확인하지 않고 애플리케이션 문제로 단정한다. 같은 이름이 내부/외부에서 다르게 해석될 수 있다.</li>
+      <li>outbound는 열었지만 return path나 inbound rule을 확인하지 않는다. stateless 장비에서는 양방향 규칙이 필요하다.</li>
+      <li>TLS 인증서의 CN/SAN과 실제 접속 hostname이 다른 문제를 놓친다. IP로 접속하면 인증서 검증이 실패할 수 있다.</li>
+      <li>보안 그룹과 NACL의 stateful/stateless 차이를 혼동한다. ephemeral port 때문에 한쪽만 열어서는 실패할 수 있다.</li>
+      <li>VPN tunnel up을 서비스 통신 성공과 같은 의미로 본다. routing, DNS, firewall, app bind까지 별도 확인해야 한다.</li>
+      <li>proxy나 load balancer timeout을 앱 timeout보다 짧게 둔다. 요청은 처리됐는데 클라이언트는 실패로 보고 재시도할 수 있다.</li>
+    </ul>
+  </section>
+  <section id="cheatnet-ch5">
+    <div class="ch-head"><span class="ch-code">NW-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>요청 흐름</b><span>request path</span></div><div class="g-def">브라우저 요청은 DNS, TCP, TLS, HTTP, proxy, application 순서로 지나가며 각 단계의 실패 신호가 다릅니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>방화벽</b><span>policy</span></div><div class="g-def">네트워크 정책은 출발지, 목적지, 포트, 방향, 상태 추적 여부를 함께 봐야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>디버깅</b><span>debug</span></div><div class="g-def">연결 장애는 추측보다 계층별 증거로 좁혀야 하며, ping 하나로 서비스 정상 여부를 판단할 수 없습니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>CIDR</b><span>addressing</span></div><div class="g-def">CIDR은 IP 범위의 언어라서 subnet, route, firewall rule을 설계할 때 가장 먼저 맞아야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>TLS</b><span>certificate</span></div><div class="g-def">TLS 문제는 인증서 체인, 만료, hostname, SNI를 나눠 보면 애플리케이션 오류와 빠르게 분리됩니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatnet-ch6">
+    <div class="ch-head"><span class="ch-code">NW-CS-06</span><h2>Red Flags</h2></div>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>ping 성공만으로 정상 판단</td><td>ICMP와 TCP/TLS/HTTP 성공은 별개</td><td><code>nc -zv</code>, <code>curl -v</code>, 서버 access log</td></tr>
+      <tr><td>VPN tunnel up인데 서비스 실패</td><td>터널 협상과 route/DNS/firewall/app bind는 별개</td><td>route table, return path, 양쪽 firewall</td></tr>
+      <tr><td>간헐 timeout</td><td>특정 target, AZ, connection pool, LB health 문제일 수 있음</td><td>target health, 5xx/timeout 분포, trace</td></tr>
+      <tr><td>TLS hostname mismatch</td><td>사용자는 보안 경고 또는 handshake 실패를 봄</td><td><code>openssl s_client -servername host -connect host:443</code></td></tr>
+      <tr><td>NACL/stateless 장비 변경</td><td>응답 ephemeral port가 막혀 한 방향만 성공할 수 있음</td><td>inbound/outbound 양방향 rule</td></tr>
+    </table>
+  </section>
+  <section id="cheatnet-ch7">
+    <div class="ch-head"><span class="ch-code">NW-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경</th><th>merge/deploy 차단 기준</th><th>필수 증거</th></tr>
+      <tr><td>방화벽/SG/NACL</td><td>source, destination, protocol, port, direction이 불명확함</td><td>규칙 diff, 허용 CIDR, 검증 명령</td></tr>
+      <tr><td>DNS 변경</td><td>TTL, rollback record, 내부/외부 resolver 차이를 모름</td><td><code>dig</code> 결과, TTL, 이전 record</td></tr>
+      <tr><td>LB/proxy 변경</td><td>health check, timeout, header forwarding 검증 없음</td><td>target health, <code>curl -v</code>, upstream log</td></tr>
+      <tr><td>VPN/peering</td><td>CIDR 충돌, return route, 상대 방화벽 담당자 확인 없음</td><td>route table, peer CIDR, 테스트 source</td></tr>
+      <tr><td>TLS 인증서</td><td>SAN, chain, expiry, SNI 검증 없음</td><td><code>openssl s_client</code>, browser/curl 검증</td></tr>
+    </table>
+  </section>
+  <section id="cheatnet-ch8">
+    <div class="ch-head"><span class="ch-code">NW-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">L3-L7 TRIAGE</span>1. <code>dig host</code>로 이름 해석 확인<br>2. <code>nc -zv host port</code>로 TCP 도달성 확인<br>3. <code>curl -vk https://host</code>로 TLS/HTTP 확인<br>4. 서버에서 <code>ss -tlnp</code>로 listen 확인<br>5. LB/proxy/access log와 target health 비교<br>6. route table, firewall, return path를 양쪽에서 대조</div>
+    <div class="callout warn"><span class="co-label">운영 원칙</span><p>네트워크 장애는 "열었다"가 아니라 어떤 출발지에서 어떤 목적지의 어떤 포트를 어떤 방향으로 검증했는지로 기록합니다. 증거 없는 네트워크 정상 판단은 장애 시간을 늘립니다.</p></div>
+  </section>
+
+<section id="doc-cheatdevops">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>DevOps</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-DEVOPS-V1</span><span>SCOPE : CI/CD · DEPLOY · OBSERVABILITY · IAC</span><span>LANG : KO</span></div>
+    <h1>DevOps<br>Cheat Sheet</h1>
+    <p class="hero-sub">배포와 운영 변경을 재현성, 추적성, 롤백 가능성, 관측 가능성 기준으로 빠르게 점검하는 참조입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatdevops-ch1">
+    <div class="ch-head"><span class="ch-code">DO-CS-01</span><h2>개요</h2></div>
+    <p class="lede">DevOps의 핵심은 자동화 자체가 아니라 변경을 작게 만들고, 검증하고, 문제가 생기면 빠르게 멈추거나 되돌리는 운영 체계입니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>운영 질문</th></tr>
+      <tr><td>배포 전</td><td>artifact digest, test gate, approval, rollback plan</td><td>정확히 무엇이 운영에 올라가는가?</td></tr>
+      <tr><td>배포 중</td><td>error rate, latency, saturation, health check</td><td>어떤 지표가 나빠지면 멈출 것인가?</td></tr>
+      <tr><td>장애 대응</td><td>recent change, blast radius, log/metric/trace</td><td>사용자 영향 범위와 최근 변경은 무엇인가?</td></tr>
+      <tr><td>인프라 변경</td><td>plan diff, drift, secret exposure, dependency</td><td>이 변경이 어떤 리소스를 교체/삭제하는가?</td></tr>
+      <tr><td>Secret 변경</td><td>rotation, consumer rollout, revocation, audit</td><td>구버전 앱이 새 secret을 읽을 수 있는가?</td></tr>
+    </table>
+  </section>
+  <section id="cheatdevops-ch2">
+    <div class="ch-head"><span class="ch-code">DO-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>개념</th><th>압축 설명</th><th>실무 체크</th></tr>
+      <tr><td>CI</td><td>merge 전후 빌드, 테스트, 정적 검사로 통합 위험을 낮춤</td><td>빠르고 결정적이며 실패 원인이 읽혀야 함</td></tr>
+      <tr><td>CD</td><td>검증된 artifact를 환경에 배포하고 승격함</td><td>환경별 재빌드보다 동일 artifact 승격이 바람직</td></tr>
+      <tr><td>Blue-green</td><td>신/구 환경을 동시에 두고 트래픽을 전환</td><td>DB schema와 background job 중복 실행 주의</td></tr>
+      <tr><td>Canary</td><td>일부 트래픽부터 점진적으로 확대</td><td>중단 기준과 자동/수동 rollback 기준 필요</td></tr>
+      <tr><td>RED</td><td>Rate, Errors, Duration 중심 서비스 지표</td><td>API와 사용자 흐름의 품질 확인</td></tr>
+      <tr><td>USE</td><td>Utilization, Saturation, Errors 중심 리소스 지표</td><td>CPU, memory, disk, network 병목 확인</td></tr>
+      <tr><td>Drift</td><td>코드에 선언된 인프라와 실제 상태의 차이</td><td>수동 변경이 누적되면 재현성과 복구성이 깨짐</td></tr>
+    </table>
+  </section>
+  <section id="cheatdevops-ch3">
+    <div class="ch-head"><span class="ch-code">DO-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>Rolling</td><td>자원 추가가 어렵고 신/구 버전 공존이 안전함</td><td>중간 상태에서 호환성이 깨지면 장애 발생</td></tr>
+      <tr><td>Blue-green</td><td>빠른 전환과 빠른 rollback이 중요하고 자원 2배를 감당함</td><td>DB와 queue consumer는 단순 전환이 어려움</td></tr>
+      <tr><td>Canary</td><td>사용자 영향 반경을 작게 시작하고 지표 기반 확대가 가능함</td><td>트래픽 분할과 지표 민감도가 충분해야 함</td></tr>
+      <tr><td>Manual gate</td><td>운영 영향이 크고 사람의 판단이 필요한 release</td><td>승인자가 볼 diff와 위험 요약이 있어야 함</td></tr>
+      <tr><td>IaC</td><td>인프라 상태를 재현 가능하게 version control 해야 함</td><td>plan 검토, state 보호, secret 분리 필요</td></tr>
+      <tr><td>Feature flag</td><td>배포와 기능 공개를 분리해야 함</td><td>flag cleanup을 안 하면 코드 경로가 복잡해짐</td></tr>
+    </table>
+  </section>
+  <section id="cheatdevops-ch4">
+    <div class="ch-head"><span class="ch-code">DO-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>CI가 통과했지만 어떤 artifact가 운영에 배포됐는지 추적하지 않는다. commit, image digest, config version이 연결돼야 한다.</li>
+      <li>rollback을 문서로만 두고 실제 리허설하지 않는다. DB migration, message schema, external side effect는 단순 되돌리기가 아니다.</li>
+      <li>secret을 이미지, 로그, build argument에 남긴다. secret은 빌드 산출물에 들어가면 회수 비용이 커진다.</li>
+      <li>배포 후 볼 지표와 중단 기준 없이 canary를 시작한다. canary는 “조금 배포”가 아니라 “증거 기반 확대”다.</li>
+      <li>IaC plan diff를 검토하지 않고 apply한다. replacement, deletion, security rule broadening은 반드시 눈으로 확인한다.</li>
+      <li>알람을 많이 만들면 안전하다고 생각한다. action 없는 알람은 피로만 만들고 진짜 장애 신호를 묻는다.</li>
+    </ul>
+  </section>
+  <section id="cheatdevops-ch5">
+    <div class="ch-head"><span class="ch-code">DO-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>CI/CD</b><span>pipeline</span></div><div class="g-def">CI/CD는 빠른 배포가 아니라 같은 입력에서 같은 artifact를 만들고 검증된 변경만 환경에 승격하는 체계입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Rollback</b><span>recovery</span></div><div class="g-def">rollback은 버튼이 아니라 앱, DB, 메시지, 설정이 이전 버전과 호환되는지 확인한 운영 절차입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>관측성</b><span>observability</span></div><div class="g-def">로그, 메트릭, 트레이스는 장애가 난 뒤 원인을 좁히기 위한 증거 체계입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>IaC</b><span>reproducibility</span></div><div class="g-def">IaC는 클릭을 코드로 바꾸는 것이 아니라 인프라 변경을 리뷰, 재현, 복구 가능한 절차로 만드는 것입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>배포 전략</b><span>release</span></div><div class="g-def">배포 전략은 속도보다 영향 범위, 관측 가능성, 되돌릴 수 있는지를 기준으로 고릅니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatdevops-ch6">
+    <div class="ch-head"><span class="ch-code">DO-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">DevOps 리스크는 자동화 여부보다 변경의 추적성, 롤백 가능성, 관측 가능성, secret 노출 여부로 판단합니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>rollback 절차가 없거나 리허설되지 않음</td><td>장애 때 배포 중단과 복구 판단이 늦어집니다.</td><td>앱, DB, queue, config를 각각 되돌릴 수 있는지 확인합니다.</td></tr>
+      <tr><td>운영 artifact digest를 모름</td><td>어떤 코드와 설정이 실행 중인지 추적할 수 없습니다.</td><td>commit SHA, image digest, config version을 연결합니다.</td></tr>
+      <tr><td>운영 변경이 IaC 밖에서 수동으로 수행됨</td><td>drift가 누적되어 재현과 복구가 깨집니다.</td><td>plan diff와 실제 리소스 상태를 비교합니다.</td></tr>
+      <tr><td>secret이 CI 로그나 build artifact에 노출</td><td>폐기와 재발급이 전체 공급망 이슈가 됩니다.</td><td>log masking, build arg, image layer, rotation 이력을 봅니다.</td></tr>
+      <tr><td>알람에 owner와 action이 없음</td><td>소음이 쌓이고 실제 장애 신호가 묻힙니다.</td><td>알람별 runbook, severity, paging 기준을 정리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatdevops-ch7">
+    <div class="ch-head"><span class="ch-code">DO-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>Pipeline</td><td>테스트 결과는 있으나 어떤 artifact가 승격되는지 불명확함</td><td>동일 artifact promotion과 digest 기록이 있습니다.</td></tr>
+      <tr><td>Deployment</td><td>중단 기준, rollback 기준, 사용자 영향 범위가 없음</td><td>canary/rolling 지표와 복구 절차가 정의돼 있습니다.</td></tr>
+      <tr><td>Migration</td><td>앱 구버전과 신버전이 동시에 동작할 수 없음</td><td>expand/contract, backfill, rollback 계획이 있습니다.</td></tr>
+      <tr><td>Secret</td><td>rotation 순서와 consumer rollout 순서가 없음</td><td>dual-read, revocation, audit 기준이 있습니다.</td></tr>
+      <tr><td>Observability</td><td>장애 때 봐야 할 dashboard와 log query가 없음</td><td>RED/USE 지표와 trace 연결이 준비돼 있습니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatdevops-ch8">
+    <div class="ch-head"><span class="ch-code">DO-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">DEPLOYMENT FAILURE TRIAGE</span>배포 실패는 “재시도”보다 먼저 artifact, 변경 범위, 사용자 영향, 데이터 변경 여부를 고정합니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>현재 운영 중인 SHA, image digest, config version은 무엇인가?</td><td>deploy log, registry, release record</td></tr>
+      <tr><td>2</td><td>사용자 영향은 error rate, latency, 특정 tenant 중 어디에 나타나는가?</td><td>dashboard, alert, support ticket</td></tr>
+      <tr><td>3</td><td>DB migration, queue schema, feature flag가 함께 변경됐는가?</td><td>migration log, consumer lag, flag audit</td></tr>
+      <tr><td>4</td><td>rollback이 data loss나 compatibility break를 만들지 않는가?</td><td>schema 호환성, background job 상태, side effect</td></tr>
+      <tr><td>5</td><td>rollback, canary pause, traffic drain, flag off 중 무엇을 먼저 실행할 것인가?</td><td>runbook과 on-call 승인 기록</td></tr>
+    </table>
+  </section>
+
+<section id="doc-cheatlinux">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Linux</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-LINUX-V1</span><span>SCOPE : FILE · PROCESS · NETWORK · LOG · SYSTEM</span><span>LANG : KO</span></div>
+    <h1>Linux<br>Cheat Sheet</h1>
+    <p class="hero-sub">서버나 로컬 셸에서 파일, 프로세스, 포트, 로그, 디스크를 빠르게 확인하는 명령 중심 참조입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatlinux-ch1">
+    <div class="ch-head"><span class="ch-code">LX-CS-01</span><h2>개요</h2></div>
+    <p class="lede">운영 조사에서는 명령을 많이 아는 것보다 현재 위치, 대상 파일, 프로세스, 포트, 로그 범위를 안전하게 좁히는 것이 중요합니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>주의할 점</th></tr>
+      <tr><td>파일 찾기</td><td><code>pwd</code>, <code>ls -la</code>, <code>find</code>, <code>rg</code></td><td>대상 경로와 숨김 파일 포함 여부 확인</td></tr>
+      <tr><td>포트 점유</td><td><code>lsof -i :3000</code>, <code>ss -tlnp</code></td><td>localhost bind인지 0.0.0.0 bind인지 구분</td></tr>
+      <tr><td>로그 확인</td><td><code>tail -f</code>, <code>less</code>, <code>grep</code>, <code>journalctl</code></td><td>시간대, rotation, service unit 확인</td></tr>
+      <tr><td>리소스 확인</td><td><code>df -h</code>, <code>du -sh *</code>, <code>top</code>, <code>free -h</code></td><td>디스크 full과 inode full은 별개</td></tr>
+      <tr><td>권한 오류</td><td><code>ls -l</code>, <code>id</code>, <code>stat</code>, <code>namei -l</code></td><td>파일뿐 아니라 상위 디렉터리 실행 권한도 확인</td></tr>
+    </table>
+  </section>
+  <section id="cheatlinux-ch2">
+    <div class="ch-head"><span class="ch-code">LX-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>명령</th><th>압축 설명</th><th>해석 포인트</th></tr>
+      <tr><td><code>rg "text"</code></td><td>현재 디렉터리 이하에서 빠른 텍스트 검색</td><td><code>.gitignore</code>를 따르므로 숨은 대상은 옵션 확인</td></tr>
+      <tr><td><code>less app.log</code></td><td>큰 파일을 페이지 단위로 탐색</td><td><code>/pattern</code>, <code>Shift+F</code>로 검색/추적</td></tr>
+      <tr><td><code>tail -f app.log</code></td><td>로그를 실시간으로 따라감</td><td>rotation 환경에서는 <code>-F</code>가 더 적합할 수 있음</td></tr>
+      <tr><td><code>ps aux</code></td><td>프로세스 목록 확인</td><td>CPU, MEM, command, 사용자 확인</td></tr>
+      <tr><td><code>kill PID</code></td><td>SIGTERM으로 정상 종료 요청</td><td>graceful shutdown 로그를 먼저 확인</td></tr>
+      <tr><td><code>du -sh * | sort -rh</code></td><td>용량 큰 항목을 정렬</td><td>현재 디렉터리 기준이라 mount point를 확인</td></tr>
+      <tr><td><code>journalctl -u service -f</code></td><td>systemd 서비스 로그 추적</td><td>서비스 재시작, exit code, 시간 범위 확인</td></tr>
+    </table>
+  </section>
+  <section id="cheatlinux-ch3">
+    <div class="ch-head"><span class="ch-code">LX-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td><code>cat</code></td><td>작은 파일 전체를 즉시 볼 때</td><td>큰 로그에는 사용하지 않음</td></tr>
+      <tr><td><code>less</code></td><td>큰 파일을 검색하며 볼 때</td><td>원본을 수정하지 않고 안전하게 탐색</td></tr>
+      <tr><td><code>tail -f</code></td><td>새로 쌓이는 로그를 실시간 확인할 때</td><td>과거 원인은 <code>less</code>/<code>journalctl --since</code>가 낫다</td></tr>
+      <tr><td><code>kill</code></td><td>정상 종료 요청이 가능할 때</td><td>데이터 flush, connection drain 기회를 줌</td></tr>
+      <tr><td><code>kill -9</code></td><td>정상 종료가 실패한 마지막 수단</td><td>cleanup hook이 실행되지 않음</td></tr>
+      <tr><td><code>sudo</code></td><td>권한 상승이 명확히 필요한 작업</td><td>원인 확인 없이 권한 문제를 덮지 않음</td></tr>
+    </table>
+  </section>
+  <section id="cheatlinux-ch4">
+    <div class="ch-head"><span class="ch-code">LX-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li><code>rm -rf</code> 전에 대상 경로를 확인하지 않는다. 절대경로, 현재 디렉터리, 변수 확장을 먼저 출력해 본다.</li>
+      <li>큰 로그를 <code>cat</code>으로 터미널에 모두 쏟는다. 검색과 paging이 필요한 파일은 <code>less</code>를 쓴다.</li>
+      <li><code>kill -9</code>를 먼저 써서 graceful shutdown 기회를 없앤다. lock file과 임시 파일이 남을 수 있다.</li>
+      <li>권한 문제를 무조건 <code>sudo</code>로 덮고 원인을 보지 않는다. 소유자, 그룹, 상위 디렉터리 권한을 확인한다.</li>
+      <li>macOS BSD 명령과 GNU/Linux 옵션 차이를 고려하지 않는다. <code>sed</code>, <code>stat</code>, <code>date</code> 옵션이 다를 수 있다.</li>
+      <li>디스크 여유만 보고 inode 고갈을 놓친다. 작은 파일이 많으면 <code>df -i</code>도 확인한다.</li>
+    </ul>
+  </section>
+  <section id="cheatlinux-ch5">
+    <div class="ch-head"><span class="ch-code">LX-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>파이프</b><span>pipe</span></div><div class="g-def">셸의 힘은 작은 명령의 표준 출력을 다음 명령의 표준 입력으로 연결해 조합하는 데 있습니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>권한</b><span>permission</span></div><div class="g-def">Unix 권한은 소유자, 그룹, 기타 사용자에게 읽기, 쓰기, 실행 권한을 나눠 부여하는 모델입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>프로세스 종료</b><span>signal</span></div><div class="g-def">먼저 SIGTERM으로 정리할 시간을 주고, 실패할 때만 SIGKILL을 사용합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>로그 조사</b><span>triage</span></div><div class="g-def">로그는 최신 줄만 보는 것이 아니라 배포 시각, 오류 최초 발생 시각, 같은 requestId의 흐름을 함께 봐야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>리소스</b><span>system</span></div><div class="g-def">CPU, 메모리, 디스크, 네트워크는 각각 병목 신호가 다르므로 한 명령으로 시스템 상태를 단정하지 않습니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatlinux-ch6">
+    <div class="ch-head"><span class="ch-code">LX-CS-06</span><h2>Red Flags</h2></div>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td><code>rm -rf</code>에 변수/와일드카드 사용</td><td>대상 경로 오해 시 대량 삭제</td><td><code>pwd</code>, <code>printf '%s\n' "$TARGET"</code>, dry-run</td></tr>
+      <tr><td>disk full인데 삭제 후 용량 회복 안 됨</td><td>삭제된 파일을 프로세스가 열고 있을 수 있음</td><td><code>lsof +L1</code>, process restart</td></tr>
+      <tr><td><code>kill -9</code> 먼저 사용</td><td>flush/cleanup 없이 종료되어 상태가 손상될 수 있음</td><td><code>kill</code>, graceful shutdown log</td></tr>
+      <tr><td>권한 오류를 sudo로만 해결</td><td>소유권/umask/deploy user 문제가 숨어 남음</td><td><code>id</code>, <code>namei -l</code>, <code>stat</code></td></tr>
+      <tr><td>log rotation 무시</td><td>보고 있는 파일과 앱이 쓰는 파일이 다를 수 있음</td><td><code>tail -F</code>, <code>journalctl --since</code></td></tr>
+    </table>
+  </section>
+  <section id="cheatlinux-ch7">
+    <div class="ch-head"><span class="ch-code">LX-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>작업</th><th>차단 기준</th><th>필수 증거</th></tr>
+      <tr><td>삭제 명령</td><td>대상 경로 출력과 백업/복구 기준 없음</td><td>dry-run, backup, owner 확인</td></tr>
+      <tr><td>서비스 재시작</td><td>graceful shutdown, 영향 범위, rollback 미정</td><td>systemd unit, health check, logs</td></tr>
+      <tr><td>권한 변경</td><td>recursive chmod/chown 범위 불명확</td><td>대상 tree, user/group, 최소 권한</td></tr>
+      <tr><td>디스크 정리</td><td>큰 파일 원인과 재발 방지 없음</td><td><code>du</code>, <code>df -h</code>, <code>df -i</code>, logrotate</td></tr>
+      <tr><td>운영 조사</td><td>시간대, host, service, request id가 기록되지 않음</td><td>명령 로그, timestamp, hostname</td></tr>
+    </table>
+  </section>
+  <section id="cheatlinux-ch8">
+    <div class="ch-head"><span class="ch-code">LX-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">DISK FULL TRIAGE</span>1. <code>df -h</code>와 <code>df -i</code>로 block/inode 확인<br>2. <code>du -xhd1 /path | sort -h</code>로 큰 디렉터리 확인<br>3. <code>lsof +L1</code>로 삭제됐지만 열린 파일 확인<br>4. 로그면 logrotate와 retention 확인<br>5. 삭제 전 백업/owner/서비스 영향 확인<br>6. 정리 후 재발 방지 알림과 보존 정책 추가</div>
+    <div class="callout warn"><span class="co-label">운영 원칙</span><p>서버 명령은 빠르지만 되돌리기 어렵습니다. destructive command는 항상 현재 경로, 대상 확장 결과, 백업 가능성, 서비스 영향 범위를 확인한 뒤 실행합니다.</p></div>
+  </section>
+
+<section id="doc-cheatdocker">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Docker</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-DOCKER-V1</span><span>SCOPE : IMAGE · CONTAINER · NETWORK · VOLUME · COMPOSE</span><span>LANG : KO</span></div>
+    <h1>Docker<br>Cheat Sheet</h1>
+    <p class="hero-sub">Docker 실행 오류를 이미지, 컨테이너, 포트, 볼륨, 네트워크, Compose 기준으로 빠르게 좁히는 참조입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatdocker-ch1">
+    <div class="ch-head"><span class="ch-code">DK-CS-01</span><h2>개요</h2></div>
+    <p class="lede">이미지는 불변 실행 패키지이고 컨테이너는 그 이미지를 실행한 프로세스입니다. 런타임 문제는 build와 run 단계를 분리해 봅니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 확인할 것</th><th>실패 신호</th></tr>
+      <tr><td>빌드 실패</td><td>Dockerfile 순서, build context, cache, secret 노출</td><td>로컬에는 있는데 이미지 안에는 파일이 없음</td></tr>
+      <tr><td>실행 실패</td><td>entrypoint, env, port, volume, working directory</td><td>컨테이너가 즉시 종료되거나 health check 실패</td></tr>
+      <tr><td>연결 실패</td><td>container network, service name, port mapping</td><td>컨테이너 내부에서는 되는데 host에서는 안 됨</td></tr>
+      <tr><td>데이터 사라짐</td><td>container layer와 volume/bind mount 구분</td><td>컨테이너 재생성 후 DB/업로드 파일 유실</td></tr>
+      <tr><td>이미지 과대</td><td>base image, build artifact, package cache</td><td>배포와 scan 시간이 길고 취약점 수가 많음</td></tr>
+    </table>
+  </section>
+  <section id="cheatdocker-ch2">
+    <div class="ch-head"><span class="ch-code">DK-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>명령</th><th>압축 설명</th><th>해석 포인트</th></tr>
+      <tr><td><code>docker build -t app .</code></td><td>현재 context로 이미지 빌드</td><td><code>.</code> 아래 모든 context가 전송되므로 <code>.dockerignore</code> 중요</td></tr>
+      <tr><td><code>docker run --rm -p 3000:3000 app</code></td><td>컨테이너 실행 후 종료 시 삭제</td><td>앞이 host port, 뒤가 container port</td></tr>
+      <tr><td><code>docker ps -a</code></td><td>실행/종료 컨테이너 확인</td><td>STATUS와 PORTS를 먼저 확인</td></tr>
+      <tr><td><code>docker logs -f name</code></td><td>컨테이너 로그 추적</td><td>앱 로그가 stdout/stderr로 나오는지 확인</td></tr>
+      <tr><td><code>docker exec -it name sh</code></td><td>실행 중 컨테이너 내부 진입</td><td>이미지에 shell이 없을 수 있음</td></tr>
+      <tr><td><code>docker inspect name</code></td><td>컨테이너 설정과 network, mount 확인</td><td>env, IP, mount source/target 검증</td></tr>
+      <tr><td><code>docker compose up</code></td><td>여러 서비스를 선언 파일 기준으로 실행</td><td>service name이 compose network의 DNS 이름</td></tr>
+    </table>
+  </section>
+  <section id="cheatdocker-ch3">
+    <div class="ch-head"><span class="ch-code">DK-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
+      <tr><td>bind mount</td><td>로컬 개발에서 파일 변경을 즉시 반영해야 함</td><td>host OS 파일 권한과 성능 영향을 받음</td></tr>
+      <tr><td>named volume</td><td>DB 데이터처럼 컨테이너 교체 뒤에도 보존해야 함</td><td>삭제 전 volume 목록과 소유자를 확인</td></tr>
+      <tr><td>multi-stage build</td><td>빌드 도구와 런타임 산출물을 분리해야 함</td><td>빌드 stage의 secret/cache가 최종 이미지에 남지 않게 함</td></tr>
+      <tr><td>slim image</td><td>운영 이미지 크기와 취약점 노출을 줄여야 함</td><td>디버깅 도구가 없을 수 있으니 로그/health를 강화</td></tr>
+      <tr><td>compose</td><td>앱, DB, 캐시 등 로컬 다중 서비스를 함께 띄워야 함</td><td>운영 오케스트레이션 대체물이 아님</td></tr>
+      <tr><td>healthcheck</td><td>프로세스 생존보다 서비스 준비 상태가 중요함</td><td>DB 연결, migration 완료, dependency 준비 상태 고려</td></tr>
+    </table>
+  </section>
+  <section id="cheatdocker-ch4">
+    <div class="ch-head"><span class="ch-code">DK-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li><code>.dockerignore</code> 없이 <code>node_modules</code>와 <code>.git</code>을 build context에 포함한다. 빌드가 느려지고 secret 노출 위험이 생긴다.</li>
+      <li>Dockerfile에 secret을 굽거나 build arg로 남긴다. image history와 registry에 흔적이 남을 수 있다.</li>
+      <li>container port와 host port 방향을 헷갈린다. <code>-p 8080:3000</code>은 host 8080에서 container 3000으로 보낸다.</li>
+      <li>컨테이너 내부 파일을 영속 데이터로 믿는다. 컨테이너 삭제와 재생성은 layer 상태를 버린다.</li>
+      <li><code>latest</code> 태그를 production 배포 식별자로 사용한다. 정확한 rollback과 감사가 어려워진다.</li>
+      <li>Compose에서 <code>localhost</code>로 다른 서비스를 찾는다. 컨테이너 간 통신은 service name을 사용한다.</li>
+    </ul>
+  </section>
+  <section id="cheatdocker-ch5">
+    <div class="ch-head"><span class="ch-code">DK-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>이미지와 컨테이너</b><span>model</span></div><div class="g-def">이미지는 불변 스냅샷이고 컨테이너는 그 이미지를 실행한 격리된 프로세스입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>레이어 캐시</b><span>cache</span></div><div class="g-def">Dockerfile은 자주 바뀌지 않는 의존성 레이어를 앞에 두고 자주 바뀌는 소스를 뒤에 둬야 빌드가 빨라집니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>볼륨</b><span>volume</span></div><div class="g-def">컨테이너 파일시스템은 휘발성이므로 보존해야 하는 상태는 volume이나 외부 스토리지로 빼야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>포트 매핑</b><span>network</span></div><div class="g-def">포트 매핑은 host와 container의 포트를 연결하는 설정이고, 컨테이너 내부 서비스는 container port에 bind되어 있어야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Compose</b><span>local stack</span></div><div class="g-def">Compose는 로컬 다중 서비스 개발을 재현 가능하게 만드는 도구이며 service name 기반 네트워크를 제공합니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatdocker-ch6">
+    <div class="ch-head"><span class="ch-code">DK-CS-06</span><h2>Red Flags</h2></div>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>root user로 운영 실행</td><td>컨테이너 탈출/파일 권한 사고 시 피해가 커짐</td><td><code>USER</code>, runtime uid/gid, writable path</td></tr>
+      <tr><td>secret을 Dockerfile/ARG에 기록</td><td>image history와 registry에 남을 수 있음</td><td><code>docker history</code>, secret scanning</td></tr>
+      <tr><td><code>latest</code>로 배포</td><td>정확한 rollback과 감사가 불가능</td><td>image digest, immutable tag</td></tr>
+      <tr><td>PID 1 signal 처리 없음</td><td>SIGTERM을 무시해 graceful shutdown 실패</td><td>entrypoint, tini, app shutdown log</td></tr>
+      <tr><td>healthcheck가 프로세스 생존만 확인</td><td>준비 안 된 앱에 traffic이 들어감</td><td>readiness endpoint, dependency 상태</td></tr>
+    </table>
+  </section>
+  <section id="cheatdocker-ch7">
+    <div class="ch-head"><span class="ch-code">DK-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>변경</th><th>merge/deploy 차단 기준</th><th>필수 증거</th></tr>
+      <tr><td>Dockerfile</td><td>secret 포함, root 실행, cache 비효율, 불필요한 build context</td><td><code>.dockerignore</code>, image scan, layer size</td></tr>
+      <tr><td>Base image 변경</td><td>OS/arch, libc, CVE, runtime 호환성 미검증</td><td>scan 결과, smoke test, image digest</td></tr>
+      <tr><td>Compose 변경</td><td>volume 삭제 위험, service name/DNS 오해, port 충돌</td><td><code>docker compose config</code>, volume 목록</td></tr>
+      <tr><td>Runtime env</td><td>secret baked-in, build-time/runtime env 혼동</td><td>env 주입 방식, redacted config dump</td></tr>
+      <tr><td>Healthcheck</td><td>startup/readiness/liveness 구분 없음</td><td>실패 시 재시작/traffic drain 동작</td></tr>
+    </table>
+  </section>
+  <section id="cheatdocker-ch8">
+    <div class="ch-head"><span class="ch-code">DK-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">CONTAINER WON'T START</span>1. <code>docker ps -a</code>로 exit code 확인<br>2. <code>docker logs name</code>로 앱 오류 확인<br>3. <code>docker inspect name</code>로 env/mount/network 확인<br>4. <code>docker run --rm -it --entrypoint sh image</code>로 이미지 내부 확인<br>5. port mapping과 app bind address 확인<br>6. volume 권한과 working directory 확인</div>
+    <div class="callout warn"><span class="co-label">운영 원칙</span><p>컨테이너는 VM이 아니라 제한된 프로세스입니다. 상태는 이미지가 아니라 volume, external storage, env, network, orchestration 설정에 분산되어 있으므로 한 곳만 보고 원인을 단정하지 않습니다.</p></div>
+  </section>
+
+<section id="doc-cheatinterview">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Interview</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial"><span>DOC : CHEAT-INTERVIEW-V1</span><span>SCOPE : ANSWER FRAME · FOLLOW-UP · UNKNOWN QUESTIONS</span><span>LANG : KO</span></div>
+    <h1>Interview<br>Cheat Sheet</h1>
+    <p class="hero-sub">면접 답변을 결론, 근거, trade-off, 경험 증거 순서로 빠르게 정리하기 위한 참조입니다. 모르는 질문을 다루는 방식까지 포함합니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+  <section id="cheatinterview-ch1">
+    <div class="ch-head"><span class="ch-code">IV-CS-01</span><h2>개요</h2></div>
+    <p class="lede">좋은 답변은 많이 아는 티보다 정확한 경계와 판단 구조를 보여줍니다. 직접 경험, 일부 경험, 개념 지식을 같은 톤으로 말하지 않습니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 할 것</th><th>좋은 신호</th></tr>
+      <tr><td>기술 질문</td><td>정의, 왜 필요한지, trade-off, 실패 모드 순서로 답함</td><td>항상/무조건 대신 조건을 말함</td></tr>
+      <tr><td>프로젝트 질문</td><td>문제, 제약, 선택, 결과, 배운 점 순서로 답함</td><td>내 역할과 의사결정 근거가 분명함</td></tr>
+      <tr><td>모르는 질문</td><td>모르는 범위를 밝히고 유추 과정과 확인 방법을 말함</td><td>추측을 사실처럼 포장하지 않음</td></tr>
+      <tr><td>압박 질문</td><td>방어하지 말고 전제, 기준, 증거로 답변을 재구성함</td><td>반박보다 판단 기준을 명확히 함</td></tr>
+      <tr><td>꼬리 질문</td><td>방금 답변의 약한 부분을 좁혀서 보완함</td><td>모르는 경계를 인정하고 다음 확인을 제시</td></tr>
+    </table>
+  </section>
+  <section id="cheatinterview-ch2">
+    <div class="ch-head"><span class="ch-code">IV-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <table>
+      <tr><th>프레임</th><th>압축 설명</th><th>쓸 때</th></tr>
+      <tr><td>30초 답변</td><td>결론, 핵심 기준, 한 문장 근거</td><td>정의, 차이, 가벼운 확인 질문</td></tr>
+      <tr><td>90초 답변</td><td>개념, 선택 기준, trade-off, 실무 예시</td><td>기술 이해도와 실무 감각을 함께 볼 때</td></tr>
+      <tr><td>3분 답변</td><td>문제 배경, 대안 비교, 실패 모드, 검증 결과</td><td>프로젝트/설계/장애 경험 질문</td></tr>
+      <tr><td>STAR</td><td>Situation, Task, Action, Result로 행동 질문 정리</td><td>협업, 갈등, 실패, 리더십 질문</td></tr>
+      <tr><td>직접 경험</td><td>내가 한 일, 의사결정, 결과를 구체적으로 말함</td><td>숫자, 로그, 장애, 리뷰, 운영 증거가 있을 때</td></tr>
+      <tr><td>개념 지식</td><td>직접 경험이 없음을 밝히고 설계 기준 중심으로 말함</td><td>경험은 없지만 원리와 확인 방법을 설명할 수 있을 때</td></tr>
+      <tr><td>Trade-off 답변</td><td>A가 항상 좋다고 하지 않고 비용과 조건을 같이 말함</td><td>Redis, MSA, JWT, SSR, NoSQL 같은 선택 질문</td></tr>
+    </table>
+  </section>
+  <section id="cheatinterview-ch3">
+    <div class="ch-head"><span class="ch-code">IV-CS-03</span><h2>판단 기준</h2></div>
+    <table>
+      <tr><th>답변 선택</th><th>기준</th><th>예시 시작</th></tr>
+      <tr><td>짧게 답함</td><td>질문이 정의나 차이를 묻고 꼬리질문 여지를 남길 때</td><td>“핵심 차이는 소유권입니다.”</td></tr>
+      <tr><td>깊게 답함</td><td>경험 검증이나 설계 판단을 묻는 질문일 때</td><td>“제가 봤던 제약은 세 가지였습니다.”</td></tr>
+      <tr><td>경험으로 답함</td><td>실제 구현, 장애, 리뷰, 운영 증거가 있을 때</td><td>“비슷한 상황에서 제가 맡은 부분은...”</td></tr>
+      <tr><td>원리로 답함</td><td>직접 경험이 부족하지만 개념과 trade-off를 설명할 수 있을 때</td><td>“직접 운영 경험은 없지만 설계한다면...”</td></tr>
+      <tr><td>질문을 되묻음</td><td>요구사항, 규모, 제약에 따라 답이 달라질 때</td><td>“트래픽 규모와 일관성 요구를 먼저 확인하고 싶습니다.”</td></tr>
+      <tr><td>실패를 말함</td><td>배운 점을 검증 가능한 행동 변화로 연결할 수 있을 때</td><td>“그 뒤로는 배포 전 이 체크를 추가했습니다.”</td></tr>
+    </table>
+  </section>
+  <section id="cheatinterview-ch4">
+    <div class="ch-head"><span class="ch-code">IV-CS-04</span><h2>자주 나는 실수</h2></div>
+    <ul>
+      <li>질문을 받자마자 기술명 목록부터 나열한다. 면접관은 키워드보다 판단 구조를 보려 한다.</li>
+      <li>직접 해본 일과 읽어서 아는 일을 같은 확신으로 말한다. 경계를 숨기면 꼬리질문에서 신뢰가 무너진다.</li>
+      <li>trade-off 없이 항상 좋은 선택처럼 말한다. 좋은 엔지니어링 선택은 조건과 비용을 함께 설명한다.</li>
+      <li>실패 사례를 남 탓이나 환경 탓으로 설명한다. 내가 바꾼 행동과 재발 방지 장치가 핵심이다.</li>
+      <li>모르는 질문에서 추측을 사실처럼 말한다. “모르지만 이렇게 확인하겠다”가 더 좋은 답일 때가 많다.</li>
+      <li>프로젝트 성과를 팀 전체 표현으로만 말한다. 본인의 역할, 결정, 결과, 배운 점을 분리해야 한다.</li>
+    </ul>
+  </section>
+  <section id="cheatinterview-ch5">
+    <div class="ch-head"><span class="ch-code">IV-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+    <div class="glossary">
+      <div class="g-row"><div class="g-term"><b>모르는 질문</b><span>unknown</span></div><div class="g-def">그 부분은 직접 경험은 없지만, 제가 확인한다면 먼저 전제와 실패 모드를 나누고 작은 검증부터 하겠습니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Trade-off</b><span>choice</span></div><div class="g-def">이 선택은 장점만 있는 것이 아니라 성능, 복잡도, 운영 비용 중 무엇을 더 감수할지의 문제입니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>프로젝트 설명</b><span>project</span></div><div class="g-def">문제는 무엇이었고, 제약 안에서 어떤 대안을 비교했으며, 결과를 어떻게 검증했는지 순서로 말씀드리겠습니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>실패 경험</b><span>failure</span></div><div class="g-def">실패 자체보다 그 뒤에 어떤 관측, 테스트, 리뷰 기준을 추가했는지가 더 중요하다고 봅니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>설계 질문</b><span>architecture</span></div><div class="g-def">요구사항, 트래픽, 데이터 일관성, 장애 허용 범위를 먼저 정해야 설계 선택을 평가할 수 있습니다.</div></div>
+    </div>
+  </section>
+  <section id="cheatinterview-ch6">
+    <div class="ch-head"><span class="ch-code">IV-CS-06</span><h2>Red Flags</h2></div>
+    <p class="lede">면접 답변의 전문성은 많이 말하는 데서 나오지 않습니다. 경험의 경계, 판단 기준, 실패 모드, 검증 증거가 있어야 합니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 보완</th></tr>
+      <tr><td>키워드만 나열</td><td>실제 판단과 적용 경험이 보이지 않습니다.</td><td>정의, 선택 기준, trade-off, 실패 모드로 재구성합니다.</td></tr>
+      <tr><td>직접 경험과 개념 지식을 구분하지 않음</td><td>꼬리질문에서 신뢰가 무너집니다.</td><td>“직접 해본 부분”과 “설계한다면”을 분리합니다.</td></tr>
+      <tr><td>항상, 무조건, 절대 같은 표현</td><td>조건과 제약을 고려하지 않는 답으로 들립니다.</td><td>규모, latency, consistency, 운영 비용 기준을 붙입니다.</td></tr>
+      <tr><td>실패 사례에 재발 방지 행동이 없음</td><td>학습 능력보다 변명처럼 들릴 수 있습니다.</td><td>관측, 테스트, 리뷰 기준을 어떻게 바꿨는지 말합니다.</td></tr>
+      <tr><td>성과가 팀 단위 표현으로만 끝남</td><td>본인의 기여와 의사결정이 흐려집니다.</td><td>내 역할, 내가 바꾼 선택, 결과 지표를 분리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatinterview-ch7">
+    <div class="ch-head"><span class="ch-code">IV-CS-07</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>답변 유형</th><th>부족한 답변 기준</th><th>전문적인 답변 증거</th></tr>
+      <tr><td>프로젝트 답변</td><td>기술 스택과 결과만 있고 문제·제약·역할이 없음</td><td>문제, 대안, 선택 이유, 내 역할, 결과가 연결됩니다.</td></tr>
+      <tr><td>시스템 설계</td><td>컴포넌트 나열만 있고 병목과 failure mode가 없음</td><td>트래픽, 데이터, 장애, 운영 기준으로 좁힙니다.</td></tr>
+      <tr><td>기술 개념</td><td>정의만 말하고 언제 쓰지 않을지 설명하지 못함</td><td>장점, 비용, 대안, 적용 조건을 함께 말합니다.</td></tr>
+      <tr><td>행동 질문</td><td>상황 설명이 길고 내 행동이 모호함</td><td>STAR 구조에서 Action과 Result가 구체적입니다.</td></tr>
+      <tr><td>모르는 질문</td><td>추측을 사실처럼 말하거나 답변을 회피함</td><td>아는 범위, 모르는 범위, 확인 방법을 분리합니다.</td></tr>
+    </table>
+  </section>
+  <section id="cheatinterview-ch8">
+    <div class="ch-head"><span class="ch-code">IV-CS-08</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">STUCK ANSWER TRIAGE</span>답변이 막히면 조급하게 키워드를 쏟지 말고 전제, 아는 범위, 모르는 범위, 검증 방법 순서로 회복합니다.</div>
+    <table>
+      <tr><th>순서</th><th>말할 내용</th><th>예시</th></tr>
+      <tr><td>1</td><td>질문의 범위를 좁힙니다.</td><td>“운영 트래픽 기준인지, 개념 비교 기준인지 먼저 나누겠습니다.”</td></tr>
+      <tr><td>2</td><td>아는 범위와 모르는 범위를 분리합니다.</td><td>“직접 운영 경험은 없지만 장애 모드는 이렇게 예상합니다.”</td></tr>
+      <tr><td>3</td><td>첫 원리로 판단 기준을 세웁니다.</td><td>“일관성, latency, 복구 비용 중 무엇이 중요한지에 따라 달라집니다.”</td></tr>
+      <tr><td>4</td><td>trade-off와 실패 모드를 붙입니다.</td><td>“이 방식은 단순하지만 traffic spike에서 병목이 될 수 있습니다.”</td></tr>
+      <tr><td>5</td><td>검증 방법으로 마무리합니다.</td><td>“그래서 먼저 작은 부하 테스트와 rollback 리허설로 확인하겠습니다.”</td></tr>
+    </table>
+  </section>
+
+<section id="doc-cheattools">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>Tools·Shortcuts·Commands</h2></div>
+</section>
+
+<header class="hero">
+    <div class="hero-serial">
+      <span>DOC : CHEAT-TOOLS-SHORTCUTS-COMMANDS-V1</span>
+      <span>SCOPE : TOOLS · SHORTCUTS · CLI · DEBUGGING</span>
+      <span>LANG : KO</span>
+    </div>
+    <h1>Tools · Shortcuts<br>Commands Cheat Sheet</h1>
+    <p class="hero-sub">실무 속도를 높이는 툴, 단축키, 명령어를 역할별로 압축했습니다. 외우는 목록이 아니라 장애 진단, 코드 탐색, API 확인, 배포 검증 때 바로 꺼내 쓰는 기준표입니다.</p>
+    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+  </header>
+
+  <section id="cheattools-ch1">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-01</span><h2>개요</h2></div>
+    <p class="lede">툴과 명령어는 많이 아는 것보다 “어떤 문제에서 어떤 증거를 빠르게 얻는가”가 중요합니다. 코드 탐색, 실행 재현, 네트워크 확인, 데이터 확인, 배포 검증 순서로 손에 익히면 실무 대응 속도가 크게 올라갑니다.</p>
+    <table>
+      <tr><th>상황</th><th>먼저 쓸 도구</th><th>얻어야 할 증거</th></tr>
+      <tr><td>코드 위치를 모름</td><td>VS Code Search, <code>rg</code>, Git history</td><td>진입점, 호출자, 최근 변경 커밋</td></tr>
+      <tr><td>화면/API가 깨짐</td><td>DevTools, curl, Postman/Insomnia</td><td>status, request header, response body, console stack</td></tr>
+      <tr><td>DB 값이 이상함</td><td>psql, DBeaver/TablePlus, migration history</td><td>실제 row, index, transaction, migration 적용 여부</td></tr>
+      <tr><td>배포 후 장애</td><td>logs, health check, Docker/Kubernetes CLI</td><td>릴리스 버전, pod/container 상태, 오류 로그</td></tr>
+      <tr><td>내 로컬만 안 됨</td><td>env 확인, port/process 확인, clean install</td><td>Node/Java 버전, env 누락, 충돌 포트, lockfile 차이</td></tr>
+    </table>
+  </section>
+
+  <section id="cheattools-ch2">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-02</span><h2>유용한 툴</h2></div>
+    <table>
+      <tr><th>분류</th><th>툴</th><th>실무 용도</th></tr>
+      <tr><td>코드 탐색</td><td>VS Code, WebStorm/IntelliJ, ripgrep</td><td>symbol 이동, 전체 검색, rename, call hierarchy, 빠른 영향 범위 확인</td></tr>
+      <tr><td>Git GUI</td><td>GitLens, Fork, SourceTree, GitHub Desktop</td><td>blame, 변경 흐름, conflict 확인, 커밋 단위 리뷰</td></tr>
+      <tr><td>API</td><td>Postman, Insomnia, Bruno, curl, httpie</td><td>인증 헤더, 요청 payload, error contract, 재현 가능한 API 케이스 저장</td></tr>
+      <tr><td>브라우저</td><td>Chrome/Edge DevTools, Lighthouse</td><td>Network waterfall, console, storage, performance, accessibility 점검</td></tr>
+      <tr><td>DB</td><td>DBeaver, DataGrip, TablePlus, psql</td><td>쿼리 실행, explain, index 확인, 데이터 보정 전 검증</td></tr>
+      <tr><td>컨테이너</td><td>Docker Desktop, OrbStack, Docker CLI</td><td>로컬 의존 서비스 실행, log 확인, image/layer 정리</td></tr>
+      <tr><td>문서·다이어그램</td><td>Obsidian, Notion, Mermaid, Excalidraw, draw.io</td><td>장애 기록, API 흐름, 시스템 구성도, 의사결정 기록</td></tr>
+      <tr><td>운영·관측</td><td>Grafana, Kibana/OpenSearch Dashboards, Sentry, Datadog</td><td>로그, metric, trace, release regression, 사용자 영향 범위 확인</td></tr>
+    </table>
+    <div class="callout">
+      <span class="co-label">선택 기준</span>
+      <p>팀 표준 도구가 있으면 먼저 맞춥니다. 개인 도구는 생산성을 높일 수 있지만, API 컬렉션, DB 접속 정보, 운영 로그 같은 공유 자산은 팀이 접근 가능한 위치에 남겨야 합니다.</p>
+    </div>
+  </section>
+
+  <section id="cheattools-ch3">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-03</span><h2>IDE·브라우저 단축키</h2></div>
+    <table>
+      <tr><th>목적</th><th>macOS</th><th>Windows/Linux</th><th>용도</th></tr>
+      <tr><td>파일 빠른 열기</td><td><code>Cmd+P</code></td><td><code>Ctrl+P</code></td><td>파일명 일부로 바로 이동</td></tr>
+      <tr><td>전체 검색</td><td><code>Cmd+Shift+F</code></td><td><code>Ctrl+Shift+F</code></td><td>문자열, API path, feature flag 추적</td></tr>
+      <tr><td>명령 팔레트</td><td><code>Cmd+Shift+P</code></td><td><code>Ctrl+Shift+P</code></td><td>설정, formatter, extension command 실행</td></tr>
+      <tr><td>정의로 이동</td><td><code>F12</code> 또는 <code>Cmd+Click</code></td><td><code>F12</code> 또는 <code>Ctrl+Click</code></td><td>타입, 함수, 컴포넌트 정의 확인</td></tr>
+      <tr><td>참조 찾기</td><td><code>Shift+F12</code></td><td><code>Shift+F12</code></td><td>삭제/변경 영향 범위 확인</td></tr>
+      <tr><td>심볼 이동</td><td><code>Cmd+Shift+O</code></td><td><code>Ctrl+Shift+O</code></td><td>큰 파일에서 함수·섹션 이동</td></tr>
+      <tr><td>멀티 커서</td><td><code>Option+Click</code>, <code>Cmd+D</code></td><td><code>Alt+Click</code>, <code>Ctrl+D</code></td><td>반복 수정, 같은 토큰 순차 선택</td></tr>
+      <tr><td>DevTools 열기</td><td><code>Cmd+Option+I</code></td><td><code>Ctrl+Shift+I</code></td><td>Console, Network, Elements, Performance 확인</td></tr>
+      <tr><td>강력 새로고침</td><td><code>Cmd+Shift+R</code></td><td><code>Ctrl+Shift+R</code></td><td>브라우저 캐시 영향 제거</td></tr>
+      <tr><td>페이지 검색</td><td><code>Cmd+F</code></td><td><code>Ctrl+F</code></td><td>DOM text, 로그 뷰어, 문서 빠른 탐색</td></tr>
+    </table>
+    <div class="serial-card"><span class="sc-label">HABIT</span>처음 보는 코드베이스에서는 <code>Cmd/Ctrl+P</code>, 전체 검색, 참조 찾기, Git blame만 익혀도 탐색 시간이 크게 줄어듭니다.</div>
+  </section>
+
+  <section id="cheattools-ch4">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-04</span><h2>Git·터미널 명령어</h2></div>
+    <table>
+      <tr><th>목적</th><th>명령어</th><th>해석</th></tr>
+      <tr><td>상태 확인</td><td><code>git status --short</code></td><td>변경/추적/삭제 파일을 짧게 확인</td></tr>
+      <tr><td>변경 diff</td><td><code>git diff</code>, <code>git diff --staged</code></td><td>작업 중 변경과 stage된 변경 분리 확인</td></tr>
+      <tr><td>커밋 이력</td><td><code>git log --oneline --graph --decorate -20</code></td><td>최근 흐름과 branch 위치 확인</td></tr>
+      <tr><td>파일 이력</td><td><code>git log --follow -- path/to/file</code></td><td>이름 변경 포함 파일 변경 추적</td></tr>
+      <tr><td>작성자/변경 시점</td><td><code>git blame path/to/file</code></td><td>현재 줄이 언제 왜 들어왔는지 추적</td></tr>
+      <tr><td>문자열 검색</td><td><code>rg "keyword"</code></td><td>코드베이스 전체에서 빠른 검색</td></tr>
+      <tr><td>파일 찾기</td><td><code>rg --files | rg "name"</code></td><td>파일명 일부로 후보 좁히기</td></tr>
+      <tr><td>포트 사용 확인</td><td><code>lsof -i :3000</code></td><td>개발 서버 충돌 프로세스 확인</td></tr>
+      <tr><td>프로세스 확인</td><td><code>ps aux | rg node</code></td><td>실행 중인 런타임/서버 확인</td></tr>
+      <tr><td>디스크 확인</td><td><code>df -h</code>, <code>du -sh *</code></td><td>공간 부족과 큰 디렉터리 확인</td></tr>
+    </table>
+    <div class="callout warn">
+      <span class="co-label">주의</span>
+      <p><code>git reset --hard</code>, <code>git clean -fd</code>, <code>rm -rf</code>는 복구 비용이 큰 명령입니다. 실행 전 현재 branch, stash 필요 여부, 삭제 범위를 반드시 확인합니다.</p>
+    </div>
+  </section>
+
+  <section id="cheattools-ch5">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-05</span><h2>Node·API·DB 명령어</h2></div>
+    <table>
+      <tr><th>목적</th><th>명령어</th><th>실무 해석</th></tr>
+      <tr><td>Node 버전</td><td><code>node -v</code>, <code>npm -v</code>, <code>pnpm -v</code></td><td>로컬/CI 버전 차이 확인</td></tr>
+      <tr><td>의존성 설치</td><td><code>npm ci</code>, <code>pnpm install --frozen-lockfile</code></td><td>lockfile 기준 재현 가능한 설치</td></tr>
+      <tr><td>스크립트 확인</td><td><code>npm run</code>, <code>pnpm run</code></td><td>프로젝트가 제공하는 표준 명령 확인</td></tr>
+      <tr><td>빌드/테스트</td><td><code>npm run build</code>, <code>npm test</code></td><td>로컬 변경이 CI에서 깨질 가능성 점검</td></tr>
+      <tr><td>HTTP 상태 확인</td><td><code>curl -i https://example.com/health</code></td><td>status, header, redirect, cache 확인</td></tr>
+      <tr><td>POST 요청</td><td><code>curl -X POST -H "Content-Type: application/json" -d '{"name":"test"}' URL</code></td><td>프론트 없이 API 재현</td></tr>
+      <tr><td>DNS 확인</td><td><code>dig example.com</code>, <code>nslookup example.com</code></td><td>도메인, TTL, record 전파 확인</td></tr>
+      <tr><td>DB 접속</td><td><code>psql "$DATABASE_URL"</code></td><td>애플리케이션 밖에서 직접 데이터 확인</td></tr>
+      <tr><td>느린 쿼리</td><td><code>EXPLAIN (ANALYZE, BUFFERS) SELECT ...</code></td><td>실제 실행 시간, index 사용, buffer 비용 확인</td></tr>
+      <tr><td>마이그레이션 확인</td><td><code>SELECT * FROM flyway_schema_history ORDER BY installed_rank DESC;</code></td><td>적용된 DB 변경 이력 확인</td></tr>
+    </table>
+  </section>
+
+  <section id="cheattools-ch6">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-06</span><h2>Docker·운영 명령어</h2></div>
+    <table>
+      <tr><th>목적</th><th>명령어</th><th>실무 해석</th></tr>
+      <tr><td>컨테이너 목록</td><td><code>docker ps -a</code></td><td>실행/종료 상태와 포트 매핑 확인</td></tr>
+      <tr><td>로그 확인</td><td><code>docker logs -f container</code></td><td>부팅 실패, health check 실패, runtime error 확인</td></tr>
+      <tr><td>컨테이너 접속</td><td><code>docker exec -it container sh</code></td><td>컨테이너 내부 파일, env, network 확인</td></tr>
+      <tr><td>compose 실행</td><td><code>docker compose up -d</code></td><td>DB, Redis, API 등 로컬 의존 서비스 시작</td></tr>
+      <tr><td>compose 로그</td><td><code>docker compose logs -f service</code></td><td>특정 서비스 로그만 추적</td></tr>
+      <tr><td>이미지 정리</td><td><code>docker system df</code>, <code>docker image prune</code></td><td>디스크 사용량과 불필요 이미지 정리</td></tr>
+      <tr><td>서버 로그</td><td><code>journalctl -u service -f</code></td><td>systemd 서비스 실시간 로그 확인</td></tr>
+      <tr><td>네트워크 연결</td><td><code>curl -v URL</code>, <code>nc -vz host port</code></td><td>TLS, timeout, port open 여부 확인</td></tr>
+      <tr><td>리소스 확인</td><td><code>top</code>, <code>free -h</code>, <code>df -h</code></td><td>CPU, memory, disk 병목 확인</td></tr>
+      <tr><td>압축/전달</td><td><code>tar -czf logs.tgz logs/</code></td><td>로그 묶음, 재현 자료 전달</td></tr>
+    </table>
+  </section>
+
+  <section id="cheattools-ch7">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-07</span><h2>Red Flags</h2></div>
+    <p class="lede">툴과 명령어 사용에서 가장 큰 위험은 속도가 아니라 증거를 잃거나, 공유 환경을 망가뜨리거나, 민감 정보를 노출하는 것입니다.</p>
+    <table>
+      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
+      <tr><td>운영 DB에서 검증 없이 update/delete 실행</td><td>데이터 손상이 즉시 사용자 장애로 이어집니다.</td><td>transaction, where 조건, affected rows, backup/rollback 계획</td></tr>
+      <tr><td>secret이 command history나 문서에 남음</td><td>토큰 유출과 재발급 비용이 발생합니다.</td><td>shell history, 공유 문서, 로그 마스킹 여부</td></tr>
+      <tr><td>curl 결과 중 header/body를 저장하지 않음</td><td>장애 재현 증거가 사라집니다.</td><td>status, request id, response body, timestamp 기록</td></tr>
+      <tr><td>강제 명령으로 로컬 변경을 날림</td><td>원인 분석과 복구에 필요한 diff가 사라집니다.</td><td><code>git status</code>, stash/commit 필요 여부 확인</td></tr>
+      <tr><td>툴 결과를 해석하지 않고 캡처만 공유</td><td>다음 담당자가 다시 같은 조사를 반복합니다.</td><td>관찰, 해석, 다음 행동을 같이 기록</td></tr>
+    </table>
+  </section>
+
+  <section id="cheattools-ch8">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-08</span><h2>Review Gate</h2></div>
+    <table>
+      <tr><th>상황</th><th>차단 기준</th><th>통과 증거</th></tr>
+      <tr><td>새 개발 환경 문서</td><td>필수 버전, env, 실행 명령, 실패 복구가 없음</td><td>clean clone 기준 실행 절차와 troubleshooting이 있습니다.</td></tr>
+      <tr><td>운영 명령 공유</td><td>대상 환경, 읽기/쓰기 여부, rollback 조건이 불명확함</td><td>환경, 명령, 예상 결과, 실패 시 중단 기준이 명시됩니다.</td></tr>
+      <tr><td>API 재현 케이스</td><td>인증 방식, payload, expected status가 없음</td><td>curl 또는 컬렉션으로 재현 가능합니다.</td></tr>
+      <tr><td>DB 확인 쿼리</td><td>where 조건과 row 수 제한이 없음</td><td>read-only 쿼리, limit, transaction, explain 기준이 있습니다.</td></tr>
+      <tr><td>단축키/툴 표준화</td><td>개인 취향만 있고 팀 공유 자산으로 남지 않음</td><td>팀 문서, onboarding checklist, 공통 collection에 반영됩니다.</td></tr>
+    </table>
+  </section>
+
+  <section id="cheattools-ch9">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-09</span><h2>Failure Playbook</h2></div>
+    <div class="serial-card"><span class="sc-label">TOOLING INCIDENT TRIAGE</span>툴 문제처럼 보이는 장애는 version, env, network, credential, cache, permission 순서로 좁히면 빠르게 분리됩니다.</div>
+    <table>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>나만 실패하는가, 팀/CI/운영도 실패하는가?</td><td>동료 재현 여부, CI log, 배포 환경 log</td></tr>
+      <tr><td>2</td><td>버전 차이인가?</td><td><code>node -v</code>, <code>java -version</code>, package manager, lockfile</td></tr>
+      <tr><td>3</td><td>환경변수나 credential 누락인가?</td><td><code>.env</code> template, secret 이름, 권한, 만료 여부</td></tr>
+      <tr><td>4</td><td>네트워크/DNS/프록시 문제인가?</td><td><code>curl -v</code>, <code>dig</code>, VPN, firewall, proxy 설정</td></tr>
+      <tr><td>5</td><td>캐시나 의존성 오염인가?</td><td>clean install, lockfile diff, Docker image rebuild</td></tr>
+      <tr><td>6</td><td>복구 뒤 재발 방지 문서가 남았는가?</td><td>원인, 확인 명령, 수정 커밋, runbook 업데이트</td></tr>
+    </table>
+  </section>
+</main>
+</body>
+</html>

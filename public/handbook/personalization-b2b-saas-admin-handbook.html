@@ -10,6 +10,7 @@
   <a href="#ch3"><span class="code">ADM-PER-02</span>운영자 UX</a>
   <a href="#ch4"><span class="code">ADM-PER-03</span>대표 답변</a>
   <a href="#ch5"><span class="code">ADM-PER-04</span>회사별 조정</a>
+  <a href="#ch6"><span class="code">ADM-PER-05</span>SaaS 도메인 깊이</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : PERSONALIZATION-B2B-SAAS-ADMIN-V1</span><span>SCOPE : ADMIN UX · RBAC · DATA GRID · WORKFLOW</span><span>LANG : KO</span></div><h1>B2B·SaaS 어드민 대응</h1><p class="hero-sub">현재 이력에서 가장 강한 포지션은 B2B·SaaS 어드민 프론트엔드입니다. 이유는 <strong>운영자 UX, 권한, 대량 데이터, Excel/PDF, 감사 가능성, 워크플로우</strong>가 여러 프로젝트에 반복해서 등장하기 때문입니다.</p></header>
@@ -69,6 +70,24 @@
 <tr><td>엔터프라이즈 B2B</td><td>권한, 감사 가능성, Excel/PDF, 대량 데이터, 장애 없이 변경하는 방식</td></tr>
 <tr><td>핀테크·정산 도메인</td><td>금액 정밀도, 중복 요청 방지, 거래내역 필터, 통화·timezone, 권한</td></tr>
 <tr><td>데이터 플랫폼</td><td>Data Grid, 공정도/그래프 에디터, 파일 업로드, OCR 결과 편집, validation</td></tr>
+</table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">ADM-PER-05</span><h2>B2B·SaaS 도메인 깊이</h2></div>
+<p class="lede">B2B SaaS 어드민 면접은 Data Grid나 관리자 화면 경험만으로 충분하지 않습니다. 고객별 권한, 감사 가능성, 데이터 보존, 운영자 실수 방지까지 말해야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">B2B SAAS DOMAIN DEPTH</span>
+B2B SaaS의 핵심은 고객 조직의 업무 위험을 소프트웨어가 대신 통제하는 것입니다. 그래서 tenant isolation, RBAC/ABAC, approval workflow, audit trail, data export, admin impersonation, 고객별 설정, SLA와 장애 고지가 모두 제품 설계 질문이 됩니다.
+</div>
+<table>
+<tr><th>도메인 축</th><th>면접 질문</th><th>좋은 답변 방향</th></tr>
+<tr><td>Tenant isolation</td><td>다른 고객사 데이터가 섞이면 어디서 막나요?</td><td>DB query scope, cache key, file path, audit log, test fixture에 tenant를 포함합니다.</td></tr>
+<tr><td>RBAC/ABAC</td><td>역할만으로 권한이 부족한 경우는?</td><td>actor, action, resource, scope, condition을 분리합니다.</td></tr>
+<tr><td>Audit trail</td><td>관리자 변경을 어떻게 추적하나요?</td><td>actor, target, before/after, reason, requestId, result를 기록합니다.</td></tr>
+<tr><td>Approval workflow</td><td>위험한 작업은 바로 실행해도 되나요?</td><td>draft, review, approval, execution, rollback 상태를 분리합니다.</td></tr>
+<tr><td>Data export</td><td>Excel/PDF export의 위험은?</td><td>권한, 범위, masking, rate limit, formula injection, audit를 봅니다.</td></tr>
+<tr><td>고객별 설정</td><td>고객별 요구가 충돌하면?</td><td>core model과 configuration을 분리하고 예외를 제품 구조로 흡수할지 판단합니다.</td></tr>
 </table>
 </section>
 

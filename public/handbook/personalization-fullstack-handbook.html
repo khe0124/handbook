@@ -11,7 +11,8 @@
   <a href="#ch4"><span class="code">FS-PER-03</span>위험한 표현</a>
   <a href="#ch5"><span class="code">FS-PER-04</span>학습 연결</a>
   <a href="#ch6"><span class="code">FS-PER-05</span>강점 전환 문장</a>
-  <a href="#ch6"><span class="code">FS-PER-05</span>강점 전환 문장</a>
+  <a href="#ch7"><span class="code">FS-PER-06</span>서버 협업 역량</a>
+  <a href="#ch8"><span class="code">FS-PER-07</span>압박 질문 연결</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : PERSONALIZATION-FULLSTACK-V1</span><span>SCOPE : API CONTRACT · AUTH · DATA FLOW · OPERABILITY</span><span>LANG : KO</span></div><h1>풀스택 개발자 대응</h1><p class="hero-sub">풀스택 포지션에서는 “백엔드를 전부 직접 했다”가 아니라 <strong>프론트에서 서버 계약, 인증, 권한, 데이터 정합성, 운영 흐름을 얼마나 정확히 다뤘는지</strong>를 보여주는 전략이 안전합니다.</p></header>
@@ -74,6 +75,19 @@
 
 <section id="ch6">
 <div class="ch-head"><span class="ch-code">FS-PER-05</span><h2>강점 전환 문장</h2></div>
+<p class="lede">풀스택 답변의 핵심은 프론트 경험을 그대로 나열하지 않고, 경험을 서버 협업 역량으로 전환해 말하는 것입니다.</p>
+<table>
+<tr><th>프론트 경험</th><th>서버 협업 역량으로 전환</th></tr>
+<tr><td>Data Grid와 검색 필터</td><td>조회 API의 pagination/filter, 정렬 조건, 인덱스 후보를 함께 생각할 수 있습니다.</td></tr>
+<tr><td>인증 만료와 route guard</td><td>JWT/refresh token, 401/403 구분, 서버 최종 권한 검증 필요성을 이해합니다.</td></tr>
+<tr><td>파일 업로드/다운로드</td><td>multipart, presigned URL, 비동기 job, 실패 복구 UX를 API 계약과 연결합니다.</td></tr>
+<tr><td>오류 상태 UI</td><td>서버 error code, retryability, 사용자 복구 가능 메시지의 필요성을 압니다.</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">ANSWER</span>“제 강점은 서버를 혼자 다 만들었다는 것이 아니라, 프론트에서 서버 계약이 깨지는 지점을 많이 겪었다는 점입니다. 그래서 API 응답 구조, 인증 만료, 권한, pagination/filter, 파일 처리, 오류 복구를 백엔드와 같은 언어로 논의할 수 있습니다.”</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FS-PER-06</span><h2>서버 협업 역량</h2></div>
 <p class="lede">풀스택 면접에서는 프론트 경험을 서버 흉내로 바꾸지 말고, 경험을 서버 협업 역량으로 전환해서 말합니다.</p>
 <table>
 <tr><th>프론트 경험</th><th>강점 전환 문장</th></tr>
@@ -84,17 +98,20 @@
 </table>
 </section>
 
-<section id="ch6">
-<div class="ch-head"><span class="ch-code">FS-PER-05</span><h2>강점 전환 문장</h2></div>
-<p class="lede">풀스택 답변의 핵심은 프론트 경험을 그대로 나열하지 않고, 경험을 서버 협업 역량으로 전환해 말하는 것입니다.</p>
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">FS-PER-07</span><h2>압박 질문 연결</h2></div>
+<p class="lede">풀스택 포지션에서는 인프라·분산·클라우드·시스템 설계 질문을 “직접 전부 운영했다”로 과장하지 말고, 프론트 경험이 닿은 API 계약과 운영 경계에서 정확히 연결합니다.</p>
+<div class="serial-card"><span class="sc-label">SYSTEM DESIGN PRESSURE DRILL</span>숫자 압박 질문은 DAU, QPS, connection, cache hit ratio, queue lag, worker 수로 가정을 쪼개고, 프론트 경험은 pagination/filter, progress UI, 캐시 가능 조회와 쓰기 경로 분리로 연결합니다.</div>
+<div class="serial-card"><span class="sc-label">DISTRIBUTED CONSISTENCY SENIOR DRILL</span>분산 정합성 질문은 중복 클릭 방지 수준에서 끝내지 않고 idempotency key, outbox/inbox, processed table, reconciliation이 왜 필요한지까지 연결해 답합니다.</div>
 <table>
-<tr><th>프론트 경험</th><th>서버 협업 역량으로 전환</th></tr>
-<tr><td>Data Grid와 검색 필터</td><td>조회 API의 pagination/filter, 정렬 조건, 인덱스 후보를 함께 생각할 수 있습니다.</td></tr>
-<tr><td>인증 만료와 route guard</td><td>JWT/refresh token, 401/403 구분, 서버 최종 권한 검증 필요성을 이해합니다.</td></tr>
-<tr><td>파일 업로드/다운로드</td><td>multipart, presigned URL, 비동기 job, 실패 복구 UX를 API 계약과 연결합니다.</td></tr>
-<tr><td>오류 상태 UI</td><td>서버 error code, retryability, 사용자 복구 가능 메시지의 필요성을 압니다.</td></tr>
+<tr><th>압박 질문</th><th>안전한 포지셔닝</th><th>말할 증거</th></tr>
+<tr><td>Kubernetes나 Cloud 운영을 얼마나 이해하나요?</td><td>Service/Ingress, HPA/VPA, PDB, node drain, network policy는 직접 운영 범위를 구분해 설명하고, 배포 중 readiness·rollback·환경변수·로그 확인 경험과 연결합니다.</td><td>배포 스크립트, 환경별 설정, 장애 화면, 릴리즈 확인, 운영자 콘솔 이슈 대응</td></tr>
+<tr><td>IAM, KMS, secret 관리는 어떻게 보나요?</td><td>서버 권한을 직접 설계했다고 과장하지 않고, token/refresh/RBAC 경험에서 IAM trust/resource policy, KMS, secret rotation 필요성을 학습해 연결합니다.</td><td>axios interceptor, 401/403 처리, 권한별 메뉴, secret을 코드에 두지 않은 배포 관행</td></tr>
+<tr><td>분산 정합성 질문을 받으면?</td><td>결제·권한·상태 변경처럼 사용자 신뢰가 큰 경로는 idempotency, 중복 클릭 방지, processed 상태, reconciliation 관점으로 답하고 exactly-once 오해를 피합니다.</td><td>중복 요청 방지, 상태 전이 버튼 제어, API error 재시도 정책, 사용자에게 pending/failed 표시</td></tr>
+<tr><td>시스템 설계 숫자 압박은?</td><td>DAU→QPS→cache hit→DB connection→queue lag→worker 수 순서로 가정을 놓고, 정확한 숫자보다 병목 후보와 질문 목록을 명확히 합니다.</td><td>목록 API pagination/filter, 캐시 가능한 조회와 쓰기 구분, 대량 업로드 job/progress 경험</td></tr>
+<tr><td>프로젝트 증거를 요구하면?</td><td>PROJECT EVIDENCE QUALITY RUBRIC 기준으로 PR/ADR/metric/before-after/장애기록/QA ticket/사용자 피드백 중 실제로 가진 증거만 말합니다.</td><td>PR, QA ticket, before-after 화면, 사용자 피드백, 버그 재현 steps, 수정 전후 로그</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">ANSWER</span>“제 강점은 서버를 혼자 다 만들었다는 것이 아니라, 프론트에서 서버 계약이 깨지는 지점을 많이 겪었다는 점입니다. 그래서 API 응답 구조, 인증 만료, 권한, pagination/filter, 파일 처리, 오류 복구를 백엔드와 같은 언어로 논의할 수 있습니다.”</div>
+<div class="serial-card"><span class="sc-label">ANSWER</span>“풀스택 질문에 답할 때는 제가 직접 운영한 범위와 학습으로 설명할 범위를 나눕니다. 직접 경험은 API 계약, 인증 만료, 권한별 UI, 대량 입력, 오류 복구이고, 여기서 이어지는 서버·인프라 주제는 어떤 지표와 정책을 확인해야 하는지까지 말할 수 있게 준비했습니다.”</div>
 </section>
 
 <footer>PERSONALIZED FULLSTACK POSITION · V1 · 2026-06</footer>

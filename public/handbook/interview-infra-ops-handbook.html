@@ -18,13 +18,19 @@
   <a href="#q11"><span class="code">IO-11</span>장애 초동 대응</a>
   <a href="#q12"><span class="code">IO-12</span>Postmortem</a>
   <a href="#q13"><span class="code">IO-13</span>핵심 질문 20선</a>
+  <a href="#q14"><span class="code">IO-14</span>장애 추적 루틴</a>
+  <a href="#q15"><span class="code">IO-15</span>K8S·Cloud Senior Drill</a>
 </nav>
 <main>
-<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-INFRA-OPS-QA-V1</span><span>SCOPE : NETWORK · CDN · CONTAINER · DELIVERY · OBSERVABILITY</span><span>LANG : KO</span></div><h1>인프라·운영 면접</h1><p class="hero-sub">인프라·운영 질문은 특정 클라우드 콘솔 사용법보다 <strong>요청이 지나가는 경로, 배포가 사용자에게 도달하는 과정, 장애를 좁히는 순서</strong>를 설명할 수 있는지 확인합니다.</p></header>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-INFRA-OPS-QA-V2</span><span>SCOPE : NETWORK · CDN · CONTAINER · DELIVERY · OBSERVABILITY</span><span>LANG : KO</span></div><h1>인프라·운영 면접</h1><p class="hero-sub">인프라·운영 질문은 특정 클라우드 콘솔 사용법보다 <strong>요청이 지나가는 경로, 배포가 사용자에게 도달하는 과정, 장애를 좁히는 순서</strong>를 설명할 수 있는지 확인합니다.</p></header>
 
 <section id="q1">
 <div class="ch-head"><span class="ch-code">IO-01</span><h2>Q. 브라우저에서 서버까지 요청 흐름을 설명해보세요.</h2></div>
 <h3>핵심 개념</h3><p>웹 요청은 함수 호출이 아니라 DNS, TCP, TLS, HTTP, CDN/LB, 서버, DB, 캐시를 지나는 실패 가능한 경로입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>요청 흐름은 한 번의 함수 호출이 아니라 여러 계층의 계약이 연쇄적으로 성공해야 완성되는 경로입니다. DNS는 이름을 IP로 바꾸고, TCP는 연결을 만들며, TLS는 암호화와 서버 인증을 제공하고, HTTP는 애플리케이션 의미를 전달합니다. 장애 대응에서는 “서버 문제”라고 뭉개지 말고 어느 계층에서 실패했는지 증거로 좁혀야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">브라우저가 URL을 해석하고 DNS로 IP를 찾은 뒤 TCP 연결과 TLS handshake를 거쳐 HTTP 요청을 보냅니다. 요청은 CDN이나 Load Balancer를 지나 애플리케이션 서버에 도착하고, 서버는 인증, 라우팅, 비즈니스 로직, DB/캐시 조회 후 응답을 반환합니다.</div>
 <h3>90초 답변</h3><p>이 흐름을 알아야 장애를 계층별로 좁힐 수 있습니다. DNS가 틀리면 서버까지 도달하지 못하고, TLS가 실패하면 인증서나 SNI 문제일 수 있으며, LB health check가 실패하면 앱은 살아 있어도 트래픽을 받지 못합니다. API가 느리면 네트워크, 서버 CPU, DB 대기, 외부 API timeout을 분리해야 합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TCP와 TLS 차이는?</td><td>TCP는 전송 연결, TLS는 그 위에서 암호화와 서버 인증을 제공합니다.</td></tr><tr><td>timeout은 어디에 두나요?</td><td>client, gateway, app, DB, 외부 API마다 목적에 맞게 두고 전체 예산을 맞춥니다.</td></tr><tr><td>느린 요청은 어떻게 좁히나요?</td><td>waterfall, server log, trace, DB query, external dependency 순서로 분해합니다.</td></tr></table>
@@ -34,6 +40,10 @@
 <section id="q2">
 <div class="ch-head"><span class="ch-code">IO-02</span><h2>Q. CDN과 cache-control은 어떻게 설계하나요?</h2></div>
 <h3>핵심 개념</h3><p>CDN은 사용자 가까운 edge에서 정적 자산이나 cacheable response를 제공해 latency와 origin 부하를 줄입니다. 핵심은 무엇을 얼마나 오래 캐시해도 되는지입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CDN 캐시는 origin 부하와 거리 비용을 줄이는 대신 최신성 책임을 edge로 분산시킵니다. content hash가 붙은 asset은 URL이 내용의 버전이 되므로 오래 캐시해도 안전하지만, HTML이나 사용자별 응답은 같은 정책을 쓰면 배포 꼬임이나 개인정보 노출 위험이 생깁니다. Cache-Control은 성능 옵션이 아니라 데이터 신뢰성 계약입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">hash가 붙은 JS/CSS asset은 immutable로 길게 캐시하고, HTML은 짧게 캐시하거나 revalidate하게 둡니다. API response는 데이터 최신성 요구에 따라 private/public, max-age, stale-while-revalidate를 신중히 선택합니다.</div>
 <h3>90초 답변</h3><p>캐시는 계층별로 다르게 동작합니다. 브라우저 캐시, CDN 캐시, 애플리케이션 캐시가 같은 데이터를 서로 다른 TTL로 보관하면 사용자는 오래된 화면을 볼 수 있습니다. 배포에서는 HTML이 새 asset을 참조하는데 asset이 아직 CDN에 없거나, 반대로 HTML이 오래 캐시되어 구버전을 계속 보는 문제가 흔합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>immutable asset은 왜 안전한가요?</td><td>파일명에 content hash가 있어 내용이 바뀌면 URL도 바뀌기 때문입니다.</td></tr><tr><td>stale-while-revalidate는?</td><td>오래된 값을 우선 주고 백그라운드에서 새 값을 갱신하는 전략입니다.</td></tr><tr><td>캐시 버그는 어떻게 확인하나요?</td><td>response header, CDN status, asset hash, hard reload, purge 이력을 확인합니다.</td></tr></table>
@@ -43,6 +53,10 @@
 <section id="q3">
 <div class="ch-head"><span class="ch-code">IO-03</span><h2>Q. Docker와 Kubernetes를 어떻게 설명하나요?</h2></div>
 <h3>핵심 개념</h3><p>Docker는 애플리케이션과 런타임 의존성을 이미지로 패키징하고, Kubernetes는 컨테이너를 스케줄링, 복구, 확장, 서비스 디스커버리, rollout하는 플랫폼입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Docker 이미지는 실행 환경을 포장하지만 프로세스 생명주기와 운영 정책을 자동으로 해결하지는 않습니다. Kubernetes는 pod를 원하는 상태로 유지하려고 재시작, 스케줄링, 서비스 디스커버리, rollout을 수행합니다. 따라서 health check, resource request/limit, graceful shutdown, secret 주입 방식까지 알아야 운영 답변이 됩니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">Docker는 “어디서나 같은 방식으로 실행되는 이미지”를 만드는 도구이고, Kubernetes는 그 이미지를 여러 노드에 배치하고 장애 시 재시작하며 서비스로 노출하고 rollout/rollback을 관리하는 오케스트레이션 시스템입니다.</div>
 <h3>90초 답변</h3><p>운영 관점에서는 Dockerfile보다 이미지 크기, secret 주입, health check, graceful shutdown, 로그 출력 방식이 중요합니다. Kubernetes에서는 readiness와 liveness를 구분해야 합니다. readiness는 트래픽을 받을 준비가 됐는지, liveness는 프로세스를 재시작해야 할 정도로 죽었는지 판단합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>readiness와 liveness 차이는?</td><td>readiness는 트래픽 수신 여부, liveness는 재시작 여부입니다.</td></tr><tr><td>graceful shutdown은 왜 필요한가요?</td><td>배포/종료 중 처리 중인 요청을 안전하게 마무리하기 위해 필요합니다.</td></tr><tr><td>request와 limit은?</td><td>request는 스케줄링 기준, limit은 사용할 수 있는 상한입니다.</td></tr></table>
@@ -52,6 +66,10 @@
 <section id="q4">
 <div class="ch-head"><span class="ch-code">IO-04</span><h2>Q. CI/CD와 무중단 배포는 어떻게 보나요?</h2></div>
 <h3>핵심 개념</h3><p>CI/CD는 자동 배포 버튼이 아니라 변경을 검증하고, 추적하고, 안전하게 사용자에게 전달하고, 나빠지면 되돌리는 시스템입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CI/CD는 배포 자동화가 아니라 변경을 작게 검증하고 추적 가능한 artifact로 사용자에게 전달하는 시스템입니다. lint/test/build만 통과해도 운영 지표가 나빠질 수 있으므로 배포 후 health, error rate, latency를 확인해야 합니다. 무중단 배포의 핵심은 새 버전과 구버전, DB schema가 잠시 공존할 수 있는 호환성입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">CI는 lint, typecheck, test, build로 변경을 빠르게 검증하고, CD는 artifact를 환경에 배포하며 metric과 health check로 안전성을 확인합니다. 무중단 배포는 rolling, blue-green, canary 같은 전략과 rollback 기준이 함께 있어야 합니다.</div>
 <h3>90초 답변</h3><p>배포에서 중요한 것은 어떤 commit과 image digest, migration version, config가 배포됐는지 추적 가능해야 한다는 점입니다. DB migration은 코드 배포와 함께 깨지기 쉬우므로 expand-contract 방식으로 하위 호환성을 유지해야 합니다. canary는 일부 트래픽에 먼저 배포하고 error rate, latency, business metric을 보고 확대합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>rollback 기준은?</td><td>5xx, latency, 핵심 전환율, error budget burn rate 같은 지표로 정합니다.</td></tr><tr><td>DB migration은?</td><td>새 컬럼 추가, 양쪽 코드 호환, backfill, old column 제거를 단계로 나눕니다.</td></tr><tr><td>artifact 추적은?</td><td>commit SHA, image digest, release tag, config version을 묶어 남깁니다.</td></tr></table>
@@ -61,6 +79,10 @@
 <section id="q5">
 <div class="ch-head"><span class="ch-code">IO-05</span><h2>Q. 로그, 메트릭, 트레이스는 각각 어떤 역할을 하나요?</h2></div>
 <h3>핵심 개념</h3><p>로그는 사건의 상세 기록, 메트릭은 시스템 상태의 숫자 흐름, 트레이스는 요청이 여러 서비스와 계층을 지나간 경로입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>로그, 메트릭, 트레이스는 같은 문제를 다른 해상도로 봅니다. 메트릭은 증상의 크기와 시점을 보여주고, 로그는 개별 사건의 문맥을 주며, 트레이스는 요청이 어느 dependency에서 늦거나 실패했는지 보여줍니다. 좋은 관측성은 장애 후 검색 가능한 흔적이 아니라 장애 중 의사결정 가능한 신호입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">장애 대응에서는 먼저 영향 범위와 지표를 보고, 로그로 구체적 사건을 확인하고, trace로 요청이 어디서 늦거나 실패했는지 좁힙니다. 로그만 보는 것이 아니라 RED, USE, Golden Signals 같은 지표와 함께 봐야 합니다.</div>
 <h3>90초 답변</h3><p>RED는 request rate, error rate, duration으로 서비스 관점 지표를 봅니다. USE는 utilization, saturation, errors로 리소스 관점을 봅니다. 좋은 로그에는 traceId, user/action/resource, error code, dependency가 있어야 하지만 고카디널리티 필드를 무분별하게 metric label로 넣으면 비용과 성능 문제가 생길 수 있습니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>장애가 나면 무엇부터?</td><td>영향 범위, 최근 변경, metric, log, trace, rollback 가능성을 순서대로 봅니다.</td></tr><tr><td>postmortem에는?</td><td>타임라인, 영향, 원인, 감지 지연, 완화, 재발 방지 action을 남깁니다.</td></tr><tr><td>alert 기준은?</td><td>증상 기반, 사용자 영향 기반, action 가능한 기준으로 잡습니다.</td></tr></table>
@@ -70,6 +92,10 @@
 <section id="q6">
 <div class="ch-head"><span class="ch-code">IO-06</span><h2>Q. DNS, TCP, TLS, HTTP는 요청에서 어떤 역할을 하나요?</h2></div>
 <h3>핵심 개념</h3><p>웹 요청은 이름 해석, 연결 수립, 암호화 협상, 애플리케이션 프로토콜 처리로 나뉩니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>DNS, TCP, TLS, HTTP를 구분하면 같은 “접속 안 됨”도 원인이 달라집니다. DNS TTL과 resolver cache, TCP 방화벽/라우팅, TLS 인증서/SNI, HTTP gateway/upstream 오류는 확인 도구와 담당 영역이 다릅니다. 면접에서는 <code>dig</code>, <code>curl -v</code>, browser timing, gateway log처럼 계층별 증거를 말할 수 있어야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">DNS는 도메인을 IP로 해석하고, TCP는 신뢰성 있는 전송 연결을 만들며, TLS는 암호화와 서버 인증을 제공합니다. HTTP는 그 위에서 method, header, body, status code로 애플리케이션 요청과 응답을 표현합니다.</div>
 <h3>90초 답변</h3><p>장애도 단계별로 다릅니다. DNS 문제면 특정 ISP나 resolver에서만 실패할 수 있고, TCP 문제면 방화벽이나 라우팅, port open 여부를 봅니다. TLS 문제는 인증서 만료, SNI, protocol/cipher mismatch가 원인일 수 있고, HTTP 문제는 gateway timeout, auth, routing, upstream failure로 나눠 봅니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>HTTP/2 장점은?</td><td>multiplexing, header compression, connection 효율을 말합니다.</td></tr><tr><td>TLS handshake 비용은?</td><td>초기 연결 비용이 있어 keep-alive, session resumption을 봅니다.</td></tr><tr><td>DNS TTL은?</td><td>변경 전파 속도와 cache 효율의 trade-off입니다.</td></tr></table>
@@ -80,6 +106,10 @@
 <section id="q7">
 <div class="ch-head"><span class="ch-code">IO-07</span><h2>Q. CORS는 왜 생기고 어떻게 해결하나요?</h2></div>
 <h3>핵심 개념</h3><p>CORS는 브라우저가 다른 origin 요청을 제한하는 Same-Origin Policy를 서버가 명시적으로 완화하는 메커니즘입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CORS는 서버가 요청을 거절하는 기능이 아니라 브라우저가 cross-origin 응답 접근을 제한하는 보안 모델입니다. 서버는 허용할 origin, method, header, credential 정책을 응답 헤더로 명시하고, 브라우저는 그 정책에 맞지 않으면 JavaScript에 응답을 넘기지 않습니다. 인증·인가는 CORS와 별개의 서버 책임입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">CORS 오류는 서버가 해당 origin, method, header, credential 사용을 허용하는 응답 헤더를 주지 않을 때 브라우저가 막는 문제입니다. 서버에서 정확한 origin allowlist, preflight 대응, credential 정책을 설정해야 합니다.</div>
 <h3>90초 답변</h3><p>단순히 `*`로 열면 credential 요청과 맞지 않거나 보안 범위가 넓어집니다. Authorization header나 JSON POST는 preflight OPTIONS 요청이 먼저 갈 수 있으므로 gateway와 app이 OPTIONS를 처리해야 합니다. CORS는 브라우저 정책이지 서버 인증/인가를 대체하지 않습니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>preflight는?</td><td>실제 요청 전에 method/header 허용 여부를 확인하는 OPTIONS 요청입니다.</td></tr><tr><td>credentials는?</td><td>cookie를 보낼 때 allow-origin `*`를 쓸 수 없고 allow-credentials가 필요합니다.</td></tr><tr><td>프록시로 해결?</td><td>개발 환경 우회일 뿐 운영 정책은 서버에서 명시해야 합니다.</td></tr></table>
@@ -90,6 +120,10 @@
 <section id="q8">
 <div class="ch-head"><span class="ch-code">IO-08</span><h2>Q. readiness와 liveness는 어떻게 다르나요?</h2></div>
 <h3>핵심 개념</h3><p>readiness는 트래픽 수신 가능 여부, liveness는 프로세스를 재시작해야 할 정도로 비정상인지 판단합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>readiness와 liveness를 구분하지 않으면 장애를 키울 수 있습니다. readiness는 트래픽을 받을 준비가 되었는지라서 실패 시 endpoint에서 빠지고, liveness는 재시작해야 할 정도로 프로세스가 망가졌는지라서 실패 시 컨테이너가 재시작됩니다. 외부 DB가 잠깐 느린 것을 liveness 실패로 만들면 재시작 폭풍이 생길 수 있습니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">readiness가 실패하면 pod는 살아 있지만 Service endpoint에서 빠져 트래픽을 받지 않습니다. liveness가 실패하면 kubelet이 컨테이너를 재시작합니다. 둘을 같은 체크로 두면 장애 때 재시작 루프를 만들 수 있습니다.</div>
 <h3>90초 답변</h3><p>readiness는 DB 연결, migration 완료, warm-up처럼 요청 처리 준비 상태를 볼 수 있습니다. liveness는 deadlock이나 event loop 정지처럼 재시작이 필요한 상태만 봐야 합니다. 외부 의존성이 잠시 느리다고 liveness를 실패시키면 전체 pod가 재시작되어 장애가 커질 수 있습니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>startup probe는?</td><td>초기 기동이 긴 앱에서 liveness 시작 전 여유를 주기 위해 씁니다.</td></tr><tr><td>DB 체크를 liveness에?</td><td>보통 위험합니다. 외부 장애가 재시작 폭풍으로 번질 수 있습니다.</td></tr><tr><td>graceful shutdown과 관계?</td><td>종료 전 readiness를 내리고 in-flight 요청을 마무리합니다.</td></tr></table>
@@ -100,6 +134,10 @@
 <section id="q9">
 <div class="ch-head"><span class="ch-code">IO-09</span><h2>Q. 무중단 배포와 rollback은 어떻게 설계하나요?</h2></div>
 <h3>핵심 개념</h3><p>무중단 배포는 새 버전을 천천히 투입하고, 문제가 보이면 빠르게 되돌릴 수 있도록 배포 단위와 호환성을 관리하는 것입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>무중단 배포는 서버 인스턴스를 둘로 나누는 문제가 아니라 사용자 요청, 배포 artifact, DB schema, cache, feature flag가 호환되는 상태를 만드는 문제입니다. rolling이나 canary는 새 버전의 blast radius를 줄이는 전략이고, rollback은 코드뿐 아니라 migration과 config까지 되돌릴 수 있는지 따져야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">rolling, blue-green, canary를 상황에 맞게 선택하고 readiness, metric, log, alert로 새 버전 상태를 확인합니다. rollback은 image만 되돌리는 것이 아니라 DB migration, config, feature flag 호환성까지 고려해야 합니다.</div>
 <h3>90초 답변</h3><p>가장 깨지기 쉬운 부분은 코드와 DB schema가 동시에 바뀌는 경우입니다. expand-contract 방식으로 새 컬럼 추가, 양쪽 코드 호환, backfill, 읽기 전환, old column 제거를 나눕니다. canary는 일부 트래픽에서 5xx, latency, business metric을 보고 확대합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>blue-green 장점?</td><td>전환과 rollback이 빠르지만 비용과 데이터 호환성 문제가 있습니다.</td></tr><tr><td>canary 기준?</td><td>error rate, latency, 핵심 전환율, error budget burn을 봅니다.</td></tr><tr><td>migration rollback?</td><td>파괴적 변경은 되돌리기 어려우므로 단계적 호환 배포가 핵심입니다.</td></tr></table>
@@ -110,6 +148,10 @@
 <section id="q10">
 <div class="ch-head"><span class="ch-code">IO-10</span><h2>Q. RED, USE, Golden Signals는 무엇인가요?</h2></div>
 <h3>핵심 개념</h3><p>관측 지표를 서비스 관점과 리소스 관점으로 나눠 장애를 빠르게 감지하고 좁히는 프레임입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>RED, USE, Golden Signals는 지표를 외우는 표가 아니라 관측 대상을 나누는 프레임입니다. RED는 서비스가 사용자 요청을 어떻게 처리하는지 보고, USE는 리소스가 포화되는지 봅니다. 평균 latency보다 p95/p99가 중요한 이유는 소수의 느린 요청이 실제 사용자 경험과 장애 신호를 더 잘 드러내기 때문입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">RED는 request rate, error rate, duration으로 서비스 상태를 보고, USE는 utilization, saturation, errors로 리소스 상태를 봅니다. Golden Signals는 latency, traffic, errors, saturation을 중심으로 사용자 영향을 봅니다.</div>
 <h3>90초 답변</h3><p>서비스 장애 대응에서는 먼저 사용자 영향이 있는 증상 기반 지표를 봐야 합니다. CPU가 높아도 사용자가 영향받지 않을 수 있고, CPU가 낮아도 downstream timeout 때문에 에러가 날 수 있습니다. alert는 action 가능한 기준으로 잡고, 고카디널리티 label을 metric에 남발하지 않아야 합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>p95/p99는 왜?</td><td>평균이 숨기는 tail latency를 보기 위해서입니다.</td></tr><tr><td>증상 기반 alert?</td><td>사용자 영향이 있는 error/latency 중심 alert입니다.</td></tr><tr><td>고카디널리티 문제?</td><td>metric label 폭증으로 비용과 성능 문제가 생깁니다.</td></tr></table>
@@ -120,6 +162,10 @@
 <section id="q11">
 <div class="ch-head"><span class="ch-code">IO-11</span><h2>Q. 장애가 나면 무엇부터 확인하나요?</h2></div>
 <h3>핵심 개념</h3><p>장애 초동 대응은 원인 추측보다 영향 범위 파악, 완화, 최근 변경 확인, 계층별 분리 순서가 중요합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>장애 초동 대응은 원인을 맞히는 퀴즈가 아니라 피해를 줄이는 절차입니다. 먼저 영향 범위와 사용자 증상을 확인하고, 최근 변경과 rollback 가능성을 본 뒤, metric/log/trace로 계층을 좁힙니다. 원인 분석이 길어질 때는 feature flag off, traffic 우회, degraded mode처럼 완화 조치를 먼저 선택할 수 있어야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">먼저 사용자 영향과 범위를 확인합니다. 전체 장애인지 특정 기능/지역/버전인지 보고, 최근 배포와 설정 변경을 확인합니다. 동시에 rollback, feature flag off, traffic 우회 같은 완화 가능성을 검토합니다.</div>
 <h3>90초 답변</h3><p>그 다음 metric으로 언제부터 나빠졌는지 보고, log와 trace로 실패 지점을 좁힙니다. DB, cache, external dependency, gateway, app 중 어디가 병목인지 나누고, 원인 분석보다 사용자 영향 완화가 먼저일 때는 rollback을 우선합니다. 대응 중에는 타임라인과 의사결정을 기록합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>원인을 모르겠으면?</td><td>영향 완화와 관측 추가를 병행하고 가설을 하나씩 검증합니다.</td></tr><tr><td>커뮤니케이션은?</td><td>영향, 조치, 다음 업데이트 시간을 명확히 공유합니다.</td></tr><tr><td>최근 변경이 없으면?</td><td>트래픽 변화, 외부 의존성, 데이터 skew, 인증서/만료를 봅니다.</td></tr></table>
@@ -130,6 +176,10 @@
 <section id="q12">
 <div class="ch-head"><span class="ch-code">IO-12</span><h2>Q. postmortem에는 무엇을 남겨야 하나요?</h2></div>
 <h3>핵심 개념</h3><p>postmortem은 비난 문서가 아니라 장애를 조직 지식으로 바꾸고 재발 가능성을 줄이는 문서입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>postmortem은 누구의 실수인지 찾는 문서가 아니라 어떤 방어선이 없었거나 늦게 작동했는지 기록하는 문서입니다. 좋은 action item은 “주의”가 아니라 alert 조정, 배포 가드, 테스트 추가, runbook 개선처럼 owner와 검증 방법이 있는 작업입니다. 타임라인은 다음 장애에서 탐지와 의사결정 속도를 높이는 자료가 됩니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">영향 범위, 타임라인, 감지 경로, 원인, 완화 조치, 재발 방지 action, owner와 due date를 남깁니다. 사람 탓보다 시스템이 왜 감지하거나 막지 못했는지에 집중합니다.</div>
 <h3>90초 답변</h3><p>좋은 postmortem은 “무엇이 고장났나”보다 “왜 늦게 발견했나”, “왜 blast radius가 컸나”, “어떤 자동화와 테스트가 없었나”를 봅니다. action item은 관측성 개선, 배포 가드, runbook, 테스트, alert 조정처럼 실행 가능한 형태여야 합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>5 whys는?</td><td>표면 원인에서 시스템 원인까지 깊게 들어가는 방법입니다.</td></tr><tr><td>action item 기준?</td><td>owner, due date, 검증 방법이 있어야 합니다.</td></tr><tr><td>비난 방지는?</td><td>개인 실수보다 프로세스와 방어선 부재를 봅니다.</td></tr></table>
@@ -146,6 +196,8 @@
 <tr><td>배포</td><td>CI/CD, blue-green, canary, rollback, feature flag</td><td>실패 시 되돌리는 기준과 검증 지표</td></tr>
 <tr><td>컨테이너</td><td>Docker image, Kubernetes pod, readiness, liveness, resource limit</td><td>시작 실패와 트래픽 수신 실패를 구분</td></tr>
 <tr><td>관측성</td><td>로그, 메트릭, 트레이스, RED, USE, Golden Signals, postmortem</td><td>사용자 영향 감지와 원인 추적의 연결</td></tr>
+<tr><td>Kubernetes 운영</td><td>Service와 Ingress는 무엇을 분리하나요? HPA가 scale out해도 장애가 계속되는 이유는 무엇인가요? PDB가 있는 상태에서 node drain을 하면 어떤 일이 벌어지나요?</td><td>Service discovery, L7 routing, metric 기반 autoscaling, disruption budget, graceful termination을 연결</td></tr>
+<tr><td>Cloud 보안·DR</td><td>IAM trust policy와 resource policy는 어떻게 다르나요? KMS key 정책을 잘못 잡으면 어떤 장애가 나나요? DR failback은 왜 failover보다 어렵나요?</td><td>권한 주체, 리소스 경계, 암호화 키 의존성, 복구 후 원복 절차와 game day 검증</td></tr>
 </table>
 <div class="callout warn">
 <span class="co-label">압박 꼬리질문</span>
@@ -157,7 +209,46 @@
 </div>
 </section>
 
-<footer>INFRA & OPERATIONS INTERVIEW Q&A · V1 · 2026-06</footer>
+<section id="q14">
+<div class="ch-head"><span class="ch-code">IO-14</span><h2>계층별 장애 추적 루틴</h2></div>
+<p class="lede">인프라 면접에서 “서버가 안 됩니다”라는 질문은 정답을 맞히는 문제가 아니라, 원인을 계층별로 배제하는 능력을 보는 문제입니다.</p>
+<div class="serial-card">
+<span class="sc-label">INFRA FAILURE TRACE</span>
+브라우저 오류를 DNS, TCP, TLS, HTTP, CDN/LB, application, dependency, database 순서로 좁힙니다. 각 계층에서 확인할 증거가 다릅니다. DNS는 resolve 결과와 TTL, TCP는 handshake와 port reachability, TLS는 certificate chain과 SNI, HTTP는 status code와 header, app은 log/trace id, DB는 connection pool과 slow query를 봅니다.
+</div>
+<table>
+<tr><th>계층</th><th>확인할 증거</th><th>자주 놓치는 함정</th></tr>
+<tr><td>DNS</td><td>record, TTL, split-horizon, propagation</td><td>내 PC와 운영 VPC에서 다른 IP로 resolve될 수 있습니다.</td></tr>
+<tr><td>TCP/TLS</td><td>port open, handshake, certificate, SNI, ALPN</td><td>인증서 만료와 hostname mismatch를 애플리케이션 장애로 오해합니다.</td></tr>
+<tr><td>HTTP/CDN/LB</td><td>status code, cache header, health check, upstream time</td><td>CDN stale cache나 LB health check 실패가 특정 지역 장애처럼 보일 수 있습니다.</td></tr>
+<tr><td>Application</td><td>error log, trace id, thread pool, GC, feature flag</td><td>평균 latency만 보면 tail latency와 특정 endpoint 장애를 놓칩니다.</td></tr>
+<tr><td>Dependency</td><td>DB pool wait, queue depth, external API timeout</td><td>CPU가 낮아도 downstream 대기로 요청이 쌓일 수 있습니다.</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">답변 구조</span>
+<p>“사용자 영향 확인 → 최근 변경 확인 → 계층별 증거 수집 → 임시 완화 → 근본 원인 분석 → 재발 방지” 순서로 말합니다. 초동 대응에서는 원인 분석보다 blast radius 축소와 rollback 가능성 판단이 먼저입니다.</p>
+</div>
+</section>
+
+<section id="q15">
+<div class="ch-head"><span class="ch-code">IO-15</span><h2>K8S CLOUD SENIOR DRILL</h2></div>
+<p class="lede">시니어 인프라 질문은 Kubernetes 리소스 이름을 아는지보다 트래픽, 확장, 장애 허용, 권한, 암호화, 재해복구가 한 흐름에서 깨질 때 어떻게 판단하는지를 봅니다.</p>
+<table>
+<tr><th>압박 질문</th><th>답변에 반드시 들어갈 포인트</th><th>흔한 함정</th></tr>
+<tr><td>Service와 Ingress를 어떻게 나누나요?</td><td>Service는 pod 집합에 대한 안정적인 내부 접근과 discovery를 제공하고, Ingress는 host/path 기반 L7 외부 진입과 TLS, routing 정책을 담당한다고 설명합니다.</td><td>Ingress가 pod를 직접 찾는다고 말하거나, Service type과 Ingress controller 책임을 섞는 답변입니다.</td></tr>
+<tr><td>HPA/VPA를 동시에 쓰면 무엇을 조심하나요?</td><td>HPA는 replica 수를 조정하고 VPA는 request/limit 권고 또는 조정을 담당합니다. CPU metric만 보지 말고 queue lag, p95 latency, DB pool wait도 scale signal로 봅니다.</td><td>pod만 늘리면 DB connection, lock, downstream limit까지 같이 늘어 장애가 커질 수 있습니다.</td></tr>
+<tr><td>PDB가 있는 서비스에서 node drain은 어떻게 진행하나요?</td><td>PDB가 허용하는 unavailable 수 안에서 eviction되며, readiness를 먼저 내리고 terminationGracePeriod와 preStop으로 in-flight 요청을 마무리합니다.</td><td>PDB를 “pod가 절대 내려가지 않게 하는 설정”으로 이해하면 오답입니다.</td></tr>
+<tr><td>network policy는 어디까지 보호하나요?</td><td>namespace/pod selector 기반 east-west traffic 허용 범위를 줄입니다. 기본 deny 정책, DNS egress, monitoring, ingress controller 경로를 함께 검토합니다.</td><td>인증·인가나 TLS를 network policy가 대체한다고 말하면 위험합니다.</td></tr>
+<tr><td>IAM trust/resource policy와 KMS는 장애 때 어떻게 보나요?</td><td>trust policy는 누가 role을 assume할 수 있는지, resource policy는 특정 리소스 접근 주체와 조건을 제한합니다. KMS key policy와 grant가 막히면 secret 복호화, object read, DB 암호화 작업이 실패할 수 있습니다.</td><td>권한 오류를 애플리케이션 500으로만 보고 audit log와 denied event를 확인하지 않는 것입니다.</td></tr>
+<tr><td>DR failback과 game day는 어떻게 설명하나요?</td><td>failover 후 원래 region으로 돌아가는 failback은 데이터 방향, DNS TTL, write freeze, replication 재구성, config/secret 차이를 검증해야 합니다. game day는 runbook을 실제로 실행해 RTO/RPO와 누락된 의존성을 확인하는 훈련입니다.</td><td>백업 존재를 DR 완료로 말하거나 failover만 있고 failback 절차가 없는 답변입니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">90초 답변 구조</span>
+“트래픽은 Ingress에서 Service로 들어오고, Service는 readiness를 통과한 pod에만 보냅니다. 부하가 늘면 HPA/VPA를 보되 DB connection과 queue lag까지 같이 봅니다. 점검 때는 PDB와 node drain으로 가용 replica를 유지하고, network policy와 IAM/KMS로 blast radius를 줄입니다. DR은 failover뿐 아니라 failback과 game day 결과까지 있어야 운영 가능한 설계입니다.”
+</div>
+</section>
+
+<footer>INFRA & OPERATIONS INTERVIEW Q&A · V2 · 2026-06</footer>
 </main>
 </div>
 </body>

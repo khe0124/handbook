@@ -23,12 +23,12 @@ main{min-width:0;padding:0 56px 120px;background:var(--paper)}
 @media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
 .nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
 .nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
-nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius: 0;font-size:13.5px;line-height:1.4}
 nav a:hover{background:var(--green-tint);color:var(--green-deep)}
 nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
 header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
 .hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
-.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius: 0;background:var(--panel)}
 h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
 .hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
 .hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
@@ -43,8 +43,8 @@ p.lede{font-size:17px;color:var(--ink-soft)}
 em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
 ul,ol{margin:0 0 16px 22px}
 li{margin-bottom:7px}
-code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
-.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius: 0}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius: 0;margin:22px 0}
 .callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
 .callout.risk{border-left-color:var(--red);background:var(--red-tint)}
 .callout.gm{border-left-color:var(--ink);background:#ECEEF3}
@@ -59,15 +59,15 @@ td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line
 tr:last-child td{border-bottom:none}
 td .mono,td code{font-family:var(--mono);font-size:12.5px}
 .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
-.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius: 0;font-weight:500}
 .flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
 .flow .arr{color:var(--ink-soft)}
-.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius: 0;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
 .serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
 .serial-card .seg{color:#FACC6B}
 .serial-card .seg2{color:#9DB6E8}
 .serial-card .dim{color:#9AA3B8}
-.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius: 0;overflow:hidden;background:var(--panel);margin-top:24px}
 .g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
 .g-row:last-child{border-bottom:none}
 .g-term{padding:13px 18px;background:var(--green-tint)}
@@ -93,6 +93,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch8"><span class="code">JPA-08</span>낙관적 락</a>
   <a href="#ch9"><span class="code">JPA-09</span>Auditing</a>
   <a href="#ch10"><span class="code">JPA-10</span>치트시트</a>
+  <a href="#ch11"><span class="code">JPA-11</span>프록시·flush·연관관계 심화</a>
 </nav>
 <main>
 
@@ -457,6 +458,33 @@ List&lt;Member&gt; content = page.getContent();&nbsp;&nbsp;<span class="dim">// 
 <span class="co-label">학습 순서 제안</span>
 <p>전부 한 번에 외우려 하지 마세요. 손에 먼저 붙일 것: <code>@Entity</code>+<code>@Id</code> · <code>JpaRepository</code> 상속 · 쿼리 메서드(<code>findBy</code>) · <code>@Transactional</code> 안에서의 변경감지. 이 네 가지로 foundational CRUD는 끝납니다. 그다음 실무에서 거의 반드시 만나는 게 <strong>N+1</strong>(JPA-05)이니, 여기까지 잡으면 실전 80%입니다. 각 항목의 <em>왜</em>가 궁금하면 JPA 핸드북에서 영속성 컨텍스트·프록시·flush 타이밍을 보세요.</p>
 </div>
+</section>
+
+<section id="ch11">
+<div class="ch-head"><span class="ch-code">JPA-11</span><h2>프록시·flush·연관관계 심화</h2></div>
+<p class="lede">JPA 면접에서 깊이를 가르는 지점은 어노테이션 이름이 아니라 “언제 SQL이 나가고, 언제 프록시가 초기화되고, 왜 트랜잭션 밖에서 터지는가”를 설명하는 능력입니다.</p>
+<table>
+<tr><th>개념</th><th>실제 의미</th><th>자주 터지는 문제</th></tr>
+<tr><td>Persistence Context</td><td>트랜잭션 동안 엔티티를 추적하는 1차 캐시와 변경 감지 공간</td><td>같은 id 조회는 같은 객체, 변경은 commit/flush 때 SQL로 반영</td></tr>
+<tr><td>Proxy</td><td>연관 엔티티를 실제 객체 대신 대리 객체로 들고 있다가 접근 시 로딩</td><td>트랜잭션 밖 접근 시 LazyInitializationException</td></tr>
+<tr><td>Flush</td><td>영속성 컨텍스트 변경을 DB SQL로 밀어내는 과정</td><td>commit 전 JPQL 실행 전에 자동 flush되어 예상보다 빨리 UPDATE 발생</td></tr>
+<tr><td>Dirty Checking</td><td>스냅샷과 현재 엔티티 값을 비교해 UPDATE 생성</td><td>setter 남용 시 의도치 않은 UPDATE, 변경 범위 추적 어려움</td></tr>
+<tr><td>Cascade</td><td>부모 엔티티 작업을 자식에게 전파</td><td>삭제 전파 범위 오해로 데이터 손실</td></tr>
+<tr><td>orphanRemoval</td><td>부모 컬렉션에서 빠진 자식을 삭제 대상으로 봄</td><td>단순 관계 해제가 실제 DELETE로 이어짐</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">FLUSH TIMING</span>
+1. transaction commit 직전<br>
+2. JPQL 실행 전, 쿼리 결과와 영속성 컨텍스트 변경을 맞추기 위해<br>
+3. entityManager.flush() 명시 호출<br>
+<span class="dim">flush는 commit이 아니다. SQL은 DB에 보내지만 rollback되면 취소된다.</span>
+</div>
+<div class="callout warn">
+<span class="co-label">fetch join과 pagination</span>
+<p>to-one 연관은 fetch join으로 비교적 안전하게 함께 가져올 수 있습니다. 하지만 to-many 컬렉션 fetch join에 pagination을 섞으면 DB에서 페이지를 자르는 것이 아니라 메모리에서 잘리거나 row가 부풀어 결과가 왜곡될 수 있습니다. 컬렉션은 batch fetch size, 별도 조회, DTO projection을 고려해야 합니다.</p>
+</div>
+<h3>면접 답변 예시</h3>
+<div class="serial-card"><span class="sc-label">JPA DEPTH ANSWER</span>JPA는 트랜잭션 안에서 영속성 컨텍스트가 엔티티를 추적하고, 변경 감지로 flush 시점에 SQL을 생성합니다. lazy 연관은 프록시로 들고 있다가 접근 시 로딩되므로 트랜잭션 밖에서는 LazyInitializationException이 날 수 있습니다. 그래서 조회 목적에 따라 fetch join, entity graph, batch fetch, DTO projection을 고르고, 특히 컬렉션 fetch join과 pagination은 조심합니다.</div>
 </section>
 
 <footer>

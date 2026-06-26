@@ -30,6 +30,27 @@ export const PERSONAL_HANDBOOKS = [
   { id: "personal-b2b-saas-admin", label: "04 B2B·SaaS 어드민 대응", kind: "개인화", file: "personalization-b2b-saas-admin-handbook.html" },
 ];
 
+export const CAREER_HANDBOOKS = [
+  { id: "career-strategy-foundation", label: "00 면접 전략·커리어 포지셔닝", kind: "면접·커리어", file: "career-strategy-foundation-handbook.html" },
+  { id: "career-frontend-interview", label: "01 프론트엔드·JS/TS 면접", kind: "면접·커리어", file: "career-frontend-interview-handbook.html" },
+  { id: "career-backend-interview", label: "02 백엔드·Java/Spring 면접", kind: "면접·커리어", file: "career-backend-interview-handbook.html" },
+  { id: "career-core-deep-dive", label: "03 CS·DB·보안 심화 면접", kind: "면접·커리어", file: "career-core-deep-dive-handbook.html" },
+  { id: "career-infra-distributed-cloud", label: "04 인프라·분산·클라우드 면접", kind: "면접·커리어", file: "career-infra-distributed-cloud-handbook.html" },
+  { id: "career-system-project", label: "05 시스템 설계·프로젝트 심층", kind: "면접·커리어", file: "career-system-project-handbook.html" },
+  { id: "career-culture-collaboration", label: "06 컬처·협업·코드리뷰", kind: "면접·커리어", file: "career-culture-collaboration-handbook.html" },
+  { id: "career-coding-test", label: "07 코딩테스트 패턴", kind: "면접·커리어", file: "career-coding-test-handbook.html" },
+];
+
+export const DEV_EXAMPLES = [
+  { id: "ex-java", label: "10 Java 예시", kind: "백엔드 예시", file: "java-examples.html" },
+  { id: "ex-jpa", label: "11 JPA 예시", kind: "백엔드 예시", file: "jpa-examples.html" },
+  { id: "ex-spring", label: "12 Spring Boot 예시", kind: "백엔드 예시", file: "spring-boot-examples.html" },
+  { id: "ex-docker", label: "13 Docker 예시", kind: "백엔드 예시", file: "docker-examples.html" },
+  { id: "ex-nginx", label: "14 nginx 예시", kind: "백엔드 예시", file: "nginx-examples.html" },
+  { id: "ex-redis", label: "15 Redis 예시", kind: "백엔드 예시", file: "redis-examples.html" },
+  { id: "ex-postgresql", label: "16 PostgreSQL 예시", kind: "백엔드 예시", file: "postgresql-examples.html" },
+];
+
 export const BACKEND_HANDBOOKS = [
   { id: "backend", label: "00 백엔드 개요", kind: "개발 핸드북", file: "backend-engineering-handbook.html" },
   { id: "db", label: "01 DB", kind: "개발 핸드북", file: "db-handbook.html" },
@@ -41,6 +62,7 @@ export const BACKEND_HANDBOOKS = [
   { id: "observability", label: "07 로깅·모니터링·장애대응", kind: "개발 핸드북", file: "observability-handbook.html" },
   { id: "linux", label: "08 리눅스", kind: "개발 핸드북", file: "linux-commands-handbook.html" },
   { id: "vi", label: "09 vi", kind: "개발 핸드북", file: "vi-shortcuts-handbook.html" },
+  ...DEV_EXAMPLES,
 ];
 
 export const FRONTEND_HANDBOOKS = [
@@ -53,6 +75,17 @@ export const FRONTEND_HANDBOOKS = [
   { id: "frontend-security", label: "06 보안 대응", kind: "프론트엔드 핸드북", file: "frontend-security-handbook.html" },
   { id: "frontend-testing", label: "07 테스트 전략", kind: "프론트엔드 핸드북", file: "frontend-testing-strategy-handbook.html" },
   { id: "frontend-deployment", label: "08 배포", kind: "프론트엔드 핸드북", file: "frontend-deployment-handbook.html" },
+];
+
+export const ENGINEERING_HANDBOOKS = [
+  { id: "engineering-frontend-core", label: "00 프론트엔드 핵심", kind: "개발 핸드북", file: "engineering-frontend-core-handbook.html" },
+  { id: "engineering-frontend-performance", label: "01 프론트엔드 성능·진단", kind: "개발 핸드북", file: "engineering-frontend-performance-handbook.html" },
+  { id: "engineering-frontend-quality", label: "02 프론트엔드 품질·릴리스", kind: "개발 핸드북", file: "engineering-frontend-quality-handbook.html" },
+  { id: "engineering-backend-core", label: "03 백엔드 핵심·아키텍처", kind: "개발 핸드북", file: "engineering-backend-core-handbook.html" },
+  { id: "engineering-data", label: "04 데이터 계층·저장소", kind: "개발 핸드북", file: "engineering-data-handbook.html" },
+  { id: "engineering-runtime-quality", label: "05 런타임 품질·장애대응", kind: "개발 핸드북", file: "engineering-runtime-quality-handbook.html" },
+  { id: "engineering-platform-tools", label: "06 플랫폼 도구·운영 기본기", kind: "개발 핸드북", file: "engineering-platform-tools-handbook.html" },
+  { id: "engineering-java-spring", label: "07 Java·Spring·JPA 사례", kind: "개발 핸드북", file: "engineering-java-spring-handbook.html" },
 ];
 
 export const NETWORK_HANDBOOKS = [
@@ -81,6 +114,22 @@ export const DEVOPS_HANDBOOKS = [
   { id: "devops-orchestration", label: "08 오케스트레이션 기초", kind: "DevOps 핸드북", file: "devops-orchestration-handbook.html" },
   { id: "devops-observability", label: "09 관측 가능성과 장애 대응", kind: "DevOps 핸드북", file: "devops-observability-incident-handbook.html" },
   { id: "devops-security-reliability", label: "10 보안과 신뢰성", kind: "DevOps 핸드북", file: "devops-security-reliability-handbook.html" },
+];
+
+export const OPERATIONS_HANDBOOKS = [
+  { id: "operations-roadmap", label: "00 인프라·운영 로드맵", kind: "인프라·운영 핸드북", file: "operations-roadmap-handbook.html" },
+  { id: "operations-request-path", label: "01 서비스 요청 경로", kind: "인프라·운영 핸드북", file: "operations-request-path-handbook.html" },
+  { id: "operations-vpc-routing", label: "02 VPC·Subnet·Routing·NAT", kind: "인프라·운영 핸드북", file: "operations-vpc-routing-handbook.html" },
+  { id: "operations-security-boundary", label: "03 보안 경계", kind: "인프라·운영 핸드북", file: "operations-security-boundary-handbook.html" },
+  { id: "operations-dns-tls", label: "04 DNS·TLS·도메인 운영", kind: "인프라·운영 핸드북", file: "operations-dns-tls-handbook.html" },
+  { id: "operations-private-connectivity", label: "05 VPN·Private Connectivity", kind: "인프라·운영 핸드북", file: "operations-private-connectivity-handbook.html" },
+  { id: "operations-delivery-pipeline", label: "06 CI/CD·Artifact·Environment", kind: "인프라·운영 핸드북", file: "operations-delivery-pipeline-handbook.html" },
+  { id: "operations-runtime-orchestration", label: "07 컨테이너·오케스트레이션·Health Check", kind: "인프라·운영 핸드북", file: "operations-runtime-orchestration-handbook.html" },
+  { id: "operations-iac-change", label: "08 IaC·변경관리·Drift", kind: "인프라·운영 핸드북", file: "operations-iac-change-handbook.html" },
+  { id: "operations-observability-slo", label: "09 Observability·SLO", kind: "인프라·운영 핸드북", file: "operations-observability-slo-handbook.html" },
+  { id: "operations-incident-dr", label: "10 Incident Response·Rollback·DR", kind: "인프라·운영 핸드북", file: "operations-incident-dr-handbook.html" },
+  { id: "operations-checklist-interview", label: "11 운영 체크리스트·면접 답변", kind: "인프라·운영 핸드북", file: "operations-checklist-interview-handbook.html" },
+  { id: "operations-cloud-scenarios", label: "12 AWS·Azure 실전 시나리오", kind: "인프라·운영 핸드북", file: "operations-cloud-scenarios-handbook.html" },
 ];
 
 export const AX_HANDBOOKS = [
@@ -122,16 +171,7 @@ export const CHEAT_SHEETS = [
   { id: "cheat-linux", label: "05 Linux", kind: "Cheat Sheet", file: "linux-cheat-sheet.html" },
   { id: "cheat-docker", label: "06 Docker", kind: "Cheat Sheet", file: "docker-cheat-sheet.html" },
   { id: "cheat-interview", label: "07 Interview", kind: "Cheat Sheet", file: "interview-cheat-sheet.html" },
-];
-
-export const DEV_EXAMPLES = [
-  { id: "ex-java", label: "00 Java", kind: "예시 사례", file: "java-examples.html" },
-  { id: "ex-jpa", label: "01 JPA", kind: "예시 사례", file: "jpa-examples.html" },
-  { id: "ex-spring", label: "02 Spring Boot", kind: "예시 사례", file: "spring-boot-examples.html" },
-  { id: "ex-docker", label: "03 Docker", kind: "예시 사례", file: "docker-examples.html" },
-  { id: "ex-nginx", label: "04 nginx", kind: "예시 사례", file: "nginx-examples.html" },
-  { id: "ex-redis", label: "05 Redis", kind: "예시 사례", file: "redis-examples.html" },
-  { id: "ex-postgresql", label: "06 PostgreSQL", kind: "예시 사례", file: "postgresql-examples.html" },
+  { id: "cheat-tools-shortcuts-commands", label: "08 Tools·Shortcuts·Commands", kind: "Cheat Sheet", file: "tools-shortcuts-commands-cheat-sheet.html" },
 ];
 
 export const PRACTICAL_GUIDES = [
@@ -147,34 +187,31 @@ export const PRACTICAL_GUIDES = [
   { id: "logs-tooling", label: "09 로그·커스텀 명령", kind: "실무 가이드", file: "logs-tooling-guide.html" },
 ];
 
+export const PRACTICE_HANDBOOKS = [
+  { id: "practice-ax-foundation", label: "00 AX 기반·조직 적용", kind: "AX·디자인·실무", file: "practice-ax-foundation-handbook.html" },
+  { id: "practice-ax-workflow", label: "01 AX 실행 루프·자동화", kind: "AX·디자인·실무", file: "practice-ax-workflow-handbook.html" },
+  { id: "practice-ax-scale-governance", label: "02 AX 확장·거버넌스", kind: "AX·디자인·실무", file: "practice-ax-scale-governance-handbook.html" },
+  { id: "practice-design-foundation", label: "03 디자인 기반·사용자 흐름", kind: "AX·디자인·실무", file: "practice-design-foundation-handbook.html" },
+  { id: "practice-design-systems", label: "04 디자인 실행·시스템 품질", kind: "AX·디자인·실무", file: "practice-design-systems-handbook.html" },
+  { id: "practice-cheat-sheets", label: "05 실무 치트시트 모음", kind: "AX·디자인·실무", file: "practice-cheat-sheets-handbook.html" },
+  { id: "practice-workflow-setup", label: "06 실무 준비·작업 루프", kind: "AX·디자인·실무", file: "practice-workflow-setup-handbook.html" },
+  { id: "practice-build-release", label: "07 빌드·설정·릴리스 운영", kind: "AX·디자인·실무", file: "practice-build-release-handbook.html" },
+];
+
 export const HANDBOOK_GROUPS = [
   { key: "home", label: "홈", items: HOME_HANDBOOKS },
-  { key: "interview", label: "기술면접", items: INTERVIEW_HANDBOOKS },
-  { key: "personal", label: "개인화", items: PERSONAL_HANDBOOKS },
-  { key: "backend", label: "백엔드", items: BACKEND_HANDBOOKS },
-  { key: "frontend", label: "프론트엔드", items: FRONTEND_HANDBOOKS },
-  { key: "network", label: "네트워크 인프라", items: NETWORK_HANDBOOKS },
-  { key: "devops", label: "DevOps", items: DEVOPS_HANDBOOKS },
-  { key: "ax", label: "AX", items: AX_HANDBOOKS },
-  { key: "design", label: "디자인", items: DESIGN_HANDBOOKS },
-  { key: "cheats", label: "Cheat Sheet", items: CHEAT_SHEETS },
-  { key: "examples", label: "예시 사례", items: DEV_EXAMPLES },
-  { key: "practical", label: "실무 가이드", items: PRACTICAL_GUIDES },
+  { key: "career", label: "면접·커리어", items: CAREER_HANDBOOKS },
+  { key: "engineering", label: "개발 핸드북", items: ENGINEERING_HANDBOOKS },
+  { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
+  { key: "practice", label: "AX·디자인·실무", items: PRACTICE_HANDBOOKS },
 ];
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
-  ...INTERVIEW_HANDBOOKS,
-  ...PERSONAL_HANDBOOKS,
-  ...BACKEND_HANDBOOKS,
-  ...FRONTEND_HANDBOOKS,
-  ...NETWORK_HANDBOOKS,
-  ...DEVOPS_HANDBOOKS,
-  ...AX_HANDBOOKS,
-  ...DESIGN_HANDBOOKS,
-  ...CHEAT_SHEETS,
-  ...DEV_EXAMPLES,
-  ...PRACTICAL_GUIDES,
+  ...CAREER_HANDBOOKS,
+  ...ENGINEERING_HANDBOOKS,
+  ...OPERATIONS_HANDBOOKS,
+  ...PRACTICE_HANDBOOKS,
 ];
 
 export const DEFAULT_HANDBOOK_ID = "home";

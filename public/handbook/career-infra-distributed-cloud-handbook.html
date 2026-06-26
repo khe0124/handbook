@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>인프라·분산 시스템·클라우드 면접</title></head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-brand">CAREER · INFRA CLOUD</div>
+  <div class="nav-title">인프라 · 분산 시스템 클라우드</div>
+  <a href="#bundle-index"><span class="code">INDEX</span>학습 로드맵</a>
+  <a href="#doc-infra"><span class="code">DOC</span>인프라·운영 면접</a>
+  <a href="#doc-distributed"><span class="code">DOC</span>분산 시스템 면접</a>
+  <a href="#doc-cloud"><span class="code">DOC</span>클라우드 기본 면접</a>
+  <a href="#doc-infra"><span class="code">PART</span>인프라·운영 면접</a>
+<a href="#infra-q1"><span class="code">IO-01</span>요청 흐름</a>
+  <a href="#infra-q2"><span class="code">IO-02</span>CDN과 캐시</a>
+  <a href="#infra-q3"><span class="code">IO-03</span>Docker와 Kubernetes</a>
+  <a href="#infra-q4"><span class="code">IO-04</span>CI/CD와 배포</a>
+  <a href="#infra-q5"><span class="code">IO-05</span>관측성과 장애 대응</a>
+  <a href="#infra-q6"><span class="code">IO-06</span>DNS·TCP·TLS·HTTP</a>
+  <a href="#infra-q7"><span class="code">IO-07</span>CORS</a>
+  <a href="#infra-q8"><span class="code">IO-08</span>Readiness·Liveness</a>
+  <a href="#infra-q9"><span class="code">IO-09</span>무중단 배포</a>
+  <a href="#infra-q10"><span class="code">IO-10</span>RED·USE·Golden Signals</a>
+  <a href="#infra-q11"><span class="code">IO-11</span>장애 초동 대응</a>
+  <a href="#infra-q12"><span class="code">IO-12</span>Postmortem</a>
+  <a href="#infra-q13"><span class="code">IO-13</span>핵심 질문 20선</a>
+  <a href="#infra-q14"><span class="code">IO-14</span>장애 추적 루틴</a>
+  <a href="#infra-q15"><span class="code">IO-15</span>K8S·Cloud Senior Drill</a>
+  <a href="#doc-distributed"><span class="code">PART</span>분산 시스템 면접</a>
+<a href="#distributed-q1"><span class="code">DS-01</span>캐시</a>
+  <a href="#distributed-q2"><span class="code">DS-02</span>비동기와 큐</a>
+  <a href="#distributed-q3"><span class="code">DS-03</span>Retry와 Idempotency</a>
+  <a href="#distributed-q4"><span class="code">DS-04</span>Consistency</a>
+  <a href="#distributed-q5"><span class="code">DS-05</span>Saga와 Outbox</a>
+  <a href="#distributed-q6"><span class="code">DS-06</span>Cache Invalidation</a>
+  <a href="#distributed-q7"><span class="code">DS-07</span>Message Ordering</a>
+  <a href="#distributed-q8"><span class="code">DS-08</span>Circuit Breaker</a>
+  <a href="#distributed-q9"><span class="code">DS-09</span>Degraded Mode</a>
+  <a href="#distributed-q10"><span class="code">DS-10</span>Microservices 판단</a>
+  <a href="#distributed-q11"><span class="code">DS-11</span>Read Your Writes</a>
+  <a href="#distributed-q12"><span class="code">DS-12</span>핵심 질문 20선</a>
+  <a href="#distributed-q13"><span class="code">DS-13</span>정합성 실패 매트릭스</a>
+  <a href="#distributed-q14"><span class="code">DS-14</span>장애 답변 구조</a>
+  <a href="#distributed-q15"><span class="code">DS-15</span>Consistency Senior Drill</a>
+  <a href="#distributed-q16"><span class="code">DS-16</span>개념 인과관계</a>
+  <a href="#distributed-q17"><span class="code">DS-17</span>주문·결제 정합성 사례</a>
+  <a href="#doc-cloud"><span class="code">PART</span>클라우드 기본 면접</a>
+<a href="#cloud-q1"><span class="code">CLD-01</span>클라우드 책임 모델</a>
+  <a href="#cloud-q2"><span class="code">CLD-02</span>VPC·Subnet</a>
+  <a href="#cloud-q3"><span class="code">CLD-03</span>Route·NAT·IGW</a>
+  <a href="#cloud-q4"><span class="code">CLD-04</span>Security Group</a>
+  <a href="#cloud-q5"><span class="code">CLD-05</span>Load Balancer</a>
+  <a href="#cloud-q6"><span class="code">CLD-06</span>IAM·Secret</a>
+  <a href="#cloud-q7"><span class="code">CLD-07</span>Managed DB</a>
+  <a href="#cloud-q8"><span class="code">CLD-08</span>Object Storage·CDN</a>
+  <a href="#cloud-q9"><span class="code">CLD-09</span>Queue·Event</a>
+  <a href="#cloud-q10"><span class="code">CLD-10</span>고가용성·DR</a>
+  <a href="#cloud-q11"><span class="code">CLD-11</span>cost estimation·비용</a>
+  <a href="#cloud-q12"><span class="code">CLD-12</span>관측성·장애 대응</a>
+  <a href="#cloud-q13"><span class="code">CLD-13</span>핵심 질문 30선</a>
+  <a href="#cloud-q14"><span class="code">CLD-14</span>K8S·Cloud Senior Drill</a>
+  <a href="#cloud-q15"><span class="code">CLD-15</span>개념 인과관계</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : CAREER-INFRA-DISTRIBUTED-CLOUD</span>
+    <span>SCOPE : INFRA · OPERATIONS · DISTRIBUTED · CLOUD</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>인프라·분산 시스템·클라우드 면접</h1>
+  <p class="hero-sub">인프라·운영, 분산 시스템, 클라우드 기본 면접을 운영 구조 질문 흐름으로 통합했습니다.</p>
+  <div class="hero-meta">CURATED INTERVIEW PATH · SOURCES : 3 DOCUMENTS · UPDATED 2026-06</div>
+</header>
+
+<section id="bundle-index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>학습 로드맵</h2></div>
+<p class="lede">이 문서는 아래 원문을 면접 학습 흐름에 맞게 이어 읽도록 구성했습니다. 각 파트는 개념 이해, 압박 질문, 답변 근거를 확인하는 기준점으로 사용합니다.</p>
+<ul><li>인프라·운영 면접</li><li>분산 시스템 면접</li><li>클라우드 기본 면접</li></ul>
+</section>
+
+<section id="doc-infra">
+<div class="ch-head"><span class="ch-code">PART</span><h2>인프라·운영 면접</h2></div>
+</section>
+
+<section id="infra-q1">
+<div class="ch-head"><span class="ch-code">IO-01</span><h2>Q. 브라우저에서 서버까지 요청 흐름을 설명해보세요.</h2></div>
+<h3>핵심 개념</h3><p>웹 요청은 함수 호출이 아니라 DNS, TCP, TLS, HTTP, CDN/LB, 서버, DB, 캐시를 지나는 실패 가능한 경로입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>요청 흐름은 한 번의 함수 호출이 아니라 여러 계층의 계약이 연쇄적으로 성공해야 완성되는 경로입니다. DNS는 이름을 IP로 바꾸고, TCP는 연결을 만들며, TLS는 암호화와 서버 인증을 제공하고, HTTP는 애플리케이션 의미를 전달합니다. 장애 대응에서는 “서버 문제”라고 뭉개지 말고 어느 계층에서 실패했는지 증거로 좁혀야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">브라우저가 URL을 해석하고 DNS로 IP를 찾은 뒤 TCP 연결과 TLS handshake를 거쳐 HTTP 요청을 보냅니다. 요청은 CDN이나 Load Balancer를 지나 애플리케이션 서버에 도착하고, 서버는 인증, 라우팅, 비즈니스 로직, DB/캐시 조회 후 응답을 반환합니다.</div>
+<h3>90초 답변</h3><p>이 흐름을 알아야 장애를 계층별로 좁힐 수 있습니다. DNS가 틀리면 서버까지 도달하지 못하고, TLS가 실패하면 인증서나 SNI 문제일 수 있으며, LB health check가 실패하면 앱은 살아 있어도 트래픽을 받지 못합니다. API가 느리면 네트워크, 서버 CPU, DB 대기, 외부 API timeout을 분리해야 합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TCP와 TLS 차이는?</td><td>TCP는 전송 연결, TLS는 그 위에서 암호화와 서버 인증을 제공합니다.</td></tr><tr><td>timeout은 어디에 두나요?</td><td>client, gateway, app, DB, 외부 API마다 목적에 맞게 두고 전체 예산을 맞춥니다.</td></tr><tr><td>느린 요청은 어떻게 좁히나요?</td><td>waterfall, server log, trace, DB query, external dependency 순서로 분해합니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“브라우저가 서버에 요청합니다”에서 멈추면 얕습니다. 계층별 실패 지점을 말해야 합니다.</p></div>
+</section>
+
+<section id="infra-q2">
+<div class="ch-head"><span class="ch-code">IO-02</span><h2>Q. CDN과 cache-control은 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3><p>CDN은 사용자 가까운 edge에서 정적 자산이나 cacheable response를 제공해 latency와 origin 부하를 줄입니다. 핵심은 무엇을 얼마나 오래 캐시해도 되는지입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CDN 캐시는 origin 부하와 거리 비용을 줄이는 대신 최신성 책임을 edge로 분산시킵니다. content hash가 붙은 asset은 URL이 내용의 버전이 되므로 오래 캐시해도 안전하지만, HTML이나 사용자별 응답은 같은 정책을 쓰면 배포 꼬임이나 개인정보 노출 위험이 생깁니다. Cache-Control은 성능 옵션이 아니라 데이터 신뢰성 계약입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">hash가 붙은 JS/CSS asset은 immutable로 길게 캐시하고, HTML은 짧게 캐시하거나 revalidate하게 둡니다. API response는 데이터 최신성 요구에 따라 private/public, max-age, stale-while-revalidate를 신중히 선택합니다.</div>
+<h3>90초 답변</h3><p>캐시는 계층별로 다르게 동작합니다. 브라우저 캐시, CDN 캐시, 애플리케이션 캐시가 같은 데이터를 서로 다른 TTL로 보관하면 사용자는 오래된 화면을 볼 수 있습니다. 배포에서는 HTML이 새 asset을 참조하는데 asset이 아직 CDN에 없거나, 반대로 HTML이 오래 캐시되어 구버전을 계속 보는 문제가 흔합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>immutable asset은 왜 안전한가요?</td><td>파일명에 content hash가 있어 내용이 바뀌면 URL도 바뀌기 때문입니다.</td></tr><tr><td>stale-while-revalidate는?</td><td>오래된 값을 우선 주고 백그라운드에서 새 값을 갱신하는 전략입니다.</td></tr><tr><td>캐시 버그는 어떻게 확인하나요?</td><td>response header, CDN status, asset hash, hard reload, purge 이력을 확인합니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>CDN을 “빠르게 해주는 것”으로만 말하지 말고 무효화와 최신성 리스크를 같이 말하세요.</p></div>
+</section>
+
+<section id="infra-q3">
+<div class="ch-head"><span class="ch-code">IO-03</span><h2>Q. Docker와 Kubernetes를 어떻게 설명하나요?</h2></div>
+<h3>핵심 개념</h3><p>Docker는 애플리케이션과 런타임 의존성을 이미지로 패키징하고, Kubernetes는 컨테이너를 스케줄링, 복구, 확장, 서비스 디스커버리, rollout하는 플랫폼입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Docker 이미지는 실행 환경을 포장하지만 프로세스 생명주기와 운영 정책을 자동으로 해결하지는 않습니다. Kubernetes는 pod를 원하는 상태로 유지하려고 재시작, 스케줄링, 서비스 디스커버리, rollout을 수행합니다. 따라서 health check, resource request/limit, graceful shutdown, secret 주입 방식까지 알아야 운영 답변이 됩니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">Docker는 “어디서나 같은 방식으로 실행되는 이미지”를 만드는 도구이고, Kubernetes는 그 이미지를 여러 노드에 배치하고 장애 시 재시작하며 서비스로 노출하고 rollout/rollback을 관리하는 오케스트레이션 시스템입니다.</div>
+<h3>90초 답변</h3><p>운영 관점에서는 Dockerfile보다 이미지 크기, secret 주입, health check, graceful shutdown, 로그 출력 방식이 중요합니다. Kubernetes에서는 readiness와 liveness를 구분해야 합니다. readiness는 트래픽을 받을 준비가 됐는지, liveness는 프로세스를 재시작해야 할 정도로 죽었는지 판단합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>readiness와 liveness 차이는?</td><td>readiness는 트래픽 수신 여부, liveness는 재시작 여부입니다.</td></tr><tr><td>graceful shutdown은 왜 필요한가요?</td><td>배포/종료 중 처리 중인 요청을 안전하게 마무리하기 위해 필요합니다.</td></tr><tr><td>request와 limit은?</td><td>request는 스케줄링 기준, limit은 사용할 수 있는 상한입니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>Kubernetes를 “Docker 여러 개 관리”로만 말하면 약합니다. health, rollout, service discovery, resource 관리까지 말해야 합니다.</p></div>
+</section>
+
+<section id="infra-q4">
+<div class="ch-head"><span class="ch-code">IO-04</span><h2>Q. CI/CD와 무중단 배포는 어떻게 보나요?</h2></div>
+<h3>핵심 개념</h3><p>CI/CD는 자동 배포 버튼이 아니라 변경을 검증하고, 추적하고, 안전하게 사용자에게 전달하고, 나빠지면 되돌리는 시스템입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CI/CD는 배포 자동화가 아니라 변경을 작게 검증하고 추적 가능한 artifact로 사용자에게 전달하는 시스템입니다. lint/test/build만 통과해도 운영 지표가 나빠질 수 있으므로 배포 후 health, error rate, latency를 확인해야 합니다. 무중단 배포의 핵심은 새 버전과 구버전, DB schema가 잠시 공존할 수 있는 호환성입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">CI는 lint, typecheck, test, build로 변경을 빠르게 검증하고, CD는 artifact를 환경에 배포하며 metric과 health check로 안전성을 확인합니다. 무중단 배포는 rolling, blue-green, canary 같은 전략과 rollback 기준이 함께 있어야 합니다.</div>
+<h3>90초 답변</h3><p>배포에서 중요한 것은 어떤 commit과 image digest, migration version, config가 배포됐는지 추적 가능해야 한다는 점입니다. DB migration은 코드 배포와 함께 깨지기 쉬우므로 expand-contract 방식으로 하위 호환성을 유지해야 합니다. canary는 일부 트래픽에 먼저 배포하고 error rate, latency, business metric을 보고 확대합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>rollback 기준은?</td><td>5xx, latency, 핵심 전환율, error budget burn rate 같은 지표로 정합니다.</td></tr><tr><td>DB migration은?</td><td>새 컬럼 추가, 양쪽 코드 호환, backfill, old column 제거를 단계로 나눕니다.</td></tr><tr><td>artifact 추적은?</td><td>commit SHA, image digest, release tag, config version을 묶어 남깁니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“GitHub Actions로 배포합니다”는 도구 설명입니다. 검증, 승인, 추적, rollback을 말해야 합니다.</p></div>
+</section>
+
+<section id="infra-q5">
+<div class="ch-head"><span class="ch-code">IO-05</span><h2>Q. 로그, 메트릭, 트레이스는 각각 어떤 역할을 하나요?</h2></div>
+<h3>핵심 개념</h3><p>로그는 사건의 상세 기록, 메트릭은 시스템 상태의 숫자 흐름, 트레이스는 요청이 여러 서비스와 계층을 지나간 경로입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>로그, 메트릭, 트레이스는 같은 문제를 다른 해상도로 봅니다. 메트릭은 증상의 크기와 시점을 보여주고, 로그는 개별 사건의 문맥을 주며, 트레이스는 요청이 어느 dependency에서 늦거나 실패했는지 보여줍니다. 좋은 관측성은 장애 후 검색 가능한 흔적이 아니라 장애 중 의사결정 가능한 신호입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">장애 대응에서는 먼저 영향 범위와 지표를 보고, 로그로 구체적 사건을 확인하고, trace로 요청이 어디서 늦거나 실패했는지 좁힙니다. 로그만 보는 것이 아니라 RED, USE, Golden Signals 같은 지표와 함께 봐야 합니다.</div>
+<h3>90초 답변</h3><p>RED는 request rate, error rate, duration으로 서비스 관점 지표를 봅니다. USE는 utilization, saturation, errors로 리소스 관점을 봅니다. 좋은 로그에는 traceId, user/action/resource, error code, dependency가 있어야 하지만 고카디널리티 필드를 무분별하게 metric label로 넣으면 비용과 성능 문제가 생길 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>장애가 나면 무엇부터?</td><td>영향 범위, 최근 변경, metric, log, trace, rollback 가능성을 순서대로 봅니다.</td></tr><tr><td>postmortem에는?</td><td>타임라인, 영향, 원인, 감지 지연, 완화, 재발 방지 action을 남깁니다.</td></tr><tr><td>alert 기준은?</td><td>증상 기반, 사용자 영향 기반, action 가능한 기준으로 잡습니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“로그를 봅니다”로 끝내지 마세요. 어떤 지표로 영향 범위를 보고 어떤 trace로 병목을 좁히는지 말해야 합니다.</p></div>
+</section>
+
+<section id="infra-q6">
+<div class="ch-head"><span class="ch-code">IO-06</span><h2>Q. DNS, TCP, TLS, HTTP는 요청에서 어떤 역할을 하나요?</h2></div>
+<h3>핵심 개념</h3><p>웹 요청은 이름 해석, 연결 수립, 암호화 협상, 애플리케이션 프로토콜 처리로 나뉩니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>DNS, TCP, TLS, HTTP를 구분하면 같은 “접속 안 됨”도 원인이 달라집니다. DNS TTL과 resolver cache, TCP 방화벽/라우팅, TLS 인증서/SNI, HTTP gateway/upstream 오류는 확인 도구와 담당 영역이 다릅니다. 면접에서는 <code>dig</code>, <code>curl -v</code>, browser timing, gateway log처럼 계층별 증거를 말할 수 있어야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">DNS는 도메인을 IP로 해석하고, TCP는 신뢰성 있는 전송 연결을 만들며, TLS는 암호화와 서버 인증을 제공합니다. HTTP는 그 위에서 method, header, body, status code로 애플리케이션 요청과 응답을 표현합니다.</div>
+<h3>90초 답변</h3><p>장애도 단계별로 다릅니다. DNS 문제면 특정 ISP나 resolver에서만 실패할 수 있고, TCP 문제면 방화벽이나 라우팅, port open 여부를 봅니다. TLS 문제는 인증서 만료, SNI, protocol/cipher mismatch가 원인일 수 있고, HTTP 문제는 gateway timeout, auth, routing, upstream failure로 나눠 봅니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>HTTP/2 장점은?</td><td>multiplexing, header compression, connection 효율을 말합니다.</td></tr><tr><td>TLS handshake 비용은?</td><td>초기 연결 비용이 있어 keep-alive, session resumption을 봅니다.</td></tr><tr><td>DNS TTL은?</td><td>변경 전파 속도와 cache 효율의 trade-off입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>`dig`, `curl -v`, browser timing, 인증서 검사, gateway log로 계층별 확인한 사례를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>네트워크를 한 덩어리로 말하면 장애를 좁히는 능력이 보이지 않습니다.</p></div>
+</section>
+
+<section id="infra-q7">
+<div class="ch-head"><span class="ch-code">IO-07</span><h2>Q. CORS는 왜 생기고 어떻게 해결하나요?</h2></div>
+<h3>핵심 개념</h3><p>CORS는 브라우저가 다른 origin 요청을 제한하는 Same-Origin Policy를 서버가 명시적으로 완화하는 메커니즘입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CORS는 서버가 요청을 거절하는 기능이 아니라 브라우저가 cross-origin 응답 접근을 제한하는 보안 모델입니다. 서버는 허용할 origin, method, header, credential 정책을 응답 헤더로 명시하고, 브라우저는 그 정책에 맞지 않으면 JavaScript에 응답을 넘기지 않습니다. 인증·인가는 CORS와 별개의 서버 책임입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">CORS 오류는 서버가 해당 origin, method, header, credential 사용을 허용하는 응답 헤더를 주지 않을 때 브라우저가 막는 문제입니다. 서버에서 정확한 origin allowlist, preflight 대응, credential 정책을 설정해야 합니다.</div>
+<h3>90초 답변</h3><p>단순히 `*`로 열면 credential 요청과 맞지 않거나 보안 범위가 넓어집니다. Authorization header나 JSON POST는 preflight OPTIONS 요청이 먼저 갈 수 있으므로 gateway와 app이 OPTIONS를 처리해야 합니다. CORS는 브라우저 정책이지 서버 인증/인가를 대체하지 않습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>preflight는?</td><td>실제 요청 전에 method/header 허용 여부를 확인하는 OPTIONS 요청입니다.</td></tr><tr><td>credentials는?</td><td>cookie를 보낼 때 allow-origin `*`를 쓸 수 없고 allow-credentials가 필요합니다.</td></tr><tr><td>프록시로 해결?</td><td>개발 환경 우회일 뿐 운영 정책은 서버에서 명시해야 합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>Network 탭의 OPTIONS/actual request, response header, gateway 설정, origin allowlist를 보여줄 수 있어야 합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>CORS를 인증 실패나 서버 권한 검증과 혼동하지 마세요.</p></div>
+</section>
+
+<section id="infra-q8">
+<div class="ch-head"><span class="ch-code">IO-08</span><h2>Q. readiness와 liveness는 어떻게 다르나요?</h2></div>
+<h3>핵심 개념</h3><p>readiness는 트래픽 수신 가능 여부, liveness는 프로세스를 재시작해야 할 정도로 비정상인지 판단합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>readiness와 liveness를 구분하지 않으면 장애를 키울 수 있습니다. readiness는 트래픽을 받을 준비가 되었는지라서 실패 시 endpoint에서 빠지고, liveness는 재시작해야 할 정도로 프로세스가 망가졌는지라서 실패 시 컨테이너가 재시작됩니다. 외부 DB가 잠깐 느린 것을 liveness 실패로 만들면 재시작 폭풍이 생길 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">readiness가 실패하면 pod는 살아 있지만 Service endpoint에서 빠져 트래픽을 받지 않습니다. liveness가 실패하면 kubelet이 컨테이너를 재시작합니다. 둘을 같은 체크로 두면 장애 때 재시작 루프를 만들 수 있습니다.</div>
+<h3>90초 답변</h3><p>readiness는 DB 연결, migration 완료, warm-up처럼 요청 처리 준비 상태를 볼 수 있습니다. liveness는 deadlock이나 event loop 정지처럼 재시작이 필요한 상태만 봐야 합니다. 외부 의존성이 잠시 느리다고 liveness를 실패시키면 전체 pod가 재시작되어 장애가 커질 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>startup probe는?</td><td>초기 기동이 긴 앱에서 liveness 시작 전 여유를 주기 위해 씁니다.</td></tr><tr><td>DB 체크를 liveness에?</td><td>보통 위험합니다. 외부 장애가 재시작 폭풍으로 번질 수 있습니다.</td></tr><tr><td>graceful shutdown과 관계?</td><td>종료 전 readiness를 내리고 in-flight 요청을 마무리합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>probe 설정, rollout 중 endpoint 변화, 재시작 횟수, readiness 실패 로그를 설명합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>health check를 단순 `/health` 하나로 끝내면 운영 리스크가 남습니다.</p></div>
+</section>
+
+<section id="infra-q9">
+<div class="ch-head"><span class="ch-code">IO-09</span><h2>Q. 무중단 배포와 rollback은 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3><p>무중단 배포는 새 버전을 천천히 투입하고, 문제가 보이면 빠르게 되돌릴 수 있도록 배포 단위와 호환성을 관리하는 것입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>무중단 배포는 서버 인스턴스를 둘로 나누는 문제가 아니라 사용자 요청, 배포 artifact, DB schema, cache, feature flag가 호환되는 상태를 만드는 문제입니다. rolling이나 canary는 새 버전의 blast radius를 줄이는 전략이고, rollback은 코드뿐 아니라 migration과 config까지 되돌릴 수 있는지 따져야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">rolling, blue-green, canary를 상황에 맞게 선택하고 readiness, metric, log, alert로 새 버전 상태를 확인합니다. rollback은 image만 되돌리는 것이 아니라 DB migration, config, feature flag 호환성까지 고려해야 합니다.</div>
+<h3>90초 답변</h3><p>가장 깨지기 쉬운 부분은 코드와 DB schema가 동시에 바뀌는 경우입니다. expand-contract 방식으로 새 컬럼 추가, 양쪽 코드 호환, backfill, 읽기 전환, old column 제거를 나눕니다. canary는 일부 트래픽에서 5xx, latency, business metric을 보고 확대합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>blue-green 장점?</td><td>전환과 rollback이 빠르지만 비용과 데이터 호환성 문제가 있습니다.</td></tr><tr><td>canary 기준?</td><td>error rate, latency, 핵심 전환율, error budget burn을 봅니다.</td></tr><tr><td>migration rollback?</td><td>파괴적 변경은 되돌리기 어려우므로 단계적 호환 배포가 핵심입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>배포 대시보드, release tag, image digest, migration version, rollback runbook을 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>무중단 배포를 “서버 두 대로 번갈아 배포”로만 말하면 DB와 상태 호환성을 놓칩니다.</p></div>
+</section>
+
+<section id="infra-q10">
+<div class="ch-head"><span class="ch-code">IO-10</span><h2>Q. RED, USE, Golden Signals는 무엇인가요?</h2></div>
+<h3>핵심 개념</h3><p>관측 지표를 서비스 관점과 리소스 관점으로 나눠 장애를 빠르게 감지하고 좁히는 프레임입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>RED, USE, Golden Signals는 지표를 외우는 표가 아니라 관측 대상을 나누는 프레임입니다. RED는 서비스가 사용자 요청을 어떻게 처리하는지 보고, USE는 리소스가 포화되는지 봅니다. 평균 latency보다 p95/p99가 중요한 이유는 소수의 느린 요청이 실제 사용자 경험과 장애 신호를 더 잘 드러내기 때문입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">RED는 request rate, error rate, duration으로 서비스 상태를 보고, USE는 utilization, saturation, errors로 리소스 상태를 봅니다. Golden Signals는 latency, traffic, errors, saturation을 중심으로 사용자 영향을 봅니다.</div>
+<h3>90초 답변</h3><p>서비스 장애 대응에서는 먼저 사용자 영향이 있는 증상 기반 지표를 봐야 합니다. CPU가 높아도 사용자가 영향받지 않을 수 있고, CPU가 낮아도 downstream timeout 때문에 에러가 날 수 있습니다. alert는 action 가능한 기준으로 잡고, 고카디널리티 label을 metric에 남발하지 않아야 합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>p95/p99는 왜?</td><td>평균이 숨기는 tail latency를 보기 위해서입니다.</td></tr><tr><td>증상 기반 alert?</td><td>사용자 영향이 있는 error/latency 중심 alert입니다.</td></tr><tr><td>고카디널리티 문제?</td><td>metric label 폭증으로 비용과 성능 문제가 생깁니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>대시보드, SLO, p95 latency, error budget burn alert, traceId 연계를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>CPU, 메모리만 보면 사용자 영향과 서비스 품질을 놓칠 수 있습니다.</p></div>
+</section>
+
+<section id="infra-q11">
+<div class="ch-head"><span class="ch-code">IO-11</span><h2>Q. 장애가 나면 무엇부터 확인하나요?</h2></div>
+<h3>핵심 개념</h3><p>장애 초동 대응은 원인 추측보다 영향 범위 파악, 완화, 최근 변경 확인, 계층별 분리 순서가 중요합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>장애 초동 대응은 원인을 맞히는 퀴즈가 아니라 피해를 줄이는 절차입니다. 먼저 영향 범위와 사용자 증상을 확인하고, 최근 변경과 rollback 가능성을 본 뒤, metric/log/trace로 계층을 좁힙니다. 원인 분석이 길어질 때는 feature flag off, traffic 우회, degraded mode처럼 완화 조치를 먼저 선택할 수 있어야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">먼저 사용자 영향과 범위를 확인합니다. 전체 장애인지 특정 기능/지역/버전인지 보고, 최근 배포와 설정 변경을 확인합니다. 동시에 rollback, feature flag off, traffic 우회 같은 완화 가능성을 검토합니다.</div>
+<h3>90초 답변</h3><p>그 다음 metric으로 언제부터 나빠졌는지 보고, log와 trace로 실패 지점을 좁힙니다. DB, cache, external dependency, gateway, app 중 어디가 병목인지 나누고, 원인 분석보다 사용자 영향 완화가 먼저일 때는 rollback을 우선합니다. 대응 중에는 타임라인과 의사결정을 기록합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>원인을 모르겠으면?</td><td>영향 완화와 관측 추가를 병행하고 가설을 하나씩 검증합니다.</td></tr><tr><td>커뮤니케이션은?</td><td>영향, 조치, 다음 업데이트 시간을 명확히 공유합니다.</td></tr><tr><td>최근 변경이 없으면?</td><td>트래픽 변화, 외부 의존성, 데이터 skew, 인증서/만료를 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>장애 타임라인, incident channel 기록, rollback 판단 기준, trace와 로그 캡처를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>초동 대응에서 범위와 완화를 놓치고 원인 찾기에만 몰두하면 위험합니다.</p></div>
+</section>
+
+<section id="infra-q12">
+<div class="ch-head"><span class="ch-code">IO-12</span><h2>Q. postmortem에는 무엇을 남겨야 하나요?</h2></div>
+<h3>핵심 개념</h3><p>postmortem은 비난 문서가 아니라 장애를 조직 지식으로 바꾸고 재발 가능성을 줄이는 문서입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>postmortem은 누구의 실수인지 찾는 문서가 아니라 어떤 방어선이 없었거나 늦게 작동했는지 기록하는 문서입니다. 좋은 action item은 “주의”가 아니라 alert 조정, 배포 가드, 테스트 추가, runbook 개선처럼 owner와 검증 방법이 있는 작업입니다. 타임라인은 다음 장애에서 탐지와 의사결정 속도를 높이는 자료가 됩니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">영향 범위, 타임라인, 감지 경로, 원인, 완화 조치, 재발 방지 action, owner와 due date를 남깁니다. 사람 탓보다 시스템이 왜 감지하거나 막지 못했는지에 집중합니다.</div>
+<h3>90초 답변</h3><p>좋은 postmortem은 “무엇이 고장났나”보다 “왜 늦게 발견했나”, “왜 blast radius가 컸나”, “어떤 자동화와 테스트가 없었나”를 봅니다. action item은 관측성 개선, 배포 가드, runbook, 테스트, alert 조정처럼 실행 가능한 형태여야 합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>5 whys는?</td><td>표면 원인에서 시스템 원인까지 깊게 들어가는 방법입니다.</td></tr><tr><td>action item 기준?</td><td>owner, due date, 검증 방법이 있어야 합니다.</td></tr><tr><td>비난 방지는?</td><td>개인 실수보다 프로세스와 방어선 부재를 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>타임라인, 감지 지연, action item 완료 확인, alert 조정 전후를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“다음부터 조심하겠습니다”는 재발 방지 action이 아닙니다.</p></div>
+</section>
+
+<section id="infra-q13">
+<div class="ch-head"><span class="ch-code">IO-13</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
+<p class="lede">인프라·운영 면접은 “어디서 장애가 났는가”를 계층별로 좁히는 사고를 봅니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
+<tr><td>요청 경로</td><td>DNS, TCP, TLS, HTTP, CDN, proxy, CORS</td><td>브라우저에서 서버까지 어느 계층에서 실패했는지 분리</td></tr>
+<tr><td>배포</td><td>CI/CD, blue-green, canary, rollback, feature flag</td><td>실패 시 되돌리는 기준과 검증 지표</td></tr>
+<tr><td>컨테이너</td><td>Docker image, Kubernetes pod, readiness, liveness, resource limit</td><td>시작 실패와 트래픽 수신 실패를 구분</td></tr>
+<tr><td>관측성</td><td>로그, 메트릭, 트레이스, RED, USE, Golden Signals, postmortem</td><td>사용자 영향 감지와 원인 추적의 연결</td></tr>
+<tr><td>Kubernetes 운영</td><td>Service와 Ingress는 무엇을 분리하나요? HPA가 scale out해도 장애가 계속되는 이유는 무엇인가요? PDB가 있는 상태에서 node drain을 하면 어떤 일이 벌어지나요?</td><td>Service discovery, L7 routing, metric 기반 autoscaling, disruption budget, graceful termination을 연결</td></tr>
+<tr><td>Cloud 보안·DR</td><td>IAM trust policy와 resource policy는 어떻게 다르나요? KMS key 정책을 잘못 잡으면 어떤 장애가 나나요? DR failback은 왜 failover보다 어렵나요?</td><td>권한 주체, 리소스 경계, 암호화 키 의존성, 복구 후 원복 절차와 game day 검증</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">압박 꼬리질문</span>
+<p>“서버는 살아있는데 사용자는 접속이 안 된다면?”, “rollback 기준은 누가 정하나요?”, “CPU가 낮은데 timeout이 나는 이유는?”에 계층적으로 답합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">흔한 오답</span>
+<p>장애를 코드 문제로만 보거나, Docker와 Kubernetes를 배포 도구 이름으로만 설명하거나, alert 기준을 사용자 영향과 연결하지 못하는 답변입니다.</p>
+</div>
+</section>
+
+<section id="infra-q14">
+<div class="ch-head"><span class="ch-code">IO-14</span><h2>계층별 장애 추적 루틴</h2></div>
+<p class="lede">인프라 면접에서 “서버가 안 됩니다”라는 질문은 정답을 맞히는 문제가 아니라, 원인을 계층별로 배제하는 능력을 보는 문제입니다.</p>
+<div class="serial-card">
+<span class="sc-label">INFRA FAILURE TRACE</span>
+브라우저 오류를 DNS, TCP, TLS, HTTP, CDN/LB, application, dependency, database 순서로 좁힙니다. 각 계층에서 확인할 증거가 다릅니다. DNS는 resolve 결과와 TTL, TCP는 handshake와 port reachability, TLS는 certificate chain과 SNI, HTTP는 status code와 header, app은 log/trace id, DB는 connection pool과 slow query를 봅니다.
+</div>
+<table>
+<tr><th>계층</th><th>확인할 증거</th><th>자주 놓치는 함정</th></tr>
+<tr><td>DNS</td><td>record, TTL, split-horizon, propagation</td><td>내 PC와 운영 VPC에서 다른 IP로 resolve될 수 있습니다.</td></tr>
+<tr><td>TCP/TLS</td><td>port open, handshake, certificate, SNI, ALPN</td><td>인증서 만료와 hostname mismatch를 애플리케이션 장애로 오해합니다.</td></tr>
+<tr><td>HTTP/CDN/LB</td><td>status code, cache header, health check, upstream time</td><td>CDN stale cache나 LB health check 실패가 특정 지역 장애처럼 보일 수 있습니다.</td></tr>
+<tr><td>Application</td><td>error log, trace id, thread pool, GC, feature flag</td><td>평균 latency만 보면 tail latency와 특정 endpoint 장애를 놓칩니다.</td></tr>
+<tr><td>Dependency</td><td>DB pool wait, queue depth, external API timeout</td><td>CPU가 낮아도 downstream 대기로 요청이 쌓일 수 있습니다.</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">답변 구조</span>
+<p>“사용자 영향 확인 → 최근 변경 확인 → 계층별 증거 수집 → 임시 완화 → 근본 원인 분석 → 재발 방지” 순서로 말합니다. 초동 대응에서는 원인 분석보다 blast radius 축소와 rollback 가능성 판단이 먼저입니다.</p>
+</div>
+</section>
+
+<section id="infra-q15">
+<div class="ch-head"><span class="ch-code">IO-15</span><h2>K8S CLOUD SENIOR DRILL</h2></div>
+<p class="lede">시니어 인프라 질문은 Kubernetes 리소스 이름을 아는지보다 트래픽, 확장, 장애 허용, 권한, 암호화, 재해복구가 한 흐름에서 깨질 때 어떻게 판단하는지를 봅니다.</p>
+<table>
+<tr><th>압박 질문</th><th>답변에 반드시 들어갈 포인트</th><th>흔한 함정</th></tr>
+<tr><td>Service와 Ingress를 어떻게 나누나요?</td><td>Service는 pod 집합에 대한 안정적인 내부 접근과 discovery를 제공하고, Ingress는 host/path 기반 L7 외부 진입과 TLS, routing 정책을 담당한다고 설명합니다.</td><td>Ingress가 pod를 직접 찾는다고 말하거나, Service type과 Ingress controller 책임을 섞는 답변입니다.</td></tr>
+<tr><td>HPA/VPA를 동시에 쓰면 무엇을 조심하나요?</td><td>HPA는 replica 수를 조정하고 VPA는 request/limit 권고 또는 조정을 담당합니다. CPU metric만 보지 말고 queue lag, p95 latency, DB pool wait도 scale signal로 봅니다.</td><td>pod만 늘리면 DB connection, lock, downstream limit까지 같이 늘어 장애가 커질 수 있습니다.</td></tr>
+<tr><td>PDB가 있는 서비스에서 node drain은 어떻게 진행하나요?</td><td>PDB가 허용하는 unavailable 수 안에서 eviction되며, readiness를 먼저 내리고 terminationGracePeriod와 preStop으로 in-flight 요청을 마무리합니다.</td><td>PDB를 “pod가 절대 내려가지 않게 하는 설정”으로 이해하면 오답입니다.</td></tr>
+<tr><td>network policy는 어디까지 보호하나요?</td><td>namespace/pod selector 기반 east-west traffic 허용 범위를 줄입니다. 기본 deny 정책, DNS egress, monitoring, ingress controller 경로를 함께 검토합니다.</td><td>인증·인가나 TLS를 network policy가 대체한다고 말하면 위험합니다.</td></tr>
+<tr><td>IAM trust/resource policy와 KMS는 장애 때 어떻게 보나요?</td><td>trust policy는 누가 role을 assume할 수 있는지, resource policy는 특정 리소스 접근 주체와 조건을 제한합니다. KMS key policy와 grant가 막히면 secret 복호화, object read, DB 암호화 작업이 실패할 수 있습니다.</td><td>권한 오류를 애플리케이션 500으로만 보고 audit log와 denied event를 확인하지 않는 것입니다.</td></tr>
+<tr><td>DR failback과 game day는 어떻게 설명하나요?</td><td>failover 후 원래 region으로 돌아가는 failback은 데이터 방향, DNS TTL, write freeze, replication 재구성, config/secret 차이를 검증해야 합니다. game day는 runbook을 실제로 실행해 RTO/RPO와 누락된 의존성을 확인하는 훈련입니다.</td><td>백업 존재를 DR 완료로 말하거나 failover만 있고 failback 절차가 없는 답변입니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">90초 답변 구조</span>
+“트래픽은 Ingress에서 Service로 들어오고, Service는 readiness를 통과한 pod에만 보냅니다. 부하가 늘면 HPA/VPA를 보되 DB connection과 queue lag까지 같이 봅니다. 점검 때는 PDB와 node drain으로 가용 replica를 유지하고, network policy와 IAM/KMS로 blast radius를 줄입니다. DR은 failover뿐 아니라 failback과 game day 결과까지 있어야 운영 가능한 설계입니다.”
+</div>
+</section>
+
+<section id="doc-distributed">
+<div class="ch-head"><span class="ch-code">PART</span><h2>분산 시스템 면접</h2></div>
+</section>
+
+<section id="distributed-q1">
+<div class="ch-head"><span class="ch-code">DS-01</span><h2>Q. 캐시는 왜 어렵나요?</h2></div>
+<h3>핵심 개념</h3><p>캐시는 응답을 빠르게 하지만 최신성 문제를 만듭니다. 어려운 지점은 캐시 적중률보다 무효화와 일관성입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>캐시는 원본 데이터가 아니라 특정 시점의 복사본입니다. 그래서 캐시 설계의 핵심 질문은 “얼마나 빨라지는가”보다 “얼마나 오래 틀려도 되는가”입니다. 권한, 결제, 재고처럼 틀리면 손상되는 데이터와 통계, 추천처럼 잠시 늦어도 되는 데이터를 같은 정책으로 다루면 장애가 납니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">캐시는 빠르지만 오래된 값을 보여줄 수 있기 때문에 어렵습니다. 그래서 어떤 데이터는 stale해도 되는지, 어떤 데이터는 반드시 최신이어야 하는지 먼저 나누고 TTL, invalidation, version key, write-through 같은 전략을 선택합니다.</div>
+<h3>90초 답변</h3><p>캐시는 브라우저, CDN, 애플리케이션, DB 근처 등 여러 계층에 있을 수 있고 각 계층의 TTL이 다르면 문제를 찾기 어렵습니다. 목록 캐시, 상세 캐시, 권한별 캐시가 섞이면 사용자가 수정 직후 이전 값을 볼 수도 있습니다. 결제 상태나 권한처럼 틀리면 안 되는 데이터는 캐시보다 정합성을 우선해야 합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>cache invalidation은?</td><td>TTL, 명시적 purge, 이벤트 기반 무효화, versioned key를 상황별로 씁니다.</td></tr><tr><td>cache stampede는?</td><td>동시에 많은 요청이 origin으로 몰리는 문제로 lock, jitter, stale-while-revalidate로 줄입니다.</td></tr><tr><td>권한 데이터 캐시는?</td><td>권한 변경 즉시 반영 필요성이 높아 TTL과 invalidation을 매우 보수적으로 잡습니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>캐시를 “성능 향상”으로만 말하지 말고 stale data와 무효화 실패를 반드시 언급하세요.</p></div>
+</section>
+
+<section id="distributed-q2">
+<div class="ch-head"><span class="ch-code">DS-02</span><h2>Q. 비동기 처리와 큐는 언제 쓰나요?</h2></div>
+<h3>핵심 개념</h3><p>비동기 처리는 즉시 응답이 필요 없는 작업을 요청-응답 경로에서 분리해 latency와 결합도를 낮추는 선택입니다. 대신 운영 복잡도가 생깁니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>큐는 작업을 사라지게 하는 장치가 아니라 처리 시점을 뒤로 미루고 실패를 관찰 가능한 상태로 바꾸는 장치입니다. 요청자는 빠르게 응답받을 수 있지만 consumer 실패, 중복 소비, 순서 역전, lag가 새 문제가 됩니다. 따라서 메시지에는 idempotency key, retry 정책, DLQ, 처리 상태 추적이 함께 따라와야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">이메일, 알림, OCR, 리포트 생성처럼 사용자가 즉시 기다리지 않아도 되는 작업은 큐로 분리할 수 있습니다. 하지만 큐를 넣으면 중복 소비, 순서 보장, retry, DLQ, consumer lag 모니터링을 함께 설계해야 합니다.</div>
+<h3>90초 답변</h3><p>큐는 시스템을 빠르게만 만드는 도구가 아니라 실패 방식을 바꾸는 도구입니다. producer는 메시지를 보냈다고 생각하지만 consumer가 실패할 수 있고, 같은 메시지가 두 번 처리될 수 있으며, 순서가 바뀔 수 있습니다. 그래서 consumer는 idempotent해야 하고, 처리 실패는 DLQ나 retry policy로 관찰 가능해야 합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>at-least-once란?</td><td>최소 한 번 전달을 보장하지만 중복 가능성이 있어 idempotency가 필요합니다.</td></tr><tr><td>DLQ는 왜 필요한가요?</td><td>계속 실패하는 poison message를 격리하고 원인을 분석하기 위해 필요합니다.</td></tr><tr><td>consumer lag은?</td><td>producer 속도를 consumer가 따라가지 못해 처리 지연이 쌓이는 상태입니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>“비동기로 하면 빨라집니다”는 절반만 맞습니다. 사용자 응답은 빨라질 수 있지만 전체 완료는 더 복잡해집니다.</p></div>
+</section>
+
+<section id="distributed-q3">
+<div class="ch-head"><span class="ch-code">DS-03</span><h2>Q. Retry, timeout, idempotency는 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3><p>분산 호출은 실패할 수 있으므로 timeout과 retry가 필요하지만, retry는 중복 실행을 만들 수 있어 idempotency가 함께 필요합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>timeout은 기다림의 상한이고, retry는 실패를 다시 시도하는 정책이며, idempotency는 재시도 때문에 같은 부작용이 반복되지 않게 하는 계약입니다. 세 가지는 함께 설계해야 합니다. timeout 없이 retry하면 대기열이 쌓이고, idempotency 없이 retry하면 주문·결제·차감이 중복될 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">모든 외부 호출에는 timeout이 있어야 하고, 재시도는 exponential backoff와 jitter를 둡니다. 다만 결제나 주문 생성처럼 부작용이 있는 요청은 idempotency key로 같은 요청이 여러 번 와도 한 번만 처리되게 해야 합니다.</div>
+<h3>90초 답변</h3><p>timeout이 없으면 장애가 대기열로 전파되고, retry가 과하면 장애 중인 시스템에 더 큰 부하를 줍니다. retry는 transient failure에만 의미가 있고 validation error 같은 영구 실패에는 하면 안 됩니다. idempotency는 request key, unique constraint, 처리 상태 저장으로 구현할 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>jitter는 왜?</td><td>동시에 재시도하는 thundering herd를 줄이기 위해 랜덤성을 넣습니다.</td></tr><tr><td>멱등한 메서드는?</td><td>GET, PUT, DELETE는 의미상 멱등이어야 하지만 구현이 실제로 안전해야 합니다.</td></tr><tr><td>retry하면 안 되는 경우?</td><td>권한 오류, validation 오류, 중복 결제 위험이 있는 요청은 신중해야 합니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>retry를 안정성으로만 말하면 안 됩니다. retry storm과 중복 부작용을 같이 말해야 합니다.</p></div>
+</section>
+
+<section id="distributed-q4">
+<div class="ch-head"><span class="ch-code">DS-04</span><h2>Q. Consistency와 availability는 어떻게 판단하나요?</h2></div>
+<h3>핵심 개념</h3><p>모든 데이터를 항상 강하게 일치시키는 것은 비쌉니다. 도메인별로 즉시 맞아야 하는 데이터와 eventual consistency를 허용할 수 있는 데이터를 나눠야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>일관성은 시스템 전체의 추상 목표가 아니라 사용자와 도메인이 허용할 수 있는 불일치의 범위입니다. 강한 일관성은 이해하기 쉽지만 latency와 availability 비용이 있고, eventual consistency는 확장에 유리하지만 UX가 상태를 설명해야 합니다. “처리 중”, “동기화 중”, “마지막 갱신 시각”은 기술적 불일치를 사용자에게 정직하게 보여주는 장치입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">결제, 재고, 정산은 강한 정합성이 중요하고, 피드, 추천, 통계는 잠시 늦게 맞아도 되는 경우가 많습니다. 그래서 consistency와 availability는 기술 선택이 아니라 비즈니스가 어떤 불일치를 허용할 수 있는지의 판단입니다.</div>
+<h3>90초 답변</h3><p>분산 시스템에서는 네트워크 지연과 장애가 기본값입니다. 모든 요청에 강한 정합성을 요구하면 latency와 장애 전파가 커질 수 있습니다. 반대로 eventual consistency를 쓰면 사용자에게 처리 중, 동기화 중, 마지막 업데이트 시각 같은 상태를 보여줘야 혼란이 줄어듭니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>eventual consistency UX는?</td><td>pending, processing, synced, failed 같은 상태를 명확히 보여줍니다.</td></tr><tr><td>읽기-your-writes는?</td><td>사용자가 방금 쓴 값을 다시 읽을 수 있게 세션/primary read 등을 고려합니다.</td></tr><tr><td>CAP를 어떻게 설명하나요?</td><td>네트워크 partition 상황에서 consistency와 availability 사이 선택이 필요하다는 모델로 설명합니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>CAP 정의만 외우지 말고 결제, 재고, 통계 같은 도메인 예시로 판단해야 합니다.</p></div>
+</section>
+
+<section id="distributed-q5">
+<div class="ch-head"><span class="ch-code">DS-05</span><h2>Q. Saga와 Outbox는 왜 쓰나요?</h2></div>
+<h3>핵심 개념</h3><p>서비스가 분리되면 하나의 DB 트랜잭션으로 모든 변경을 묶기 어렵습니다. Saga와 Outbox는 분산된 변경의 정합성을 현실적으로 관리하는 패턴입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Outbox는 DB 변경과 이벤트 발행 사이의 원자성 간극을 줄이는 패턴이고, Saga는 여러 로컬 트랜잭션을 보상 가능한 workflow로 묶는 패턴입니다. 둘 다 분산 트랜잭션을 마법처럼 없애는 것이 아니라 실패 지점을 명시하고 재처리 가능하게 만드는 방법입니다. 따라서 event id, 상태 저장, 보상 동작, 관측성이 핵심입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">Outbox는 DB 변경과 이벤트 발행 사이의 간극을 줄이기 위해 같은 DB 트랜잭션에 이벤트 기록을 남기고 나중에 발행하는 패턴입니다. Saga는 여러 서비스에 걸친 작업을 로컬 트랜잭션과 보상 트랜잭션으로 관리합니다.</div>
+<h3>90초 답변</h3><p>예를 들어 주문 생성, 결제 승인, 재고 차감, 알림 발송이 여러 서비스에 나뉘면 중간 실패가 생길 수 있습니다. 강한 분산 트랜잭션은 결합과 장애 포인트가 커질 수 있어, 각 단계의 완료와 실패를 이벤트로 관리하고 실패 시 보상 동작을 수행하는 방식이 필요합니다. 다만 Saga는 설계와 관측이 복잡하므로 단일 서비스에서 충분한 경우에는 과할 수 있습니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Outbox가 막는 문제는?</td><td>DB commit은 됐지만 이벤트 발행이 실패하는 간극을 줄입니다.</td></tr><tr><td>보상 트랜잭션은?</td><td>이미 완료된 단계를 비즈니스적으로 되돌리는 별도 동작입니다.</td></tr><tr><td>MSA는 언제 과한가요?</td><td>팀 경계, 데이터 소유권, 배포 독립성이 없으면 네트워크 비용만 늘 수 있습니다.</td></tr></table>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>Saga와 Outbox를 최신 패턴처럼 말하지 말고, 어떤 실패 간극을 줄이는지 설명하세요.</p></div>
+</section>
+
+<section id="distributed-q6">
+<div class="ch-head"><span class="ch-code">DS-06</span><h2>Q. cache invalidation 전략은 어떻게 잡나요?</h2></div>
+<h3>핵심 개념</h3><p>cache invalidation은 캐시에 무엇을 언제 지울지 정하는 문제이며 최신성, 성능, 구현 복잡도의 trade-off입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>cache invalidation은 쓰기 경로와 읽기 경로가 만나는 지점입니다. 상세 캐시만 지워도 목록 캐시가 남으면 사용자는 이전 값을 볼 수 있고, 이벤트 기반 무효화는 이벤트 유실과 순서 문제를 만듭니다. TTL은 단순하지만 stale window를 허용한다는 명시적 선택입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">데이터별로 stale 허용 시간을 먼저 정합니다. 비교적 덜 중요한 데이터는 TTL로 단순화하고, 권한이나 가격처럼 민감한 데이터는 명시적 purge, versioned key, event 기반 invalidation을 씁니다.</div>
+<h3>90초 답변</h3><p>목록과 상세 캐시가 함께 있으면 하나만 지워서는 사용자에게 오래된 값이 보일 수 있습니다. write-through는 쓰기 경로가 복잡해지고, write-behind는 유실 위험을 봐야 합니다. 캐시 stampede를 막기 위해 jitter, lock, stale-while-revalidate도 고려합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TTL만 쓰면?</td><td>단순하지만 변경 직후 stale 데이터가 보일 수 있습니다.</td></tr><tr><td>event 기반은?</td><td>정교하지만 이벤트 유실과 순서 문제를 고려해야 합니다.</td></tr><tr><td>versioned key는?</td><td>무효화 대신 새 key로 전환하지만 오래된 key 정리가 필요합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>cache hit ratio, stale 데이터 신고, purge 로그, Redis key 설계, TTL 정책 표를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>캐시를 추가하는 순간 최신성 책임도 함께 생깁니다.</p></div>
+</section>
+
+<section id="distributed-q7">
+<div class="ch-head"><span class="ch-code">DS-07</span><h2>Q. 메시지 순서 보장은 어떻게 다루나요?</h2></div>
+<h3>핵심 개념</h3><p>분산 메시징에서 순서 보장은 partition, key, consumer 병렬성, retry 정책에 의해 깨질 수 있습니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>메시지 순서 보장은 보통 전체 시스템 순서가 아니라 특정 entity 단위 순서의 문제입니다. 전체 순서를 보장하려 하면 병렬성과 처리량을 크게 잃습니다. 주문 id, 사용자 id 같은 key 기준으로 partition을 정하고, event version이나 sequence로 out-of-order 적용을 막는 것이 현실적입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">순서가 필요한 범위를 먼저 정합니다. 전체 순서가 필요한지, 주문 id나 사용자 id 단위 순서만 필요한지 나눈 뒤 같은 key를 같은 partition으로 보내고 consumer 병렬성을 조정합니다.</div>
+<h3>90초 답변</h3><p>전체 순서 보장은 처리량을 크게 낮출 수 있습니다. 대부분은 entity별 순서면 충분합니다. retry나 DLQ 처리 과정에서 나중 이벤트가 먼저 적용될 수 있으므로 event version, sequence number, idempotent consumer가 필요합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>중복 메시지는?</td><td>consumer idempotency와 processed event table로 막습니다.</td></tr><tr><td>out-of-order는?</td><td>version 비교, sequence check, 보류 큐를 검토합니다.</td></tr><tr><td>전체 순서가 왜 어렵나요?</td><td>병렬 처리와 확장성을 희생해야 하기 때문입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>partition key 선택, event schema의 version/sequence, 중복 소비 테스트, DLQ 재처리 절차를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>큐를 쓰면 자동으로 순서가 보장된다고 말하면 위험합니다.</p></div>
+</section>
+
+<section id="distributed-q8">
+<div class="ch-head"><span class="ch-code">DS-08</span><h2>Q. circuit breaker는 언제 필요한가요?</h2></div>
+<h3>핵심 개념</h3><p>circuit breaker는 실패 중인 의존성에 계속 요청을 보내 장애를 증폭시키지 않도록 호출을 빠르게 차단하는 패턴입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>circuit breaker는 실패한 의존성을 고치는 장치가 아니라 실패 중인 의존성으로 장애가 확산되는 것을 막는 장치입니다. timeout과 retry만 있으면 느린 서비스에 요청이 계속 쌓일 수 있고, breaker는 일정 실패율에서 빠른 실패 또는 fallback으로 전환합니다. half-open은 회복 여부를 제한적으로 확인하는 상태입니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">외부 API나 downstream 서비스가 느리거나 실패할 때 timeout과 retry만으로는 부족할 수 있습니다. 실패율이 임계치를 넘으면 circuit을 열어 빠르게 실패시키고, 일정 시간 뒤 half-open으로 일부 요청만 보내 회복을 확인합니다.</div>
+<h3>90초 답변</h3><p>retry는 transient failure에는 도움이 되지만 장애 중인 서비스에는 부하를 더할 수 있습니다. circuit breaker는 bulkhead, timeout, fallback과 같이 써야 효과가 있습니다. 다만 임계치가 과하면 정상 요청도 막을 수 있어 metric과 알림이 필요합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>fallback은?</td><td>캐시된 값, 제한된 기능, 안내 메시지를 제공하는 방식입니다.</td></tr><tr><td>half-open은?</td><td>회복 확인을 위해 일부 요청만 통과시키는 상태입니다.</td></tr><tr><td>retry와 관계?</td><td>retry storm을 막기 위해 timeout/backoff와 함께 조정합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>downstream failure rate, timeout budget, fallback UX, breaker state metric을 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>circuit breaker는 장애를 없애는 기능이 아니라 장애 전파를 줄이는 장치입니다.</p></div>
+</section>
+
+<section id="distributed-q9">
+<div class="ch-head"><span class="ch-code">DS-09</span><h2>Q. degraded mode는 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3><p>degraded mode는 일부 의존성이 실패해도 핵심 기능을 제한된 품질로 계속 제공하는 전략입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>degraded mode는 장애를 숨기는 것이 아니라 핵심 기능을 보호하기 위해 품질이나 기능 범위를 의도적으로 낮추는 운영 모드입니다. 추천, 통계, 알림은 제한하고 주문, 로그인, 조회 같은 핵심 경로를 살릴 수 있습니다. 사용자가 보는 데이터가 stale하거나 제한된 기능이라면 UI가 그 상태를 명확히 말해야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">모든 기능을 같은 중요도로 보지 않고 핵심 경로와 부가 기능을 나눕니다. 추천, 통계, 알림이 실패해도 주문이나 로그인 같은 핵심 기능은 유지하도록 fallback, cached data, read-only mode를 설계합니다.</div>
+<h3>90초 답변</h3><p>사용자에게는 기능이 제한되었음을 명확히 보여줘야 합니다. stale 데이터라면 마지막 갱신 시각을 표시하고, 쓰기 기능이 위험하면 read-only로 전환합니다. degraded mode도 운영자가 켜고 끌 수 있어야 하며, 어떤 지표에서 발동할지 기준이 필요합니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>read-only mode는?</td><td>정합성 위험이 큰 쓰기를 막고 조회만 허용하는 방식입니다.</td></tr><tr><td>사용자 안내는?</td><td>제한 상태와 재시도 가능성을 명확히 보여줍니다.</td></tr><tr><td>발동 기준은?</td><td>error rate, dependency timeout, queue lag 같은 지표를 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>feature flag, fallback 화면, stale 표시, 장애 모드 runbook을 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>장애 때 모든 기능을 계속 정상처럼 보이게 하면 데이터 신뢰를 잃을 수 있습니다.</p></div>
+</section>
+
+<section id="distributed-q10">
+<div class="ch-head"><span class="ch-code">DS-10</span><h2>Q. microservices는 언제 적절하고 언제 과한가요?</h2></div>
+<h3>핵심 개념</h3><p>MSA는 기술 구조가 아니라 팀 경계, 데이터 소유권, 배포 독립성, 장애 격리를 위한 조직적 선택입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>microservices의 비용은 HTTP 호출이 늘어나는 정도가 아니라 데이터 소유권, 배포, 관측성, 장애 복구 방식이 모두 분산된다는 점입니다. 경계가 약한 상태에서 서비스를 나누면 독립 배포는 못 하고 네트워크 비용만 갖는 분산 모놀리스가 됩니다. 먼저 bounded context와 팀 소유권이 분명한지 확인해야 합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">도메인 경계가 명확하고 팀이 독립 배포와 운영을 감당할 수 있을 때 microservices가 유리합니다. 반대로 데이터 소유권이 불분명하고 팀 규모가 작으면 네트워크, 배포, 관측성, 정합성 비용만 늘 수 있습니다.</div>
+<h3>90초 답변</h3><p>서비스 분리는 DB join을 API 호출로 바꾸고, 트랜잭션을 saga나 eventual consistency 문제로 바꿉니다. 그래서 먼저 모듈러 모놀리스로 경계를 명확히 하고, 실제 병목이나 팀 독립성이 필요할 때 분리하는 접근이 현실적입니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>공유 DB는?</td><td>서비스 독립성을 깨므로 데이터 소유권을 분리해야 합니다.</td></tr><tr><td>분리 기준은?</td><td>bounded context, 변경 빈도, 팀 소유권, scaling 요구를 봅니다.</td></tr><tr><td>분산 모놀리스는?</td><td>배포는 나뉘었지만 강한 동기 의존으로 독립성이 없는 상태입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>서비스 경계도, 배포 독립성, 장애 격리 사례, 데이터 소유권 표를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>MSA를 확장성의 기본 정답처럼 말하면 운영 비용을 과소평가한 것입니다.</p></div>
+</section>
+
+<section id="distributed-q11">
+<div class="ch-head"><span class="ch-code">DS-11</span><h2>Q. read-your-writes는 왜 중요하고 어떻게 보장하나요?</h2></div>
+<h3>핵심 개념</h3><p>read-your-writes는 사용자가 방금 쓴 데이터를 바로 다시 읽을 수 있게 하는 사용자 체감 정합성입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>read-your-writes는 이론적 정합성보다 사용자 신뢰에 가까운 요구사항입니다. 저장 성공 후 바로 이전 값이 보이면 사용자는 실패했다고 느낍니다. replica lag가 있는 구조에서는 쓰기 직후 일정 시간 primary를 읽거나, session 단위 라우팅, optimistic UI와 rollback, pending 상태 표시를 조합합니다.</p>
+</div>
+<h3>30초 답변</h3><div class="serial-card">replica lag이나 비동기 동기화가 있으면 저장 성공 후 바로 조회했는데 이전 값이 보일 수 있습니다. 이 경우 일정 시간 primary read, session stickiness, optimistic UI, 동기화 상태 표시를 고려합니다.</div>
+<h3>90초 답변</h3><p>모든 읽기를 primary로 보내면 비용이 커지고 replica 사용 이점이 줄어듭니다. 그래서 쓰기 직후 사용자나 특정 resource에 한해 primary를 읽거나, write timestamp보다 최신 replica만 선택하는 방식이 있습니다. 사용자에게 처리 중 상태를 보여주는 것도 UX 보정입니다.</p>
+<h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>replica lag은?</td><td>primary와 replica 동기화 지연으로 오래된 값을 읽는 문제입니다.</td></tr><tr><td>optimistic UI 위험은?</td><td>서버 실패 시 rollback과 오류 안내가 필요합니다.</td></tr><tr><td>언제 중요한가요?</td><td>프로필 수정, 결제 상태, 권한 변경처럼 사용자 신뢰가 걸린 경우입니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3><p>replica lag metric, 쓰기 직후 primary read 정책, pending UI, rollback 케이스를 말합니다.</p>
+<h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>eventual consistency를 쓰면 UX 보정까지 설계해야 합니다.</p></div>
+</section>
+
+<section id="distributed-q12">
+<div class="ch-head"><span class="ch-code">DS-12</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
+<p class="lede">분산 시스템 면접에서는 정답보다 “어떤 일관성을 포기하고 어떤 복구 장치를 둘 것인가”를 봅니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
+<tr><td>캐시</td><td>cache-aside, TTL, invalidation, stampede, stale data</td><td>정합성 요구와 비용 절감의 균형</td></tr>
+<tr><td>메시징</td><td>queue, stream, ordering, retry, dead letter queue</td><td>중복 처리와 순서 보장 범위</td></tr>
+<tr><td>일관성</td><td>eventual consistency, read-your-writes, saga, outbox, idempotency</td><td>사용자 체감과 데이터 정합성의 경계</td></tr>
+<tr><td>복원력</td><td>timeout, circuit breaker, degraded mode, bulkhead, backpressure</td><td>downstream 장애가 전체 장애로 번지지 않게 하는 방법</td></tr>
+<tr><td>정합성 모델</td><td>linearizability가 필요한 경로는 어디인가요? quorum read/write는 어떤 장애를 견디나요? consensus는 언제 필요한가요?</td><td>돈·권한·재고 같은 경로와 latency/availability 비용을 연결</td></tr>
+<tr><td>이벤트 처리</td><td>exactly-once는 왜 오해가 많나요? outbox CDC와 polling 중 무엇을 고르나요? consumer inbox/processed table은 왜 필요한가요?</td><td>broker 전달 보장과 business side effect 중복 방지를 구분</td></tr>
+<tr><td>복구</td><td>eventual consistency가 정말 수렴했는지 어떻게 확인하나요? reconciliation job은 어떤 데이터를 비교하나요?</td><td>source of truth, projection, 누락 이벤트, 보상 처리, 운영 알림을 연결</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">압박 꼬리질문</span>
+<p>“메시지가 두 번 처리되면?”, “캐시 삭제와 DB commit 사이에 실패하면?”, “MSA로 나누면 트랜잭션은 어떻게 하나요?”를 준비합니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">흔한 오답</span>
+<p>Kafka를 쓰면 해결된다, retry를 늘리면 된다, eventual consistency라 괜찮다처럼 실패 복구와 사용자 경험이 빠진 답변은 위험합니다.</p>
+</div>
+</section>
+
+<section id="distributed-q13">
+<div class="ch-head"><span class="ch-code">DS-13</span><h2>정합성 실패 매트릭스</h2></div>
+<p class="lede">분산 시스템 답변은 “정합성을 보장합니다”보다 어떤 정합성을 어느 범위에서 포기하거나 보정하는지 말해야 전문적으로 들립니다.</p>
+<table>
+<tr><th>실패 모드</th><th>원인</th><th>방어·보정 전략</th><th>면접에서 말할 trade-off</th></tr>
+<tr><td>stale read</td><td>replica lag, cache TTL, 비동기 projection</td><td>primary read, read-your-writes token, version check, pending UI</td><td>모든 읽기를 강하게 만들면 비용과 latency가 증가합니다.</td></tr>
+<tr><td>lost update</td><td>동시 수정, 마지막 쓰기 우선 정책</td><td>optimistic locking, compare-and-swap, merge UI, conflict event</td><td>충돌 감지는 사용자 흐름을 복잡하게 만들 수 있습니다.</td></tr>
+<tr><td>duplicate processing</td><td>retry, at-least-once delivery, consumer 재시작</td><td>idempotency key, unique constraint, processed message table</td><td>중복 제거 저장소도 TTL과 용량 관리가 필요합니다.</td></tr>
+<tr><td>out-of-order event</td><td>partitioning, network delay, parallel consumer</td><td>aggregate 단위 ordering key, sequence number, versioned projection</td><td>전역 순서 보장은 처리량과 확장성을 크게 낮춥니다.</td></tr>
+<tr><td>partial failure</td><td>한 서비스만 성공, downstream timeout</td><td>saga compensation, outbox, retry with backoff, reconciliation job</td><td>즉시 rollback보다 나중에 맞추는 운영 모델이 필요합니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">CONSISTENCY FAILURE MATRIX</span>
+정합성 질문에는 “읽기 정합성, 쓰기 충돌, 메시지 중복, 순서, 부분 실패”를 분리해서 답합니다. 같은 eventual consistency라도 사용자 프로필 수정과 결제 상태 변경은 허용 가능한 지연과 보정 방식이 다릅니다.
+</div>
+</section>
+
+<section id="distributed-q14">
+<div class="ch-head"><span class="ch-code">DS-14</span><h2>분산 장애 답변 구조</h2></div>
+<p class="lede">장애 시나리오 질문에서는 기술명보다 blast radius를 줄이는 순서가 중요합니다.</p>
+<div class="serial-card">
+<span class="sc-label">DISTRIBUTED INCIDENT ANSWER</span>
+1단계는 timeout과 retry budget으로 장애 전파를 막고, 2단계는 circuit breaker와 bulkhead로 실패 영역을 격리하고, 3단계는 queue·DLQ·outbox/inbox로 손실 없는 재처리를 설계합니다. 마지막으로 reconciliation job과 관측 지표를 둬서 “언젠가 맞는다”가 실제로 맞았는지 확인합니다.
+</div>
+<table>
+<tr><th>질문</th><th>전문적인 답변 포인트</th></tr>
+<tr><td>downstream이 느려지면?</td><td>timeout budget, circuit breaker, fallback, bulkhead, queue length alert를 함께 말합니다.</td></tr>
+<tr><td>queue가 밀리면?</td><td>producer rate limit, consumer scale-out, poison message 분리, DLQ와 replay 절차를 말합니다.</td></tr>
+<tr><td>메시지가 손실되면?</td><td>transactional outbox, broker ack, idempotent consumer, reconciliation으로 끝까지 추적합니다.</td></tr>
+<tr><td>보상이 실패하면?</td><td>saga 상태를 영속화하고 manual review queue와 operator runbook을 둡니다.</td></tr>
+<tr><td>장애 중 사용자 경험은?</td><td>read-only mode, pending 상태, 지연 고지, 핵심 기능 우선 처리로 degradation을 설계합니다.</td></tr>
+</table>
+</section>
+
+<section id="distributed-q15">
+<div class="ch-head"><span class="ch-code">DS-15</span><h2>DISTRIBUTED CONSISTENCY SENIOR DRILL</h2></div>
+<p class="lede">시니어 분산 시스템 질문은 “eventual consistency입니다”로 끝나지 않습니다. 어떤 연산이 linearizability를 요구하고, 어떤 연산은 quorum·consensus·reconciliation 비용을 감수할 가치가 있는지 설명해야 합니다.</p>
+<table>
+<tr><th>압박 질문</th><th>답변에 들어갈 핵심</th><th>오답 신호</th></tr>
+<tr><td>linearizability가 필요한 예시는?</td><td>결제 승인, 권한 변경, 재고 차감처럼 사용자가 성공을 본 순간 이후 모든 관찰자가 그 결과를 본 것처럼 동작해야 하는 경로를 예로 듭니다.</td><td>모든 데이터를 linearizable하게 만들겠다고 하며 비용과 가용성 저하를 설명하지 못합니다.</td></tr>
+<tr><td>quorum read/write는 무엇을 보장하나요?</td><td>N개 replica 중 W개 write ack와 R개 read 응답을 조합해 최신 값을 읽을 가능성을 높입니다. 단, clock, conflict resolution, partition 상황의 trade-off를 함께 봅니다.</td><td>quorum이면 항상 최신이고 충돌이 없다고 말합니다.</td></tr>
+<tr><td>consensus는 언제 필요한가요?</td><td>leader election, configuration 변경, 분산 lock처럼 여러 노드가 하나의 순서와 상태에 합의해야 할 때 필요합니다. Raft/Paxos류는 latency와 운영 비용이 있습니다.</td><td>일반 메시징 문제를 모두 consensus로 해결한다고 말합니다.</td></tr>
+<tr><td>exactly-once 처리는 가능한가요?</td><td>broker의 exactly-once delivery/processing 보장과 외부 DB·결제 API 같은 business side effect의 정확히 한 번 실행은 다릅니다. 실무에서는 at-least-once + idempotency가 기본 방어선입니다.</td><td>Kafka를 쓰면 결제도 정확히 한 번만 된다고 답합니다.</td></tr>
+<tr><td>outbox CDC vs polling은 어떻게 고르나요?</td><td>CDC는 DB log 기반으로 지연과 부하가 낮고 누락 가능성이 작지만 운영 복잡도가 있습니다. polling은 단순하지만 지연, 중복, scan 부하, lock 경합을 관리해야 합니다.</td><td>outbox를 쓰면 재처리와 idempotency가 필요 없다고 말합니다.</td></tr>
+<tr><td>inbox/processed table은 왜 두나요?</td><td>consumer가 처리한 event id와 결과를 저장해 retry·중복 delivery에도 side effect가 한 번만 적용되게 합니다. TTL, unique constraint, transaction boundary가 중요합니다.</td><td>consumer 코드가 멱등하다고만 말하고 저장소 기반 증거를 두지 않습니다.</td></tr>
+<tr><td>reconciliation은 무엇을 검증하나요?</td><td>source of truth와 projection, broker offset과 DB 상태, 결제 provider와 내부 주문 상태를 주기적으로 비교해 누락·중복·불일치를 찾아 보정합니다.</td><td>eventual consistency라 시간이 지나면 알아서 맞는다고 말합니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">90초 답변 구조</span>
+“돈·권한·재고처럼 성공 직후 신뢰가 필요한 경로는 linearizability나 강한 transaction 경계를 우선합니다. 그 외 projection, 검색, 통계는 eventual consistency를 허용하되 outbox CDC 또는 polling으로 이벤트를 발행하고, consumer에는 inbox/processed table을 둡니다. exactly-once는 broker 용어와 비즈니스 부작용을 분리해서 설명하고, 마지막에는 reconciliation으로 수렴 여부를 검증합니다.”
+</div>
+</section>
+
+<section id="distributed-q16">
+<div class="ch-head"><span class="ch-code">DS-16</span><h2>분산 시스템 개념 인과관계</h2></div>
+<p class="lede">분산 시스템 답변은 “Kafka, Redis, Saga를 씁니다”로 시작하면 암기처럼 들립니다. 먼저 네트워크가 실패하고, 시간이 어긋나고, 같은 메시지가 두 번 처리될 수 있다는 전제를 세운 뒤 패턴을 도출해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">DISTRIBUTED CAUSAL MODEL</span>서비스를 나누면 함수 호출이 네트워크 호출로 바뀌고, 네트워크 호출은 timeout, retry, partial failure를 만듭니다. retry는 가용성을 높일 수 있지만 중복 부작용을 만들기 때문에 idempotency key와 processed table이 필요합니다. queue는 요청 경로를 빠르게 만들지만 consumer lag, out-of-order, DLQ 운영을 만들고, cache는 읽기 부하를 줄이지만 stale data를 만듭니다. 그래서 분산 설계는 성능 개선보다 실패 모드를 명시하고 수렴을 검증하는 설계입니다.</div>
+<table>
+<tr><th>선택</th><th>줄이는 문제</th><th>새로 생기는 문제</th><th>답변에 붙일 보정 장치</th></tr>
+<tr><td>cache</td><td>반복 읽기, DB 부하, latency</td><td>stale data, invalidation 실패, stampede</td><td>TTL, versioned key, stale-while-revalidate, 권한 데이터 제외</td></tr>
+<tr><td>queue</td><td>요청 latency, peak 부하, 시간 결합</td><td>중복 처리, 순서 역전, lag, poison message</td><td>idempotent consumer, DLQ, retry budget, consumer lag alert</td></tr>
+<tr><td>outbox</td><td>DB commit과 event publish 사이의 간극</td><td>outbox 적체, 중복 발행, polling/CDC 운영 비용</td><td>event id, processed table, CDC 모니터링, reconciliation</td></tr>
+<tr><td>saga</td><td>분산 transaction 결합과 lock 지속 시간</td><td>보상 실패, 중간 상태 노출, 운영 복잡도</td><td>saga state, compensation, manual review queue, 상태 UI</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">암기 답변 교정</span>
+<p>“eventual consistency라 괜찮다”는 답변은 부족합니다. 어떤 source of truth와 projection이 있고, 누락 이벤트를 어떻게 찾고, 사용자는 pending/synced/failed 상태를 어떻게 보는지까지 설명해야 합니다.</p>
+</div>
+</section>
+
+<section id="distributed-q17">
+<div class="ch-head"><span class="ch-code">DS-17</span><h2>분산 정합성 사례: 주문·결제·재고 플로우</h2></div>
+<p class="lede">분산 시스템을 전문가처럼 설명하려면 패턴 이름이 아니라 실패가 실제로 어디서 생기는지 말해야 합니다. 주문·결제·재고 플로우는 retry, idempotency, outbox, saga, reconciliation을 한 번에 설명하기 좋은 사례입니다.</p>
+<div class="serial-card"><span class="sc-label">EXPERT DISTRIBUTED CONSISTENCY CASE</span>사용자가 주문 버튼을 누르면 주문 생성, 결제 승인, 재고 차감, 알림 발송이 이어집니다. 이 네 단계가 하나의 DB 안에 있으면 transaction으로 묶을 수 있지만, 결제 provider와 재고 서비스, 알림 서비스가 분리되면 네트워크 실패와 부분 성공이 기본값이 됩니다. 결제는 성공했는데 주문 DB update가 실패할 수 있고, 주문은 생성됐지만 이벤트 발행이 실패할 수 있으며, consumer가 재시작하면서 같은 메시지를 두 번 처리할 수 있습니다.</div>
+<h3>1. Idempotency는 API와 consumer 양쪽에 필요하다</h3>
+<p>사용자가 버튼을 두 번 누르거나 client timeout 후 재시도하면 주문 생성 요청이 두 번 들어올 수 있습니다. API는 idempotency key, payload hash, status, response snapshot을 저장해 같은 요청이 같은 결과를 돌려주도록 합니다. 하지만 이것만으로 충분하지 않습니다. 메시지 broker가 at-least-once delivery를 제공하면 consumer도 같은 event를 두 번 받을 수 있습니다. 그래서 consumer에는 inbox 또는 processed_message table을 두고 event id에 unique constraint를 걸어 side effect가 한 번만 실행되게 합니다.</p>
+<h3>2. Outbox는 DB commit과 event publish 사이 간극을 줄인다</h3>
+<p>주문 DB에 주문을 저장한 뒤 broker에 <code>OrderCreated</code>를 publish하는 구조에서는 DB commit은 성공했지만 publish가 실패하는 간극이 생깁니다. Outbox는 주문 저장과 outbox event 저장을 같은 DB transaction으로 묶습니다. 별도 publisher가 outbox row를 읽어 broker에 발행합니다. 여기서도 발행 중복은 가능하므로 event id와 consumer idempotency가 필요합니다. Outbox는 exactly-once 마법이 아니라 “누락을 찾고 재발행할 수 있는 durable record”를 만드는 패턴입니다.</p>
+<h3>3. Saga는 rollback이 아니라 보상 가능한 workflow다</h3>
+<p>결제가 승인된 뒤 재고 차감이 실패하면 DB transaction처럼 자동 rollback할 수 없습니다. 이미 외부 결제 provider에 부작용이 발생했기 때문입니다. Saga는 각 단계의 상태를 저장하고, 실패 시 보상 동작을 실행합니다. 예를 들어 재고 차감 실패 시 결제 취소 요청을 보내고 주문 상태를 <code>PAYMENT_CANCEL_REQUESTED</code>로 바꿉니다. 보상도 실패할 수 있으므로 manual review queue와 운영자 runbook이 필요합니다. “Saga를 쓰면 해결됩니다”가 아니라 “보상 실패를 어디에 저장하고 누가 처리하는가”까지 답해야 합니다.</p>
+<h3>4. Exactly-once의 오해</h3>
+<p>Kafka나 특정 broker가 exactly-once semantics를 제공한다고 해도 외부 결제 API, 이메일 발송, DB update 같은 business side effect가 정확히 한 번만 일어난다는 뜻은 아닙니다. broker 내부의 producer/consumer transaction과 외부 시스템의 부작용은 다른 경계입니다. 실무 답변은 at-least-once delivery를 전제로 idempotency, dedupe key, unique constraint, processed table, reconciliation을 둔다고 말하는 편이 더 안전합니다.</p>
+<h3>5. Reconciliation은 eventual consistency의 안전망이다</h3>
+<p>eventual consistency는 시간이 지나면 자동으로 맞는다는 뜻이 아닙니다. 맞도록 만드는 작업이 있어야 합니다. reconciliation job은 결제 provider의 승인 내역과 내부 주문 상태, 재고 차감 이벤트와 재고 ledger, outbox 발행 상태와 consumer processed 상태를 비교합니다. 불일치가 있으면 재발행, 보상, manual review로 보냅니다. 운영 지표는 outbox backlog, DLQ count, consumer lag, reconciliation mismatch count, compensation failure count입니다.</p>
+<h3>면접에서의 90초 답변</h3>
+<p>“주문·결제·재고가 분리된 시스템에서는 네트워크 실패와 중복 처리를 기본값으로 둡니다. 주문 생성 API에는 idempotency key를 저장하고, 주문 DB 변경과 OrderCreated 이벤트는 outbox로 같은 transaction에 기록합니다. consumer는 processed table로 중복 event를 막고, 결제 승인 후 재고 실패처럼 부분 성공이 생기면 saga state와 보상 트랜잭션을 실행합니다. exactly-once라는 표현은 broker 내부 보장과 비즈니스 부작용을 분리해서 봐야 하며, 최종적으로 reconciliation job으로 provider 상태와 내부 상태가 수렴했는지 검증합니다.”</p>
+<div class="callout warn">
+<span class="co-label">전문가 기준</span>
+<p>분산 시스템 답변에서 “큐를 쓰면 됩니다”, “Kafka면 됩니다”, “eventual consistency입니다”는 초보 신호입니다. 실패 기록이 어디에 남고, 중복을 어떤 key로 막고, 보상 실패를 누가 처리하며, 수렴 여부를 어떤 job과 지표로 확인하는지 말해야 합니다.</p>
+</div>
+</section>
+
+<section id="doc-cloud">
+<div class="ch-head"><span class="ch-code">PART</span><h2>클라우드 기본 면접</h2></div>
+</section>
+
+<section id="cloud-q1">
+<div class="ch-head"><span class="ch-code">CLD-01</span><h2>Q. 클라우드를 쓴다는 것은 어떤 운영 책임을 바꾸는 것인가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>클라우드는 서버를 빌리는 서비스가 아니라 인프라의 일부 책임을 공급자에게 위임하고, 애플리케이션·데이터·권한·설정 책임을 개발 조직이 명확히 가져가는 운영 모델입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>클라우드는 서버를 빌리는 것이 아니라 물리 인프라 일부를 provider에게 넘기고, 네트워크·권한·비용·가용성 설계 책임을 더 명시적으로 갖는 모델입니다. managed service도 설정, 접근 제어, 백업 정책, 장애 대응은 사용자 책임으로 남습니다. 면접에서는 shared responsibility를 기준으로 어디까지 직접 책임지는지 말해야 합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">클라우드를 쓰면 물리 서버, 전원, 하드웨어 장애, 일부 managed service 운영은 공급자가 책임집니다. 하지만 네트워크 경계, IAM, 데이터 암호화, 백업 정책, 접근 제어, 비용과 장애 대응은 여전히 우리 책임입니다. 그래서 shared responsibility model을 기준으로 어디까지 위임하고 어디부터 직접 통제할지 설명해야 합니다.</div>
+<h3>90초 답변</h3>
+<p>예를 들어 managed DB를 쓰면 패치, 스토리지 장애, 백업 기능, failover 기능 일부는 서비스가 제공하지만 schema 설계, slow query, 인덱스, 권한, 개인정보 보호, 복구 훈련은 팀의 책임입니다. 면접에서는 “클라우드라 안전합니다”가 아니라 어떤 계층을 공급자가 보장하고 어떤 계층을 우리 시스템 설계로 보완하는지 말해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>IaaS, PaaS, SaaS 차이는?</td><td>직접 책임지는 범위가 compute/runtime/application/data 중 어디까지인지로 설명합니다.</td></tr><tr><td>클라우드가 항상 싸나요?</td><td>초기 속도와 탄력성은 장점이지만 egress, managed service, 로그, NAT 비용 때문에 항상 싸지는 않습니다.</td></tr><tr><td>멀티 클라우드는 좋은가요?</td><td>가용성보다 복잡도, 운영 역량, 데이터 이동 비용, 공통 추상화 비용을 먼저 봅니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“AWS가 다 해줍니다”는 위험한 답변입니다. 클라우드는 책임을 없애는 것이 아니라 책임의 위치를 바꿉니다.</p></div>
+</section>
+
+<section id="cloud-q2">
+<div class="ch-head"><span class="ch-code">CLD-02</span><h2>Q. VPC, subnet, public/private 배치를 설명해보세요.</h2></div>
+<h3>핵심 개념</h3>
+<p>VPC는 클라우드 안의 논리적 네트워크 경계이고, subnet은 그 경계 안에서 CIDR과 가용 영역 단위로 리소스를 배치하는 영역입니다. public/private 구분은 이름이 아니라 route table과 노출 정책으로 결정됩니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>VPC는 논리적으로 격리된 네트워크 경계이고, subnet은 그 안에서 주소 범위와 routing 성격을 나누는 단위입니다. public/private은 리소스 자체 속성이 아니라 route table과 internet-facing 경로가 있는지로 결정됩니다. DB를 private subnet에 두는 이유는 인터넷에서 직접 도달하지 못하게 blast radius를 줄이기 위해서입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">VPC는 서비스 네트워크의 큰 경계이고 subnet은 그 안의 주소 대역과 배치 단위입니다. public subnet은 인터넷 게이트웨이로 나가는 경로를 갖고 외부 진입점인 load balancer나 bastion을 둡니다. private subnet에는 app server, DB, cache처럼 외부에서 직접 접근하면 안 되는 리소스를 둡니다.</div>
+<h3>90초 답변</h3>
+<p>좋은 설명은 “어디에 무엇을 둔다”보다 요청 흐름을 말하는 것입니다. 사용자는 인터넷에서 load balancer로 들어오고, load balancer는 private subnet의 app으로 전달하며, app은 private DB에 접근합니다. outbound가 필요한 private 리소스는 NAT Gateway나 VPC endpoint를 사용합니다. 고가용성을 위해 subnet은 여러 AZ에 나누고, 각 AZ 장애 때도 최소 용량을 유지할 수 있게 설계합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>public subnet에 DB를 두면 왜 위험한가요?</td><td>보안 그룹을 제한해도 라우팅과 노출면이 커지고 실수 시 인터넷 접근이 열릴 수 있습니다.</td></tr><tr><td>CIDR은 어떻게 잡나요?</td><td>현재 규모뿐 아니라 AZ 수, subnet 분리, peering 충돌 가능성, 확장 여지를 봅니다.</td></tr><tr><td>VPC endpoint는 언제 쓰나요?</td><td>private subnet에서 object storage나 cloud API에 접근할 때 인터넷/NAT 경유를 줄이기 위해 씁니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>VPC diagram, route table, security group source, subnet별 리소스 배치, 장애 시 traffic flow를 설명할 수 있으면 좋습니다.</p>
+</section>
+
+<section id="cloud-q3">
+<div class="ch-head"><span class="ch-code">CLD-03</span><h2>Q. Internet Gateway, NAT Gateway, route table은 어떻게 다르나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Internet Gateway는 VPC와 인터넷 사이의 출입구이고, NAT Gateway는 private subnet 리소스의 outbound 인터넷 접근을 제공합니다. route table은 패킷을 어디로 보낼지 정하는 규칙입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Internet Gateway는 VPC가 인터넷과 통신할 출입구이고, NAT Gateway는 private subnet의 outbound 인터넷 접근을 대리합니다. route table은 목적지 CIDR별로 다음 hop을 결정하는 규칙표입니다. private resource가 외부 패키지를 받거나 API를 호출할 수는 있어도 외부에서 직접 들어오지 못하게 만드는 것이 NAT의 핵심입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">public subnet은 route table에 0.0.0.0/0 → Internet Gateway 경로가 있어 인터넷과 직접 통신할 수 있습니다. private subnet은 외부에서 직접 들어오는 경로를 열지 않고, 필요할 때 0.0.0.0/0 → NAT Gateway로 outbound만 허용합니다. 그래서 NAT는 private 리소스를 공개하는 장치가 아니라 외부로 나가는 길입니다.</div>
+<h3>90초 답변</h3>
+<p>운영에서는 NAT 비용과 단일 장애 지점도 봐야 합니다. AZ별 NAT를 두지 않으면 한 AZ 장애 또는 cross-AZ routing 비용이 문제가 될 수 있습니다. 패키지 설치, 외부 API 호출, 이미지 pull 같은 outbound가 많은 서비스는 NAT 비용이 커질 수 있으므로 VPC endpoint, private registry, egress 제한 정책을 함께 검토합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>private subnet 서버에 SSH는 어떻게 하나요?</td><td>가능하면 SSM/VPN을 쓰고, bastion은 MFA, allowlist, audit log로 제한합니다.</td></tr><tr><td>NAT 비용이 급증하면?</td><td>egress 대상, 이미지 pull, 외부 API retry, 로그 전송, endpoint 대체 가능성을 확인합니다.</td></tr><tr><td>route 충돌은?</td><td>가장 구체적인 prefix가 우선되므로 peering, VPN, endpoint route를 함께 확인합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>NAT Gateway를 “private subnet에 접속하게 해주는 장치”라고 말하면 방향을 반대로 이해한 것입니다.</p></div>
+</section>
+
+<section id="cloud-q4">
+<div class="ch-head"><span class="ch-code">CLD-04</span><h2>Q. Security Group과 NACL은 어떻게 다르고 어떻게 설계하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Security Group은 리소스 단위의 stateful firewall이고, NACL은 subnet 단위의 stateless 방화벽입니다. 대부분의 애플리케이션 접근 제어는 SG를 중심으로 설계하고, NACL은 넓은 네트워크 방어선으로 보조합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Security Group은 instance나 ENI에 붙는 stateful 방화벽이고, NACL은 subnet 경계에서 동작하는 stateless 규칙입니다. stateful이라는 말은 허용된 inbound에 대한 응답 outbound를 따로 열지 않아도 된다는 뜻입니다. 설계는 넓게 열고 막는 방식보다 필요한 source, port, protocol을 최소화하는 방식이어야 합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Security Group은 인스턴스나 DB 같은 리소스에 붙고 stateful이라 inbound를 허용하면 응답 outbound는 자동으로 허용됩니다. NACL은 subnet에 적용되고 stateless라 inbound와 outbound 규칙을 모두 명시해야 합니다. DB는 0.0.0.0/0에 열지 않고 app security group을 source로 지정합니다.</div>
+<h3>90초 답변</h3>
+<p>면접에서는 “포트를 열었다”가 아니라 어떤 신뢰 경계에서 어떤 리소스로만 접근 가능한지 말해야 합니다. 예를 들어 ALB는 443을 인터넷에 열 수 있지만 app은 ALB SG에서 오는 트래픽만 받고, DB는 app SG에서 오는 5432만 받습니다. 운영 접근은 개인 IP 허용보다 VPN, SSM, role, MFA, audit log를 우선합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>SG를 너무 많이 만들면?</td><td>추적이 어려워지므로 계층별 표준 SG와 태그, IaC 리뷰가 필요합니다.</td></tr><tr><td>NACL은 언제 유용한가요?</td><td>subnet 단위 차단, 임시 격리, 명시적 deny가 필요한 경계에서 유용합니다.</td></tr><tr><td>운영자가 DB에 접근해야 하면?</td><td>직접 공개하지 않고 VPN/SSM/bastion, 권한 승인, 감사 로그, 시간 제한을 둡니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>보안 그룹을 “클라우드 방화벽”으로만 말하면 얕습니다. source를 CIDR이 아니라 다른 SG로 제한하는 설계를 말해야 합니다.</p></div>
+</section>
+
+<section id="cloud-q5">
+<div class="ch-head"><span class="ch-code">CLD-05</span><h2>Q. Load Balancer는 단순 트래픽 분산 외에 어떤 역할을 하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Load Balancer는 트래픽 분산뿐 아니라 health check, TLS termination, routing, rollout 안정성, 장애 격리의 중심 컴포넌트입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Load Balancer는 단순 분산기가 아니라 health check를 통해 비정상 target을 제외하고 TLS termination, path routing, sticky session, connection 관리까지 담당할 수 있습니다. LB가 정상이어도 target group health가 실패하면 사용자는 장애를 봅니다. 따라서 app health endpoint와 readiness 기준이 배포 안정성의 일부가 됩니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Load Balancer는 여러 app instance로 요청을 분산하고 health check에 실패한 target을 제외합니다. TLS 인증서를 관리하고 path나 host 기반 routing을 처리하며, rolling 배포 중 준비되지 않은 인스턴스에 트래픽이 가지 않도록 도와줍니다.</div>
+<h3>90초 답변</h3>
+<p>ALB 같은 L7 LB는 host/path routing, header 기반 처리, sticky session, WebSocket 지원 등을 볼 수 있고, NLB 같은 L4 LB는 낮은 지연과 TCP/UDP 처리에 유리합니다. health check는 너무 단순하면 죽은 앱을 살았다고 보고, 너무 무거우면 의존성 장애가 전체 장애로 번질 수 있어 readiness 성격을 명확히 해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TLS termination은 어디서 하나요?</td><td>LB에서 종료하면 인증서와 암호 정책 관리가 쉬워지지만 내부 구간 암호화 요구도 확인합니다.</td></tr><tr><td>sticky session은 좋은가요?</td><td>상태ful 설계를 숨길 수 있어 가능하면 session store 분리를 우선합니다.</td></tr><tr><td>health check endpoint는?</td><td>프로세스 생존, 주요 dependency, readiness를 목적에 맞게 분리합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>target group health, 5xx 원인 구분, 배포 중 deregistration delay, access log를 봤던 경험을 연결합니다.</p>
+</section>
+
+<section id="cloud-q6">
+<div class="ch-head"><span class="ch-code">CLD-06</span><h2>Q. IAM과 Secret 관리는 어떻게 설명하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>IAM은 누가 어떤 리소스에 어떤 action을 할 수 있는지 정의하는 권한 시스템입니다. secret 관리는 비밀값을 코드, 이미지, 로그에 노출하지 않고 저장·주입·회전·감사하는 운영 체계입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>IAM은 사람이 아니라 workload와 service까지 포함해 누가 무엇을 할 수 있는지 정하는 권한 시스템입니다. access key를 코드에 넣는 대신 role과 temporary credential을 쓰는 이유는 유출 범위와 수명을 줄이기 위해서입니다. least privilege는 이상론이 아니라 사고 시 blast radius를 제한하는 운영 장치입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">IAM은 최소 권한 원칙으로 사용자, 서비스, CI/CD, batch worker의 역할을 분리합니다. 장기 access key보다 role 기반 임시 credential을 우선하고, secret은 repository나 container image에 넣지 않고 secret manager에서 관리합니다. rotation, audit log, 접근 권한 검토도 함께 봅니다.</div>
+<h3>90초 답변</h3>
+<p>실무에서는 “admin 권한 하나로 다 한다”가 가장 위험합니다. CI/CD는 배포에 필요한 권한만, app은 특정 DB secret read나 object storage prefix 접근만, 운영자는 승인된 시간에 필요한 role만 사용하게 합니다. secret rotation이 가능한 구조인지, rotation 중 구버전과 신버전이 공존 가능한지, 로그와 crash dump에 비밀이 남지 않는지도 확인합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>access key가 유출되면?</td><td>즉시 revoke/rotate, CloudTrail 같은 audit 확인, 영향 범위 산정, 탐지 룰 보강을 말합니다.</td></tr><tr><td>권한을 어떻게 리뷰하나요?</td><td>IaC diff, permission boundary, last used, role assumption log, 정기 access review를 봅니다.</td></tr><tr><td>환경변수는 안전한가요?</td><td>주입 방식일 뿐이며 저장소, 로그, 프로세스 노출, rotation 정책이 더 중요합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>secret을 “환경변수로 빼면 끝”이라고 말하면 운영 수준이 낮아 보입니다. 저장, 접근, 주입, 회전, 감사까지 말해야 합니다.</p></div>
+</section>
+
+<section id="cloud-q7">
+<div class="ch-head"><span class="ch-code">CLD-07</span><h2>Q. Managed DB를 쓸 때 무엇을 여전히 직접 책임져야 하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Managed DB는 운영 부담을 줄이지만 데이터 모델, 쿼리 성능, 권한, 백업 정책, 복구 검증, 마이그레이션 안정성은 애플리케이션 팀의 책임으로 남습니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Managed DB는 patching, failover, backup 자동화를 제공하지만 schema, query, index, connection pool, migration 위험은 여전히 애플리케이션 팀 책임입니다. 장애가 provider 영역인지, 설정/쿼리/락 문제인지 구분할 수 있어야 합니다. managed라고 해서 데이터 모델링과 운영 검증이 사라지지 않습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Managed DB는 패치, 백업 기능, replication, failover 같은 운영 기능을 제공하지만 slow query, index, schema migration, connection pool, 권한 설계, 데이터 복구 훈련은 직접 챙겨야 합니다. managed라고 해서 DB 운영 리스크가 사라지는 것은 아닙니다.</div>
+<h3>90초 답변</h3>
+<p>면접에서는 DB를 private subnet에 둔다에서 멈추면 안 됩니다. connection 수가 app autoscaling과 맞는지, backup retention과 PITR이 요구사항을 만족하는지, read replica lag를 허용할 수 있는지, failover 중 connection 재시도가 안전한지, migration이 lock을 오래 잡지 않는지까지 말해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>RPO/RTO는?</td><td>얼마나 잃을 수 있는지와 얼마나 빨리 복구해야 하는지를 수치로 정의합니다.</td></tr><tr><td>read replica는 언제 쓰나요?</td><td>읽기 부하 분산에 쓰지만 stale read와 lag monitoring이 필요합니다.</td></tr><tr><td>DB failover 후 앱은?</td><td>connection 재생성, retry, idempotency, pool 설정을 확인합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>slow query 대응, connection pool 조정, backup restore drill, migration dry-run 경험을 말하면 신뢰도가 올라갑니다.</p>
+</section>
+
+<section id="cloud-q8">
+<div class="ch-head"><span class="ch-code">CLD-08</span><h2>Q. Object Storage와 CDN은 언제 쓰고 어떤 보안 이슈가 있나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Object Storage는 파일과 정적 객체 저장에 적합하고, CDN은 사용자 가까운 edge에서 콘텐츠를 캐싱해 latency와 origin 부하를 줄입니다. 핵심은 공개 범위와 캐시 무효화 정책입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Object Storage는 파일 시스템이 아니라 key 기반 object 저장소이고, CDN은 그 object나 응답을 edge에 캐시합니다. 공개 bucket, presigned URL 만료, cache-control, content-type, 개인정보 포함 여부가 핵심 보안 지점입니다. 파일 URL 하나가 권한 우회 통로가 되지 않게 접근 경계를 설계해야 합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Object Storage는 이미지, 첨부파일, 백업, 정적 자산 저장에 쓰고 CDN은 public read 콘텐츠의 지연과 origin 부하를 줄이는 데 씁니다. private 파일은 bucket public open을 피하고 presigned URL, 짧은 만료, content-type 검증, 권한 scope를 관리해야 합니다.</div>
+<h3>90초 답변</h3>
+<p>CDN은 성능 도구이면서 운영 리스크도 만듭니다. cache-control을 잘못 잡으면 배포 후 오래된 JS가 남거나 민감한 응답이 edge에 캐시될 수 있습니다. 업로드 파일은 확장자보다 MIME 검증, 크기 제한, 악성 파일 스캔, path traversal 방지, tenant별 prefix 권한을 함께 봐야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>presigned URL은 안전한가요?</td><td>짧은 만료, 권한 범위, 파일명/타입 검증, 로그 추적이 있어야 안전합니다.</td></tr><tr><td>CDN invalidation은 언제?</td><td>HTML이나 mutable asset은 invalidation이 필요하고, hashed asset은 장기 캐시가 가능합니다.</td></tr><tr><td>private bucket인데 유출되면?</td><td>정책, ACL, public access block, signed URL 발급 로그, object access log를 확인합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“S3에 올리고 URL을 저장합니다”로 끝내면 권한, 만료, 캐시, 파일 검증 리스크를 놓칩니다.</p></div>
+</section>
+
+<section id="cloud-q9">
+<div class="ch-head"><span class="ch-code">CLD-09</span><h2>Q. Queue와 Event 서비스를 클라우드에서 쓰는 이유는 무엇인가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Queue와 Event 서비스는 요청 처리와 후속 작업을 분리해 peak 부하를 흡수하고, 실패한 작업을 재시도하며, 시스템 간 결합도를 낮춥니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Queue와 Event 서비스는 서비스 간 시간 결합을 끊지만 중복, 지연, 순서 문제를 새로 만듭니다. producer가 메시지를 보냈다는 사실과 consumer가 처리했다는 사실은 다릅니다. DLQ, retry, idempotent consumer, lag metric이 없으면 비동기 처리는 장애를 늦게 발견하게 만들 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">사용자 요청에서 오래 걸리거나 실패 가능성이 높은 작업은 queue로 분리할 수 있습니다. 예를 들어 이메일 발송, 파일 변환, 외부 API 동기화는 메시지로 넘기고 worker가 처리합니다. 이때 retry, DLQ, idempotency, visibility timeout을 같이 설계해야 합니다.</div>
+<h3>90초 답변</h3>
+<p>클라우드 managed queue는 운영 부담을 줄이지만 중복 전달, 순서 보장 제한, poison message, retry 폭주 같은 분산 시스템 문제가 남습니다. 이벤트 기반 설계에서는 “발행하면 끝”이 아니라 consumer 실패, schema 변경, 재처리, 관측성을 함께 설계해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>메시지가 중복 처리되면?</td><td>idempotency key, 처리 상태 저장, unique constraint, deduplication을 둡니다.</td></tr><tr><td>DLQ는 왜 필요한가요?</td><td>반복 실패 메시지를 격리해 전체 queue 지연을 막고 원인을 분석합니다.</td></tr><tr><td>queue lag가 늘면?</td><td>worker autoscaling, 외부 dependency 지연, poison message, retry 정책을 봅니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>queue depth, age of oldest message, retry count, DLQ 처리 runbook을 운영 지표로 말합니다.</p>
+</section>
+
+<section id="cloud-q10">
+<div class="ch-head"><span class="ch-code">CLD-10</span><h2>Q. 고가용성과 DR은 어떻게 설명하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>고가용성은 평상시 장애를 견디는 설계이고, DR은 큰 장애 후 서비스를 복구하는 계획입니다. 둘 다 RTO와 RPO 기준이 있어야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>고가용성은 instance 수가 아니라 failure domain을 나눠 한 영역 장애가 전체 장애로 번지지 않게 하는 설계입니다. DR은 데이터 손실 허용치인 RPO와 복구 시간 목표인 RTO를 먼저 정해야 현실적인 구조가 나옵니다. active-active는 강력하지만 비용과 데이터 정합성 복잡도가 크므로 항상 정답은 아닙니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">고가용성은 multi-AZ 배치, health check, autoscaling, failover, stateless app 설계로 단일 장애 지점을 줄이는 것입니다. DR은 region 장애나 데이터 손상 같은 큰 사건에서 어떤 순서로 복구하고 어느 정도 데이터 손실을 허용할지 정하는 계획입니다.</div>
+<h3>90초 답변</h3>
+<p>RTO는 복구까지 걸리는 목표 시간, RPO는 잃어도 되는 데이터 양입니다. 모든 서비스를 active-active로 만들 필요는 없습니다. 비즈니스 중요도에 따라 backup/restore, pilot light, warm standby, active-active를 선택합니다. 중요한 것은 설계 문서보다 복구 훈련입니다. 복구 절차를 실행해보지 않으면 실제 장애 때 작동한다고 보기 어렵습니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>multi-AZ와 multi-region 차이는?</td><td>AZ 장애 대응과 region 장애 대응은 비용과 복잡도가 다릅니다.</td></tr><tr><td>active-active는 항상 좋은가요?</td><td>데이터 일관성, 운영 복잡도, 비용이 커져 요구 수준이 높을 때만 적절합니다.</td></tr><tr><td>DR 훈련은 무엇을 보나요?</td><td>복구 시간, 데이터 검증, DNS 전환, secret/config, runbook 누락을 확인합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“백업이 있습니다”는 DR 답변이 아닙니다. 복구 목표, 절차, 검증 결과가 있어야 합니다.</p></div>
+</section>
+
+<section id="cloud-q11">
+<div class="ch-head"><span class="ch-code">CLD-11</span><h2>Q. 클라우드 비용이 갑자기 증가하면 어떤 순서로 확인하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>클라우드 cost estimation은 compute뿐 아니라 NAT, egress, managed DB I/O, object request, log ingest/storage, autoscaling, retry 폭주까지 함께 계산하는 작업입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>클라우드 비용 증가는 트래픽 증가, 캐시 실패, NAT egress, 로그 폭증, 잘못된 autoscaling, orphan resource처럼 여러 계층에서 생깁니다. 비용은 사후 청구서가 아니라 metric으로 관측해야 합니다. 태그, 예산 알림, 서비스별 cost attribution이 없으면 원인과 소유자를 찾기 어렵습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">먼저 비용 리포트에서 서비스별 증가분을 봅니다. compute인지, DB I/O인지, NAT/egress인지, 로그 저장인지 분리하고 최근 배포, 트래픽 변화, retry 증가, autoscaling, batch 작업을 확인합니다. 비용 알림과 태그 기반 attribution이 없으면 원인 추적이 늦어집니다.</div>
+<h3>90초 답변</h3>
+<p>비용 최적화는 무조건 줄이는 것이 아니라 성능과 안정성을 해치지 않는 범위에서 낭비를 제거하는 것입니다. 사용하지 않는 리소스 정리, right sizing, reserved/savings plan, lifecycle policy, log retention, CDN cache hit rate, VPC endpoint로 NAT 우회, autoscaling 기준 조정 같은 방법을 씁니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>태그는 왜 중요한가요?</td><td>팀, 서비스, 환경별 비용 책임과 원인 분석을 가능하게 합니다.</td></tr><tr><td>로그 비용은 어떻게 줄이나요?</td><td>샘플링, level 조정, retention, 민감정보 제거, 고카디널리티 label 제한을 봅니다.</td></tr><tr><td>비용과 안정성이 충돌하면?</td><td>SLO와 비즈니스 중요도를 기준으로 축소 가능한 영역을 구분합니다.</td></tr></table>
+<h3>면접에서 말할 증거</h3>
+<p>월별 비용 breakdown, budget alert, 태그 정책, 비용 절감 전후 수치가 있으면 강합니다.</p>
+</section>
+
+<section id="cloud-q12">
+<div class="ch-head"><span class="ch-code">CLD-12</span><h2>Q. 클라우드 장애 대응에서 무엇을 먼저 보나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>클라우드 장애 대응은 공급자 장애인지, 우리 설정/배포 문제인지, 네트워크/권한/용량 문제인지 계층별로 좁히는 과정입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>클라우드 장애 대응은 provider status page 확인만으로 끝나지 않습니다. region/AZ 영향인지, 우리 계정 quota·권한·route·security group·최근 배포 문제인지 나눠야 합니다. 우회, failover, degraded mode, 고객 공지 기준을 runbook으로 갖고 있어야 실제 대응이 됩니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">먼저 사용자 영향 범위와 최근 변경을 확인합니다. 특정 region, AZ, 서비스, endpoint만 문제인지 보고, cloud provider status, LB 5xx, app log, DB metric, queue lag, IAM denied log를 함께 봅니다. 원인 분석보다 rollback, traffic 우회, scale out 같은 완화가 먼저일 수 있습니다.</div>
+<h3>90초 답변</h3>
+<p>관측성은 metric, log, trace, audit log를 연결해야 합니다. 예를 들어 502가 늘면 LB target health, app readiness, upstream timeout, deploy version을 보고, 403이 늘면 IAM policy 변경이나 token scope를 봅니다. 장애 대응 후에는 postmortem에서 감지 지연, blast radius, runbook 누락, alert 품질을 개선합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>cloud provider 장애면?</td><td>status 확인, 영향 서비스 파악, 우회 가능성, 고객 커뮤니케이션, DR 기준을 봅니다.</td></tr><tr><td>권한 문제는 어떻게 찾나요?</td><td>audit log, denied event, 최근 IAM/IaC 변경, role assumption 실패를 확인합니다.</td></tr><tr><td>용량 문제는?</td><td>quota, connection limit, DB IOPS, autoscaling 지연, queue lag를 봅니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“콘솔에 들어가서 봅니다”는 답변이 아닙니다. 어떤 지표와 로그를 어떤 순서로 볼지 말해야 합니다.</p></div>
+</section>
+
+<section id="cloud-q13">
+<div class="ch-head"><span class="ch-code">CLD-13</span><h2>핵심 질문 30선과 답변 훈련</h2></div>
+<p class="lede">클라우드 면접은 서비스 이름보다 경계, 책임, 장애, 비용을 묶어 말하는 훈련이 필요합니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문</th><th>확장 포인트</th></tr>
+<tr><td>책임 모델</td><td>shared responsibility, IaaS/PaaS/SaaS, managed service 책임 범위</td><td>공급자 책임과 팀 책임을 명확히 나누기</td></tr>
+<tr><td>네트워크</td><td>VPC, subnet, route table, IGW, NAT, endpoint, peering, VPN</td><td>패킷 흐름과 노출 경계로 설명하기</td></tr>
+<tr><td>보안</td><td>SG/NACL, IAM role, secret rotation, audit log, private DB</td><td>최소 권한과 운영 접근 통제</td></tr>
+<tr><td>운영</td><td>LB health check, autoscaling, managed DB, queue, object storage, CDN</td><td>장애와 성능, 캐시, stale data 리스크</td></tr>
+<tr><td>신뢰성</td><td>multi-AZ, multi-region, backup, RTO/RPO, failover, DR drill</td><td>복구 목표와 실제 훈련 여부</td></tr>
+<tr><td>비용</td><td>NAT, egress, logs, DB I/O, autoscaling, reserved capacity, tagging</td><td>비용 원인 분리와 guardrail</td></tr>
+<tr><td>권한 정책</td><td>IAM trust policy와 resource policy 차이는 무엇인가요? cross-account 접근은 어디서 허용하나요?</td><td>principal, action, resource, condition, role assumption log를 함께 설명</td></tr>
+<tr><td>암호화</td><td>KMS key policy가 잘못되면 어떤 서비스가 실패하나요? envelope encryption을 어떻게 설명하나요?</td><td>secret 복호화, object storage, DB 암호화, key rotation과 감사 로그</td></tr>
+<tr><td>DR 운영</td><td>failover 후 failback은 어떤 순서로 검증하나요? game day에서 무엇을 측정하나요?</td><td>DNS, 데이터 방향, write freeze, runbook, RTO/RPO 실측</td></tr>
+</table>
+<div class="callout risk"><span class="co-label">압박 꼬리질문</span><p>“DB는 private subnet인데 왜 외부에서 접속되나요?”, “NAT 비용이 왜 이렇게 나왔나요?”, “백업은 있는데 복구가 안 되면 누구 책임인가요?”, “S3 bucket은 private인데 파일이 유출될 수 있나요?”에 계층적으로 답합니다.</p></div>
+</section>
+
+<section id="cloud-q14">
+<div class="ch-head"><span class="ch-code">CLD-14</span><h2>K8S CLOUD SENIOR DRILL</h2></div>
+<p class="lede">클라우드 시니어 면접에서는 managed service 이름보다 네트워크 경계, workload 노출, autoscaling 신호, 권한 위임, 암호화 키, 복구 훈련을 하나의 운영 모델로 설명해야 합니다.</p>
+<table>
+<tr><th>주제</th><th>구체 질문</th><th>답변 방향</th></tr>
+<tr><td>Service/Ingress</td><td>Internet-facing Ingress에서 private workload까지 트래픽은 어떤 경로로 흐르나요?</td><td>DNS, LB/Ingress controller, TLS termination, Service, readiness endpoint, pod routing을 순서대로 말합니다.</td></tr>
+<tr><td>HPA/VPA</td><td>CPU HPA는 정상인데 응답이 느릴 때 무엇을 보나요?</td><td>DB connection pool, cache hit ratio, queue lag, worker 수, downstream quota, request/limit 설정을 함께 봅니다.</td></tr>
+<tr><td>PDB·node drain</td><td>노드 교체 중 트래픽 중단을 어떻게 줄이나요?</td><td>PDB, maxUnavailable, readiness drain, termination grace, LB deregistration delay, canary 배포 지표를 설명합니다.</td></tr>
+<tr><td>network policy</td><td>namespace 간 통신을 기본 차단하면 무엇이 같이 깨질 수 있나요?</td><td>DNS, metrics scraping, logging agent, ingress controller, external egress를 명시적으로 허용해야 합니다.</td></tr>
+<tr><td>IAM trust/resource policy</td><td>CI/CD가 다른 계정 role을 assume해 배포하려면 어디를 확인하나요?</td><td>대상 role의 trust policy, 호출 주체 권한, resource policy, permission boundary, audit log를 봅니다.</td></tr>
+<tr><td>KMS</td><td>KMS key를 rotate하거나 disable하면 어떤 blast radius가 생기나요?</td><td>secret manager, object storage, DB snapshot, queue encryption, log encryption처럼 key 의존 리소스를 inventory로 확인합니다.</td></tr>
+<tr><td>DR failback/game day</td><td>DR 훈련은 성공했는데 failback이 실패할 수 있는 이유는?</td><td>복제 방향 전환, 데이터 divergence, DNS TTL, client cache, config/secret drift, 권한 정책 차이를 검증하지 않았기 때문입니다.</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">답변 기준</span>
+<p>“구성되어 있습니다”보다 “어떤 지표와 로그로 정상 동작을 검증했고, 장애 때 어떤 순서로 되돌릴지”를 말합니다. 특히 DR은 backup 생성이 아니라 restore, failover, failback, game day 결과가 있어야 완성됩니다.</p>
+</div>
+</section>
+
+<section id="cloud-q15">
+<div class="ch-head"><span class="ch-code">CLD-15</span><h2>클라우드 개념 인과관계</h2></div>
+<p class="lede">클라우드 면접에서 서비스 이름을 나열하면 얕게 들립니다. 트래픽이 어떤 경계를 통과하고, 어떤 책임이 cloud provider에서 application team으로 넘어오는지 설명해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">CLOUD CAUSAL MODEL</span>사용자 요청은 DNS, CDN 또는 Load Balancer, public subnet, security group, private subnet workload, managed DB를 거치며 각 계층에서 다른 실패와 권한 문제가 생깁니다. private subnet에 DB를 둬도 잘못된 route, 보안 그룹, bastion, secret 유출이 있으면 접근될 수 있습니다. IAM은 “누가 무엇을 할 수 있나”의 선언이고, KMS는 “어떤 key로 누가 복호화할 수 있나”의 경계입니다. DR은 백업 파일이 있다는 뜻이 아니라 실제 restore와 failback까지 검증했다는 뜻입니다.</div>
+<table>
+<tr><th>주제</th><th>원인</th><th>실패 현상</th><th>답변 기준</th></tr>
+<tr><td>VPC routing</td><td>subnet route table, NAT, IGW, peering 경로가 의도와 다르다</td><td>private 리소스가 외부 노출되거나 egress가 막힌다</td><td>source, destination, route table, SG/NACL, return path를 순서대로 본다</td></tr>
+<tr><td>IAM</td><td>trust policy와 permission policy를 혼동한다</td><td>배포 role assume 실패 또는 과권한 부여</td><td>who can assume, what can do, on which resource, under what condition을 분리한다</td></tr>
+<tr><td>Managed DB</td><td>고가용성은 provider가 도와주지만 schema, query, backup 검증은 팀 책임이다</td><td>failover는 됐지만 앱 재연결 실패, 복구 데이터 불일치</td><td>connection retry, backup restore drill, RPO/RTO, migration lock을 함께 말한다</td></tr>
+<tr><td>비용</td><td>트래픽 경로와 저장 기간을 모르고 리소스를 켠다</td><td>NAT, 로그, egress, snapshot 비용이 예측보다 커진다</td><td>request path, data transfer, retention, scale metric으로 산정한다</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">면접 답변 전환</span>
+<p>“DB는 private subnet에 둡니다”에서 멈추지 말고 “DB는 public route가 없는 subnet에 두고, app security group에서 DB port만 허용합니다. 다만 운영 접속, migration, backup restore, secret rotation 경로도 필요하므로 bastion/SSM, IAM, audit log, break-glass 절차를 함께 설계합니다”라고 말합니다.</p>
+</div>
+</section>
+</main>
+</div>
+</body>
+</html>

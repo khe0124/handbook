@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, ArrowUp, ChevronDown, Menu, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DEFAULT_HANDBOOK_ID,
   HANDBOOK_GROUPS,
@@ -21,19 +21,101 @@ type HandbookGroup = {
   items: HandbookItem[];
 };
 
+type DocumentMenuItemsProps = {
+  items: HandbookItem[];
+  activeId: string;
+  className: string;
+  onSelect: (item: HandbookItem) => void;
+  role?: "menuitem";
+};
+
 const groups = HANDBOOK_GROUPS as HandbookGroup[];
 const items = HANDBOOK_ITEMS as HandbookItem[];
+const activeIdStorageKey = "dev-handbook:last-active-id";
+const scrollPositionStoragePrefix = "dev-handbook:scroll:";
 
 const getGroupKeyForItemId = (itemId: string) =>
   groups.find((group) => group.items.some((item) => item.id === itemId))?.key ?? groups[0]?.key ?? "";
 
+const hasHandbookItem = (itemId: string) => items.some((item) => item.id === itemId);
+
+const getStoredActiveId = () => {
+  if (typeof window === "undefined") {
+    return DEFAULT_HANDBOOK_ID;
+  }
+
+  try {
+    const storedId = window.localStorage.getItem(activeIdStorageKey);
+    return storedId && hasHandbookItem(storedId) ? storedId : DEFAULT_HANDBOOK_ID;
+  } catch {
+    return DEFAULT_HANDBOOK_ID;
+  }
+};
+
+const getScrollPositionStorageKey = (itemId: string) => `${scrollPositionStoragePrefix}${itemId}`;
+
+const getStoredScrollPosition = (itemId: string) => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const storedPosition = window.localStorage.getItem(getScrollPositionStorageKey(itemId));
+    if (!storedPosition) {
+      return null;
+    }
+
+    const parsedPosition = Number.parseInt(storedPosition, 10);
+    return Number.isFinite(parsedPosition) && parsedPosition > 0 ? parsedPosition : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveActiveId = (itemId: string) => {
+  try {
+    window.localStorage.setItem(activeIdStorageKey, itemId);
+  } catch {
+    // Reading should continue even when storage is unavailable.
+  }
+};
+
+const saveScrollPosition = (itemId: string, scrollY = window.scrollY) => {
+  try {
+    window.localStorage.setItem(getScrollPositionStorageKey(itemId), String(Math.max(0, Math.round(scrollY))));
+  } catch {
+    // Reading should continue even when storage is unavailable.
+  }
+};
+
+function DocumentMenuItems({ items, activeId, className, onSelect, role }: DocumentMenuItemsProps) {
+  return (
+    <>
+      {items.map((item) => (
+        <button
+          key={item.id}
+          type="button"
+          role={role}
+          className={className}
+          onClick={() => onSelect(item)}
+          aria-current={activeId === item.id ? "page" : undefined}
+        >
+          {item.label}
+        </button>
+      ))}
+    </>
+  );
+}
+
 export default function App() {
-  const [activeId, setActiveId] = useState(DEFAULT_HANDBOOK_ID);
+  const [activeId, setActiveId] = useState(getStoredActiveId);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileGroupKeys, setOpenMobileGroupKeys] = useState<string[]>([
-    getGroupKeyForItemId(DEFAULT_HANDBOOK_ID),
+    getGroupKeyForItemId(getStoredActiveId()),
   ]);
+  const activeIdRef = useRef(activeId);
+  const pendingScrollRestoreIdRef = useRef(activeId);
 
   const activeItem = useMemo(
     () => items.find((item) => item.id === activeId) ?? items[0],
@@ -52,8 +134,25 @@ export default function App() {
   );
 
   useEffect(() => {
+    activeIdRef.current = activeItem.id;
+    saveActiveId(activeItem.id);
+  }, [activeItem.id]);
+
+  useEffect(() => {
+    let ticking = false;
+
     const syncScrollState = () => {
       setShowScrollTop(window.scrollY > 320);
+
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        saveScrollPosition(activeIdRef.current);
+        ticking = false;
+      });
     };
 
     syncScrollState();
@@ -61,6 +160,19 @@ export default function App() {
 
     return () => {
       window.removeEventListener("scroll", syncScrollState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const saveCurrentPosition = () => {
+      saveScrollPosition(activeIdRef.current);
+    };
+
+    window.addEventListener("pagehide", saveCurrentPosition);
+
+    return () => {
+      saveCurrentPosition();
+      window.removeEventListener("pagehide", saveCurrentPosition);
     };
   }, []);
 
@@ -104,10 +216,28 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: scrollBehavior });
   };
 
+  const restoreSavedPosition = useCallback((itemId: string) => {
+    if (pendingScrollRestoreIdRef.current !== itemId) {
+      return;
+    }
+
+    const storedPosition = getStoredScrollPosition(itemId) ?? 0;
+
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: storedPosition, behavior: "auto" });
+    });
+  }, []);
+
   const handleSelectItem = (item: HandbookItem) => {
+    if (item.id === activeItem.id) {
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    saveScrollPosition(activeItem.id);
+    pendingScrollRestoreIdRef.current = item.id;
     setActiveId(item.id);
     setMobileMenuOpen(false);
-    handleScrollTop();
   };
 
   const handleSelectHome = () => {
@@ -156,18 +286,13 @@ export default function App() {
                   {group.label} <span className="caret" aria-hidden>▾</span>
                 </button>
                 <div className="menu-panel" role="menu">
-                  {group.items.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="menuitem"
-                      className="menu-item"
-                      onClick={() => handleSelectItem(item)}
-                      aria-current={activeItem.id === item.id ? "page" : undefined}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                  <DocumentMenuItems
+                    items={group.items}
+                    activeId={activeItem.id}
+                    className="menu-item"
+                    role="menuitem"
+                    onSelect={handleSelectItem}
+                  />
                 </div>
               </div>
             );
@@ -175,7 +300,7 @@ export default function App() {
         </nav>
       </header>
 
-      <HandbookPage item={activeItem} />
+      <HandbookPage item={activeItem} onReady={restoreSavedPosition} />
 
       {mobileMenuOpen ? (
         <button
@@ -224,17 +349,12 @@ export default function App() {
                       </button>
                     </h2>
                     <div className="mobile-menu-items" id={panelId} hidden={!groupOpen}>
-                      {group.items.map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          className="mobile-menu-item"
-                          onClick={() => handleSelectItem(item)}
-                          aria-current={activeItem.id === item.id ? "page" : undefined}
-                        >
-                          {item.label}
-                        </button>
-                      ))}
+                      <DocumentMenuItems
+                        items={group.items}
+                        activeId={activeItem.id}
+                        className="mobile-menu-item"
+                        onSelect={handleSelectItem}
+                      />
                     </div>
                   </section>
                 );

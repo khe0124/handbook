@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS·Azure 실전 시나리오 | Dev Handbook</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-brand">OPERATIONS · AWS</div>
+  <div class="nav-title">AWS·Azure 실전 시나리오</div>
+  <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
+  <a href="#ch1"><span class="code">CLD-00</span>웹 서비스 기본 구성</a>
+  <a href="#ch2"><span class="code">CLD-01</span>사설 네트워크와 데이터 경계</a>
+  <a href="#ch3"><span class="code">CLD-02</span>Secret과 배포</a>
+  <a href="#ch4"><span class="code">CLD-03</span>장애와 비용 사례</a>
+  <a href="#ch5"><span class="code">MODEL</span>개념 모델</a>
+  <a href="#ch6"><span class="code">CHECK</span>실무 체크리스트</a>
+  <a href="#ch7"><span class="code">CASE</span>장애/운영 시나리오</a>
+  <a href="#ch8"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#ch9"><span class="code">Q&A</span>면접 답변 템플릿</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : OPERATIONS-CLOUD-SCENARIOS</span>
+    <span>SCOPE : OPERATIONS · RELIABILITY · INCIDENT RESPONSE</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AWS·Azure 실전 시나리오</h1>
+  <p class="hero-sub">실제 클라우드 서비스를 조합해 웹 서비스, 내부 API, 데이터, 관측, 복구 사례를 설계한다</p>
+  <div class="hero-meta">FORMAT : 개념 → 체크리스트 → 시나리오 → 리스크 → 면접 답변 · UPDATED 2026-06</div>
+</header>
+
+<section id="chindex">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
+<p class="lede">이 문서는 다른 핸드북과 같은 구조로 읽습니다. 먼저 핵심 개념을 잡고, 표와 체크리스트로 운영 판단 기준을 만든 뒤, 장애 시나리오와 면접 답변 템플릿으로 실전 적용까지 연결합니다.</p>
+<ul><li>핵심 개념</li><li>검증 증거와 운영 리스크</li><li>실무 체크리스트</li><li>장애/운영 시나리오</li><li>면접 답변 템플릿</li></ul>
+</section>
+
+      <section id="ch1">
+        <div class="ch-head"><span class="ch-code">CLD-00</span><h2>웹 서비스 기본 구성</h2></div>
+        <p class="lede">AWS에서는 Route 53, CloudFront, AWS WAF, Application Load Balancer, ECS Fargate 또는 EKS, RDS, ElastiCache, S3, CloudWatch를 조합한다. Azure에서는 Azure DNS, Azure Front Door, WAF policy, Application Gateway, AKS 또는 App Service, Azure SQL, Azure Cache for Redis, Blob Storage, Azure Monitor를 대응시킨다.</p>
+        <table>
+          <tr><th>판단 질문</th><th>검증 증거</th><th>운영 리스크</th></tr>
+          <tr>
+            <td>웹 서비스 기본 구성이 실제 서비스 경로에서 어떤 책임을 갖는가?</td>
+            <td>설정 diff, 로그, 메트릭, trace, smoke test 결과</td>
+            <td>말로는 이해했지만 장애 시 어느 계층을 볼지 정해지지 않음</td>
+          </tr>
+          <tr>
+            <td>변경되면 어떤 사용자 영향과 rollback 조건이 생기는가?</td>
+            <td>변경 티켓, 승인 기록, 배포 후 지표, runbook 링크</td>
+            <td>복구 절차가 담당자 기억에 의존함</td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="ch2">
+        <div class="ch-head"><span class="ch-code">CLD-01</span><h2>사설 네트워크와 데이터 경계</h2></div>
+        <p class="lede">AWS는 VPC, public/private subnet, NAT Gateway, Security Group, VPC Endpoint, AWS PrivateLink로 경계를 만든다. Azure는 VNet, subnet, NAT Gateway, Network Security Group, Private Endpoint, Private Link, Private DNS Zone을 조합한다. 핵심은 DB와 관리형 서비스가 인터넷을 거치지 않게 하는 것이다.</p>
+        <table>
+          <tr><th>판단 질문</th><th>검증 증거</th><th>운영 리스크</th></tr>
+          <tr>
+            <td>사설 네트워크와 데이터 경계이 실제 서비스 경로에서 어떤 책임을 갖는가?</td>
+            <td>설정 diff, 로그, 메트릭, trace, smoke test 결과</td>
+            <td>말로는 이해했지만 장애 시 어느 계층을 볼지 정해지지 않음</td>
+          </tr>
+          <tr>
+            <td>변경되면 어떤 사용자 영향과 rollback 조건이 생기는가?</td>
+            <td>변경 티켓, 승인 기록, 배포 후 지표, runbook 링크</td>
+            <td>복구 절차가 담당자 기억에 의존함</td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="ch3">
+        <div class="ch-head"><span class="ch-code">CLD-02</span><h2>Secret과 배포</h2></div>
+        <p class="lede">AWS에서는 IAM role, Secrets Manager, Parameter Store, ECR, CodePipeline 또는 GitHub Actions를 사용한다. Azure에서는 Microsoft Entra ID, Managed Identity, Key Vault, Azure Container Registry, Azure DevOps 또는 GitHub Actions를 연결한다. secret은 build artifact에 넣지 않고 runtime 주입과 rotation 절차를 둔다.</p>
+        <table>
+          <tr><th>판단 질문</th><th>검증 증거</th><th>운영 리스크</th></tr>
+          <tr>
+            <td>Secret과 배포이 실제 서비스 경로에서 어떤 책임을 갖는가?</td>
+            <td>설정 diff, 로그, 메트릭, trace, smoke test 결과</td>
+            <td>말로는 이해했지만 장애 시 어느 계층을 볼지 정해지지 않음</td>
+          </tr>
+          <tr>
+            <td>변경되면 어떤 사용자 영향과 rollback 조건이 생기는가?</td>
+            <td>변경 티켓, 승인 기록, 배포 후 지표, runbook 링크</td>
+            <td>복구 절차가 담당자 기억에 의존함</td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="ch4">
+        <div class="ch-head"><span class="ch-code">CLD-03</span><h2>장애와 비용 사례</h2></div>
+        <p class="lede">CloudFront나 Azure Front Door 캐시 설정 오류는 stale content를 만들고, NAT Gateway 비용 폭증은 private subnet egress 설계가 잘못됐다는 신호일 수 있다. RDS/Azure SQL connection pool 고갈, ALB/Application Gateway health probe 실패, AKS/EKS rollout 실패는 지표와 로그를 같은 릴리스 단위로 묶어야 빠르게 좁힌다.</p>
+        <table>
+          <tr><th>판단 질문</th><th>검증 증거</th><th>운영 리스크</th></tr>
+          <tr>
+            <td>장애와 비용 사례이 실제 서비스 경로에서 어떤 책임을 갖는가?</td>
+            <td>설정 diff, 로그, 메트릭, trace, smoke test 결과</td>
+            <td>말로는 이해했지만 장애 시 어느 계층을 볼지 정해지지 않음</td>
+          </tr>
+          <tr>
+            <td>변경되면 어떤 사용자 영향과 rollback 조건이 생기는가?</td>
+            <td>변경 티켓, 승인 기록, 배포 후 지표, runbook 링크</td>
+            <td>복구 절차가 담당자 기억에 의존함</td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="ch5">
+        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
+        <p class="lede">AWS·Azure 실전 시나리오은 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
+        <table>
+          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
+          <tr><td>CLD-00 · 웹 서비스 기본 구성</td><td>AWS에서는 Route 53, CloudFront, AWS WAF, Application Load Balancer, ECS Fargate 또는 EKS, RDS, ElastiCache, S3, CloudWatch를 조합한다. Azure에서는 Azure DNS, Azure Front Door, WAF policy, Application Gateway, AKS 또는 App Service, Azure SQL, Azure Cache for Redis, Blob Storage, Azure Monitor를 대응시킨다.</td><td>설정, 로그, 지표, 변경 이력, 재현 명령</td></tr>
+          <tr><td>CLD-01 · 사설 네트워크와 데이터 경계</td><td>AWS는 VPC, public/private subnet, NAT Gateway, Security Group, VPC Endpoint, AWS PrivateLink로 경계를 만든다. Azure는 VNet, subnet, NAT Gateway, Network Security Group, Private Endpoint, Private Link, Private DNS Zone을 조합한다. 핵심은 DB와 관리형 서비스가 인터넷을 거치지 않게 하는 것이다.</td><td>설정, 로그, 지표, 변경 이력, 재현 명령</td></tr>
+          <tr><td>CLD-02 · Secret과 배포</td><td>AWS에서는 IAM role, Secrets Manager, Parameter Store, ECR, CodePipeline 또는 GitHub Actions를 사용한다. Azure에서는 Microsoft Entra ID, Managed Identity, Key Vault, Azure Container Registry, Azure DevOps 또는 GitHub Actions를 연결한다. secret은 build artifact에 넣지 않고 runtime 주입과 rotation 절차를 둔다.</td><td>설정, 로그, 지표, 변경 이력, 재현 명령</td></tr>
+          <tr><td>CLD-03 · 장애와 비용 사례</td><td>CloudFront나 Azure Front Door 캐시 설정 오류는 stale content를 만들고, NAT Gateway 비용 폭증은 private subnet egress 설계가 잘못됐다는 신호일 수 있다. RDS/Azure SQL connection pool 고갈, ALB/Application Gateway health probe 실패, AKS/EKS rollout 실패는 지표와 로그를 같은 릴리스 단위로 묶어야 빠르게 좁힌다.</td><td>설정, 로그, 지표, 변경 이력, 재현 명령</td></tr>
+        </table>
+      </section>
+
+      <section id="ch6">
+        <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
+        <p class="lede">작업 전에는 무엇을 바꿀지보다 무엇을 깨뜨릴 수 있는지를 먼저 본다. 체크리스트는 리뷰와 운영 인수에서 그대로 사용할 수 있어야 한다.</p>
+        <ul>
+          <li>AWS와 Azure에서 같은 역할을 하는 서비스를 1:1로 외우지 말고 edge, network, runtime, data, identity, observability 책임으로 매핑한다.</li>
+          <li>Route 53/Azure DNS, CloudFront/Azure Front Door, ALB/Application Gateway, ECS Fargate·EKS/AKS·App Service, RDS/Azure SQL 조합을 요청 경로로 그린다.</li>
+          <li>Secrets Manager 또는 Key Vault, IAM role 또는 Managed Identity, PrivateLink 또는 Private Endpoint를 보안 경계에 포함한다.</li>
+          <li>CloudWatch 또는 Azure Monitor에서 RED 지표, DB connection, health probe, deployment version을 같은 대시보드에 둔다.</li>
+        </ul>
+        <table>
+          <tr><th>작업 단계</th><th>필수 산출물</th><th>차단 기준</th></tr>
+          <tr><td>설계</td><td>목적, 영향 범위, 비목표, owner</td><td>영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음</td></tr>
+          <tr><td>변경</td><td>diff, 승인 기록, 검증 명령</td><td>production 변경과 staging 검증의 차이가 설명되지 않음</td></tr>
+          <tr><td>복구</td><td>rollback 또는 forward fix, 담당자, 예상 시간</td><td>실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음</td></tr>
+        </table>
+      </section>
+
+      <section id="ch7">
+        <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
+        <p class="lede">B2B SaaS 관리자 서비스를 클라우드에 배포한다. AWS안은 Route 53 → CloudFront/WAF → Application Load Balancer → ECS Fargate → RDS Multi-AZ와 ElastiCache로 구성하고, secret은 Secrets Manager, 이미지는 ECR, 로그와 알림은 CloudWatch로 둔다. Azure안은 Azure DNS → Azure Front Door/WAF → Application Gateway → AKS 또는 App Service → Azure SQL zone redundant 구성과 Azure Cache for Redis로 구성하고, secret은 Key Vault, 이미지는 ACR, 로그와 알림은 Azure Monitor로 둔다.</p>
+        <div class="callout">
+          <span class="co-label">Triage frame</span>
+          <p>증상 → 영향 범위 → 최근 변경 → 계층별 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 순서가 없으면 원인 분석이 사람마다 달라진다.</p>
+        </div>
+        <table>
+          <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
+          <tr><td>사용자 영향과 최근 변경을 확인한다.</td><td>계층별 증거를 모아 완화책을 실행한다.</td><td>지표 회복, 재현 불가, owner 확인, 기록 완료</td></tr>
+        </table>
+      </section>
+
+      <section id="ch8">
+        <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
+        <p class="lede">운영 품질은 아는 개념보다 틀린 가정을 빨리 찾는 능력에서 갈린다. 아래 신호가 보이면 설계나 답변을 다시 점검한다.</p>
+        <ul>
+          <li>AWS 서비스명과 Azure 서비스명을 단순 번역해서 같은 장애 특성을 가진다고 가정한다.</li>
+          <li>CloudFront나 Azure Front Door 뒤에 origin timeout, cache policy, WAF rule 변경 이력을 남기지 않는다.</li>
+          <li>NAT Gateway 또는 egress 비용을 보지 않아 private subnet의 외부 호출 비용이 폭증한다.</li>
+          <li>RDS/Azure SQL 백업은 켜져 있지만 restore drill과 connection pool 장애 대응이 없다.</li>
+        </ul>
+      </section>
+
+      <section id="ch9">
+        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
+        <p class="lede">실제 클라우드 구성 질문에는 먼저 역할을 나눠 답합니다. DNS는 Route 53 또는 Azure DNS, edge는 CloudFront 또는 Azure Front Door, L7 진입점은 Application Load Balancer 또는 Application Gateway, 런타임은 ECS Fargate/EKS 또는 AKS/App Service, 데이터는 RDS 또는 Azure SQL, secret은 Secrets Manager 또는 Key Vault로 설명합니다. 이후 private network, observability, rollback, 비용과 DR까지 연결합니다.</p>
+        <div class="serial-card">
+          <span class="sc-label">ANSWER SHAPE</span>
+          1. 한 줄 결론<br>
+          2. 핵심 개념과 책임 경계<br>
+          3. 실무에서 깨지는 지점<br>
+          4. 검증 명령 또는 관측 증거<br>
+          5. rollback, runbook, 운영 인수 기준
+        </div>
+      </section>
+<footer>
+OPERATIONS HANDBOOK · 2026-06<br>
+PRINCIPLE : 운영 지식은 경로, 증거, 복구 절차로 검증한다.
+</footer>
+</main>
+</div>
+</body>
+</html>

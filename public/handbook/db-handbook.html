@@ -23,12 +23,12 @@ main{min-width:0;padding:0 56px 120px;background:var(--paper)}
 @media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
 .nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
 .nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
-nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius: 0;font-size:13.5px;line-height:1.4}
 nav a:hover{background:var(--green-tint);color:var(--green-deep)}
 nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
 header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
 .hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
-.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius: 0;background:var(--panel)}
 h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
 .hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
 .hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
@@ -43,8 +43,8 @@ p.lede{font-size:17px;color:var(--ink-soft)}
 em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
 ul,ol{margin:0 0 16px 22px}
 li{margin-bottom:7px}
-code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
-.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius: 0}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius: 0;margin:22px 0}
 .callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
 .callout.risk{border-left-color:var(--red);background:var(--red-tint)}
 .callout.gm{border-left-color:var(--ink);background:#ECEEF3}
@@ -59,15 +59,15 @@ td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line
 tr:last-child td{border-bottom:none}
 td .mono,td code{font-family:var(--mono);font-size:12.5px}
 .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
-.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius: 0;font-weight:500}
 .flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
 .flow .arr{color:var(--ink-soft)}
-.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius: 0;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
 .serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
 .serial-card .seg{color:#FACC6B}
 .serial-card .seg2{color:#9DB6E8}
 .serial-card .dim{color:#9AA3B8}
-.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius: 0;overflow:hidden;background:var(--panel);margin-top:24px}
 .g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
 .g-row:last-child{border-bottom:none}
 .g-term{padding:13px 18px;background:var(--green-tint)}
@@ -95,6 +95,9 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch10"><span class="code">DB-10</span>NoSQL은 언제</a>
   <a href="#ch11"><span class="code">DB-11</span>용어집</a>
   <a href="#ch12"><span class="code">DB-12</span>실무 DB 운영 심화</a>
+  <a href="#ch13"><span class="code">DB-13</span>락과 MVCC를 실제로 읽기</a>
+  <a href="#ch14"><span class="code">DB-14</span>실행계획 해석 훈련</a>
+  <a href="#ch15"><span class="code">DB-15</span>무중단 스키마 변경</a>
 </nav>
 <main>
 
@@ -399,6 +402,83 @@ T2: lock <span class="seg2">B</span> ───▶ wants <span class="seg">A</spa
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>주문 테이블에 <code>status</code> 컬럼을 NOT NULL로 추가하면서 기본값과 전체 UPDATE를 한 번에 실행하면 큰 테이블에서 lock wait가 길어질 수 있습니다. 먼저 nullable 컬럼을 추가하고, 배치로 backfill하고, NOT VALID 제약 검증 후 NOT NULL을 적용하는 방식이 운영 중단 위험을 줄입니다.</p>
+</div>
+</section>
+
+<section id="ch13">
+<div class="ch-head"><span class="ch-code">DB-13</span><h2>락과 MVCC를 실제로 읽기</h2></div>
+<p class="lede">MVCC와 락은 정의를 외우면 쉬워 보이지만, 운영에서는 “왜 이 UPDATE가 멈췄는가”, “왜 방금 쓴 값이 안 보이는가”, “왜 vacuum이 밀리는가”를 설명해야 합니다.</p>
+<p>MVCC는 한 행을 덮어쓰지 않고 새 버전을 만들어 읽기와 쓰기를 동시에 처리합니다. 읽는 트랜잭션은 자기 스냅샷에서 보이는 버전을 읽고, 쓰는 트랜잭션은 새 버전을 만듭니다. 그래서 읽기가 쓰기를 막지 않는 대신, 오래 열린 트랜잭션이 있으면 오래된 row version을 지울 수 없어 bloat가 커집니다.</p>
+<table>
+<tr><th>현상</th><th>겉으로 보이는 증상</th><th>실제 확인</th></tr>
+<tr><td>lock wait</td><td>쿼리가 CPU를 안 쓰는데 오래 걸림</td><td>blocking transaction, wait_event, 대기 중인 row/table lock</td></tr>
+<tr><td>deadlock</td><td>두 트랜잭션 중 하나가 강제로 실패</td><td>서로 다른 순서로 같은 자원 잠금</td></tr>
+<tr><td>long transaction</td><td>vacuum 지연, table/index bloat 증가</td><td>트랜잭션 시작 시각, idle in transaction</td></tr>
+<tr><td>replica lag</td><td>쓰기 직후 읽기에서 데이터가 안 보임</td><td>primary와 replica replay lag, read-after-write 요구</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">LOCK TRIAGE QUESTION</span>
+1. 느린 쿼리가 실제로 실행 중인가, 락을 기다리는가?<br>
+2. 누가 blocking transaction인가?<br>
+3. 그 트랜잭션은 언제 시작했고 어떤 SQL을 실행했는가?<br>
+4. 같은 테이블을 항상 같은 순서로 잠그는가?<br>
+5. 실패시 재시도해도 안전한가?
+</div>
+<div class="callout warn">
+<span class="co-label">면접 포인트</span>
+<p>“MVCC는 읽기와 쓰기가 서로 막지 않게 합니다”에서 멈추면 얕습니다. 이어서 “대신 오래 열린 트랜잭션이 오래된 버전을 붙잡아 vacuum과 bloat에 영향을 주고, UPDATE끼리는 여전히 같은 row에 대해 lock 경합이 생긴다”고 말해야 실제 운영 이해가 드러납니다.</p>
+</div>
+</section>
+
+<section id="ch14">
+<div class="ch-head"><span class="ch-code">DB-14</span><h2>실행계획 해석 훈련</h2></div>
+<p class="lede">실행계획은 DB가 쿼리를 어떻게 풀기로 결정했는지 보여주는 지도입니다. 인덱스를 탔는지만 보는 것이 아니라 예상 행 수, 실제 행 수, join 방식, sort, buffer 사용을 같이 봐야 합니다.</p>
+<table>
+<tr><th>항목</th><th>의미</th><th>위험 신호</th></tr>
+<tr><td>Seq Scan</td><td>테이블 전체를 읽음</td><td>큰 테이블에서 선택도가 높은 조건인데도 풀스캔</td></tr>
+<tr><td>Index Scan</td><td>인덱스로 후보를 찾고 테이블 접근</td><td>너무 많은 row를 다시 table lookup</td></tr>
+<tr><td>Index Only Scan</td><td>인덱스만으로 필요한 컬럼 해결</td><td>visibility map 때문에 실제 heap fetch가 많음</td></tr>
+<tr><td>Nested Loop</td><td>바깥 row마다 안쪽 조회</td><td>바깥 row가 많으면 N+1처럼 폭증</td></tr>
+<tr><td>Hash Join</td><td>한쪽을 hash table로 만들어 join</td><td>메모리 부족으로 disk spill</td></tr>
+<tr><td>Sort</td><td>정렬 작업</td><td>ORDER BY가 인덱스와 맞지 않아 큰 정렬 발생</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">EXPLAIN ANALYZE CHECKLIST</span>
+actual time이 어디서 큰가?<br>
+estimated rows와 actual rows가 크게 다른가?<br>
+loops가 비정상적으로 큰 node가 있는가?<br>
+Sort, Hash가 memory를 넘겨 disk를 쓰는가?<br>
+filter로 버리는 row가 너무 많은가?<br>
+인덱스 컬럼 순서가 WHERE + ORDER BY와 맞는가?
+</div>
+<p>예를 들어 <code>WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC LIMIT 20</code> 쿼리에는 보통 <code>(tenant_id, status, created_at DESC)</code> 형태의 복합 인덱스가 후보가 됩니다. 하지만 status 카디널리티가 낮고 tenant별 데이터 분포가 크게 다르면 순서와 partial index를 다시 봐야 합니다. 인덱스 설계는 “조건에 나온 컬럼을 다 넣기”가 아니라 선택도, 정렬, limit, 쓰기 비용을 함께 계산하는 일입니다.</p>
+<div class="callout">
+<span class="co-label">면접 답변</span>
+<p>느린 쿼리를 보면 먼저 <code>EXPLAIN (ANALYZE, BUFFERS)</code>로 실제 실행 시간을 확인하고, 예상 행 수와 실제 행 수 차이, scan 방식, join 방식, sort와 buffer hit/read를 봅니다. 인덱스 추가 전에는 쿼리 조건과 정렬, limit, 데이터 분포를 확인하고, 추가 후에는 쓰기 비용과 기존 인덱스 중복을 같이 검토합니다.</p>
+</div>
+</section>
+
+<section id="ch15">
+<div class="ch-head"><span class="ch-code">DB-15</span><h2>무중단 스키마 변경</h2></div>
+<p class="lede">스키마 변경은 SQL 한 줄이 아니라 배포 프로토콜입니다. 운영 중인 앱 버전이 여러 개 섞여 있을 수 있고, 큰 테이블의 DDL은 lock과 rewrite를 만들 수 있습니다.</p>
+<table>
+<tr><th>변경</th><th>위험</th><th>안전한 접근</th></tr>
+<tr><td>NOT NULL 컬럼 추가</td><td>기존 row backfill, table rewrite, lock</td><td>nullable 추가 → 배치 backfill → constraint 검증 → NOT NULL</td></tr>
+<tr><td>컬럼명 변경</td><td>구버전 앱이 기존 컬럼 참조</td><td>새 컬럼 추가 → 이중 쓰기 → 읽기 전환 → 기존 컬럼 제거</td></tr>
+<tr><td>인덱스 추가</td><td>큰 테이블에서 쓰기 차단 가능</td><td>PostgreSQL은 CREATE INDEX CONCURRENTLY 검토</td></tr>
+<tr><td>enum 값 변경</td><td>앱/DB 값 범위 불일치</td><td>DB 허용 범위 확장 후 앱 배포, 제거는 마지막</td></tr>
+<tr><td>외래키 추가</td><td>기존 데이터 검증 시간과 lock</td><td>NOT VALID 추가 후 VALIDATE CONSTRAINT</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">EXPAND-CONTRACT</span>
+1. expand: 새 컬럼/테이블/인덱스 추가, 구버전 앱과 호환<br>
+2. migrate: backfill, dual write, read path 전환<br>
+3. verify: count, checksum, sample query, error log 확인<br>
+4. contract: 더 이상 쓰지 않는 컬럼/코드 제거
+</div>
+<div class="callout warn">
+<span class="co-label">면접에서 깊어지는 지점</span>
+<p>“마이그레이션 도구를 씁니다”는 시작일 뿐입니다. 좋은 답변은 “앱 구버전과 신버전이 동시에 떠 있어도 깨지지 않게 expand-contract로 나누고, backfill은 배치 크기와 lock 시간을 통제하며, 제거는 read/write 전환이 검증된 뒤에 한다”까지 가야 합니다.</p>
 </div>
 </section>
 

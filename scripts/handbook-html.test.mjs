@@ -4,7 +4,21 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { HANDBOOK_GROUPS, HANDBOOK_ITEMS } from "../src/handbook/catalog.mjs";
+import {
+  AX_HANDBOOKS,
+  BACKEND_HANDBOOKS,
+  CAREER_HANDBOOKS,
+  CHEAT_SHEETS,
+  DESIGN_HANDBOOKS,
+  DEVOPS_HANDBOOKS,
+  FRONTEND_HANDBOOKS,
+  HANDBOOK_GROUPS,
+  HANDBOOK_ITEMS,
+  INTERVIEW_HANDBOOKS,
+  NETWORK_HANDBOOKS,
+  PERSONAL_HANDBOOKS,
+  PRACTICAL_GUIDES,
+} from "../src/handbook/catalog.mjs";
 import { extractHandbookDocument, generateHandbookDocuments } from "./handbook-html.mjs";
 
 const GENERATED_HTML_LITERAL_PATTERN = /(?:navHtml|mainHtml):\s*(`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*")/g;
@@ -63,7 +77,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "interview", "personal", "backend", "frontend", "network", "devops", "ax", "design", "cheats", "examples", "practical"],
+    ["home", "career", "engineering", "operations", "practice"],
   );
 
   const labels = [
@@ -71,104 +85,60 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
     ...HANDBOOK_ITEMS.map((item) => item.label),
   ].join("\n");
 
-  assert.equal(HANDBOOK_ITEMS.length, 113);
+  const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
+  const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
+  const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
+
+  assert.equal(HANDBOOK_ITEMS.length, 38);
+  assert.equal(careerGroup?.items.length, 8);
+  assert.equal(engineeringGroup?.items.length, 8);
+  assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
+  assert.equal(practiceGroup?.items.length, 8);
   assert.ok(labels.includes("홈"));
-  assert.ok(labels.includes("기술면접"));
-  assert.ok(labels.includes("00 기술면접 개요"));
-  assert.ok(labels.includes("01 프론트엔드 면접"));
-  assert.ok(labels.includes("02 백엔드·DB 면접"));
-  assert.ok(labels.includes("03 인프라·운영 면접"));
-  assert.ok(labels.includes("04 분산 시스템 면접"));
-  assert.ok(labels.includes("05 시스템 설계 면접"));
-  assert.ok(labels.includes("06 프로젝트 심층 면접"));
-  assert.ok(labels.includes("07 컬처·압박 면접"));
-  assert.ok(labels.includes("08 JavaScript·TypeScript 면접"));
-  assert.ok(labels.includes("09 Java·Spring·JPA 면접"));
-  assert.ok(labels.includes("10 CS 기본기 면접"));
-  assert.ok(labels.includes("11 보안 심화 면접"));
-  assert.ok(labels.includes("12 DB 심화 면접"));
-  assert.ok(labels.includes("13 클라우드 기본 면접"));
-  assert.ok(labels.includes("14 Git·협업·코드리뷰 면접"));
-  assert.ok(labels.includes("15 코딩테스트 패턴"));
-  assert.ok(labels.includes("16 회사·직무별 면접 전략"));
-  assert.ok(labels.includes("개인화"));
-  assert.ok(labels.includes("00 개인화 개요"));
-  assert.ok(labels.includes("01 프론트엔드 개발자 대응"));
-  assert.ok(labels.includes("02 풀스택 개발자 대응"));
-  assert.ok(labels.includes("03 백엔드 전환 대응"));
-  assert.ok(labels.includes("04 B2B·SaaS 어드민 대응"));
-  assert.ok(labels.includes("백엔드"));
-  assert.ok(labels.includes("프론트엔드"));
-  assert.ok(labels.includes("네트워크 인프라"));
-  assert.ok(labels.includes("DevOps"));
-  assert.ok(labels.includes("AX"));
-  assert.ok(labels.includes("디자인"));
-  assert.ok(labels.includes("Cheat Sheet"));
-  assert.ok(labels.includes("00 Frontend"));
-  assert.ok(labels.includes("01 Backend"));
-  assert.ok(labels.includes("02 Database"));
-  assert.ok(labels.includes("03 Network"));
-  assert.ok(labels.includes("04 DevOps"));
-  assert.ok(labels.includes("05 Linux"));
-  assert.ok(labels.includes("06 Docker"));
-  assert.ok(labels.includes("07 Interview"));
-  assert.ok(labels.includes("00 프론트엔드 개요"));
-  assert.ok(labels.includes("01 브라우저 동작 원리"));
-  assert.ok(labels.includes("02 웹접근성"));
-  assert.ok(labels.includes("03 번들링·렌더링·메모이제이션"));
-  assert.ok(labels.includes("04 성능과 지표"));
-  assert.ok(labels.includes("05 DevTools 사용법"));
-  assert.ok(labels.includes("06 보안 대응"));
-  assert.ok(labels.includes("07 테스트 전략"));
-  assert.ok(labels.includes("08 배포"));
-  assert.ok(labels.includes("00 로드맵과 패킷 사고"));
-  assert.ok(labels.includes("01 IP·CIDR·서브넷 설계"));
-  assert.ok(labels.includes("02 VPC와 Public·Private 배치"));
-  assert.ok(labels.includes("03 Route Table·NAT·IGW"));
-  assert.ok(labels.includes("04 DNS와 이름 해석"));
-  assert.ok(labels.includes("05 보안 경계: SG·NACL·방화벽"));
-  assert.ok(labels.includes("06 클라우드 VPN Gateway"));
-  assert.ok(labels.includes("07 IPsec VPN 협상 원리"));
-  assert.ok(labels.includes("08 L3-L7 디버깅 도구"));
-  assert.ok(labels.includes("09 VPN 장애 트러블슈팅"));
-  assert.ok(labels.includes("10 구축·운영 체크리스트"));
-  assert.ok(labels.includes("00 DevOps 개요"));
-  assert.ok(labels.includes("01 소프트웨어 전달 구조"));
-  assert.ok(labels.includes("02 형상 관리와 변경 추적"));
-  assert.ok(labels.includes("03 CI 파이프라인"));
-  assert.ok(labels.includes("04 CD와 배포 전략"));
-  assert.ok(labels.includes("05 설정과 비밀 정보 관리"));
-  assert.ok(labels.includes("06 IaC와 인프라 변경 관리"));
-  assert.ok(labels.includes("07 컨테이너와 런타임"));
-  assert.ok(labels.includes("08 오케스트레이션 기초"));
-  assert.ok(labels.includes("09 관측 가능성과 장애 대응"));
-  assert.ok(labels.includes("10 보안과 신뢰성"));
-  assert.ok(labels.includes("00 AX 개요"));
-  assert.ok(labels.includes("01 AX 엔지니어 역량 모델"));
-  assert.ok(labels.includes("03 AX 업무 자동화 설계"));
-  assert.ok(labels.includes("05 AI Harness Engineering"));
-  assert.ok(labels.includes("04 Context Engineering"));
-  assert.ok(labels.includes("06 Loop Engineering"));
-  assert.ok(labels.includes("08 Multi-Agent Workflow"));
-  assert.ok(labels.includes("07 검증과 평가"));
-  assert.ok(labels.includes("09 AI Governance & Security"));
-  assert.ok(labels.includes("02 AX 조직 적용 패턴"));
-  assert.ok(labels.includes("10 AX 실전 적용 사례"));
-  assert.ok(labels.includes("11 AX 실무 플레이북"));
-  assert.ok(labels.includes("00 디자인 개요"));
-  assert.ok(labels.includes("01 UX 사고와 문제 정의"));
-  assert.ok(labels.includes("02 정보구조와 내비게이션"));
-  assert.ok(labels.includes("03 사용자 흐름과 태스크 설계"));
-  assert.ok(labels.includes("04 UI 레이아웃과 시각 위계"));
-  assert.ok(labels.includes("05 인터랙션 디자인 패턴"));
-  assert.ok(labels.includes("06 폼과 입력 경험"));
-  assert.ok(labels.includes("07 컴포넌트 패턴"));
-  assert.ok(labels.includes("08 디자인 시스템과 토큰"));
-  assert.ok(labels.includes("09 접근성과 인클루시브 디자인"));
-  assert.ok(labels.includes("10 프로토타입과 사용성 테스트"));
-  assert.ok(labels.includes("11 디자인 핸드오프와 QA"));
-  assert.ok(labels.includes("00 풀스택 성장 로드맵"));
-  assert.ok(labels.includes("01 개발자 FAQ·트러블슈팅"));
+  assert.ok(labels.includes("면접·커리어"));
+  assert.ok(labels.includes("개발 핸드북"));
+  assert.ok(labels.includes("인프라·운영"));
+  assert.ok(labels.includes("AX·디자인·실무"));
+  assert.ok(labels.includes("00 면접 전략·커리어 포지셔닝"));
+  assert.ok(labels.includes("01 프론트엔드·JS/TS 면접"));
+  assert.ok(labels.includes("02 백엔드·Java/Spring 면접"));
+  assert.ok(labels.includes("03 CS·DB·보안 심화 면접"));
+  assert.ok(labels.includes("04 인프라·분산·클라우드 면접"));
+  assert.ok(labels.includes("05 시스템 설계·프로젝트 심층"));
+  assert.ok(labels.includes("06 컬처·협업·코드리뷰"));
+  assert.ok(labels.includes("07 코딩테스트 패턴"));
+  assert.ok(labels.includes("00 프론트엔드 핵심"));
+  assert.ok(labels.includes("01 프론트엔드 성능·진단"));
+  assert.ok(labels.includes("02 프론트엔드 품질·릴리스"));
+  assert.ok(labels.includes("03 백엔드 핵심·아키텍처"));
+  assert.ok(labels.includes("04 데이터 계층·저장소"));
+  assert.ok(labels.includes("05 런타임 품질·장애대응"));
+  assert.ok(labels.includes("06 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("07 Java·Spring·JPA 사례"));
+  assert.ok(labels.includes("00 인프라·운영 로드맵"));
+  assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
+  assert.ok(labels.includes("00 AX 기반·조직 적용"));
+  assert.ok(labels.includes("01 AX 실행 루프·자동화"));
+  assert.ok(labels.includes("02 AX 확장·거버넌스"));
+  assert.ok(labels.includes("03 디자인 기반·사용자 흐름"));
+  assert.ok(labels.includes("04 디자인 실행·시스템 품질"));
+  assert.ok(labels.includes("05 실무 치트시트 모음"));
+  assert.ok(labels.includes("06 실무 준비·작업 루프"));
+  assert.ok(labels.includes("07 빌드·설정·릴리스 운영"));
+  assert.ok(labels.includes("00 인프라·운영 로드맵"));
+  assert.ok(labels.includes("01 서비스 요청 경로"));
+  assert.ok(labels.includes("02 VPC·Subnet·Routing·NAT"));
+  assert.ok(labels.includes("03 보안 경계"));
+  assert.ok(labels.includes("04 DNS·TLS·도메인 운영"));
+  assert.ok(labels.includes("05 VPN·Private Connectivity"));
+  assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
+  assert.ok(labels.includes("07 컨테이너·오케스트레이션·Health Check"));
+  assert.ok(labels.includes("08 IaC·변경관리·Drift"));
+  assert.ok(labels.includes("09 Observability·SLO"));
+  assert.ok(labels.includes("10 Incident Response·Rollback·DR"));
+  assert.ok(labels.includes("11 운영 체크리스트·면접 답변"));
+  assert.ok(labels.includes("12 AWS·Azure 실전 시나리오"));
+  assert.ok(!HANDBOOK_GROUPS.some((group) => group.key === "examples" || group.label === "예시 사례"));
   assert.ok(!labels.includes("개발핸드북"));
   assert.ok(!labels.includes("업무현황"));
   assert.ok(!labels.includes("탄소회계"));
@@ -181,17 +151,233 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   }
 });
 
+test("career menu consolidates interview and personalized career documents into eight items", async () => {
+  const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
+  const bundles = [
+    {
+      file: "career-strategy-foundation-handbook.html",
+      sources: ["기술면접 개요", "회사·직무별 면접 전략", "개인화 개요"],
+      evidence: ["BASE ANSWER FRAME", "핵심 질문 30선", "ANSWER FRAME"],
+    },
+    {
+      file: "career-frontend-interview-handbook.html",
+      sources: ["프론트엔드 면접", "JavaScript·TypeScript 면접", "프론트엔드 개발자 대응"],
+      evidence: ["REACT CONCURRENT SSR DRILL", "TYPESCRIPT ADVANCED BOUNDARY", "프론트엔드 개발자 대응"],
+    },
+    {
+      file: "career-backend-interview-handbook.html",
+      sources: ["백엔드·DB 면접", "Java·Spring·JPA 면접", "백엔드 전환 대응"],
+      evidence: ["TRANSACTION LOCK SCENARIO MATRIX", "SPRING JPA FAILURE PLAYBOOK", "백엔드 전환 대응"],
+    },
+    {
+      file: "career-core-deep-dive-handbook.html",
+      sources: ["CS 기본기 면접", "DB 심화 면접", "보안 심화 면접"],
+      evidence: ["Big-O", "MVCC", "OWASP"],
+    },
+    {
+      file: "career-infra-distributed-cloud-handbook.html",
+      sources: ["인프라·운영 면접", "분산 시스템 면접", "클라우드 기본 면접"],
+      evidence: ["DNS", "Outbox", "VPC"],
+    },
+    {
+      file: "career-system-project-handbook.html",
+      sources: ["시스템 설계 면접", "프로젝트 심층 면접", "풀스택 개발자 대응"],
+      evidence: ["SYSTEM DESIGN PRESSURE DRILL", "PROJECT EVIDENCE QUALITY RUBRIC", "풀스택 개발자 대응"],
+    },
+    {
+      file: "career-culture-collaboration-handbook.html",
+      sources: ["컬처·압박 면접", "Git·협업·코드리뷰 면접", "B2B·SaaS 어드민 대응"],
+      evidence: ["STAR", "Git", "B2B"],
+    },
+    {
+      file: "career-coding-test-handbook.html",
+      sources: ["코딩테스트 패턴"],
+      evidence: ["COMPLEXITY LIMIT TABLE", "INVARIANT PROOF DRILL", "REAL PROBLEM TRAINING LOOP"],
+    },
+  ];
+
+  assert.equal(careerGroup?.items.length, 8);
+  assert.deepEqual(
+    careerGroup?.items.map((item) => item.file),
+    bundles.map((bundle) => bundle.file),
+  );
+
+  for (const bundle of bundles) {
+    const source = await readFile(path.join("public", "handbook", bundle.file), "utf8");
+
+    for (const sourceLabel of bundle.sources) {
+      assert.match(source, new RegExp(`<h2>${sourceLabel}</h2>`), `${bundle.file} should include ${sourceLabel}`);
+    }
+
+    for (const marker of bundle.evidence) {
+      assert.match(source, new RegExp(marker, "i"), `${bundle.file} should preserve ${marker}`);
+    }
+  }
+});
+
+test("career bundles read as curated publications instead of raw merged drafts", async () => {
+  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+
+  for (const file of careerFiles) {
+    const source = await readFile(path.join("public", "handbook", file), "utf8");
+    const headerCount = source.match(/<header class="hero">/g)?.length ?? 0;
+    const ids = [...source.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+    const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+    assert.equal(headerCount, 1, `${file} should have exactly one page hero`);
+    assert.deepEqual([...new Set(duplicateIds)], [], `${file} should not contain duplicate ids`);
+    assert.doesNotMatch(source, /MERGED WITHOUT SUMMARY/, `${file} should not expose draft merge metadata`);
+    assert.doesNotMatch(source, /통합된 원문/, `${file} should not describe itself as raw source stitching`);
+    assert.doesNotMatch(source, /원문 내용을 축약하지 않고/, `${file} should not expose raw merge copy`);
+    assert.doesNotMatch(source, /<footer>/, `${file} should not contain nested source footers`);
+    assert.match(source, /CURATED INTERVIEW PATH/, `${file} should expose curated interview metadata`);
+    assert.match(source, /<span class="code">PART<\/span>/, `${file} should label sources as career parts`);
+  }
+});
+
+test("engineering handbook menu consolidates all source documents into eight items", async () => {
+  const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
+  const bundles = [
+    {
+      file: "engineering-frontend-core-handbook.html",
+      sources: ["프론트엔드 개요", "브라우저 동작 원리", "웹접근성"],
+      evidence: ["FRONTEND ENGINEERING HANDBOOK", "BROWSER RUNTIME HANDBOOK", "WEB ACCESSIBILITY HANDBOOK"],
+    },
+    {
+      file: "engineering-frontend-performance-handbook.html",
+      sources: ["번들링·렌더링·메모이제이션", "성능과 지표", "DevTools 사용법"],
+      evidence: ["RENDERING OPTIMIZATION HANDBOOK", "PERFORMANCE METRICS HANDBOOK", "DEVTOOLS HANDBOOK"],
+    },
+    {
+      file: "engineering-frontend-quality-handbook.html",
+      sources: ["보안 대응", "테스트 전략", "배포"],
+      evidence: ["FRONTEND SECURITY HANDBOOK", "FRONTEND TESTING HANDBOOK", "FRONTEND DEPLOYMENT HANDBOOK"],
+    },
+    {
+      file: "engineering-backend-core-handbook.html",
+      sources: ["백엔드 개요", "아키텍처 패턴", "인증과 보안"],
+      evidence: ["BACKEND ENGINEERING HANDBOOK", "ARCHITECTURE PATTERNS HANDBOOK", "AUTH &amp; SECURITY HANDBOOK"],
+    },
+    {
+      file: "engineering-data-handbook.html",
+      sources: ["DB", "PostgreSQL 예시", "Redis 예시"],
+      evidence: ["DATABASE HANDBOOK", "POSTGRESQL EXAMPLES", "REDIS EXAMPLES"],
+    },
+    {
+      file: "engineering-runtime-quality-handbook.html",
+      sources: ["비동기·메시지 큐", "테스트", "로깅·모니터링·장애대응"],
+      evidence: ["ASYNC &amp; MESSAGING HANDBOOK", "TESTING HANDBOOK", "OBSERVABILITY HANDBOOK"],
+    },
+    {
+      file: "engineering-platform-tools-handbook.html",
+      sources: ["Docker와 배포", "리눅스", "vi", "Docker 예시", "nginx 예시"],
+      evidence: ["DOCKER & DEPLOY HANDBOOK", "LINUX / SHELL COMMANDS HANDBOOK", "vi / VIM SHORTCUTS HANDBOOK", "DOCKER EXAMPLES", "NGINX EXAMPLES"],
+    },
+    {
+      file: "engineering-java-spring-handbook.html",
+      sources: ["Java 예시", "JPA 예시", "Spring Boot 예시"],
+      evidence: ["JAVA EXAMPLES", "JPA EXAMPLES", "SPRING BOOT 예시 사례"],
+    },
+  ];
+
+  assert.equal(engineeringGroup?.items.length, 8);
+  assert.deepEqual(
+    engineeringGroup?.items.map((item) => item.file),
+    bundles.map((bundle) => bundle.file),
+  );
+
+  for (const bundle of bundles) {
+    const source = await readFile(path.join("public", "handbook", bundle.file), "utf8");
+
+    for (const sourceLabel of bundle.sources) {
+      assert.match(source, new RegExp(`<h2>${sourceLabel}</h2>`), `${bundle.file} should include ${sourceLabel}`);
+    }
+
+    for (const marker of bundle.evidence) {
+      assert.match(source, new RegExp(marker), `${bundle.file} should preserve ${marker}`);
+    }
+  }
+});
+
+test("practice menu consolidates AX, design, cheat sheets, and guides into eight items", async () => {
+  const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
+  const bundles = [
+    {
+      file: "practice-ax-foundation-handbook.html",
+      sources: ["AX 개요", "AX 엔지니어 역량 모델", "AX 조직 적용 패턴"],
+      evidence: ["Model·Harness·Environment", "Workflow Mining", "조직 진단"],
+    },
+    {
+      file: "practice-ax-workflow-handbook.html",
+      sources: ["AX 업무 자동화 설계", "Context Engineering", "AI Harness Engineering", "Loop Engineering"],
+      evidence: ["후보 선정 매트릭스", "AUTOMATION HARNESS ARCHITECTURE", "Episode Package"],
+    },
+    {
+      file: "practice-ax-scale-governance-handbook.html",
+      sources: ["Multi-Agent Workflow", "검증과 평가", "AI Governance & Security", "AX 실전 적용 사례", "AX 실무 플레이북"],
+      evidence: ["Adversarial Verification", "Prompt Injection", "2-WEEK AX AUTOMATION SPRINT"],
+    },
+    {
+      file: "practice-design-foundation-handbook.html",
+      sources: ["디자인 개요", "UX 사고와 문제 정의", "정보구조와 내비게이션", "사용자 흐름과 태스크 설계"],
+      evidence: ["North Star Metric", "정보구조", "사용자 흐름"],
+    },
+    {
+      file: "practice-design-systems-handbook.html",
+      sources: ["UI 레이아웃과 시각 위계", "인터랙션 디자인 패턴", "폼과 입력 경험", "컴포넌트 패턴", "디자인 시스템과 토큰", "접근성과 인클루시브 디자인", "프로토타입과 사용성 테스트", "디자인 핸드오프와 QA"],
+      evidence: ["시각 위계", "Design Token", "핸드오프"],
+    },
+    {
+      file: "practice-cheat-sheets-handbook.html",
+      sources: ["Frontend", "Backend", "Database", "Network", "DevOps", "Linux", "Docker", "Interview", "Tools·Shortcuts·Commands"],
+      evidence: ["Red Flags", "Review Gate", "Failure Playbook", "Cmd\\+P", "curl -i", "docker logs"],
+    },
+    {
+      file: "practice-workflow-setup-handbook.html",
+      sources: ["풀스택 성장 로드맵", "개발자 FAQ·트러블슈팅", "새 PC 환경 설정", "실무 플레이북"],
+      evidence: ["실전 훈련 루프", "60문항 문제 해결 매트릭스", "SETUP-01", "DEV PLAYBOOK"],
+    },
+    {
+      file: "practice-build-release-handbook.html",
+      sources: ["Gradle 의존성·빌드", "패키지·버전 매니저", "환경변수·설정", "DB 스키마·시딩", "CI/CD 배포", "로그·커스텀 명령"],
+      evidence: ["Gradle", "패키지·버전 매니저", "CI/CD"],
+    },
+  ];
+
+  assert.equal(practiceGroup?.items.length, 8);
+  assert.deepEqual(
+    practiceGroup?.items.map((item) => item.file),
+    bundles.map((bundle) => bundle.file),
+  );
+
+  for (const bundle of bundles) {
+    const source = await readFile(path.join("public", "handbook", bundle.file), "utf8");
+
+    for (const sourceLabel of bundle.sources) {
+      assert.match(source, new RegExp(`<h2>${sourceLabel}</h2>`), `${bundle.file} should include ${sourceLabel}`);
+    }
+
+    for (const marker of bundle.evidence) {
+      assert.match(source, new RegExp(marker, "i"), `${bundle.file} should preserve ${marker}`);
+    }
+  }
+});
+
 test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {
   const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
-  const personalFiles = new Set(HANDBOOK_ITEMS.filter((item) => item.kind === "개인화").map((item) => item.file));
-  const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file));
+  const careerSourceFiles = new Set([...INTERVIEW_HANDBOOKS, ...PERSONAL_HANDBOOKS].map((item) => item.file));
+  const engineeringSourceFiles = new Set([...FRONTEND_HANDBOOKS, ...BACKEND_HANDBOOKS].map((item) => item.file));
+  const operationsSourceFiles = new Set([...NETWORK_HANDBOOKS, ...DEVOPS_HANDBOOKS].map((item) => item.file));
+  const practiceSourceFiles = new Set([...AX_HANDBOOKS, ...DESIGN_HANDBOOKS, ...CHEAT_SHEETS, ...PRACTICAL_GUIDES].map((item) => item.file));
+  const personalSourceFiles = new Set(PERSONAL_HANDBOOKS.map((item) => item.file));
+  const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file) && !careerSourceFiles.has(file) && !engineeringSourceFiles.has(file) && !operationsSourceFiles.has(file) && !practiceSourceFiles.has(file));
 
   assert.deepEqual(extraFiles, []);
 
   for (const file of publicFiles) {
     assert.doesNotMatch(file, /carbon|lca|vcm/i);
-    if (personalFiles.has(file)) {
+    if (personalSourceFiles.has(file)) {
       continue;
     }
 
@@ -268,7 +454,7 @@ test("each public handbook nav links all main sections", async () => {
 
 test("selected handbook content is positioned as a neutral full-stack growth guide", async () => {
   const sources = await Promise.all(
-    HANDBOOK_ITEMS.filter((item) => item.kind !== "개인화").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+    HANDBOOK_ITEMS.filter((item) => item.kind !== "개인화" && item.kind !== "면접·커리어").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
   );
   const source = sources.join("\n");
   const roadmap = await readFile("public/handbook/fullstack-growth-roadmap-handbook.html", "utf8");
@@ -331,14 +517,18 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /메뉴별 목적/);
   assert.match(homeSource, /핸드북 사용법/);
   assert.match(homeSource, /실전 루프/);
+  assert.match(homeSource, /면접·커리어/);
+  assert.match(homeSource, /개발 핸드북/);
+  assert.match(homeSource, /인프라·운영/);
+  assert.match(homeSource, /AX·디자인·실무/);
   assert.match(homeSource, /프론트엔드/);
   assert.match(homeSource, /백엔드/);
   assert.match(homeSource, /네트워크 인프라/);
   assert.match(homeSource, /DevOps/);
   assert.match(homeSource, /AX/);
   assert.match(homeSource, /디자인/);
-  assert.match(homeSource, /예시 사례/);
-  assert.match(homeSource, /실무 가이드/);
+  assert.match(homeSource, /백엔드 예시/);
+  assert.match(homeSource, /Cheat Sheet/);
   assert.match(homeSource, /Plan → Act → Verify → Reflect/);
   assert.doesNotMatch(homeSource, /시니어급 성장/);
 });
@@ -419,6 +609,8 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(overview, /흔한 오답/);
   assert.match(overview, /모의면접 체크리스트/);
   assert.match(overview, /답변 캘리브레이션/);
+  assert.match(overview, /CAREER STRATEGY EVALUATION RUBRIC/);
+  assert.match(overview, /INTERVIEW PRESSURE SIMULATION/);
   assert.match(overview, /나쁜 답변/);
   assert.match(overview, /개선 답변/);
   assert.match(overview, /좋은 답변/);
@@ -430,6 +622,10 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
     assert.match(source, /압박 꼬리질문/);
     assert.match(source, /흔한 오답/);
   }
+
+  assert.match(frontend, /FRONTEND CAUSAL MODEL/);
+  assert.match(backend, /BACKEND DB CAUSAL MODEL/);
+  assert.match(distributed, /DISTRIBUTED CAUSAL MODEL/);
 
   assert.match(systemDesign, /화이트보드 진행 순서/);
   assert.match(systemDesign, /요구사항 정리/);
@@ -447,6 +643,11 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(systemDesign, /active-active/);
   assert.match(systemDesign, /RPO\/RTO/);
   assert.match(systemDesign, /load shedding/);
+  assert.match(systemDesign, /SYSTEM DESIGN REVIEW GATE/);
+  assert.match(systemDesign, /TRADE-OFF MATRIX/);
+  assert.match(systemDesign, /SYSTEM DESIGN PRESSURE DRILL/);
+  assert.match(systemDesign, /SYSTEM DESIGN CAUSAL MODEL/);
+  assert.match(systemDesign, /EXPERT SYSTEM DESIGN CASE/);
 
   assert.match(project, /프로젝트 답변 템플릿/);
   assert.match(project, /문제 → 제약 → 선택지 → 선택 이유 → 실패\/트레이드오프 → 검증 결과/);
@@ -456,10 +657,14 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(project, /Data Grid 프로젝트/);
   assert.match(project, /API 전환 프로젝트/);
   assert.match(project, /React Flow 프로젝트/);
+  assert.match(project, /PROJECT DEPTH LEDGER/);
+  assert.match(project, /PROJECT EVIDENCE QUALITY RUBRIC/);
+  assert.match(project, /PROJECT CAUSAL MODEL/);
 
   assert.match(behavioral, /압박 질문 대응 루프/);
   assert.match(behavioral, /인정 → 경계 설정 → 검증 계획/);
   assert.match(behavioral, /신뢰를 잃는 답변/);
+  assert.match(behavioral, /STAR ANSWER QUALITY/);
 
   assert.match(jsTs, /JavaScript·TypeScript 면접/);
   assert.match(jsTs, /execution context/);
@@ -470,6 +675,9 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(jsTs, /structural typing/);
   assert.match(jsTs, /unknown vs any/);
   assert.match(jsTs, /conditional type/);
+  assert.match(jsTs, /JS RUNTIME FAILURE MAP/);
+  assert.match(jsTs, /TS TYPE SAFETY BOUNDARY/);
+  assert.match(jsTs, /TYPESCRIPT ADVANCED BOUNDARY/);
 
   assert.match(javaSpring, /Java·Spring·JPA 면접/);
   assert.match(javaSpring, /JVM/);
@@ -482,6 +690,12 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(javaSpring, /persistence context/);
   assert.match(javaSpring, /dirty checking/);
   assert.match(javaSpring, /OSIV/);
+  assert.match(javaSpring, /SPRING PROXY FAILURE MATRIX/);
+  assert.match(javaSpring, /JPA QUERY FAILURE MATRIX/);
+  assert.match(javaSpring, /JAVA OPERABILITY EVIDENCE/);
+  assert.match(javaSpring, /SPRING JPA FAILURE PLAYBOOK/);
+  assert.match(javaSpring, /SPRING JPA CAUSAL MODEL/);
+  assert.match(javaSpring, /EXPERT SPRING DEBUGGING CASE/);
 
   assert.match(cs, /CS 기본기 면접/);
   assert.match(cs, /Big-O/);
@@ -492,6 +706,12 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(cs, /process vs thread/);
   assert.match(cs, /context switching/);
   assert.match(cs, /file descriptor/);
+  assert.match(cs, /CS SYSTEM TRACE/);
+  assert.match(cs, /CS DEPTH RUBRIC/);
+  assert.match(cs, /CS NETWORK MEMORY DRILL/);
+  assert.match(cs, /CONCURRENCY INVARIANT CHECK/);
+  assert.match(cs, /OS NETWORK INTERNALS DRILL/);
+  assert.match(cs, /CS CAUSAL MODEL/);
 
   assert.match(security, /보안 심화 면접/);
   assert.match(security, /OWASP Top 10/);
@@ -501,6 +721,9 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(security, /refresh token rotation/);
   assert.match(security, /bcrypt/);
   assert.match(security, /audit log/);
+  assert.match(security, /SECURITY ATTACK PATH ANSWER/);
+  assert.match(security, /EXPLOIT CHAIN VALIDATION/);
+  assert.match(security, /SECURITY CAUSAL MODEL/);
 
   assert.match(dbDeep, /DB 심화 면접/);
   assert.match(dbDeep, /MVCC/);
@@ -511,6 +734,9 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(dbDeep, /WAL/);
   assert.match(dbDeep, /replication lag/);
   assert.match(dbDeep, /zero-downtime migration/);
+  assert.match(dbDeep, /MVCC INDEX PLAN DEEP DIVE/);
+  assert.match(dbDeep, /DB CAUSAL MODEL/);
+  assert.match(dbDeep, /EXPERT DB PLAN CASE/);
 
   assert.match(cloud, /클라우드 기본 면접/);
   assert.match(cloud, /VPC/);
@@ -519,6 +745,8 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(cloud, /IAM/);
   assert.match(cloud, /managed DB/);
   assert.match(cloud, /cost estimation/);
+  assert.match(cloud, /K8S CLOUD SENIOR DRILL/);
+  assert.match(cloud, /CLOUD CAUSAL MODEL/);
 
   assert.match(collaboration, /Git·협업·코드리뷰 면접/);
   assert.match(collaboration, /rebase vs merge/);
@@ -527,6 +755,10 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(collaboration, /ADR/);
   assert.match(collaboration, /technical debt/);
   assert.match(collaboration, /feature flag/);
+  assert.match(collaboration, /CHANGE MANAGEMENT ANSWER/);
+  assert.match(collaboration, /REVIEW COMMENT QUALITY/);
+  assert.match(collaboration, /REVIEW COMMENT EXAMPLES/);
+  assert.match(collaboration, /COLLABORATION CAUSAL MODEL/);
 
   assert.match(coding, /코딩테스트 패턴/);
   assert.match(coding, /투 포인터/);
@@ -534,6 +766,15 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(coding, /이분탐색/);
   assert.match(coding, /DP 기본/);
   assert.match(coding, /시간복잡도 설명 템플릿/);
+  assert.match(coding, /ALGORITHM EXPLANATION RUBRIC/);
+  assert.match(coding, /COMPLEXITY LIMIT TABLE/);
+  assert.match(coding, /INVARIANT PROOF DRILL/);
+  assert.match(coding, /DP GREEDY GRAPH DEEPENING/);
+  assert.match(coding, /REAL PROBLEM TRAINING LOOP/);
+  assert.match(coding, /ALGORITHM CAUSAL MODEL/);
+
+  assert.match(frontend, /EXPERT FRONTEND RENDERING MODEL/);
+  assert.match(distributed, /EXPERT DISTRIBUTED CONSISTENCY CASE/);
 
   assert.match(strategy, /회사·직무별 면접 전략/);
   assert.match(strategy, /SI\/SM/);
@@ -542,6 +783,75 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(strategy, /핀테크/);
   assert.match(strategy, /대규모 트래픽/);
   assert.match(strategy, /백엔드 전환 포지션/);
+});
+
+test("consolidated career interview bundles preserve advanced concept depth markers", async () => {
+  const documents = await Promise.all([
+    readFile("public/handbook/career-frontend-interview-handbook.html", "utf8"),
+    readFile("public/handbook/career-backend-interview-handbook.html", "utf8"),
+    readFile("public/handbook/career-core-deep-dive-handbook.html", "utf8"),
+    readFile("public/handbook/career-infra-distributed-cloud-handbook.html", "utf8"),
+    readFile("public/handbook/career-system-project-handbook.html", "utf8"),
+    readFile("public/handbook/career-culture-collaboration-handbook.html", "utf8"),
+    readFile("public/handbook/career-coding-test-handbook.html", "utf8"),
+  ]);
+  const source = documents.join("\n");
+
+  assert.match(source, /CS SYSTEM TRACE/);
+  assert.match(source, /CS DEPTH RUBRIC/);
+  assert.match(source, /CS NETWORK MEMORY DRILL/);
+  assert.match(source, /OS NETWORK INTERNALS DRILL/);
+  assert.match(source, /CS CAUSAL MODEL/);
+  assert.match(source, /CONCURRENCY INVARIANT CHECK/);
+  assert.match(source, /JS RUNTIME FAILURE MAP/);
+  assert.match(source, /TS TYPE SAFETY BOUNDARY/);
+  assert.match(source, /TYPESCRIPT ADVANCED BOUNDARY/);
+  assert.match(source, /REACT CONCURRENT SSR DRILL/);
+  assert.match(source, /FRONTEND SECURITY CACHE DRILL/);
+  assert.match(source, /FRONTEND CAUSAL MODEL/);
+  assert.match(source, /EXPERT FRONTEND RENDERING MODEL/);
+  assert.match(source, /TRANSACTION LOCK SCENARIO MATRIX/);
+  assert.match(source, /INDEX PLAN OPERATIONS DRILL/);
+  assert.match(source, /BACKEND DB CAUSAL MODEL/);
+  assert.match(source, /SPRING PROXY FAILURE MATRIX/);
+  assert.match(source, /JPA QUERY FAILURE MATRIX/);
+  assert.match(source, /JAVA OPERABILITY EVIDENCE/);
+  assert.match(source, /SPRING JPA FAILURE PLAYBOOK/);
+  assert.match(source, /SPRING JPA CAUSAL MODEL/);
+  assert.match(source, /EXPERT SPRING DEBUGGING CASE/);
+  assert.match(source, /MVCC INDEX PLAN DEEP DIVE/);
+  assert.match(source, /DB CAUSAL MODEL/);
+  assert.match(source, /EXPERT DB PLAN CASE/);
+  assert.match(source, /EXPLOIT CHAIN VALIDATION/);
+  assert.match(source, /SECURITY CAUSAL MODEL/);
+  assert.match(source, /CONSISTENCY FAILURE MATRIX/);
+  assert.match(source, /DISTRIBUTED INCIDENT ANSWER/);
+  assert.match(source, /K8S CLOUD SENIOR DRILL/);
+  assert.match(source, /DISTRIBUTED CONSISTENCY SENIOR DRILL/);
+  assert.match(source, /DISTRIBUTED CAUSAL MODEL/);
+  assert.match(source, /EXPERT DISTRIBUTED CONSISTENCY CASE/);
+  assert.match(source, /SYSTEM DESIGN REVIEW GATE/);
+  assert.match(source, /TRADE-OFF MATRIX/);
+  assert.match(source, /SYSTEM DESIGN PRESSURE DRILL/);
+  assert.match(source, /SYSTEM DESIGN CAUSAL MODEL/);
+  assert.match(source, /EXPERT SYSTEM DESIGN CASE/);
+  assert.match(source, /CHANGE MANAGEMENT ANSWER/);
+  assert.match(source, /REVIEW COMMENT QUALITY/);
+  assert.match(source, /REVIEW COMMENT EXAMPLES/);
+  assert.match(source, /COLLABORATION CAUSAL MODEL/);
+  assert.match(source, /SECURITY ATTACK PATH ANSWER/);
+  assert.match(source, /INFRA FAILURE TRACE/);
+  assert.match(source, /ALGORITHM EXPLANATION RUBRIC/);
+  assert.match(source, /COMPLEXITY LIMIT TABLE/);
+  assert.match(source, /INVARIANT PROOF DRILL/);
+  assert.match(source, /DP GREEDY GRAPH DEEPENING/);
+  assert.match(source, /REAL PROBLEM TRAINING LOOP/);
+  assert.match(source, /ALGORITHM CAUSAL MODEL/);
+  assert.match(source, /PROJECT DEPTH LEDGER/);
+  assert.match(source, /PROJECT EVIDENCE QUALITY RUBRIC/);
+  assert.match(source, /PROJECT CAUSAL MODEL/);
+  assert.match(source, /STAR ANSWER QUALITY/);
+  assert.match(source, /B2B SAAS DOMAIN DEPTH/);
 });
 
 test("personalized handbook maps career evidence to four target positions", async () => {
@@ -578,6 +888,8 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(frontend, /대체 증거/);
   assert.match(frontend, /커밋 수/);
   assert.match(frontend, /반복 개선 횟수/);
+  assert.match(frontend, /REACT CONCURRENT SSR DRILL/);
+  assert.match(frontend, /FRONTEND SECURITY CACHE DRILL/);
 
   assert.match(fullstack, /풀스택 개발자 대응/);
   assert.match(fullstack, /API 계약/);
@@ -588,6 +900,8 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(fullstack, /파일 업로드\/다운로드/);
   assert.match(fullstack, /강점 전환 문장/);
   assert.match(fullstack, /경험을 서버 협업 역량으로 전환/);
+  assert.match(fullstack, /SYSTEM DESIGN PRESSURE DRILL/);
+  assert.match(fullstack, /PROJECT EVIDENCE QUALITY RUBRIC/);
 
   assert.match(backendTransition, /백엔드 전환 대응/);
   assert.match(backendTransition, /직접 경험/);
@@ -606,18 +920,19 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(b2bAdmin, /Excel\/PDF/);
   assert.match(b2bAdmin, /감사 가능성/);
   assert.match(b2bAdmin, /워크플로우/);
+  assert.match(b2bAdmin, /B2B SAAS DOMAIN DEPTH/);
 });
 
-test("catalog items have source files, generated modules, and loader entries", async () => {
+test("catalog items have source files, generated modules, and catalog-derived loader entries", async () => {
   const loaderSource = await readFile("src/handbook/documentLoaders.ts", "utf8");
+
+  assert.match(loaderSource, /import\s+\{\s*HANDBOOK_ITEMS\s*\}\s+from\s+"\.\/catalog\.mjs"/);
+  assert.match(loaderSource, /import\.meta\.glob/);
+  assert.doesNotMatch(loaderSource, /"home":\s*\(\)\s*=>\s*import\("\.\/documents\/home"\)/);
 
   for (const item of HANDBOOK_ITEMS) {
     await access(path.join("public", "handbook", item.file));
     await access(path.join("src", "handbook", "documents", `${item.id}.ts`));
-    assert.match(
-      loaderSource,
-      new RegExp(`${JSON.stringify(item.id)}:\\s*\\(\\)\\s*=>\\s*import\\("\\./documents/${item.id}"\\)`),
-    );
   }
 });
 
@@ -670,7 +985,7 @@ test("every handbook item has a rendered practical example", async () => {
     );
     assert.match(
       examplesSource,
-      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|network|devops|ax|design|examples|practical)"`),
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|network|devops|ax|design|practical)"`),
       `${item.id} should have a practical example lens`,
     );
   }
@@ -686,6 +1001,7 @@ test("cheat sheets include professional review gates and failure playbooks", asy
     "linux-cheat-sheet.html",
     "devops-cheat-sheet.html",
     "interview-cheat-sheet.html",
+    "tools-shortcuts-commands-cheat-sheet.html",
   ];
 
   const sources = await Promise.all(
@@ -714,6 +1030,14 @@ test("cheat sheets include professional review gates and failure playbooks", asy
   assert.match(combined, /EXPLAIN \(ANALYZE, BUFFERS\)/);
   assert.match(combined, /lsof \+L1/);
   assert.match(combined, /PID 1/);
+  assert.match(combined, /TOOLING INCIDENT TRIAGE/);
+  assert.match(combined, /VS Code/);
+  assert.match(combined, /Postman/);
+  assert.match(combined, /Cmd\+P/);
+  assert.match(combined, /Ctrl\+P/);
+  assert.match(combined, /git status --short/);
+  assert.match(combined, /curl -i/);
+  assert.match(combined, /docker logs -f/);
 });
 
 test("generateHandbookDocuments leaves existing output intact when source extraction fails", async () => {
@@ -753,6 +1077,15 @@ test("app exposes an accessible fixed bottom document navigation bar", async () 
   assert.match(appSource, /aria-label=\{nextItem \? `다음 항목: \$\{nextItem\.label\}` : "다음 항목 없음"\}/);
   assert.match(appSource, /aria-label="맨 위로 이동"/);
   assert.match(appSource, /mobileMenuOpen/);
+  assert.match(appSource, /activeIdStorageKey/);
+  assert.match(appSource, /scrollPositionStoragePrefix/);
+  assert.match(appSource, /getStoredActiveId/);
+  assert.match(appSource, /getStoredScrollPosition/);
+  assert.match(appSource, /saveScrollPosition/);
+  assert.match(appSource, /pagehide/);
+  assert.match(appSource, /pendingScrollRestoreIdRef/);
+  assert.match(appSource, /restoreSavedPosition/);
+  assert.match(appSource, /<HandbookPage item=\{activeItem\} onReady=\{restoreSavedPosition\} \/>/);
   assert.match(appSource, /className="mobile-menu-toggle"/);
   assert.match(appSource, /aria-controls="mobile-handbook-menu"/);
   assert.match(appSource, /aria-label=\{mobileMenuOpen \? "전체 메뉴 닫기" : "전체 메뉴 열기"\}/);
@@ -770,6 +1103,7 @@ test("app exposes an accessible fixed bottom document navigation bar", async () 
   assert.match(appSource, /setActiveId\(item\.id\)/);
   assert.match(appSource, /window\.scrollY > 320/);
   assert.match(appSource, /window\.scrollTo\(\{\s*top: 0,\s*behavior: scrollBehavior/s);
+  assert.match(appSource, /window\.scrollTo\(\{\s*top: storedPosition,\s*behavior: "auto"/s);
   assert.match(cssSource, /\.bottom-doc-nav/);
   assert.match(cssSource, /position: fixed/);
   assert.match(cssSource, /bottom: 0/);
@@ -787,6 +1121,15 @@ test("app exposes an accessible fixed bottom document navigation bar", async () 
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*grid-template-columns: 46px minmax\(0, 1fr\) 46px minmax\(0, 1fr\)/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*max-height: min\(62dvh, calc\(100dvh - 146px\)\)/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.doc-nav-label\s*\{[\s\S]*display: none/s);
+});
+
+test("handbook page notifies the app after document content renders for scroll restoration", async () => {
+  const pageSource = await readFile("src/handbook/HandbookPage.tsx", "utf8");
+
+  assert.match(pageSource, /onReady\?: \(itemId: string\) => void/);
+  assert.match(pageSource, /export function HandbookPage\(\{ item, onReady \}/);
+  assert.match(pageSource, /onReady\?\.\(item\.id\)/);
+  assert.match(pageSource, /\[document, item\.id, onReady\]/);
 });
 
 test("app uses the Dev Handbook title with fixed top navigation", async () => {
@@ -911,21 +1254,14 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
     readFile("public/handbook/ax-practical-playbook-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
-  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "ax").items.map((item) => item.label);
+  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "practice").items
+    .filter((item) => item.id.startsWith("practice-ax-"))
+    .map((item) => item.label);
 
   assert.deepEqual(axLabels, [
-    "00 AX 개요",
-    "01 AX 엔지니어 역량 모델",
-    "02 AX 조직 적용 패턴",
-    "03 AX 업무 자동화 설계",
-    "04 Context Engineering",
-    "05 AI Harness Engineering",
-    "06 Loop Engineering",
-    "07 검증과 평가",
-    "08 Multi-Agent Workflow",
-    "09 AI Governance & Security",
-    "10 AX 실전 적용 사례",
-    "11 AX 실무 플레이북",
+    "00 AX 기반·조직 적용",
+    "01 AX 실행 루프·자동화",
+    "02 AX 확장·거버넌스",
   ]);
   assert.match(source, /Model·Harness·Environment/);
   assert.match(source, /Workflow Mining/);
@@ -1024,54 +1360,111 @@ test("backend handbook includes practical senior-level backend guidance without 
   assert.match(source, /USE/);
   assert.match(source, /high-cardinality/);
   assert.match(source, /SLO burn rate/);
+  assert.match(source, /REQUEST PATH/);
+  assert.match(source, /transaction boundary/);
+  assert.match(source, /same key에 다른 payload|같은 key에 다른 payload/);
+  assert.match(source, /ATOMIC STOCK DECREASE/);
+  assert.match(source, /SLOW REQUEST TRIAGE/);
+  assert.match(source, /connection acquisition time/);
+  assert.match(source, /면접 답변 심화 프레임/);
+  assert.match(source, /LOCK TRIAGE QUESTION/);
+  assert.match(source, /EXPLAIN ANALYZE CHECKLIST/);
+  assert.match(source, /EXPAND-CONTRACT/);
+  assert.match(source, /idle in transaction/);
 });
 
-test("network handbook follows an essential infrastructure roadmap", async () => {
+test("java spring backend examples explain JPA and Spring proxy internals", async () => {
   const docs = await Promise.all([
-    readFile("public/handbook/network-infrastructure-handbook.html", "utf8"),
-    readFile("public/handbook/network-vpc-subnet-cidr-handbook.html", "utf8"),
-    readFile("public/handbook/network-public-private-routing-handbook.html", "utf8"),
-    readFile("public/handbook/network-routing-nat-gateway-handbook.html", "utf8"),
-    readFile("public/handbook/network-firewall-acg-nacl-handbook.html", "utf8"),
-    readFile("public/handbook/network-dns-name-resolution-handbook.html", "utf8"),
-    readFile("public/handbook/network-ipsec-vpn-handbook.html", "utf8"),
-    readFile("public/handbook/network-cloud-vpn-gateway-handbook.html", "utf8"),
-    readFile("public/handbook/network-debugging-tools-handbook.html", "utf8"),
-    readFile("public/handbook/network-vpn-troubleshooting-handbook.html", "utf8"),
-    readFile("public/handbook/network-vpn-checklist-handbook.html", "utf8"),
+    readFile("public/handbook/jpa-examples.html", "utf8"),
+    readFile("public/handbook/spring-boot-examples.html", "utf8"),
+    readFile("public/handbook/engineering-java-spring-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
-  const networkLabels = HANDBOOK_GROUPS.find((group) => group.key === "network").items.map((item) => item.label);
 
-  assert.deepEqual(networkLabels, [
-    "00 로드맵과 패킷 사고",
-    "01 IP·CIDR·서브넷 설계",
-    "02 VPC와 Public·Private 배치",
-    "03 Route Table·NAT·IGW",
-    "04 DNS와 이름 해석",
-    "05 보안 경계: SG·NACL·방화벽",
-    "06 클라우드 VPN Gateway",
-    "07 IPsec VPN 협상 원리",
-    "08 L3-L7 디버깅 도구",
-    "09 VPN 장애 트러블슈팅",
-    "10 구축·운영 체크리스트",
+  assert.match(source, /프록시·flush·연관관계 심화/);
+  assert.match(source, /FLUSH TIMING/);
+  assert.match(source, /LazyInitializationException/);
+  assert.match(source, /fetch join과 pagination/);
+  assert.match(source, /JPA DEPTH ANSWER/);
+  assert.match(source, /프록시·트랜잭션·테스트 심화/);
+  assert.match(source, /TRANSACTION PROXY FLOW/);
+  assert.match(source, /self-invocation/);
+  assert.match(source, /rollbackFor/);
+  assert.match(source, /SPRING DEPTH ANSWER/);
+});
+
+test("operations handbook follows a service operations lifecycle roadmap", async () => {
+  const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
+
+  assert.deepEqual(operationsGroup?.items.map((item) => item.label), [
+    "00 인프라·운영 로드맵",
+    "01 서비스 요청 경로",
+    "02 VPC·Subnet·Routing·NAT",
+    "03 보안 경계",
+    "04 DNS·TLS·도메인 운영",
+    "05 VPN·Private Connectivity",
+    "06 CI/CD·Artifact·Environment",
+    "07 컨테이너·오케스트레이션·Health Check",
+    "08 IaC·변경관리·Drift",
+    "09 Observability·SLO",
+    "10 Incident Response·Rollback·DR",
+    "11 운영 체크리스트·면접 답변",
+    "12 AWS·Azure 실전 시나리오",
   ]);
-  assert.match(source, /필수지식 로드맵/);
-  assert.match(source, /RFC 1918/);
-  assert.match(source, /reserved IP/);
-  assert.match(source, /route table/);
-  assert.match(source, /return path/);
-  assert.match(source, /Longest Prefix Match/);
-  assert.match(source, /stateful/);
-  assert.match(source, /stateless/);
-  assert.match(source, /split-horizon DNS/);
-  assert.match(source, /TTL/);
-  assert.match(source, /Phase 1/);
-  assert.match(source, /Phase 2/);
-  assert.match(source, /L3/);
-  assert.match(source, /L4/);
-  assert.match(source, /L7/);
-  assert.match(source, /Case study/);
+
+  const docs = await Promise.all(
+    operationsGroup.items.map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+  );
+  const source = docs.join("\n");
+
+  for (const [index, doc] of docs.entries()) {
+    const item = operationsGroup.items[index];
+    const lineCount = doc.split("\n").length;
+
+    assert.ok(lineCount >= 100, `${item.file} should be a full handbook, not a short summary`);
+    assert.match(doc, /<div class="shell">/, `${item.file} should use the standard handbook shell`);
+    assert.match(doc, /<div class="nav-brand">OPERATIONS · /, `${item.file} should use the standard nav brand`);
+    assert.match(doc, /<div class="nav-title">/, `${item.file} should use the standard nav title`);
+    assert.match(doc, /<div class="hero-serial">/, `${item.file} should use the standard hero serial`);
+    assert.match(doc, /class="hero-sub"/, `${item.file} should use the standard hero subtitle`);
+    assert.match(doc, /<div class="ch-head">/, `${item.file} should use standard chapter headers`);
+    assert.match(doc, /<footer>/, `${item.file} should include the standard document footer`);
+    assert.match(doc, /개념 모델/, `${item.file} should include a concept model`);
+    assert.match(doc, /실무 체크리스트/, `${item.file} should include an operational checklist`);
+    assert.match(doc, /장애\/운영 시나리오/, `${item.file} should include an operations scenario`);
+    assert.match(doc, /자주 틀리는 판단/, `${item.file} should include common failure signals`);
+    assert.match(doc, /면접 답변 템플릿/, `${item.file} should include an interview answer template`);
+  }
+
+  assert.match(source, /DNS → CDN\/WAF → Load Balancer → App → DB/);
+  assert.match(source, /TLS/);
+  assert.match(source, /인증서/);
+  assert.match(source, /CDN/);
+  assert.match(source, /WAF/);
+  assert.match(source, /Load Balancer/);
+  assert.match(source, /health check/);
+  assert.match(source, /ingress/);
+  assert.match(source, /egress/);
+  assert.match(source, /Private Endpoint/);
+  assert.match(source, /SLO burn rate/);
+  assert.match(source, /Incident Commander/);
+  assert.match(source, /rollback/);
+  assert.match(source, /RPO\/RTO/);
+  assert.match(source, /DR/);
+  assert.match(source, /runbook/i);
+  assert.match(source, /운영 인수/);
+  assert.match(source, /Route 53/);
+  assert.match(source, /CloudFront/);
+  assert.match(source, /Application Load Balancer/);
+  assert.match(source, /ECS Fargate/);
+  assert.match(source, /RDS/);
+  assert.match(source, /Azure DNS/);
+  assert.match(source, /Azure Front Door/);
+  assert.match(source, /Application Gateway/);
+  assert.match(source, /AKS/);
+  assert.match(source, /Azure SQL/);
+  assert.match(source, /Key Vault/);
+  assert.match(source, /Private Link/);
 });
 
 test("design handbook includes practical senior-level product design guidance", async () => {
@@ -1128,4 +1521,26 @@ test("serial cards expose lucide-powered copy buttons", async () => {
   assert.match(buttonSource, /aria-label=\{copied \? "복사됨" : "명령어 복사"\}/);
   assert.match(cssSource, /\.serial-card-copy/);
   assert.match(cssSource, /position: absolute/);
+});
+
+test("practice cheat sheet inline code exposes copy buttons for commands and shortcuts", async () => {
+  const [pageSource, buttonSource, cssSource] = await Promise.all([
+    readFile("src/handbook/HandbookPage.tsx", "utf8"),
+    readFile("src/handbook/InlineCodeCopyButton.tsx", "utf8"),
+    readFile("src/handbook/handbook.css", "utf8"),
+  ]);
+
+  assert.match(pageSource, /InlineCodeCopyButton/);
+  assert.match(pageSource, /itemId === "practice-cheat-sheets"/);
+  assert.match(pageSource, /main\.querySelectorAll<HTMLElement>\("code"\)/);
+  assert.match(pageSource, /!code\.closest\("pre"\)/);
+  assert.match(pageSource, /!code\.closest\("\.serial-card"\)/);
+  assert.match(pageSource, /inline-code-copy-mount/);
+  assert.match(buttonSource, /from "lucide-react"/);
+  assert.match(buttonSource, /Copy/);
+  assert.match(buttonSource, /Check/);
+  assert.match(buttonSource, /navigator\.clipboard\.writeText/);
+  assert.match(buttonSource, /aria-label=\{label\}/);
+  assert.match(cssSource, /\.inline-code-copy-mount/);
+  assert.match(cssSource, /\.inline-code-copy/);
 });

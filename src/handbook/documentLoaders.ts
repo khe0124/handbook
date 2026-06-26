@@ -1,120 +1,31 @@
+import { HANDBOOK_ITEMS } from "./catalog.mjs";
 import type { HandbookDocumentContent } from "./types";
+
+type HandbookItem = {
+  id: string;
+};
+
+type HandbookDocumentModule = {
+  default: HandbookDocumentContent;
+};
+
+type HandbookDocumentLoader = () => Promise<HandbookDocumentModule>;
+
+const documentModules = import.meta.glob<HandbookDocumentModule>("./documents/*.ts");
+
+function getDocumentLoader(id: string): HandbookDocumentLoader {
+  const loader = documentModules[`./documents/${id}.ts`];
+
+  if (!loader) {
+    return () => Promise.reject(new Error(`Missing handbook document module: ${id}`));
+  }
+
+  return loader;
+}
 
 export const HANDBOOK_DOCUMENT_LOADERS: Record<
   string,
-  () => Promise<{ default: HandbookDocumentContent }>
-> = {
-  "home": () => import("./documents/home"),
-  "interview": () => import("./documents/interview"),
-  "interview-frontend": () => import("./documents/interview-frontend"),
-  "interview-backend-db": () => import("./documents/interview-backend-db"),
-  "interview-infra-ops": () => import("./documents/interview-infra-ops"),
-  "interview-distributed": () => import("./documents/interview-distributed"),
-  "interview-system-design": () => import("./documents/interview-system-design"),
-  "interview-project": () => import("./documents/interview-project"),
-  "interview-behavioral": () => import("./documents/interview-behavioral"),
-  "interview-javascript-typescript": () => import("./documents/interview-javascript-typescript"),
-  "interview-java-spring-jpa": () => import("./documents/interview-java-spring-jpa"),
-  "interview-cs-fundamentals": () => import("./documents/interview-cs-fundamentals"),
-  "interview-security-deep-dive": () => import("./documents/interview-security-deep-dive"),
-  "interview-db-deep-dive": () => import("./documents/interview-db-deep-dive"),
-  "interview-cloud-fundamentals": () => import("./documents/interview-cloud-fundamentals"),
-  "interview-git-collaboration": () => import("./documents/interview-git-collaboration"),
-  "interview-coding-test-patterns": () => import("./documents/interview-coding-test-patterns"),
-  "interview-company-role-strategy": () => import("./documents/interview-company-role-strategy"),
-  "personal-overview": () => import("./documents/personal-overview"),
-  "personal-frontend": () => import("./documents/personal-frontend"),
-  "personal-fullstack": () => import("./documents/personal-fullstack"),
-  "personal-backend-transition": () => import("./documents/personal-backend-transition"),
-  "personal-b2b-saas-admin": () => import("./documents/personal-b2b-saas-admin"),
-  "backend": () => import("./documents/backend"),
-  "db": () => import("./documents/db"),
-  "auth-security": () => import("./documents/auth-security"),
-  "architecture": () => import("./documents/architecture"),
-  "async-messaging": () => import("./documents/async-messaging"),
-  "testing": () => import("./documents/testing"),
-  "docker-deploy": () => import("./documents/docker-deploy"),
-  "observability": () => import("./documents/observability"),
-  "linux": () => import("./documents/linux"),
-  "vi": () => import("./documents/vi"),
-  "frontend": () => import("./documents/frontend"),
-  "frontend-browser": () => import("./documents/frontend-browser"),
-  "frontend-accessibility": () => import("./documents/frontend-accessibility"),
-  "frontend-rendering": () => import("./documents/frontend-rendering"),
-  "frontend-performance": () => import("./documents/frontend-performance"),
-  "frontend-devtools": () => import("./documents/frontend-devtools"),
-  "frontend-security": () => import("./documents/frontend-security"),
-  "frontend-testing": () => import("./documents/frontend-testing"),
-  "frontend-deployment": () => import("./documents/frontend-deployment"),
-  "network": () => import("./documents/network"),
-  "network-vpc": () => import("./documents/network-vpc"),
-  "network-routing": () => import("./documents/network-routing"),
-  "network-nat-routing": () => import("./documents/network-nat-routing"),
-  "network-dns": () => import("./documents/network-dns"),
-  "network-firewall": () => import("./documents/network-firewall"),
-  "network-cloud-vpn": () => import("./documents/network-cloud-vpn"),
-  "network-ipsec": () => import("./documents/network-ipsec"),
-  "network-debugging": () => import("./documents/network-debugging"),
-  "network-troubleshooting": () => import("./documents/network-troubleshooting"),
-  "network-checklist": () => import("./documents/network-checklist"),
-  "devops": () => import("./documents/devops"),
-  "devops-delivery": () => import("./documents/devops-delivery"),
-  "devops-configuration": () => import("./documents/devops-configuration"),
-  "devops-ci": () => import("./documents/devops-ci"),
-  "devops-cd": () => import("./documents/devops-cd"),
-  "devops-secrets": () => import("./documents/devops-secrets"),
-  "devops-iac": () => import("./documents/devops-iac"),
-  "devops-containers": () => import("./documents/devops-containers"),
-  "devops-orchestration": () => import("./documents/devops-orchestration"),
-  "devops-observability": () => import("./documents/devops-observability"),
-  "devops-security-reliability": () => import("./documents/devops-security-reliability"),
-  "ax": () => import("./documents/ax"),
-  "ax-capability": () => import("./documents/ax-capability"),
-  "ax-organization": () => import("./documents/ax-organization"),
-  "ax-automation": () => import("./documents/ax-automation"),
-  "ax-context": () => import("./documents/ax-context"),
-  "ax-harness": () => import("./documents/ax-harness"),
-  "ax-loop": () => import("./documents/ax-loop"),
-  "ax-verification": () => import("./documents/ax-verification"),
-  "ax-multi-agent": () => import("./documents/ax-multi-agent"),
-  "ax-governance": () => import("./documents/ax-governance"),
-  "ax-case-studies": () => import("./documents/ax-case-studies"),
-  "ax-playbook": () => import("./documents/ax-playbook"),
-  "design": () => import("./documents/design"),
-  "design-ux-thinking": () => import("./documents/design-ux-thinking"),
-  "design-information-architecture": () => import("./documents/design-information-architecture"),
-  "design-user-flows": () => import("./documents/design-user-flows"),
-  "design-layout-hierarchy": () => import("./documents/design-layout-hierarchy"),
-  "design-interaction-patterns": () => import("./documents/design-interaction-patterns"),
-  "design-forms-input": () => import("./documents/design-forms-input"),
-  "design-component-patterns": () => import("./documents/design-component-patterns"),
-  "design-system-tokens": () => import("./documents/design-system-tokens"),
-  "design-accessibility-inclusive": () => import("./documents/design-accessibility-inclusive"),
-  "design-prototyping-testing": () => import("./documents/design-prototyping-testing"),
-  "design-handoff-qa": () => import("./documents/design-handoff-qa"),
-  "cheat-frontend": () => import("./documents/cheat-frontend"),
-  "cheat-backend": () => import("./documents/cheat-backend"),
-  "cheat-database": () => import("./documents/cheat-database"),
-  "cheat-network": () => import("./documents/cheat-network"),
-  "cheat-devops": () => import("./documents/cheat-devops"),
-  "cheat-linux": () => import("./documents/cheat-linux"),
-  "cheat-docker": () => import("./documents/cheat-docker"),
-  "cheat-interview": () => import("./documents/cheat-interview"),
-  "ex-java": () => import("./documents/ex-java"),
-  "ex-jpa": () => import("./documents/ex-jpa"),
-  "ex-spring": () => import("./documents/ex-spring"),
-  "ex-docker": () => import("./documents/ex-docker"),
-  "ex-nginx": () => import("./documents/ex-nginx"),
-  "ex-redis": () => import("./documents/ex-redis"),
-  "ex-postgresql": () => import("./documents/ex-postgresql"),
-  "fullstack-roadmap": () => import("./documents/fullstack-roadmap"),
-  "developer-faq": () => import("./documents/developer-faq"),
-  "machine-setup": () => import("./documents/machine-setup"),
-  "dev-playbook": () => import("./documents/dev-playbook"),
-  "gradle": () => import("./documents/gradle"),
-  "package-managers": () => import("./documents/package-managers"),
-  "config": () => import("./documents/config"),
-  "db-seeding": () => import("./documents/db-seeding"),
-  "cicd": () => import("./documents/cicd"),
-  "logs-tooling": () => import("./documents/logs-tooling"),
-};
+  HandbookDocumentLoader
+> = Object.fromEntries(
+  (HANDBOOK_ITEMS as HandbookItem[]).map((item) => [item.id, getDocumentLoader(item.id)]),
+);

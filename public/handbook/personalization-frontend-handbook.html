@@ -11,6 +11,7 @@
   <a href="#ch4"><span class="code">FE-PER-03</span>압박 질문</a>
   <a href="#ch5"><span class="code">FE-PER-04</span>포트폴리오 문장</a>
   <a href="#ch6"><span class="code">FE-PER-05</span>대체 증거</a>
+  <a href="#ch7"><span class="code">FE-PER-06</span>심화 드릴 연결</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : PERSONALIZATION-FRONTEND-V1</span><span>SCOPE : FRONTEND POSITION · UI ARCHITECTURE · PRODUCT QUALITY</span><span>LANG : KO</span></div><h1>프론트엔드 개발자 대응</h1><p class="hero-sub">프론트엔드 포지션에서는 <strong>UI 구현력 → 복잡한 상태와 데이터 흐름 → 제품 품질과 운영 안정성</strong>으로 성장한 흐름을 보여주는 것이 가장 강합니다.</p></header>
@@ -84,6 +85,19 @@
 <tr><td>반복 개선 횟수</td><td>“거래내역 상세와 필터는 60~80회 이상 반복 개선한 핵심 화면이었습니다.”</td><td>정확한 출처가 있는 경우에만 말합니다.</td></tr>
 <tr><td>운영 기간</td><td>“기업 웹사이트는 3.5년 동안 단독 운영하며 성능, SEO/AEO, i18n, 보안을 순차적으로 개선했습니다.”</td><td>운영 기간을 성과로만 말하지 말고 개선 흐름과 연결합니다.</td></tr>
 </table>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FE-PER-06</span><h2>심화 드릴 연결</h2></div>
+<p class="lede">심화 기술 질문을 받았을 때는 “알고 있습니다”가 아니라 본인 경험의 증거와 운영 관점으로 연결합니다. 아래 문장은 프론트엔드·JS/TS 원본 문서의 심화 섹션을 개인 답변으로 바꾸는 연결고리입니다.</p>
+<table>
+<tr><th>마커</th><th>압박 질문</th><th>개인화 답변 방향</th></tr>
+<tr><td>REACT CONCURRENT SSR DRILL</td><td>React/Next를 썼다면 Strict Mode, Suspense, streaming SSR 문제도 다뤄봤나요?</td><td>Strict Mode에서 effect cleanup과 중복 요청을 먼저 의심하고, Suspense/Error Boundary는 화면 전체를 막지 않는 경계로 둔다고 답합니다. Next 경험은 SEO/AEO, dynamic import, hydration mismatch 방지처럼 실제 운영 품질과 연결합니다.</td></tr>
+<tr><td>FRONTEND SECURITY CACHE DRILL</td><td>프론트엔드 보안과 성능 캐시는 어디까지 책임질 수 있나요?</td><td>최종 인가는 서버 책임이지만 프론트는 XSS sink 제거, token/cookie trade-off 설명, SameSite 한계 인식, 개인화 응답 cache 정책, preload/resource priority 남용 방지를 책임진다고 답합니다.</td></tr>
+<tr><td>TYPESCRIPT ADVANCED BOUNDARY</td><td>TypeScript를 단순 annotation 이상으로 써본 경험이 있나요?</td><td>외부 API와 form input은 runtime schema validation 또는 adapter에서 검증하고, <code>satisfies</code>, <code>as const</code>, strict flags, branded type은 도메인 계약을 더 선명하게 만드는 도구라고 답합니다.</td></tr>
+</table>
+<h3>짧은 답변 예시</h3>
+<div class="serial-card"><span class="sc-label">90초</span>React/Next 프로젝트에서는 단순히 화면을 구현하는 것보다 서버에서 만든 HTML과 클라이언트 첫 렌더가 어긋나지 않게 하는 점, effect가 재실행되어도 요청과 listener가 중복되지 않게 정리하는 점을 중요하게 봤습니다. 보안은 token 저장 위치를 단정하지 않고 XSS와 CSRF trade-off를 비교하며, 성능은 HTTP cache와 preload가 실제 LCP 후보에 맞는지 확인합니다. TypeScript는 API 응답이 타입과 다를 수 있다는 전제로 adapter와 validation 경계를 둔다고 설명합니다.</div>
 </section>
 
 <footer>PERSONALIZED FRONTEND POSITION · V1 · 2026-06</footer>

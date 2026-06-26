@@ -17,13 +17,22 @@
   <a href="#q10"><span class="code">DS-10</span>Microservices 판단</a>
   <a href="#q11"><span class="code">DS-11</span>Read Your Writes</a>
   <a href="#q12"><span class="code">DS-12</span>핵심 질문 20선</a>
+  <a href="#q13"><span class="code">DS-13</span>정합성 실패 매트릭스</a>
+  <a href="#q14"><span class="code">DS-14</span>장애 답변 구조</a>
+  <a href="#q15"><span class="code">DS-15</span>Consistency Senior Drill</a>
+  <a href="#q16"><span class="code">DS-16</span>개념 인과관계</a>
+  <a href="#q17"><span class="code">DS-17</span>주문·결제 정합성 사례</a>
 </nav>
 <main>
-<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-DISTRIBUTED-QA-V1</span><span>SCOPE : CACHE · QUEUE · RETRY · CONSISTENCY · SAGA · OUTBOX</span><span>LANG : KO</span></div><h1>분산 시스템 면접</h1><p class="hero-sub">분산 시스템 질문은 CAP 같은 용어 암기가 아니라 <strong>네트워크 실패, 중복 처리, 순서 보장, 최신성, 보상 처리</strong>를 현실적으로 설명할 수 있는지 봅니다.</p></header>
+<header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-DISTRIBUTED-QA-V2</span><span>SCOPE : CACHE · QUEUE · RETRY · CONSISTENCY · SAGA · OUTBOX</span><span>LANG : KO</span></div><h1>분산 시스템 면접</h1><p class="hero-sub">분산 시스템 질문은 CAP 같은 용어 암기가 아니라 <strong>네트워크 실패, 중복 처리, 순서 보장, 최신성, 보상 처리</strong>를 현실적으로 설명할 수 있는지 봅니다.</p></header>
 
 <section id="q1">
 <div class="ch-head"><span class="ch-code">DS-01</span><h2>Q. 캐시는 왜 어렵나요?</h2></div>
 <h3>핵심 개념</h3><p>캐시는 응답을 빠르게 하지만 최신성 문제를 만듭니다. 어려운 지점은 캐시 적중률보다 무효화와 일관성입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>캐시는 원본 데이터가 아니라 특정 시점의 복사본입니다. 그래서 캐시 설계의 핵심 질문은 “얼마나 빨라지는가”보다 “얼마나 오래 틀려도 되는가”입니다. 권한, 결제, 재고처럼 틀리면 손상되는 데이터와 통계, 추천처럼 잠시 늦어도 되는 데이터를 같은 정책으로 다루면 장애가 납니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">캐시는 빠르지만 오래된 값을 보여줄 수 있기 때문에 어렵습니다. 그래서 어떤 데이터는 stale해도 되는지, 어떤 데이터는 반드시 최신이어야 하는지 먼저 나누고 TTL, invalidation, version key, write-through 같은 전략을 선택합니다.</div>
 <h3>90초 답변</h3><p>캐시는 브라우저, CDN, 애플리케이션, DB 근처 등 여러 계층에 있을 수 있고 각 계층의 TTL이 다르면 문제를 찾기 어렵습니다. 목록 캐시, 상세 캐시, 권한별 캐시가 섞이면 사용자가 수정 직후 이전 값을 볼 수도 있습니다. 결제 상태나 권한처럼 틀리면 안 되는 데이터는 캐시보다 정합성을 우선해야 합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>cache invalidation은?</td><td>TTL, 명시적 purge, 이벤트 기반 무효화, versioned key를 상황별로 씁니다.</td></tr><tr><td>cache stampede는?</td><td>동시에 많은 요청이 origin으로 몰리는 문제로 lock, jitter, stale-while-revalidate로 줄입니다.</td></tr><tr><td>권한 데이터 캐시는?</td><td>권한 변경 즉시 반영 필요성이 높아 TTL과 invalidation을 매우 보수적으로 잡습니다.</td></tr></table>
@@ -33,6 +42,10 @@
 <section id="q2">
 <div class="ch-head"><span class="ch-code">DS-02</span><h2>Q. 비동기 처리와 큐는 언제 쓰나요?</h2></div>
 <h3>핵심 개념</h3><p>비동기 처리는 즉시 응답이 필요 없는 작업을 요청-응답 경로에서 분리해 latency와 결합도를 낮추는 선택입니다. 대신 운영 복잡도가 생깁니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>큐는 작업을 사라지게 하는 장치가 아니라 처리 시점을 뒤로 미루고 실패를 관찰 가능한 상태로 바꾸는 장치입니다. 요청자는 빠르게 응답받을 수 있지만 consumer 실패, 중복 소비, 순서 역전, lag가 새 문제가 됩니다. 따라서 메시지에는 idempotency key, retry 정책, DLQ, 처리 상태 추적이 함께 따라와야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">이메일, 알림, OCR, 리포트 생성처럼 사용자가 즉시 기다리지 않아도 되는 작업은 큐로 분리할 수 있습니다. 하지만 큐를 넣으면 중복 소비, 순서 보장, retry, DLQ, consumer lag 모니터링을 함께 설계해야 합니다.</div>
 <h3>90초 답변</h3><p>큐는 시스템을 빠르게만 만드는 도구가 아니라 실패 방식을 바꾸는 도구입니다. producer는 메시지를 보냈다고 생각하지만 consumer가 실패할 수 있고, 같은 메시지가 두 번 처리될 수 있으며, 순서가 바뀔 수 있습니다. 그래서 consumer는 idempotent해야 하고, 처리 실패는 DLQ나 retry policy로 관찰 가능해야 합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>at-least-once란?</td><td>최소 한 번 전달을 보장하지만 중복 가능성이 있어 idempotency가 필요합니다.</td></tr><tr><td>DLQ는 왜 필요한가요?</td><td>계속 실패하는 poison message를 격리하고 원인을 분석하기 위해 필요합니다.</td></tr><tr><td>consumer lag은?</td><td>producer 속도를 consumer가 따라가지 못해 처리 지연이 쌓이는 상태입니다.</td></tr></table>
@@ -42,6 +55,10 @@
 <section id="q3">
 <div class="ch-head"><span class="ch-code">DS-03</span><h2>Q. Retry, timeout, idempotency는 어떻게 설계하나요?</h2></div>
 <h3>핵심 개념</h3><p>분산 호출은 실패할 수 있으므로 timeout과 retry가 필요하지만, retry는 중복 실행을 만들 수 있어 idempotency가 함께 필요합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>timeout은 기다림의 상한이고, retry는 실패를 다시 시도하는 정책이며, idempotency는 재시도 때문에 같은 부작용이 반복되지 않게 하는 계약입니다. 세 가지는 함께 설계해야 합니다. timeout 없이 retry하면 대기열이 쌓이고, idempotency 없이 retry하면 주문·결제·차감이 중복될 수 있습니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">모든 외부 호출에는 timeout이 있어야 하고, 재시도는 exponential backoff와 jitter를 둡니다. 다만 결제나 주문 생성처럼 부작용이 있는 요청은 idempotency key로 같은 요청이 여러 번 와도 한 번만 처리되게 해야 합니다.</div>
 <h3>90초 답변</h3><p>timeout이 없으면 장애가 대기열로 전파되고, retry가 과하면 장애 중인 시스템에 더 큰 부하를 줍니다. retry는 transient failure에만 의미가 있고 validation error 같은 영구 실패에는 하면 안 됩니다. idempotency는 request key, unique constraint, 처리 상태 저장으로 구현할 수 있습니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>jitter는 왜?</td><td>동시에 재시도하는 thundering herd를 줄이기 위해 랜덤성을 넣습니다.</td></tr><tr><td>멱등한 메서드는?</td><td>GET, PUT, DELETE는 의미상 멱등이어야 하지만 구현이 실제로 안전해야 합니다.</td></tr><tr><td>retry하면 안 되는 경우?</td><td>권한 오류, validation 오류, 중복 결제 위험이 있는 요청은 신중해야 합니다.</td></tr></table>
@@ -51,6 +68,10 @@
 <section id="q4">
 <div class="ch-head"><span class="ch-code">DS-04</span><h2>Q. Consistency와 availability는 어떻게 판단하나요?</h2></div>
 <h3>핵심 개념</h3><p>모든 데이터를 항상 강하게 일치시키는 것은 비쌉니다. 도메인별로 즉시 맞아야 하는 데이터와 eventual consistency를 허용할 수 있는 데이터를 나눠야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>일관성은 시스템 전체의 추상 목표가 아니라 사용자와 도메인이 허용할 수 있는 불일치의 범위입니다. 강한 일관성은 이해하기 쉽지만 latency와 availability 비용이 있고, eventual consistency는 확장에 유리하지만 UX가 상태를 설명해야 합니다. “처리 중”, “동기화 중”, “마지막 갱신 시각”은 기술적 불일치를 사용자에게 정직하게 보여주는 장치입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">결제, 재고, 정산은 강한 정합성이 중요하고, 피드, 추천, 통계는 잠시 늦게 맞아도 되는 경우가 많습니다. 그래서 consistency와 availability는 기술 선택이 아니라 비즈니스가 어떤 불일치를 허용할 수 있는지의 판단입니다.</div>
 <h3>90초 답변</h3><p>분산 시스템에서는 네트워크 지연과 장애가 기본값입니다. 모든 요청에 강한 정합성을 요구하면 latency와 장애 전파가 커질 수 있습니다. 반대로 eventual consistency를 쓰면 사용자에게 처리 중, 동기화 중, 마지막 업데이트 시각 같은 상태를 보여줘야 혼란이 줄어듭니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>eventual consistency UX는?</td><td>pending, processing, synced, failed 같은 상태를 명확히 보여줍니다.</td></tr><tr><td>읽기-your-writes는?</td><td>사용자가 방금 쓴 값을 다시 읽을 수 있게 세션/primary read 등을 고려합니다.</td></tr><tr><td>CAP를 어떻게 설명하나요?</td><td>네트워크 partition 상황에서 consistency와 availability 사이 선택이 필요하다는 모델로 설명합니다.</td></tr></table>
@@ -60,6 +81,10 @@
 <section id="q5">
 <div class="ch-head"><span class="ch-code">DS-05</span><h2>Q. Saga와 Outbox는 왜 쓰나요?</h2></div>
 <h3>핵심 개념</h3><p>서비스가 분리되면 하나의 DB 트랜잭션으로 모든 변경을 묶기 어렵습니다. Saga와 Outbox는 분산된 변경의 정합성을 현실적으로 관리하는 패턴입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Outbox는 DB 변경과 이벤트 발행 사이의 원자성 간극을 줄이는 패턴이고, Saga는 여러 로컬 트랜잭션을 보상 가능한 workflow로 묶는 패턴입니다. 둘 다 분산 트랜잭션을 마법처럼 없애는 것이 아니라 실패 지점을 명시하고 재처리 가능하게 만드는 방법입니다. 따라서 event id, 상태 저장, 보상 동작, 관측성이 핵심입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">Outbox는 DB 변경과 이벤트 발행 사이의 간극을 줄이기 위해 같은 DB 트랜잭션에 이벤트 기록을 남기고 나중에 발행하는 패턴입니다. Saga는 여러 서비스에 걸친 작업을 로컬 트랜잭션과 보상 트랜잭션으로 관리합니다.</div>
 <h3>90초 답변</h3><p>예를 들어 주문 생성, 결제 승인, 재고 차감, 알림 발송이 여러 서비스에 나뉘면 중간 실패가 생길 수 있습니다. 강한 분산 트랜잭션은 결합과 장애 포인트가 커질 수 있어, 각 단계의 완료와 실패를 이벤트로 관리하고 실패 시 보상 동작을 수행하는 방식이 필요합니다. 다만 Saga는 설계와 관측이 복잡하므로 단일 서비스에서 충분한 경우에는 과할 수 있습니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Outbox가 막는 문제는?</td><td>DB commit은 됐지만 이벤트 발행이 실패하는 간극을 줄입니다.</td></tr><tr><td>보상 트랜잭션은?</td><td>이미 완료된 단계를 비즈니스적으로 되돌리는 별도 동작입니다.</td></tr><tr><td>MSA는 언제 과한가요?</td><td>팀 경계, 데이터 소유권, 배포 독립성이 없으면 네트워크 비용만 늘 수 있습니다.</td></tr></table>
@@ -69,6 +94,10 @@
 <section id="q6">
 <div class="ch-head"><span class="ch-code">DS-06</span><h2>Q. cache invalidation 전략은 어떻게 잡나요?</h2></div>
 <h3>핵심 개념</h3><p>cache invalidation은 캐시에 무엇을 언제 지울지 정하는 문제이며 최신성, 성능, 구현 복잡도의 trade-off입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>cache invalidation은 쓰기 경로와 읽기 경로가 만나는 지점입니다. 상세 캐시만 지워도 목록 캐시가 남으면 사용자는 이전 값을 볼 수 있고, 이벤트 기반 무효화는 이벤트 유실과 순서 문제를 만듭니다. TTL은 단순하지만 stale window를 허용한다는 명시적 선택입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">데이터별로 stale 허용 시간을 먼저 정합니다. 비교적 덜 중요한 데이터는 TTL로 단순화하고, 권한이나 가격처럼 민감한 데이터는 명시적 purge, versioned key, event 기반 invalidation을 씁니다.</div>
 <h3>90초 답변</h3><p>목록과 상세 캐시가 함께 있으면 하나만 지워서는 사용자에게 오래된 값이 보일 수 있습니다. write-through는 쓰기 경로가 복잡해지고, write-behind는 유실 위험을 봐야 합니다. 캐시 stampede를 막기 위해 jitter, lock, stale-while-revalidate도 고려합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TTL만 쓰면?</td><td>단순하지만 변경 직후 stale 데이터가 보일 수 있습니다.</td></tr><tr><td>event 기반은?</td><td>정교하지만 이벤트 유실과 순서 문제를 고려해야 합니다.</td></tr><tr><td>versioned key는?</td><td>무효화 대신 새 key로 전환하지만 오래된 key 정리가 필요합니다.</td></tr></table>
@@ -79,6 +108,10 @@
 <section id="q7">
 <div class="ch-head"><span class="ch-code">DS-07</span><h2>Q. 메시지 순서 보장은 어떻게 다루나요?</h2></div>
 <h3>핵심 개념</h3><p>분산 메시징에서 순서 보장은 partition, key, consumer 병렬성, retry 정책에 의해 깨질 수 있습니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>메시지 순서 보장은 보통 전체 시스템 순서가 아니라 특정 entity 단위 순서의 문제입니다. 전체 순서를 보장하려 하면 병렬성과 처리량을 크게 잃습니다. 주문 id, 사용자 id 같은 key 기준으로 partition을 정하고, event version이나 sequence로 out-of-order 적용을 막는 것이 현실적입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">순서가 필요한 범위를 먼저 정합니다. 전체 순서가 필요한지, 주문 id나 사용자 id 단위 순서만 필요한지 나눈 뒤 같은 key를 같은 partition으로 보내고 consumer 병렬성을 조정합니다.</div>
 <h3>90초 답변</h3><p>전체 순서 보장은 처리량을 크게 낮출 수 있습니다. 대부분은 entity별 순서면 충분합니다. retry나 DLQ 처리 과정에서 나중 이벤트가 먼저 적용될 수 있으므로 event version, sequence number, idempotent consumer가 필요합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>중복 메시지는?</td><td>consumer idempotency와 processed event table로 막습니다.</td></tr><tr><td>out-of-order는?</td><td>version 비교, sequence check, 보류 큐를 검토합니다.</td></tr><tr><td>전체 순서가 왜 어렵나요?</td><td>병렬 처리와 확장성을 희생해야 하기 때문입니다.</td></tr></table>
@@ -89,6 +122,10 @@
 <section id="q8">
 <div class="ch-head"><span class="ch-code">DS-08</span><h2>Q. circuit breaker는 언제 필요한가요?</h2></div>
 <h3>핵심 개념</h3><p>circuit breaker는 실패 중인 의존성에 계속 요청을 보내 장애를 증폭시키지 않도록 호출을 빠르게 차단하는 패턴입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>circuit breaker는 실패한 의존성을 고치는 장치가 아니라 실패 중인 의존성으로 장애가 확산되는 것을 막는 장치입니다. timeout과 retry만 있으면 느린 서비스에 요청이 계속 쌓일 수 있고, breaker는 일정 실패율에서 빠른 실패 또는 fallback으로 전환합니다. half-open은 회복 여부를 제한적으로 확인하는 상태입니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">외부 API나 downstream 서비스가 느리거나 실패할 때 timeout과 retry만으로는 부족할 수 있습니다. 실패율이 임계치를 넘으면 circuit을 열어 빠르게 실패시키고, 일정 시간 뒤 half-open으로 일부 요청만 보내 회복을 확인합니다.</div>
 <h3>90초 답변</h3><p>retry는 transient failure에는 도움이 되지만 장애 중인 서비스에는 부하를 더할 수 있습니다. circuit breaker는 bulkhead, timeout, fallback과 같이 써야 효과가 있습니다. 다만 임계치가 과하면 정상 요청도 막을 수 있어 metric과 알림이 필요합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>fallback은?</td><td>캐시된 값, 제한된 기능, 안내 메시지를 제공하는 방식입니다.</td></tr><tr><td>half-open은?</td><td>회복 확인을 위해 일부 요청만 통과시키는 상태입니다.</td></tr><tr><td>retry와 관계?</td><td>retry storm을 막기 위해 timeout/backoff와 함께 조정합니다.</td></tr></table>
@@ -99,6 +136,10 @@
 <section id="q9">
 <div class="ch-head"><span class="ch-code">DS-09</span><h2>Q. degraded mode는 어떻게 설계하나요?</h2></div>
 <h3>핵심 개념</h3><p>degraded mode는 일부 의존성이 실패해도 핵심 기능을 제한된 품질로 계속 제공하는 전략입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>degraded mode는 장애를 숨기는 것이 아니라 핵심 기능을 보호하기 위해 품질이나 기능 범위를 의도적으로 낮추는 운영 모드입니다. 추천, 통계, 알림은 제한하고 주문, 로그인, 조회 같은 핵심 경로를 살릴 수 있습니다. 사용자가 보는 데이터가 stale하거나 제한된 기능이라면 UI가 그 상태를 명확히 말해야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">모든 기능을 같은 중요도로 보지 않고 핵심 경로와 부가 기능을 나눕니다. 추천, 통계, 알림이 실패해도 주문이나 로그인 같은 핵심 기능은 유지하도록 fallback, cached data, read-only mode를 설계합니다.</div>
 <h3>90초 답변</h3><p>사용자에게는 기능이 제한되었음을 명확히 보여줘야 합니다. stale 데이터라면 마지막 갱신 시각을 표시하고, 쓰기 기능이 위험하면 read-only로 전환합니다. degraded mode도 운영자가 켜고 끌 수 있어야 하며, 어떤 지표에서 발동할지 기준이 필요합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>read-only mode는?</td><td>정합성 위험이 큰 쓰기를 막고 조회만 허용하는 방식입니다.</td></tr><tr><td>사용자 안내는?</td><td>제한 상태와 재시도 가능성을 명확히 보여줍니다.</td></tr><tr><td>발동 기준은?</td><td>error rate, dependency timeout, queue lag 같은 지표를 봅니다.</td></tr></table>
@@ -109,6 +150,10 @@
 <section id="q10">
 <div class="ch-head"><span class="ch-code">DS-10</span><h2>Q. microservices는 언제 적절하고 언제 과한가요?</h2></div>
 <h3>핵심 개념</h3><p>MSA는 기술 구조가 아니라 팀 경계, 데이터 소유권, 배포 독립성, 장애 격리를 위한 조직적 선택입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>microservices의 비용은 HTTP 호출이 늘어나는 정도가 아니라 데이터 소유권, 배포, 관측성, 장애 복구 방식이 모두 분산된다는 점입니다. 경계가 약한 상태에서 서비스를 나누면 독립 배포는 못 하고 네트워크 비용만 갖는 분산 모놀리스가 됩니다. 먼저 bounded context와 팀 소유권이 분명한지 확인해야 합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">도메인 경계가 명확하고 팀이 독립 배포와 운영을 감당할 수 있을 때 microservices가 유리합니다. 반대로 데이터 소유권이 불분명하고 팀 규모가 작으면 네트워크, 배포, 관측성, 정합성 비용만 늘 수 있습니다.</div>
 <h3>90초 답변</h3><p>서비스 분리는 DB join을 API 호출로 바꾸고, 트랜잭션을 saga나 eventual consistency 문제로 바꿉니다. 그래서 먼저 모듈러 모놀리스로 경계를 명확히 하고, 실제 병목이나 팀 독립성이 필요할 때 분리하는 접근이 현실적입니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>공유 DB는?</td><td>서비스 독립성을 깨므로 데이터 소유권을 분리해야 합니다.</td></tr><tr><td>분리 기준은?</td><td>bounded context, 변경 빈도, 팀 소유권, scaling 요구를 봅니다.</td></tr><tr><td>분산 모놀리스는?</td><td>배포는 나뉘었지만 강한 동기 의존으로 독립성이 없는 상태입니다.</td></tr></table>
@@ -119,6 +164,10 @@
 <section id="q11">
 <div class="ch-head"><span class="ch-code">DS-11</span><h2>Q. read-your-writes는 왜 중요하고 어떻게 보장하나요?</h2></div>
 <h3>핵심 개념</h3><p>read-your-writes는 사용자가 방금 쓴 데이터를 바로 다시 읽을 수 있게 하는 사용자 체감 정합성입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>read-your-writes는 이론적 정합성보다 사용자 신뢰에 가까운 요구사항입니다. 저장 성공 후 바로 이전 값이 보이면 사용자는 실패했다고 느낍니다. replica lag가 있는 구조에서는 쓰기 직후 일정 시간 primary를 읽거나, session 단위 라우팅, optimistic UI와 rollback, pending 상태 표시를 조합합니다.</p>
+</div>
 <h3>30초 답변</h3><div class="serial-card">replica lag이나 비동기 동기화가 있으면 저장 성공 후 바로 조회했는데 이전 값이 보일 수 있습니다. 이 경우 일정 시간 primary read, session stickiness, optimistic UI, 동기화 상태 표시를 고려합니다.</div>
 <h3>90초 답변</h3><p>모든 읽기를 primary로 보내면 비용이 커지고 replica 사용 이점이 줄어듭니다. 그래서 쓰기 직후 사용자나 특정 resource에 한해 primary를 읽거나, write timestamp보다 최신 replica만 선택하는 방식이 있습니다. 사용자에게 처리 중 상태를 보여주는 것도 UX 보정입니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>replica lag은?</td><td>primary와 replica 동기화 지연으로 오래된 값을 읽는 문제입니다.</td></tr><tr><td>optimistic UI 위험은?</td><td>서버 실패 시 rollback과 오류 안내가 필요합니다.</td></tr><tr><td>언제 중요한가요?</td><td>프로필 수정, 결제 상태, 권한 변경처럼 사용자 신뢰가 걸린 경우입니다.</td></tr></table>
@@ -135,6 +184,9 @@
 <tr><td>메시징</td><td>queue, stream, ordering, retry, dead letter queue</td><td>중복 처리와 순서 보장 범위</td></tr>
 <tr><td>일관성</td><td>eventual consistency, read-your-writes, saga, outbox, idempotency</td><td>사용자 체감과 데이터 정합성의 경계</td></tr>
 <tr><td>복원력</td><td>timeout, circuit breaker, degraded mode, bulkhead, backpressure</td><td>downstream 장애가 전체 장애로 번지지 않게 하는 방법</td></tr>
+<tr><td>정합성 모델</td><td>linearizability가 필요한 경로는 어디인가요? quorum read/write는 어떤 장애를 견디나요? consensus는 언제 필요한가요?</td><td>돈·권한·재고 같은 경로와 latency/availability 비용을 연결</td></tr>
+<tr><td>이벤트 처리</td><td>exactly-once는 왜 오해가 많나요? outbox CDC와 polling 중 무엇을 고르나요? consumer inbox/processed table은 왜 필요한가요?</td><td>broker 전달 보장과 business side effect 중복 방지를 구분</td></tr>
+<tr><td>복구</td><td>eventual consistency가 정말 수렴했는지 어떻게 확인하나요? reconciliation job은 어떤 데이터를 비교하나요?</td><td>source of truth, projection, 누락 이벤트, 보상 처리, 운영 알림을 연결</td></tr>
 </table>
 <div class="callout warn">
 <span class="co-label">압박 꼬리질문</span>
@@ -146,7 +198,99 @@
 </div>
 </section>
 
-<footer>DISTRIBUTED SYSTEMS INTERVIEW Q&A · V1 · 2026-06</footer>
+<section id="q13">
+<div class="ch-head"><span class="ch-code">DS-13</span><h2>정합성 실패 매트릭스</h2></div>
+<p class="lede">분산 시스템 답변은 “정합성을 보장합니다”보다 어떤 정합성을 어느 범위에서 포기하거나 보정하는지 말해야 전문적으로 들립니다.</p>
+<table>
+<tr><th>실패 모드</th><th>원인</th><th>방어·보정 전략</th><th>면접에서 말할 trade-off</th></tr>
+<tr><td>stale read</td><td>replica lag, cache TTL, 비동기 projection</td><td>primary read, read-your-writes token, version check, pending UI</td><td>모든 읽기를 강하게 만들면 비용과 latency가 증가합니다.</td></tr>
+<tr><td>lost update</td><td>동시 수정, 마지막 쓰기 우선 정책</td><td>optimistic locking, compare-and-swap, merge UI, conflict event</td><td>충돌 감지는 사용자 흐름을 복잡하게 만들 수 있습니다.</td></tr>
+<tr><td>duplicate processing</td><td>retry, at-least-once delivery, consumer 재시작</td><td>idempotency key, unique constraint, processed message table</td><td>중복 제거 저장소도 TTL과 용량 관리가 필요합니다.</td></tr>
+<tr><td>out-of-order event</td><td>partitioning, network delay, parallel consumer</td><td>aggregate 단위 ordering key, sequence number, versioned projection</td><td>전역 순서 보장은 처리량과 확장성을 크게 낮춥니다.</td></tr>
+<tr><td>partial failure</td><td>한 서비스만 성공, downstream timeout</td><td>saga compensation, outbox, retry with backoff, reconciliation job</td><td>즉시 rollback보다 나중에 맞추는 운영 모델이 필요합니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">CONSISTENCY FAILURE MATRIX</span>
+정합성 질문에는 “읽기 정합성, 쓰기 충돌, 메시지 중복, 순서, 부분 실패”를 분리해서 답합니다. 같은 eventual consistency라도 사용자 프로필 수정과 결제 상태 변경은 허용 가능한 지연과 보정 방식이 다릅니다.
+</div>
+</section>
+
+<section id="q14">
+<div class="ch-head"><span class="ch-code">DS-14</span><h2>분산 장애 답변 구조</h2></div>
+<p class="lede">장애 시나리오 질문에서는 기술명보다 blast radius를 줄이는 순서가 중요합니다.</p>
+<div class="serial-card">
+<span class="sc-label">DISTRIBUTED INCIDENT ANSWER</span>
+1단계는 timeout과 retry budget으로 장애 전파를 막고, 2단계는 circuit breaker와 bulkhead로 실패 영역을 격리하고, 3단계는 queue·DLQ·outbox/inbox로 손실 없는 재처리를 설계합니다. 마지막으로 reconciliation job과 관측 지표를 둬서 “언젠가 맞는다”가 실제로 맞았는지 확인합니다.
+</div>
+<table>
+<tr><th>질문</th><th>전문적인 답변 포인트</th></tr>
+<tr><td>downstream이 느려지면?</td><td>timeout budget, circuit breaker, fallback, bulkhead, queue length alert를 함께 말합니다.</td></tr>
+<tr><td>queue가 밀리면?</td><td>producer rate limit, consumer scale-out, poison message 분리, DLQ와 replay 절차를 말합니다.</td></tr>
+<tr><td>메시지가 손실되면?</td><td>transactional outbox, broker ack, idempotent consumer, reconciliation으로 끝까지 추적합니다.</td></tr>
+<tr><td>보상이 실패하면?</td><td>saga 상태를 영속화하고 manual review queue와 operator runbook을 둡니다.</td></tr>
+<tr><td>장애 중 사용자 경험은?</td><td>read-only mode, pending 상태, 지연 고지, 핵심 기능 우선 처리로 degradation을 설계합니다.</td></tr>
+</table>
+</section>
+
+<section id="q15">
+<div class="ch-head"><span class="ch-code">DS-15</span><h2>DISTRIBUTED CONSISTENCY SENIOR DRILL</h2></div>
+<p class="lede">시니어 분산 시스템 질문은 “eventual consistency입니다”로 끝나지 않습니다. 어떤 연산이 linearizability를 요구하고, 어떤 연산은 quorum·consensus·reconciliation 비용을 감수할 가치가 있는지 설명해야 합니다.</p>
+<table>
+<tr><th>압박 질문</th><th>답변에 들어갈 핵심</th><th>오답 신호</th></tr>
+<tr><td>linearizability가 필요한 예시는?</td><td>결제 승인, 권한 변경, 재고 차감처럼 사용자가 성공을 본 순간 이후 모든 관찰자가 그 결과를 본 것처럼 동작해야 하는 경로를 예로 듭니다.</td><td>모든 데이터를 linearizable하게 만들겠다고 하며 비용과 가용성 저하를 설명하지 못합니다.</td></tr>
+<tr><td>quorum read/write는 무엇을 보장하나요?</td><td>N개 replica 중 W개 write ack와 R개 read 응답을 조합해 최신 값을 읽을 가능성을 높입니다. 단, clock, conflict resolution, partition 상황의 trade-off를 함께 봅니다.</td><td>quorum이면 항상 최신이고 충돌이 없다고 말합니다.</td></tr>
+<tr><td>consensus는 언제 필요한가요?</td><td>leader election, configuration 변경, 분산 lock처럼 여러 노드가 하나의 순서와 상태에 합의해야 할 때 필요합니다. Raft/Paxos류는 latency와 운영 비용이 있습니다.</td><td>일반 메시징 문제를 모두 consensus로 해결한다고 말합니다.</td></tr>
+<tr><td>exactly-once 처리는 가능한가요?</td><td>broker의 exactly-once delivery/processing 보장과 외부 DB·결제 API 같은 business side effect의 정확히 한 번 실행은 다릅니다. 실무에서는 at-least-once + idempotency가 기본 방어선입니다.</td><td>Kafka를 쓰면 결제도 정확히 한 번만 된다고 답합니다.</td></tr>
+<tr><td>outbox CDC vs polling은 어떻게 고르나요?</td><td>CDC는 DB log 기반으로 지연과 부하가 낮고 누락 가능성이 작지만 운영 복잡도가 있습니다. polling은 단순하지만 지연, 중복, scan 부하, lock 경합을 관리해야 합니다.</td><td>outbox를 쓰면 재처리와 idempotency가 필요 없다고 말합니다.</td></tr>
+<tr><td>inbox/processed table은 왜 두나요?</td><td>consumer가 처리한 event id와 결과를 저장해 retry·중복 delivery에도 side effect가 한 번만 적용되게 합니다. TTL, unique constraint, transaction boundary가 중요합니다.</td><td>consumer 코드가 멱등하다고만 말하고 저장소 기반 증거를 두지 않습니다.</td></tr>
+<tr><td>reconciliation은 무엇을 검증하나요?</td><td>source of truth와 projection, broker offset과 DB 상태, 결제 provider와 내부 주문 상태를 주기적으로 비교해 누락·중복·불일치를 찾아 보정합니다.</td><td>eventual consistency라 시간이 지나면 알아서 맞는다고 말합니다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">90초 답변 구조</span>
+“돈·권한·재고처럼 성공 직후 신뢰가 필요한 경로는 linearizability나 강한 transaction 경계를 우선합니다. 그 외 projection, 검색, 통계는 eventual consistency를 허용하되 outbox CDC 또는 polling으로 이벤트를 발행하고, consumer에는 inbox/processed table을 둡니다. exactly-once는 broker 용어와 비즈니스 부작용을 분리해서 설명하고, 마지막에는 reconciliation으로 수렴 여부를 검증합니다.”
+</div>
+</section>
+
+<section id="q16">
+<div class="ch-head"><span class="ch-code">DS-16</span><h2>분산 시스템 개념 인과관계</h2></div>
+<p class="lede">분산 시스템 답변은 “Kafka, Redis, Saga를 씁니다”로 시작하면 암기처럼 들립니다. 먼저 네트워크가 실패하고, 시간이 어긋나고, 같은 메시지가 두 번 처리될 수 있다는 전제를 세운 뒤 패턴을 도출해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">DISTRIBUTED CAUSAL MODEL</span>서비스를 나누면 함수 호출이 네트워크 호출로 바뀌고, 네트워크 호출은 timeout, retry, partial failure를 만듭니다. retry는 가용성을 높일 수 있지만 중복 부작용을 만들기 때문에 idempotency key와 processed table이 필요합니다. queue는 요청 경로를 빠르게 만들지만 consumer lag, out-of-order, DLQ 운영을 만들고, cache는 읽기 부하를 줄이지만 stale data를 만듭니다. 그래서 분산 설계는 성능 개선보다 실패 모드를 명시하고 수렴을 검증하는 설계입니다.</div>
+<table>
+<tr><th>선택</th><th>줄이는 문제</th><th>새로 생기는 문제</th><th>답변에 붙일 보정 장치</th></tr>
+<tr><td>cache</td><td>반복 읽기, DB 부하, latency</td><td>stale data, invalidation 실패, stampede</td><td>TTL, versioned key, stale-while-revalidate, 권한 데이터 제외</td></tr>
+<tr><td>queue</td><td>요청 latency, peak 부하, 시간 결합</td><td>중복 처리, 순서 역전, lag, poison message</td><td>idempotent consumer, DLQ, retry budget, consumer lag alert</td></tr>
+<tr><td>outbox</td><td>DB commit과 event publish 사이의 간극</td><td>outbox 적체, 중복 발행, polling/CDC 운영 비용</td><td>event id, processed table, CDC 모니터링, reconciliation</td></tr>
+<tr><td>saga</td><td>분산 transaction 결합과 lock 지속 시간</td><td>보상 실패, 중간 상태 노출, 운영 복잡도</td><td>saga state, compensation, manual review queue, 상태 UI</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">암기 답변 교정</span>
+<p>“eventual consistency라 괜찮다”는 답변은 부족합니다. 어떤 source of truth와 projection이 있고, 누락 이벤트를 어떻게 찾고, 사용자는 pending/synced/failed 상태를 어떻게 보는지까지 설명해야 합니다.</p>
+</div>
+</section>
+
+<section id="q17">
+<div class="ch-head"><span class="ch-code">DS-17</span><h2>분산 정합성 사례: 주문·결제·재고 플로우</h2></div>
+<p class="lede">분산 시스템을 전문가처럼 설명하려면 패턴 이름이 아니라 실패가 실제로 어디서 생기는지 말해야 합니다. 주문·결제·재고 플로우는 retry, idempotency, outbox, saga, reconciliation을 한 번에 설명하기 좋은 사례입니다.</p>
+<div class="serial-card"><span class="sc-label">EXPERT DISTRIBUTED CONSISTENCY CASE</span>사용자가 주문 버튼을 누르면 주문 생성, 결제 승인, 재고 차감, 알림 발송이 이어집니다. 이 네 단계가 하나의 DB 안에 있으면 transaction으로 묶을 수 있지만, 결제 provider와 재고 서비스, 알림 서비스가 분리되면 네트워크 실패와 부분 성공이 기본값이 됩니다. 결제는 성공했는데 주문 DB update가 실패할 수 있고, 주문은 생성됐지만 이벤트 발행이 실패할 수 있으며, consumer가 재시작하면서 같은 메시지를 두 번 처리할 수 있습니다.</div>
+<h3>1. Idempotency는 API와 consumer 양쪽에 필요하다</h3>
+<p>사용자가 버튼을 두 번 누르거나 client timeout 후 재시도하면 주문 생성 요청이 두 번 들어올 수 있습니다. API는 idempotency key, payload hash, status, response snapshot을 저장해 같은 요청이 같은 결과를 돌려주도록 합니다. 하지만 이것만으로 충분하지 않습니다. 메시지 broker가 at-least-once delivery를 제공하면 consumer도 같은 event를 두 번 받을 수 있습니다. 그래서 consumer에는 inbox 또는 processed_message table을 두고 event id에 unique constraint를 걸어 side effect가 한 번만 실행되게 합니다.</p>
+<h3>2. Outbox는 DB commit과 event publish 사이 간극을 줄인다</h3>
+<p>주문 DB에 주문을 저장한 뒤 broker에 <code>OrderCreated</code>를 publish하는 구조에서는 DB commit은 성공했지만 publish가 실패하는 간극이 생깁니다. Outbox는 주문 저장과 outbox event 저장을 같은 DB transaction으로 묶습니다. 별도 publisher가 outbox row를 읽어 broker에 발행합니다. 여기서도 발행 중복은 가능하므로 event id와 consumer idempotency가 필요합니다. Outbox는 exactly-once 마법이 아니라 “누락을 찾고 재발행할 수 있는 durable record”를 만드는 패턴입니다.</p>
+<h3>3. Saga는 rollback이 아니라 보상 가능한 workflow다</h3>
+<p>결제가 승인된 뒤 재고 차감이 실패하면 DB transaction처럼 자동 rollback할 수 없습니다. 이미 외부 결제 provider에 부작용이 발생했기 때문입니다. Saga는 각 단계의 상태를 저장하고, 실패 시 보상 동작을 실행합니다. 예를 들어 재고 차감 실패 시 결제 취소 요청을 보내고 주문 상태를 <code>PAYMENT_CANCEL_REQUESTED</code>로 바꿉니다. 보상도 실패할 수 있으므로 manual review queue와 운영자 runbook이 필요합니다. “Saga를 쓰면 해결됩니다”가 아니라 “보상 실패를 어디에 저장하고 누가 처리하는가”까지 답해야 합니다.</p>
+<h3>4. Exactly-once의 오해</h3>
+<p>Kafka나 특정 broker가 exactly-once semantics를 제공한다고 해도 외부 결제 API, 이메일 발송, DB update 같은 business side effect가 정확히 한 번만 일어난다는 뜻은 아닙니다. broker 내부의 producer/consumer transaction과 외부 시스템의 부작용은 다른 경계입니다. 실무 답변은 at-least-once delivery를 전제로 idempotency, dedupe key, unique constraint, processed table, reconciliation을 둔다고 말하는 편이 더 안전합니다.</p>
+<h3>5. Reconciliation은 eventual consistency의 안전망이다</h3>
+<p>eventual consistency는 시간이 지나면 자동으로 맞는다는 뜻이 아닙니다. 맞도록 만드는 작업이 있어야 합니다. reconciliation job은 결제 provider의 승인 내역과 내부 주문 상태, 재고 차감 이벤트와 재고 ledger, outbox 발행 상태와 consumer processed 상태를 비교합니다. 불일치가 있으면 재발행, 보상, manual review로 보냅니다. 운영 지표는 outbox backlog, DLQ count, consumer lag, reconciliation mismatch count, compensation failure count입니다.</p>
+<h3>면접에서의 90초 답변</h3>
+<p>“주문·결제·재고가 분리된 시스템에서는 네트워크 실패와 중복 처리를 기본값으로 둡니다. 주문 생성 API에는 idempotency key를 저장하고, 주문 DB 변경과 OrderCreated 이벤트는 outbox로 같은 transaction에 기록합니다. consumer는 processed table로 중복 event를 막고, 결제 승인 후 재고 실패처럼 부분 성공이 생기면 saga state와 보상 트랜잭션을 실행합니다. exactly-once라는 표현은 broker 내부 보장과 비즈니스 부작용을 분리해서 봐야 하며, 최종적으로 reconciliation job으로 provider 상태와 내부 상태가 수렴했는지 검증합니다.”</p>
+<div class="callout warn">
+<span class="co-label">전문가 기준</span>
+<p>분산 시스템 답변에서 “큐를 쓰면 됩니다”, “Kafka면 됩니다”, “eventual consistency입니다”는 초보 신호입니다. 실패 기록이 어디에 남고, 중복을 어떤 key로 막고, 보상 실패를 누가 처리하며, 수렴 여부를 어떤 job과 지표로 확인하는지 말해야 합니다.</p>
+</div>
+</section>
+
+<footer>DISTRIBUTED SYSTEMS INTERVIEW Q&A · V2 · 2026-06</footer>
 </main>
 </div>
 </body>

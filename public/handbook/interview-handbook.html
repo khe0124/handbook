@@ -16,6 +16,8 @@
   <a href="#ch5"><span class="code">IV-04</span>연습 루프</a>
   <a href="#ch6"><span class="code">IV-05</span>모의면접 체크리스트</a>
   <a href="#ch7"><span class="code">IV-06</span>답변 품질 비교</a>
+  <a href="#ch8"><span class="code">IV-07</span>평가 루브릭</a>
+  <a href="#ch9"><span class="code">IV-08</span>압박 시뮬레이션</a>
 </nav>
 <main>
 <header class="hero">
@@ -130,6 +132,41 @@
 <tr><td>React 렌더링 최적화</td><td>React.memo와 useMemo를 씁니다.</td><td>Profiler로 느린 컴포넌트를 찾고 memo를 적용합니다.</td><td>렌더링 원인이 부모 state 범위인지, context value인지, key 문제인지 먼저 분리하고 측정된 병목에만 memoization이나 virtualization을 적용합니다.</td></tr>
 <tr><td>트랜잭션</td><td>중요한 로직에는 트랜잭션을 겁니다.</td><td>함께 성공/실패해야 하는 작업을 묶습니다.</td><td>비즈니스 정합성 단위로 경계를 잡고, 격리 수준·락·외부 API 호출·재시도·멱등성까지 같이 판단합니다.</td></tr>
 <tr><td>프로젝트 성과</td><td>성능을 많이 개선했습니다.</td><td>렌더링이 느려서 최적화했습니다.</td><td>Profiler에서 grid cell 전체 rerender가 병목임을 확인했고, column definition 안정화와 draft 상태 분리로 commit 시간을 줄였습니다. 수치가 없다면 재현 조건과 QA 감소 같은 대체 증거를 제시합니다.</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">IV-07</span><h2>면접관 평가 루브릭</h2></div>
+<p class="lede">기술면접 답변은 정답 키워드보다 면접관이 어떤 위험을 줄이려 하는지 이해해야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">CAREER STRATEGY EVALUATION RUBRIC</span>
+면접관은 기술 지식, 문제 분해, 협업 신뢰, 운영 감각, 경험 진실성, 학습 가능성을 동시에 봅니다. 좋은 답변은 “제가 해봤습니다”가 아니라 어떤 제약에서 어떤 선택을 했고, 어떤 증거로 결과를 확인했으며, 어디까지가 본인 책임이었는지를 분리합니다.
+</div>
+<table>
+<tr><th>평가 축</th><th>면접관이 의심하는 지점</th><th>좋은 답변의 증거</th></tr>
+<tr><td>기술 깊이</td><td>용어만 외운 것은 아닌가?</td><td>내부 동작, 실패 모드, trade-off, 측정 지표를 함께 말합니다.</td></tr>
+<tr><td>문제 분해</td><td>복잡한 문제를 구조화할 수 있는가?</td><td>요구사항, 제약, 선택지, 검증 방법을 순서대로 나눕니다.</td></tr>
+<tr><td>협업 신뢰</td><td>혼자 잘하는 사람인가, 팀에서 재현 가능한가?</td><td>PR, 문서, 리뷰, 합의 기록, 운영 runbook을 말합니다.</td></tr>
+<tr><td>운영 감각</td><td>만든 뒤 장애와 변경을 책임질 수 있는가?</td><td>로그, metric, alert, rollback, postmortem 경험을 연결합니다.</td></tr>
+<tr><td>경험 진실성</td><td>직접 한 범위가 명확한가?</td><td>본인/팀/외부 시스템의 책임 경계를 정확히 나눕니다.</td></tr>
+<tr><td>학습 가능성</td><td>부족한 영역을 현실적으로 메울 수 있는가?</td><td>학습 계획보다 검증 가능한 작은 산출물을 제시합니다.</td></tr>
+</table>
+</section>
+
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">IV-08</span><h2>압박 질문 시뮬레이션</h2></div>
+<p class="lede">압박 질문은 후보자를 몰아붙이려는 절차가 아니라 답변의 경계와 증거를 확인하는 과정입니다.</p>
+<div class="serial-card">
+<span class="sc-label">INTERVIEW PRESSURE SIMULATION</span>
+압박을 받으면 방어적으로 길게 설명하지 말고 인정, 경계, 증거, 보완 계획 순서로 답합니다. “직접 운영한 경험은 제한적입니다. 다만 API 계약과 장애 증거 수집은 직접 했고, 서버 구현은 이 범위까지 검증했습니다”처럼 경험 경계를 먼저 잡아야 신뢰가 유지됩니다.
+</div>
+<table>
+<tr><th>압박 질문</th><th>약한 반응</th><th>복구 답변 구조</th></tr>
+<tr><td>그건 본인이 직접 한 게 맞나요?</td><td>“거의 다 했습니다.”</td><td>직접 한 범위, 협업한 범위, 이해만 한 범위를 분리합니다.</td></tr>
+<tr><td>수치가 없으면 어떻게 믿죠?</td><td>“체감상 좋아졌습니다.”</td><td>수치 부재를 인정하고 로그, QA ticket, 리뷰 cycle, 사용자 문의 같은 대체 증거를 제시합니다.</td></tr>
+<tr><td>그건 그냥 구현 아닌가요?</td><td>“아닙니다, 복잡했습니다.”</td><td>구현 난도를 요구사항 충돌, 실패 복구, 운영 리스크로 다시 정의합니다.</td></tr>
+<tr><td>왜 처음부터 그렇게 설계하지 않았나요?</td><td>“시간이 없었습니다.”</td><td>당시 제약, 놓친 신호, 이후 바뀐 판단 기준을 말합니다.</td></tr>
+<tr><td>입사 후 바로 못 하면 어떡하죠?</td><td>“열심히 배우겠습니다.”</td><td>30일 안에 확인할 정보, 작은 산출물, 리뷰 받을 지점을 제시합니다.</td></tr>
 </table>
 </section>
 

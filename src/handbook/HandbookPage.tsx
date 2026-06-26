@@ -1,6 +1,7 @@
 import { createRoot, type Root } from "react-dom/client";
 import { useEffect, useRef, useState } from "react";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
+import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
 import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
 import type { HandbookDocumentContent } from "./types";
@@ -14,9 +15,23 @@ type HandbookItem = {
 
 type HandbookPageProps = {
   item: HandbookItem;
+  onReady?: (itemId: string) => void;
 };
 
-export function HandbookPage({ item }: HandbookPageProps) {
+function shouldAttachInlineCodeCopy(itemId: string, code: HTMLElement) {
+  const text = code.textContent?.trim() ?? "";
+
+  return (
+    itemId === "practice-cheat-sheets" &&
+    text.length > 0 &&
+    text.length <= 90 &&
+    !code.closest("pre") &&
+    !code.closest(".serial-card") &&
+    !code.nextElementSibling?.classList.contains("inline-code-copy-mount")
+  );
+}
+
+export function HandbookPage({ item, onReady }: HandbookPageProps) {
   const [document, setDocument] = useState<HandbookDocumentContent | null>(null);
   const [failed, setFailed] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -68,11 +83,31 @@ export function HandbookPage({ item }: HandbookPageProps) {
       mounts.push(mount);
     });
 
+    main.querySelectorAll<HTMLElement>("code").forEach((code) => {
+      if (!shouldAttachInlineCodeCopy(item.id, code)) return;
+
+      const mount = window.document.createElement("span");
+      mount.className = "inline-code-copy-mount";
+      code.after(mount);
+
+      const root = createRoot(mount);
+      root.render(<InlineCodeCopyButton code={code} />);
+
+      roots.push(root);
+      mounts.push(mount);
+    });
+
     return () => {
       roots.forEach((root) => root.unmount());
       mounts.forEach((mount) => mount.remove());
     };
-  }, [document]);
+  }, [document, item.id]);
+
+  useEffect(() => {
+    if (!document) return;
+
+    onReady?.(item.id);
+  }, [document, item.id, onReady]);
 
   if (failed) {
     return (

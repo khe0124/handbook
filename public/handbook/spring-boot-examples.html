@@ -23,12 +23,12 @@ main{min-width:0;padding:0 56px 120px;background:var(--paper)}
 @media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
 .nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}
 .nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}
-nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:6px;font-size:13.5px;line-height:1.4}
+nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius: 0;font-size:13.5px;line-height:1.4}
 nav a:hover{background:var(--green-tint);color:var(--green-deep)}
 nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}
 header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}
 .hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
-.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:3px;background:var(--panel)}
+.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius: 0;background:var(--panel)}
 h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}
 .hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:660px}
 .hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}
@@ -43,8 +43,8 @@ p.lede{font-size:17px;color:var(--ink-soft)}
 em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}
 ul,ol{margin:0 0 16px 22px}
 li{margin-bottom:7px}
-code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:3px}
-.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0 6px 6px 0;margin:22px 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius: 0}
+.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius: 0;margin:22px 0}
 .callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}
 .callout.risk{border-left-color:var(--red);background:var(--red-tint)}
 .callout.gm{border-left-color:var(--ink);background:#ECEEF3}
@@ -59,15 +59,15 @@ td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line
 tr:last-child td{border-bottom:none}
 td .mono,td code{font-family:var(--mono);font-size:12.5px}
 .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0;font-family:var(--mono);font-size:12.5px}
-.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius:4px;font-weight:500}
+.flow .step{background:var(--panel);border:1px solid var(--ink);padding:8px 14px;border-radius: 0;font-weight:500}
 .flow .step.hl{background:var(--green);color:#fff;border-color:var(--green)}
 .flow .arr{color:var(--ink-soft)}
-.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:8px;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
+.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius: 0;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}
 .serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}
 .serial-card .seg{color:#FACC6B}
 .serial-card .seg2{color:#9DB6E8}
 .serial-card .dim{color:#9AA3B8}
-.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);margin-top:24px}
+.glossary{display:grid;grid-template-columns:1fr;border:1px solid var(--line);border-radius: 0;overflow:hidden;background:var(--panel);margin-top:24px}
 .g-row{display:grid;grid-template-columns:230px 1fr;border-bottom:1px solid var(--line)}
 .g-row:last-child{border-bottom:none}
 .g-term{padding:13px 18px;background:var(--green-tint)}
@@ -94,6 +94,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch9"><span class="code">SPRING-09</span>테스트</a>
   <a href="#ch10"><span class="code">SPRING-10</span>운영 — Actuator</a>
   <a href="#ch11"><span class="code">SPRING-11</span>치트시트</a>
+  <a href="#ch12"><span class="code">SPRING-12</span>프록시·트랜잭션·테스트 심화</a>
 </nav>
 <main>
 
@@ -536,6 +537,42 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <span class="co-label">한 기능을 끝까지 — 짜는 순서</span>
 <p>① 요청·응답 DTO(검증 어노테이션 포함) → ② 컨트롤러(매핑·상태코드) → ③ service(<code>@Transactional</code>·비즈니스 로직) → ④ repository(주입해 호출) → ⑤ 도메인 예외 + <code>@RestControllerAdvice</code> → ⑥ <code>@WebMvcTest</code>로 컨트롤러, 단위 테스트로 service. 이 한 바퀴를 손에 넣으면 새 기능마다 같은 골격을 반복하면 됩니다. 계층의 책임 분리가 왜 중요한지, 더 큰 구조는 (→ 아키텍처 패턴)에서.</p>
 </div>
+</section>
+
+<section id="ch12">
+<div class="ch-head"><span class="ch-code">SPRING-12</span><h2>프록시·트랜잭션·테스트 심화</h2></div>
+<p class="lede">Spring을 깊게 이해한다는 것은 어노테이션을 많이 아는 것이 아니라, 컨테이너가 만든 프록시 객체를 통해 부가기능이 적용된다는 사실을 이해하는 것입니다. <code>@Transactional</code>, 보안, 캐시, 로깅 AOP가 모두 이 사고 위에 있습니다.</p>
+<table>
+<tr><th>개념</th><th>정확한 의미</th><th>면접 단골 함정</th></tr>
+<tr><td>Bean</td><td>Spring container가 생성·관리하는 객체</td><td>new로 만든 객체에는 DI/AOP가 적용되지 않음</td></tr>
+<tr><td>Proxy</td><td>실제 객체 앞에서 트랜잭션 같은 부가기능을 감싸는 대리 객체</td><td>같은 클래스 내부 메서드 호출(self-invocation)은 프록시를 거치지 않음</td></tr>
+<tr><td>@Transactional</td><td>프록시가 메서드 전후로 transaction begin/commit/rollback을 처리</td><td>private 메서드, 내부 호출, checked exception rollback 정책 오해</td></tr>
+<tr><td>readOnly</td><td>읽기 트랜잭션 힌트, flush 최적화와 의도 표현</td><td>DB가 모든 쓰기를 자동 차단한다고 착각</td></tr>
+<tr><td>@ControllerAdvice</td><td>예외를 HTTP error contract로 번역하는 경계</td><td>모든 예외를 500으로 뭉개거나 문자열 message만 반환</td></tr>
+<tr><td>Slice Test</td><td>웹, JPA 등 특정 계층만 로드하는 빠른 테스트</td><td>모든 테스트를 @SpringBootTest로 돌려 느리고 깨지기 쉬움</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">TRANSACTION PROXY FLOW</span>
+client → proxy.findUser()<br>
+proxy: begin transaction<br>
+target service method 실행<br>
+proxy: 정상 return이면 commit, runtime exception이면 rollback<br>
+<span class="dim">this.otherTransactionalMethod() 는 proxy를 거치지 않으므로 새 트랜잭션 속성이 적용되지 않는다.</span>
+</div>
+<div class="callout warn">
+<span class="co-label">rollback 정책</span>
+<p>Spring의 기본 <code>@Transactional</code>은 unchecked exception(RuntimeException, Error)에서 rollback하고 checked exception은 기본적으로 rollback하지 않습니다. 비즈니스 예외를 checked로 만들었다면 <code>rollbackFor</code>를 명시해야 할 수 있습니다. 면접에서 “예외가 나면 롤백됩니다”로 끝내면 부족하고, 어떤 예외인지와 트랜잭션 경계가 어디인지까지 말해야 합니다.</p>
+</div>
+<h3>테스트 경계</h3>
+<table>
+<tr><th>테스트</th><th>검증할 것</th><th>피해야 할 것</th></tr>
+<tr><td>Domain unit</td><td>상태 전이, 불변식, 계산 규칙</td><td>Spring context 로딩</td></tr>
+<tr><td>Service unit</td><td>유스케이스 분기, repository port 호출, 예외 처리</td><td>DB 세부 구현 검증</td></tr>
+<tr><td>@WebMvcTest</td><td>HTTP mapping, validation, status code, error body</td><td>service 내부 로직 검증</td></tr>
+<tr><td>@DataJpaTest</td><td>repository query, mapping, constraint</td><td>mock DB로 SQL 문제 숨기기</td></tr>
+<tr><td>@SpringBootTest</td><td>실제 wiring, 전체 흐름, 설정 통합</td><td>모든 edge case를 통합 테스트로만 검증</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">SPRING DEPTH ANSWER</span>Spring의 @Transactional은 메서드에 마법이 걸리는 게 아니라 Spring bean을 감싼 proxy가 호출 전후로 트랜잭션을 시작하고 종료하는 구조입니다. 그래서 같은 클래스 내부 호출은 proxy를 거치지 않아 트랜잭션 속성이 적용되지 않을 수 있고, 기본 rollback은 unchecked exception 기준입니다. 테스트도 이 구조를 기준으로 domain은 순수 단위 테스트, web은 @WebMvcTest, repository는 @DataJpaTest, wiring은 소수의 @SpringBootTest로 나눕니다.</div>
 </section>
 
 <footer>
