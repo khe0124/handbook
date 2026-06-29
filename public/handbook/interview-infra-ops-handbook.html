@@ -20,6 +20,7 @@
   <a href="#q13"><span class="code">IO-13</span>핵심 질문 20선</a>
   <a href="#q14"><span class="code">IO-14</span>장애 추적 루틴</a>
   <a href="#q15"><span class="code">IO-15</span>K8S·Cloud Senior Drill</a>
+  <a href="#infra-deep-answer-upgrade"><span class="code">IO-16</span>Deep Answer Model</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-INFRA-OPS-QA-V2</span><span>SCOPE : NETWORK · CDN · CONTAINER · DELIVERY · OBSERVABILITY</span><span>LANG : KO</span></div><h1>인프라·운영 면접</h1><p class="hero-sub">인프라·운영 질문은 특정 클라우드 콘솔 사용법보다 <strong>요청이 지나가는 경로, 배포가 사용자에게 도달하는 과정, 장애를 좁히는 순서</strong>를 설명할 수 있는지 확인합니다.</p></header>
@@ -246,6 +247,26 @@
 <span class="sc-label">90초 답변 구조</span>
 “트래픽은 Ingress에서 Service로 들어오고, Service는 readiness를 통과한 pod에만 보냅니다. 부하가 늘면 HPA/VPA를 보되 DB connection과 queue lag까지 같이 봅니다. 점검 때는 PDB와 node drain으로 가용 replica를 유지하고, network policy와 IAM/KMS로 blast radius를 줄입니다. DR은 failover뿐 아니라 failback과 game day 결과까지 있어야 운영 가능한 설계입니다.”
 </div>
+</section>
+
+<section id="infra-deep-answer-upgrade" class="answer-card" data-answer-model="definition mechanism tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">IO-16</span><h2>DEEP ANSWER MODEL</h2></div>
+<p class="lede">인프라 답변은 서비스 이름을 맞히는 것이 아니라 사용자의 요청이 DNS, TLS, CDN/WAF, Load Balancer, App, DB pool 중 어디까지 도달했는지 증거로 좁히는 능력을 보여줘야 합니다.</p>
+<div class="serial-card"><span class="sc-label">CONCEPT DEPTH</span>정의 → 내부 동작 → trade-off → 실패 모드 → 검증 증거 → FOLLOW-UP DEFENSE 순서로 답합니다. Kubernetes도 Deployment, Service, Ingress 이름이 아니라 pod lifecycle, readiness endpoint selection, graceful termination, HPA metric, PDB eviction 흐름으로 설명해야 합니다.</div>
+<table>
+<tr><th>질문</th><th>부실한 답변</th><th>ANSWER UPGRADE TABLE</th></tr>
+<tr><td>사용자는 접속이 안 되는데 서버는 살아있다면?</td><td>로그를 확인합니다.</td><td>DNS resolve, TLS handshake, CDN/WAF request id, Load Balancer target health, app traceId, DB pool wait를 같은 timestamp로 놓고 가장 앞에서 끊긴 hop을 찾습니다.</td></tr>
+<tr><td>Kubernetes health check</td><td>readiness와 liveness를 설정합니다.</td><td>readiness는 endpoint에 포함될지 결정하고, liveness는 재시작 판단입니다. DB 지연을 liveness에 넣으면 장애 중 모든 pod가 재시작되어 회복을 방해할 수 있습니다.</td></tr>
+<tr><td>Autoscaling</td><td>HPA로 pod를 늘립니다.</td><td>CPU가 아니라 queue lag, p95 latency, DB connection pool, downstream rate limit을 같이 봅니다. pod만 늘리면 DB와 외부 API 병목을 키울 수 있습니다.</td></tr>
+</table>
+<h3>FOLLOW-UP DEFENSE</h3>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>COMMON TRAPS</th></tr>
+<tr><td>CPU가 낮은데 timeout이 나는 이유는?</td><td>DB pool wait, lock wait, external API timeout, thread pool starvation처럼 CPU 밖 대기가 원인일 수 있습니다. trace와 dependency metric을 봅니다.</td><td>리소스 평균만 보고 정상이라 판단하기</td></tr>
+<tr><td>rollback 기준은 누가 정하나요?</td><td>배포 전에 SLO, error rate, p95/p99, business metric, migration reversibility 기준으로 정하고, incident commander가 사용자 영향 기준으로 실행합니다.</td><td>개발자가 감으로 되돌린다고 말하기</td></tr>
+</table>
+<h3>EVIDENCE TO SAY</h3>
+<p>dig/curl/openssl 결과, LB target health, WAF log, app traceId, DB pool metric, SLO burn rate, incident timeline, rollback record, runbook diff를 답변 증거로 준비합니다.</p>
 </section>
 
 <footer>INFRA & OPERATIONS INTERVIEW Q&A · V2 · 2026-06</footer>

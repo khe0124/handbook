@@ -11,11 +11,17 @@
 <div class="nav-brand">CAREER · FRONTEND</div>
   <div class="nav-title">프론트엔드 · JS TS 면접</div>
   <a href="#bundle-index"><span class="code">INDEX</span>학습 로드맵</a>
+  <a href="#career-readiness-gate"><span class="code">GATE</span>답변 준비도</a>
+  <a href="#career-answer-rubric"><span class="code">RUBRIC</span>답변 품질</a>
+  <a href="#career-pressure-loop"><span class="code">LOOP</span>압박 대응</a>
+  <a href="#career-evidence-packet"><span class="code">EVIDENCE</span>증거 패킷</a>
+  <a href="#career-final-drill"><span class="code">DRILL</span>최종 점검</a>
   <a href="#doc-feinterview"><span class="code">DOC</span>프론트엔드 면접</a>
   <a href="#doc-jsts"><span class="code">DOC</span>JavaScript·TypeScript 면접</a>
   <a href="#doc-personalfe"><span class="code">DOC</span>프론트엔드 개발자 대응</a>
   <a href="#doc-feinterview"><span class="code">PART</span>프론트엔드 면접</a>
-<a href="#feinterview-q1"><span class="code">FE-01</span>브라우저 렌더링</a>
+<a href="#feinterview-q0"><span class="code">FE-00</span>답변 원칙</a>
+  <a href="#feinterview-q1"><span class="code">FE-01</span>브라우저 렌더링</a>
   <a href="#feinterview-q2"><span class="code">FE-02</span>React 렌더링 최적화</a>
   <a href="#feinterview-q3"><span class="code">FE-03</span>상태관리 설계</a>
   <a href="#feinterview-q4"><span class="code">FE-04</span>렌더링 전략</a>
@@ -35,6 +41,8 @@
   <a href="#feinterview-frontend-security-cache-drill"><span class="code">FE-D2</span>Security Cache Drill</a>
   <a href="#feinterview-frontend-causal-model"><span class="code">FE-D3</span>개념 인과관계</a>
   <a href="#feinterview-frontend-expert-rendering-model"><span class="code">FE-D4</span>전문가 렌더링 모델</a>
+  <a href="#feinterview-frontend-deep-answer-upgrade"><span class="code">FE-D5</span>Deep Answer Model</a>
+  <a href="#feinterview-frontend-project-evidence-answer-lab"><span class="code">FE-D6</span>Evidence Answer Lab</a>
   <a href="#doc-jsts"><span class="code">PART</span>JavaScript·TypeScript 면접</a>
 <a href="#jsts-q1"><span class="code">JT-01</span>실행 컨텍스트</a>
   <a href="#jsts-q2"><span class="code">JT-02</span>클로저와 스코프</a>
@@ -74,8 +82,97 @@
 <ul><li>프론트엔드 면접</li><li>JavaScript·TypeScript 면접</li><li>프론트엔드 개발자 대응</li></ul>
 </section>
 
+<section id="career-readiness-gate">
+<div class="ch-head"><span class="ch-code">GATE</span><h2>CAREER READINESS GATE</h2></div>
+<p class="lede"><strong>프론트엔드·JS/TS 답변 게이트</strong>는 이 문서를 읽은 뒤 실제 면접에서 바로 말할 수 있어야 하는 산출물 기준입니다. 목표는 더 많이 읽는 것이 아니라, 질문을 받았을 때 30초 결론과 90초 확장을 증거와 함께 말하는 상태를 만드는 것입니다.</p>
+<div class="serial-card">
+<span class="sc-label">프론트엔드·JS/TS 답변 게이트</span>
+브라우저, React, TypeScript, 성능, 보안을 기능 구현 경험이 아니라 사용자 영향과 측정 근거로 설명한다.
+</div>
+<table>
+<tr><th>준비 결과</th><th>면접에서 보여야 하는 신호</th><th>미달 신호</th></tr>
+<tr><td>30초 결론</td><td>첫 문장에서 판단 기준과 결론이 나온다.</td><td>배경 설명이 길고 질문의 핵심을 늦게 잡는다.</td></tr>
+<tr><td>90초 확장</td><td>대안, trade-off, 실패 모드, 검증 증거가 이어진다.</td><td>장점만 말하고 깨지는 조건을 말하지 못한다.</td></tr>
+<tr><td>압박 꼬리질문</td><td>모르는 범위와 직접 경험 범위를 분리한 뒤 확인 방법을 말한다.</td><td>직접 하지 않은 일을 경험처럼 포장한다.</td></tr>
+</table>
+<ul><li>렌더링 병목을 state 범위, context, key, network, bundle 중 어디서 찾을지 말한다.</li><li>TypeScript 안전성을 any 회피가 아니라 API 계약, unknown narrowing, discriminated union으로 설명한다.</li><li>프론트 보안과 캐시 문제를 XSS, token storage, CORS, cache invalidation, CSP 증거로 연결한다.</li></ul>
+</section>
+
+<section id="career-answer-rubric">
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>ANSWER QUALITY RUBRIC</h2></div>
+<p class="lede">답변 품질은 유창함이 아니라 검증 가능성으로 판단합니다. 아래 기준으로 녹음 답변을 채점하고, 약한 답변은 결론, 근거, 증거 순서로 다시 작성합니다.</p>
+<table>
+<tr><th>등급</th><th>답변 상태</th><th>보정 기준</th></tr>
+<tr><td>S</td><td>결론, 기준, trade-off, 실패 모드, 검증 증거, 본인 기여가 모두 분리된다.</td><td>압박 질문 2개를 붙여도 같은 경계와 증거를 유지한다.</td></tr>
+<tr><td>A</td><td>핵심 개념과 실무 예시는 좋지만 수치나 산출물 증거가 일부 비어 있다.</td><td>PR·ADR·지표·장애기록·QA ticket 중 최소 2개를 붙인다.</td></tr>
+<tr><td>B</td><td>개념 설명은 가능하지만 경험, 대안, 실패 조건이 약하다.</td><td>직접 경험, 일부 참여, 설계 지식을 문장 안에서 분리한다.</td></tr>
+<tr><td>C</td><td>기술명과 기능 목록 중심이고 면접관이 기여도와 판단 기준을 확인하기 어렵다.</td><td>질문을 다시 정의하고 30초 결론부터 재작성한다.</td></tr>
+</table>
+</section>
+
+<section id="career-pressure-loop">
+<div class="ch-head"><span class="ch-code">LOOP</span><h2>PRESSURE RESPONSE LOOP</h2></div>
+<p class="lede">압박 질문은 틀리게 만들기 위한 질문이 아니라 답변의 경계와 증거를 확인하는 질문입니다. 당황했을 때는 답변을 확장하지 말고 구조를 되찾습니다.</p>
+<div class="serial-card">
+<span class="sc-label">PRESSURE RESPONSE LOOP</span>
+1. 질문을 한 문장으로 재정의한다<br>
+2. 직접 경험 / 일부 경험 / 설계 지식을 분리한다<br>
+3. 판단 기준 2개만 말한다<br>
+4. 증거 하나와 실패 모드 하나를 붙인다<br>
+5. 남은 불확실성은 검증 계획으로 닫는다
+</div>
+<table>
+<tr><th>압박 질문</th><th>복구 답변</th><th>피해야 할 방향</th></tr>
+<tr><td>React.memo를 썼다는 말 말고 실제로 무엇이 빨라졌나요?</td><td>측정 기준, 병목 위치, 선택한 최적화, 버린 대안, 전후 증거 순서로 답변을 복구한다.</td><td>질문을 피하려고 일반론을 길게 늘리는 것</td></tr>
+<tr><td>그건 본인이 한 일인가요?</td><td>본인 결정, 팀 결정, 외부 제약을 분리하고 본인이 소유한 판단만 말한다.</td><td>팀 성과 전체를 개인 성과처럼 말하는 것</td></tr>
+<tr><td>수치나 증거가 없으면 어떻게 확인하나요?</td><td>정량 지표가 없었던 한계를 인정하고, 재현 절차·QA ticket·before/after·PR diff 같은 대체 증거를 제시한다.</td><td>좋아졌다고만 말하는 것</td></tr>
+</table>
+</section>
+
+<section id="career-evidence-packet">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>EVIDENCE PACKET</h2></div>
+<p class="lede">면접 답변은 기억이 아니라 증거로 보강합니다. 각 문서에서 최소 하나의 대표 답변을 만들고, 아래 산출물을 붙여 실제 경험과 설계 지식의 경계를 명확히 합니다.</p>
+<table>
+<tr><th>증거 묶음</th><th>준비할 항목</th><th>면접에서 쓰는 방식</th></tr>
+<tr><td>핵심 산출물</td><td>Profiler 캡처, Network waterfall, bundle 분석, PR·ADR·지표·장애기록·QA ticket</td><td>주장 뒤에 바로 붙일 수 있는 근거로 정리한다.</td></tr>
+<tr><td>공통 증거</td><td>PR·ADR·지표·장애기록·QA ticket</td><td>기술 판단, 협업 합의, 결과 확인을 한 번에 보여준다.</td></tr>
+<tr><td>답변 카드</td><td>질문, 30초 결론, 90초 확장, 압박 꼬리질문, 위험 표현, 대체 문장</td><td>면접 전날 같은 질문을 다시 말하며 품질을 점검한다.</td></tr>
+</table>
+</section>
+
+<section id="career-final-drill">
+<div class="ch-head"><span class="ch-code">DRILL</span><h2>FINAL 10 MINUTE DRILL</h2></div>
+<p class="lede">면접 직전에는 새 내용을 추가하지 않습니다. 이미 준비한 답변의 결론, 경계, 증거만 빠르게 복구합니다.</p>
+<table>
+<tr><th>시간</th><th>할 일</th><th>완료 기준</th></tr>
+<tr><td>0-3분</td><td>프론트엔드·JS/TS 답변 게이트 질문 하나를 30초 결론으로 말한다.</td><td>첫 문장에 결론과 판단 기준이 있다.</td></tr>
+<tr><td>3-6분</td><td>같은 질문을 90초 확장으로 말한다.</td><td>대안, trade-off, 실패 모드, 증거가 포함된다.</td></tr>
+<tr><td>6-8분</td><td>압박 꼬리질문 하나를 붙여 답변을 복구한다.</td><td>모르는 범위를 숨기지 않고 확인 방법으로 닫는다.</td></tr>
+<tr><td>8-10분</td><td>DANGEROUS PHRASES를 제거하고 대체 문장으로 바꾼다.</td><td>추상 표현 없이 본인 기여와 증거가 남는다.</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">DANGEROUS PHRASES</span>
+<p>“많이 해봤습니다”, “대충 알고 있습니다”, “그냥 최적화했습니다”, “팀에서 처리했습니다”처럼 범위와 증거가 없는 표현은 약하게 들립니다. “제가 소유한 결정은 A이고, B 제약 때문에 C를 선택했으며, 결과는 D 증거로 확인했습니다”로 바꿉니다.</p>
+</div>
+</section>
+
 <section id="doc-feinterview">
 <div class="ch-head"><span class="ch-code">PART</span><h2>프론트엔드 면접</h2></div>
+</section>
+
+<section id="feinterview-q0" class="answer-card" data-answer-model="definition mechanism cause effect tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">FE-00</span><h2>프론트엔드 답변 원칙</h2></div>
+<p class="lede">프론트엔드 답변은 기술명을 많이 말하는 것이 아니라 사용자 행동 하나가 React, 브라우저, 네트워크, 보안 경계를 지나며 어떤 비용과 실패를 만드는지 설명해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">SPOKEN ANSWER MODEL</span>정의 → 내부 동작 → 원인 → 결과 → trade-off → 실패 모드 → 검증 증거 순서로 답합니다. 답변이 “useMemo를 씁니다”에서 끝나면 구현 방법만 말한 것이고, “어떤 state 변경이 어떤 render와 layout 비용을 만들었고 어떤 수치로 줄었는가”까지 말해야 면접 답변이 됩니다.</div>
+<h3>답변 밀도 기준</h3>
+<p>각 답변은 먼저 개념의 경계를 잡고, 그 다음 내부 동작을 설명하며, 마지막에 실패했을 때 사용자가 겪는 결과와 검증 증거를 붙입니다. 예를 들어 렌더링 최적화는 memoization 이름보다 state update, render scheduling, reconciliation, commit, browser layout/paint 중 어느 단계가 병목인지 분리해야 합니다.</p>
+<h3>약한 답변을 바꾸는 방식</h3>
+<table>
+<tr><th>약한 답변</th><th>강한 답변으로 바꾸는 기준</th></tr>
+<tr><td>React.memo를 사용합니다.</td><td>왜 다시 렌더링됐는지, props 참조가 왜 바뀌었는지, memo가 왜 효과가 없었는지, commit duration이 어떻게 바뀌었는지 말합니다.</td></tr>
+<tr><td>성능을 최적화했습니다.</td><td>LCP, INP, CLS 중 어떤 지표가 나빴고, TTFB, render-blocking resource, long task, layout box 중 어느 원인을 줄였는지 말합니다.</td></tr>
+<tr><td>보안을 신경 씁니다.</td><td>untrusted source가 어떤 sink로 들어가는지, XSS/CSRF/cache 노출이 어떤 결과로 이어지는지, CSP나 Trusted Types가 어떤 한계를 갖는지 말합니다.</td></tr>
+</table>
 </section>
 
 <section id="feinterview-q1">
@@ -88,8 +185,16 @@
 </div>
 <h3>30초 답변</h3>
 <div class="serial-card">브라우저는 DOM과 CSSOM을 만들고 Render Tree를 구성한 뒤 Layout, Paint, Composite 단계로 화면을 그립니다. 실무에서는 `width`, `top`처럼 layout을 다시 계산하게 만드는 변경과, 조건이 맞으면 compositor 계층에서 처리될 수 있는 `transform`, `opacity` 변경을 구분하는 것이 성능 최적화의 핵심입니다.</div>
-<h3>90초 답변</h3>
-<p>렌더링 파이프라인은 UI 성능 문제를 계층적으로 좁히기 위한 모델입니다. DOM 변경이 많다고 항상 느린 것이 아니라, 그 변경이 스타일 계산, layout, paint, composite 중 어디까지 영향을 주는지가 중요합니다. 애니메이션에서 `transform`이 `top`보다 유리한 이유도 layout 재계산을 피하고 compositor가 처리할 가능성이 높기 때문입니다. 다만 layer promotion은 메모리를 쓰므로 `will-change`를 남용하면 오히려 손해가 될 수 있습니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>DOM을 쓴 직후 layout 값을 읽으면 브라우저가 최신 위치와 크기를 보장하려고 forced synchronous layout을 수행할 수 있습니다. 이런 읽기/쓰기가 반복되면 layout thrashing이 되고, 큰 subtree의 layout과 paint가 반복되어 입력과 animation frame을 밀어냅니다. layout containment는 영향 범위를 줄이고, transform/opacity는 조건이 맞으면 compositor layer에서 처리되어 layout을 피할 수 있습니다. 다만 layer promotion과 <code>will-change</code>는 GPU memory를 쓰므로 오래 남기면 memory pressure와 paint 비용을 키울 수 있습니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>브라우저 렌더링은 순서 암기보다 어떤 코드가 어느 단계를 무효화하는지 설명하는 것이 중요합니다. 예를 들어 DOM style을 바꾼 뒤 바로 <code>getBoundingClientRect</code>를 읽으면 브라우저가 forced synchronous layout을 수행할 수 있고, 이 패턴이 반복되면 layout thrashing으로 frame budget을 넘깁니다. 반대로 transform이나 opacity는 조건이 맞으면 composite 단계에서 처리될 수 있어 animation에 유리합니다. 하지만 layer promotion은 GPU memory를 사용하므로 <code>will-change</code>를 남용하면 오히려 메모리와 paint 비용이 늘 수 있습니다. 그래서 저는 Performance 탭에서 style recalculation, layout, paint, composite 비용을 분리해 보고, containment나 batched DOM read/write로 영향 범위를 줄입니다.</p>
+<h3>실패 모드</h3>
+<p>모든 animation을 compositor로 보내려고 layer를 과하게 만들면 GPU memory가 늘고 low-end device에서 frame drop이 생길 수 있습니다. 반대로 layout 값을 반복해서 읽는 코드를 방치하면 작은 UI 변경도 전체 layout 비용으로 번집니다.</p>
+<h3>검증 증거</h3>
+<p>Chrome Performance 탭의 forced reflow 경고, style recalculation/layout/paint/composite 비용, layer count, frame drop, layout containment 적용 전후를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“transform이면 항상 빠른가요?”에는 layout을 피할 가능성이 높지만 layer promotion과 GPU memory 비용이 있어 측정이 필요하다고 답합니다. “will-change를 미리 넣으면 좋지 않나요?”에는 짧은 구간에만 쓰고 오래 남기지 않는다고 답합니다.</p>
 <h3>면접에서 말할 증거</h3>
 <p>Chrome Performance 탭에서 layout/paint/composite 비용을 비교한 캡처, 애니메이션 변경 전후 frame drop, layout thrashing 재현 코드와 수정 결과를 말하면 신뢰도가 올라갑니다.</p>
 <h3>꼬리질문</h3>
@@ -104,12 +209,20 @@
 <p>React 최적화는 memo를 붙이는 작업이 아니라 렌더링 원인, state 위치, props 참조 안정성, 리스트 key, 비싼 계산, 브라우저 렌더링 비용을 함께 보는 과정입니다.</p>
 <div class="callout">
 <span class="co-label">개념 해부</span>
-<p>React에서 render는 컴포넌트 함수를 다시 실행해 다음 UI 설명을 만드는 단계이고, commit은 변경된 결과를 실제 DOM에 반영하는 단계입니다. 렌더링이 일어났다고 항상 DOM이 많이 바뀌는 것은 아니지만, render가 비싸거나 commit 이후 layout/paint가 커지면 사용자는 느리게 느낍니다. <code>memo</code>는 “렌더링 금지 스위치”가 아니라 이전 props와 다음 props가 같을 때 컴포넌트 함수 재실행을 건너뛰는 조건부 최적화입니다. props가 매번 새 객체나 새 함수면 memo가 기대만큼 동작하지 않습니다.</p>
+<p>React에서 state update는 즉시 DOM을 바꾸는 명령이 아니라 다음 UI tree를 계산하도록 작업을 예약하는 신호입니다. render phase에서는 컴포넌트 함수가 실행되고 element tree가 만들어지며, reconciliation은 이전 tree와 다음 tree를 비교해 어떤 fiber를 유지할지 결정합니다. key가 안정적이면 state preservation이 가능하지만 key가 바뀌면 같은 위치의 UI라도 state가 초기화될 수 있습니다. commit phase에서는 실제 DOM mutation과 ref/effect 연결이 일어나고, 그 뒤 브라우저의 style calculation, layout/paint가 사용자 지연으로 보입니다.</p>
 </div>
 <h3>30초 답변</h3>
-<div class="serial-card">먼저 React DevTools Profiler로 어떤 컴포넌트가 왜 렌더링되는지 확인합니다. 그 다음 state 위치를 조정하고 props 참조를 안정화하며, 실제 병목이 있을 때 `memo`, `useMemo`, `useCallback`, virtualization을 적용합니다. 감으로 최적화하지 않고 측정으로 시작합니다.</div>
-<h3>90초 답변</h3>
-<p>렌더링 최적화는 원인 분리가 먼저입니다. 부모 state가 너무 넓게 잡혀 있는지, context 값이 매번 새 객체인지, 리스트 key가 불안정한지, 셀 렌더러가 무거운지 확인합니다. 대용량 table이나 grid에서는 모든 데이터를 React state에 올리는 구조가 비용을 만들 수 있으므로 virtualization, row 단위 memoization, 편집 draft 분리도 봅니다.</p>
+<div class="serial-card">저는 먼저 느린 지점이 React render 비용인지, commit DOM mutation 비용인지, 이후 browser layout/paint 비용인지 나눕니다. 같은 “렌더링이 느리다”라도 원인이 parent state 범위, props 참조 변경, key 불안정, context 전파, layout thrashing 중 어디냐에 따라 해결책이 달라집니다.</div>
+<h3>원인-결과 흐름</h3>
+<p>state update가 발생하면 render scheduling이 일어나고, 부모 컴포넌트가 다시 실행되면서 새 object/function props가 만들어질 수 있습니다. 이 참조가 child로 내려가면 <code>memo</code>가 있어도 props equality가 깨지고, reconciliation 범위가 넓어지며, commit에서 DOM mutation이 커지거나 commit 이후 layout/paint 비용이 커집니다. Strict Mode에서는 개발 중 render/effect가 반복되어 cleanup 누락과 idempotency 문제도 더 잘 드러납니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>React 렌더링 최적화는 memo를 먼저 붙이는 일이 아니라 원인을 분리하는 일이라고 봅니다. 예를 들어 입력이 느린 화면이면 React Profiler로 어떤 컴포넌트가 왜 다시 렌더링되는지 확인하고, Chrome Performance에서 commit 이후 layout/paint나 long task가 있는지도 같이 봅니다. 상위 state가 너무 넓어 child가 계속 재실행된다면 state를 더 가까운 곳으로 내리고, 매 렌더마다 새 object/function을 props로 넘긴다면 데이터 구조와 callback 경계를 안정화합니다. key가 불안정해서 state preservation이 깨지는 경우도 있어서 list key와 remount 여부를 확인합니다. 그 다음 실제 비용이 큰 컴포넌트에만 memoization을 적용하고, 대용량 리스트라면 virtualization이나 pagination으로 렌더링 대상 자체를 줄입니다.</p>
+<h3>실패 모드</h3>
+<p><code>React.memo</code>를 넓게 붙였는데 props 참조가 계속 바뀌면 비교 비용만 늘고 효과는 없습니다. 반대로 render phase는 가벼운데 DOM이 크게 바뀌거나 layout이 반복되는 문제라면 memoization보다 DOM 구조, style 변경, virtualization이 더 중요합니다.</p>
+<h3>검증 증거</h3>
+<p>React Profiler의 render reason, commit duration, why-did-you-render 로그, Chrome Performance의 layout/paint 비용, 입력 지연 p95, 스크롤 FPS를 전후로 비교합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“memo를 붙였는데 왜 안 빨라졌나요?”라는 질문에는 props 참조가 불안정하거나 실제 병목이 render가 아니라 layout/paint일 수 있다고 답합니다. “useCallback을 많이 쓰면 좋은가요?”에는 참조 안정성이 필요한 경계에서만 쓰고, dependency 관리와 코드 복잡도 비용을 같이 본다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>useMemo를 많이 쓰면 좋은가요?</td><td>아닙니다. 계산 비용과 참조 안정성이 실제 병목일 때만 의미가 있고, 자체 관리 비용도 있습니다.</td></tr><tr><td>Context가 느린 이유는?</td><td>provider value가 바뀌면 consumer가 넓게 다시 렌더링될 수 있어서 값 분리와 selector 패턴이 필요합니다.</td></tr><tr><td>key는 왜 중요한가요?</td><td>React가 기존 element와 새 element를 매칭하는 기준이라 불안정하면 상태 보존과 렌더링 비용이 깨집니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -127,9 +240,17 @@
 <p>상태는 “값을 어디에 저장할까”가 아니라 “누가 진실의 원천인가”의 문제입니다. 서버 상태의 진실은 서버에 있고 프론트의 값은 캐시입니다. form draft의 진실은 사용자가 아직 저장하지 않은 입력이고, URL state의 진실은 공유 가능한 주소입니다. 이 경계를 섞으면 사용자가 취소를 눌렀을 때 돌아갈 원본이 없어지고, refetch가 들어왔을 때 편집 중인 값이 덮이며, 서버 validation 실패를 어느 상태에 반영해야 하는지 모호해집니다.</p>
 </div>
 <h3>30초 답변</h3>
-<div class="serial-card">저는 먼저 서버 상태와 UI 상태를 나눕니다. 서버 상태는 캐시, 재시도, 동기화, 최신성 문제가 있으므로 TanStack Query나 RTK Query 같은 도구가 유리하고, 모달 열림이나 입력 중 draft 같은 UI 상태는 가능한 가까운 컴포넌트에 둡니다.</div>
-<h3>90초 답변</h3>
-<p>상태의 위치는 “진실의 원천이 어디인가”, “공유 범위가 어디까지인가”, “실패했을 때 어떻게 복구하는가”로 정합니다. 서버에서 온 원본과 사용자가 수정 중인 draft를 섞으면 저장 실패나 취소 시 복구가 어렵습니다. 복잡한 입력 UI에서는 `serverData`, `draftData`, `validationErrors`, `dirtyRows`처럼 책임을 나누는 편이 안정적입니다.</p>
+<div class="serial-card">저는 상태를 저장 위치가 아니라 책임으로 나눕니다. 서버에서 온 값은 server snapshot이고, 사용자가 아직 저장하지 않은 값은 draft이며, dirty와 validation error는 복구와 저장 판단을 위한 별도 상태입니다.</div>
+<h3>원인-결과 흐름</h3>
+<p>server snapshot과 draft를 같은 객체로 다루면 refetch가 들어왔을 때 편집 중인 값이 덮이거나, 저장 실패 후 원래 값으로 rollback할 기준이 사라집니다. dirty field와 validation error를 분리하지 않으면 어떤 row가 변경됐고 어떤 오류가 서버 검증에서 온 것인지 모호해집니다. 그래서 복잡한 입력 UI는 server snapshot, draft, dirty, validation error, submit status, rollback 기준을 분리해야 합니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>상태관리는 먼저 진실의 원천을 나누는 문제라고 봅니다. 서버에서 받은 데이터는 프론트가 소유한 원본이 아니라 특정 시점의 server snapshot이고, 사용자가 입력 중인 값은 아직 저장되지 않은 draft입니다. 이 둘을 섞으면 취소, 저장 실패, 동시 수정, refetch 상황에서 복구가 어려워집니다. 그래서 form이나 grid에서는 draft, dirty field, validation error를 별도로 두고, 서버 상태는 query cache와 invalidation 정책으로 관리합니다. optimistic update를 쓰는 경우에도 실패했을 때 어떤 snapshot으로 rollback할지와 사용자에게 어떤 오류 단위를 보여줄지 같이 설계합니다.</p>
+<h3>실패 모드</h3>
+<p>API 응답을 전역 store에 복사하고 그 값을 그대로 편집하면 query cache와 store가 서로 다른 원본이 됩니다. 이 상태에서 refetch, 저장 실패, 동시 수정이 겹치면 화면은 성공처럼 보이지만 서버에는 반영되지 않은 값이 남거나, 사용자가 고친 draft가 조용히 사라질 수 있습니다.</p>
+<h3>검증 증거</h3>
+<p>상태 구조도, 저장 실패 rollback 화면, 서버 validation error 매핑, stale/refetch 정책, optimistic update 실패 테스트를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“그냥 Redux에 다 넣으면 편하지 않나요?”라는 질문에는 전역 store가 편의는 줄 수 있지만 서버 상태의 최신성, invalidation, retry, dedupe 책임까지 직접 떠안게 된다고 답합니다. “상태 라이브러리 기준은요?”에는 공유 범위, 쓰기 빈도, 디버깅 필요성, 실패 복구 기준으로 고른다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Redux와 Context 기준은?</td><td>Context는 read-heavy 전역 값에 적합하고, 복잡한 write, 디버깅, 확장 처리가 필요하면 store를 봅니다.</td></tr><tr><td>URL state는 언제 쓰나요?</td><td>검색, 필터, 정렬, 페이지처럼 공유/복원 가능한 상태에 씁니다.</td></tr><tr><td>서버 상태 도구가 필요한 이유는?</td><td>캐시, refetch, stale time, dedupe, retry 같은 서버 동기화 문제를 직접 구현하지 않기 위해서입니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -148,8 +269,16 @@
 </div>
 <h3>30초 답변</h3>
 <div class="serial-card">SEO와 초기 로딩이 중요한 공개 페이지는 SSR이나 SSG가 유리하고, 로그인 이후 개인화와 상호작용이 강한 화면은 CSR이 자연스러운 경우가 많습니다. ISR은 정적 페이지를 캐시하되 stale 시간이 지난 뒤 요청 흐름에서 재검증하거나 재생성하는 절충안입니다.</div>
-<h3>90초 답변</h3>
-<p>SSR은 초기 HTML을 서버에서 만들어 보내므로 SEO와 첫 표시에는 유리하지만 서버 비용, TTFB, hydration 비용이 생깁니다. SSG는 변경이 적은 콘텐츠에 강하고, ISR은 캐시된 정적 페이지를 일정 조건에서 갱신합니다. Server Components도 서버/클라이언트 경계를 잘 나누면 번들을 줄일 수 있지만, interactive state와 브라우저 API가 필요한 부분은 client boundary가 필요합니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>공개 상품 페이지는 검색 노출과 첫 HTML이 중요하므로 SSG나 ISR이 유리하지만 가격·재고 freshness가 중요하면 재검증 정책이 필요합니다. 로그인 대시보드는 사용자별 권한과 개인화 데이터가 많아 public cache를 쓰기 어렵고, SSR을 쓰더라도 cache key와 session 경계를 신중히 잡아야 합니다. 개인화 검색 결과는 query, 권한, 정렬 조건이 매번 달라 CSR 또는 서버 데이터 fetch와 client boundary 조합이 자연스러울 수 있습니다. streaming SSR은 Suspense boundary 단위로 먼저 준비된 HTML을 보낼 수 있지만, RSC client boundary를 잘못 잡으면 bundle 절감보다 hydration waterfall과 상태 경계 혼선이 커질 수 있습니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>렌더링 전략은 프레임워크 기능명을 고르는 문제가 아니라 페이지의 데이터 확정 시점과 사용자별 차이를 보는 문제입니다. 공개 상품 페이지처럼 SEO와 cache 효율이 중요하고 사용자별 차이가 작으면 SSG나 ISR을 먼저 봅니다. 로그인 대시보드처럼 권한별 데이터가 섞이면 SSR을 쓰더라도 cache가 개인화 응답을 공유하지 않도록 private 정책과 session 경계를 확인합니다. 개인화 검색 결과는 쿼리와 필터가 자주 바뀌기 때문에 CSR이나 서버 상태 도구가 더 단순할 수 있습니다. streaming SSR은 초기 표시를 앞당길 수 있지만 Suspense boundary가 너무 크면 중요한 정보가 fallback 뒤에 숨고, RSC client boundary가 많아지면 결국 client bundle과 hydration 비용이 다시 커질 수 있습니다.</p>
+<h3>실패 모드</h3>
+<p>공개 페이지에 CSR만 쓰면 크롤링과 초기 표시가 약해질 수 있고, 개인화 페이지에 aggressive cache를 쓰면 다른 사용자의 데이터가 노출될 수 있습니다. SSR을 무조건 선택하면 서버 비용, TTFB, hydration mismatch, cache invalidation 문제가 커집니다.</p>
+<h3>검증 증거</h3>
+<p>페이지 유형별 TTFB, HTML cache hit, hydration duration, LCP, bundle size, RSC client boundary 수, 개인화 cache header 점검 결과를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“Next.js면 SSR이 정답 아닌가요?”에는 공개 상품 페이지, 로그인 대시보드, 개인화 검색 결과가 서로 다른 제약을 가진다고 답합니다. “streaming SSR이면 다 빨라지나요?”에는 boundary 설계와 hydration waterfall을 함께 봐야 한다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>hydration mismatch는 왜 생기나요?</td><td>서버 HTML과 클라이언트 첫 렌더 결과가 다를 때 생기며 시간, 랜덤값, 브라우저 전용 상태가 흔한 원인입니다.</td></tr><tr><td>SSR이 항상 좋은가요?</td><td>아닙니다. 서버 비용과 hydration 비용이 생기므로 페이지 목적에 맞춰야 합니다.</td></tr><tr><td>RSC는 왜 어렵나요?</td><td>서버 데이터, 클라이언트 이벤트, 로컬 상태 경계를 명확히 나누지 않으면 디버깅이 어려워집니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -167,9 +296,17 @@
 <p>성능 지표는 서로 다른 병목을 가리킵니다. LCP는 주요 콘텐츠가 언제 보이는지, CLS는 화면이 얼마나 흔들리는지, INP는 사용자의 입력에 얼마나 빨리 반응하는지를 봅니다. 번들이 작아도 API가 느리면 LCP가 나빠질 수 있고, 이미지는 빨리 떠도 메인 스레드 long task가 길면 클릭 반응이 늦습니다. 그래서 성능 개선은 “빠르게 만들었다”가 아니라 network, main thread, rendering, server latency 중 어느 병목을 줄였는지 증명하는 작업입니다.</p>
 </div>
 <h3>30초 답변</h3>
-<div class="serial-card">먼저 Core Web Vitals, Network waterfall, Performance 탭, React Profiler로 병목을 측정합니다. 이후 LCP 이미지, INP long task, CLS 원인, bundle size, API latency 중 어디가 문제인지 나눠 비용 대비 효과가 큰 지점부터 개선합니다.</div>
-<h3>90초 답변</h3>
-<p>최적화는 추측이 아니라 측정으로 시작합니다. 초기 로딩이 느리면 bundle split, route-level lazy loading, critical asset 최적화를 봅니다. 상호작용이 느리면 long task, 비싼 validation, 대형 리스트 렌더링을 봅니다. API가 무겁다면 응답 크기, pagination, server filtering, cache policy까지 함께 봐야 합니다.</p>
+<div class="serial-card">저는 성능을 LCP, INP, CLS 같은 사용자 체감 지표로 먼저 나누고, 각 지표를 네트워크, 메인 스레드, 렌더링, 서버 응답 중 어느 계층 문제인지 추적합니다. 개선 후에는 lab data뿐 아니라 field data의 p75나 p95도 같이 봅니다.</div>
+<h3>원인-결과 흐름</h3>
+<p>LCP가 느리면 TTFB가 길거나 render-blocking CSS/JS 때문에 LCP 후보 리소스 발견이 늦고, 이미지 다운로드와 디코딩이 밀리면서 주요 콘텐츠 표시가 지연됩니다. INP는 사용자의 입력 이후 event handler, 큰 JSON parsing, list filtering, synchronous validation 같은 long task가 main thread를 점유해 next paint를 늦출 때 악화됩니다. CLS는 이미지 크기 미지정, late font swap, 동적 배너 삽입처럼 layout box가 뒤늦게 바뀔 때 증가합니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>웹 성능은 “빠르게 만들었다”가 아니라 어떤 지표의 어떤 병목을 줄였는지로 설명해야 한다고 봅니다. 초기 표시가 느리면 먼저 Network waterfall로 TTFB, render-blocking resource, LCP image priority를 확인하고, JavaScript 실행 비용이 크면 Performance 탭에서 parse/compile/execute와 long task를 봅니다. 상호작용이 느리면 React Profiler와 Performance를 함께 보고, event handler나 validation이 next paint를 막는지 확인합니다. CLS가 문제라면 이미지와 동적 영역의 layout box가 처음부터 예약되는지 봅니다. 수정 후에는 Lighthouse 한 번이 아니라 throttling 조건, Core Web Vitals field data, p75/p95 사용자 지표를 전후 비교합니다.</p>
+<h3>실패 모드</h3>
+<p>번들만 줄였는데 LCP 원인이 TTFB나 LCP 이미지 우선순위라면 체감 개선이 작습니다. preload를 과하게 넣으면 실제 LCP 후보가 아닌 자원이 네트워크를 선점해 더 느려질 수 있고, long task를 줄이지 않으면 INP는 그대로 나쁠 수 있습니다.</p>
+<h3>검증 증거</h3>
+<p>CrUX나 RUM의 field data, Lighthouse lab data, Network waterfall, Chrome Performance long task, LCP candidate 기록, INP event timing, CLS layout shift entry를 근거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“Lighthouse 점수만 올리면 충분한가요?”에는 lab data는 재현과 비교에 좋지만 실제 사용자의 기기와 네트워크를 반영하는 field data도 봐야 한다고 답합니다. “이미지를 최적화했는데 왜 느린가요?”에는 서버 응답, render-blocking resource, hydration, main thread long task가 LCP/INP를 막을 수 있다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>LCP 개선은?</td><td>hero image, font, critical CSS, server response, render-blocking resource를 봅니다.</td></tr><tr><td>INP 개선은?</td><td>long task를 줄이고 비싼 계산을 분리하거나 debounce, worker, virtualization을 검토합니다.</td></tr><tr><td>수치가 없으면?</td><td>정량 지표가 없으면 재현 조건, 측정 도구, 체감 병목, QA 감소 같은 증거를 말합니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -188,8 +325,16 @@
 </div>
 <h3>30초 답변</h3>
 <div class="serial-card">기본은 semantic HTML, 키보드 접근, focus 표시와 이동, 명도 대비, 상태 변화 전달입니다. ARIA는 기본 HTML 구조를 대체하는 것이 아니라 보완하는 수단으로 봅니다.</div>
-<h3>90초 답변</h3>
-<p>접근성은 장애 사용자만의 문제가 아니라 품질, SEO, 유지보수성과 연결됩니다. modal은 focus trap과 Escape, dialog labeling이 필요하고, form은 label, error message, aria-describedby가 필요합니다. 일정이 부족해도 heading 구조, 버튼/링크 의미, 키보드 접근, contrast는 초기에 잡아야 나중 비용이 작습니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>대화형 요소가 semantic HTML을 잃으면 브라우저가 role, keyboard activation, accessible name을 자동으로 제공하지 못합니다. 그래서 <code>div</code> 버튼은 click은 되지만 keyboard와 screen reader에서는 버튼으로 인식되지 않을 수 있습니다. modal은 focus trap, focus return, Escape 처리, labeling이 없으면 사용자가 배경으로 빠지거나 현재 대화상자의 이름을 알 수 없습니다. 상태 변경은 <code>aria-live</code> 같은 announcement 경로가 없으면 보조기술 사용자에게 전달되지 않고, composite widget은 roving tabindex 없이 모든 item을 tab stop으로 만들면 탐색 비용이 폭증합니다. virtualized list/grid는 DOM에 없는 row를 보조기술이 알 수 없으므로 row count, focus 유지, 대체 탐색을 설계해야 합니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>접근성은 ARIA를 많이 붙이는 일이 아니라 브라우저가 제공하는 의미와 상호작용을 깨지 않는 일이라고 봅니다. 먼저 button, a, label, heading 같은 semantic HTML을 사용해 role과 accessible name을 자연스럽게 만들고, 부족한 정보만 ARIA로 보완합니다. modal은 focus trap, Escape, aria-labelledby, 닫힌 뒤 focus return을 확인하고, toast나 비동기 저장 결과는 aria-live로 전달해야 합니다. 복합 위젯은 roving tabindex로 keyboard 탐색 범위를 제어하고, disabled와 aria-disabled는 실제 focus 가능성과 submit 가능성 차이를 이해하고 선택합니다. virtualized list/grid는 보이는 DOM만 존재하기 때문에 screen reader와 keyboard focus가 끊기지 않는지 별도 검증이 필요합니다.</p>
+<h3>실패 모드</h3>
+<p>ARIA로 native semantics를 흉내 내다 role과 keyboard 동작이 어긋나면 화면상으로는 정상이어도 keyboard 사용자에게는 사용할 수 없는 컴포넌트가 됩니다. <code>aria-disabled</code>를 쓰고 실제 click handler를 막지 않으면 비활성처럼 보이는 버튼이 실행될 수도 있습니다.</p>
+<h3>검증 증거</h3>
+<p>keyboard-only 탐색 녹화, accessible name 점검, screen reader smoke test, axe/Lighthouse 결과, focus trap 테스트, aria-live announcement 확인, virtualized grid focus 유지 테스트를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“ARIA를 붙이면 접근성이 좋아지나요?”에는 native semantic을 먼저 쓰고 ARIA는 보완 수단이라고 답합니다. “Lighthouse 점수만 보면 되나요?”에는 자동 도구는 일부만 잡으므로 keyboard와 screen reader 수동 흐름을 같이 본다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>ARIA를 많이 쓰면 좋은가요?</td><td>아닙니다. native semantic을 먼저 쓰고 부족한 정보만 보완합니다.</td></tr><tr><td>모달 접근성은?</td><td>role/dialog, label, focus trap, Escape, 배경 inert 처리, 닫은 뒤 focus 복귀를 봅니다.</td></tr><tr><td>검증은 어떻게 하나요?</td><td>키보드만 사용, screen reader smoke test, axe/Lighthouse, 수동 focus flow를 봅니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -207,9 +352,18 @@
 <p>프론트엔드는 사용자의 브라우저에서 실행되므로 클라이언트 상태와 UI 조건은 신뢰 경계 밖에 있다고 봐야 합니다. 공격자는 API를 직접 호출하거나 요청 값을 바꿀 수 있고, XSS가 생기면 우리 origin의 JavaScript 실행 환경과 브라우저 저장소에 접근할 수 있습니다. 그래서 “화면에서 버튼을 숨긴다”는 권한 방어가 아니라 UX 처리입니다. XSS는 token storage, 사용자 대신 요청, 화면 변조로 이어질 수 있고, CORS는 다른 origin의 브라우저 요청을 제한하는 정책이지 서버 API의 인증·인가를 대신하지 않습니다.</p>
 </div>
 <h3>30초 답변</h3>
-<div class="serial-card">클라이언트는 사용자 경험과 1차 방어를 담당하지만 최종 보안 경계는 서버입니다. 프론트에서는 XSS를 막기 위해 escaping과 sanitizing, CSP를 보고, token 저장과 쿠키 정책, 권한별 UI 노출, 민감정보 로그 노출을 함께 봅니다.</div>
-<h3>90초 답변</h3>
-<p>XSS는 사용자 입력이 실행 가능한 코드로 렌더링될 때 생기므로 `innerHTML` 사용, markdown/html rendering, URL allowlist를 주의해야 합니다. CSRF는 브라우저가 자동으로 쿠키를 붙이는 특성과 관련되므로 SameSite, CSRF token, origin 검증이 필요합니다. CORS는 보안 기능이지만 인증/인가를 대체하지 않습니다.</p>
+<div class="serial-card">프론트엔드 보안은 source에서 들어온 untrusted data가 어떤 sink로 흘러가는지 추적하는 일입니다. UI 권한 체크는 UX이고, 최종 인가는 서버가 해야 하지만 프론트도 XSS, cache 노출, token 저장, 민감정보 로그 같은 공격면을 줄여야 합니다.</div>
+<h3>원인-결과 흐름</h3>
+<p>사용자 입력, 외부 API, CMS, markdown 파일 같은 source가 markdown/html/SVG/URL 변환을 거쳐 <code>innerHTML</code>, script URL, redirect URL, DOM attribute 같은 sink로 들어가면 XSS나 open redirect가 됩니다. XSS가 발생하면 localStorage token 탈취, 사용자 대신 요청, 화면 변조로 이어질 수 있습니다. Trusted Types는 dangerous sink에 문자열이 직접 들어가는 것을 막고, CSP nonce/hash는 허용된 script 실행을 좁히지만 sanitizer bypass와 URL allowlist 오류는 별도로 점검해야 합니다.</p>
+<p>source와 sink를 먼저 식별한 뒤 markdown renderer, SVG 허용 정책, URL protocol allowlist, Trusted Types 적용 범위, sanitizer bypass negative test를 같은 흐름에서 확인해야 합니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>저는 프론트엔드 보안을 source-sink 흐름으로 설명합니다. 예를 들어 사용자가 입력한 markdown을 HTML로 렌더링한다면 입력 source, sanitizer, 허용 tag와 URL protocol, 최종 DOM sink를 나눠 봅니다. sanitizer가 있어도 SVG, DOM clobbering, mutation XSS, javascript URL 같은 sanitizer bypass가 가능하므로 CSP와 Trusted Types를 함께 고려합니다. token 저장도 XSS와 CSRF 중 어떤 위험을 더 크게 볼지의 trade-off입니다. localStorage는 구현이 쉽지만 XSS 때 token이 직접 탈취될 수 있고, httpOnly cookie는 JS 접근을 막지만 SameSite, CSRF token, Origin 검증이 필요합니다. 개인화 API 응답을 public cache에 넣으면 보안 사고가 되므로 Cache-Control과 Vary도 보안 경계로 봅니다.</p>
+<h3>실패 모드</h3>
+<p>프론트에서 버튼을 숨겼다고 권한이 막힌 것은 아닙니다. 공격자는 API를 직접 호출할 수 있습니다. 또 CSP만 켰다고 XSS가 사라지는 것도 아닙니다. markdown renderer나 sanitizer 설정이 틀리면 허용된 경로 안에서 우회될 수 있습니다.</p>
+<h3>검증 증거</h3>
+<p>source-sink 점검표, sanitizer negative test, CSP violation report, Trusted Types rollout 결과, token storage ADR, 서버 인가 실패 테스트, cache header 점검 결과를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“보안은 서버가 하는 것 아닌가요?”라는 질문에는 최종 인가는 서버 책임이지만 프론트는 DOM sink, token exposure, cache policy, 민감정보 로그 노출을 줄이는 책임이 있다고 답합니다. “CORS를 열면 안전한가요?”에는 CORS는 브라우저의 cross-origin 읽기 정책이지 인증과 인가를 대신하지 않는다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>localStorage token은 왜 위험한가요?</td><td>XSS가 발생하면 token 탈취가 쉬워집니다. httpOnly cookie와 trade-off를 비교해야 합니다.</td></tr><tr><td>CORS를 열면 안전한가요?</td><td>아닙니다. CORS는 브라우저 정책이고 서버 권한 검증은 별도로 필요합니다.</td></tr><tr><td>프론트 권한 체크로 충분한가요?</td><td>아닙니다. UI 숨김은 UX이고 서버가 최종 인가를 해야 합니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -228,8 +382,16 @@
 </div>
 <h3>30초 답변</h3>
 <div class="serial-card">순수 로직은 unit test, 컴포넌트 상호작용은 Testing Library, API와 연결된 흐름은 MSW 기반 integration test, 핵심 사용자 journey는 Playwright 같은 E2E로 검증합니다. 모든 것을 E2E로 하지 않고 위험도에 따라 나눕니다.</div>
-<h3>90초 답변</h3>
-<p>테스트 피라미드는 속도와 신뢰도의 균형입니다. validation, formatter, adapter는 unit test가 좋고, form submit이나 error state는 integration test가 적합합니다. 결제, 로그인, 권한처럼 깨지면 큰 흐름은 E2E로 최소 세트를 둡니다. snapshot은 구조 회귀에는 도움이 되지만 사용자 행동을 대신하지 않습니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>순수 함수의 분기 오류는 unit test가 가장 빠르게 잡지만, API 응답에 따른 화면 전환은 실제 network boundary를 흉내 내지 않으면 contract drift를 놓치기 쉽습니다. MSW 기반 integration test는 서버 응답 성공, 지연, 오류, validation error를 사용자 흐름 안에서 검증하게 해줍니다. Playwright E2E는 browser navigation, cookie, focus, file upload처럼 런타임 통합이 필요한 경로에 적합하지만, 너무 많이 두면 flaky test와 긴 feedback loop가 생깁니다.</p>
+<h3>90초 발화형 답변</h3>
+<p>프론트엔드 테스트는 모든 것을 E2E로 올리는 것이 아니라 버그를 가장 싸게 잡는 계층을 고르는 일입니다. formatter, validation rule, adapter처럼 입력과 출력이 명확한 코드는 unit test로 빠르게 잡습니다. API 응답에 따라 loading, empty, error, success 화면이 바뀌는 흐름은 MSW를 둔 integration test가 적합합니다. 로그인, 권한, 결제, 파일 업로드처럼 browser runtime과 backend 계약이 함께 깨질 수 있는 핵심 journey는 Playwright E2E로 최소 세트를 둡니다. 다만 E2E가 많아지면 flaky와 유지보수 비용이 커지므로 contract drift가 자주 나는 API는 schema나 mock fixture 관리까지 같이 봅니다.</p>
+<h3>실패 모드</h3>
+<p>mock이 실제 API와 달라지면 테스트는 통과하지만 운영에서 깨지는 contract drift가 생깁니다. 반대로 모든 테스트를 E2E로 만들면 느리고 flaky해져 팀이 테스트를 신뢰하지 않게 됩니다.</p>
+<h3>검증 증거</h3>
+<p>unit test의 validation 반례, MSW integration test의 error state, Playwright 핵심 journey, flaky test 격리 기록, API fixture 갱신 정책, 회귀 버그 재현 테스트를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“커버리지만 높으면 충분한가요?”에는 coverage보다 사용자가 실패하는 경로를 잡는지가 중요하다고 답합니다. “E2E가 제일 실제에 가까운데 다 E2E로 하면 되지 않나요?”에는 비용과 flaky 문제 때문에 위험도 높은 journey만 남긴다고 답합니다.</p>
 <h3>꼬리질문</h3>
 <table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>무엇부터 테스트하나요?</td><td>장애 비용이 큰 흐름, 반복 버그, 복잡한 validation과 adapter부터 잡습니다.</td></tr><tr><td>mock은 어디까지?</td><td>단위 테스트는 외부를 mock하고, 통합 테스트는 MSW로 API 계약에 가까운 응답을 둡니다.</td></tr><tr><td>E2E가 느리면?</td><td>핵심 happy path와 대표 error path만 남기고 나머지는 낮은 계층 테스트로 내립니다.</td></tr></table>
 <h3>오답/주의점</h3>
@@ -258,7 +420,15 @@
 <p>SSR에서 서버는 HTML 문자열을 만들고, 브라우저는 그 HTML을 먼저 보여준 뒤 React가 같은 컴포넌트 트리를 다시 계산해 이벤트를 연결합니다. 이때 React는 “이미 있는 DOM이 내가 계산한 첫 결과와 같다”고 가정합니다. 서버에는 <code>window</code>, viewport, localStorage, 사용자의 현재 시간대 같은 정보가 없으므로 클라이언트 첫 렌더에서 다른 값을 만들면 mismatch가 납니다. 핵심은 서버 렌더와 클라이언트 첫 렌더의 입력을 같게 만드는 것입니다.</p>
 </div>
 <h3>30초 답변</h3><div class="serial-card">서버와 클라이언트의 첫 렌더 입력이 같아야 합니다. `Date.now`, random, window 접근, localStorage 기반 분기처럼 서버에서 알 수 없는 값은 client effect 이후로 미루거나 서버에서 동일한 값을 내려줘야 합니다.</div>
-<h3>90초 답변</h3><p>SSR 페이지에서 mismatch가 나면 단순 경고가 아니라 이벤트 바인딩, 레이아웃 shift, 사용자 신뢰 문제로 이어질 수 있습니다. 인증 UI는 서버 세션 기반으로 초기 상태를 맞추고, 브라우저 전용 값은 mounted 이후 렌더합니다. 다국어/시간대도 서버와 클라이언트 locale이 다르면 문제가 됩니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>SSR에서 서버는 HTML을 만들고 브라우저는 그 HTML을 먼저 보여준 뒤 React가 클라이언트에서 first render를 다시 계산해 이벤트를 연결합니다. 이때 <code>Date.now</code>, random, locale, viewport, <code>localStorage</code>, 인증 상태, feature flag처럼 서버와 클라이언트 입력이 다르면 기존 DOM과 첫 render 결과가 달라지고 hydration warning, 부분 재생성, 이벤트 연결 지연, 깜빡임이 생깁니다. 해결은 경고를 숨기는 것이 아니라 서버 initial data를 맞추거나 mounted 이후 분기, client-only boundary, Suspense boundary로 차이를 격리하는 것입니다.</p>
+<h3>90초 발화형 답변</h3><p>hydration mismatch는 서버 HTML과 클라이언트 첫 렌더 결과가 달라질 때 생깁니다. SSR의 목적은 HTML을 빨리 보내는 것에서 끝나지 않고, 클라이언트가 같은 입력으로 첫 render를 계산해 안정적으로 hydration을 끝내는 데 있습니다. 예를 들어 테마를 localStorage에서 바로 읽거나 <code>Date.now</code>로 시간을 렌더링하면 서버는 그 값을 알 수 없어 클라이언트 결과가 달라질 수 있습니다. 인증 UI도 서버 세션과 클라이언트 상태가 다르면 로그인/로그아웃 화면이 깜빡일 수 있습니다. 그래서 초기 렌더에 필요한 값은 cookie나 서버 initial props로 맞추고, 브라우저 전용 값은 mounted 이후 처리하거나 client-only boundary로 분리합니다. streaming SSR에서는 Suspense boundary를 너무 크게 잡으면 중요한 정보가 fallback 뒤에 숨고 hydration waterfall이 생길 수 있어 boundary 설계도 같이 봅니다.</p>
+<h3>실패 모드</h3>
+<p><code>suppressHydrationWarning</code>으로 경고만 숨기면 입력 불일치가 남아 이벤트 연결 지연, layout shift, 잘못된 초기 UI가 계속될 수 있습니다. 개인화 데이터를 public cache에 섞으면 mismatch를 넘어 다른 사용자 정보 노출로 이어질 수도 있습니다.</p>
+<h3>검증 증거</h3>
+<p>hydration warning 원인 diff, 서버 initial props 정리, mounted guard 적용 전후, localStorage 테마 처리 방식, streaming SSR waterfall, client-only boundary 적용 사례를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“경고만 숨기면 되지 않나요?”에는 경고를 숨기는 것과 서버/클라이언트 first render 입력을 맞추는 것은 다르다고 답합니다. “SSR이면 무조건 빠른가요?”에는 TTFB, hydration 비용, cache와 개인화 위험까지 비교해야 한다고 답합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>suppressHydrationWarning은?</td><td>정말 불가피한 작은 차이에만 쓰고 근본 해결로 보지 않습니다.</td></tr><tr><td>localStorage 테마는?</td><td>초기 script나 cookie로 서버/클라이언트 입력을 맞춥니다.</td></tr><tr><td>RSC와 관련은?</td><td>서버 컴포넌트와 클라이언트 컴포넌트 경계를 명확히 해야 합니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>mismatch 경고 원인 추적, 서버 initial props 정리, mounted guard 적용 전후를 설명합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>경고를 숨기는 것과 서버/클라이언트 렌더 입력을 맞추는 것은 다릅니다.</p></div>
@@ -272,7 +442,15 @@
 <p>JavaScript 비용은 다운로드 크기만이 아닙니다. 브라우저는 스크립트를 다운로드하고, 압축을 풀고, parse/compile하고, 실행해야 합니다. 큰 라이브러리가 초기 chunk에 들어오면 네트워크뿐 아니라 메인 스레드도 오래 점유합니다. 코드 스플리팅은 이 비용을 뒤로 미루는 기술이지만, 너무 잘게 나누면 요청 waterfall과 loading state가 늘어납니다. 따라서 “쪼갰다”가 아니라 첫 사용자 행동에 필요한 코드와 나중 행동에 필요한 코드를 구분하는 것이 핵심입니다.</p>
 </div>
 <h3>30초 답변</h3><div class="serial-card">먼저 bundle analyzer로 큰 의존성과 중복을 확인합니다. route-level splitting, dynamic import, tree shaking, 무거운 editor/chart 라이브러리 지연 로딩을 적용하고, split이 너무 잘게 쪼개져 request overhead가 커지지 않는지도 봅니다.</div>
-<h3>90초 답변</h3><p>초기 로딩이 느린 경우 vendor bundle, polyfill, locale data, icon import, chart/editor 같은 큰 모듈을 봅니다. 사용자 여정상 첫 화면에 필요 없는 기능은 lazy load하고, 자주 쓰는 공통 모듈은 캐시 효율을 고려합니다. 최적화 후에는 LCP, TBT/INP, cache hit, chunk waterfall을 다시 확인합니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>큰 라이브러리가 초기 chunk에 들어오면 download뿐 아니라 decompress, parse/compile, execute 비용이 main thread를 점유합니다. route-level splitting과 dynamic import는 첫 화면에 필요 없는 editor/chart 코드를 뒤로 미루지만, 너무 잘게 쪼개면 request waterfall과 fallback 깜빡임이 늘어납니다. preload와 fetchpriority는 LCP 후보를 앞당길 수 있지만 잘못 쓰면 덜 중요한 chunk가 네트워크를 선점하는 priority inversion을 만들 수 있습니다.</p>
+<h3>90초 발화형 답변</h3><p>번들 최적화는 gzip 크기만 줄이는 일이 아니라 초기 사용자 행동에 꼭 필요한 JavaScript 실행 비용을 줄이는 일입니다. 먼저 bundle analyzer로 vendor, polyfill, locale data, icon, chart/editor 라이브러리가 초기 chunk에 들어오는지 확인합니다. 첫 화면에 필요 없는 기능은 route-level splitting이나 사용 액션 기준 dynamic import로 나누고, loading fallback이 사용자 흐름을 끊지 않는지도 봅니다. preload와 fetchpriority는 LCP 이미지나 핵심 font처럼 중요한 자원에만 제한적으로 쓰고, 잘못된 priority가 다른 critical request를 밀어내지 않는지 waterfall로 확인합니다. 최종적으로는 chunk 수, cache hit, parse/compile long task, LCP/INP 변화를 같이 봅니다.</p>
+<h3>실패 모드</h3>
+<p>코드를 너무 잘게 나누면 초기 bundle은 작아져도 runtime waterfall이 늘어 사용자가 클릭한 뒤 더 오래 기다릴 수 있습니다. fetchpriority나 preload를 남용하면 중요하지 않은 자원이 먼저 받아져 LCP가 늦어지는 priority inversion이 생길 수 있습니다.</p>
+<h3>검증 증거</h3>
+<p>bundle analyzer 리포트, chunk waterfall, parse/compile long task, route-level splitting 전후 LCP/INP, preload/fetchpriority 적용 전후 network priority, cache hit 변화를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“gzip 크기를 줄이면 끝인가요?”에는 JavaScript는 parse/compile과 execute 비용도 있어서 main thread long task를 같이 봐야 한다고 답합니다. “dynamic import는 많이 할수록 좋은가요?”에는 request overhead와 fallback UX 때문에 사용자 흐름 기준으로 나눈다고 답합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>dynamic import 기준은?</td><td>초기 화면에 필요 없고 크거나 특정 액션에서만 필요한 기능입니다.</td></tr><tr><td>tree shaking 실패는?</td><td>sideEffects, ESM/CJS, import 방식, barrel export를 확인합니다.</td></tr><tr><td>너무 많이 쪼개면?</td><td>요청 수와 waterfall이 늘 수 있어 실제 네트워크에서 확인합니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>번들 분석 리포트, chunk 변화, LCP/TBT 변화, lazy loading fallback UX를 제시합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>gzip 크기만 말하지 말고 실행 비용과 long task까지 같이 봐야 합니다.</p></div>
@@ -300,7 +478,16 @@
 <p>대용량 grid가 느린 이유는 row가 많아서만이 아닙니다. 한 셀을 수정했는데 전체 row 배열, column definition, cell renderer props가 모두 새 참조가 되면 React는 넓은 범위를 다시 계산합니다. 또한 validation을 매 입력마다 전체 데이터에 대해 돌리면 입력 지연이 생깁니다. grid는 “표”가 아니라 작은 form 수천 개가 모인 시스템이므로 원본, draft, error, dirty state, focus, selection, 서버 저장 상태를 분리해야 합니다.</p>
 </div>
 <h3>30초 답변</h3><div class="serial-card">virtualization으로 보이는 row만 렌더링하고, 서버 원본과 draft, validation error, dirty row를 분리합니다. cell edit마다 전체 데이터를 새로 만들지 않고 변경분 중심으로 관리하며, 무거운 validation은 debounce나 submit 단계로 나눕니다.</div>
-<h3>90초 답변</h3><p>grid 성능은 row 수보다 업데이트 범위가 더 중요할 때가 많습니다. 전체 rows 배열을 매번 새로 만들면 memoization이 깨지고, column definition이 매 렌더 새 객체면 cell이 불필요하게 다시 렌더링됩니다. Excel 업로드는 parse, mapping, preview, validation, submit을 단계로 나눠야 사용자가 오류를 고칠 수 있습니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>cell edit가 발생할 때 전체 rows 배열을 새로 만들고 column definition이나 cell renderer props도 매번 새 참조가 되면 row/cell memoization 실패가 발생합니다. 그 결과 보이지 않는 cell까지 render scheduling 대상이 되고, commit과 layout/paint 비용이 커져 입력 지연이 생깁니다. 여기에 validation을 매 key stroke마다 전체 row에 대해 돌리면 IME 입력, focus 유지, 스크롤 sync까지 흔들릴 수 있습니다. 그래서 draft를 row 또는 cell 단위로 분리하고, stable columns, virtualization, overscan, batch validation, 필요 시 worker offloading을 함께 설계합니다.</p>
+<p>정리하면 cell edit → rows 배열 전체 교체 → memoization 실패 → virtualization으로 렌더링 범위 제한 → IME와 focus 유지 검증 → 무거운 validation의 worker offloading 순서로 원인과 대응을 연결합니다.</p>
+<h3>90초 발화형 답변</h3><p>대용량 grid는 row 수가 많아서만 느린 것이 아니라 한 셀 변경이 얼마나 넓게 전파되는지가 중요합니다. 예를 들어 cell edit 때 rows 배열 전체를 새로 만들면 각 row props가 바뀌고 memoization이 깨져 수천 개 cell이 다시 렌더링될 수 있습니다. column definition이 렌더마다 새 객체가 되는 경우도 cell renderer를 불필요하게 깨웁니다. 저는 서버 원본과 draft, dirty row, validation error를 분리하고, 보이는 영역은 virtualization과 적절한 overscan으로 제한합니다. dynamic row height나 pinned column, scroll sync가 있으면 virtualization이 더 어려워지므로 focus와 keyboard navigation까지 같이 테스트합니다. Excel 업로드나 대량 validation은 parse, mapping, preview, validation, submit 단계로 나누고, 무거운 검증은 debounce나 submit 단계 또는 worker offloading으로 분리합니다.</p>
+<h3>실패 모드</h3>
+<p>virtualization만 넣으면 접근성, 검색, focus 이동, IME 조합 입력, 스크롤 복원 문제가 새로 생길 수 있습니다. 저장 실패를 row/cell 단위로 매핑하지 않으면 사용자는 어떤 값을 고쳐야 하는지 알 수 없고, 전체 재시도만 남습니다.</p>
+<h3>검증 증거</h3>
+<p>React Profiler의 row render count, Chrome Performance의 input long task, 스크롤 FPS, commit duration, IME 입력 재현, focus 유지 테스트, row 단위 오류 매핑 화면을 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“가상 스크롤을 쓰면 끝 아닌가요?”에는 보이는 row 수는 줄지만 state 전파, validation 비용, focus/접근성 문제가 남는다고 답합니다. “라이브러리 쓰면 해결되나요?”에는 라이브러리는 렌더링 도구이고 domain row, draft, validation, 저장 실패 복구 모델은 직접 설계해야 한다고 답합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>virtualization 단점은?</td><td>접근성, dynamic height, focus 이동, 검색/스크롤 복원이 어려울 수 있습니다.</td></tr><tr><td>validation 위치는?</td><td>cell, row, submit, server 단계로 나눕니다.</td></tr><tr><td>저장 실패는?</td><td>row/cell별 오류와 재시도 대상을 명확히 보여줍니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>렌더링 횟수, 스크롤 FPS, 변경분 상태 구조, row 단위 오류 매핑 화면을 준비합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>Grid 라이브러리 이름보다 상태 구조와 검증 경계가 핵심입니다.</p></div>
@@ -314,7 +501,15 @@
 <p>DOM과 SVG는 브라우저가 각 요소를 노드로 관리하므로 스타일링, 접근성, 이벤트 위임이 쉽습니다. 대신 노드 수가 많아지면 style calculation, layout, paint 대상이 늘어납니다. Canvas는 픽셀 버퍼에 직접 그리는 방식이라 많은 점이나 도형을 빠르게 그릴 수 있지만, 브라우저가 개별 도형의 의미를 알지 못합니다. 그래서 hit testing, focus, screen reader 대응, 부분 업데이트를 개발자가 직접 설계해야 합니다. 선택 기준은 “빠른가”가 아니라 “브라우저에게 맡길 일을 어디까지 직접 할 것인가”입니다.</p>
 </div>
 <h3>30초 답변</h3><div class="serial-card">DOM은 접근성과 일반 UI 구성에 강하고, SVG는 벡터 도형과 연결선 표현에 좋으며, Canvas는 많은 요소를 직접 그릴 때 유리합니다. React Flow 같은 라이브러리는 graph UI 생산성을 주지만 node/edge 상태와 렌더링 최적화를 이해해야 합니다.</div>
-<h3>90초 답변</h3><p>DOM/SVG는 요소 단위로 접근하고 스타일링하기 쉽지만 노드 수가 많아지면 layout과 paint 비용이 커질 수 있습니다. Canvas는 대량 렌더링에 유리하지만 접근성, 텍스트 선택, 개별 요소 이벤트, 테스트가 어려워집니다. Flow editor는 domain graph와 view graph를 분리하고 저장 가능한 payload를 명확히 해야 합니다.</p>
+<h3>원인-결과 흐름</h3>
+<p>DOM과 SVG는 브라우저가 각 요소의 의미, style, event, focus를 관리하므로 접근성과 상호작용이 쉽지만 노드 수와 path 수가 많아지면 style calculation과 paint 비용이 늘어납니다. Canvas는 픽셀 버퍼에 직접 그리므로 많은 점과 도형을 빠르게 그릴 수 있지만 브라우저가 개별 도형의 의미를 잃습니다. 그래서 dirty rectangle으로 다시 그릴 영역을 줄이고, hit map으로 좌표와 도형을 매핑하며, device pixel ratio를 반영해 선명도를 맞추고, 필요하면 WebGL로 전환하거나 DOM overlay로 접근성/입력을 보완해야 합니다.</p>
+<h3>90초 발화형 답변</h3><p>렌더링 방식을 고를 때는 빠른지만 보지 않고 브라우저에게 맡길 책임과 우리가 직접 구현할 책임을 나눕니다. DOM은 접근성, focus, text selection, form interaction에 강해서 일반 UI에 적합합니다. SVG는 연결선, 확대/축소, path styling에 좋지만 path 수가 많아지면 paint 비용이 커질 수 있습니다. Canvas는 대량 렌더링에 유리하지만 개별 요소의 hit testing, keyboard focus, screen reader 대체 구조, dirty rectangle, device pixel ratio 보정을 직접 설계해야 합니다. 요소 수와 animation이 더 커지면 WebGL을 검토하고, 입력 UI나 tooltip은 DOM overlay로 섞는 전략도 씁니다. React Flow는 생산성을 주지만 domain graph와 view graph, node/edge 상태 안정성, drag 중 업데이트 범위를 별도로 설계해야 합니다.</p>
+<h3>실패 모드</h3>
+<p>Canvas를 쓰면 화면은 빨라져도 접근성, 테스트, hit testing, text selection이 사라질 수 있습니다. SVG나 DOM을 너무 많은 노드로 구성하면 layout과 paint가 커져 drag나 zoom이 끊길 수 있습니다.</p>
+<h3>검증 증거</h3>
+<p>노드/path 수 증가별 frame time, Canvas dirty rectangle 적용 전후 redraw 비용, hit map 정확도, device pixel ratio 대응, WebGL 전환 기준, DOM overlay 상호작용 테스트, React Flow drag 중 commit 횟수를 증거로 제시합니다.</p>
+<h3>압박 질문 방어</h3>
+<p>“Canvas가 항상 빠르지 않나요?”에는 그리기 자체는 유리할 수 있지만 hit testing, 접근성, focus, testing 비용을 직접 구현해야 한다고 답합니다. “React Flow 쓰면 그래프 문제는 끝인가요?”에는 저장 가능한 domain graph와 화면용 view graph를 분리해야 한다고 답합니다.</p>
 <h3>꼬리질문</h3><table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Canvas 접근성은?</td><td>대체 DOM 구조, keyboard interaction, ARIA 보조가 필요합니다.</td></tr><tr><td>React Flow 성능은?</td><td>node props 안정성, selector, memoization, drag 업데이트 범위를 봅니다.</td></tr><tr><td>SVG가 좋은 경우는?</td><td>도형, 연결선, 확대/축소, 스타일 제어가 필요한 경우입니다.</td></tr></table>
 <h3>면접에서 말할 증거</h3><p>노드 수 증가 시 렌더링 비용, node/edge 저장 payload, drag 중 commit 횟수 측정 결과를 말합니다.</p>
 <h3>오답/주의점</h3><div class="callout warn"><span class="co-label">주의</span><p>Canvas가 항상 빠르다는 식의 답변은 위험합니다. 상호작용과 접근성 비용을 같이 말해야 합니다.</p></div>
@@ -337,6 +532,16 @@
 <section id="feinterview-q16">
 <div class="ch-head"><span class="ch-code">FE-16</span><h2>핵심 질문 20선과 답변 훈련</h2></div>
 <p class="lede">아래 질문은 프론트엔드 면접에서 반복적으로 깊이를 확인하는 축입니다. 각 질문은 30초 답변으로 시작하고, 90초 확장에서 trade-off와 검증 방법을 붙입니다.</p>
+<h3>실전 압박 면접 세트</h3>
+<p>이 세트는 질문을 많이 외우기 위한 목록이 아니라, 면접관이 “왜 그렇게 판단했나요?”, “실제로 빨라졌다는 증거가 있나요?”, “언제 쓰면 안 되나요?”라고 물었을 때 답변을 확장하는 훈련입니다.</p>
+<table>
+<tr><th>질문 축</th><th>30초 시작 문장</th><th>90초 확장 포인트</th><th>반드시 말할 증거</th><th>피해야 할 답변</th></tr>
+<tr><td>React 렌더링</td><td>먼저 React render 비용인지 commit 이후 브라우저 비용인지 분리합니다.</td><td>state update, render scheduling, reconciliation, commit, layout/paint를 나누고 memoization이 실패하는 참조 원인을 설명합니다.</td><td>Profiler render reason, commit duration, Performance long task</td><td>React.memo를 붙이면 빨라진다고 단정하기</td></tr>
+<tr><td>웹 성능</td><td>성능은 LCP, INP, CLS 중 어떤 사용자 지표가 나쁜지부터 나눕니다.</td><td>TTFB, render-blocking resource, LCP image, long task, layout box를 waterfall과 field data로 좁힙니다.</td><td>CrUX/RUM p75, Lighthouse, Network waterfall, layout shift entry</td><td>이미지와 번들만 줄였다고 말하기</td></tr>
+<tr><td>접근성</td><td>접근성은 ARIA를 붙이는 일이 아니라 native semantic을 깨지 않는 일입니다.</td><td>accessible name, focus trap, aria-live, roving tabindex, virtualized list/grid의 keyboard 흐름을 설명합니다.</td><td>keyboard-only 녹화, screen reader smoke test, axe 결과</td><td>Lighthouse 점수만으로 충분하다고 말하기</td></tr>
+<tr><td>보안</td><td>프론트 보안은 untrusted source가 어떤 sink로 들어가는지 추적합니다.</td><td>markdown, SVG, URL, DOM sink, Trusted Types, CSP, sanitizer bypass, cookie/token trade-off를 연결합니다.</td><td>negative test, CSP violation report, token storage ADR</td><td>CORS나 UI 숨김을 인가로 설명하기</td></tr>
+<tr><td>대용량 Grid</td><td>Grid는 row 수보다 한 셀 변경이 어디까지 전파되는지가 중요합니다.</td><td>rows 배열 참조, stable columns, virtualization, IME/focus, worker offloading, row 단위 오류 복구를 설명합니다.</td><td>row render count, input p95, 스크롤 FPS, 오류 매핑 화면</td><td>Grid 라이브러리 이름만 말하기</td></tr>
+</table>
 <table>
 <tr><th>축</th><th>핵심 질문 20선</th><th>90초 확장 포인트</th></tr>
 <tr><td>브라우저</td><td>렌더링 파이프라인, reflow/repaint, event loop, HTTP cache, CORS</td><td>측정 도구, 병목 구간, 사용자 체감 지표</td></tr>
@@ -422,13 +627,14 @@ Strict Mode는 개발 중 effect cleanup과 idempotency 문제를 드러내고, 
 <div class="ch-head"><span class="ch-code">FE-D3</span><h2>프론트엔드 개념 인과관계</h2></div>
 <p class="lede">프론트엔드 면접 답변이 암기처럼 들리는 이유는 React, 브라우저, 네트워크, 보안을 따로 말하기 때문입니다. 실제 사용자 경험은 이 네 계층이 연결되어 만들어집니다.</p>
 <div class="serial-card"><span class="sc-label">FRONTEND CAUSAL MODEL</span>state가 바뀌면 render가 예약되고, render가 비싸거나 같은 참조가 계속 새로 만들어지면 commit과 layout/paint 비용이 커집니다. SSR을 쓰면 첫 HTML은 빨라질 수 있지만 client hydration에서 서버 HTML과 client state가 다르면 mismatch가 생깁니다. cache를 쓰면 재방문은 빨라지지만 개인화 데이터가 섞이면 보안 사고가 됩니다. XSS는 문자열이 DOM sink로 들어갈 때 발생하고, token 저장 방식은 XSS와 CSRF 중 어느 위험을 더 크게 볼지의 선택입니다. 좋은 답변은 “useMemo를 씁니다”가 아니라 “왜 render가 반복되고 어떤 계산/참조/DOM 비용이 실제 병목인지 측정한 뒤 memoization이나 컴포넌트 분리를 선택합니다”로 이어집니다.</div>
-<table>
-<tr><th>개념</th><th>원인</th><th>사용자에게 보이는 결과</th><th>답변 기준</th></tr>
-<tr><td>React rendering</td><td>상위 state 변경, 새 object/function 참조, context 과다 구독</td><td>입력 지연, 스크롤 끊김, 불필요한 child render</td><td>Profiler로 실제 render 비용을 확인하고 state colocating, memo, virtualization을 선택한다</td></tr>
-<tr><td>Hydration</td><td>서버 HTML과 client 초기 state가 다르다</td><td>경고, 깜빡임, 이벤트 연결 지연</td><td>time/random/browser-only 값 분리, suspense boundary, client-only 영역을 명확히 한다</td></tr>
-<tr><td>Browser performance</td><td>큰 JS, render-blocking resource, layout thrashing</td><td>LCP 지연, INP 악화, CLS 발생</td><td>critical path, code splitting, image priority, layout 안정성을 지표로 설명한다</td></tr>
-<tr><td>Frontend security</td><td>untrusted input이 DOM sink나 URL/action으로 들어간다</td><td>XSS, open redirect, token 탈취, 권한 오해</td><td>escaping, sanitization, CSP, Trusted Types, 서버 최종 인가를 구분한다</td></tr>
-</table>
+<h3>React rendering chain</h3>
+<p>상위 state가 넓으면 작은 입력 변경도 부모 render를 예약하고, 부모가 새 object/function props를 만들면 child memo가 깨집니다. 이때 reconciliation 범위가 넓어지고 commit이나 browser layout/paint가 커지면 사용자는 입력 지연과 스크롤 끊김으로 체감합니다. 답변은 Profiler로 render reason을 확인하고 state colocating, stable props, virtualization을 어떤 순서로 적용했는지까지 이어져야 합니다.</p>
+<h3>Hydration chain</h3>
+<p>서버 HTML과 client first render 입력이 다르면 hydration warning, 깜빡임, 이벤트 연결 지연이 발생합니다. 시간, random, localStorage, 인증 상태, feature flag처럼 서버와 클라이언트가 다르게 계산하는 값을 분리하고, 필요한 경우 client-only 영역이나 Suspense boundary로 격리해야 합니다.</p>
+<h3>Performance chain</h3>
+<p>큰 JS와 render-blocking resource는 LCP 후보 발견을 늦추고, long task는 사용자의 입력 이후 next paint를 막아 INP를 악화시키며, 늦게 잡히는 layout box는 CLS를 만듭니다. 그래서 성능 답변은 bundle size 하나가 아니라 critical path, main thread, layout stability를 지표별로 나눠야 합니다.</p>
+<h3>Security chain</h3>
+<p>untrusted input이 markdown, SVG, URL, DOM attribute 같은 경로를 지나 sink에 들어가면 XSS나 open redirect가 됩니다. 프론트는 escaping, sanitization, CSP, Trusted Types로 공격면을 줄이고, 서버는 최종 인가와 민감 데이터 응답 정책을 보장해야 합니다.</p>
 <div class="callout warn">
 <span class="co-label">암기 답변 교정</span>
 <p>“React는 virtual DOM이라 빠릅니다”는 위험합니다. React는 변경을 선언적으로 계산하게 해주지만 render 작업 자체는 비용이 있습니다. 빠른지는 state 경계, reconciliation 범위, DOM commit, 브라우저 layout 비용을 어떻게 관리하느냐에 달려 있습니다.</p>
@@ -453,6 +659,95 @@ Strict Mode는 개발 중 effect cleanup과 idempotency 문제를 드러내고, 
 <span class="co-label">면접 답변 전환</span>
 <p>“성능 최적화를 했습니다” 대신 “입력 지연의 원인이 React render인지 browser layout인지 먼저 Profiler와 Performance 탭으로 분리했습니다. parent state 변경이 큰 grid를 재렌더링하고 있었고, cell draft state를 row 단위로 분리한 뒤 virtualization을 적용했습니다. 이후 INP와 입력 지연 p95를 비교했고, memoization은 실제 비용이 큰 row renderer에만 적용했습니다”처럼 계층과 증거를 함께 말합니다.</p>
 </div>
+</section>
+
+<section id="feinterview-frontend-deep-answer-upgrade" class="answer-card" data-answer-model="definition mechanism tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">FE-D5</span><h2>DEEP ANSWER MODEL</h2></div>
+<p class="lede">프론트엔드 답변의 질은 API 이름을 많이 말하는지가 아니라 사용자 입력 하나가 React, 브라우저, 네트워크, 보안 경계를 지나며 어떤 비용과 실패를 만드는지 설명하는 능력으로 갈립니다.</p>
+<div class="serial-card"><span class="sc-label">CONCEPT DEPTH</span>정의 → 내부 동작 → trade-off → 실패 모드 → 검증 증거 → FOLLOW-UP DEFENSE 순서로 답합니다. 예를 들어 렌더링 최적화는 “memo를 쓴다”가 아니라 render phase에서 컴포넌트 함수가 재실행되고, commit phase에서 DOM mutation이 발생하며, 이후 browser layout/paint가 실제 사용자 지연을 만든다는 계층으로 설명해야 합니다.</div>
+<table>
+<tr><th>질문</th><th>부실한 답변</th><th>ANSWER UPGRADE TABLE</th></tr>
+<tr><td>React 렌더링 최적화</td><td>useMemo와 React.memo를 사용합니다.</td><td>Profiler로 render phase와 commit phase 비용을 나누고, parent state 범위, context value, key 안정성, list virtualization을 확인한 뒤 실제 병목에만 memoization을 적용합니다.</td></tr>
+<tr><td>웹 성능</td><td>번들을 줄이고 이미지를 최적화합니다.</td><td>LCP는 TTFB, render-blocking resource, LCP image priority를 보고, INP는 main thread long task와 event handler 비용을 봅니다. CLS는 layout box 안정성과 font swap을 확인합니다.</td></tr>
+<tr><td>프론트 보안</td><td>XSS를 막고 token을 안전하게 저장합니다.</td><td>untrusted input이 DOM sink, URL, markdown, SVG로 들어가는 경로를 나누고 CSP nonce/hash, Trusted Types, sanitizer 설정, httpOnly cookie와 CSRF 방어를 함께 설명합니다.</td></tr>
+</table>
+<h3>FOLLOW-UP DEFENSE</h3>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>COMMON TRAPS</th></tr>
+<tr><td>React.memo를 붙였는데 왜 안 빨라졌나요?</td><td>props 참조가 매번 바뀌거나 실제 병목이 browser layout/paint에 있으면 효과가 제한됩니다. Profiler와 Performance 탭을 같이 봐야 합니다.</td><td>memo를 성능 보장 장치로 말하기</td></tr>
+<tr><td>SSR이면 무조건 빠른가요?</td><td>초기 HTML은 빨라질 수 있지만 hydration 비용과 mismatch 위험이 있습니다. 개인화, cache, server cost까지 비교해야 합니다.</td><td>SSR/CSR을 정답처럼 고르기</td></tr>
+</table>
+<h3>EVIDENCE TO SAY</h3>
+<p>React Profiler commit duration, Chrome Performance long task, Network waterfall, LCP/CLS/INP before-after, bundle analyzer, CSP violation report, QA ticket을 답변 증거로 준비합니다.</p>
+</section>
+
+<section id="feinterview-frontend-project-evidence-answer-lab" class="answer-card" data-answer-model="case evidence pressure defense">
+<div class="ch-head"><span class="ch-code">FE-D6</span><h2>PROJECT EVIDENCE ANSWER LAB</h2></div>
+<p class="lede">좋은 프론트엔드 면접 답변은 “기술을 안다”에서 멈추지 않고, 실제 장애나 개선 과제를 어떤 관찰로 발견했고 어떤 원인 가설을 세웠으며 어떤 지표로 결과를 증명했는지까지 이어집니다. 이 섹션은 경험을 과장하지 않으면서도 시니어답게 말할 수 있도록 사례를 증거 단위로 압축하는 훈련표입니다.</p>
+<div id="feinterview-case-evidence-lab" class="serial-card">
+<span class="sc-label">CASE EVIDENCE LAB</span>
+상황 → 원인 → 조치 → 결과 수치 → 압박 꼬리질문 순서로 정리합니다. 상황은 사용자 영향으로 시작하고, 원인은 브라우저·React·네트워크·접근성·보안 경계 중 어디에서 병목이 생겼는지 설명하며, 조치는 선택하지 않은 대안까지 함께 말합니다.
+</div>
+<table>
+<thead>
+<tr><th>사례</th><th>상황</th><th>원인</th><th>조치</th><th>결과 수치</th><th>압박 꼬리질문</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>React render regression</td>
+<td>검색 입력 중 화면이 끊기고 input p95 지연이 커졌습니다.</td>
+<td>상위 parent state 변경이 목록 전체를 다시 렌더링했고, React Profiler에서 commit duration이 길게 관찰됐습니다.</td>
+<td>상태 소유권을 입력 영역 가까이로 내리고, 행 컴포넌트 memo 기준을 이벤트 핸들러와 파생 데이터까지 포함해 재정리했습니다.</td>
+<td>commit duration과 input p95를 전후 비교하고, 느린 기기 프로파일에서 재현성을 확인했습니다.</td>
+<td>follow-up 1: memo가 오히려 비용이 되지 않았는가. follow-up 2: parent state를 분리해도 데이터 정합성이 깨지지 않는가.</td>
+</tr>
+<tr>
+<td>LCP regression</td>
+<td>릴리즈 뒤 상품 상세의 p75 LCP가 악화되어 검색 유입 전환율이 흔들렸습니다.</td>
+<td>Network waterfall에서 TTFB 증가, render-blocking CSS, 우선순위가 낮은 LCP image 요청이 함께 보였습니다.</td>
+<td>서버 캐시 키를 정리하고 critical CSS를 줄였으며 LCP image preload와 사이즈 예약을 적용했습니다.</td>
+<td>p75 LCP, TTFB, 이미지 요청 시작 시각을 배포 전후로 비교했고, 기준 미달 시 rollback 조건을 릴리즈 체크리스트에 넣었습니다.</td>
+<td>CDN 캐시와 앱 코드 중 무엇이 핵심 원인이었는지, 실험군이 충분했는지 설명할 수 있어야 합니다.</td>
+</tr>
+<tr>
+<td>Modal accessibility</td>
+<td>모달에서 스크린리더 사용자가 제목을 알 수 없고 키보드 사용자가 배경으로 빠져나갔습니다.</td>
+<td>accessible name 연결이 누락됐고 focus trap, Escape 처리, 상태 변경 aria-live 안내가 일관되지 않았습니다.</td>
+<td>dialog 역할, labelledby, 초기 포커스, 복귀 포커스, keyboard-only 탐색 시나리오를 컴포넌트 계약으로 고정했습니다.</td>
+<td>axe 결과와 수동 keyboard-only 테스트, 스크린리더 탐색 로그로 회귀를 막았습니다.</td>
+<td>자동화 도구가 잡지 못하는 접근성 결함을 어떤 사용자 흐름으로 검증했는지 답합니다.</td>
+</tr>
+<tr>
+<td>Markdown XSS</td>
+<td>사용자 작성 Markdown 미리보기에서 링크와 HTML 조합이 보안 리뷰 대상이 됐습니다.</td>
+<td>untrusted source가 sanitizer를 우회해 innerHTML sink에 도달할 가능성이 있었고, URL protocol과 HTML 속성 경계가 불명확했습니다.</td>
+<td>Markdown 파서를 허용 목록 기반으로 제한하고 Trusted Types 정책을 추가했으며 CSP violation 리포트 수집을 배포 환경까지 확장했습니다.</td>
+<td>위험 태그·속성 negative test, sanitizer 단위 테스트, e2e 악성 payload 테스트로 회귀 가능성을 낮췄습니다.</td>
+<td>왜 escape만으로 부족한지, source와 sink 경계를 코드에서 어떻게 강제했는지 설명합니다.</td>
+</tr>
+<tr>
+<td>Grid editing latency</td>
+<td>대량 행 편집 중 IME 조합 입력이 밀리고 스크롤이 끊겼습니다.</td>
+<td>rows 배열 전체 교체와 IME 조합 이벤트 중 동기 검증이 겹치면서 입력이 밀렸습니다.</td>
+<td>행 단위 patch 구조로 변경하고 가상화 overscan을 조정했으며 무거운 검증은 worker offloading으로 분리했습니다.</td>
+<td>row render count, long task 수, IME 입력 p95, 저장 실패율을 함께 보며 UX와 정합성의 균형을 확인했습니다.</td>
+<td>낙관적 업데이트 실패 시 되돌림 정책과 worker 메시지 순서 보장을 어떻게 설계했는지 답합니다.</td>
+</tr>
+</tbody>
+</table>
+<h3>90초 답변 예시</h3>
+<p>“상품 상세 페이지 LCP가 릴리즈 뒤 p75 기준으로 악화됐습니다. 처음에는 이미지 최적화 문제로 봤지만 waterfall을 보니 TTFB 증가와 render-blocking CSS, LCP image 우선순위가 같이 얽혀 있었습니다. 서버 캐시 키를 정리하고 critical CSS 범위를 줄인 뒤 LCP 이미지를 preload했으며, 전후 비교는 p75 LCP와 이미지 요청 시작 시각으로 확인했습니다. 이 과정에서 단순히 평균값만 보지 않고 느린 네트워크 사용자군을 따로 봤고, 기준을 넘으면 rollback하는 조건을 배포 체크에 넣었습니다.”</p>
+<p>“React 렌더링 문제는 useMemo를 넣는 식으로 시작하지 않습니다. 먼저 Profiler로 commit duration과 실제 input p95가 어디에서 증가하는지 확인하고, parent state 변경이 얼마나 넓은 하위 트리를 깨우는지 봅니다. 그 다음 상태 위치, 컴포넌트 경계, key 안정성, 이벤트 핸들러 참조, 파생 데이터 캐시를 순서대로 줄여서 가장 작은 변경으로 사용자 지연을 낮춥니다.”</p>
+<h3>압박 꼬리질문 대응</h3>
+<table>
+<thead><tr><th>질문 유형</th><th>약한 답변</th><th>밀도 높은 답변</th></tr></thead>
+<tbody>
+<tr><td>“그게 진짜 원인인가요?”</td><td>개선 후 빨라졌다고 말합니다.</td><td>가설, 계측 지점, 반례 제거, 전후 지표를 분리해서 설명합니다.</td></tr>
+<tr><td>“왜 그 대안을 선택했나요?”</td><td>그 방식이 좋아서 했다고 말합니다.</td><td>복잡도, 회귀 위험, 팀의 운영 비용, 사용자 영향 범위를 기준으로 선택 이유를 말합니다.</td></tr>
+<tr><td>“실패하면 어떻게 하나요?”</td><td>모니터링한다고 말합니다.</td><td>알림 기준, rollback 조건, feature flag, 데이터 보정 절차를 함께 말합니다.</td></tr>
+<tr><td>“본인이 직접 한 일인가요?”</td><td>프로젝트를 했다고만 말합니다.</td><td>본인이 잡은 문제, 직접 바꾼 코드 경계, 협업한 영역, 배운 점을 분리합니다.</td></tr>
+</tbody>
+</table>
 </section>
 
 <section id="doc-jsts">

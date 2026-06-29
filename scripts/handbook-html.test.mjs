@@ -241,6 +241,36 @@ test("career bundles read as curated publications instead of raw merged drafts",
   }
 });
 
+test("career bundles include interview readiness gates and evidence-driven drills", async () => {
+  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+  const documents = await Promise.all(
+    careerFiles.map(async (file) => [file, await readFile(path.join("public", "handbook", file), "utf8")]),
+  );
+  const source = documents.map(([, doc]) => doc).join("\n");
+
+  for (const [file, doc] of documents) {
+    assert.match(doc, /CAREER READINESS GATE/, `${file} should define concrete readiness outcomes`);
+    assert.match(doc, /ANSWER QUALITY RUBRIC/, `${file} should include a self-scoring answer rubric`);
+    assert.match(doc, /PRESSURE RESPONSE LOOP/, `${file} should include a pressure recovery loop`);
+    assert.match(doc, /EVIDENCE PACKET/, `${file} should turn reading into interview evidence`);
+    assert.match(doc, /DANGEROUS PHRASES/, `${file} should warn about weak interview phrasing`);
+    assert.match(doc, /FINAL 10 MINUTE DRILL/, `${file} should include a final interview drill`);
+    assert.match(doc, /30초 결론[\s\S]*90초 확장[\s\S]*압박 꼬리질문/, `${file} should connect short answers, expanded answers, and follow-ups`);
+    assert.match(doc, /PR·ADR·지표·장애기록·QA ticket|PR, ADR, metric, incident record, QA ticket/, `${file} should require concrete evidence artifacts`);
+  }
+
+  assert.match(source, /프론트엔드·JS\/TS 답변 게이트/);
+  assert.match(source, /백엔드·Java\/Spring 답변 게이트/);
+  assert.match(source, /CS·DB·보안 심화 답변 게이트/);
+  assert.match(source, /인프라·분산·클라우드 답변 게이트/);
+  assert.match(source, /시스템 설계·프로젝트 답변 게이트/);
+  assert.match(source, /컬처·협업 답변 게이트/);
+  assert.match(source, /코딩테스트 답변 게이트/);
+  assert.doesNotMatch(source, /열심히 했습니다/);
+  assert.doesNotMatch(source, /공부했습니다/);
+  assert.doesNotMatch(source, /잘 모릅니다만 열심히/);
+});
+
 test("engineering handbook menu consolidates all source documents into eight items", async () => {
   const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
   const bundles = [
@@ -518,6 +548,10 @@ test("selected handbook content is positioned as a neutral full-stack growth gui
   assert.match(roadmap, /성능 증거/);
   assert.match(roadmap, /LOOP-01/);
   assert.match(roadmap, /복구 승인/);
+  assert.match(roadmap, /FS-09/);
+  assert.match(roadmap, /EXPERIENCE SIMULATOR/);
+  assert.match(roadmap, /Senior Simulation Scorecard/);
+  assert.match(roadmap, /Week 4 Game Day/);
 
   assert.match(source, /대규모 운영 판단/);
   assert.match(source, /Capacity thinking/);
@@ -832,6 +866,124 @@ test("interview handbook provides answer-drill templates and aggressive follow-u
   assert.match(strategy, /핀테크/);
   assert.match(strategy, /대규모 트래픽/);
   assert.match(strategy, /백엔드 전환 포지션/);
+});
+
+test("primary interview documents include high-density concept answer upgrades", async () => {
+  const primaryDocs = [
+    ["frontend", "public/handbook/interview-frontend-handbook.html"],
+    ["backend", "public/handbook/interview-backend-db-handbook.html"],
+    ["infra", "public/handbook/interview-infra-ops-handbook.html"],
+    ["distributed", "public/handbook/interview-distributed-handbook.html"],
+    ["system", "public/handbook/interview-system-design-handbook.html"],
+    ["project", "public/handbook/interview-project-handbook.html"],
+    ["behavioral", "public/handbook/interview-behavioral-handbook.html"],
+  ];
+  const docs = await Promise.all(primaryDocs.map(async ([name, file]) => [name, file, await readFile(file, "utf8")]));
+  const source = docs.map(([, , doc]) => doc).join("\n");
+
+  for (const [name, file, doc] of docs) {
+    assert.match(doc, /DEEP ANSWER MODEL/, `${file} should include a deep answer model`);
+    assert.match(doc, /CONCEPT DEPTH/, `${file} should include concept-depth guidance`);
+    assert.match(doc, /ANSWER UPGRADE TABLE/, `${file} should compare weak and strong answers`);
+    assert.match(doc, /FOLLOW-UP DEFENSE/, `${file} should include pressure-question defense`);
+    assert.match(doc, /EVIDENCE TO SAY/, `${file} should require concrete interview evidence`);
+    assert.match(doc, /COMMON TRAPS/, `${file} should warn about weak answer traps`);
+    assert.match(doc, /정의[\s\S]*내부 동작[\s\S]*실패 모드[\s\S]*검증 증거/, `${file} should connect definition, internals, failure modes, and evidence`);
+    assert.doesNotMatch(doc, /많이 해봤습니다|공부했습니다|그냥 최적화|대충 알고/, `${name} should avoid vague answer phrasing`);
+  }
+
+  assert.match(source, /render phase[\s\S]*commit phase[\s\S]*layout\/paint/);
+  assert.match(source, /transaction boundary[\s\S]*lock wait[\s\S]*connection pool/);
+  assert.match(source, /DNS[\s\S]*TLS[\s\S]*Load Balancer[\s\S]*DB pool/);
+  assert.match(source, /idempotency[\s\S]*outbox[\s\S]*eventual consistency/);
+  assert.match(source, /capacity estimation[\s\S]*bottleneck[\s\S]*rollback/);
+  assert.match(source, /project depth ledger[\s\S]*personal contribution[\s\S]*trade-off/);
+  assert.match(source, /STAR[\s\S]*decision evidence[\s\S]*conflict boundary/);
+
+  const careerDocs = await Promise.all([
+    readFile("public/handbook/career-frontend-interview-handbook.html", "utf8"),
+    readFile("public/handbook/career-backend-interview-handbook.html", "utf8"),
+    readFile("public/handbook/career-infra-distributed-cloud-handbook.html", "utf8"),
+    readFile("public/handbook/career-system-project-handbook.html", "utf8"),
+    readFile("public/handbook/career-culture-collaboration-handbook.html", "utf8"),
+  ]);
+  const careerSource = careerDocs.join("\n");
+  assert.match(careerSource, /DEEP ANSWER MODEL/);
+  assert.match(careerSource, /ANSWER UPGRADE TABLE/);
+  assert.match(careerSource, /FOLLOW-UP DEFENSE/);
+});
+
+test("frontend interview handbook teaches causal spoken answers instead of keyword lists", async () => {
+  const frontend = await readFile("public/handbook/interview-frontend-handbook.html", "utf8");
+
+  assert.match(frontend, /FE-00/);
+  assert.match(frontend, /프론트엔드 답변 원칙/);
+  assert.match(frontend, /정의[\s\S]*내부 동작[\s\S]*원인[\s\S]*결과[\s\S]*trade-off[\s\S]*실패 모드[\s\S]*검증 증거/);
+
+  const requiredSections = [
+    ["React rendering", "q2", /state update[\s\S]*render scheduling[\s\S]*reconciliation[\s\S]*commit[\s\S]*layout\/paint/],
+    ["state boundary", "q3", /server snapshot[\s\S]*draft[\s\S]*dirty[\s\S]*validation error[\s\S]*rollback/],
+    ["hydration", "q10", /SSR[\s\S]*first render[\s\S]*Date\.now[\s\S]*localStorage[\s\S]*hydration warning[\s\S]*client-only boundary/],
+    ["web vitals", "q5", /LCP[\s\S]*TTFB[\s\S]*render-blocking[\s\S]*INP[\s\S]*long task[\s\S]*next paint[\s\S]*CLS[\s\S]*layout box/],
+    ["frontend security", "q7", /source[\s\S]*sink[\s\S]*markdown[\s\S]*SVG[\s\S]*Trusted Types[\s\S]*sanitizer bypass/],
+    ["large grid", "q13", /cell edit[\s\S]*rows 배열[\s\S]*memoization 실패[\s\S]*virtualization[\s\S]*IME[\s\S]*worker offloading/],
+  ];
+
+  for (const [label, id, pattern] of requiredSections) {
+    const section = frontend.match(new RegExp(`<section id="${id}">[\\s\\S]*?<\\/section>`))?.[0] ?? "";
+    assert.match(section, /원인-결과 흐름/, `${label} should include a causal chain block`);
+    assert.match(section, /90초 발화형 답변/, `${label} should include a spoken 90-second answer`);
+    assert.match(section, /실패 모드/, `${label} should include failure modes`);
+    assert.match(section, /검증 증거/, `${label} should include verification evidence`);
+    assert.match(section, /압박 질문 방어/, `${label} should include follow-up defense`);
+    assert.match(section, pattern, `${label} should explain concrete cause-and-effect details`);
+  }
+
+  assert.doesNotMatch(frontend, /<tr><td>React rendering<\/td><td>상위 state 변경, 새 object\/function 참조, context 과다 구독<\/td>/);
+});
+
+test("frontend interview handbook covers second-pass advanced concept depth", async () => {
+  const frontend = await readFile("public/handbook/interview-frontend-handbook.html", "utf8");
+  const requiredSections = [
+    ["browser pipeline", "q1", /forced synchronous layout[\s\S]*layout containment[\s\S]*layer promotion[\s\S]*will-change[\s\S]*GPU memory/],
+    ["rendering strategy", "q4", /공개 상품 페이지[\s\S]*로그인 대시보드[\s\S]*개인화 검색 결과[\s\S]*streaming SSR[\s\S]*RSC client boundary/],
+    ["accessibility", "q6", /accessible name[\s\S]*aria-live[\s\S]*roving tabindex[\s\S]*virtualized list\/grid[\s\S]*aria-disabled/],
+    ["testing strategy", "q8", /unit test[\s\S]*MSW[\s\S]*integration test[\s\S]*Playwright[\s\S]*contract drift[\s\S]*flaky/],
+    ["bundle optimization", "q11", /parse\/compile[\s\S]*route-level splitting[\s\S]*dynamic import[\s\S]*preload[\s\S]*fetchpriority[\s\S]*priority inversion/],
+    ["rendering surface", "q14", /dirty rectangle[\s\S]*hit map[\s\S]*device pixel ratio[\s\S]*WebGL[\s\S]*DOM overlay/],
+  ];
+
+  for (const [label, id, pattern] of requiredSections) {
+    const section = frontend.match(new RegExp(`<section id="${id}">[\\s\\S]*?<\\/section>`))?.[0] ?? "";
+    assert.match(section, /원인-결과 흐름/, `${label} should include a causal chain block`);
+    assert.match(section, /90초 발화형 답변/, `${label} should include a spoken 90-second answer`);
+    assert.match(section, /실패 모드/, `${label} should include failure modes`);
+    assert.match(section, /검증 증거/, `${label} should include verification evidence`);
+    assert.match(section, /압박 질문 방어/, `${label} should include follow-up defense`);
+    assert.match(section, pattern, `${label} should include advanced concept details`);
+  }
+
+  const drill = frontend.match(/<section id="q16">[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(drill, /실전 압박 면접 세트/);
+  assert.match(drill, /30초 시작 문장/);
+  assert.match(drill, /90초 확장 포인트/);
+  assert.match(drill, /반드시 말할 증거/);
+  assert.match(drill, /피해야 할 답변/);
+});
+
+test("frontend interview handbook includes project-style evidence answer labs", async () => {
+  const frontend = await readFile("public/handbook/interview-frontend-handbook.html", "utf8");
+
+  assert.match(frontend, /FE-D6/);
+  assert.match(frontend, /PROJECT EVIDENCE ANSWER LAB/);
+  assert.match(frontend, /case-evidence-lab/);
+  assert.match(frontend, /상황[\s\S]*원인[\s\S]*조치[\s\S]*결과 수치[\s\S]*압박 꼬리질문/);
+  assert.match(frontend, /React render regression[\s\S]*parent state[\s\S]*commit duration[\s\S]*input p95[\s\S]*follow-up 1[\s\S]*follow-up 2/);
+  assert.match(frontend, /LCP regression[\s\S]*TTFB[\s\S]*render-blocking[\s\S]*LCP image[\s\S]*p75[\s\S]*rollback/);
+  assert.match(frontend, /Modal accessibility[\s\S]*accessible name[\s\S]*focus trap[\s\S]*aria-live[\s\S]*keyboard-only/);
+  assert.match(frontend, /Markdown XSS[\s\S]*source[\s\S]*sink[\s\S]*Trusted Types[\s\S]*CSP violation[\s\S]*negative test/);
+  assert.match(frontend, /Grid editing latency[\s\S]*rows 배열[\s\S]*IME[\s\S]*worker offloading[\s\S]*row render count/);
+  assert.doesNotMatch(frontend, /PROJECT EVIDENCE ANSWER LAB[\s\S]*수치가 없으면 준비합니다/);
 });
 
 test("consolidated career interview bundles preserve advanced concept depth markers", async () => {
@@ -1337,6 +1489,8 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
   assert.match(source, /EPISODE LOG EXAMPLE/);
   assert.match(source, /Human approval gate/i);
   assert.match(source, /환각 \/ 도구 오용 유형/);
+  assert.match(source, /AX Peer Review Simulation/);
+  assert.match(source, /AX REVIEW SIMULATION CARD/);
   assert.match(source, /Adversarial Verification/);
   assert.match(source, /Prompt Injection/);
   assert.match(source, /Data leakage/);
@@ -1395,11 +1549,15 @@ test("backend handbook includes practical senior-level backend guidance without 
   assert.match(source, /Performance &amp; DB Lab|Performance & DB Lab/);
   assert.match(source, /LOAD TEST RESULT TEMPLATE/);
   assert.match(source, /Migration safety lab/);
+  assert.match(source, /DB Incident Drill Cards/);
+  assert.match(source, /DB INCIDENT REVIEW PACKET/);
   assert.match(source, /refresh token rotation/);
   assert.match(source, /session fixation/);
   assert.match(source, /Security Threat Modeling/);
   assert.match(source, /Tenant Isolation/);
   assert.match(source, /Security Review Rubric/);
+  assert.match(source, /Security Tabletop Drills/);
+  assert.match(source, /SECURITY INCIDENT PACKET/);
   assert.match(source, /RBAC/);
   assert.match(source, /ABAC/);
   assert.match(source, /bounded context/);
@@ -1501,6 +1659,24 @@ test("operations handbook follows a service operations lifecycle roadmap", async
     assert.match(doc, /장애\/운영 시나리오/, `${item.file} should include an operations scenario`);
     assert.match(doc, /자주 틀리는 판단/, `${item.file} should include common failure signals`);
     assert.match(doc, /면접 답변 템플릿/, `${item.file} should include an interview answer template`);
+    const termSections = doc.match(/<section\b[^>]*>[\s\S]*?(?:<span class="ch-code">TERM<\/span>|<h2>[^<]*TERM[^<]*<\/h2>)[\s\S]*?<\/section>/g) ?? [];
+    assert.ok(termSections.length >= 1, `${item.file} should include a TERM glossary section`);
+    assert.ok(
+      termSections.some((section) => /<(?:table|div)\b[\s\S]*?용어[\s\S]*?정의[\s\S]*?운영 증거[\s\S]*?자주 하는 오해[\s\S]*?관련 항목[\s\S]*?<\/(?:table|div)>/.test(section)),
+      `${item.file} should include a TERM glossary table or block with term, definition, evidence, misconception, and related-item labels`,
+    );
+    const practiceLabBlocks = doc.match(/<div class="practice-lab">[\s\S]*?<\/div>/g) ?? [];
+    assert.ok(practiceLabBlocks.length >= 1, `${item.file} should include at least one concrete practice lab`);
+    assert.ok(
+      practiceLabBlocks.some(
+        (block) =>
+          /PRACTICE LAB/.test(block) &&
+          /Command \/ Query/.test(block) &&
+          /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/.test(block) &&
+          /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/.test(block),
+      ),
+      `${item.file} should include a complete practice lab block with command, outputs, interpretation, mitigation, fix, and verification`,
+    );
   }
 
   assert.match(source, /DNS → CDN\/WAF → Load Balancer → App → DB/);
@@ -1523,6 +1699,107 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.match(source, /SLO \/ Burn-rate evidence/);
   assert.match(source, /DR DRILL \/ FAILBACK CHECKLIST/);
   assert.match(source, /IAM\/Network 증거/);
+  assert.match(source, /Game Day 운영 훈련/);
+  assert.match(source, /GAME DAY REVIEW PACKET/);
+  assert.match(source, /REQUEST PATH TRIAGE PLAYBOOK/);
+  assert.match(source, /VPC ROUTING EVIDENCE PLAYBOOK/);
+  assert.match(source, /SLO OBSERVABILITY DESIGN PLAYBOOK/);
+  assert.match(source, /INCIDENT RESPONSE DRILL PLAYBOOK/);
+  assert.match(source, /AWS AZURE OPERATIONS PLAYBOOK/);
+  assert.match(source, /OPERATIONS ANSWER FRAME/);
+  assert.match(source, /심화 장애 패턴/);
+  assert.match(source, /Good SLI/);
+  assert.match(source, /CloudFront \/ Front Door 403/);
+  assert.match(source, /target health/);
+  assert.match(source, /openssl s_client/);
+  assert.match(source, /flow log/i);
+  assert.doesNotMatch(source, /말로는 이해했지만/);
+  assert.doesNotMatch(source, /설정, 로그, 지표, 변경 이력, 재현 명령/);
+  assert.doesNotMatch(source, /실제 서비스 경로에서 어떤 책임/);
+  assert.doesNotMatch(source, /FORMAT : 개념 → 체크리스트/);
+
+  const requestPathDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-request-path-handbook.html")];
+  const observabilityDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-observability-slo-handbook.html")];
+  const cloudDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-cloud-scenarios-handbook.html")];
+
+  assert.match(requestPathDoc, /앱과 DB 경계[\s\S]*connection pool[\s\S]*slow query[\s\S]*lock wait/);
+  assert.doesNotMatch(requestPathDoc, /앱과 DB 경계[\s\S]{0,700}authoritative answer/);
+  assert.doesNotMatch(requestPathDoc, /앱과 DB 경계[\s\S]{0,700}dig \+trace/);
+
+  assert.match(observabilityDoc, /SLO는 사용자 경험을 기준으로 잡는 내부 신뢰성 목표/);
+  assert.doesNotMatch(observabilityDoc, /SLO는 내부 목표가 아니라 사용자에게 약속할 품질 수준/);
+  assert.match(observabilityDoc, /SLO burn rate[\s\S]*error budget[\s\S]*fast burn[\s\S]*slow burn/);
+
+  assert.match(cloudDoc, /CloudFront와 Azure Front Door는 edge 계층/);
+  assert.match(cloudDoc, /Application Load Balancer와 Application Gateway는 regional L7 진입점/);
+  assert.match(cloudDoc, /사설 네트워크와 데이터 경계[\s\S]*route table[\s\S]*Private DNS[\s\S]*flow log/);
+  assert.doesNotMatch(cloudDoc, /사설 네트워크와 데이터 경계[\s\S]{0,700}Front Door health/);
+  assert.match(requestPathDoc, /pool pending 낮음[\s\S]*pool pending 급증/);
+  assert.match(observabilityDoc, /Fast burn[\s\S]*Slow burn/);
+  assert.match(cloudDoc, /Private DNS가 사설 IP를 반환[\s\S]*DNS가 public endpoint를 반환/);
+
+  assert.doesNotMatch(source, /서비스 요청 경로은/);
+  assert.doesNotMatch(source, /Observability·SLO은/);
+  assert.doesNotMatch(source, /AWS·Azure 실전 시나리오은/);
+  assert.doesNotMatch(source, /사용자 영향, 최근 변경, owner, runbook/);
+  assert.doesNotMatch(source, /dashboard, alert, log sample, trace sample, change ticket, runbook/);
+  assert.doesNotMatch(source, /장애 시 이 항목을 원인 후보에서 제외하려면 무엇을 확인해야 하는가/);
+  assert.doesNotMatch(source, /임시 완화와 영구 수정은 어떻게 구분하는가/);
+  assert.doesNotMatch(source, /작업 전에는 무엇을 바꿀지보다 무엇을 깨뜨릴 수 있는지를 먼저 본다/);
+  assert.doesNotMatch(source, /아래 표는 이 주제를 실제 운영 상황에서 확인하는 순서입니다/);
+  assert.doesNotMatch(source, /증상 → 영향 범위 → 최근 변경 → 계층별 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다/);
+  assert.doesNotMatch(source, /운영 품질은 아는 개념보다 틀린 가정을 빨리 찾는 능력에서 갈린다/);
+  assert.match(source, /route table readback[\s\S]*effective route/);
+  assert.match(source, /WAF rule hit[\s\S]*SG stateful rule[\s\S]*NACL stateless rule/);
+  assert.match(source, /openssl s_client -showcerts[\s\S]*certificate inventory/);
+  assert.match(source, /kubectl describe[\s\S]*logs --previous/);
+  assert.match(source, /terraform plan -out[\s\S]*terraform show/);
+  for (const term of [
+    "SLO",
+    "RPO",
+    "RTO",
+    "NAT Gateway",
+    "Private Endpoint",
+    "readiness",
+    "liveness",
+    "Terraform state lock",
+    "WAF",
+    "DNS",
+    "TLS",
+  ]) {
+    assert.match(source, new RegExp(term), `operations TERM glossary source should include ${term}`);
+  }
+  assert.doesNotMatch(source, /용어를 이해한다/);
+  assert.doesNotMatch(source, /상황에 따라 다르다/);
+  assert.doesNotMatch(source, /필요하면 확인한다/);
+  assert.match(source, /PRACTICE LAB/);
+  assert.match(source, /정상 출력/);
+  assert.match(source, /비정상 출력/);
+  assert.match(source, /판단 훈련/);
+  assert.match(source, /aws elbv2 describe-target-health/);
+  assert.match(source, /aws ec2 describe-route-tables/);
+  assert.match(source, /az network watcher test-connectivity/);
+  assert.match(source, /kubectl describe pod/);
+  assert.match(source, /kubectl get endpoints/);
+  assert.match(source, /rate\(http_requests_total/);
+  assert.match(source, /sum_over_time/);
+  assert.match(source, /NXDOMAIN/);
+  assert.match(source, /Target\.ResponseCodeMismatch/);
+  assert.match(source, /OOMKilled/);
+  assert.match(source, /Error acquiring the state lock/);
+  assert.match(source, /5m burn/);
+  assert.match(source, /RPO breach/);
+  assert.doesNotMatch(source, /실제 상황에 맞게 적절히 확인한다/);
+  assert.doesNotMatch(source, /필요한 명령어를 실행한다/);
+  assert.doesNotMatch(source, /문제를 해결한다/);
+  const practiceLabCount = (source.match(/PRACTICE LAB/g) ?? []).length;
+  assert.ok(practiceLabCount >= 12, `expected at least 12 operations practice labs, found ${practiceLabCount}`);
+  const normalOutputCount = (source.match(/정상 출력/g) ?? []).length;
+  const abnormalOutputCount = (source.match(/비정상 출력/g) ?? []).length;
+  assert.ok(normalOutputCount >= 8, `expected normal output examples, found ${normalOutputCount}`);
+  assert.ok(abnormalOutputCount >= 8, `expected abnormal output examples, found ${abnormalOutputCount}`);
+  assert.doesNotMatch(source, /PRACTICE LAB[\s\S]{0,800}(TBD|TODO|예시를 추가|상황에 따라)/);
+
   assert.match(source, /Route 53/);
   assert.match(source, /CloudFront/);
   assert.match(source, /Application Load Balancer/);

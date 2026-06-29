@@ -150,6 +150,29 @@ training cohort: 같은 eval rubric으로 실습하고 판정 차이를 보정
 <span class="co-label">승인 원칙</span>
 <p>사람 승인은 “AI가 맞는지”를 감으로 판단하는 절차가 아닙니다. 승인자는 남은 위험, 검증 증거, rollback 가능성, owner 책임을 확인합니다. 증거가 부족하면 재작업을 요청하고, 시간이 없으면 범위를 줄입니다.</p>
 </div>
+<h3><span class="h3-tag">EVAL-04B</span>AX Peer Review Simulation</h3>
+<p>AI와 일하는 실전 경험은 “프롬프트를 잘 쓰는 능력”보다 <strong>agent가 만든 결과를 팀 변경처럼 검토하고 책임지는 능력</strong>에 가깝습니다. 아래 시뮬레이션은 한 명은 agent operator, 한 명은 reviewer, 한 명은 risk owner 역할을 맡아 같은 episode를 검토하는 방식입니다.</p>
+<table>
+<tr><th>역할</th><th>책임</th><th>반드시 남길 증거</th></tr>
+<tr><td>Agent operator</td><td>목표, 범위, 금지사항, 검증 명령을 명확히 주고 tool trace를 보존</td><td>task spec, context package, command log, failed attempt note</td></tr>
+<tr><td>Reviewer</td><td>diff보다 먼저 요구사항, 불변조건, 테스트 충분성, 과도한 변경을 확인</td><td>review checklist, challenged assumptions, requested follow-up</td></tr>
+<tr><td>Risk owner</td><td>보안, 데이터, 운영, 고객 영향이 있는지 승인 게이트를 판단</td><td>risk decision, approval or rejection reason, rollback condition</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">AX REVIEW SIMULATION CARD</span>
+Task: agent가 결제 실패 메시지와 retry 정책을 수정했다<br>
+Challenge 1: 실패 fixture가 실제 provider error와 맞는가?<br>
+Challenge 2: localization fallback이 기존 고객 커뮤니케이션을 깨지 않는가?<br>
+Challenge 3: retry 증가가 중복 결제나 rate limit을 만들지 않는가?<br>
+Pass: operator가 증거를 제시하고 reviewer가 독립 테스트로 확인하며 risk owner가 승인 조건을 남긴다
+</div>
+<table>
+<tr><th>시뮬레이션 판정</th><th>통과</th><th>재작업</th></tr>
+<tr><td>Spec alignment</td><td>goal, non-goal, invariant가 episode에 있고 diff가 그 범위를 지킴</td><td>요청하지 않은 리팩터링, rename, 정책 변경이 섞임</td></tr>
+<tr><td>Evidence quality</td><td>명령, exit code, 주요 output, 실패 로그가 분리되어 있음</td><td>“테스트함”, “확인함” 같은 요약만 있음</td></tr>
+<tr><td>Reviewer load</td><td>리뷰어가 10분 안에 핵심 위험과 검증 상태를 파악 가능</td><td>리뷰어가 처음부터 파일을 재조사해야 함</td></tr>
+<tr><td>Human accountability</td><td>승인자, 남은 위험, rollback 조건이 명시됨</td><td>AI가 만들었으니 맞을 것이라는 전제로 merge 판단</td></tr>
+</table>
 </section>
 
 <section id="ch5">

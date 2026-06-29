@@ -536,6 +536,21 @@ sig == sign(<span class="seg">header</span> + <span class="seg2">payload</span>,
 <tr><td>Admin</td><td>관리자 기능에 최소 권한, 사유, 재인증, 감사 로그가 있는가?</td><td>내부자·계정 탈취 시 피해가 제한됨</td></tr>
 <tr><td>Observability</td><td>침해나 남용을 나중에 발견할 수 있는 이벤트가 남는가?</td><td>audit event와 alert query가 설계됨</td></tr>
 </table>
+<h3><span class="h3-tag">13.9</span>Security Tabletop Drills</h3>
+<p>보안 경험은 취약점 이름을 외우는 것보다, 보고를 받았을 때 <strong>재현, 영향 범위, 임시 차단, 영구 수정, 고객 커뮤니케이션</strong>을 순서대로 처리해 본 기록에서 생깁니다. 아래 tabletop은 실제 사고처럼 시간 제한을 두고 진행합니다.</p>
+<table>
+<tr><th>Drill</th><th>상황</th><th>제한 시간</th><th>제출 증거</th></tr>
+<tr><td>IDOR report</td><td>외부 테스터가 다른 tenant의 export 파일 URL에 접근 가능하다고 보고</td><td>30분 안에 재현과 영향 범위 초안</td><td>재현 요청, affected resource query, hotfix diff, audit query, 고객 영향 판단</td></tr>
+<tr><td>Leaked token</td><td>Git history에서 오래된 API token이 발견됨</td><td>20분 안에 폐기와 노출 범위 판단</td><td>rotation record, last-used log, 접근 가능 리소스, 재발 방지 secret scanning rule</td></tr>
+<tr><td>Webhook replay</td><td>결제 webhook event id가 재사용되어 중복 상태 변경 의심</td><td>45분 안에 중복 처리 여부 판단</td><td>event id ledger, signature/timestamp check, idempotency test, ledger correction plan</td></tr>
+<tr><td>Admin abuse</td><td>CS 계정이 업무 시간 외 대량 PII export를 수행</td><td>1시간 안에 악용/정상 업무 구분</td><td>actor timeline, reason code, approval record, export scope, access review action</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">SECURITY INCIDENT PACKET</span>
+report summary · reproduction · asset/actor/scope<br>
+temporary control · permanent fix · audit evidence<br>
+customer impact · legal/support handoff · action owner/date
+</div>
 <div class="callout gm">
 <span class="co-label">리뷰의 결론은 액션이어야 한다</span>
 <p>위협 모델링의 산출물은 멋진 다이어그램이 아니라 코드와 운영 통제입니다. 예를 들어 "tenant isolation 위험"을 찾았다면 repository guard, RLS, negative test, audit event 중 무엇을 이번 변경에 넣을지 결정해야 합니다. 남은 위험은 "known risk"로 기록하고 owner와 만료일을 둡니다. 보안 리뷰가 결정으로 이어지지 않으면 회의록일 뿐입니다.</p>

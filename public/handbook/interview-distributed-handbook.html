@@ -22,6 +22,7 @@
   <a href="#q15"><span class="code">DS-15</span>Consistency Senior Drill</a>
   <a href="#q16"><span class="code">DS-16</span>개념 인과관계</a>
   <a href="#q17"><span class="code">DS-17</span>주문·결제 정합성 사례</a>
+  <a href="#distributed-deep-answer-upgrade"><span class="code">DS-18</span>Deep Answer Model</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-DISTRIBUTED-QA-V2</span><span>SCOPE : CACHE · QUEUE · RETRY · CONSISTENCY · SAGA · OUTBOX</span><span>LANG : KO</span></div><h1>분산 시스템 면접</h1><p class="hero-sub">분산 시스템 질문은 CAP 같은 용어 암기가 아니라 <strong>네트워크 실패, 중복 처리, 순서 보장, 최신성, 보상 처리</strong>를 현실적으로 설명할 수 있는지 봅니다.</p></header>
@@ -288,6 +289,26 @@
 <span class="co-label">전문가 기준</span>
 <p>분산 시스템 답변에서 “큐를 쓰면 됩니다”, “Kafka면 됩니다”, “eventual consistency입니다”는 초보 신호입니다. 실패 기록이 어디에 남고, 중복을 어떤 key로 막고, 보상 실패를 누가 처리하며, 수렴 여부를 어떤 job과 지표로 확인하는지 말해야 합니다.</p>
 </div>
+</section>
+
+<section id="distributed-deep-answer-upgrade" class="answer-card" data-answer-model="definition mechanism tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">DS-18</span><h2>DEEP ANSWER MODEL</h2></div>
+<p class="lede">분산 시스템 답변은 패턴 이름이 아니라 네트워크 실패, 중복 처리, 순서 역전, partial failure를 어떤 기록과 복구 루프로 수렴시키는지 설명해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">CONCEPT DEPTH</span>정의 → 내부 동작 → trade-off → 실패 모드 → 검증 증거 → FOLLOW-UP DEFENSE 순서로 답합니다. idempotency, outbox, eventual consistency는 용어가 아니라 “중복 요청이 들어와도 같은 결과로 수렴하고, 이벤트 누락을 durable record로 찾고, reconciliation으로 상태를 맞추는 운영 모델”입니다.</div>
+<table>
+<tr><th>질문</th><th>부실한 답변</th><th>ANSWER UPGRADE TABLE</th></tr>
+<tr><td>큐를 왜 쓰나요?</td><td>비동기로 처리해서 빠릅니다.</td><td>사용자 요청 경로에서 긴 작업을 분리하지만 at-least-once delivery로 중복 처리와 순서 역전이 생깁니다. consumer idempotency, DLQ, retry budget, lag alert가 함께 필요합니다.</td></tr>
+<tr><td>Outbox는 무엇을 해결하나요?</td><td>이벤트 발행을 안전하게 합니다.</td><td>DB commit과 broker publish 사이 간극을 같은 transaction의 outbox row로 줄입니다. 다만 중복 발행은 가능하므로 event id와 processed table이 필요합니다.</td></tr>
+<tr><td>eventual consistency는 언제 쓰나요?</td><td>나중에 맞으면 됩니다.</td><td>사용자가 허용할 수 있는 stale window를 정하고, pending/synced/failed 상태 UI, reconciliation job, mismatch metric으로 수렴을 검증합니다.</td></tr>
+</table>
+<h3>FOLLOW-UP DEFENSE</h3>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>COMMON TRAPS</th></tr>
+<tr><td>Kafka exactly-once면 멱등성이 필요 없나요?</td><td>Broker 내부 처리 보장과 결제, 이메일, DB update 같은 business side effect는 다른 경계입니다. 외부 부작용은 idempotency와 reconciliation이 필요합니다.</td><td>exactly-once를 모든 시스템 경계에 적용하기</td></tr>
+<tr><td>Saga는 rollback인가요?</td><td>자동 rollback이 아니라 보상 가능한 workflow입니다. 보상 실패도 상태와 manual review queue로 관리해야 합니다.</td><td>보상 실패 처리 없이 Saga라고 말하기</td></tr>
+</table>
+<h3>EVIDENCE TO SAY</h3>
+<p>idempotency table, outbox backlog, processed_message unique constraint, consumer lag, DLQ count, reconciliation mismatch count, compensation failure metric, incident timeline을 답변 증거로 준비합니다.</p>
 </section>
 
 <footer>DISTRIBUTED SYSTEMS INTERVIEW Q&A · V2 · 2026-06</footer>

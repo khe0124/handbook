@@ -668,6 +668,22 @@ Fix later: transaction timeout, batch size limit, lock order 문서화, retry po
 6. validate: constraint 검증, SLO/lag/error 24h 관찰<br>
 7. contract: old column/code 제거는 다음 배포 창에서
 </div>
+<h3><span class="h3-tag">LAB-07</span>DB Incident Drill Cards</h3>
+<p>DB 실무 경험은 느린 쿼리를 하나 고치는 경험보다, <strong>어떤 증거를 먼저 보고 어떤 완화책을 선택할지</strong>를 반복하면서 쌓입니다. 아래 드릴은 로컬·스테이징에서도 재현 가능한 방식으로 DB 장애 판단을 훈련하기 위한 사건 카드입니다.</p>
+<table>
+<tr><th>사건 카드</th><th>초기 증상</th><th>먼저 볼 증거</th><th>완화 판단</th></tr>
+<tr><td>Slow query regression</td><td>배포 후 검색 API p95가 120ms → 1.8s</td><td>deploy diff, query text, bind 값, plan shape, rows estimate/actual, buffer read</td><td>통계 갱신, 인덱스 후보, query rewrite, feature flag rollback 중 하나를 증거로 선택</td></tr>
+<tr><td>Connection pool exhaustion</td><td>DB CPU는 낮지만 요청 timeout과 pool pending이 증가</td><td>active/idle/idle in transaction, borrow time, transaction duration, external call trace</td><td>pool 증설 전에 긴 트랜잭션과 외부 I/O를 분리하고 timeout을 낮춤</td></tr>
+<tr><td>Lock contention</td><td>특정 UPDATE만 p99가 튀고 deadlock retry가 증가</td><td>blocking query, lock type, wait event, transaction start, row hot spot</td><td>락 순서 통일, batch chunking, optimistic retry, hot row 분산 중 선택</td></tr>
+<tr><td>Failed migration recovery</td><td>backfill 중 replication lag와 app error가 동시에 증가</td><td>batch progress, lock wait, WAL volume, replica lag, error sample, rollback point</td><td>batch 중단, 코드 fallback, dual write 유지, constraint validate 연기</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">DB INCIDENT REVIEW PACKET</span>
+symptom window · affected endpoint · query fingerprint<br>
+before/after plan · wait event · pool state · lock blocker<br>
+temporary mitigation · permanent fix · rollback condition<br>
+verification query · follow-up owner/date
+</div>
 <div class="callout gm">
 <span class="co-label">랩의 완성 조건</span>
 <p>이 섹션의 모든 실험은 “무엇을 바꿨는가”보다 “무엇을 보고 안전하다고 판단했는가”를 남기는 데 목적이 있습니다. 성능 개선 PR에는 before/after 계획, 부하 테스트 결과, tail latency 해석, 쓰기 비용, rollback 기준이 같이 있어야 합니다. 운영 DB에서 senior로 보이는 사람은 SQL을 많이 아는 사람이 아니라, <em>증거와 실패 경로를 함께 관리하는 사람</em>입니다.</p>

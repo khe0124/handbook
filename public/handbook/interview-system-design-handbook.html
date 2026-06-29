@@ -24,6 +24,7 @@
   <a href="#ch8"><span class="code">SD-16</span>핵심 질문 20선</a>
   <a href="#ch9"><span class="code">SD-17</span>개념 인과관계</a>
   <a href="#ch10"><span class="code">SD-18</span>완성형 설계 사례</a>
+  <a href="#system-design-deep-answer-upgrade"><span class="code">SD-19</span>Deep Answer Model</a>
 </nav>
 <main>
 <header class="hero"><div class="hero-serial"><span>DOC : INTERVIEW-SYSTEM-DESIGN-QA-V2</span><span>SCOPE : REQUIREMENTS · DATA · API · STATE · OBSERVABILITY</span><span>LANG : KO</span></div><h1>시스템 설계 면접</h1><p class="hero-sub">시스템 설계 면접은 완벽한 구조를 바로 그리는 시험이 아닙니다. <strong>요구사항을 묻고, 제약을 세우고, trade-off를 설명하며, 위험을 검증 가능한 단위로 줄이는 과정</strong>을 보여주는 자리입니다.</p></header>
@@ -358,6 +359,26 @@ DAU 500,000명 × 사용자당 30 요청 = 15,000,000 requests/day입니다. 평
 <span class="co-label">전문가 답변의 핵심</span>
 <p>이 사례에서 좋은 답변은 “S3, SQS, Redis, RDS를 씁니다”가 아닙니다. “파일 업로드는 긴 작업이므로 요청 경로에서 분리하고, row 상태를 분리해 오류 복구를 가능하게 하며, tenant 격리와 audit을 서버에서 보장하고, worker 확장은 DB write throughput과 queue lag를 함께 보며, schema 변경은 expand-contract로 배포합니다”처럼 제약에서 구조가 도출되는 답변입니다.</p>
 </div>
+</section>
+
+<section id="system-design-deep-answer-upgrade" class="answer-card" data-answer-model="definition mechanism tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">SD-19</span><h2>DEEP ANSWER MODEL</h2></div>
+<p class="lede">시스템 설계 답변은 컴포넌트 나열이 아니라 요구사항 압력이 capacity estimation, bottleneck, 데이터 모델, API 계약, rollout, rollback 전략을 어떻게 결정하는지 보여주는 과정입니다.</p>
+<div class="serial-card"><span class="sc-label">CONCEPT DEPTH</span>정의 → 내부 동작 → trade-off → 실패 모드 → 검증 증거 → FOLLOW-UP DEFENSE 순서로 답합니다. “캐시를 둔다”가 아니라 read/write ratio, freshness, 권한 데이터 여부, invalidation 비용, stale 허용 시간을 근거로 선택합니다.</div>
+<table>
+<tr><th>질문</th><th>부실한 답변</th><th>ANSWER UPGRADE TABLE</th></tr>
+<tr><td>대시보드 설계</td><td>필터와 페이지네이션을 넣습니다.</td><td>actor/resource/action, 권한별 action, audit event, URL state, server filtering/sorting, cursor pagination, bulk action dry-run을 요구사항과 위험 기준으로 설계합니다.</td></tr>
+<tr><td>대용량 업로드</td><td>파일을 올리고 검증합니다.</td><td>upload session, raw file, parsed row, validation error, domain record를 분리하고 parsing/validation을 job으로 넘겨 queue lag와 worker throughput을 관측합니다.</td></tr>
+<tr><td>출시와 rollback</td><td>단계적으로 배포합니다.</td><td>expand-contract, feature flag, canary, backfill 검증, 구버전 호환성, rollback 불가능 데이터 변경의 forward fix를 설계합니다.</td></tr>
+</table>
+<h3>FOLLOW-UP DEFENSE</h3>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>COMMON TRAPS</th></tr>
+<tr><td>트래픽이 10배 늘면 어디가 먼저 터지나요?</td><td>QPS 평균보다 peak, read/write ratio, DB connection, queue lag, worker throughput, cache hit ratio를 세우고 bottleneck 후보를 순서대로 좁힙니다.</td><td>서버만 늘리면 된다고 말하기</td></tr>
+<tr><td>설계가 실패하면 어떻게 되돌리나요?</td><td>코드 rollback, schema rollback 가능성, 데이터 migration forward fix, feature flag off, traffic shift를 분리합니다. 데이터 변경은 되돌릴 수 없을 수 있습니다.</td><td>rollback을 배포 취소와 동일시하기</td></tr>
+</table>
+<h3>EVIDENCE TO SAY</h3>
+<p>architecture sketch, capacity sheet, API contract, ERD, sequence diagram, SLO, queue lag dashboard, migration plan, PR·ADR·장애기록·QA ticket을 답변 증거로 준비합니다.</p>
 </section>
 
 <footer>SYSTEM DESIGN INTERVIEW Q&A · V2 · 2026-06</footer>

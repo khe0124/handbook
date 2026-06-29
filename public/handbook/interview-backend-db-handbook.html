@@ -27,6 +27,7 @@
   <a href="#q16"><span class="code">BD-16</span>Slow Query 대응</a>
   <a href="#q17"><span class="code">BD-17</span>핵심 질문 20선</a>
   <a href="#q18"><span class="code">BD-18</span>개념 인과관계</a>
+  <a href="#backend-deep-answer-upgrade"><span class="code">BD-19</span>Deep Answer Model</a>
 </nav>
 <main>
 <header class="hero">
@@ -383,6 +384,26 @@
 <span class="co-label">면접 답변 전환</span>
 <p>“트랜잭션은 ACID입니다”에서 멈추면 암기입니다. “트랜잭션은 여러 변경을 하나의 실패 단위로 묶지만, 길어질수록 connection과 lock을 오래 잡아 동시성을 해칩니다. 그래서 외부 API 호출은 transaction 밖으로 빼고, DB 변경과 이벤트 발행 사이 간극은 outbox로 줄입니다”까지 말해야 합니다.</p>
 </div>
+</section>
+
+<section id="backend-deep-answer-upgrade" class="answer-card" data-answer-model="definition mechanism tradeoff failure evidence defense">
+<div class="ch-head"><span class="ch-code">BD-19</span><h2>DEEP ANSWER MODEL</h2></div>
+<p class="lede">백엔드 답변은 “API를 만들었다”가 아니라 요청이 transaction boundary, lock wait, connection pool, index plan, external dependency를 지나며 어떤 정합성과 지연을 만드는지 설명해야 깊이가 생깁니다.</p>
+<div class="serial-card"><span class="sc-label">CONCEPT DEPTH</span>정의 → 내부 동작 → trade-off → 실패 모드 → 검증 증거 → FOLLOW-UP DEFENSE 순서로 답합니다. 예를 들어 트랜잭션은 ACID 정의가 아니라 DB connection을 점유하고 lock을 유지하며, 외부 API 호출을 내부에 넣으면 장애 전파와 lock wait를 키운다는 내부 동작으로 설명합니다.</div>
+<table>
+<tr><th>질문</th><th>부실한 답변</th><th>ANSWER UPGRADE TABLE</th></tr>
+<tr><td>트랜잭션 경계</td><td>중요한 로직은 트랜잭션으로 묶습니다.</td><td>도메인 불변식이 함께 성공해야 하는 DB 변경만 transaction boundary 안에 두고, 외부 API와 메시지 발행은 outbox 또는 후속 단계로 분리합니다. 길어진 트랜잭션은 connection pool 점유와 lock wait를 키웁니다.</td></tr>
+<tr><td>인덱스 최적화</td><td>느리면 인덱스를 추가합니다.</td><td>WHERE/JOIN/ORDER BY, equality/range 조건, selectivity, covering 여부, write amplification을 보고 EXPLAIN actual rows와 buffer hit로 검증합니다.</td></tr>
+<tr><td>멱등성</td><td>중복 요청을 막습니다.</td><td>idempotency key, payload hash, processing/success/fail 상태, unique constraint, retry UX를 저장해 같은 요청이 재시도되어도 같은 결과로 수렴하게 만듭니다.</td></tr>
+</table>
+<h3>FOLLOW-UP DEFENSE</h3>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>COMMON TRAPS</th></tr>
+<tr><td>DB 제약이 있는데 서버 validation이 왜 필요한가요?</td><td>서버 validation은 사용자에게 도메인 오류를 명확히 돌려주고, DB constraint는 우회와 race를 막는 최종 방어선입니다. 둘은 중복이 아니라 다른 계층의 책임입니다.</td><td>validation을 한 계층으로만 몰기</td></tr>
+<tr><td>connection pool이 꽉 차면 DB가 느린 건가요?</td><td>DB query, lock wait, transaction length, downstream timeout 때문에 connection 반환이 늦어질 수 있습니다. Hikari metric, APM trace, slow query log를 함께 봅니다.</td><td>CPU만 보고 DB 문제가 아니라고 단정하기</td></tr>
+</table>
+<h3>EVIDENCE TO SAY</h3>
+<p>EXPLAIN ANALYZE, query log, Hikari connection pool metric, lock wait, migration plan, contract test, PR·ADR·장애기록·QA ticket을 답변 증거로 준비합니다.</p>
 </section>
 
 <footer>BACKEND & DB INTERVIEW Q&A · V2 · 2026-06</footer>
