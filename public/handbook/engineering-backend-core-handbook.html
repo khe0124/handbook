@@ -89,6 +89,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#doc-auth"><span class="code">DOC</span>인증과 보안</a>
   <a href="#doc-backend"><span class="code">SRC</span>백엔드 개요</a>
 <a href="#backend-ch1"><span class="code">BE-01</span>무엇이 실무형 백엔드를 만드는가</a>
+  <a href="#backend-ch1-5"><span class="code">BE-01B</span>백엔드 실행 모델</a>
   <a href="#backend-ch2"><span class="code">BE-02</span>HTTP·API 설계 — 계약으로서의 인터페이스</a>
   <a href="#backend-ch3"><span class="code">BE-03</span>관계형 DB — 트랜잭션·인덱스·격리</a>
   <a href="#backend-ch4"><span class="code">BE-04</span>ORM·JPA — 추상화의 비용</a>
@@ -132,6 +133,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#auth-ch10"><span class="code">SEC-10</span>전송·저장·secret</a>
   <a href="#auth-ch11"><span class="code">SEC-11</span>용어집</a>
   <a href="#auth-ch12"><span class="code">SEC-12</span>실무 인증·인가 심화</a>
+  <a href="#auth-ch13"><span class="code">SEC-13</span>Security Threat Modeling</a>
 </nav>
 <main>
 <header class="hero">
@@ -147,7 +149,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
-<p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
+<p class="lede">백엔드는 요청 처리 경로 → API 계약 → 트랜잭션과 데이터 모델 → 동시성·멱등성 → 외부 의존성·비동기 → 성능 병목 → 테스트 → 관측가능성·운영 → 보안 기본값 → 아키텍처 경계 순서로 읽습니다. 이 통합 문서는 원문을 이어붙이는 용도가 아니라 제품 서버를 설계·리뷰·운영하는 판단 경로를 먼저 잡기 위한 큐레이션입니다.</p>
 <ul><li>백엔드 개요</li><li>아키텍처 패턴</li><li>인증과 보안</li></ul>
 </section>
 
@@ -181,6 +183,37 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="callout">
 <span class="co-label">CORE STANCE</span>
 <p>숙련된 백엔드의 표식은 <strong>트레이드오프를 언어화하는 능력</strong>입니다. "JWT 쓸게요"가 아니라 "stateless라 확장은 쉽지만 즉시 무효화가 안 되니, 짧은 access + refresh로 가겠습니다"라고 말할 수 있는가. 정답을 외우는 게 아니라 <em>비용과 대안을 같이 제시</em>하는 것 — 면접도 실무도 여기서 갈립니다.</p>
+</div>
+</section>
+
+<section id="backend-ch1-5">
+<div class="ch-head"><span class="ch-code">BE-01B</span><h2>백엔드 실행 모델</h2></div>
+<p class="lede">백엔드 학습은 기술 이름을 나열하는 순서가 아니라 요청 하나가 시스템을 통과하며 어떤 계약, 상태, 실패, 증거를 남기는지 따라가는 순서여야 합니다. 이 모델을 먼저 잡으면 API, DB, 보안, 테스트, 운영이 따로 놀지 않습니다.</p>
+<div class="serial-card">
+<span class="sc-label">BACKEND REQUEST MODEL</span>
+client → controller → validation → authN/authZ<br>
+→ application service → transaction boundary<br>
+→ domain rule → repository / external client<br>
+→ commit / rollback → response → log / metric / trace
+</div>
+<table>
+<tr><th>축</th><th>핵심 질문</th><th>대표 산출물</th></tr>
+<tr><td>API 계약</td><td>클라이언트가 무엇을 믿고 호출하는가</td><td>OpenAPI, request/response DTO, error contract</td></tr>
+<tr><td>트랜잭션과 데이터 모델</td><td>무엇이 함께 성공하거나 함께 실패해야 하는가</td><td>transaction boundary, aggregate, DB constraint, migration plan</td></tr>
+<tr><td>동시성·멱등성</td><td>중복 요청, 재시도, 동시 갱신이 들어오면 안전한가</td><td>idempotency key, unique constraint, atomic update, lock policy</td></tr>
+<tr><td>외부 의존성</td><td>느리거나 실패하는 시스템을 어떻게 격리하는가</td><td>timeout, retry budget, circuit breaker, outbox, fallback</td></tr>
+<tr><td>테스트</td><td>변경이 동작과 계약을 깨지 않았다는 증거가 있는가</td><td>unit, integration, contract, regression, smoke test</td></tr>
+<tr><td>운영</td><td>장애가 났을 때 어디가 왜 실패했는지 추적 가능한가</td><td>structured log, metric, traceId, SLO, runbook</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">BACKEND REVIEW CHECKLIST</span>
+□ transaction boundary가 유스케이스와 맞는가<br>
+□ 외부 API 호출이 DB 트랜잭션 안에서 오래 대기하지 않는가<br>
+□ timeout, retry, idempotency key가 중복 실행을 안전하게 만드는가<br>
+□ 최종 방어선이 애플리케이션 if문이 아니라 DB constraint에도 있는가<br>
+□ API contract가 request DTO, response schema, error contract, authZ rule을 포함하는가<br>
+□ unit/integration/contract/regression test가 변경 위험에 맞게 배치되었는가<br>
+□ log, metric, traceId, readiness/liveness, runbook으로 운영 확인이 가능한가
 </div>
 </section>
 
@@ -372,6 +405,16 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td><b>트레이스 Traces</b></td><td>"이 요청이 어느 서비스에서 느렸나"</td><td>분산 트레이싱(OpenTelemetry)</td></tr>
 </table>
 <p>실천의 핵심은 둘입니다. <strong>상관관계 ID</strong> — 요청 진입점에서 ID를 발급해 모든 로그·하위 호출에 전파하면, 마이크로서비스 5개를 거친 한 요청의 궤적을 한 줄로 추적할 수 있습니다. <strong>RED 메트릭</strong> — 모든 서비스에 대해 Rate(처리량)·Errors(에러율)·Duration(지연)을 보면 "느리다/터진다"를 숫자로 잡습니다. 그리고 <code>p50</code>이 아니라 <strong>p95·p99</strong>를 보세요 — 평균은 꼬리의 고통을 숨깁니다.</p>
+<div class="serial-card">
+<span class="sc-label">OPERATIONS READINESS CHECKLIST</span>
+structured log: requestId, userId, endpoint, status, latency, error code<br>
+metric: RED(rate, errors, duration) + USE(utilization, saturation, errors)<br>
+traceId: entrypoint에서 만들고 DB, cache, external call, queue까지 전파<br>
+p95 / p99: 평균이 아니라 꼬리 지연을 배포 전후로 비교<br>
+readiness / liveness: 트래픽 수신 가능 여부와 프로세스 생존 여부를 분리<br>
+alert owner: 알람마다 담당자, 기준, 조치 링크를 둔다<br>
+runbook: 증상 → 확인 지표 → 완화 → 복구 확인 → 사후 기록
+</div>
 <div class="callout">
 <span class="co-label">HEALTH CHECK</span>
 <p><code>liveness</code>(살아있나 — 죽었으면 재시작)와 <code>readiness</code>(요청 받을 준비 됐나 — DB 연결 전엔 트래픽 차단)를 구분하세요. 둘을 합치면 "DB가 잠깐 끊겼다고 컨테이너가 통째로 재시작되는" 사고가 납니다. SLI(측정 지표)로 SLO(목표, 예: 가용성 99.9%)를 정하는 것이 운영 성숙의 시작입니다.</p>
@@ -414,6 +457,16 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td><b>E2E</b></td><td>전체 플로우</td><td>느리고 깨지기 쉬움 — 핵심 경로만 소수</td></tr>
 </table>
 <p>테스트 원칙: <strong>구현이 아니라 동작을 테스트</strong>하라 — "내부 함수를 몇 번 호출했나"가 아니라 "이 입력에 이 결과가 나오나". 구현 디테일을 검증하면 리팩토링할 때마다 테스트가 깨져 오히려 변경을 막습니다. 그리고 <strong>flaky test는 즉시 격리하거나 고쳐라</strong> — 가끔 실패하는 테스트 하나를 용인하면 팀이 빨간불을 무시하기 시작하고, 그 순간 테스트 스위트 전체의 신뢰가 무너집니다.</p>
+<div class="serial-card">
+<span class="sc-label">BACKEND TEST PLAN</span>
+Domain unit: 불변식, 상태 전이, 계산 규칙을 Spring 없이 검증<br>
+Service unit: 유스케이스 분기, 권한 실패, repository port 호출을 검증<br>
+Repository integration: Testcontainers로 실제 DB constraint, query, mapping 확인<br>
+API slice: request DTO validation, status code, error contract, authZ branch 확인<br>
+Contract test: consumer가 기대하는 field, status, backward compatibility 고정<br>
+E2E smoke: 로그인, 핵심 생성/조회/취소 같은 소수 happy path만 확인<br>
+Regression: 장애나 버그가 재발하지 않도록 실패 사례를 테스트로 고정
+</div>
 <div class="callout">
 <span class="co-label">TDD as DESIGN</span>
 <p>버그를 고칠 땐 <strong>먼저 그 버그를 재현하는 실패 테스트</strong>를 쓰세요 — 고친 뒤 그 테스트가 통과하면 "정말 고쳤다"의 증거이자, 재발을 막는 회귀 방어선이 됩니다. 테스트를 먼저 쓰면 자연스럽게 "이 코드를 어떻게 호출할까(인터페이스)"를 먼저 설계하게 됩니다 — TDD의 진짜 가치는 커버리지가 아니라 설계 압력입니다.</p>
@@ -427,6 +480,18 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 
 <h3><span class="h3-tag">12.1</span>먼저 묻는 질문 — 비기능 요구</h3>
 <p>기능("무엇을")보다 <strong>비기능 요구("얼마나")</strong>가 설계를 결정합니다: 예상 트래픽(읽기:쓰기 비율, peak), 지연 목표(p99), 가용성 목표, 데이터 규모와 증가율, 일관성 요구(강한가 최종이어도 되나). 이걸 안 묻고 그린 설계는 추측입니다 — 당신의 작업 원칙 "요구사항이 모호하면 채우지 말고 질문하라"가 그대로 적용됩니다.</p>
+<div class="rule-box">
+<span class="rb-label">BACKEND DESIGN QUESTION FLOW</span>
+요구사항: 사용자가 실제로 끝내야 하는 행동과 실패 시 손실은 무엇인가<br>
+트래픽: read/write 비율, peak QPS, p95·p99 latency 목표, 데이터 증가율은 어느 정도인가<br>
+일관성: 즉시 맞아야 하는 값과 나중에 맞아도 되는 값은 무엇인가<br>
+데이터 모델: aggregate root, 고유 제약, 상태 전이, 삭제·보존 정책은 어디에 있는가<br>
+API 계약: request/response, error code, idempotency key, pagination, versioning을 어떻게 고정할 것인가<br>
+트랜잭션 경계: 한 번에 커밋해야 하는 변경과 이벤트로 분리할 변경은 무엇인가<br>
+장애 모드: 외부 API, DB, cache, queue가 느리거나 죽었을 때 사용자는 무엇을 보게 되는가<br>
+확장 경로: 지금은 단순하게 두되, 어느 지표가 넘으면 cache, queue, read model, sharding을 검토할 것인가<br>
+관측 지표: 성공률, 에러율, p99, lock wait, queue lag, retry count를 어디서 볼 것인가
+</div>
 
 <h3><span class="h3-tag">12.2</span>확장과 일관성의 거래</h3>
 <ul>
@@ -434,12 +499,62 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <li><strong>CAP</strong> — 네트워크 분단(P)은 피할 수 없으니, 분단 시 일관성(C)과 가용성(A) 중 무엇을 포기할지의 선택입니다. 은행 잔액은 C, 좋아요 수는 A.</li>
 <li><strong>일관성 모델</strong> — 강한 일관성(항상 최신)은 비싸고, 최종 일관성(잠깐 어긋나도 결국 수렴)은 싸고 빠릅니다. 도메인이 결정합니다.</li>
 </ul>
+<div class="table-wrap">
+<table>
+<thead><tr><th>설계 결정</th><th>단순하게 시작</th><th>분리하는 신호</th><th>주의할 비용</th></tr></thead>
+<tbody>
+<tr><td>모듈 vs 서비스</td><td>한 코드베이스 안의 명확한 module boundary</td><td>배포 주기, 데이터 소유권, 장애 격리가 실제로 갈라질 때</td><td>분산 트랜잭션, 네트워크 실패, 관측 복잡도</td></tr>
+<tr><td>동기 API vs 비동기 메시지</td><td>사용자 응답에 필요한 작업만 동기 처리</td><td>느린 외부 호출, 후처리, fan-out, 재시도가 필요할 때</td><td>중복 메시지, 순서 보장, 보상 처리</td></tr>
+<tr><td>RDB vs 캐시·검색·큐</td><td>정합성의 기준은 RDB에 둔다</td><td>읽기 병목, 검색 요구, 비동기 처리량이 명확해질 때</td><td>무효화, 재색인, lag, 운영 장애 지점 증가</td></tr>
+<tr><td>강한 일관성 vs 최종 일관성</td><td>돈, 재고, 권한은 강한 일관성</td><td>알림, 추천, 집계처럼 잠깐 틀려도 되는 화면</td><td>사용자에게 보이는 상태 불일치와 보정 로직</td></tr>
+<tr><td>단일 트랜잭션 vs outbox/saga</td><td>한 DB 안의 핵심 상태는 단일 트랜잭션</td><td>외부 시스템 발행, 여러 서비스 변경, 장기 작업</td><td>중간 상태, 재시도, 보상 이벤트, 모니터링</td></tr>
+</tbody>
+</table>
+</div>
+<div class="rule-box">
+<span class="rb-label">DESIGN DECISION MATRIX</span>
+결정은 기술 선호가 아니라 제약의 결과여야 합니다. 설계 리뷰에서는 "왜 이 기술인가"보다 "어떤 제약 때문에 이 선택이 최소 비용인가", "어떤 지표가 나오면 다음 단계로 바꿀 것인가", "되돌리거나 확장할 수 있는가"를 먼저 설명하세요.
+</div>
 
 <h3><span class="h3-tag">12.3</span>장애를 전제로 설계</h3>
 <p>"무엇이 깨질 수 있는가"를 먼저 그리는 것이 실무 설계입니다 — 단일 장애점(SPOF) 제거, 우아한 성능저하(graceful degradation: 추천이 죽어도 상품은 보이게), 백프레셔(과부하 시 받지 않고 거절), 격벽(한 기능의 자원 고갈이 다른 기능을 안 죽이게).</p>
 <div class="callout">
 <span class="co-label">측정 없는 최적화 금지</span>
 <p>"이게 더 빠를 것 같아서"는 근거가 아닙니다 — 병목은 <em>측정한 뒤</em> 잡으세요(프로파일링·메트릭). 명확성과 성능이 충돌하면 명확성을 먼저 택하고, 측정이 정당화할 때 최적화하세요. 예외는 알고리즘 복잡도 — <code>O(n²)</code>가 될 게 명백하면 처음부터 피합니다. 용량 산정은 정밀할 필요 없이 <em>back-of-envelope</em>(자릿수 추정)면 충분합니다: "초당 만 건 × 1KB = 10MB/s, 하루 ~860GB" 수준의 감각이 설계 방향을 가릅니다.</p>
+</div>
+
+<h3><span class="h3-tag">12.4</span>Case study — 주문 생성 설계</h3>
+<p>예시 요구사항: 사용자는 상품을 주문하고, 재고는 중복 차감되면 안 되며, 결제와 알림은 실패해도 재시도되어야 합니다. 이때 설계의 핵심은 "주문 생성"과 "후처리"를 같은 무게로 다루지 않는 것입니다.</p>
+<div class="rule-box">
+<span class="rb-label">ORDER CREATION DESIGN WALKTHROUGH</span>
+API: <code>POST /orders</code>는 <code>idempotency key</code>를 받아 같은 요청의 중복 주문을 막는다<br>
+Data: <code>orders</code>, <code>order_items</code>, <code>stock_reservations</code>, <code>outbox_events</code>를 같은 DB에 둔다<br>
+Transaction: 주문 생성, 재고 예약, outbox 기록은 하나의 트랜잭션으로 커밋한다<br>
+Concurrency: 상품 재고 행은 optimistic lock 또는 조건부 update로 음수 재고를 막는다<br>
+Async: 결제 요청, 알림, 검색 색인은 outbox consumer가 at-least-once로 처리한다<br>
+Idempotency: producer는 idempotency key, consumer는 event id inbox로 중복 처리를 방어한다<br>
+Failure: 결제 실패는 주문을 취소하거나 결제대기 만료 작업으로 회수한다<br>
+Observability: 주문 생성 성공률, 재고 예약 실패율, 결제 retry count, outbox lag, consumer error를 대시보드에 둔다
+</div>
+<p>이 사례에서 "처음부터 마이크로서비스"가 답은 아닙니다. 먼저 모듈 경계를 선명하게 두고, 결제·재고·알림의 실패 모드와 데이터 소유권이 실제로 갈라질 때 서비스 분리를 검토합니다.</p>
+
+<h3><span class="h3-tag">12.5</span>설계 리뷰 루브릭</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>리뷰 축</th><th>좋은 설계의 증거</th><th>위험 신호</th></tr></thead>
+<tbody>
+<tr><td>정확성</td><td>불변식, unique constraint, 상태 전이가 코드와 DB에 함께 표현됨</td><td>중요한 규칙이 문서나 프론트엔드 검증에만 있음</td></tr>
+<tr><td>트랜잭션</td><td>커밋 경계와 롤백 시나리오가 명확함</td><td>외부 API 호출이 DB 트랜잭션 안에 오래 머묾</td></tr>
+<tr><td>동시성</td><td>중복 요청, 경합, 재시도, 메시지 중복을 테스트함</td><td>"거의 동시에 안 들어온다"를 전제로 함</td></tr>
+<tr><td>운영</td><td>핵심 지표, 로그 키, 알람 조건, runbook 초안이 있음</td><td>장애가 나야만 어디가 막혔는지 알 수 있음</td></tr>
+<tr><td>변경 가능성</td><td>API versioning, backward compatibility, migration 순서가 있음</td><td>한 번에 배포해야만 동작하는 변경</td></tr>
+<tr><td>테스트</td><td>contract, integration, concurrency, failure case 테스트가 있음</td><td>happy path E2E 하나로 설계를 증명하려 함</td></tr>
+</tbody>
+</table>
+</div>
+<div class="rule-box">
+<span class="rb-label">BACKEND DESIGN REVIEW RUBRIC</span>
+설계안을 제출할 때는 다이어그램보다 먼저 "무엇을 절대 깨면 안 되는가", "어디까지 같은 트랜잭션인가", "중복·재시도·부분 실패를 어떻게 처리하는가", "어떤 지표로 맞게 동작하는지 볼 것인가"를 답하세요. 이 네 가지를 답하지 못하면 설계가 아니라 구현 아이디어에 가깝습니다.
 </div>
 </section>
 
@@ -481,6 +596,17 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td>error contract</td><td>code, message, field, retryable, traceId를 구조화</td><td>프론트가 문자열 파싱으로 분기</td></tr>
 <tr><td>API versioning</td><td>필드 추가는 호환, 의미 변경과 삭제는 버전 또는 migration 필요</td><td>모바일 앱 구버전이 갑자기 깨짐</td></tr>
 </table>
+<div class="serial-card">
+<span class="sc-label">API CONTRACT MINI</span>
+Endpoint / method: 자원과 행동을 URL, method, status code로 명확히 표현<br>
+Request DTO validation: 필수값, 형식, 범위, cross-field rule을 서버에서 검증<br>
+Response schema: 성공 응답 field, nullable, enum, timestamp format을 고정<br>
+Error contract: code, message, field, retryable, traceId를 구조화<br>
+Idempotency rule: 중복 위험 POST는 idempotency key와 request fingerprint 저장<br>
+Pagination rule: offset, cursor, keyset 중 데이터 특성에 맞게 선택<br>
+AuthZ rule: role뿐 아니라 resource ownership과 tenant boundary 확인<br>
+Backward compatibility note: 필드 삭제, 의미 변경, enum 추가의 consumer 영향 기록
+</div>
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>주문 생성 API가 timeout을 냈을 때 클라이언트는 성공인지 실패인지 알 수 없습니다. 이때 같은 idempotency key로 재요청하면 서버는 이전 처리 결과를 반환해야 합니다. key 저장소에는 요청 fingerprint, 응답, 만료 시간을 함께 저장하고, 같은 key에 다른 payload가 오면 충돌로 거절해야 합니다.</p>
@@ -1233,9 +1359,145 @@ sig == sign(<span class="seg">header</span> + <span class="seg2">payload</span>,
 </div>
 </section>
 
+<section id="auth-ch13">
+<div class="ch-head"><span class="ch-code">SEC-13</span><h2>Security Threat Modeling</h2></div>
+<p class="lede">위협 모델링은 "무서운 것을 상상하는 회의"가 아니라 <em>설계가 어떤 신뢰 가정 위에 서 있는지 드러내는 작업</em>입니다. 기능을 만들기 전에 데이터 흐름, 신뢰 경계, 권한 경계, 감사 가능성을 놓고 "어디서 공격자가 개입할 수 있는가"를 구체적으로 묻습니다.</p>
+<p>좋은 위협 모델은 문서가 길지 않습니다. 대신 <strong>자산(asset), 행위자(actor), 진입점(entry point), 신뢰 경계(trust boundary), 실패 시 영향</strong>이 분명합니다. 로그인, 결제, 파일 업로드, 웹훅, 관리자 기능, 테넌트 데이터 접근처럼 실패 비용이 큰 기능은 티켓이 아니라 설계 단계에서 먼저 모델링해야 합니다.</p>
+
+<h3><span class="h3-tag">13.1</span>STRIDE로 빠르게 훑기</h3>
+<p><strong>STRIDE</strong>는 위협을 여섯 질문으로 나누는 실무 프레임입니다. 모든 항목에 대단한 답을 쓰는 것이 목적이 아니라, "이 기능에서 빠뜨리면 사고가 되는 질문"을 빠르게 누락 없이 통과하는 것이 목적입니다.</p>
+<table>
+<tr><th>STRIDE</th><th>질문</th><th>예시 방어</th></tr>
+<tr><td>Spoofing</td><td>공격자가 다른 사용자·서비스인 척할 수 있는가?</td><td>MFA, 세션 재발급, JWT 서명 검증, webhook 서명 검증</td></tr>
+<tr><td>Tampering</td><td>요청·파일·이벤트·권한값을 바꿔도 서버가 믿는가?</td><td>서버 측 재계산, 무결성 검증, allowlist, optimistic locking</td></tr>
+<tr><td>Repudiation</td><td>나중에 "내가 한 게 아니다"를 반박할 기록이 있는가?</td><td>감사 로그, 요청 id, actor/ip/user-agent, 변경 전후 diff</td></tr>
+<tr><td>Information Disclosure</td><td>다른 사용자·테넌트·내부 정보가 새는가?</td><td>객체 단위 인가, 필드 마스킹, 에러 메시지 축소, 로그 redaction</td></tr>
+<tr><td>Denial of Service</td><td>작은 비용의 요청으로 큰 서버 비용을 만들 수 있는가?</td><td>rate limit, payload 제한, 큐 격리, timeout, backpressure</td></tr>
+<tr><td>Elevation of Privilege</td><td>일반 사용자가 관리자·소유자 권한을 얻는 경로가 있는가?</td><td>권한 중앙화, step-up auth, dual control, 정책 테스트</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">THREAT MODEL MINI LOOP</span>
+1. <span class="seg">무엇을 보호하나?</span> 자산: 계정, 결제수단, 개인정보, 파일, API key<br>
+2. <span class="seg2">누가 접근하나?</span> anonymous, user, tenant admin, internal admin, partner service<br>
+3. <span class="seg">어디서 경계가 바뀌나?</span> browser → API → worker → DB → external provider<br>
+4. <span class="seg2">무엇을 신뢰하지 않나?</span> client input, URL id, headers, file metadata, webhook payload<br>
+5. <span class="seg">실패하면 어떻게 알 수 있나?</span> audit log, alert, anomaly query, replayable request id
+</div>
+
+<h3><span class="h3-tag">13.2</span>Trust Boundary는 선으로 그린다</h3>
+<p><strong>신뢰 경계</strong>는 데이터가 다른 신뢰 수준으로 넘어가는 지점입니다. 브라우저에서 온 값, 모바일 앱에서 온 값, 파트너가 보낸 웹훅, 내부 큐 메시지, 관리자 콘솔 입력은 모두 별도 경계입니다. "우리 프론트엔드가 보내니까 안전하다"는 말은 경계 밖의 입력을 신뢰한다는 뜻입니다.</p>
+<table>
+<tr><th>경계</th><th>위험 질문</th><th>필수 통제</th></tr>
+<tr><td>Browser → API</td><td>사용자가 hidden field, price, role, ownerId를 바꾸면?</td><td>서버 측 권한 판정, 값 재계산, schema validation</td></tr>
+<tr><td>API → DB</td><td>쿼리 조건에 tenantId/ownerId가 항상 붙는가?</td><td>repository 정책, RLS 또는 mandatory predicate, 테스트</td></tr>
+<tr><td>API → Worker/Queue</td><td>큐 메시지를 내부 신뢰로 처리해도 되는가?</td><td>message schema, idempotency key, actor/context 포함</td></tr>
+<tr><td>Service → External</td><td>외부 응답·callback을 그대로 상태 변경에 쓰는가?</td><td>서명 검증, allowlist, timeout, replay 방어</td></tr>
+<tr><td>Admin Console → Core Data</td><td>관리자 실수·악용이 고객 데이터에 즉시 반영되는가?</td><td>승인 단계, reason code, audit log, 민감 작업 재인증</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">경계 밖 데이터는 다시 검증한다</span>
+<p>한 번 검증한 데이터라도 다른 경계를 넘으면 다시 검증합니다. 예를 들어 API에서 검증한 업로드 작업도 worker가 파일을 열기 전 크기·MIME·확장자·바이러스 스캔 상태를 다시 확인해야 합니다. 큐, 캐시, 웹훅은 "내부"처럼 보이지만 공격자가 간접적으로 값을 넣을 수 있으면 신뢰 경계 밖입니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.3</span>Tenant Isolation은 필터가 아니라 불변식</h3>
+<p>멀티테넌트 서비스의 보안 목표는 단순합니다. <strong>한 테넌트의 사용자가 다른 테넌트의 데이터를 읽거나, 바꾸거나, 존재 여부를 추론할 수 없어야 합니다.</strong> 이를 컨트롤러마다 <code>where tenant_id = ?</code>를 기억하는 방식으로만 운영하면 언젠가 빠집니다.</p>
+<table>
+<tr><th>계층</th><th>설계 기준</th><th>리뷰 질문</th></tr>
+<tr><td>식별자</td><td>모든 테넌트 소유 리소스에 <code>tenant_id</code>를 필수 보유</td><td>테넌트 없는 row가 생성될 수 있는가?</td></tr>
+<tr><td>쿼리</td><td>조회·수정·삭제 조건에 tenant predicate를 강제</td><td>id만으로 <code>findById</code> 하는 경로가 있는가?</td></tr>
+<tr><td>권한</td><td>role은 tenant scope 안에서만 의미를 가짐</td><td>tenant A admin이 tenant B에 admin인가?</td></tr>
+<tr><td>캐시</td><td>캐시 키에 tenant scope 포함</td><td><code>user:123</code> 같은 전역 키가 섞이지 않는가?</td></tr>
+<tr><td>검색·통계</td><td>index, export, analytics에도 tenant filter 적용</td><td>운영성 기능이 isolation을 우회하지 않는가?</td></tr>
+<tr><td>DB 방어</td><td>가능하면 RLS, view, repository guard 등 2차 방어</td><td>애플리케이션 버그 하나로 전 테넌트가 노출되는가?</td></tr>
+</table>
+
+<h3><span class="h3-tag">13.4</span>IDOR 테스트 케이스</h3>
+<p>IDOR는 "id를 바꿔본다"에서 시작하지만, 실무 테스트는 더 넓어야 합니다. 단건 조회뿐 아니라 목록, 검색, export, bulk update, soft delete, 첨부파일 다운로드, websocket subscription까지 <strong>객체 참조가 들어가는 모든 표면</strong>을 대상으로 봅니다.</p>
+<table>
+<tr><th>케이스</th><th>테스트 방법</th><th>기대 결과</th></tr>
+<tr><td>단건 조회</td><td>user A 토큰으로 user B의 <code>/orders/{id}</code> 요청</td><td><code>403</code> 또는 존재 숨김이 필요한 경우 <code>404</code></td></tr>
+<tr><td>수정·삭제</td><td>본문의 <code>ownerId</code>, <code>tenantId</code>, <code>role</code>을 다른 값으로 변경</td><td>서버가 본문 값을 무시하고 권한 컨텍스트로 판정</td></tr>
+<tr><td>목록·검색</td><td>filter에 다른 tenant/user id를 직접 지정</td><td>허용된 scope 밖 row가 0건</td></tr>
+<tr><td>파일 다운로드</td><td>첨부파일 id 또는 signed URL을 다른 계정에서 재사용</td><td>객체 권한 재검증, URL 만료·scope 확인</td></tr>
+<tr><td>Bulk API</td><td>요청 배열에 내 리소스와 남의 리소스를 섞음</td><td>부분 성공 정책 명확, unauthorized 항목 차단·기록</td></tr>
+<tr><td>Export/Report</td><td>비동기 리포트 생성 요청에 다른 tenant id 삽입</td><td>worker 단계에서도 tenant scope 재검증</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">테스트가 통과해야 하는 기준</span>
+<p>컨트롤러에서 403을 한 번 돌려주는 것만으로 충분하지 않습니다. repository, service, worker, export job처럼 같은 데이터에 접근하는 다른 경로에서도 같은 정책이 적용되어야 합니다. 인가 테스트는 "성공 케이스"보다 "다른 사용자의 자원을 섞었을 때 실패하는 케이스"가 더 중요합니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.5</span>Audit Log Design</h3>
+<p>감사 로그는 디버그 로그가 아닙니다. 침해 대응, 내부자 악용 조사, 고객 문의, 규제 대응에서 <strong>행위의 증거</strong>가 되는 별도 데이터 모델입니다. 그래서 읽기 좋게 남기는 것보다 변조 어렵고, 검색 가능하고, 민감정보를 과하게 담지 않는 것이 중요합니다.</p>
+<table>
+<tr><th>필드</th><th>기준</th><th>주의</th></tr>
+<tr><td><code>actor</code></td><td>user id, admin id, service account, impersonation 여부</td><td>이메일만 남기면 변경·재사용 추적이 약함</td></tr>
+<tr><td><code>action</code></td><td><code>user.role.changed</code>, <code>invoice.refunded</code>처럼 안정적 이벤트명</td><td>자유문장 로그는 집계·alert가 어려움</td></tr>
+<tr><td><code>resource</code></td><td>type, id, tenant id, owner id</td><td>테넌트 scope 누락 시 조사 불가</td></tr>
+<tr><td><code>before/after</code></td><td>민감 필드는 마스킹한 변경 diff</td><td>비밀번호, token, secret, 전체 PII를 남기지 않음</td></tr>
+<tr><td><code>context</code></td><td>request id, ip, user-agent, auth method, reason code</td><td>프록시 환경의 실제 client ip 해석 기준 필요</td></tr>
+<tr><td><code>integrity</code></td><td>append-only 저장, 보존 기간, 관리자 삭제 제한</td><td>관리자가 흔적을 지울 수 있으면 감사가 아님</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">AUDIT EVENT SHAPE</span>
+{<br>
+&nbsp;&nbsp;<span class="seg">"event"</span>: "tenant.member.role_changed",<br>
+&nbsp;&nbsp;<span class="seg2">"actor"</span>: {"type":"user","id":"u_123","tenant":"t_1"},<br>
+&nbsp;&nbsp;<span class="seg">"resource"</span>: {"type":"member","id":"m_456","tenant":"t_1"},<br>
+&nbsp;&nbsp;<span class="seg2">"change"</span>: {"role":{"from":"viewer","to":"admin"}},<br>
+&nbsp;&nbsp;<span class="seg">"context"</span>: {"request_id":"req_...","ip":"203.0.113.10","reason":"support_ticket"}<br>
+}<br>
+<span class="dim">※ secret, raw token, password, full card number는 감사 로그에도 저장하지 않는다</span>
+</div>
+
+<h3><span class="h3-tag">13.6</span>File Upload와 Webhook 위험</h3>
+<p>파일 업로드와 웹훅은 공격자가 서버 안쪽으로 데이터를 밀어 넣는 대표 경로입니다. 둘 다 "사용자가 보낸 입력"보다 위험할 수 있습니다. 파일은 저장소·백신·썸네일러·다운로드 경로를 지나고, 웹훅은 외부 서비스 이름을 달고 내부 상태 변경을 트리거하기 때문입니다.</p>
+<table>
+<tr><th>표면</th><th>주요 위험</th><th>실무 방어</th></tr>
+<tr><td>파일 업로드</td><td>웹셸, polyglot 파일, MIME 속임, zip bomb, 악성 이미지 parser exploit</td><td>크기 제한, 확장자·MIME allowlist, magic byte 확인, AV scan, 이미지 재인코딩</td></tr>
+<tr><td>파일 저장</td><td>경로 조작, 공개 버킷, 원본 파일명 XSS, tenant 간 파일 섞임</td><td>서버 생성 파일명, private bucket, metadata escape, tenant prefix 분리</td></tr>
+<tr><td>파일 다운로드</td><td>signed URL 재사용, 권한 변경 후 접근 유지, content sniffing</td><td>짧은 만료, 다운로드 직전 인가, <code>Content-Disposition</code>, <code>nosniff</code></td></tr>
+<tr><td>Webhook 수신</td><td>서명 없는 위조 이벤트, replay, 이벤트 순서 뒤집힘, SSRF callback</td><td>HMAC 서명 검증, timestamp window, idempotency, event id 저장, allowlist</td></tr>
+<tr><td>Webhook 처리</td><td>외부 payload를 내부 권한으로 상태 변경</td><td>상태 전이 검증, 서버 측 조회로 사실 확인, 실패 큐·재시도 제한</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">Webhook은 인증된 API처럼 다룬다</span>
+<p>웹훅 endpoint가 공개 URL이라는 점을 잊지 마세요. provider 이름이 path에 들어있어도 인증이 아닙니다. 서명 검증, timestamp 검증, replay 방지, idempotency를 통과한 뒤에도 "이 이벤트가 현재 리소스 상태에서 가능한 전이인가"를 서버가 다시 판단해야 합니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.7</span>Admin Abuse Cases</h3>
+<p>관리자 기능은 "권한이 높으니 괜찮다"가 아니라 <strong>권한이 높아서 더 엄격해야 하는 표면</strong>입니다. 외부 공격자만 위협 행위자가 아닙니다. 실수한 운영자, 과도한 권한을 가진 CS 담당자, 탈취된 관리자 계정, 악의적 내부자도 모델에 포함해야 합니다.</p>
+<table>
+<tr><th>남용 케이스</th><th>위험</th><th>통제</th></tr>
+<tr><td>사용자 impersonation</td><td>고객 계정으로 임의 작업, 부인 가능성</td><td>읽기 전용 기본값, 명시적 사유, 배너 표시, 모든 행위 audit</td></tr>
+<tr><td>권한 상승·역할 변경</td><td>동료 또는 본인에게 과도 권한 부여</td><td>self-grant 금지, dual approval, step-up auth, break-glass 절차</td></tr>
+<tr><td>PII 조회·export</td><td>대량 개인정보 유출</td><td>필드 마스킹, 목적 제한, export 승인, anomaly alert</td></tr>
+<tr><td>결제 취소·환불</td><td>금전 손실, 고객 분쟁</td><td>금액 threshold, 2인 승인, ledger 불변 기록</td></tr>
+<tr><td>감사 로그 삭제</td><td>침해 흔적 제거</td><td>append-only 저장, 별도 권한, 보존 정책, 삭제 대신 redaction workflow</td></tr>
+</table>
+
+<h3><span class="h3-tag">13.8</span>Security Review Rubric</h3>
+<p>리뷰는 "보안 문제 없어 보임"이 아니라 구체적인 질문에 답하는 과정이어야 합니다. 아래 rubric은 PR 설명이나 설계 문서에 붙여도 됩니다. 답이 "해당 없음"이면 왜 해당 없는지까지 짧게 남기는 것이 좋습니다.</p>
+<table>
+<tr><th>영역</th><th>리뷰 질문</th><th>통과 기준</th></tr>
+<tr><td>AuthN/AuthZ</td><td>새 endpoint/job/subscription이 인증과 객체 단위 인가를 모두 수행하는가?</td><td>권한 정책 위치와 negative test가 명확함</td></tr>
+<tr><td>Tenant Isolation</td><td>모든 query, cache key, export, background job에 tenant scope가 있는가?</td><td>id-only 접근 경로가 없음</td></tr>
+<tr><td>Input/Output</td><td>외부 입력이 schema validation을 통과하고 출력 컨텍스트에 맞게 escape되는가?</td><td>allowlist, binding, escaping이 코드로 확인됨</td></tr>
+<tr><td>Secrets/PII</td><td>secret, token, PII가 코드·로그·URL·analytics에 남지 않는가?</td><td>redaction과 보관 기간이 정의됨</td></tr>
+<tr><td>State Change</td><td>중요 변경에 CSRF/replay/idempotency/동시성 방어가 있는가?</td><td>중복 요청과 순서 뒤집힘이 안전함</td></tr>
+<tr><td>Files/Webhooks</td><td>업로드·웹훅이 서명, 크기, 타입, 재시도, replay를 다루는가?</td><td>비동기 처리 단계에서도 재검증함</td></tr>
+<tr><td>Admin</td><td>관리자 기능에 최소 권한, 사유, 재인증, 감사 로그가 있는가?</td><td>내부자·계정 탈취 시 피해가 제한됨</td></tr>
+<tr><td>Observability</td><td>침해나 남용을 나중에 발견할 수 있는 이벤트가 남는가?</td><td>audit event와 alert query가 설계됨</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">리뷰의 결론은 액션이어야 한다</span>
+<p>위협 모델링의 산출물은 멋진 다이어그램이 아니라 코드와 운영 통제입니다. 예를 들어 "tenant isolation 위험"을 찾았다면 repository guard, RLS, negative test, audit event 중 무엇을 이번 변경에 넣을지 결정해야 합니다. 남은 위험은 "known risk"로 기록하고 owner와 만료일을 둡니다. 보안 리뷰가 결정으로 이어지지 않으면 회의록일 뿐입니다.</p>
+</div>
+</section>
+
 <footer>
 AUTH &amp; SECURITY HANDBOOK · V1 · 2026-06<br>
-SCOPE : AUTHN/AUTHZ · OWASP TOP 10 · CRYPTO · SECRET MANAGEMENT<br>
+SCOPE : AUTHN/AUTHZ · OWASP TOP 10 · CRYPTO · SECRET MANAGEMENT · THREAT MODELING<br>
 PRINCIPLE : 모든 사용자 입력은 적대적이라고 가정한다 · COMPANION : 백엔드 개요 · DB 핸드북
 </footer>
 </main>

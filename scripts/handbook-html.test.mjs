@@ -277,7 +277,17 @@ test("engineering handbook menu consolidates all source documents into eight ite
     {
       file: "engineering-platform-tools-handbook.html",
       sources: ["Docker와 배포", "리눅스", "vi", "Docker 예시", "nginx 예시"],
-      evidence: ["DOCKER & DEPLOY HANDBOOK", "LINUX / SHELL COMMANDS HANDBOOK", "vi / VIM SHORTCUTS HANDBOOK", "DOCKER EXAMPLES", "NGINX EXAMPLES"],
+      evidence: [
+        "DOCKER & DEPLOY HANDBOOK",
+        "LINUX / SHELL COMMANDS HANDBOOK",
+        "vi / VIM SHORTCUTS HANDBOOK",
+        "DOCKER EXAMPLES",
+        "NGINX EXAMPLES",
+        "PLATFORM OPERATING MODEL",
+        "CHANGE SAFETY CHECKLIST",
+        "TOOL RESPONSIBILITY MATRIX",
+        "PRODUCTION TROUBLESHOOTING PLAYBOOK",
+      ],
     },
     {
       file: "engineering-java-spring-handbook.html",
@@ -504,6 +514,10 @@ test("selected handbook content is positioned as a neutral full-stack growth gui
   assert.match(roadmap, /실전 훈련 루프/);
   assert.match(roadmap, /ADR/);
   assert.match(roadmap, /STRIDE/);
+  assert.match(roadmap, /증거 포트폴리오 규칙/);
+  assert.match(roadmap, /성능 증거/);
+  assert.match(roadmap, /LOOP-01/);
+  assert.match(roadmap, /복구 승인/);
 
   assert.match(source, /대규모 운영 판단/);
   assert.match(source, /Capacity thinking/);
@@ -1320,6 +1334,9 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
   assert.match(source, /독립 리뷰어/);
   assert.match(source, /Episode Package/);
   assert.match(source, /Failure Classification/);
+  assert.match(source, /EPISODE LOG EXAMPLE/);
+  assert.match(source, /Human approval gate/i);
+  assert.match(source, /환각 \/ 도구 오용 유형/);
   assert.match(source, /Adversarial Verification/);
   assert.match(source, /Prompt Injection/);
   assert.match(source, /Data leakage/);
@@ -1363,6 +1380,7 @@ test("backend handbook includes practical senior-level backend guidance without 
     readFile("public/handbook/testing-handbook.html", "utf8"),
     readFile("public/handbook/docker-deploy-handbook.html", "utf8"),
     readFile("public/handbook/observability-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-core-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
 
@@ -1374,8 +1392,14 @@ test("backend handbook includes practical senior-level backend guidance without 
   assert.match(source, /MVCC/);
   assert.match(source, /covering index/);
   assert.match(source, /lock wait/);
+  assert.match(source, /Performance &amp; DB Lab|Performance & DB Lab/);
+  assert.match(source, /LOAD TEST RESULT TEMPLATE/);
+  assert.match(source, /Migration safety lab/);
   assert.match(source, /refresh token rotation/);
   assert.match(source, /session fixation/);
+  assert.match(source, /Security Threat Modeling/);
+  assert.match(source, /Tenant Isolation/);
+  assert.match(source, /Security Review Rubric/);
   assert.match(source, /RBAC/);
   assert.match(source, /ABAC/);
   assert.match(source, /bounded context/);
@@ -1394,6 +1418,16 @@ test("backend handbook includes practical senior-level backend guidance without 
   assert.match(source, /high-cardinality/);
   assert.match(source, /SLO burn rate/);
   assert.match(source, /REQUEST PATH/);
+  assert.match(source, /BACKEND REQUEST MODEL/);
+  assert.match(source, /BACKEND REVIEW CHECKLIST/);
+  assert.match(source, /BACKEND DESIGN QUESTION FLOW/);
+  assert.match(source, /DESIGN DECISION MATRIX/);
+  assert.match(source, /ORDER CREATION DESIGN WALKTHROUGH/);
+  assert.match(source, /BACKEND DESIGN REVIEW RUBRIC/);
+  assert.match(source, /API CONTRACT MINI/);
+  assert.match(source, /BACKEND TEST PLAN/);
+  assert.match(source, /OPERATIONS READINESS CHECKLIST/);
+  assert.match(source, /요청 처리 경로 → API 계약/);
   assert.match(source, /transaction boundary/);
   assert.match(source, /same key에 다른 payload|같은 key에 다른 payload/);
   assert.match(source, /ATOMIC STOCK DECREASE/);
@@ -1486,6 +1520,9 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.match(source, /DR/);
   assert.match(source, /runbook/i);
   assert.match(source, /운영 인수/);
+  assert.match(source, /SLO \/ Burn-rate evidence/);
+  assert.match(source, /DR DRILL \/ FAILBACK CHECKLIST/);
+  assert.match(source, /IAM\/Network 증거/);
   assert.match(source, /Route 53/);
   assert.match(source, /CloudFront/);
   assert.match(source, /Application Load Balancer/);

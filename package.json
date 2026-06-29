@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1 --port 7780",
     "generate:handbook": "node scripts/handbook-html.mjs",
     "test": "node --test scripts/handbook-html.test.mjs",
     "build": "vite build",

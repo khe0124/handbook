@@ -95,6 +95,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch10"><span class="code">SEC-10</span>전송·저장·secret</a>
   <a href="#ch11"><span class="code">SEC-11</span>용어집</a>
   <a href="#ch12"><span class="code">SEC-12</span>실무 인증·인가 심화</a>
+  <a href="#ch13"><span class="code">SEC-13</span>Security Threat Modeling</a>
 </nav>
 <main>
 
@@ -405,9 +406,145 @@ sig == sign(<span class="seg">header</span> + <span class="seg2">payload</span>,
 </div>
 </section>
 
+<section id="ch13">
+<div class="ch-head"><span class="ch-code">SEC-13</span><h2>Security Threat Modeling</h2></div>
+<p class="lede">위협 모델링은 "무서운 것을 상상하는 회의"가 아니라 <em>설계가 어떤 신뢰 가정 위에 서 있는지 드러내는 작업</em>입니다. 기능을 만들기 전에 데이터 흐름, 신뢰 경계, 권한 경계, 감사 가능성을 놓고 "어디서 공격자가 개입할 수 있는가"를 구체적으로 묻습니다.</p>
+<p>좋은 위협 모델은 문서가 길지 않습니다. 대신 <strong>자산(asset), 행위자(actor), 진입점(entry point), 신뢰 경계(trust boundary), 실패 시 영향</strong>이 분명합니다. 로그인, 결제, 파일 업로드, 웹훅, 관리자 기능, 테넌트 데이터 접근처럼 실패 비용이 큰 기능은 티켓이 아니라 설계 단계에서 먼저 모델링해야 합니다.</p>
+
+<h3><span class="h3-tag">13.1</span>STRIDE로 빠르게 훑기</h3>
+<p><strong>STRIDE</strong>는 위협을 여섯 질문으로 나누는 실무 프레임입니다. 모든 항목에 대단한 답을 쓰는 것이 목적이 아니라, "이 기능에서 빠뜨리면 사고가 되는 질문"을 빠르게 누락 없이 통과하는 것이 목적입니다.</p>
+<table>
+<tr><th>STRIDE</th><th>질문</th><th>예시 방어</th></tr>
+<tr><td>Spoofing</td><td>공격자가 다른 사용자·서비스인 척할 수 있는가?</td><td>MFA, 세션 재발급, JWT 서명 검증, webhook 서명 검증</td></tr>
+<tr><td>Tampering</td><td>요청·파일·이벤트·권한값을 바꿔도 서버가 믿는가?</td><td>서버 측 재계산, 무결성 검증, allowlist, optimistic locking</td></tr>
+<tr><td>Repudiation</td><td>나중에 "내가 한 게 아니다"를 반박할 기록이 있는가?</td><td>감사 로그, 요청 id, actor/ip/user-agent, 변경 전후 diff</td></tr>
+<tr><td>Information Disclosure</td><td>다른 사용자·테넌트·내부 정보가 새는가?</td><td>객체 단위 인가, 필드 마스킹, 에러 메시지 축소, 로그 redaction</td></tr>
+<tr><td>Denial of Service</td><td>작은 비용의 요청으로 큰 서버 비용을 만들 수 있는가?</td><td>rate limit, payload 제한, 큐 격리, timeout, backpressure</td></tr>
+<tr><td>Elevation of Privilege</td><td>일반 사용자가 관리자·소유자 권한을 얻는 경로가 있는가?</td><td>권한 중앙화, step-up auth, dual control, 정책 테스트</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">THREAT MODEL MINI LOOP</span>
+1. <span class="seg">무엇을 보호하나?</span> 자산: 계정, 결제수단, 개인정보, 파일, API key<br>
+2. <span class="seg2">누가 접근하나?</span> anonymous, user, tenant admin, internal admin, partner service<br>
+3. <span class="seg">어디서 경계가 바뀌나?</span> browser → API → worker → DB → external provider<br>
+4. <span class="seg2">무엇을 신뢰하지 않나?</span> client input, URL id, headers, file metadata, webhook payload<br>
+5. <span class="seg">실패하면 어떻게 알 수 있나?</span> audit log, alert, anomaly query, replayable request id
+</div>
+
+<h3><span class="h3-tag">13.2</span>Trust Boundary는 선으로 그린다</h3>
+<p><strong>신뢰 경계</strong>는 데이터가 다른 신뢰 수준으로 넘어가는 지점입니다. 브라우저에서 온 값, 모바일 앱에서 온 값, 파트너가 보낸 웹훅, 내부 큐 메시지, 관리자 콘솔 입력은 모두 별도 경계입니다. "우리 프론트엔드가 보내니까 안전하다"는 말은 경계 밖의 입력을 신뢰한다는 뜻입니다.</p>
+<table>
+<tr><th>경계</th><th>위험 질문</th><th>필수 통제</th></tr>
+<tr><td>Browser → API</td><td>사용자가 hidden field, price, role, ownerId를 바꾸면?</td><td>서버 측 권한 판정, 값 재계산, schema validation</td></tr>
+<tr><td>API → DB</td><td>쿼리 조건에 tenantId/ownerId가 항상 붙는가?</td><td>repository 정책, RLS 또는 mandatory predicate, 테스트</td></tr>
+<tr><td>API → Worker/Queue</td><td>큐 메시지를 내부 신뢰로 처리해도 되는가?</td><td>message schema, idempotency key, actor/context 포함</td></tr>
+<tr><td>Service → External</td><td>외부 응답·callback을 그대로 상태 변경에 쓰는가?</td><td>서명 검증, allowlist, timeout, replay 방어</td></tr>
+<tr><td>Admin Console → Core Data</td><td>관리자 실수·악용이 고객 데이터에 즉시 반영되는가?</td><td>승인 단계, reason code, audit log, 민감 작업 재인증</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">경계 밖 데이터는 다시 검증한다</span>
+<p>한 번 검증한 데이터라도 다른 경계를 넘으면 다시 검증합니다. 예를 들어 API에서 검증한 업로드 작업도 worker가 파일을 열기 전 크기·MIME·확장자·바이러스 스캔 상태를 다시 확인해야 합니다. 큐, 캐시, 웹훅은 "내부"처럼 보이지만 공격자가 간접적으로 값을 넣을 수 있으면 신뢰 경계 밖입니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.3</span>Tenant Isolation은 필터가 아니라 불변식</h3>
+<p>멀티테넌트 서비스의 보안 목표는 단순합니다. <strong>한 테넌트의 사용자가 다른 테넌트의 데이터를 읽거나, 바꾸거나, 존재 여부를 추론할 수 없어야 합니다.</strong> 이를 컨트롤러마다 <code>where tenant_id = ?</code>를 기억하는 방식으로만 운영하면 언젠가 빠집니다.</p>
+<table>
+<tr><th>계층</th><th>설계 기준</th><th>리뷰 질문</th></tr>
+<tr><td>식별자</td><td>모든 테넌트 소유 리소스에 <code>tenant_id</code>를 필수 보유</td><td>테넌트 없는 row가 생성될 수 있는가?</td></tr>
+<tr><td>쿼리</td><td>조회·수정·삭제 조건에 tenant predicate를 강제</td><td>id만으로 <code>findById</code> 하는 경로가 있는가?</td></tr>
+<tr><td>권한</td><td>role은 tenant scope 안에서만 의미를 가짐</td><td>tenant A admin이 tenant B에 admin인가?</td></tr>
+<tr><td>캐시</td><td>캐시 키에 tenant scope 포함</td><td><code>user:123</code> 같은 전역 키가 섞이지 않는가?</td></tr>
+<tr><td>검색·통계</td><td>index, export, analytics에도 tenant filter 적용</td><td>운영성 기능이 isolation을 우회하지 않는가?</td></tr>
+<tr><td>DB 방어</td><td>가능하면 RLS, view, repository guard 등 2차 방어</td><td>애플리케이션 버그 하나로 전 테넌트가 노출되는가?</td></tr>
+</table>
+
+<h3><span class="h3-tag">13.4</span>IDOR 테스트 케이스</h3>
+<p>IDOR는 "id를 바꿔본다"에서 시작하지만, 실무 테스트는 더 넓어야 합니다. 단건 조회뿐 아니라 목록, 검색, export, bulk update, soft delete, 첨부파일 다운로드, websocket subscription까지 <strong>객체 참조가 들어가는 모든 표면</strong>을 대상으로 봅니다.</p>
+<table>
+<tr><th>케이스</th><th>테스트 방법</th><th>기대 결과</th></tr>
+<tr><td>단건 조회</td><td>user A 토큰으로 user B의 <code>/orders/{id}</code> 요청</td><td><code>403</code> 또는 존재 숨김이 필요한 경우 <code>404</code></td></tr>
+<tr><td>수정·삭제</td><td>본문의 <code>ownerId</code>, <code>tenantId</code>, <code>role</code>을 다른 값으로 변경</td><td>서버가 본문 값을 무시하고 권한 컨텍스트로 판정</td></tr>
+<tr><td>목록·검색</td><td>filter에 다른 tenant/user id를 직접 지정</td><td>허용된 scope 밖 row가 0건</td></tr>
+<tr><td>파일 다운로드</td><td>첨부파일 id 또는 signed URL을 다른 계정에서 재사용</td><td>객체 권한 재검증, URL 만료·scope 확인</td></tr>
+<tr><td>Bulk API</td><td>요청 배열에 내 리소스와 남의 리소스를 섞음</td><td>부분 성공 정책 명확, unauthorized 항목 차단·기록</td></tr>
+<tr><td>Export/Report</td><td>비동기 리포트 생성 요청에 다른 tenant id 삽입</td><td>worker 단계에서도 tenant scope 재검증</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">테스트가 통과해야 하는 기준</span>
+<p>컨트롤러에서 403을 한 번 돌려주는 것만으로 충분하지 않습니다. repository, service, worker, export job처럼 같은 데이터에 접근하는 다른 경로에서도 같은 정책이 적용되어야 합니다. 인가 테스트는 "성공 케이스"보다 "다른 사용자의 자원을 섞었을 때 실패하는 케이스"가 더 중요합니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.5</span>Audit Log Design</h3>
+<p>감사 로그는 디버그 로그가 아닙니다. 침해 대응, 내부자 악용 조사, 고객 문의, 규제 대응에서 <strong>행위의 증거</strong>가 되는 별도 데이터 모델입니다. 그래서 읽기 좋게 남기는 것보다 변조 어렵고, 검색 가능하고, 민감정보를 과하게 담지 않는 것이 중요합니다.</p>
+<table>
+<tr><th>필드</th><th>기준</th><th>주의</th></tr>
+<tr><td><code>actor</code></td><td>user id, admin id, service account, impersonation 여부</td><td>이메일만 남기면 변경·재사용 추적이 약함</td></tr>
+<tr><td><code>action</code></td><td><code>user.role.changed</code>, <code>invoice.refunded</code>처럼 안정적 이벤트명</td><td>자유문장 로그는 집계·alert가 어려움</td></tr>
+<tr><td><code>resource</code></td><td>type, id, tenant id, owner id</td><td>테넌트 scope 누락 시 조사 불가</td></tr>
+<tr><td><code>before/after</code></td><td>민감 필드는 마스킹한 변경 diff</td><td>비밀번호, token, secret, 전체 PII를 남기지 않음</td></tr>
+<tr><td><code>context</code></td><td>request id, ip, user-agent, auth method, reason code</td><td>프록시 환경의 실제 client ip 해석 기준 필요</td></tr>
+<tr><td><code>integrity</code></td><td>append-only 저장, 보존 기간, 관리자 삭제 제한</td><td>관리자가 흔적을 지울 수 있으면 감사가 아님</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">AUDIT EVENT SHAPE</span>
+{<br>
+&nbsp;&nbsp;<span class="seg">"event"</span>: "tenant.member.role_changed",<br>
+&nbsp;&nbsp;<span class="seg2">"actor"</span>: {"type":"user","id":"u_123","tenant":"t_1"},<br>
+&nbsp;&nbsp;<span class="seg">"resource"</span>: {"type":"member","id":"m_456","tenant":"t_1"},<br>
+&nbsp;&nbsp;<span class="seg2">"change"</span>: {"role":{"from":"viewer","to":"admin"}},<br>
+&nbsp;&nbsp;<span class="seg">"context"</span>: {"request_id":"req_...","ip":"203.0.113.10","reason":"support_ticket"}<br>
+}<br>
+<span class="dim">※ secret, raw token, password, full card number는 감사 로그에도 저장하지 않는다</span>
+</div>
+
+<h3><span class="h3-tag">13.6</span>File Upload와 Webhook 위험</h3>
+<p>파일 업로드와 웹훅은 공격자가 서버 안쪽으로 데이터를 밀어 넣는 대표 경로입니다. 둘 다 "사용자가 보낸 입력"보다 위험할 수 있습니다. 파일은 저장소·백신·썸네일러·다운로드 경로를 지나고, 웹훅은 외부 서비스 이름을 달고 내부 상태 변경을 트리거하기 때문입니다.</p>
+<table>
+<tr><th>표면</th><th>주요 위험</th><th>실무 방어</th></tr>
+<tr><td>파일 업로드</td><td>웹셸, polyglot 파일, MIME 속임, zip bomb, 악성 이미지 parser exploit</td><td>크기 제한, 확장자·MIME allowlist, magic byte 확인, AV scan, 이미지 재인코딩</td></tr>
+<tr><td>파일 저장</td><td>경로 조작, 공개 버킷, 원본 파일명 XSS, tenant 간 파일 섞임</td><td>서버 생성 파일명, private bucket, metadata escape, tenant prefix 분리</td></tr>
+<tr><td>파일 다운로드</td><td>signed URL 재사용, 권한 변경 후 접근 유지, content sniffing</td><td>짧은 만료, 다운로드 직전 인가, <code>Content-Disposition</code>, <code>nosniff</code></td></tr>
+<tr><td>Webhook 수신</td><td>서명 없는 위조 이벤트, replay, 이벤트 순서 뒤집힘, SSRF callback</td><td>HMAC 서명 검증, timestamp window, idempotency, event id 저장, allowlist</td></tr>
+<tr><td>Webhook 처리</td><td>외부 payload를 내부 권한으로 상태 변경</td><td>상태 전이 검증, 서버 측 조회로 사실 확인, 실패 큐·재시도 제한</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">Webhook은 인증된 API처럼 다룬다</span>
+<p>웹훅 endpoint가 공개 URL이라는 점을 잊지 마세요. provider 이름이 path에 들어있어도 인증이 아닙니다. 서명 검증, timestamp 검증, replay 방지, idempotency를 통과한 뒤에도 "이 이벤트가 현재 리소스 상태에서 가능한 전이인가"를 서버가 다시 판단해야 합니다.</p>
+</div>
+
+<h3><span class="h3-tag">13.7</span>Admin Abuse Cases</h3>
+<p>관리자 기능은 "권한이 높으니 괜찮다"가 아니라 <strong>권한이 높아서 더 엄격해야 하는 표면</strong>입니다. 외부 공격자만 위협 행위자가 아닙니다. 실수한 운영자, 과도한 권한을 가진 CS 담당자, 탈취된 관리자 계정, 악의적 내부자도 모델에 포함해야 합니다.</p>
+<table>
+<tr><th>남용 케이스</th><th>위험</th><th>통제</th></tr>
+<tr><td>사용자 impersonation</td><td>고객 계정으로 임의 작업, 부인 가능성</td><td>읽기 전용 기본값, 명시적 사유, 배너 표시, 모든 행위 audit</td></tr>
+<tr><td>권한 상승·역할 변경</td><td>동료 또는 본인에게 과도 권한 부여</td><td>self-grant 금지, dual approval, step-up auth, break-glass 절차</td></tr>
+<tr><td>PII 조회·export</td><td>대량 개인정보 유출</td><td>필드 마스킹, 목적 제한, export 승인, anomaly alert</td></tr>
+<tr><td>결제 취소·환불</td><td>금전 손실, 고객 분쟁</td><td>금액 threshold, 2인 승인, ledger 불변 기록</td></tr>
+<tr><td>감사 로그 삭제</td><td>침해 흔적 제거</td><td>append-only 저장, 별도 권한, 보존 정책, 삭제 대신 redaction workflow</td></tr>
+</table>
+
+<h3><span class="h3-tag">13.8</span>Security Review Rubric</h3>
+<p>리뷰는 "보안 문제 없어 보임"이 아니라 구체적인 질문에 답하는 과정이어야 합니다. 아래 rubric은 PR 설명이나 설계 문서에 붙여도 됩니다. 답이 "해당 없음"이면 왜 해당 없는지까지 짧게 남기는 것이 좋습니다.</p>
+<table>
+<tr><th>영역</th><th>리뷰 질문</th><th>통과 기준</th></tr>
+<tr><td>AuthN/AuthZ</td><td>새 endpoint/job/subscription이 인증과 객체 단위 인가를 모두 수행하는가?</td><td>권한 정책 위치와 negative test가 명확함</td></tr>
+<tr><td>Tenant Isolation</td><td>모든 query, cache key, export, background job에 tenant scope가 있는가?</td><td>id-only 접근 경로가 없음</td></tr>
+<tr><td>Input/Output</td><td>외부 입력이 schema validation을 통과하고 출력 컨텍스트에 맞게 escape되는가?</td><td>allowlist, binding, escaping이 코드로 확인됨</td></tr>
+<tr><td>Secrets/PII</td><td>secret, token, PII가 코드·로그·URL·analytics에 남지 않는가?</td><td>redaction과 보관 기간이 정의됨</td></tr>
+<tr><td>State Change</td><td>중요 변경에 CSRF/replay/idempotency/동시성 방어가 있는가?</td><td>중복 요청과 순서 뒤집힘이 안전함</td></tr>
+<tr><td>Files/Webhooks</td><td>업로드·웹훅이 서명, 크기, 타입, 재시도, replay를 다루는가?</td><td>비동기 처리 단계에서도 재검증함</td></tr>
+<tr><td>Admin</td><td>관리자 기능에 최소 권한, 사유, 재인증, 감사 로그가 있는가?</td><td>내부자·계정 탈취 시 피해가 제한됨</td></tr>
+<tr><td>Observability</td><td>침해나 남용을 나중에 발견할 수 있는 이벤트가 남는가?</td><td>audit event와 alert query가 설계됨</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">리뷰의 결론은 액션이어야 한다</span>
+<p>위협 모델링의 산출물은 멋진 다이어그램이 아니라 코드와 운영 통제입니다. 예를 들어 "tenant isolation 위험"을 찾았다면 repository guard, RLS, negative test, audit event 중 무엇을 이번 변경에 넣을지 결정해야 합니다. 남은 위험은 "known risk"로 기록하고 owner와 만료일을 둡니다. 보안 리뷰가 결정으로 이어지지 않으면 회의록일 뿐입니다.</p>
+</div>
+</section>
+
 <footer>
 AUTH &amp; SECURITY HANDBOOK · V1 · 2026-06<br>
-SCOPE : AUTHN/AUTHZ · OWASP TOP 10 · CRYPTO · SECRET MANAGEMENT<br>
+SCOPE : AUTHN/AUTHZ · OWASP TOP 10 · CRYPTO · SECRET MANAGEMENT · THREAT MODELING<br>
 PRINCIPLE : 모든 사용자 입력은 적대적이라고 가정한다 · COMPANION : 백엔드 개요 · DB 핸드북
 </footer>
 

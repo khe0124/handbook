@@ -166,6 +166,7 @@ const BUNDLES = [
     title: "백엔드 핵심과 아키텍처",
     subtitle: "백엔드 개요, 아키텍처 패턴, 인증과 보안 문서를 제품 서버 설계 흐름으로 통합했습니다.",
     scope: "BACKEND · ARCHITECTURE · AUTH SECURITY",
+    indexDescription: "백엔드는 요청 처리 경로 → API 계약 → 트랜잭션과 데이터 모델 → 동시성·멱등성 → 외부 의존성·비동기 → 성능 병목 → 테스트 → 관측가능성·운영 → 보안 기본값 → 아키텍처 경계 순서로 읽습니다. 이 통합 문서는 원문을 이어붙이는 용도가 아니라 제품 서버를 설계·리뷰·운영하는 판단 경로를 먼저 잡기 위한 큐레이션입니다.",
     sources: [
       { prefix: "backend", label: "백엔드 개요", file: "backend-engineering-handbook.html" },
       { prefix: "architecture", label: "아키텍처 패턴", file: "architecture-handbook.html" },
@@ -206,8 +207,60 @@ const BUNDLES = [
     navBrand: "ENGINEERING · PLATFORM TOOLS",
     navTitle: "운영 도구 · Docker Linux vi nginx",
     title: "플랫폼 도구와 운영 기본기",
-    subtitle: "Docker와 배포, Linux, vi, Docker 예시, nginx 예시를 실행 환경 관점으로 통합했습니다.",
-    scope: "DOCKER · LINUX · VI · NGINX",
+    subtitle: "Docker, Linux, nginx, CI/CD를 운영 가능한 변경 흐름으로 연결했습니다.",
+    scope: "DOCKER · LINUX · VI · NGINX · OPERATIONS",
+    indexDescription: "플랫폼 도구는 명령어 모음이 아니라 변경을 안전하게 만들고, 장애가 났을 때 증거를 찾고, 되돌릴 수 있게 하는 운영 루프입니다. 로컬 재현 → 빌드 → 이미지 → 설정 주입 → 배포 → 헬스체크 → 로그·메트릭 → 롤백 순서로 읽습니다.",
+    afterIndexNav: `  <a href="#platform-operating-model"><span class="code">MODEL</span>플랫폼 운영 모델</a>`,
+    afterIndexHtml: `<section id="platform-operating-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>플랫폼 운영 모델</h2></div>
+<p class="lede">Docker, Linux, nginx, CI/CD는 서로 다른 도구처럼 보이지만 실무에서는 하나의 변경 경로를 이룹니다. 좋은 플랫폼 작업은 "명령을 실행했다"가 아니라 어떤 artifact가 어느 환경에 올라갔고, 어떤 지표로 정상임을 확인했으며, 실패하면 어떻게 되돌릴지까지 설명합니다.</p>
+<div class="serial-card">
+<span class="sc-label">PLATFORM OPERATING MODEL</span>
+local reproduce → build/test → image build<br>
+→ image tag/digest → registry push → env/secret injection<br>
+→ deploy/reload → health check/smoke test<br>
+→ logs/metrics/traces → rollback or forward fix
+</div>
+<div class="serial-card">
+<span class="sc-label">CHANGE SAFETY CHECKLIST</span>
+□ 배포 대상 artifact가 tag뿐 아니라 digest로 식별되는가<br>
+□ staging과 production의 env diff, secret 주입 방식, feature flag 차이가 설명되는가<br>
+□ DB migration, volume, 파일 권한, port, network, nginx upstream 변경이 포함되는가<br>
+□ readiness/health endpoint와 smoke test가 실제 사용자 경로를 최소 한 번 통과하는가<br>
+□ 실패 시 rollback 대상 이미지, 이전 nginx config, 이전 env 값을 바로 찾을 수 있는가<br>
+□ owner, 승인자, 배포 창, 영향 범위, 알림 채널, runbook 링크가 기록되는가
+</div>
+
+<h3><span class="h3-tag">MODEL</span>TOOL RESPONSIBILITY MATRIX</h3>
+<table>
+<thead><tr><th>도구</th><th>책임</th><th>실무 증거</th><th>책임이 아닌 것</th></tr></thead>
+<tbody>
+<tr><td>Gradle / build</td><td>컴파일, 테스트, 패키징, 의존성 해석</td><td>build log, test report, artifact version, dependency lock</td><td>운영 환경 설정과 네트워크 상태</td></tr>
+<tr><td>Docker image</td><td>런타임과 앱 산출물을 재현 가능한 단위로 봉인</td><td>Dockerfile, image digest, SBOM, vulnerability scan</td><td>secret 보관, 데이터 영속성, 배포 승인</td></tr>
+<tr><td>Container runtime</td><td>프로세스 실행, env 주입, port/volume/network 연결</td><td>container logs, exit code, health status, resource usage</td><td>앱 내부 오류 처리와 DB 정합성</td></tr>
+<tr><td>Linux shell</td><td>파일, 프로세스, 포트, 디스크, 네트워크 증거 확인</td><td><code>ps</code>, <code>ss</code>, <code>df</code>, <code>journalctl</code>, <code>curl</code></td><td>근본 원인 추측을 대신하지 않음</td></tr>
+<tr><td>nginx</td><td>TLS 종료, reverse proxy, static serving, routing, rate limit</td><td><code>nginx -t</code>, access/error log, upstream status, reload history</td><td>앱 readiness, DB 연결, business error</td></tr>
+<tr><td>CI/CD</td><td>검증 순서, 승인 gate, 배포 자동화, rollback 실행</td><td>pipeline run, commit SHA, environment, approval, deploy log</td><td>테스트 품질 자체와 운영 판단의 최종 책임</td></tr>
+</tbody>
+</table>
+
+<h3><span class="h3-tag">RUNBOOK</span>PRODUCTION TROUBLESHOOTING PLAYBOOK</h3>
+<table>
+<thead><tr><th>증상</th><th>처음 볼 증거</th><th>흔한 원인</th><th>완화 조치</th></tr></thead>
+<tbody>
+<tr><td>배포 직후 502</td><td>nginx error log, upstream health, app port, readiness</td><td>앱 미기동, port mismatch, upstream 이름 오류, readiness 실패</td><td>이전 이미지로 rollback, nginx config revert, readiness 원인 수정</td></tr>
+<tr><td>컨테이너 반복 재시작</td><td>exit code, last logs, memory usage, env diff</td><td>필수 env 누락, DB 연결 실패, OOM, migration 실패</td><td>env 복구, resource limit 조정, migration 중단 또는 forward fix</td></tr>
+<tr><td>새 버전만 DB 오류</td><td>app logs, migration history, schema version, SQL error</td><td>코드와 schema 순서 불일치, backward compatibility 누락</td><td>호환 가능한 migration 적용, 이전 코드 rollback 가능 여부 확인</td></tr>
+<tr><td>정적 파일이 예전 버전</td><td>response header, CDN/cache status, asset hash</td><td>캐시 무효화 누락, immutable 파일명 미사용, index.html 캐시</td><td>index cache 낮추기, hashed asset 배포, CDN invalidation</td></tr>
+<tr><td>nginx reload 실패</td><td><code>nginx -t</code>, syntax error line, include path</td><td>문법 오류, 인증서 경로 오류, upstream 중복</td><td>테스트 통과 전 reload 금지, 이전 config restore</td></tr>
+<tr><td>운영 서버 디스크 급증</td><td><code>df -h</code>, <code>du</code>, log rotation, docker image list</td><td>로그 폭증, 오래된 image/layer, volume 누적</td><td>logrotate 확인, 안전한 prune, retention 정책 추가</td></tr>
+</tbody>
+</table>
+<div class="callout warn">
+<span class="co-label">운영 기본기</span>
+<p>운영 서버에서 가장 위험한 습관은 "일단 들어가서 고쳐보기"입니다. 먼저 최근 변경, 사용자 영향, 현재 artifact, env diff, rollback 가능성을 확인하세요. SSH와 vi는 최후의 수단이어야 하며, 수정 후에는 반드시 같은 변경을 코드·설정 저장소와 runbook에 되돌려 기록해야 합니다.</p>
+</div>
+</section>`,
     sources: [
       { prefix: "deploy", label: "Docker와 배포", file: "docker-deploy-handbook.html" },
       { prefix: "linux", label: "리눅스", file: "linux-commands-handbook.html" },
@@ -454,9 +507,13 @@ for (const bundle of BUNDLES) {
     `<div class="nav-brand">${bundle.navBrand}</div>`,
     `  <div class="nav-title">${bundle.navTitle}</div>`,
     `  <a href="#bundle-index"><span class="code">INDEX</span>${isCareer ? "학습 로드맵" : "통합 문서"}</a>`,
+    bundle.afterIndexNav,
     sourceJumpNav(bundle.sources),
-  ];
+  ].filter(Boolean);
   const mainParts = [bundleIntro(bundle)];
+  if (bundle.afterIndexHtml) {
+    mainParts.push(bundle.afterIndexHtml.trim());
+  }
 
   for (const source of bundle.sources) {
     const html = await readFile(path.join(handbookDir, source.file), "utf8");

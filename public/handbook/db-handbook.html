@@ -98,6 +98,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch13"><span class="code">DB-13</span>락과 MVCC를 실제로 읽기</a>
   <a href="#ch14"><span class="code">DB-14</span>실행계획 해석 훈련</a>
   <a href="#ch15"><span class="code">DB-15</span>무중단 스키마 변경</a>
+  <a href="#ch16"><span class="code">DB-16</span>Performance &amp; DB Lab</a>
 </nav>
 <main>
 
@@ -482,9 +483,154 @@ filter로 버리는 row가 너무 많은가?<br>
 </div>
 </section>
 
+<section id="ch16">
+<div class="ch-head"><span class="ch-code">DB-16</span><h2>Performance &amp; DB Lab</h2></div>
+<p class="lede">성능 튜닝은 “인덱스를 추가했다”가 아니라 <em>가설 → 측정 → 변경 → 재측정 → 부작용 확인</em>으로 닫혀야 합니다. 이 섹션은 실무에서 그대로 복사해 쓸 수 있는 랩 노트입니다. 쿼리 하나의 실행계획부터 부하 테스트, 커넥션 풀, 락 대기, 마이그레이션까지 같은 형식으로 증거를 남기는 훈련을 목표로 합니다.</p>
+
+<h3><span class="h3-tag">LAB-01</span>EXPLAIN ANALYZE before/after rubric</h3>
+<p><code>EXPLAIN ANALYZE</code>는 “빠른지 느린지”보다 <strong>왜 그런 계획이 선택됐는지</strong>를 읽는 도구입니다. before/after 비교는 실행 시간이 줄었다는 한 줄로 끝내면 안 됩니다. 캐시 상태, 입력 파라미터, 반환 row 수, plan shape, buffer 사용량, 쓰기 비용까지 같이 기록해야 재현 가능한 튜닝이 됩니다.</p>
+<table>
+<tr><th>항목</th><th>Before에 남길 것</th><th>After에서 판정할 것</th></tr>
+<tr><td>쿼리와 바인딩</td><td>SQL 원문, 주요 파라미터, tenant/user 범위, LIMIT/OFFSET</td><td>같은 파라미터로 비교했는가. 빠른 케이스만 고른 것은 아닌가</td></tr>
+<tr><td>데이터 분포</td><td>대상 테이블 row 수, 조건 컬럼의 선택도, 상위 tenant 편향</td><td>인덱스가 평균 케이스와 최악 케이스 모두에서 유효한가</td></tr>
+<tr><td>Plan shape</td><td>Seq/Index Scan, join 방식, sort/hash node, loops</td><td>느린 node가 사라졌는가, 아니면 다른 node로 비용이 옮겨갔는가</td></tr>
+<tr><td>Rows estimate</td><td>estimated rows와 actual rows의 차이</td><td>통계 갱신 또는 extended statistics가 필요한가</td></tr>
+<tr><td>Buffers</td><td>shared hit/read/dirtied, temp read/write</td><td>디스크 read와 temp spill이 줄었는가. 단순 캐시 효과는 아닌가</td></tr>
+<tr><td>Latency</td><td>planning time, execution time, 반복 실행의 min/median/p95</td><td>p95가 같이 내려갔는가. 평균만 좋아진 것은 아닌가</td></tr>
+<tr><td>Write cost</td><td>기존 인덱스 수, 쓰기 QPS, hot update 여부</td><td>새 인덱스가 INSERT/UPDATE 지연과 저장공간을 얼마나 늘렸는가</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">BEFORE / AFTER NOTE</span>
+Query: <span class="seg">orders by tenant/status/recent</span><br>
+Hypothesis: <span class="seg2">ORDER BY + LIMIT이 인덱스 순서와 맞지 않아 큰 sort 발생</span><br>
+Before: actual <span class="seg">812ms</span>, rows estimate <span class="seg">200</span> / actual <span class="seg">184,392</span>, temp write <span class="seg">1.2GB</span><br>
+Change: composite index candidate, statistics refresh, old duplicate index review<br>
+After: actual <span class="seg2">34ms</span>, no temp write, same bind values, same row visibility<br>
+Guardrail: write latency p95, index size, autovacuum pressure 확인
+</div>
+<div class="callout warn">
+<span class="co-label">판정 기준</span>
+<p>좋은 before/after는 “실행 시간이 줄었다”가 아니라 “느린 node가 무엇이었고, 어떤 변경으로 plan shape이 어떻게 바뀌었으며, 그 결과 buffer read/temp spill/loops가 줄었고, 쓰기 비용이 허용 범위 안이다”까지 설명합니다. <code>EXPLAIN</code>만 보고 끝내지 말고, 실제 실행이 가능한 환경에서는 <code>EXPLAIN (ANALYZE, BUFFERS)</code>로 닫으세요.</p>
+</div>
+
+<h3><span class="h3-tag">LAB-02</span>Load test result template</h3>
+<p>부하 테스트는 숫자를 많이 만드는 일이 아니라 <strong>운영 의사결정에 필요한 질문</strong>에 답하는 일입니다. “몇 RPS까지 버티나”보다 “목표 트래픽에서 p95가 SLO 안에 들어오나”, “어느 자원이 먼저 포화되나”, “장애 전조가 어떤 메트릭으로 보이나”를 남겨야 합니다.</p>
+<table>
+<tr><th>섹션</th><th>기록 내용</th><th>해석 포인트</th></tr>
+<tr><td>목표</td><td>예상 peak RPS, 목표 p95/p99, error budget, 테스트 지속 시간</td><td>목표 없는 부하는 의미가 없음. SLO 기준으로 pass/fail을 정함</td></tr>
+<tr><td>시나리오</td><td>읽기/쓰기 비율, 로그인 사용자 수, hot key/tenant 비율, think time</td><td>실제 트래픽 분포와 다르면 결과가 과신됨</td></tr>
+<tr><td>환경</td><td>앱 인스턴스 수, DB tier, pool size, 캐시 상태, replica 사용 여부</td><td>운영과 다른 병목을 만들지 않았는가</td></tr>
+<tr><td>결과</td><td>RPS, avg, p50/p95/p99, timeout/error rate, saturation point</td><td>평균이 아니라 tail latency와 에러율로 판정</td></tr>
+<tr><td>DB 지표</td><td>active/idle connections, lock wait, slow query, CPU, I/O, buffer hit</td><td>앱 병목인지 DB 병목인지 분리</td></tr>
+<tr><td>판정</td><td>pass/fail, bottleneck, 다음 실험, rollback 기준</td><td>결론은 액션으로 이어져야 함</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">LOAD TEST RESULT TEMPLATE</span>
+Scenario: <span class="seg">checkout-read-80-write-20</span><br>
+Target: <span class="seg2">600 RPS, p95 &lt; 250ms, p99 &lt; 800ms, error &lt; 0.1%</span><br>
+Run: 10m warmup + 30m steady + 5m ramp down<br>
+Observed: RPS 620, p50 72ms, p95 238ms, p99 1.4s, error 0.03%<br>
+DB: active conn 38/40, pool pending spikes, lock wait p99 window 2.1s<br>
+Decision: <span class="seg">조건부 fail</span> — p95는 통과했지만 p99가 lock wait에 민감. hot update path 분리 실험
+</div>
+<div class="callout">
+<span class="co-label">부하 테스트의 함정</span>
+<p>짧은 1분 테스트는 캐시가 따뜻한 순간만 보여줄 수 있습니다. 최소한 warmup과 steady 구간을 나누고, 테스트 후반에 p99가 올라가는지 보세요. 시간이 지날수록 느려지면 connection leak, long transaction, vacuum 지연, temp file 누적 같은 “누적형 병목”을 의심해야 합니다.</p>
+</div>
+
+<h3><span class="h3-tag">LAB-03</span>p95/p99와 커넥션 풀 해석</h3>
+<p>p95는 “사용자 100명 중 느린 5명”, p99는 “가장 불쾌한 1명”에 가깝습니다. 평균이 좋아도 p99가 튀면 운영에서는 장애처럼 보입니다. 커넥션 풀은 tail latency를 키우는 대표적인 증폭기입니다. DB가 느려져 커넥션 반납이 늦어지고, 풀이 차고, 대기열이 생기고, 요청 timeout이 연쇄적으로 늘어납니다.</p>
+<table>
+<tr><th>관측</th><th>가능한 해석</th><th>다음 확인</th></tr>
+<tr><td>DB CPU 낮음 + pool pending 높음</td><td>커넥션 누수, 긴 트랜잭션, 외부 I/O를 트랜잭션 안에서 대기</td><td>borrow time, active query, idle in transaction, slow external call</td></tr>
+<tr><td>DB CPU 높음 + active conn 최대</td><td>DB 처리량 포화. pool을 키우면 더 느려질 수 있음</td><td>top query, CPU profile, index miss, sort/hash spill</td></tr>
+<tr><td>p95 정상 + p99만 급등</td><td>일부 요청이 lock wait, GC, cold page read, replica lag에 걸림</td><td>p99 window의 wait_event와 trace를 시간대별로 맞춤</td></tr>
+<tr><td>pool size 증가 후 p99 악화</td><td>동시 DB 작업을 늘려 경합과 context switch를 키움</td><td>throughput 증가 여부, DB run queue, lock wait, I/O wait</td></tr>
+<tr><td>timeout 직전까지 응답 없음</td><td>대기열이 앱 또는 pool 앞단에 쌓임</td><td>queue time과 execution time을 분리 계측</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">풀 크기 조정의 원칙</span>
+<p>풀 크기는 “대기 요청을 없애기 위해” 키우는 값이 아니라 <strong>DB가 안정적으로 병렬 처리할 수 있는 동시 작업 수</strong>에 맞추는 값입니다. p99가 높을 때 먼저 볼 것은 pool size가 아니라 커넥션 점유 시간입니다. 트랜잭션 안의 외부 API, 느린 쿼리, lock wait를 줄이면 같은 pool size로 더 많은 요청을 처리합니다.</p>
+</div>
+
+<h3><span class="h3-tag">LAB-04</span>Index trade-off experiment</h3>
+<p>인덱스 실험은 읽기 쿼리 하나만 보면 항상 성공처럼 보입니다. senior-level 판정은 <strong>읽기 이득, 쓰기 손실, 저장공간, 중복 인덱스, 데이터 분포 변화</strong>를 같이 봅니다. 특히 복합 인덱스는 컬럼 순서를 바꾸면 완전히 다른 물건이 됩니다.</p>
+<table>
+<tr><th>실험 단계</th><th>질문</th><th>증거</th></tr>
+<tr><td>가설</td><td>어떤 WHERE/JOIN/ORDER BY/LIMIT 패턴을 빠르게 하려는가</td><td>slow query 샘플, 호출 빈도, 비즈니스 중요도</td></tr>
+<tr><td>후보 설계</td><td>선두 컬럼은 선택도와 정렬 요구를 모두 만족하는가</td><td>distinct count, most common values, tenant skew</td></tr>
+<tr><td>읽기 측정</td><td>plan shape과 p95가 개선되는가</td><td>EXPLAIN ANALYZE, BUFFERS, 반복 실행 latency</td></tr>
+<tr><td>쓰기 측정</td><td>INSERT/UPDATE/DELETE 지연이 허용 가능한가</td><td>쓰기 p95, WAL 증가, index update count</td></tr>
+<tr><td>운영 비용</td><td>기존 인덱스와 겹치거나 거의 안 쓰이는가</td><td>index size, scan count, cache pressure</td></tr>
+<tr><td>정리</td><td>새 인덱스를 유지할 근거가 충분한가</td><td>keep/drop 결정, rollback 방법, 모니터링 기간</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">INDEX TRADE-OFF LAB</span>
+Candidate A: <span class="seg">(tenant_id, status, created_at DESC)</span><br>
+Candidate B: <span class="seg2">(tenant_id, created_at DESC) WHERE status = 'READY'</span><br>
+Read result: A는 범용, B는 hot query에서 더 작고 빠름<br>
+Write result: A는 모든 status 변경마다 갱신, B는 READY subset만 영향<br>
+Decision: traffic의 82%가 READY 조회이고 status 분포가 안정적이면 B 우선. admin 범용 조회는 별도 판단
+</div>
+<div class="callout warn">
+<span class="co-label">실험에서 자주 놓치는 것</span>
+<p>낮은 카디널리티 컬럼이라도 단독 인덱스가 약할 뿐, 복합 인덱스나 partial index에서는 강한 필터가 될 수 있습니다. 반대로 카디널리티가 높은 컬럼이라도 쿼리의 정렬 방향과 LIMIT을 만족하지 못하면 큰 sort가 남습니다. “이 컬럼은 카디널리티가 높다/낮다”가 아니라 <em>전체 쿼리 모양</em>으로 판단하세요.</p>
+</div>
+
+<h3><span class="h3-tag">LAB-05</span>Lock wait / MVCC investigation</h3>
+<p>느린 쿼리가 항상 일을 많이 하는 것은 아닙니다. 많은 운영 장애는 쿼리가 CPU를 쓰는 게 아니라 <strong>다른 트랜잭션이 가진 락을 기다리는 상태</strong>에서 시작합니다. MVCC 때문에 SELECT는 보통 쓰기를 막지 않지만, UPDATE/DELETE/SELECT FOR UPDATE끼리는 같은 row에서 충돌하고, 긴 트랜잭션은 오래된 row version 정리를 막습니다.</p>
+<table>
+<tr><th>질문</th><th>확인할 것</th><th>판단</th></tr>
+<tr><td>실행 중인가, 대기 중인가</td><td>wait event, lock wait, active query duration</td><td>대기라면 쿼리 튜닝보다 blocker 제거가 우선</td></tr>
+<tr><td>누가 막고 있는가</td><td>blocking transaction, query text, transaction start</td><td>오래 열린 작업, 배치, 관리자 쿼리, idle in transaction 확인</td></tr>
+<tr><td>무엇을 잠갔는가</td><td>row/table/advisory lock, FK validation, DDL lock</td><td>같은 자원 잠금 순서가 일관적인가</td></tr>
+<tr><td>MVCC 정리가 밀리는가</td><td>oldest transaction, dead tuple, vacuum lag, bloat</td><td>긴 읽기 트랜잭션이 vacuum을 붙잡고 있는가</td></tr>
+<tr><td>재시도 가능한가</td><td>idempotency key, optimistic lock, transaction boundary</td><td>deadlock/serialization failure를 안전하게 재시도할 수 있는가</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">LOCK / MVCC INCIDENT NOTE</span>
+Symptom: <span class="seg">checkout update p99 8s</span><br>
+Blocked query: UPDATE orders SET status='PAID' WHERE id=?<br>
+Blocker: admin batch transaction, started 14m ago, idle in transaction<br>
+MVCC impact: dead tuples 증가, vacuum not advancing<br>
+Fix now: blocker 종료 또는 batch chunking<br>
+Fix later: transaction timeout, batch size limit, lock order 문서화, retry policy
+</div>
+<div class="callout risk">
+<span class="co-label">운영 대응 기준</span>
+<p>락 대기 사고에서 가장 위험한 대응은 느린 쿼리만 보고 인덱스를 추가하는 것입니다. blocker가 긴 트랜잭션이면 인덱스는 본질을 해결하지 못합니다. 먼저 “기다리는 쪽”과 “막는 쪽”을 분리하고, blocker의 트랜잭션 경계와 배치 크기, DDL 여부를 확인하세요.</p>
+</div>
+
+<h3><span class="h3-tag">LAB-06</span>Migration safety lab</h3>
+<p>마이그레이션 랩의 목적은 “적용 성공”이 아니라 <strong>구버전 앱과 신버전 앱이 섞여도 깨지지 않고, lock 시간이 통제되고, 실패 시 되돌릴 수 있음</strong>을 증명하는 것입니다. SQL 리뷰만으로는 부족합니다. 데이터 크기, lock level, backfill 방식, 배포 순서, 검증 쿼리가 하나의 runbook이어야 합니다.</p>
+<table>
+<tr><th>단계</th><th>실험</th><th>통과 기준</th></tr>
+<tr><td>호환성</td><td>구버전 앱 + 새 스키마, 신버전 앱 + 기존 스키마 조합 확인</td><td>rolling deploy 중 읽기/쓰기 모두 정상</td></tr>
+<tr><td>DDL 위험</td><td>lock level, table rewrite, index build 방식 확인</td><td>긴 ACCESS EXCLUSIVE lock 없음. 필요시 concurrent/online 방식</td></tr>
+<tr><td>Backfill</td><td>batch size, sleep, retry, progress marker, id range 전략</td><td>p95와 replication lag가 SLO 안에 유지</td></tr>
+<tr><td>제약 추가</td><td>NOT VALID/VALIDATE, nullable → not null 단계화</td><td>기존 데이터 검증이 쓰기 차단 없이 완료</td></tr>
+<tr><td>검증</td><td>count, checksum, null count, sample read, app error log</td><td>전환 전후 결과가 일치하고 에러율 증가 없음</td></tr>
+<tr><td>Rollback</td><td>코드 rollback, dual write 중단, 새 컬럼 무시 가능 여부</td><td>contract 전까지 되돌릴 수 있음. drop은 마지막 단계</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">MIGRATION SAFETY RUNBOOK</span>
+1. expand: nullable column 추가, default/rewrite 위험 없음 확인<br>
+2. deploy A: dual write 시작, old read 유지<br>
+3. backfill: 5k rows/batch, lock_timeout 설정, progress table 기록<br>
+4. verify: old/new count, checksum, null count, sampled business query<br>
+5. deploy B: read path 전환, fallback flag 유지<br>
+6. validate: constraint 검증, SLO/lag/error 24h 관찰<br>
+7. contract: old column/code 제거는 다음 배포 창에서
+</div>
+<div class="callout gm">
+<span class="co-label">랩의 완성 조건</span>
+<p>이 섹션의 모든 실험은 “무엇을 바꿨는가”보다 “무엇을 보고 안전하다고 판단했는가”를 남기는 데 목적이 있습니다. 성능 개선 PR에는 before/after 계획, 부하 테스트 결과, tail latency 해석, 쓰기 비용, rollback 기준이 같이 있어야 합니다. 운영 DB에서 senior로 보이는 사람은 SQL을 많이 아는 사람이 아니라, <em>증거와 실패 경로를 함께 관리하는 사람</em>입니다.</p>
+</div>
+</section>
+
 <footer>
 DATABASE HANDBOOK · V1 · 2026-06<br>
-SCOPE : RELATIONAL MODEL · TRANSACTION · ISOLATION · LOCK · INDEX · QUERY PLAN · POOL · SCALING<br>
+SCOPE : RELATIONAL MODEL · TRANSACTION · ISOLATION · LOCK · INDEX · QUERY PLAN · POOL · SCALING · PERFORMANCE LAB<br>
 BASIS : PostgreSQL · MySQL(InnoDB) · 차이 항목은 본문 표기 · COMPANION : BACKEND ENGINEERING HANDBOOK
 </footer>
 

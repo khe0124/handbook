@@ -120,6 +120,27 @@
 <tr><td>배치 작업 상태판</td><td>작업 요청, 진행 상태, 실패 사유, 재실행</td><td>polling/SSE 판단, 상태 전이, 운영 로그 연결</td></tr>
 <tr><td>배포 파이프라인</td><td>빌드, 테스트, 이미지 push, staging 배포</td><td>환경변수 분리, secret 관리, rollback 문서</td></tr>
 </table>
+<div class="callout">
+<span class="co-label">증거 포트폴리오 규칙</span>
+<p>캡스톤은 “만들었다”가 아니라 <strong>판단과 검증이 남아 있다</strong>로 통과합니다. 각 과제는 코드 저장소와 함께 아래 산출물을 같은 버전으로 묶어 제출합니다.</p>
+</div>
+<table>
+<tr><th>산출물</th><th>포함 내용</th><th>통과 기준</th></tr>
+<tr><td>문제 명세</td><td>사용자, 업무 목표, 제약, 데이터 규모, 비기능 목표</td><td>무엇을 하지 않을지도 적혀 있고 성공/실패 기준이 숫자나 관찰 가능한 상태로 표현된다</td></tr>
+<tr><td>API 계약</td><td>OpenAPI, 요청·응답 schema, error contract, 권한, 멱등성 key</td><td>400/401/403/404/409/429/5xx가 UI 상태와 연결되고 breaking change 정책이 있다</td></tr>
+<tr><td>데이터 모델</td><td>ERD, migration, index, unique 제약, 상태 전이, 감사 로그</td><td>동시성 충돌과 rollback 가능한 schema 변경 순서가 설명된다</td></tr>
+<tr><td>ADR</td><td>선택지 2개 이상, 결정, 포기한 것, 되돌릴 조건</td><td>현재 규모에서 왜 충분한지와 어떤 신호가 보이면 바꿀지 적혀 있다</td></tr>
+<tr><td>테스트 계획</td><td>unit, integration, contract, E2E, 접근성, 실패 주입</td><td>해피패스보다 권한, timeout, retry, 중복 요청, 부분 실패를 우선 검증한다</td></tr>
+<tr><td>성능 증거</td><td>baseline, p95/p99, 실행계획, bundle 또는 렌더링 지표, 개선 전후</td><td>병목 위치와 개선 근거가 수치로 남고 재현 명령이 함께 있다</td></tr>
+<tr><td>보안·위협 모델</td><td>신뢰 경계, STRIDE, abuse case, secret, PII, rate limit</td><td>서버 권한 검증과 입력 검증을 전제로 공격 경로와 방어선을 설명한다</td></tr>
+<tr><td>관측·런북</td><td>로그 필드, traceId, dashboard, alert, health check, 운영 절차</td><td>장애를 감지할 신호, 담당자가 볼 화면, 첫 15분 조치가 적혀 있다</td></tr>
+<tr><td>롤백·포스트모템</td><td>rollback/roll-forward, 데이터 복구, RTO/RPO, 재발 방지 액션</td><td>배포 실패와 운영 장애를 각각 복구해 본 기록이 남아 있다</td></tr>
+</table>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>CAP-01</b><span>problem</span></div><div class="g-def">문제 명세는 요구사항 목록이 아니라 결정 문서의 시작점입니다. 사용자 영향, 제외 범위, 성공 지표, 모르는 것을 먼저 분리합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>CAP-02</b><span>contract</span></div><div class="g-def">API 계약과 데이터 모델은 같이 리뷰합니다. 응답 필드 하나가 추가될 때 UI 상태, 캐시, migration, 권한까지 같이 바뀌는지 확인합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>CAP-03</b><span>operation</span></div><div class="g-def">성능, 보안, 관측, 롤백은 구현 뒤 장식이 아닙니다. 설계 초안부터 어떤 증거를 남길지 정해야 나중에 운영 가능한 기능이 됩니다.</div></div>
+</div>
 </section>
 
 <section id="ch6">
@@ -168,6 +189,19 @@
 <tr><td>보안 점검</td><td>STRIDE 기준으로 신뢰 경계와 abuse case를 적는다</td><td>인가 누락, XSS, CSRF, secret 노출을 어떻게 막는가</td></tr>
 <tr><td>복구 훈련</td><td>rollback, restore drill, hotfix 절차를 실제로 실행</td><td>RTO/RPO 안에 복구 가능한가</td></tr>
 <tr><td>포스트모템</td><td>원인보다 재발 방지 액션을 남긴다</td><td>같은 실패가 다시 와도 더 빨리 감지·완화되는가</td></tr>
+</table>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>LOOP-01</b><span>baseline</span></div><div class="g-def">구현 전에 문제 명세, API 계약, 데이터 모델, ADR 초안을 먼저 만듭니다. 이때 성능 목표, 보안 경계, 관측 신호, rollback 조건도 빈칸으로 남기지 않습니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LOOP-02</b><span>evidence</span></div><div class="g-def">구현 중에는 테스트 계획과 성능 증거를 계속 갱신합니다. 실패한 테스트, 느린 쿼리, 취소한 설계안도 senior-level 판단 근거로 남깁니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LOOP-03</b><span>operation</span></div><div class="g-def">배포 전에는 threat model, dashboard, alert, runbook, rollback drill을 묶어 리뷰합니다. 기능 설명보다 “실패하면 어떻게 제한하고 복구하는가”가 먼저 답해야 합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LOOP-04</b><span>review</span></div><div class="g-def">배포 뒤에는 포스트모템 형식으로 학습을 닫습니다. 실제 지표, 놓친 위험, 다음 capstone에서 바꿀 정책을 한 페이지에 남깁니다.</div></div>
+</div>
+<table>
+<tr><th>리뷰 게이트</th><th>질문</th><th>필수 증거</th></tr>
+<tr><td>설계 승인</td><td>현재 문제에 충분하고 나중에 바꿀 수 있는가</td><td>문제 명세, API 계약, 데이터 모델, ADR</td></tr>
+<tr><td>구현 승인</td><td>성공 경로와 실패 경로가 모두 검증됐는가</td><td>테스트 계획, contract test, 권한·동시성·에러 테스트 결과</td></tr>
+<tr><td>출시 승인</td><td>사용자 영향과 운영 신호를 볼 수 있는가</td><td>성능 측정, threat model, dashboard, alert, runbook</td></tr>
+<tr><td>복구 승인</td><td>잘못된 배포와 데이터 문제를 제한할 수 있는가</td><td>rollback 기록, restore drill, hotfix 절차, postmortem</td></tr>
 </table>
 <div class="callout warn">
 <span class="co-label">시니어급 학습 방식</span>
