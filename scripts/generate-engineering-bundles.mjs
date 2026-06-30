@@ -124,10 +124,31 @@ const BUNDLES = [
     title: "프론트엔드 핵심",
     subtitle: "프론트엔드 개요, 브라우저 동작 원리, 웹접근성을 하나의 흐름으로 통합한 개발 핸드북입니다.",
     scope: "FRONTEND · BROWSER · ACCESSIBILITY",
+    indexDescription:
+      "FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK 원천을 기반으로 역할 판단에서 시작해 브라우저 제약, UI 계약, 접근성 검증으로 이어 읽도록 구성했습니다. 각 파트는 원문을 그대로 나열하지 않고 통합 흐름에서 중복되는 문서 크롬을 제거해 이어 읽기 좋게 정리했습니다.",
+    omitSourceJumpNav: true,
+    stripNestedChrome: true,
+    sourceNavCode: "PART",
     sources: [
       { prefix: "fe", label: "프론트엔드 개요", file: "frontend-engineering-handbook.html" },
       { prefix: "browser", label: "브라우저 동작 원리", file: "frontend-browser-handbook.html" },
       { prefix: "a11y", label: "웹접근성", file: "frontend-accessibility-handbook.html" },
+    ],
+  },
+  {
+    id: "engineering-frontend-interaction",
+    file: "engineering-frontend-interaction-handbook.html",
+    navBrand: "ENGINEERING · FRONTEND INTERACTION",
+    navTitle: "프론트엔드 인터랙션 · 애니메이션과 3D",
+    title: "프론트엔드 인터랙션과 그래픽",
+    subtitle: "인터랙션 아키텍처, 모션 엔진, SVG·Canvas·WebGL·Three.js, 진단 루틴과 실전 과제를 하나의 성장 흐름으로 통합했습니다.",
+    scope: "INTERACTION ARCHITECTURE · MOTION ENGINE · CANVAS · WEBGL · THREE.JS · DIAGNOSTICS",
+    indexDescription:
+      "목표는 화면을 보기 좋게 움직이는 개발자가 아니라 입력 모델, 상태 기계, 모션 파이프라인, Canvas/WebGL 렌더링, asset pipeline, 성능 진단, fallback까지 설명하고 구현할 수 있는 수준급 인터랙티브 개발자입니다. 이 문서는 인터랙션 계약 → 입력 이벤트와 상태 아키텍처 → 모션 시스템과 FLIP/spring → 그래픽·3D 구현 → 진단 도구 → 실전 과제 로드맵 순서로 읽습니다.",
+    sources: [
+      { prefix: "interaction", label: "인터랙션 설계", file: "frontend-interaction-handbook.html" },
+      { prefix: "motion", label: "애니메이션·모션 시스템", file: "frontend-animation-motion-handbook.html" },
+      { prefix: "graphics", label: "그래픽·3D·WebGL", file: "frontend-graphics-3d-handbook.html" },
     ],
   },
   {
@@ -162,15 +183,124 @@ const BUNDLES = [
     id: "engineering-backend-core",
     file: "engineering-backend-core-handbook.html",
     navBrand: "ENGINEERING · BACKEND CORE",
-    navTitle: "백엔드 핵심 · API 보안 아키텍처",
-    title: "백엔드 핵심과 아키텍처",
-    subtitle: "백엔드 개요, 아키텍처 패턴, 인증과 보안 문서를 제품 서버 설계 흐름으로 통합했습니다.",
-    scope: "BACKEND · ARCHITECTURE · AUTH SECURITY",
-    indexDescription: "백엔드는 요청 처리 경로 → API 계약 → 트랜잭션과 데이터 모델 → 동시성·멱등성 → 외부 의존성·비동기 → 성능 병목 → 테스트 → 관측가능성·운영 → 보안 기본값 → 아키텍처 경계 순서로 읽습니다. 이 통합 문서는 원문을 이어붙이는 용도가 아니라 제품 서버를 설계·리뷰·운영하는 판단 경로를 먼저 잡기 위한 큐레이션입니다.",
+    navTitle: "백엔드 핵심 · API 보안 운영",
+    title: "백엔드 핵심",
+    subtitle: "백엔드 개요와 인증·보안을 제품 서버 구현·운영 흐름으로 통합했습니다.",
+    scope: "BACKEND · API · AUTH SECURITY · OPERATIONS",
+    indexDescription: "백엔드는 기초 체력(HTTP·DNS·쿠키·CORS·Linux·Git) → 요청 생명주기 → API 계약 → Java/Spring 실행 모델 → DB 스키마·트랜잭션·마이그레이션 → JPA → 동시성·멱등성 → 인증·인가·보안 → 캐시·비동기 → 테스트·부하 검증 → 배포·클라우드·운영 → 관측가능성·장애 대응 → 아키텍처 경계 → 포트폴리오·24주 커리큘럼 순서로 읽습니다. 이 통합 문서는 기술명을 나열하지 않고, 제품 서버를 설계·리뷰·운영할 때 필요한 판단 기준과 증거물을 먼저 세웁니다.",
+    afterIndexNav: `  <a href="#backend-roadmap-overview"><span class="code">ROADMAP</span>백엔드 로드맵 개요</a>
+  <a href="#backend-request-ops-map"><span class="code">MAP</span>요청에서 운영까지</a>
+  <a href="#backend-study-outputs"><span class="code">OUTPUT</span>학습 산출물</a>`,
+    afterIndexHtml: `<section id="backend-roadmap-overview">
+<div class="ch-head"><span class="ch-code">ROADMAP</span><h2>BACKEND ROADMAP OVERVIEW</h2></div>
+<p class="lede">백엔드 핵심은 기능 구현 목록이 아니라 요청이 계약, 상태, 실패, 증거를 남기며 통과하는 경로를 설명하는 능력입니다. 아래 순서로 읽으면 API, DB, 보안, 테스트, 운영, 아키텍처가 따로 놀지 않습니다.</p>
+<div class="serial-card">
+<span class="sc-label">BACKEND ROADMAP OVERVIEW</span>
+request lifecycle → API contract → Java/Spring runtime<br>
+→ transaction/data model → ORM/JPA boundary<br>
+→ concurrency/idempotency → auth/security<br>
+→ cache/async → testing → deployment/observability<br>
+→ architecture boundary → portfolio/interview evidence
+</div>
+<table>
+<thead><tr><th>축</th><th>핵심 질문</th><th>증거 산출물</th></tr></thead>
+<tbody>
+<tr><td>API</td><td>클라이언트가 무엇을 믿고 호출하는가</td><td>OpenAPI, error contract, idempotency rule</td></tr>
+<tr><td>Data</td><td>무엇이 함께 성공하거나 실패해야 하는가</td><td>ERD, transaction boundary, migration order</td></tr>
+<tr><td>Failure</td><td>중복, 재시도, 부분 실패가 안전한가</td><td>retry budget, outbox/inbox, compensation plan</td></tr>
+<tr><td>Quality</td><td>변경이 계약과 정합성을 깨지 않았는가</td><td>unit, integration, contract, regression test</td></tr>
+<tr><td>Ops</td><td>장애가 났을 때 원인을 찾을 수 있는가</td><td>structured log, RED/USE metric, traceId, runbook</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="backend-request-ops-map">
+<div class="ch-head"><span class="ch-code">MAP</span><h2>REQUEST TO OPERATIONS MAP</h2></div>
+<p class="lede">좋은 백엔드 설명은 controller에서 끝나지 않습니다. 요청 하나가 저장소, 외부 의존성, 큐, 로그와 지표까지 어떻게 이어지는지 따라가야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">REQUEST TO OPERATIONS MAP</span>
+client → controller → validation → authN/authZ<br>
+→ application service → transaction boundary<br>
+→ domain invariant → repository / external client<br>
+→ commit / rollback → outbox / cache invalidation<br>
+→ response → structured log / metric / trace / alert
+</div>
+<div class="callout">
+<span class="co-label">리뷰 기준</span>
+<p>각 단계마다 실패 모드를 하나씩 붙입니다. validation은 4xx와 error contract, transaction은 rollback과 constraint, external call은 timeout과 retry, async는 duplicate event와 DLQ, operations는 traceId와 SLO burn rate가 핵심 증거입니다.</p>
+</div>
+</section>
+
+<section id="backend-study-outputs">
+<div class="ch-head"><span class="ch-code">OUTPUT</span><h2>BACKEND STUDY OUTPUTS</h2></div>
+<p class="lede">학습 완료 기준은 읽은 분량이 아니라 제출 가능한 산출물입니다. 아래 묶음이 있으면 포트폴리오와 면접 답변이 같은 증거를 공유합니다.</p>
+<div class="serial-card">
+<span class="sc-label">BACKEND STUDY OUTPUTS</span>
+API docs · ERD · migration notes · transaction boundary note<br>
+EXPLAIN ANALYZE before/after · idempotency and retry policy<br>
+unit/integration/contract/regression test report<br>
+Docker/CI evidence · dashboard metric list · incident runbook · ADR<br>
+foundation checklist · Spring proxy failure cases · schema design notes<br>
+backup/restore drill · load test baseline · cloud deployment minimum<br>
+24-week curriculum · portfolio README rubric<br>
+language/framework choice · IaC/Kubernetes boundary · project example mapping<br>
+mid-level expectation matrix · ownership evidence packet
+</div>
+</section>`,
     sources: [
       { prefix: "backend", label: "백엔드 개요", file: "backend-engineering-handbook.html" },
-      { prefix: "architecture", label: "아키텍처 패턴", file: "architecture-handbook.html" },
       { prefix: "auth", label: "인증과 보안", file: "auth-security-handbook.html" },
+    ],
+  },
+  {
+    id: "engineering-backend-architecture",
+    file: "engineering-backend-architecture-handbook.html",
+    navBrand: "ENGINEERING · BACKEND ARCHITECTURE",
+    navTitle: "백엔드 아키텍처 · 경계와 트레이드오프",
+    title: "백엔드 아키텍처",
+    subtitle: "아키텍처 패턴 문서를 시스템 경계, 모듈화, 분산 설계, 트레이드오프 판단 중심으로 독립 분리했습니다.",
+    scope: "ARCHITECTURE · SYSTEM DESIGN · SERVICE BOUNDARY",
+    indexDescription: "아키텍처는 패턴명을 외우는 영역이 아니라 경계, 소유권, 실패 모드, 배포 단위, 데이터 일관성을 조정하는 의사결정입니다. 백엔드 핵심 문서에서 API·보안·운영 기본기를 잡은 뒤, 이 문서에서 모듈러 모놀리스, 헥사고날, DDD, MSA, CQRS, event-driven 설계를 별도 흐름으로 읽습니다.",
+    afterIndexNav: `  <a href="#architecture-decision-map"><span class="code">MAP</span>아키텍처 판단 지도</a>`,
+    afterIndexHtml: `<section id="architecture-decision-map">
+<div class="ch-head"><span class="ch-code">MAP</span><h2>ARCHITECTURE DECISION MAP</h2></div>
+<p class="lede">좋은 아키텍처 문서는 다이어그램이 아니라 결정을 설명합니다. 무엇을 같은 모듈에 둘지, 어떤 데이터가 어느 경계에 속하는지, 실패를 어디서 끊을지, 나중에 어떤 지표가 나오면 분리할지까지 남겨야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">ARCHITECTURE DECISION MAP</span>
+domain language → bounded context → module boundary<br>
+→ data ownership → transaction boundary → integration style<br>
+→ failure isolation → observability → migration path → ADR
+</div>
+<table>
+<thead><tr><th>판단 축</th><th>핵심 질문</th><th>증거 산출물</th></tr></thead>
+<tbody>
+<tr><td>Boundary</td><td>무엇이 함께 바뀌고 무엇이 독립적으로 배포되어야 하는가</td><td>module map, dependency rule, bounded context note</td></tr>
+<tr><td>Data</td><td>어느 모듈이 데이터를 소유하고 다른 모듈은 어떻게 읽는가</td><td>ownership table, read model, migration path</td></tr>
+<tr><td>Failure</td><td>한 경계의 장애가 어디까지 전파되어도 되는가</td><td>timeout/retry policy, circuit breaker, fallback plan</td></tr>
+<tr><td>Evolution</td><td>지금 단순하게 시작하고 언제 분리할 것인가</td><td>ADR, split trigger metric, strangler plan</td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>ARCHITECTURE CHOICE MATRIX</th><th>선택 기준</th><th>주요 비용</th></tr></thead>
+<tbody>
+<tr><td>Layered</td><td>CRUD 중심, 팀 규모가 작고 흐름이 단순할 때</td><td>service 비대화, 도메인 규칙 누수</td></tr>
+<tr><td>Hexagonal</td><td>DB, 외부 API, 메시징 어댑터 교체 가능성이 높을 때</td><td>port/adapter 추상화와 파일 수 증가</td></tr>
+<tr><td>Modular monolith</td><td>서비스 분리 전 모듈 경계와 의존 방향을 검증할 때</td><td>모듈 규칙 자동화가 없으면 경계가 흐려짐</td></tr>
+<tr><td>MSA</td><td>독립 배포, 데이터 소유권, 장애 격리가 실제 병목일 때</td><td>분산 트랜잭션, 관측, 테스트, 운영 복잡도</td></tr>
+<tr><td>CQRS/Event-driven</td><td>읽기 모델 분리, 감사 이벤트, 비동기 확장이 핵심일 때</td><td>event schema, replay, eventual consistency 비용</td></tr>
+</tbody>
+</table>
+<div class="serial-card">
+<span class="sc-label">SERVICE BOUNDARY CHECKLIST</span>
+□ 이 경계가 소유하는 데이터와 외부에 공개하는 read model이 분리되는가<br>
+□ sync API가 필요한 요청 경로와 async event로 충분한 후처리가 나뉘는가<br>
+□ anti-corruption layer로 외부 모델이 내부 domain model을 오염시키지 않는가<br>
+□ service 분리 시 transaction을 outbox/saga/compensation으로 바꿀 준비가 있는가<br>
+□ timeout, retry, circuit breaker, bulkhead가 경계마다 정의되어 있는가
+</div>
+</section>`,
+    sources: [
+      { prefix: "architecture", label: "아키텍처 패턴", file: "architecture-handbook.html" },
     ],
   },
   {
@@ -701,7 +831,7 @@ for (const bundle of BUNDLES) {
     `  <a href="#bundle-index"><span class="code">INDEX</span>${isCareer ? "학습 로드맵" : "통합 문서"}</a>`,
     isCareer ? careerReadinessNav() : undefined,
     bundle.afterIndexNav,
-    sourceJumpNav(bundle.sources),
+    bundle.omitSourceJumpNav ? undefined : sourceJumpNav(bundle.sources),
   ].filter(Boolean);
   const mainParts = [bundleIntro(bundle)];
   if (isCareer) {
@@ -717,12 +847,13 @@ for (const bundle of BUNDLES) {
       .replace(/<div class="nav-brand">[\s\S]*?<\/div>\s*/g, "")
       .replace(/<div class="nav-title">[\s\S]*?<\/div>\s*/g, "")
       .trim();
-    const main = isCareer
+    const shouldStripChrome = isCareer || bundle.stripNestedChrome;
+    const main = shouldStripChrome
       ? stripNestedPageChrome(removeDomainSpecificCareerTerms(prefixAnchors(extractRegion(html, "main"), source.prefix)))
       : prefixAnchors(extractRegion(html, "main"), source.prefix);
 
     if (!bundle.compactNav) {
-      navParts.push(`  <a href="#doc-${source.prefix}"><span class="code">${isCareer ? "PART" : "SRC"}</span>${source.label}</a>`);
+      navParts.push(`  <a href="#doc-${source.prefix}"><span class="code">${bundle.sourceNavCode ?? (isCareer ? "PART" : "SRC")}</span>${source.label}</a>`);
       navParts.push(nav);
     }
     mainParts.push(sourceDivider(source, isCareer));

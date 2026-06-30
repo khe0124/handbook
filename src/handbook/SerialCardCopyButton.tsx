@@ -6,6 +6,8 @@ type SerialCardCopyButtonProps = {
 };
 
 function getCopyText(card: HTMLElement) {
+  if (card.dataset.copyText) return card.dataset.copyText;
+
   const clone = card.cloneNode(true) as HTMLElement;
 
   clone.querySelectorAll(".serial-card-copy-mount").forEach((node) => {

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Handbook — 기초·모델 동작 원리</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">LLM 기초</div>
+  <a href="#ch1"><span class="code">FND-00</span>Mental Model</a>
+  <a href="#ch2"><span class="code">FND-01</span>Token</a>
+  <a href="#ch3"><span class="code">FND-02</span>Context·Attention</a>
+  <a href="#ch4"><span class="code">FND-03</span>Sampling</a>
+  <a href="#ch5"><span class="code">FND-04</span>Hallucination</a>
+  <a href="#ch6"><span class="code">FND-05</span>모델 선택</a>
+  <a href="#depth"><span class="code">DEPTH</span>원리 적용</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : LLM-FUNDAMENTALS-V2</span>
+    <span>SCOPE : TOKEN · CONTEXT · ATTENTION · SAMPLING · LIMITS</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>LLM 기초와<br>모델 동작 원리</h1>
+  <p class="hero-sub">LLM은 정답 DB가 아니라 다음 token의 확률 분포를 계산하는 모델입니다. 이 차이를 이해해야 prompt, RAG, evaluation, 운영 설계가 흔들리지 않습니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">FND-00</span><h2>LLM Mental Model</h2></div>
+<p class="lede">LLM은 “알고 있는 사실을 조회”하는 시스템이 아니라, 주어진 context에서 가장 그럴듯한 다음 token을 생성하는 시스템입니다. 그래서 정답성은 모델 내부가 아니라 입력 근거, 출력 계약, 평가 체계로 만들어야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">FND-EVAL-01</span>
+model prediction is not verification → source grounding is required<br>
+prompt quality is not enough → evaluation and validation close the loop
+</div>
+<table>
+<tr><th>오해</th><th>정확한 이해</th><th>설계 결과</th></tr>
+<tr><td>모델은 사실을 안다</td><td>모델은 훈련 분포에서 그럴듯한 출력을 만든다</td><td>최신·사내 지식은 RAG나 tool로 공급</td></tr>
+<tr><td>긴 prompt면 안전하다</td><td>긴 입력은 충돌·희석·비용을 만든다</td><td>계약을 짧게 유지하고 근거를 선별</td></tr>
+<tr><td>temperature 0이면 결정적이다</td><td>시스템·모델·infra 변화로 완전 재현은 어렵다</td><td>회귀 테스트와 허용 범위를 둔다</td></tr>
+<tr><td>JSON으로 답하라고 하면 충분하다</td><td>형식 요청과 schema 계약은 다르다</td><td>structured output과 validation을 둔다</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">FND-01</span><h2>FND-TOKEN-01 Tokenization</h2></div>
+<p class="lede">Token은 비용, 지연, context budget의 기본 단위입니다. 단어 수와 token 수는 같지 않으며, 한국어·코드·JSON·URL·로그는 예상보다 token이 늘어날 수 있습니다.</p>
+<table>
+<tr><th>입력 유형</th><th>왜 비싸지는가</th><th>설계 규칙</th></tr>
+<tr><td>한국어 문서</td><td>조사·복합어·문장부호가 여러 token으로 나뉠 수 있음</td><td>문서 전체 투입보다 chunk 검색 사용</td></tr>
+<tr><td>JSON</td><td>따옴표, key 반복, 중첩 구조가 token을 증가</td><td>필요 필드만 추려 prompt에 넣음</td></tr>
+<tr><td>코드·로그</td><td>기호와 긴 식별자가 잘게 쪼개짐</td><td>관련 stack trace와 주변 코드만 넣음</td></tr>
+<tr><td>URL·base64</td><td>의미 대비 token 소모가 큼</td><td>원문 대신 metadata나 파일 참조 사용</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">FND-TOKEN-02</span>
+<p>입력 token을 줄이는 것은 단순 비용 최적화가 아닙니다. 불필요한 context가 줄어들면 irrelevant context poisoning과 lost-in-the-middle 위험도 함께 줄어듭니다.</p>
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">FND-02</span><h2>FND-CONTEXT-01 TOKEN CONTEXT ATTENTION</h2></div>
+<p class="lede">Context window는 system prompt, developer instruction, user input, 대화 기록, 검색 chunk, tool result, 출력 token이 함께 쓰는 공유 예산입니다.</p>
+<table>
+<tr><th>요소</th><th>예산 영향</th><th>실패 모드</th></tr>
+<tr><td>System/developer prompt</td><td>모든 요청에 반복 포함</td><td>너무 길면 실제 근거가 밀림</td></tr>
+<tr><td>Conversation history</td><td>대화형 앱에서 빠르게 증가</td><td>옛 지시와 새 지시가 충돌</td></tr>
+<tr><td>Retrieved context</td><td>RAG 품질과 비용을 동시에 좌우</td><td>top-k가 크면 노이즈 증가</td></tr>
+<tr><td>Tool result</td><td>외부 API 응답이 길 수 있음</td><td>비신뢰 결과가 지시문처럼 작동</td></tr>
+<tr><td>Output</td><td>schema가 길면 충분한 max output 필요</td><td>응답 잘림, JSON 파싱 실패</td></tr>
+</table>
+<table>
+<tr><th>FND-CONTEXT-02 패턴</th><th>증상</th><th>대응</th></tr>
+<tr><td>lost-in-the-middle</td><td>중간에 있는 핵심 근거를 놓침</td><td>중요 근거를 앞쪽에 배치하고 chunk 수를 제한</td></tr>
+<tr><td>recency bias</td><td>마지막 입력을 과하게 따름</td><td>instruction hierarchy와 최종 검증 규칙 명시</td></tr>
+<tr><td>irrelevant context poisoning</td><td>관련 없는 문서가 답변을 흐림</td><td>reranking, context compression, no-answer 허용</td></tr>
+<tr><td>instruction conflict</td><td>문서 안 지시가 system 정책과 충돌</td><td>document-as-data와 prompt injection 방어</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">FND-ATTN-01</span>
+<p>Attention은 완전한 메모리가 아니라 입력 token 간 관련도를 계산하는 메커니즘입니다. “context 안에 있으니 반드시 참고한다”는 가정은 위험합니다.</p>
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">FND-03</span><h2>FND-SAMPLE-01 SAMPLING CONTROL</h2></div>
+<p class="lede">temperature, top_p, seed, max output은 창의성 버튼이 아니라 품질·재현성·비용을 조정하는 운영 파라미터입니다.</p>
+<table>
+<tr><th>파라미터</th><th>낮게</th><th>높게</th><th>권장</th></tr>
+<tr><td>temperature</td><td>보수적, 반복 가능성 증가</td><td>다양성 증가, 형식 실패 가능성 증가</td><td>분류·추출·JSON은 낮게, 아이디어는 중간</td></tr>
+<tr><td>top_p</td><td>후보 token 범위를 좁힘</td><td>더 넓은 후보 사용</td><td>temperature와 동시에 크게 흔들지 않음</td></tr>
+<tr><td>seed</td><td>실험 재현성을 보조</td><td>해당 없음</td><td>평가 실험에서만 의존</td></tr>
+<tr><td>max output</td><td>비용과 응답 길이 제한</td><td>긴 답변과 큰 schema 허용</td><td>JSON은 충분히, UI 답변은 제한</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">FND-SAMPLE-02</span>
+<p>sampling을 낮춰도 거짓말이 사라지지 않습니다. 창의성을 줄이는 것과 근거성을 보장하는 것은 다른 문제입니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">FND-04</span><h2>FND-HALL-01 Hallucination Taxonomy</h2></div>
+<p class="lede">환각은 모델이 악의적으로 거짓말하는 것이 아니라, 근거 확인 없이 그럴듯한 token을 생성하는 구조적 현상입니다.</p>
+<table>
+<tr><th>유형</th><th>예</th><th>대응</th><th>측정</th></tr>
+<tr><td>missing knowledge</td><td>사내 정책이나 최신 가격을 추측</td><td>RAG, tool call, citation</td><td>groundedness</td></tr>
+<tr><td>ambiguous prompt</td><td>질문 의도를 임의 해석</td><td>clarifying question</td><td>ambiguity failure rate</td></tr>
+<tr><td>unsupported synthesis</td><td>근거 조각을 과하게 일반화</td><td>claim-level citation</td><td>unsupported claim count</td></tr>
+<tr><td>stale context</td><td>예전 문서 기준으로 답함</td><td>document version, freshness check</td><td>stale source rate</td></tr>
+<tr><td>unsafe guessing</td><td>의료·법률·보안 판단을 단정</td><td>risk tier, refusal, human review</td><td>policy violation rate</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">FND-HALL-02 grounded output contract</span>
+answer must cite source chunks · no source means no-answer · uncertainty must be explicit · claims outside retrieved context are rejected
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">FND-05</span><h2>FND-MODEL-01 모델 선택 기준</h2></div>
+<p class="lede">모델 선택은 최신 모델 이름 맞히기가 아니라 업무 요구와 실패 비용을 맞추는 결정입니다. 같은 제품에서도 경로별로 모델이 달라질 수 있습니다.</p>
+<table>
+<tr><th>요구</th><th>볼 것</th><th>질문</th><th>교체 기준</th></tr>
+<tr><td>문서 분석</td><td>긴 context, structured output 안정성</td><td>긴 입력에서 JSON schema를 지키는가</td><td>schema failure rate가 임계값 초과</td></tr>
+<tr><td>RAG 챗봇</td><td>근거 준수, no-answer, 지연</td><td>검색 근거 밖 주장을 하지 않는가</td><td>groundedness 하락 또는 p95 초과</td></tr>
+<tr><td>도구 실행</td><td>function calling 정확도</td><td>잘못된 tool argument를 적게 내는가</td><td>blocked tool call이 증가</td></tr>
+<tr><td>평가자</td><td>판정 일관성, rubric 준수</td><td>사람 라벨과 상관이 있는가</td><td>judge drift 발견</td></tr>
+<tr><td>대량 처리</td><td>비용, batch, throughput</td><td>작은 모델로 충분한가</td><td>cost per successful answer 초과</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">FND-MODEL-02</span>
+task difficulty · latency SLO · cost ceiling · context length · structured output reliability · tool accuracy · safety policy · eval score
+</div>
+</section>
+<section id="depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>기초 개념을 설계로 옮기는 법</h2></div>
+<h3>MARKER: concept-depth — 정답성은 모델 속성이 아니라 시스템 속성이다</h3>
+<p>LLM을 DB처럼 다루면 설계가 계속 어긋납니다. DB는 저장된 값을 조회하지만, LLM은 context 안의 token 관계를 바탕으로 그럴듯한 다음 출력을 생성합니다. 따라서 모델 내부 지식, 입력 context, 검색된 근거, 외부 tool, validator는 서로 다른 책임을 가져야 합니다. 최신 사내 정책은 모델이 “알고 있길” 기대하는 것이 아니라 retrieval이나 tool call로 공급해야 하고, 출력 형식은 모델의 선의에 맡기는 것이 아니라 structured output과 validator로 강제해야 합니다.</p>
+<p>이 관점은 hallucination을 설명하는 데도 중요합니다. 환각은 모델이 악의적으로 거짓말하는 문제가 아니라, 근거가 없거나 애매한 상황에서도 그럴듯한 연속 token을 만드는 구조적 결과입니다. 그래서 “모르면 모른다고 해”라는 문장만으로는 부족합니다. no-answer policy, citation validation, claim-level groundedness, golden dataset이 함께 있어야 모델이 모르는 상황을 제품이 다룰 수 있습니다.</p>
+<h3>MARKER: artifact-ready — Token budget walkthrough</h3>
+<pre><code>context_window: 8000 tokens
+system_developer_prompt: 900
+conversation_history: 1400
+retrieved_chunks: 4000
+tool_result: 500
+structured_output_allowance: 1200
+remaining_margin: 0</code></pre>
+<p>이 예산표가 보여주는 핵심은 긴 prompt가 항상 좋은 prompt가 아니라는 점입니다. system prompt가 길어지고 대화 기록을 무작정 붙이면 정작 필요한 검색 근거와 출력 schema가 들어갈 공간이 사라집니다. 출력 여유가 부족하면 JSON이 잘리고, 검색 chunk를 많이 넣으면 관련 없는 문서가 attention을 오염시키며, history가 길면 이전 지시와 현재 지시가 충돌합니다. token budget은 비용 계산이면서 동시에 품질 설계입니다.</p>
+<h3>MARKER: failure-driven — Context is not memory</h3>
+<p>Context window 안에 정보가 있다는 말은 모델이 그 정보를 반드시 정확하게 사용한다는 뜻이 아닙니다. 중요한 근거가 중간에 묻히거나, 마지막 사용자 메시지가 과하게 반영되거나, 같은 사실을 표현한 중복 chunk가 서로 경쟁할 수 있습니다. RAG에서 chunk ordering, deduplication, parent expansion, context compression을 설계해야 하는 이유가 여기에 있습니다. context는 저장소가 아니라 한 번의 추론을 위한 작업 공간이며, 작업 공간이 지저분하면 답변도 흔들립니다.</p>
+<p>Sampling도 같은 방식으로 오해하면 안 됩니다. temperature를 낮추면 표현의 변동성은 줄어들 수 있지만, 근거 없는 주장을 사실로 바꾸지는 못합니다. 낮은 temperature의 오답은 더 일관된 오답이 될 수 있고, 높은 temperature의 답변은 더 다양한 표현을 만들지만 groundedness를 보장하지 않습니다. factuality는 sampling이 아니라 evidence supply, no-answer rule, validator, evaluation으로 통제해야 합니다.</p>
+<h3>MARKER: artifact-ready — Hallucination response architecture</h3>
+<pre><code>missing_knowledge: detect retrieval_empty -> prevent with RAG/tool -> recover no-answer -> measure recall@k
+unsupported_synthesis: detect unsupported claim -> prevent claim citation -> recover remove claim -> measure groundedness
+stale_context: detect old document_version -> prevent freshness filter -> recover reindex -> measure stale_source_rate
+unsafe_guessing: detect risk tier -> prevent refusal/human review -> recover escalation -> measure policy_violation_rate</code></pre>
+<h3>MARKER: failure-driven — Sampling을 사실성 제어 장치로 오해하는 실패</h3>
+<p>temperature를 낮추면 답이 더 차분해지고 반복 가능성은 올라가지만, 근거가 없는 답이 사실이 되는 것은 아닙니다. 반대로 temperature를 높이면 표현은 다양해질 수 있지만, 누락된 지식이나 오래된 context를 보완하지는 못합니다. 초급 구현에서는 “temperature를 0으로 두면 환각이 줄어든다”는 식으로 문제를 닫아버리기 쉽습니다. 미들급 설계에서는 sampling이 variance와 style을 제어한다는 점을 분리하고, 사실성은 retrieval evidence, tool result, validator, no-answer policy로 다룹니다. 같은 질문에 대해 낮은 temperature 출력이 틀렸다면 모델 설정 문제가 아니라 근거 공급과 검증 경계가 실패한 것입니다.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>프론트엔드 인터랙션과 그래픽</title></head>
+<body><div class="shell"><nav aria-label="목차">
+<div class="nav-brand">ENGINEERING · FRONTEND INTERACTION</div>
+  <div class="nav-title">프론트엔드 인터랙션 · 애니메이션과 3D</div>
+  <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#doc-interaction"><span class="code">DOC</span>인터랙션 설계</a>
+  <a href="#doc-motion"><span class="code">DOC</span>애니메이션·모션 시스템</a>
+  <a href="#doc-graphics"><span class="code">DOC</span>그래픽·3D·WebGL</a>
+  <a href="#doc-interaction"><span class="code">SRC</span>인터랙션 설계</a>
+<a href="#interaction-ch1"><span class="code">INT-01</span>인터랙션 설계의 역할</a>
+  <a href="#interaction-ch2"><span class="code">INT-02</span>상태와 입력 피드백</a>
+  <a href="#interaction-ch3"><span class="code">INT-03</span>포인터·터치·키보드</a>
+  <a href="#interaction-ch4"><span class="code">INT-04</span>모션 시스템과 안전성</a>
+  <a href="#interaction-ch5"><span class="code">INT-05</span>Scroll interaction</a>
+  <a href="#interaction-ch6"><span class="code">INT-06</span>3D 인터랙션 판단</a>
+  <a href="#interaction-ch7"><span class="code">INT-07</span>실패 모드와 관측</a>
+  <a href="#interaction-ch8"><span class="code">INT-08</span>QA와 PR 게이트</a>
+  <a href="#interaction-ch9"><span class="code">INT-09</span>인터랙션 아키텍처</a>
+  <a href="#interaction-ch10"><span class="code">INT-10</span>입력 이벤트 심화</a>
+  <a href="#interaction-ch11"><span class="code">INT-11</span>실전 과제 로드맵</a>
+  <a href="#interaction-ch12"><span class="code">INT-12</span>구현 패턴과 좌표계</a>
+  <a href="#interaction-ch13"><span class="code">INT-13</span>Hook 레시피와 접근성 구현</a>
+  <a href="#interaction-ch14"><span class="code">INT-14</span>근거 기반 판단 기준</a>
+  <a href="#interaction-ch15"><span class="code">INT-15</span>자주 봉착하는 문제와 해결</a>
+  <a href="#doc-motion"><span class="code">SRC</span>애니메이션·모션 시스템</a>
+<a href="#motion-ch1"><span class="code">MOTION-01</span>모션의 역할과 원칙</a>
+  <a href="#motion-ch2"><span class="code">MOTION-02</span>CSS transition/keyframes</a>
+  <a href="#motion-ch3"><span class="code">MOTION-03</span>WAAPI와 JS animation</a>
+  <a href="#motion-ch4"><span class="code">MOTION-04</span>라이브러리 선택 기준</a>
+  <a href="#motion-ch5"><span class="code">MOTION-05</span>Motion system</a>
+  <a href="#motion-ch6"><span class="code">MOTION-06</span>고급 모션과 전환</a>
+  <a href="#motion-ch7"><span class="code">MOTION-07</span>Reduced motion</a>
+  <a href="#motion-ch8"><span class="code">MOTION-08</span>모션 QA와 회귀 방지</a>
+  <a href="#motion-ch9"><span class="code">MOTION-09</span>FLIP과 layout animation</a>
+  <a href="#motion-ch10"><span class="code">MOTION-10</span>Spring과 물리 모션</a>
+  <a href="#motion-ch11"><span class="code">MOTION-11</span>Compositor 진단</a>
+  <a href="#motion-ch12"><span class="code">MOTION-12</span>모션 실전 로드맵</a>
+  <a href="#motion-ch13"><span class="code">MOTION-13</span>구현 패턴 예시</a>
+  <a href="#motion-ch14"><span class="code">MOTION-14</span>Hook과 회귀 자동화</a>
+  <a href="#motion-ch15"><span class="code">MOTION-15</span>근거 기반 모션 예산</a>
+  <a href="#motion-ch16"><span class="code">MOTION-16</span>자주 봉착하는 문제와 해결</a>
+  <a href="#doc-graphics"><span class="code">SRC</span>그래픽·3D·WebGL</a>
+<a href="#graphics-ch1"><span class="code">GFX-01</span>SVG·Canvas·WebGL 선택</a>
+  <a href="#graphics-ch2"><span class="code">GFX-02</span>Canvas 실무 패턴</a>
+  <a href="#graphics-ch3"><span class="code">GFX-03</span>WebGL 기초 모델</a>
+  <a href="#graphics-ch4"><span class="code">GFX-04</span>Three.js 구조</a>
+  <a href="#graphics-ch5"><span class="code">GFX-05</span>3D 제품 경험 설계</a>
+  <a href="#graphics-ch6"><span class="code">GFX-06</span>성능·메모리 예산</a>
+  <a href="#graphics-ch7"><span class="code">GFX-07</span>Fallback·접근성</a>
+  <a href="#graphics-ch8"><span class="code">GFX-08</span>QA와 릴리스 게이트</a>
+  <a href="#graphics-ch9"><span class="code">GFX-09</span>Asset pipeline</a>
+  <a href="#graphics-ch10"><span class="code">GFX-10</span>R3F와 상호작용 구조</a>
+  <a href="#graphics-ch11"><span class="code">GFX-11</span>그래픽 진단 도구</a>
+  <a href="#graphics-ch12"><span class="code">GFX-12</span>3D 실전 로드맵</a>
+  <a href="#graphics-ch13"><span class="code">GFX-13</span>좌표·Shader·Lighting</a>
+  <a href="#graphics-ch14"><span class="code">GFX-14</span>Configurator case study</a>
+  <a href="#graphics-ch15"><span class="code">GFX-15</span>추가 case studies</a>
+  <a href="#graphics-ch16"><span class="code">GFX-16</span>Canvas·WebGL 자동화</a>
+  <a href="#graphics-ch17"><span class="code">GFX-17</span>근거 기반 그래픽 예산</a>
+  <a href="#graphics-ch18"><span class="code">GFX-18</span>자주 봉착하는 문제와 해결</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : ENGINEERING-FRONTEND-INTERACTION</span>
+    <span>SCOPE : INTERACTION ARCHITECTURE · MOTION ENGINE · CANVAS · WEBGL · THREE.JS · DIAGNOSTICS</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>프론트엔드 인터랙션과 그래픽</h1>
+  <p class="hero-sub">인터랙션 아키텍처, 모션 엔진, SVG·Canvas·WebGL·Three.js, 진단 루틴과 실전 과제를 하나의 성장 흐름으로 통합했습니다.</p>
+  <div class="hero-meta">CURATED HANDBOOK PATH · SOURCES : 3 DOCUMENTS · UPDATED 2026-06</div>
+</header>
+
+<section id="bundle-index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
+<p class="lede">목표는 화면을 보기 좋게 움직이는 개발자가 아니라 입력 모델, 상태 기계, 모션 파이프라인, Canvas/WebGL 렌더링, asset pipeline, 성능 진단, fallback까지 설명하고 구현할 수 있는 수준급 인터랙티브 개발자입니다. 이 문서는 인터랙션 계약 → 입력 이벤트와 상태 아키텍처 → 모션 시스템과 FLIP/spring → 그래픽·3D 구현 → 진단 도구 → 실전 과제 로드맵 순서로 읽습니다.</p>
+<ul><li>인터랙션 설계</li><li>애니메이션·모션 시스템</li><li>그래픽·3D·WebGL</li></ul>
+</section>
+
+<section id="doc-interaction">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>인터랙션 설계</h2></div>
+</section>
+
+<header class="hero">
+  <div class="hero-serial"><span>DOC : FE-INTERACTION-V1</span><span>SCOPE : INTERACTION · MOTION · INPUT · SCROLL · 3D · QA</span><span>LANG : KO</span></div>
+  <h1>프론트엔드 인터랙션<br>애니메이션과 3D</h1>
+  <p class="hero-sub">인터랙션은 화면에 움직임을 더하는 장식이 아니라 <strong>사용자 의도, 시스템 상태, 입력 장치, 성능 제약, 접근성</strong>을 하나의 계약으로 묶는 엔지니어링입니다. 좋은 인터랙션은 사용자가 무엇을 할 수 있고, 무엇이 진행 중이며, 실패하면 어떻게 회복할 수 있는지 즉시 알게 만듭니다.</p>
+  <div class="hero-meta">AUDIENCE : 프론트엔드 개발자 · 제품 디자이너 · QA · REVIEWERS<br>STANCE : 실무 판단 · 실패 모드 · 체크리스트 · PR 게이트 중심 · UPDATED 2026-06</div>
+</header>
+
+<section id="interaction-ch1">
+<div class="ch-head"><span class="ch-code">INT-01</span><h2>인터랙션 설계의 역할</h2></div>
+<p class="lede">프론트엔드 인터랙션의 목표는 “멋있게 움직인다”가 아닙니다. 사용자의 입력이 시스템에 도착했고, 시스템이 어떤 상태이며, 다음 행동이 무엇인지 사용자가 확신하게 만드는 것입니다. 애니메이션과 3D는 이 목적을 도울 때만 제품 품질이 됩니다.</p>
+<table>
+<tr><th>관점</th><th>나쁜 기준</th><th>실무 기준</th><th>리뷰 질문</th></tr>
+<tr><td>의도</td><td>클릭하면 뭔가 바뀜</td><td>사용자가 시작한 작업과 결과 범위가 명확함</td><td>누르기 전에 영향 범위를 알 수 있는가?</td></tr>
+<tr><td>상태</td><td>로딩 spinner 하나로 처리</td><td>idle, pending, success, error, disabled reason을 구분</td><td>현재 시스템 상태가 텍스트와 구조로도 전달되는가?</td></tr>
+<tr><td>시간</td><td>모든 전환에 동일한 duration</td><td>작업 위험도와 정보량에 맞춰 즉시성, 지연, 확인을 조정</td><td>기다림이 필요한 이유와 남은 행동이 보이는가?</td></tr>
+<tr><td>입력</td><td>마우스 기준으로만 설계</td><td>포인터, 터치, 키보드, 보조기술, reduced motion을 함께 설계</td><td>마우스 없이 핵심 플로우가 끝나는가?</td></tr>
+<tr><td>성능</td><td>프레임이 조금 끊겨도 시각적으로 화려함</td><td>입력 반응성, layout shift, main thread 점유를 예산으로 관리</td><td>이 효과가 INP, CLS, 배터리, 저사양 기기에 어떤 비용을 내는가?</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">INTERACTION CONTRACT</span>
+<p>인터랙션은 사용자와 시스템 사이의 계약입니다. 버튼을 눌렀다면 눌림, 처리 중, 완료, 실패, 재시도 가능 여부가 분리되어야 합니다. 애니메이션은 이 계약을 더 읽기 쉽게 만드는 수단이지 계약을 대신할 수 없습니다.</p>
+</div>
+<h3>인터랙션 우선순위</h3>
+<table>
+<tr><th>우선순위</th><th>먼저 보장할 것</th><th>뒤로 미룰 것</th></tr>
+<tr><td>1</td><td>기능이 키보드와 터치로 동작하고 상태가 명확함</td><td>장식 모션, hover-only affordance</td></tr>
+<tr><td>2</td><td>오류와 중복 실행을 막고 입력을 보존함</td><td>복잡한 transition choreography</td></tr>
+<tr><td>3</td><td>레이아웃 안정성과 성능 예산을 지킴</td><td>스크롤 기반 대형 연출</td></tr>
+<tr><td>4</td><td>핵심 흐름의 모션 언어를 일관화함</td><td>컴포넌트별 임의 easing과 duration</td></tr>
+</table>
+</section>
+
+<section id="interaction-ch2">
+<div class="ch-head"><span class="ch-code">INT-02</span><h2>상태와 입력 피드백</h2></div>
+<p class="lede">입력 피드백은 사용자가 같은 행동을 반복하지 않게 만드는 방어선입니다. 눌림, 포커스, 비활성, 진행 중, 성공, 실패가 구분되지 않으면 사용자는 중복 제출, 강제 새로고침, 이탈로 대응합니다.</p>
+<table>
+<tr><th>상태</th><th>사용자 의미</th><th>UI 책임</th><th>실패 모드</th></tr>
+<tr><td>hover</td><td>상호작용 가능해 보임</td><td>포인터 환경에서 보조 단서 제공</td><td>hover에만 중요한 정보를 숨김</td></tr>
+<tr><td>focus</td><td>키보드 현재 위치</td><td>명확한 focus ring과 논리적 이동 순서</td><td>outline 제거, 숨은 요소에 focus 이동</td></tr>
+<tr><td>active/pressed</td><td>입력이 접수됨</td><td>짧고 즉각적인 눌림 피드백</td><td>클릭 후 아무 변화가 없어 중복 클릭 발생</td></tr>
+<tr><td>pending</td><td>작업 처리 중</td><td>트리거 잠금, 취소 가능성, 진행 범위 표시</td><td>버튼은 다시 눌리는데 요청은 이미 진행 중</td></tr>
+<tr><td>disabled</td><td>현재 실행 불가</td><td>이유와 해제 조건을 가까운 곳에 제공</td><td>회색 버튼만 있고 무엇을 해야 하는지 모름</td></tr>
+<tr><td>success</td><td>작업 완료</td><td>결과 위치, 저장 시각, 다음 행동을 제공</td><td>toast만 사라지고 실제 반영 여부를 확인할 수 없음</td></tr>
+<tr><td>error</td><td>작업 실패</td><td>원인, 보존된 입력, 재시도 또는 수정 경로 표시</td><td>입력값이 사라지거나 같은 실패를 반복하게 함</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">INPUT FEEDBACK PACKET</span>trigger: 어떤 요소가 작업을 시작했는가<br>scope: 버튼 하나, 카드 하나, 페이지 전체 중 어디가 pending인가<br>lock: 중복 실행을 막는가, 취소는 가능한가<br>message: 처리 중/성공/실패가 같은 위치에서 이어지는가<br>recovery: 실패 후 입력과 focus가 보존되는가</div>
+<h3>위험도별 피드백 강도</h3>
+<table>
+<tr><th>작업</th><th>예</th><th>피드백 기준</th><th>확인 강도</th></tr>
+<tr><td>저위험 즉시 작업</td><td>즐겨찾기, 보기 전환, 행 펼치기</td><td>100ms 안의 local state 반영, 실패 시 조용한 rollback</td><td>별도 확인 없음</td></tr>
+<tr><td>저장 작업</td><td>프로필 수정, 설정 저장</td><td>pending 잠금, 저장 성공 위치 표시, 실패 시 입력 보존</td><td>중복 제출 방지</td></tr>
+<tr><td>되돌릴 수 있는 변경</td><td>항목 이동, 라벨 변경</td><td>변경 요약과 undo window</td><td>작업 후 undo</td></tr>
+<tr><td>위험 작업</td><td>삭제, 권한 변경, 결제, 배포</td><td>대상, 영향 범위, irreversible 여부, audit 로그</td><td>확인 dialog, typed confirmation, 재인증 중 선택</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">DOUBLE ACTION</span>
+<p>중복 실행 방지는 CSS disabled만으로 끝나지 않습니다. 버튼 pending, optimistic update rollback, mutation idempotency, 서버 중복 제약이 함께 필요합니다. 프론트 피드백은 사용자를 돕고, 서버 방어는 시스템을 지킵니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch3">
+<div class="ch-head"><span class="ch-code">INT-03</span><h2>포인터·터치·키보드</h2></div>
+<p class="lede">하나의 UI는 여러 입력 장치에서 같은 의미를 가져야 합니다. hover, drag, pinch, keyboard shortcut, screen reader 동작은 서로 충돌하지 않게 설계해야 하며, 포인터 중심 기능에는 반드시 대체 경로가 있어야 합니다.</p>
+<table>
+<tr><th>입력</th><th>설계 기준</th><th>실패 신호</th><th>PR 확인</th></tr>
+<tr><td>마우스·트랙패드</td><td>hover는 보조 단서, click target은 충분한 크기</td><td>hover해야만 버튼이 나타나 핵심 작업을 발견 못함</td><td>hover 없이도 작업을 찾을 수 있는가?</td></tr>
+<tr><td>터치</td><td>touch target과 간격 확보, long press 의존 최소화</td><td>작은 icon button이 붙어 있어 오탭 발생</td><td>모바일 viewport에서 엄지 조작이 가능한가?</td></tr>
+<tr><td>키보드</td><td>Tab order, Enter/Space, Arrow, Esc 의미를 컴포넌트별로 정의</td><td>Tab이 visual order와 다르거나 trap에서 빠져나가지 못함</td><td>키보드만으로 핵심 시나리오를 완료했는가?</td></tr>
+<tr><td>스타일러스·정밀 포인터</td><td>drawing, drag, resize에는 취소와 snap 기준 제공</td><td>작은 실수가 곧바로 저장됨</td><td>입력 취소, undo, precision mode가 있는가?</td></tr>
+<tr><td>보조기술</td><td>role, accessible name, live status, focus restore 제공</td><td>상태 변화가 시각적으로만 전달됨</td><td>이름과 상태가 DOM에서 읽히는가?</td></tr>
+</table>
+<h3>Drag와 gesture 판단표</h3>
+<table>
+<tr><th>패턴</th><th>쓸 때</th><th>필수 대체 경로</th><th>주의</th></tr>
+<tr><td>Drag reorder</td><td>순서 변경이 주요 작업이고 시각 비교가 필요한 경우</td><td>키보드 move up/down, 메뉴 기반 이동</td><td>drop target, scroll container, screen reader announcement 필요</td></tr>
+<tr><td>Swipe action</td><td>모바일 목록에서 보조 작업을 빠르게 노출할 때</td><td>명시적 버튼 또는 overflow menu</td><td>삭제 같은 위험 작업을 swipe 단독으로 실행하지 않음</td></tr>
+<tr><td>Pinch/zoom</td><td>지도, 캔버스, 이미지 검토처럼 공간 확대가 본질일 때</td><td>zoom in/out 버튼, keyboard shortcut</td><td>브라우저 기본 zoom과 충돌하지 않게 설계</td></tr>
+<tr><td>Long press</td><td>보조 context menu에 한정</td><td>보이는 menu button</td><td>발견성이 낮고 assistive tech gesture와 충돌 가능</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span>1. 주소창에서 Tab을 눌러 첫 focus가 예측 가능한 위치로 가는지 본다<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다<br>3. Dialog, Menu, Popover, Tooltip이 열리고 닫힐 때 focus가 보존되는지 확인한다<br>4. Drag, slider, carousel, canvas 기능에 키보드 대체 조작이 있는지 본다<br>5. 실패 메시지와 저장 성공이 focus 또는 live status로 전달되는지 확인한다</div>
+<div class="callout risk">
+<span class="co-label">HOVER ONLY</span>
+<p>hover-only UI는 터치와 키보드에서 사라집니다. 행에 마우스를 올려야만 삭제 버튼이 보이는 패턴은 시각적으로 깔끔하지만 발견성과 접근성 회귀를 만듭니다. 주요 행동은 항상 보이거나 focus, menu, bulk action 같은 대체 경로가 있어야 합니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch4">
+<div class="ch-head"><span class="ch-code">INT-04</span><h2>모션 시스템과 안전성</h2></div>
+<p class="lede">모션 시스템은 duration 숫자 모음이 아니라 상태 전환의 언어입니다. 어떤 변화가 즉시 일어나고, 어떤 변화가 공간 이동으로 설명되며, 어떤 변화는 줄이거나 꺼야 하는지 팀 기준을 가져야 합니다.</p>
+<table>
+<tr><th>목적</th><th>좋은 사용</th><th>피해야 할 사용</th><th>성능 기준</th></tr>
+<tr><td>원인과 결과 연결</td><td>버튼에서 panel이 열리는 방향을 짧게 암시</td><td>관련 없는 요소가 동시에 튀거나 흔들림</td><td>transform, opacity 중심</td></tr>
+<tr><td>공간 변화 안내</td><td>삽입, 삭제, reorder 위치 변화를 안정적으로 표시</td><td>layout shift를 애니메이션으로 덮음</td><td>레이아웃 예약 후 전환</td></tr>
+<tr><td>상태 전환</td><td>loading에서 content로 부드럽게 교체</td><td>끝나지 않는 shimmer만 반복</td><td>long task 없이 60fps 근접</td></tr>
+<tr><td>주의 환기</td><td>충돌, 위험 변경, 새 오류 위치를 짧게 강조</td><td>계속 흔들리거나 색과 모션만으로 의미 전달</td><td>반복 제한, reduced motion 대응</td></tr>
+<tr><td>브랜드 감각</td><td>핵심 제품 순간에 제한적으로 사용</td><td>업무 화면 전체에 장식 모션 남발</td><td>초기 로드와 입력 반응성 영향 측정</td></tr>
+</table>
+<h3>duration·easing 판단</h3>
+<table>
+<tr><th>전환</th><th>권장 감각</th><th>예</th><th>검토 포인트</th></tr>
+<tr><td>즉각 피드백</td><td>매우 짧고 반응적</td><td>pressed, toggle, checkbox</td><td>사용자 입력이 늦게 접수된 것처럼 보이지 않는가?</td></tr>
+<tr><td>소형 UI 전환</td><td>짧고 명확함</td><td>popover, tooltip, dropdown</td><td>빠른 반복 조작을 방해하지 않는가?</td></tr>
+<tr><td>공간 이동</td><td>방향성과 관계가 드러남</td><td>drawer, step transition, list reorder</td><td>motion 없이도 위치와 상태가 이해되는가?</td></tr>
+<tr><td>장시간 처리</td><td>시간 포장보다 진행 정보</td><td>upload, export, AI generation</td><td>progress, 단계, 취소, 백그라운드 전환이 있는가?</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION TOKEN SET</span>duration.fast: 눌림, 작은 상태 변화<br>duration.base: popover, panel, small list change<br>duration.slow: drawer, page-level transition, guided reveal<br>easing.standard: 대부분의 상태 전환<br>easing.exit: 빠르게 사라짐<br>easing.enter: 부드럽게 등장<br>reducedMotion: opacity 또는 즉시 전환으로 축소</div>
+<div class="callout warn">
+<span class="co-label">REDUCED MOTION</span>
+<p><code>prefers-reduced-motion</code>은 “애니메이션을 모두 없애라”가 아니라 불필요한 이동, 확대, parallax, 반복 모션을 줄이라는 신호입니다. 상태 변화 자체는 텍스트, 위치, opacity, focus로 계속 전달해야 합니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch5">
+<div class="ch-head"><span class="ch-code">INT-05</span><h2>Scroll interaction</h2></div>
+<p class="lede">스크롤 인터랙션은 사용자의 기본 탐색 행위를 빌려 쓰는 기능입니다. 스크롤을 조종하거나 과하게 연출하면 정보 탐색, 접근성, 성능이 동시에 나빠질 수 있습니다. 스크롤 기반 효과는 콘텐츠 이해를 돕는 경우에만 사용합니다.</p>
+<table>
+<tr><th>패턴</th><th>쓸 때</th><th>실패 모드</th><th>안전장치</th></tr>
+<tr><td>Sticky header</td><td>긴 목록에서 현재 맥락과 주요 액션을 유지할 때</td><td>viewport를 과도하게 차지해 본문을 가림</td><td>높이 제한, anchor offset, focus 이동 테스트</td></tr>
+<tr><td>Scroll spy</td><td>긴 문서의 현재 섹션을 표시할 때</td><td>짧은 섹션에서 active 상태가 흔들림</td><td>IntersectionObserver threshold 조정</td></tr>
+<tr><td>Infinite scroll</td><td>탐색형 feed, 끝이 덜 중요한 콘텐츠</td><td>footer 접근 불가, 위치 복구 실패, SEO/공유성 약화</td><td>명시적 pagination 대안, load more, scroll restoration</td></tr>
+<tr><td>Virtualized list</td><td>행 수가 많아 DOM 수가 병목일 때</td><td>브라우저 find, screen reader, 인쇄, 동적 높이 문제</td><td>검색·선택·focus·접근성 요구 별도 설계</td></tr>
+<tr><td>Parallax</td><td>스토리텔링 화면에서 공간감을 줄 때</td><td>멀미, scroll jank, 핵심 정보 지연</td><td>reduced motion에서 제거, transform 기반 구현</td></tr>
+<tr><td>Scroll-driven animation</td><td>단계별 설명과 현재 진행이 강하게 연결될 때</td><td>스크롤 hijacking, wheel/touch 관성 무시</td><td>native scroll 유지, skip 경로 제공</td></tr>
+</table>
+<h3>스크롤 성능 판단</h3>
+<table>
+<tr><th>증상</th><th>원인 후보</th><th>확인 도구</th><th>조치</th></tr>
+<tr><td>스크롤이 끊김</td><td>scroll handler에서 layout 읽기·쓰기 반복</td><td>Performance Frames, Main thread</td><td>passive listener, rAF batching, IntersectionObserver</td></tr>
+<tr><td>sticky가 흔들림</td><td>부모 overflow, transform, stacking context 충돌</td><td>Elements, Layers</td><td>layout 구조 재검토, z-index와 containing block 정리</td></tr>
+<tr><td>목록 위치가 복구되지 않음</td><td>route 전환, 데이터 재조회, dynamic height</td><td>navigation trace, state log</td><td>scroll restoration key, item id anchor, skeleton 크기 예약</td></tr>
+<tr><td>CLS가 큼</td><td>이미지, 광고, lazy content 크기 미예약</td><td>Performance Layout Shift</td><td>aspect-ratio, placeholder, reserved slot</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">SCROLL HIJACKING</span>
+<p>wheel 이벤트를 가로채 페이지를 임의 단계로 넘기는 패턴은 접근성과 신뢰를 크게 해칩니다. 사용자가 브라우저의 기본 스크롤, 키보드 PageDown, 스페이스, touch inertia를 기대한 대로 쓸 수 있어야 합니다.</p>
+</div>
+<div class="serial-card"><span class="sc-label">SCROLL REVIEW CHECK</span>native scroll을 유지하는가<br>키보드, touch, trackpad 관성이 깨지지 않는가<br>anchor 이동 시 sticky header에 제목이 가려지지 않는가<br>새 콘텐츠가 삽입될 때 focus와 scroll 위치가 예측 가능한가<br>reduced motion에서 parallax와 scroll-linked motion이 줄어드는가<br>긴 목록에서 검색, 인쇄, screen reader 요구를 검토했는가</div>
+</section>
+
+<section id="interaction-ch6">
+<div class="ch-head"><span class="ch-code">INT-06</span><h2>3D 인터랙션 판단</h2></div>
+<p class="lede">3D는 제품 이해를 높일 수도 있지만, 비용이 큽니다. 로딩, GPU, 입력 장치, fallback, 접근성, QA 복잡도가 모두 증가합니다. 3D는 “있으면 멋있다”가 아니라 2D로는 해결하기 어려운 공간 이해나 조작 문제가 있을 때 선택합니다.</p>
+<table>
+<tr><th>사용 후보</th><th>3D가 유효한 이유</th><th>2D 대안</th><th>게이트</th></tr>
+<tr><td>제품 configurator</td><td>각도, 재질, 조합을 사용자가 직접 검토</td><td>대표 이미지, 갤러리, 비교표</td><td>실제 구매 결정에 영향을 주는가?</td></tr>
+<tr><td>공간·설비 시각화</td><td>위치, 거리, 충돌, 경로를 공간적으로 이해</td><td>도면, 평면 지도, 계층형 diagram</td><td>공간 관계가 핵심 정보인가?</td></tr>
+<tr><td>교육·시뮬레이션</td><td>조작과 결과의 물리적 관계를 학습</td><td>영상, 단계별 이미지, animation</td><td>상호작용이 학습 성과를 높이는가?</td></tr>
+<tr><td>브랜드 hero</td><td>첫 인상과 제품 형태를 강하게 전달</td><td>실사 이미지, video, static render</td><td>LCP, 배터리, 모바일 fallback을 감당하는가?</td></tr>
+</table>
+<h3>3D 구현 체크포인트</h3>
+<table>
+<tr><th>영역</th><th>기준</th><th>실패 모드</th></tr>
+<tr><td>로딩</td><td>모델, texture, environment map 크기와 progress 표시</td><td>빈 canvas가 오래 보이고 이유가 없음</td></tr>
+<tr><td>입력</td><td>orbit, pan, zoom, reset view, keyboard 대체 경로</td><td>드래그만 가능하고 현재 조작 모드를 알 수 없음</td></tr>
+<tr><td>성능</td><td>mobile GPU, devicePixelRatio, polygon count, texture 압축 관리</td><td>고해상도 화면에서 발열과 frame drop 발생</td></tr>
+<tr><td>접근성</td><td>canvas 대체 설명, 같은 정보의 2D/텍스트 경로 제공</td><td>중요 정보가 canvas 안에만 존재</td></tr>
+<tr><td>fallback</td><td>WebGL 불가, low power, reduced motion, 오류 상태 처리</td><td>지원 안 되는 브라우저에서 빈 영역만 표시</td></tr>
+<tr><td>QA</td><td>desktop/mobile screenshot, canvas nonblank, interaction smoke 테스트</td><td>로컬에서는 보이지만 CI나 특정 GPU에서 검정 화면</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">3D PR EVIDENCE</span>모델·texture 용량과 lazy loading 경계<br>mobile과 desktop의 first meaningful render 캡처<br>WebGL 미지원 fallback 화면<br>reset view, keyboard path, pointer/touch 조작 설명<br>reduced motion 또는 low power mode 처리<br>canvas가 비어 있지 않음을 확인한 자동/수동 증거</div>
+<div class="callout warn">
+<span class="co-label">3D COST</span>
+<p>3D 장면은 일반 이미지보다 QA 표면이 넓습니다. 조명, 카메라, 모델 좌표, texture 압축, GPU 차이, canvas 크기, hydration 순서가 모두 실패 원인이 됩니다. 제품 가치가 이 비용을 넘지 않으면 실사 이미지나 pre-rendered animation이 더 낫습니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch7">
+<div class="ch-head"><span class="ch-code">INT-07</span><h2>실패 모드와 관측</h2></div>
+<p class="lede">인터랙션 결함은 “동작 안 함”보다 “사용자가 다음 행동을 오해함”으로 자주 나타납니다. 그래서 기능 테스트만으로 부족하고, 상태 로그, 사용자 행동, 성능 지표, 오류 수집을 함께 봐야 합니다.</p>
+<table>
+<tr><th>실패 모드</th><th>사용자 증상</th><th>원인 후보</th><th>관측 신호</th></tr>
+<tr><td>중복 실행</td><td>저장을 여러 번 눌러 중복 데이터 생성</td><td>pending lock 없음, idempotency 없음</td><td>짧은 시간 동일 mutation 반복, 409/duplicate 증가</td></tr>
+<tr><td>상태 불신</td><td>저장됐는지 몰라 새로고침</td><td>success feedback 약함, 자동 저장 실패 숨김</td><td>저장 직후 reload, 같은 화면 재방문 증가</td></tr>
+<tr><td>포커스 손실</td><td>키보드 사용자가 위치를 잃음</td><td>dialog close restore 누락, list remount</td><td>접근성 QA 실패, keyboard abandon</td></tr>
+<tr><td>스크롤 위치 손실</td><td>상세에서 돌아오면 목록 처음으로 이동</td><td>route state, virtualization key, 데이터 로딩 순서 문제</td><td>back navigation 후 rapid scroll, rage click</td></tr>
+<tr><td>모션 멀미</td><td>스크롤 연출이 피로하거나 이탈</td><td>parallax 남발, reduced motion 무시</td><td>특정 섹션 drop-off, user feedback</td></tr>
+<tr><td>저사양 성능 저하</td><td>타이핑과 드래그가 늦음</td><td>main thread long task, 큰 DOM, heavy canvas</td><td>INP p75/p95 악화, long task 증가</td></tr>
+<tr><td>3D blank</td><td>주요 영역이 검정 또는 빈 canvas</td><td>asset path, WebGL context loss, shader/texture 오류</td><td>console error, canvas pixel check, webglcontextlost</td></tr>
+</table>
+<h3>관측 이벤트 설계</h3>
+<table>
+<tr><th>이벤트</th><th>남길 필드</th><th>목적</th><th>주의</th></tr>
+<tr><td>interaction_start</td><td>component, action, inputType, targetId</td><td>사용자 의도와 진입점을 파악</td><td>개인정보와 입력 원문 저장 금지</td></tr>
+<tr><td>interaction_result</td><td>status, duration, errorClass, retryable</td><td>성공/실패/지연을 분리</td><td>성공 toast 노출과 실제 서버 성공을 혼동하지 않음</td></tr>
+<tr><td>focus_escape</td><td>component, previousFocus, nextFocus</td><td>modal/menu focus 회귀 탐지</td><td>샘플링 또는 QA 빌드에서 우선 사용</td></tr>
+<tr><td>scroll_restore</td><td>route, restored, anchorType, delta</td><td>목록/상세 왕복 경험 확인</td><td>좌표보다 item id 기반 복구 여부가 중요</td></tr>
+<tr><td>motion_disabled</td><td>reason, component</td><td>reduced motion과 fallback 사용률 파악</td><td>사용자 설정을 과도하게 fingerprinting하지 않음</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">OBSERVABILITY</span>
+<p>인터랙션 관측은 사용자를 감시하기 위한 것이 아니라 실패를 분류하기 위한 것입니다. “클릭 수”보다 “시작한 작업이 성공했는가, 실패했는가, 얼마나 걸렸는가, 회복했는가”가 더 중요합니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch8">
+<div class="ch-head"><span class="ch-code">INT-08</span><h2>QA와 PR 게이트</h2></div>
+<p class="lede">인터랙션 품질은 리뷰어의 기억에 맡기면 빠집니다. 새 컴포넌트, 모션, scroll effect, 3D 장면, 위험 작업에는 PR 게이트를 두고 증거를 요구해야 합니다.</p>
+<table>
+<tr><th>변경 유형</th><th>필수 증거</th><th>자동화 후보</th><th>수동 확인</th></tr>
+<tr><td>새 상호작용 컴포넌트</td><td>idle/focus/disabled/pending/error 상태 캡처</td><td>component test, axe, visual regression</td><td>keyboard-only 플로우, screen reader 이름</td></tr>
+<tr><td>폼·저장 플로우</td><td>중복 제출 방지, 실패 후 입력 보존</td><td>component/E2E mutation 테스트</td><td>네트워크 실패, 409, 422, 5xx 재현</td></tr>
+<tr><td>모션 추가</td><td>reduced motion 처리와 before/after 캡처</td><td>CSS snapshot, visual test</td><td>저사양 throttling, motion 의미 검토</td></tr>
+<tr><td>스크롤 기능</td><td>anchor, back navigation, sticky overlap 증거</td><td>Playwright scroll test</td><td>trackpad, touch, keyboard scroll 확인</td></tr>
+<tr><td>3D/canvas</td><td>desktop/mobile 캡처, fallback, asset size</td><td>canvas nonblank smoke, route screenshot</td><td>조작, reset view, WebGL 미지원</td></tr>
+<tr><td>위험 작업</td><td>영향 범위, confirmation, undo/rollback 정책</td><td>E2E happy/fail path</td><td>권한별 표시와 audit log 확인</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">PR GATE TEMPLATE</span>Interaction: 사용자가 시작하는 행동과 시스템 결과<br>States: idle, hover, focus, disabled, pending, success, error 캡처<br>Input: mouse, touch, keyboard, screen reader 경로<br>Motion: duration/easing token, reduced motion 처리<br>Performance: INP/long task/scroll frame 영향 또는 면제 근거<br>Recovery: 실패, 취소, undo, retry 정책<br>Evidence: 테스트 이름, trace, screenshot, QA 메모</div>
+<h3>릴리스 전 체크리스트</h3>
+<table>
+<tr><th>항목</th><th>통과 기준</th><th>차단 기준</th></tr>
+<tr><td>입력 경로</td><td>포인터, 터치, 키보드로 핵심 작업 완료</td><td>마우스 전용 핵심 행동</td></tr>
+<tr><td>상태 표시</td><td>pending, success, error가 같은 맥락에서 이어짐</td><td>실패 시 입력 손실 또는 원인 미표시</td></tr>
+<tr><td>접근성</td><td>focus visible, accessible name, 오류 연결, live status 확인</td><td>outline 제거, role만 있고 키보드 동작 없음</td></tr>
+<tr><td>모션 안전</td><td>reduced motion 대응, 반복/큰 이동 제한</td><td>필수 정보가 모션으로만 전달됨</td></tr>
+<tr><td>성능</td><td>핵심 interaction에서 long task와 jank가 허용 범위</td><td>입력 후 UI가 멈추거나 scroll jank가 재현됨</td></tr>
+<tr><td>복구</td><td>취소, 재시도, undo, rollback 중 요구되는 경로 제공</td><td>위험 작업이 즉시 실행되고 되돌릴 수 없음</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">MERGE RULE</span>
+<p>인터랙션 PR은 “눈으로 보기 좋다”가 아니라 증거로 통과시킵니다. 핵심 상태 캡처, keyboard walkthrough, 실패 경로, reduced motion, 성능 영향 중 해당되는 항목이 없으면 리뷰어는 구현 완성도를 판단할 근거가 없습니다.</p>
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Affordance</b><span>행동 단서</span></div><div class="g-def">사용자가 어떤 요소를 누르거나 드래그하거나 입력할 수 있다고 추론하게 만드는 시각·구조적 단서입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Feedback</b><span>입력 응답</span></div><div class="g-def">사용자 입력이 접수됐고 시스템이 어떤 상태로 바뀌었는지 알려주는 즉각적 응답입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Reduced Motion</b><span>모션 축소</span></div><div class="g-def">OS 또는 브라우저 수준에서 큰 이동, 반복 모션, parallax를 줄이도록 요청하는 사용자 선호입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Scroll Restoration</b><span>스크롤 복구</span></div><div class="g-def">목록과 상세 화면을 오갈 때 사용자가 보던 위치나 항목 맥락을 되돌려 주는 동작입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>INP</b><span>Interaction to Next Paint</span></div><div class="g-def">사용자 입력 후 다음 화면 갱신까지의 지연을 보는 Core Web Vitals 지표입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Canvas Nonblank</b><span>3D QA</span></div><div class="g-def">WebGL 또는 canvas 장면이 실제 픽셀을 렌더링했는지 확인하는 기본 smoke check입니다.</div></div>
+</div>
+</section>
+
+<section id="interaction-ch9">
+<div class="ch-head"><span class="ch-code">INT-09</span><h2>인터랙션 아키텍처</h2></div>
+<p class="lede">수준급 인터랙티브 개발자는 “클릭하면 상태를 바꾼다”가 아니라 입력, 상태 전이, 비동기 작업, 취소, 실패 복구, 관측을 하나의 작은 시스템으로 봅니다. 복잡한 UI일수록 컴포넌트 내부 boolean 여러 개보다 명시적인 상태 기계와 이벤트 계약이 안전합니다.</p>
+<table>
+<tr><th>축</th><th>초급 구현</th><th>수준급 구현</th><th>검토 질문</th></tr>
+<tr><td>상태 모델</td><td><code>isOpen</code>, <code>isLoading</code>, <code>hasError</code>를 따로 둠</td><td>idle → armed → pending → success/error → recovering처럼 가능한 전이를 제한</td><td>동시에 참이면 안 되는 상태가 boolean 조합으로 가능하지 않은가?</td></tr>
+<tr><td>이벤트</td><td>onClick마다 즉시 side effect 실행</td><td>user event, system event, async result, timeout, cancel을 구분</td><td>실패와 취소가 정상 이벤트로 모델링되어 있는가?</td></tr>
+<tr><td>비동기</td><td>요청 시작 후 버튼만 disabled</td><td>abort, idempotency key, optimistic rollback, stale response 무시를 함께 설계</td><td>늦게 도착한 응답이 최신 UI 상태를 덮어쓰지 않는가?</td></tr>
+<tr><td>동시성</td><td>빠른 클릭은 QA에서만 잡음</td><td>rapid click, double submit, route leave, tab hidden을 설계 입력으로 취급</td><td>사용자가 animation 중 반대 행동을 하면 최종 상태가 하나로 수렴하는가?</td></tr>
+<tr><td>관측</td><td>클릭 수만 남김</td><td>start/result/cancel/retry와 duration, error class, input type을 남김</td><td>사용자가 어디서 실패했고 회복했는지 알 수 있는가?</td></tr>
+</table>
+<table>
+<tr><th>상태 기계 패턴</th><th>적합한 UI</th><th>필수 전이</th><th>금지 상태</th></tr>
+<tr><td>Disclosure</td><td>accordion, popover, menu, drawer</td><td>closed, opening, open, closing, disabled</td><td>DOM은 닫혔는데 focus가 내부에 남는 상태</td></tr>
+<tr><td>Mutation</td><td>저장, 삭제, 결제, 배포</td><td>idle, validating, pending, succeeded, failed, retrying, cancelled</td><td>pending 중 같은 mutation이 중복 실행되는 상태</td></tr>
+<tr><td>Drag/Reorder</td><td>칸반, 리스트 정렬, 캔버스 편집기</td><td>idle, pointerDown, dragging, overTarget, dropped, reverted</td><td>pointer capture가 풀렸는데 dragging이 유지되는 상태</td></tr>
+<tr><td>Viewer</td><td>이미지/지도/3D viewer</td><td>loading, ready, interacting, degraded, failed, fallback</td><td>asset 실패 후 조작 컨트롤만 살아 있는 상태</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">INTERACTION STATE MACHINE TEMPLATE</span>States: 가능한 화면 상태를 명사로 쓴다<br>Events: 사용자 입력, async result, timeout, cancel, route leave를 분리한다<br>Guards: 권한, validation, 중복 실행, disabled reason을 전이 조건으로 둔다<br>Actions: DOM focus, network mutation, animation start, analytics emit을 명시한다<br>Finalization: success, error, cancel 뒤 focus와 message, rollback 위치를 정한다<br>Tests: 전이표에 없는 이벤트가 들어왔을 때 무시/복구 정책을 검증한다</div>
+<div class="callout warn">
+<span class="co-label">STATE BUG</span>
+<p>인터랙션 버그의 상당수는 CSS 문제가 아니라 불가능해야 할 상태가 가능해서 생깁니다. 예를 들어 modal이 닫혔는데 backdrop은 남고, focus는 내부에 있으며, API 요청은 pending인 상태입니다. 복잡한 인터랙션은 상태 전이표를 먼저 쓰는 편이 코드보다 빠릅니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch10">
+<div class="ch-head"><span class="ch-code">INT-10</span><h2>입력 이벤트 심화</h2></div>
+<p class="lede">고급 인터랙션은 입력 장치의 차이를 무시하지 않습니다. Pointer Events, keyboard event, wheel, scroll, focus event는 서로 다른 수명주기를 가지며, 드래그·줌·스크롤·텍스트 선택이 충돌하는 지점에서 품질 차이가 납니다.</p>
+<table>
+<tr><th>주제</th><th>핵심 개념</th><th>실전 기준</th><th>실패 모드</th></tr>
+<tr><td>Pointer Events</td><td>mouse, pen, touch를 하나의 pointer 모델로 다룸</td><td><code>pointerId</code>, <code>pointerType</code>, primary pointer를 기록</td><td>멀티터치 중 첫 pointer만 처리해 pinch/drag가 꼬임</td></tr>
+<tr><td>Pointer capture</td><td>드래그 중 포인터가 요소 밖으로 나가도 이벤트를 계속 받음</td><td>drag start에서 capture, cancel/drop/unmount에서 release</td><td>capture 해제가 누락되어 다른 UI가 입력을 받지 못함</td></tr>
+<tr><td><code>touch-action</code></td><td>브라우저 기본 pan/zoom과 커스텀 gesture의 경계</td><td>필요한 축만 제한하고 페이지 스크롤은 가능한 한 유지</td><td><code>touch-action: none</code> 남발로 모바일 스크롤이 막힘</td></tr>
+<tr><td>Wheel</td><td>마우스 휠, 트랙패드, 고해상도 delta가 서로 다름</td><td>delta mode와 누적값을 정규화하고 zoom/pan threshold를 둠</td><td>트랙패드에서 너무 빠르거나 휠에서 너무 느림</td></tr>
+<tr><td>Passive listener</td><td>스크롤 성능을 위해 기본 동작 취소 여부를 브라우저에 알려줌</td><td>스크롤을 막지 않는 listener는 passive로 둠</td><td>불필요한 non-passive listener가 scroll jank를 만듦</td></tr>
+<tr><td>Roving tabindex</td><td>복합 위젯 내부에서 하나의 tab stop과 arrow navigation을 제공</td><td>menu, toolbar, grid, tablist에서 DOM order와 visual order를 맞춤</td><td>모든 항목이 Tab에 걸려 긴 컴포넌트 탐색이 지옥이 됨</td></tr>
+</table>
+<table>
+<tr><th>충돌</th><th>원인</th><th>해결 전략</th><th>테스트</th></tr>
+<tr><td>drag vs page scroll</td><td>수직 스크롤 영역 안에서 horizontal drag 사용</td><td>축 threshold, drag handle, touch-action pan-y, 명시적 grab 상태</td><td>엄지로 천천히/빠르게 스크롤, 카드 drag 반복</td></tr>
+<tr><td>canvas zoom vs browser zoom</td><td>pinch와 wheel shortcut을 canvas가 독점</td><td>Ctrl/Meta wheel 분기, zoom button 제공, browser zoom 방해 금지</td><td>키보드 확대, OS 확대, trackpad pinch</td></tr>
+<tr><td>popover vs focus blur</td><td>pointerdown, click, blur 순서 차이</td><td>pointerdown에서 의도 기록, focusout은 relatedTarget 기준 지연 처리</td><td>마우스 클릭, Tab 이동, screen reader activation</td></tr>
+<tr><td>text selection vs drag</td><td>드래그 가능한 카드 안에 텍스트와 input이 존재</td><td>drag handle 분리, editable target 제외, selection threshold</td><td>텍스트 선택, input focus, 카드 이동</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">POINTER DEBUG PACKET</span>inputType: mouse, touch, pen, keyboard<br>event order: pointerdown → focus → pointermove → pointerup → click 순서 기록<br>capture: set/release 여부와 pointerId<br>default action: preventDefault 사용 이유와 touch-action 값<br>threshold: click, drag, long press, swipe 판정 기준<br>fallback: keyboard와 visible button 대체 경로</div>
+<div class="callout risk">
+<span class="co-label">IMPLEMENTATION BAR</span>
+<p>드래그가 마우스로만 잘 되는 것은 완성 기준이 아닙니다. 터치 스크롤과 충돌하지 않고, 키보드로 대체 가능하며, 포인터가 창 밖으로 나가거나 route가 바뀌어도 상태가 복구되어야 인터랙션 구현으로 볼 수 있습니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch11">
+<div class="ch-head"><span class="ch-code">INT-11</span><h2>실전 과제 로드맵</h2></div>
+<p class="lede">수준급 인터랙티브 개발자는 문서를 읽어서가 아니라 구현·측정·회귀 방지를 반복하면서 성장합니다. 아래 과제는 입력, 상태, 모션, 스크롤, Canvas/3D를 단계적으로 묶어 실전 감각을 만드는 로드맵입니다.</p>
+<table>
+<tr><th>레벨</th><th>과제</th><th>핵심 역량</th><th>완료 증거</th></tr>
+<tr><td>1</td><td>접근 가능한 Menu/Popover/Dialog primitive</td><td>focus, keyboard, disclosure state, outside click</td><td>키보드 walkthrough, axe, rapid open/close 테스트</td></tr>
+<tr><td>2</td><td>저장 폼 interaction state machine</td><td>pending, optimistic update, abort, error recovery</td><td>409/422/5xx, route leave, double submit 테스트</td></tr>
+<tr><td>3</td><td>Drag reorder list</td><td>pointer capture, collision, keyboard reorder, screen reader announcement</td><td>mouse/touch/keyboard 동등 플로우와 large list trace</td></tr>
+<tr><td>4</td><td>Scroll restoration + virtualized list</td><td>item anchor, dynamic height, back navigation, focus restore</td><td>상세 왕복 20회, 검색/필터/뒤로가기 위치 보존</td></tr>
+<tr><td>5</td><td>Canvas pan/zoom editor</td><td>좌표계, hit testing, dirty redraw, DPR cap, overlay</td><td>1만 object에서 p95 frame time과 hit test 시간 기록</td></tr>
+<tr><td>6</td><td>3D product viewer shell</td><td>asset loading, camera bounds, fallback, WebGL diagnostics</td><td>no-WebGL, low-end, reduced motion, context loss 캡처</td></tr>
+</table>
+<table>
+<tr><th>포트폴리오 증거</th><th>초급 산출물</th><th>수준급 산출물</th></tr>
+<tr><td>문제 정의</td><td>구현한 컴포넌트 설명</td><td>사용자 의도, 실패 모드, 제약, 대안 비교</td></tr>
+<tr><td>코드</td><td>동작하는 화면</td><td>상태 전이, 입력 경계, cleanup, fallback이 드러나는 구조</td></tr>
+<tr><td>성능</td><td>“부드럽다”는 설명</td><td>Performance trace, p75/p95, frame budget, before/after</td></tr>
+<tr><td>접근성</td><td>aria 속성 일부</td><td>키보드/스크린리더 walkthrough와 reduced motion 증거</td></tr>
+<tr><td>운영성</td><td>데모 영상</td><td>관측 이벤트, 오류 분류, 회귀 테스트, 롤백 또는 feature flag</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">INTERACTIVE PORTFOLIO PACKET</span>Demo: 핵심 사용자 플로우 60초 영상<br>Architecture: 상태 기계와 입력 이벤트 흐름도<br>Performance: target device trace와 병목 분석<br>Accessibility: keyboard, reduced motion, screen reader evidence<br>Failure: network error, rapid input, route leave, fallback 캡처<br>Reflection: 왜 이 구현을 선택했고 다음 개선은 무엇인지</div>
+</section>
+
+<section id="interaction-ch12">
+<div class="ch-head"><span class="ch-code">INT-12</span><h2>구현 패턴과 좌표계</h2></div>
+<p class="lede">정교한 인터랙션은 좋은 문장만으로 구현되지 않습니다. 상태 전이를 코드에서 제한하고, pointer lifecycle을 명시적으로 닫고, 좌표계를 구분해야 드래그·줌·캔버스·3D 조작이 안정됩니다.</p>
+<table>
+<tr><th>패턴</th><th>언제 쓰는가</th><th>핵심 아이디어</th><th>검증</th></tr>
+<tr><td>Reducer state machine</td><td>pending/error/cancel/retry가 있는 UI</td><td>불가능한 상태 조합을 type과 reducer에서 차단</td><td>모든 event에 대한 전이 테스트</td></tr>
+<tr><td>Pointer session object</td><td>drag, resize, draw, pan/zoom</td><td>pointerId, start point, current point, captured target, mode를 하나로 묶음</td><td>cancel, pointerup outside, unmount cleanup</td></tr>
+<tr><td>Coordinate transform</td><td>canvas, SVG, 3D overlay, zoomable surface</td><td>screen/client/local/world 좌표를 섞지 않음</td><td>DPR, scroll offset, CSS transform, zoom 상태에서 hit test</td></tr>
+<tr><td>Command model</td><td>undo/redo가 필요한 editor</td><td>사용자 행동을 apply/revert 가능한 command로 저장</td><td>drag cancel, batch undo, optimistic rollback</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">REDUCER STATE MACHINE 예시</span>type State =<br>&nbsp;&nbsp;| { tag: "idle" }<br>&nbsp;&nbsp;| { tag: "validating" }<br>&nbsp;&nbsp;| { tag: "pending"; requestId: string }<br>&nbsp;&nbsp;| { tag: "failed"; message: string; retryable: boolean }<br>&nbsp;&nbsp;| { tag: "succeeded"; savedAt: number };<br><br>type Event =<br>&nbsp;&nbsp;| { type: "SUBMIT" }<br>&nbsp;&nbsp;| { type: "VALIDATION_FAILED"; message: string }<br>&nbsp;&nbsp;| { type: "REQUEST_STARTED"; requestId: string }<br>&nbsp;&nbsp;| { type: "REQUEST_RESOLVED"; requestId: string }<br>&nbsp;&nbsp;| { type: "REQUEST_REJECTED"; requestId: string; message: string }<br>&nbsp;&nbsp;| { type: "CANCEL" };</div>
+<table>
+<tr><th>Reducer 규칙</th><th>이유</th><th>나쁜 신호</th></tr>
+<tr><td>늦게 도착한 응답은 requestId가 다르면 무시</td><td>stale response가 최신 상태를 덮어쓰지 않게 함</td><td>빠른 재시도 뒤 이전 실패 메시지가 다시 보임</td></tr>
+<tr><td>pending 중 SUBMIT은 무시하거나 queue 정책을 명시</td><td>중복 mutation과 시각 상태 불일치를 막음</td><td>버튼 disabled만 믿고 서버 중복 방어가 없음</td></tr>
+<tr><td>CANCEL은 abort, focus restore, message 정리를 함께 수행</td><td>취소가 시각 상태만 닫고 작업은 계속되는 문제 방지</td><td>modal을 닫아도 요청이 완료되어 toast가 뜸</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">POINTER CAPTURE LIFECYCLE 예시</span>onPointerDown(e):<br>&nbsp;&nbsp;target.setPointerCapture(e.pointerId)<br>&nbsp;&nbsp;session = { pointerId, startClient, mode: "dragging" }<br><br>onPointerMove(e):<br>&nbsp;&nbsp;if session.pointerId !== e.pointerId return<br>&nbsp;&nbsp;local = clientToLocal(e.clientX, e.clientY)<br>&nbsp;&nbsp;updatePreview(local)<br><br>finish(e):<br>&nbsp;&nbsp;target.releasePointerCapture(e.pointerId)<br>&nbsp;&nbsp;commitOrRevert(session)</div>
+<table>
+<tr><th>좌표계</th><th>의미</th><th>대표 사용</th><th>주의</th></tr>
+<tr><td>Screen</td><td>물리 화면 기준</td><td>OS/브라우저 바깥 정보와 연결할 때</td><td>웹 UI 대부분에는 부적합</td></tr>
+<tr><td>Client</td><td>viewport 기준 CSS pixel</td><td>PointerEvent <code>clientX/Y</code>, DOM hit test</td><td>scroll offset이 포함되지 않음</td></tr>
+<tr><td>Page</td><td>문서 전체 기준</td><td>문서 스크롤 위치와 결합</td><td>nested scroll container에서는 부족</td></tr>
+<tr><td>Local</td><td>특정 요소 내부 기준</td><td>canvas draw, SVG editor, drag surface</td><td>DOMRect, CSS transform, DPR 보정 필요</td></tr>
+<tr><td>World</td><td>Canvas/3D scene 내부 논리 좌표</td><td>pan/zoom editor, WebGL object picking</td><td>camera, zoom, projection matrix를 거쳐야 함</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">IMPLEMENTATION TEST</span>
+<p>정교한 인터랙션 구현은 “마우스로 한 번 움직임”으로 검증하지 않습니다. 스크롤된 컨테이너, DPR 2, CSS transform이 걸린 부모, 터치 입력, 키보드 대체 경로, unmount 중 pointer capture 해제까지 확인해야 합니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch13">
+<div class="ch-head"><span class="ch-code">INT-13</span><h2>Hook 레시피와 접근성 구현</h2></div>
+<p class="lede">정교한 인터랙션 구현은 매번 이벤트 핸들러를 새로 쓰는 방식으로 유지하기 어렵습니다. 반복되는 입력 세션, roving tabindex, keyboard reorder, live announcement는 작은 hook 또는 primitive로 표준화해야 합니다.</p>
+<table>
+<tr><th>Hook/Primitive</th><th>책임</th><th>반드시 포함할 것</th><th>테스트</th></tr>
+<tr><td><code>usePointerSession</code></td><td>drag/pan/resize의 pointer lifecycle 관리</td><td>pointerId, capture, threshold, cancel, cleanup</td><td>pointerup outside, Escape cancel, unmount</td></tr>
+<tr><td><code>useRovingTabIndex</code></td><td>menu/toolbar/grid 내부 keyboard 이동</td><td>activeIndex, orientation, Home/End, disabled item skip</td><td>Tab 1회 진입, Arrow 이동, focus 복구</td></tr>
+<tr><td><code>useLiveAnnouncement</code></td><td>비시각 사용자에게 상태 변화 전달</td><td>polite/assertive channel, 중복 문구 억제</td><td>저장 성공, 오류, reorder 결과 announce</td></tr>
+<tr><td><code>useInteractionMachine</code></td><td>복잡한 mutation 상태 전이 제한</td><td>requestId, stale response ignore, cancel event</td><td>double submit, retry, late response</td></tr>
+<tr><td><code>useFocusReturn</code></td><td>dialog/menu 종료 후 focus 복귀</td><td>trigger ref, fallback target, unmount guard</td><td>Escape, route leave, trigger 제거</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">usePointerSession 예시</span>function usePointerSession({ onMove, onCommit, onCancel }) {<br>&nbsp;&nbsp;const sessionRef = useRef(null);<br>&nbsp;&nbsp;const start = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;event.currentTarget.setPointerCapture(event.pointerId);<br>&nbsp;&nbsp;&nbsp;&nbsp;sessionRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY };<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;const move = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;const session = sessionRef.current;<br>&nbsp;&nbsp;&nbsp;&nbsp;if (!session || session.pointerId !== event.pointerId) return;<br>&nbsp;&nbsp;&nbsp;&nbsp;onMove({ dx: event.clientX - session.startX, dy: event.clientY - session.startY });<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;const end = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;event.currentTarget.releasePointerCapture(event.pointerId);<br>&nbsp;&nbsp;&nbsp;&nbsp;onCommit(sessionRef.current);<br>&nbsp;&nbsp;&nbsp;&nbsp;sessionRef.current = null;<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;return { onPointerDown: start, onPointerMove: move, onPointerUp: end, onPointerCancel: onCancel };<br>}</div>
+<table>
+<tr><th>접근성 구현 패턴</th><th>DOM 구조</th><th>키보드 동작</th><th>Announcement</th></tr>
+<tr><td>Keyboard drag reorder</td><td>listbox 또는 list + button controls</td><td>Space로 집기, Arrow로 이동, Space로 놓기, Esc 취소</td><td>“3번째 항목을 1번째 위치로 이동했습니다”</td></tr>
+<tr><td>Toolbar roving tabindex</td><td><code>role="toolbar"</code>, button group</td><td>Tab은 toolbar 진입/탈출, Arrow는 내부 이동</td><td>상태 변화는 pressed/current로 전달</td></tr>
+<tr><td>Async form status</td><td>submit button + status region + field error</td><td>오류 시 첫 오류 필드 또는 summary로 focus</td><td>“저장 실패. 이메일 형식을 확인하세요”</td></tr>
+<tr><td>Canvas object list</td><td>canvas 옆 hidden이 아닌 DOM list</td><td>object list에서 선택/삭제/이동 가능</td><td>선택된 object와 좌표/상태 설명</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">PLAYWRIGHT INTERACTION SMOKE</span>await page.keyboard.press("Tab");<br>await expect(page.getByRole("button", { name: "옵션 열기" })).toBeFocused();<br>await page.keyboard.press("Enter");<br>await page.keyboard.press("ArrowDown");<br>await page.keyboard.press("Space");<br>await expect(page.getByRole("status")).toContainText("선택됨");<br><br>// pointer path<br>await page.mouse.move(120, 240);<br>await page.mouse.down();<br>await page.mouse.move(240, 260);<br>await page.mouse.up();</div>
+<div class="callout gm">
+<span class="co-label">PRACTICAL BAR</span>
+<p>접근성은 “aria를 붙였다”가 아니라 동일한 작업을 키보드와 보조기술 경로로 완료할 수 있다는 뜻입니다. 정교한 인터랙션일수록 canvas/drag/gesture 기능과 같은 정보를 DOM control로 병렬 제공해야 합니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch14">
+<div class="ch-head"><span class="ch-code">INT-14</span><h2>근거 기반 판단 기준</h2></div>
+<p class="lede">인터랙션 품질은 “부드러워 보인다”가 아니라 사용자가 입력한 뒤 어느 시점에 시스템 반응을 확인하고, 실패했을 때 어떤 부작용이 생기는지로 판단합니다. 아래 숫자는 절대 법칙이 아니라 리뷰와 계측을 시작하기 위한 기준선입니다. 실제 승인 기준은 제품의 핵심 행동별 p75, p95 현장 데이터로 보정해야 합니다.</p>
+<table>
+<tr><th>판단 항목</th><th>실질 숫자</th><th>근거와 의미</th><th>부수효과</th><th>수집할 데이터</th></tr>
+<tr><td>전체 입력 반응성</td><td>INP &le; 200ms good, 200-500ms needs improvement, &gt; 500ms poor</td><td>Core Web Vitals의 INP 기준. click, tap, keyboard interaction이 다음 paint까지 걸린 시간을 본다</td><td>200ms를 넘기면 사용자는 입력이 누락됐다고 느끼기 시작하고, 500ms 이상은 중복 클릭·이탈·불신으로 이어지기 쉽다</td><td>route, component, action, device tier별 INP p75/p95와 worst interaction name</td></tr>
+<tr><td>초기 로드 이후의 반응성</td><td>Chrome 사용 데이터 기준 페이지 체류 시간의 약 90%는 load 이후</td><td>초기 렌더링만 빠른 앱보다 세션 중 입력 반응성이 유지되는 앱이 실제 사용 품질에 더 직접적이다</td><td>대시보드, 폼, 에디터처럼 오래 머무는 화면에서 “처음만 빠른” 최적화가 품질을 속인다</td><td>session age, route dwell time, interaction count, long task after load</td></tr>
+<tr><td>Event Timing 관측 한계</td><td>기본 event entry는 104ms 미만 interaction을 놓칠 수 있음</td><td>브라우저 성능 API와 CrUX는 강한 신호를 주지만, 모든 미세 지연을 자동으로 보여주지는 않는다</td><td>hover, drag preview, editor shortcut 같은 짧은 상호작용은 느려져도 RUM에 잘 안 잡힐 수 있다</td><td>critical action에 <code>performance.mark</code>, custom duration, cancellation reason 추가</td></tr>
+<tr><td>Drag·resize 세션</td><td>Pointer capture는 pointerup/release 전까지 이후 pointer event를 지정 element로 보냄</td><td>drag 중 포인터가 요소 밖으로 나가도 세션이 끊기지 않게 하는 표준 API다</td><td>release 누락 시 다른 UI가 입력을 받지 못하거나, unmount 뒤 stale session이 남는다</td><td>pointerdown/up/cancel, release success, unmount cleanup, lost pointer session rate</td></tr>
+<tr><td>모션 민감도</td><td><code>prefers-reduced-motion: reduce</code>는 비필수 움직임 축소 선호를 뜻함</td><td>사용자가 OS나 브라우저에서 움직임 최소화를 요청한 상태를 CSS/JS에서 감지할 수 있다</td><td>상태 전달을 이동·확대·parallax에만 의존하면 일부 사용자에게 불편하거나 접근 불가능한 경험이 된다</td><td>reduced motion 사용률, alternate path 적용 여부, motion-disabled screenshot</td></tr>
+</table>
+<p class="lede">근거 출처는 web.dev의 <a href="https://web.dev/articles/inp">INP 문서</a>, MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture">setPointerCapture</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a> 문서를 기준으로 삼고, 제품별 기준은 반드시 현장 RUM 데이터로 보정합니다.</p>
+<div class="serial-card"><span class="sc-label">EVIDENCE PACKET</span>1. 측정 대상: route + component + user action 이름을 먼저 고정한다<br>2. 숫자: p75와 p95를 device tier별로 나누고, 평균값 단독 보고를 금지한다<br>3. 부수효과: 중복 클릭, 취소 실패, focus 손실, scroll jump, rage click을 함께 본다<br>4. 재현 조건: CPU slowdown, mobile viewport, touch input, DPR 2, reduced motion을 명시한다<br>5. 결정: 유지, 단순화, lazy load, optimistic feedback, fallback 중 무엇을 선택했는지 기록한다</div>
+<div class="callout gm">
+<span class="co-label">PRACTICAL STANDARD</span>
+<p>인터랙션 리뷰에서 가장 강한 근거는 “이 효과가 좋다”가 아니라 “이 행동의 p95 입력 지연이 420ms였고, optimistic feedback을 추가한 뒤 170ms로 내려갔으며, 중복 submit이 38% 줄었다” 같은 문장입니다. 수치와 부수효과가 함께 있어야 디자인, 프론트엔드, 백엔드가 같은 문제를 보고 같은 결정을 내릴 수 있습니다.</p>
+</div>
+</section>
+
+<section id="interaction-ch15">
+<div class="ch-head"><span class="ch-code">INT-15</span><h2>자주 봉착하는 문제와 해결</h2></div>
+<p class="lede">인터랙션 문제는 대부분 “이벤트가 안 먹는다”가 아니라 입력 세션, 비동기 상태, focus, scroll, 접근성 경로가 서로 다른 수명으로 움직일 때 생깁니다. 문제를 고칠 때는 시각 효과만 만지지 말고 상태 전이, cleanup, 관측 이벤트를 함께 고쳐야 재발하지 않습니다.</p>
+<table>
+<tr><th>문제</th><th>대표 증상</th><th>주요 원인</th><th>해결법</th><th>검증</th></tr>
+<tr><td>중복 클릭·중복 제출</td><td>주문, 저장, 배포가 두 번 실행됨</td><td>pending lock이 UI에만 있고 mutation idempotency와 request key가 없음</td><td>action 단위 requestId, 서버 idempotency key, optimistic state와 rollback, pending 중 재입력 정책을 명시</td><td>double click, Enter 연타, slow network에서 mutation 1회만 발생</td></tr>
+<tr><td>Drag가 중간에 끊김</td><td>요소 밖으로 나가면 resize/drag가 멈춤</td><td>pointer capture 미사용, pointerId 추적 없음, scroll container와 이벤트 충돌</td><td>pointerdown에서 capture, pointerId별 session 관리, pointercancel과 unmount cleanup, scroll lock 여부 결정</td><td>요소 밖 pointerup, 터치 입력, route 이동 중 cleanup 테스트</td></tr>
+<tr><td>Dialog 닫은 뒤 focus 손실</td><td>Tab이 문서 처음으로 튀거나 숨은 요소에 머묾</td><td>trigger ref 보존 실패, exit animation과 focus restore 수명 불일치</td><td>open 시 trigger 저장, close 완료 후 restore, trigger 제거 시 fallback target 지정</td><td>Escape, backdrop click, route leave, trigger unmount 경로 확인</td></tr>
+<tr><td>Scroll jump·위치 복구 실패</td><td>필터 변경, 탭 이동, infinite scroll 후 위치가 튐</td><td>DOM height 변동, async content 삽입, scroll restoration 정책 부재</td><td>list key 안정화, skeleton 높이 예약, route별 scroll state 저장, anchor 기반 복구</td><td>뒤로가기, 필터 토글, lazy image load 후 viewport 위치 비교</td></tr>
+<tr><td>Optimistic UI가 실제 상태와 어긋남</td><td>성공처럼 보였는데 새로고침하면 사라짐</td><td>낙관 업데이트와 서버 응답 병합 규칙, 실패 rollback, stale response ignore가 없음</td><td>operation log, request version, 실패 시 원래 값 복원, 성공 응답으로 canonical state 재동기화</td><td>느린 응답, 실패 응답, 순서가 뒤바뀐 응답, retry 테스트</td></tr>
+<tr><td>Canvas/drag 기능이 접근 불가능</td><td>마우스로만 조작 가능하고 키보드·보조기술 경로가 없음</td><td>시각 객체를 DOM control이나 command model로 노출하지 않음</td><td>object list, keyboard commands, live announcement, hidden이 아닌 대체 control 제공</td><td>마우스 없이 선택·이동·삭제·취소 완료</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">INTERACTION DEBUG ORDER</span>1. 문제가 발생한 user action 이름과 입력 장치를 고정한다<br>2. idle, pending, success, error, cancelled 중 어느 상태에서 깨졌는지 찾는다<br>3. event lifecycle(pointerdown/move/up/cancel, keydown, blur)을 로그로 확인한다<br>4. async response가 늦게 오거나 순서가 바뀌는 경우를 재현한다<br>5. focus, scroll, announcement, cleanup까지 같은 테스트에 넣는다</div>
+<div class="callout warn">
+<span class="co-label">ANTI-PATCH</span>
+<p>인터랙션 버그를 <code>setTimeout</code>, 전역 flag, CSS <code>pointer-events: none</code>만으로 막으면 다음 입력 장치나 느린 네트워크에서 다시 터집니다. 해결 단위는 “한 이벤트 핸들러”가 아니라 “입력 세션과 상태 전이 전체”여야 합니다.</p>
+</div>
+</section>
+
+<footer>FRONTEND INTERACTION HANDBOOK · V1 · 2026-06<br>PRINCIPLE : 인터랙션은 장식보다 상태, 입력, 복구, 성능, 접근성을 먼저 설계한다</footer>
+
+<section id="doc-motion">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>애니메이션·모션 시스템</h2></div>
+</section>
+
+<header class="hero">
+  <div class="hero-serial"><span>DOC : FE-ANIMATION-MOTION-V1</span><span>SCOPE : CSS · WAAPI · JS · FRAMER · GSAP · LOTTIE · MOTION SYSTEM</span><span>LANG : KO</span></div>
+  <h1>프론트엔드 인터랙션 ·<br>애니메이션과 3D</h1>
+  <p class="hero-sub">모션은 화면을 화려하게 만드는 장식이 아니라 <strong>상태 변화, 공간 관계, 사용자 행동의 결과</strong>를 설명하는 피드백입니다. 좋은 애니메이션은 덜 보이고, 실패한 애니메이션은 사용자의 시간을 빼앗습니다.</p>
+  <div class="hero-meta">AUDIENCE : FRONTEND ENGINEERING · PRODUCT UI · DESIGN SYSTEM · UPDATED 2026-06</div>
+</header>
+
+<section id="motion-ch1">
+<div class="ch-head"><span class="ch-code">MOTION-01</span><h2>모션의 역할과 원칙</h2></div>
+<p class="lede">모션의 1차 목적은 즐거움이 아니라 이해입니다. 사용자가 방금 누른 버튼이 어떤 상태를 만들었는지, 새 패널이 어디서 왔는지, 목록 항목이 왜 이동했는지 설명하지 못하는 모션은 대부분 제거하는 편이 낫습니다.</p>
+<table>
+<tr><th>목적</th><th>좋은 사용</th><th>실패 모드</th><th>숫자 가이드</th></tr>
+<tr><td>상태 피드백</td><td>hover, pressed, loading, success, error를 짧게 구분</td><td>클릭 후 300ms 이상 아무 변화가 없어 중복 클릭 유발</td><td>입력 피드백은 100ms 안에 시작</td></tr>
+<tr><td>공간 관계</td><td>drawer, popover, detail panel이 트리거와 연결되어 보임</td><td>화면 중앙에서 갑자기 나타나 사용자가 위치를 잃음</td><td>open 160-240ms, close 120-180ms</td></tr>
+<tr><td>변화 위치 안내</td><td>추가, 삭제, 정렬, 필터 결과가 어디서 바뀌었는지 드러냄</td><td>layout shift를 부드럽게 포장해 원인을 숨김</td><td>목록 재배치 180-300ms</td></tr>
+<tr><td>주의 환기</td><td>위험, 충돌, 미완료 필드를 한 번만 강조</td><td>반복 흔들림, 깜빡임, 색상만으로 경고 전달</td><td>강조는 1회, 400ms 이하</td></tr>
+<tr><td>브랜드 감각</td><td>제품의 속도감과 밀도를 반영한 작은 signature motion</td><td>모든 화면 전환에 같은 과장 효과를 붙임</td><td>핵심 flow 외 장식 모션은 예산 밖</td></tr>
+</table>
+<table>
+<tr><th>판단 질문</th><th>통과 기준</th><th>탈락 신호</th></tr>
+<tr><td>이 모션이 없어도 의미가 유지되는가</td><td>의미는 텍스트, 구조, 상태로 유지되고 모션은 보조한다</td><td>모션을 끄면 완료/오류/위치 변화를 알 수 없다</td></tr>
+<tr><td>사용자 작업 속도보다 느리지 않은가</td><td>반복 업무의 다음 입력을 막지 않는다</td><td>닫기 애니메이션을 기다려야 다음 작업 가능</td></tr>
+<tr><td>성능 예산 안에 있는가</td><td>transform/opacity 중심, long task 없음, frame drop 제한</td><td>height, top, box-shadow, filter가 큰 영역에서 반복</td></tr>
+<tr><td>접근성 설정을 존중하는가</td><td><code>prefers-reduced-motion</code>에서 대체 상태가 존재</td><td>패럴랙스, 자동 재생, 흔들림을 끌 수 없음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION FIRST PRINCIPLES</span>1. 모션은 사용자의 원인과 결과를 연결한다<br>2. 빠른 작업 흐름에서는 짧게, 학습이 필요한 변화에서는 명확하게 둔다<br>3. show보다 hide가 보통 더 짧다<br>4. layout을 움직이기보다 composite 가능한 속성을 우선한다<br>5. motion off 상태에서도 제품 의미와 조작 가능성이 유지되어야 한다</div>
+<div class="callout warn"><span class="co-label">PRACTICAL RULE</span><p>애니메이션 duration을 정할 때 “예뻐 보이는가”보다 “사용자가 다음 행동을 하기 전에 필요한 정보를 받는가”를 먼저 봅니다. 80ms 이하는 변화가 거의 감지되지 않고, 500ms 이상은 반복 업무에서 지연으로 느껴지기 쉽습니다.</p></div>
+</section>
+
+<section id="motion-ch2">
+<div class="ch-head"><span class="ch-code">MOTION-02</span><h2>CSS transition/keyframes</h2></div>
+<p class="lede">CSS 애니메이션은 UI 상태 전환의 기본값입니다. hover, focus, open/close, skeleton, 간단한 reveal처럼 DOM 상태와 스타일 변화가 일대일로 연결되는 경우에는 CSS가 가장 단순하고 안정적입니다.</p>
+<table>
+<tr><th>도구</th><th>적합한 상황</th><th>피해야 할 상황</th><th>실무 기준</th></tr>
+<tr><td><code>transition</code></td><td>상태 class, pseudo-class, 속성 변화가 명확함</td><td>중간 단계 제어, sequence, interrupt가 복잡함</td><td>버튼, 카드 hover, panel opacity/transform</td></tr>
+<tr><td><code>@keyframes</code></td><td>반복 로딩, skeleton, 정해진 entrance 효과</td><td>사용자 입력에 따라 경로가 달라짐</td><td>무한 반복은 reduced motion에서 정지 또는 단순화</td></tr>
+<tr><td><code>animation</code></td><td>시작과 끝이 자동이고 JS 상태가 필요 없음</td><td>React state와 정확히 동기화해야 함</td><td>완료 후 상태는 class로 확정</td></tr>
+<tr><td><code>transition-behavior</code></td><td>display 같은 discrete 전환을 보완할 때</td><td>브라우저 지원이 제품 기준과 맞지 않음</td><td>progressive enhancement로만 사용</td></tr>
+</table>
+<table>
+<tr><th>속성</th><th>권장도</th><th>이유</th><th>주의</th></tr>
+<tr><td><code>transform</code></td><td>높음</td><td>layout을 다시 계산하지 않고 composite 단계에서 처리 가능</td><td>텍스트가 흐려지거나 hit area와 시각 위치가 어긋나지 않게 확인</td></tr>
+<tr><td><code>opacity</code></td><td>높음</td><td>fade, overlay, entrance에 안정적</td><td>0이어도 focusable/clickable일 수 있어 visibility와 pointer-events 관리</td></tr>
+<tr><td><code>height</code>, <code>width</code></td><td>낮음</td><td>layout을 유발해 주변 요소까지 영향을 줌</td><td>accordion은 grid row, max-height, FLIP, measured animation 검토</td></tr>
+<tr><td><code>top</code>, <code>left</code></td><td>낮음</td><td>positioned element라도 layout/paint 비용이 커질 수 있음</td><td>대부분 translate로 대체</td></tr>
+<tr><td><code>box-shadow</code>, <code>filter</code></td><td>제한</td><td>큰 영역 repaint와 GPU 비용 증가</td><td>작은 요소에만 사용하고 Performance trace 확인</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CSS MOTION TOKEN 예시</span>:root {<br>&nbsp;&nbsp;--motion-fast: 120ms;<br>&nbsp;&nbsp;--motion-base: 180ms;<br>&nbsp;&nbsp;--motion-slow: 280ms;<br>&nbsp;&nbsp;--ease-standard: cubic-bezier(0.2, 0, 0, 1);<br>&nbsp;&nbsp;--ease-enter: cubic-bezier(0, 0, 0.2, 1);<br>&nbsp;&nbsp;--ease-exit: cubic-bezier(0.4, 0, 1, 1);<br>}</div>
+<div class="serial-card"><span class="sc-label">TRANSITION 예시</span>.panel {<br>&nbsp;&nbsp;opacity: 0;<br>&nbsp;&nbsp;transform: translateY(8px);<br>&nbsp;&nbsp;transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);<br>}<br>.panel[data-open="true"] {<br>&nbsp;&nbsp;opacity: 1;<br>&nbsp;&nbsp;transform: translateY(0);<br>}</div>
+<div class="callout risk"><span class="co-label">COMMON FAILURE</span><p><code>transition: all</code>은 편하지만 위험합니다. 나중에 width, color, shadow, filter가 추가되면 의도하지 않은 속성까지 움직여 성능과 예측 가능성을 망칩니다. 움직일 속성은 명시합니다.</p></div>
+</section>
+
+<section id="motion-ch3">
+<div class="ch-head"><span class="ch-code">MOTION-03</span><h2>WAAPI와 JS animation</h2></div>
+<p class="lede">JS 애니메이션은 “CSS보다 고급”이라서 쓰는 것이 아닙니다. 애니메이션의 시작, 중단, 재생 방향, 사용자 입력, Promise 흐름, 동적 측정값이 제품 상태와 연결될 때 사용합니다. 그렇지 않다면 CSS가 더 적은 코드와 낮은 위험을 줍니다.</p>
+<table>
+<tr><th>방식</th><th>좋은 사용</th><th>실패 모드</th><th>검증 포인트</th></tr>
+<tr><td>WAAPI <code>element.animate()</code></td><td>JS에서 play/cancel/reverse/finish를 제어하고 싶음</td><td>React unmount 뒤 애니메이션이 남아 memory leak 또는 flicker 발생</td><td>cleanup에서 <code>animation.cancel()</code></td></tr>
+<tr><td><code>requestAnimationFrame</code></td><td>scroll, pointer, canvas처럼 frame별 계산이 필요함</td><td>state set을 매 frame 호출해 React render 폭발</td><td>DOM read/write 분리, ref 기반 업데이트</td></tr>
+<tr><td>Timer 기반</td><td>단순 delay, staged feedback</td><td>tab background, throttling, unmount 뒤 setState</td><td>timer cleanup과 visibility 상태</td></tr>
+<tr><td>Physics 직접 구현</td><td>도메인 제약이 단순하고 dependency를 피해야 함</td><td>spring 튜닝, interrupt, accessibility를 매번 새로 품</td><td>라이브러리 대비 유지보수 비용</td></tr>
+</table>
+<table>
+<tr><th>문제</th><th>JS가 필요한 신호</th><th>CSS로 충분한 신호</th></tr>
+<tr><td>Accordion</td><td>내용 높이를 측정해 정확히 접고 펼쳐야 하며 중간 중단이 필요</td><td>고정 높이 또는 opacity/transform reveal만 필요</td></tr>
+<tr><td>Drag</td><td>pointer 위치, velocity, threshold, snap point가 필요</td><td>hover/focus/pressed 상태만 필요</td></tr>
+<tr><td>Route transition</td><td>이전 route exit 완료 후 다음 route enter를 조율</td><td>단순 fade in만 필요</td></tr>
+<tr><td>Chart</td><td>데이터 값 변화에 따라 path, axis, tooltip을 보간</td><td>legend hover나 point highlight 수준</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">WAAPI CLEANUP 예시</span>const animation = node.animate(<br>&nbsp;&nbsp;[{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }],<br>&nbsp;&nbsp;{ duration: 180, easing: "cubic-bezier(0.2, 0, 0, 1)", fill: "both" }<br>);<br><br>return () =&gt; animation.cancel();</div>
+<div class="callout warn"><span class="co-label">FRAME BUDGET</span><p>60fps에서 한 frame 예산은 약 16.7ms입니다. 이 안에 JS, style, layout, paint, composite가 모두 들어와야 합니다. pointermove마다 React state를 바꾸거나 DOM read/write를 섞으면 금방 예산을 넘습니다.</p></div>
+<div class="serial-card"><span class="sc-label">JS ANIMATION REVIEW</span>animation lifecycle이 component lifecycle과 연결되어 있는가<br>unmount, route change, rapid toggle에서 cancel되는가<br>prefers-reduced-motion일 때 즉시 완료 또는 단순 전환되는가<br>동일 interaction을 10회 반복해도 memory와 DOM node가 증가하지 않는가<br>Performance trace에서 long task와 forced reflow가 없는가</div>
+</section>
+
+<section id="motion-ch4">
+<div class="ch-head"><span class="ch-code">MOTION-04</span><h2>Framer Motion/GSAP/Lottie 선택 기준</h2></div>
+<p class="lede">애니메이션 라이브러리 선택은 취향 문제가 아니라 제품 표면, 팀 역량, 번들 예산, 디자이너 산출물, 상호작용 복잡도의 문제입니다. 간단한 상태 전환에 대형 라이브러리를 넣는 것도 문제고, 복잡한 timeline을 CSS로 억지로 관리하는 것도 문제입니다.</p>
+<table>
+<tr><th>선택지</th><th>강점</th><th>좋은 사용</th><th>주의</th></tr>
+<tr><td>CSS only</td><td>가볍고 예측 가능, 디자인 토큰과 결합 쉬움</td><td>대부분의 상태 전환, hover, panel, skeleton</td><td>복잡한 sequencing과 interrupt가 늘면 class 상태가 지저분해짐</td></tr>
+<tr><td>WAAPI</td><td>브라우저 기본 API, imperative control 가능</td><td>작은 JS 제어 animation, 라이브러리 없이 cancel/reverse 필요</td><td>팀 표준 wrapper 없이 흩어지면 패턴이 갈라짐</td></tr>
+<tr><td>Framer Motion</td><td>React 친화, layout animation, presence, gesture</td><td>React 앱의 modal, route, card reorder, drag, spring 기반 UI</td><td>Server Component 경계, bundle, layout animation 비용 확인</td></tr>
+<tr><td>GSAP</td><td>강력한 timeline, scroll, SVG, 복잡한 sequence</td><td>마케팅 페이지, 데이터 스토리텔링, 고밀도 timeline</td><td>제품 CRUD UI에 남발하면 코드 소유권이 어려워짐</td></tr>
+<tr><td>Lottie</td><td>After Effects 산출물 재생, 브랜드 일러스트 전달 쉬움</td><td>empty state, success, onboarding, 설명용 루프</td><td>상호작용 로직에는 부적합. JSON 크기와 렌더러 성능 확인</td></tr>
+<tr><td>Three.js/R3F</td><td>실제 3D scene, camera, material, interaction</td><td>제품 3D preview, configurator, spatial demo, game-like UI</td><td>접근성 대체 UI, GPU 비용, asset pipeline 필요</td></tr>
+</table>
+<table>
+<tr><th>상황</th><th>추천</th><th>이유</th><th>검토 질문</th></tr>
+<tr><td>button, tooltip, drawer</td><td>CSS</td><td>상태 기반 전환으로 충분하고 비용이 낮음</td><td>토큰으로 duration/easing이 통일됐는가</td></tr>
+<tr><td>modal enter/exit가 unmount와 충돌</td><td>Framer Motion 또는 작은 presence wrapper</td><td>exit 완료 전 DOM 유지가 필요</td><td>focus trap과 scroll lock 수명주기가 맞는가</td></tr>
+<tr><td>카드 reordering, shared layout</td><td>Framer Motion</td><td>layout 변화 보간과 interrupt 처리 부담 감소</td><td>목록이 커질 때 layout 측정 비용은 감당 가능한가</td></tr>
+<tr><td>스크롤 기반 긴 브랜드 페이지</td><td>GSAP</td><td>timeline과 scroll trigger 관리가 핵심</td><td>reduced motion과 모바일 성능 대체안이 있는가</td></tr>
+<tr><td>디자이너가 AE로 만든 성공 애니메이션</td><td>Lottie</td><td>벡터 산출물을 재현하기 쉬움</td><td>용량, loop 여부, 의미 전달 대체 텍스트가 있는가</td></tr>
+<tr><td>3D 제품 커스터마이저</td><td>Three.js 또는 React Three Fiber</td><td>camera, material, lighting, hit testing이 필요</td><td>저사양 기기 fallback과 asset lazy loading이 있는가</td></tr>
+</table>
+<div class="callout"><span class="co-label">DEPENDENCY GATE</span><p>새 모션 라이브러리는 “할 수 있다”가 아니라 “제품이 이 복잡도를 지속적으로 필요로 한다”는 증거가 있을 때 도입합니다. PR에는 bundle delta, 사용 surface, reduced motion 대응, 소유 팀을 함께 남깁니다.</p></div>
+<div class="serial-card"><span class="sc-label">LIBRARY DECISION LOG</span>Problem: route exit animation과 modal presence가 반복 구현되고 있음<br>Options: CSS timeout wrapper / WAAPI wrapper / Framer Motion<br>Decision: React surface가 많고 layout/presence 요구가 반복되므로 Framer Motion 도입<br>Guardrail: shared primitives에만 사용, page별 임의 timeline 금지, reduced motion variant 필수<br>Review: bundle analyzer와 핵심 interaction trace를 PR에 첨부</div>
+</section>
+
+<section id="motion-ch5">
+<div class="ch-head"><span class="ch-code">MOTION-05</span><h2>Motion system</h2></div>
+<p class="lede">모션 시스템은 개별 애니메이션 모음이 아니라 제품 전체의 시간, easing, 거리, 상태 언어를 표준화한 계약입니다. 토큰이 없으면 화면마다 다른 속도감이 생기고, 토큰만 있고 사용 기준이 없으면 장식 모음이 됩니다.</p>
+<table>
+<tr><th>토큰</th><th>예시 값</th><th>사용처</th><th>주의</th></tr>
+<tr><td>Duration fast</td><td>80-120ms</td><td>hover, pressed, small feedback</td><td>의미 있는 변화 설명에는 너무 짧을 수 있음</td></tr>
+<tr><td>Duration base</td><td>160-220ms</td><td>popover, dropdown, small panel</td><td>반복 업무 기본값으로 적합</td></tr>
+<tr><td>Duration slow</td><td>260-360ms</td><td>page section, drawer, 큰 layout 변화</td><td>닫기나 취소에는 짧은 값을 별도 적용</td></tr>
+<tr><td>Distance xs</td><td>2-4px</td><td>button press, focus emphasis</td><td>작아도 layout shift처럼 보이면 실패</td></tr>
+<tr><td>Distance sm</td><td>8-12px</td><td>menu, toast, panel reveal</td><td>모바일에서 과장되어 보이지 않는지 확인</td></tr>
+<tr><td>Easing standard</td><td><code>cubic-bezier(0.2, 0, 0, 1)</code></td><td>일반 상태 전환</td><td>brand easing을 모든 곳에 강제하지 않음</td></tr>
+<tr><td>Easing exit</td><td><code>cubic-bezier(0.4, 0, 1, 1)</code></td><td>사라지는 요소</td><td>사용자가 기다릴 이유가 없으면 빠르게</td></tr>
+</table>
+<table>
+<tr><th>컴포넌트</th><th>motion contract</th><th>금지 패턴</th><th>QA 기준</th></tr>
+<tr><td>Button</td><td>press 80ms, loading 즉시 표시, success 120ms</td><td>클릭 후 spinner 표시 지연, bounce</td><td>키보드 Space/Enter에서도 동일 피드백</td></tr>
+<tr><td>Toast</td><td>enter 160ms, exit 120ms, 자동 소멸 4-6s</td><td>필수 오류를 자동 소멸만으로 처리</td><td>hover/focus 시 pause 또는 충분한 지속 시간</td></tr>
+<tr><td>Modal</td><td>overlay fade + dialog scale/translate, focus 이동</td><td>dialog만 움직이고 focus trap 지연</td><td>Escape, backdrop, rapid open/close 테스트</td></tr>
+<tr><td>Drawer</td><td>방향성 있는 translate, close는 open보다 짧게</td><td>width 애니메이션으로 layout 밀기</td><td>스크롤 잠금과 animation lifecycle 일치</td></tr>
+<tr><td>List item</td><td>insert/delete/reorder에 위치 변화 표시</td><td>정렬 때 전체 리스트 fade out</td><td>100개 이상에서 frame drop 확인</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION SYSTEM CHECKLIST</span>duration, easing, distance, delay token이 있는가<br>enter, exit, emphasis, loading, reorder의 쓰임이 구분되는가<br>component별 motion contract가 문서화되어 있는가<br>reduced motion variant가 token 수준에서 제공되는가<br>새 animation PR이 token 밖 임의 값을 만들지 않는가<br>디자인과 코드의 naming이 같은가</div>
+<div class="callout gm"><span class="co-label">SYSTEM</span><p>모션 시스템의 성공 기준은 “멋진 animation demo”가 아니라 제품 팀이 새 컴포넌트를 만들 때 duration과 easing을 새로 고민하지 않아도 되는 상태입니다.</p></div>
+</section>
+
+<section id="motion-ch6">
+<div class="ch-head"><span class="ch-code">MOTION-06</span><h2>고급 모션과 전환</h2></div>
+<p class="lede">고급 모션의 어려움은 효과 자체가 아니라 상태 전환, unmount, 빠른 반복 입력, route 변경, focus 복귀가 동시에 일어나는 데 있습니다. 이 장은 3D 구현이 아니라 제품 UI의 복잡한 전환을 안정적으로 제어하는 기준을 다룹니다. WebGL·Three.js 구현은 그래픽·3D 파트에서 별도로 다룹니다.</p>
+<table>
+<tr><th>패턴</th><th>사용 시점</th><th>주요 위험</th><th>검증</th></tr>
+<tr><td>Presence transition</td><td>modal, toast, drawer가 사라질 때 exit motion이 필요</td><td>DOM이 너무 빨리 unmount되어 exit·focus restore가 깨짐</td><td>빠른 열기/닫기, Esc, route 이동 중 닫기</td></tr>
+<tr><td>Shared layout</td><td>카드가 상세 화면으로 확장되거나 목록 순서가 바뀜</td><td>layout 측정 비용, scroll 위치, focus 위치 혼란</td><td>큰 목록, 모바일, reduced motion, back navigation</td></tr>
+<tr><td>Gesture motion</td><td>drag, swipe, reorder, pull-to-refresh</td><td>pointer capture, scroll 충돌, keyboard 대체 누락</td><td>mouse/touch/keyboard 각각의 완료 경로</td></tr>
+<tr><td>Route transition</td><td>화면 간 공간 관계를 설명해야 할 때</td><td>loading state, data fetch, scroll restoration과 충돌</td><td>느린 네트워크, back/forward, 중복 navigation</td></tr>
+<tr><td>Interrupted animation</td><td>사용자가 animation 중 반대 행동을 할 수 있음</td><td>중간 상태가 DOM·state와 불일치</td><td>rapid toggle, double click, cancel, retry</td></tr>
+</table>
+<table>
+<tr><th>설계 질문</th><th>좋은 답</th><th>나쁜 신호</th></tr>
+<tr><td>animation 중 사용자 입력은 어떻게 처리하는가?</td><td>interrupt 가능, 중복 요청 방지, 최종 상태 단일화</td><td>animation lock으로 입력이 먹히지 않음</td></tr>
+<tr><td>exit가 끝나기 전에 focus는 어디에 있는가?</td><td>focus trap, restore target, inert 상태가 motion 수명과 동기화</td><td>닫힌 modal 내부에 focus가 남음</td></tr>
+<tr><td>layout animation은 몇 개 요소까지 허용하는가?</td><td>큰 목록은 virtualization 또는 motion 제한</td><td>100개 이상 카드가 동시에 layout 측정</td></tr>
+<tr><td>route transition이 데이터 로딩과 충돌하지 않는가?</td><td>skeleton, pending, scroll restoration, error state가 함께 정의됨</td><td>전환만 있고 느린 API에서 빈 화면</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">ADVANCED MOTION PR GATE</span>전환 목적과 사용자 상태 변화<br>animation 중 interrupt/cancel 정책<br>focus trap, restore, scroll lock 수명주기<br>route/data loading/error와의 결합 지점<br>reduced motion variant<br>rapid toggle과 slow network 검증 결과</div>
+<div class="callout warn"><span class="co-label">STATE FIRST</span><p>고급 모션은 시각 효과보다 상태 기계에 가깝습니다. animation이 끝났는지보다 제품 상태가 정확히 하나로 수렴하는지가 더 중요합니다.</p></div>
+</section>
+
+<section id="motion-ch7">
+<div class="ch-head"><span class="ch-code">MOTION-07</span><h2>Reduced motion</h2></div>
+<p class="lede">Reduced motion은 애니메이션을 전부 없애라는 뜻이 아닙니다. 어지러움, 집중 방해, 전정기관 민감성을 유발할 수 있는 큰 이동, 확대, 회전, 패럴랙스, 자동 재생을 줄이고 상태 의미는 유지하라는 요구입니다.</p>
+<table>
+<tr><th>모션 유형</th><th>기본 상태</th><th>reduced motion 대체</th><th>주의</th></tr>
+<tr><td>Fade</td><td>짧은 opacity 전환</td><td>유지하거나 duration 축소</td><td>상태 전달용이면 완전 제거보다 단순화가 낫다</td></tr>
+<tr><td>Slide/translate</td><td>8-24px 이동</td><td>이동 제거, fade 또는 즉시 표시</td><td>drawer 방향성은 icon/위치 구조로 보완</td></tr>
+<tr><td>Scale/zoom</td><td>modal, image, hero 강조</td><td>scale 제거, opacity만 사용</td><td>큰 zoom은 특히 민감할 수 있음</td></tr>
+<tr><td>Parallax</td><td>scroll 위치에 따른 배경/레이어 이동</td><td>정적 배치</td><td>scroll-linked motion은 기본적으로 보수적으로 사용</td></tr>
+<tr><td>Loop</td><td>loading, illustration, background</td><td>정지 프레임, progress text, 수동 재생</td><td>필수 loading은 텍스트 상태를 함께 제공</td></tr>
+<tr><td>3D camera</td><td>자동 회전, orbit, fly-through</td><td>정적 camera, 사용자가 직접 조작할 때만 이동</td><td>자동 재생을 멈춰도 조작 가능해야 함</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">REDUCED MOTION CSS 예시</span>@media (prefers-reduced-motion: reduce) {<br>&nbsp;&nbsp;*, *::before, *::after {<br>&nbsp;&nbsp;&nbsp;&nbsp;animation-duration: 1ms !important;<br>&nbsp;&nbsp;&nbsp;&nbsp;animation-iteration-count: 1 !important;<br>&nbsp;&nbsp;&nbsp;&nbsp;scroll-behavior: auto !important;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;.motion-slide, .motion-parallax, .motion-spin {<br>&nbsp;&nbsp;&nbsp;&nbsp;transform: none !important;<br>&nbsp;&nbsp;}<br>}</div>
+<table>
+<tr><th>제품 요구</th><th>잘못된 대응</th><th>좋은 대응</th></tr>
+<tr><td>로딩 중임을 알려야 함</td><td>무한 shimmer만 제공</td><td>정적 skeleton + “불러오는 중” 상태 텍스트 + timeout 처리</td></tr>
+<tr><td>새 항목 위치를 알려야 함</td><td>긴 slide-in을 그대로 유지</td><td>새 항목 배지, focus 이동, 짧은 highlight</td></tr>
+<tr><td>오류 필드를 강조해야 함</td><td>shake 애니메이션만 사용</td><td>오류 텍스트, aria-invalid, focus, 색과 아이콘 병행</td></tr>
+<tr><td>페이지 전환 감각이 필요</td><td>큰 zoom transition</td><td>즉시 전환 또는 아주 짧은 fade, heading/focus 업데이트</td></tr>
+</table>
+<div class="callout risk"><span class="co-label">ACCESSIBILITY</span><p>모션을 끄는 설정은 사용자 선호가 아니라 접근성 요구일 수 있습니다. “우리 브랜드 경험에 필요하다”는 이유로 무시하면 안 됩니다. 필수 의미는 모션이 아니라 DOM, 텍스트, focus, ARIA 상태로 전달합니다.</p></div>
+</section>
+
+<section id="motion-ch8">
+<div class="ch-head"><span class="ch-code">MOTION-08</span><h2>모션 QA와 회귀 방지</h2></div>
+<p class="lede">모션 QA는 눈으로 예쁜지 보는 절차가 아닙니다. 빠른 클릭, 느린 기기, reduced motion, 키보드, 라우트 전환, 네트워크 지연, unmount 같은 실제 실패 조건에서 상태가 깨지지 않는지 확인하는 절차입니다.</p>
+<table>
+<tr><th>QA 항목</th><th>테스트 방법</th><th>실패 신호</th><th>수정 방향</th></tr>
+<tr><td>Rapid interaction</td><td>open/close, hover, click을 빠르게 10회 반복</td><td>중간 상태 고착, 중복 DOM, backdrop만 남음</td><td>animation cancel, finite state machine, cleanup</td></tr>
+<tr><td>Unmount</td><td>애니메이션 중 route 이동, conditional render 제거</td><td>console error, setState on unmounted, flicker</td><td>cleanup, presence boundary, abort signal</td></tr>
+<tr><td>Keyboard</td><td>Tab, Enter, Space, Escape만으로 조작</td><td>시각 상태와 focus 상태 불일치</td><td>focus management와 motion lifecycle 통합</td></tr>
+<tr><td>Reduced motion</td><td>OS 설정 변경 후 핵심 flow 수행</td><td>패럴랙스/루프/zoom이 계속 실행</td><td>media query, JS hook, library reduced config</td></tr>
+<tr><td>Performance</td><td>CPU throttling, Performance trace, FPS 확인</td><td>long task, forced reflow, frame drop</td><td>transform/opacity 전환, read/write batching, DOM 수 축소</td></tr>
+<tr><td>Visual regression</td><td>시작, 중간, 완료 상태 screenshot</td><td>텍스트 겹침, clipping, z-index 오류</td><td>stable dimensions, overflow, stacking context 정리</td></tr>
+</table>
+<table>
+<tr><th>시나리오</th><th>체크리스트</th></tr>
+<tr><td>Modal</td><td>열릴 때 focus 이동, 닫힐 때 trigger focus 복귀, exit animation 중 중복 submit 불가, Escape 동작, reduced motion에서 즉시 또는 fade만</td></tr>
+<tr><td>Accordion</td><td>content height 변화, 빠른 토글, 내부 focus 요소, screen reader expanded 상태, 긴 콘텐츠에서 scroll jump 없음</td></tr>
+<tr><td>Toast</td><td>자동 소멸 타이머, hover/focus pause, action button 접근성, route 이동 후 cleanup, 오류 toast는 충분히 지속</td></tr>
+<tr><td>Drag/Reorder</td><td>pointer와 keyboard 대체, drop 실패 복구, 큰 목록 성능, reduced motion에서 위치 변화 이해 가능</td></tr>
+<tr><td>3D Canvas</td><td>빈 화면 fallback, asset load 실패, canvas focus 경계, pause on hidden, battery/thermal 영향, 텍스트 대체 정보</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION PR EVIDENCE</span>목적: 이 모션이 설명하는 상태 변화<br>범위: 영향을 받는 컴포넌트와 route<br>토큰: 사용한 duration/easing/distance<br>접근성: reduced motion, keyboard, focus 결과<br>성능: low-end CPU trace 또는 frame 확인<br>실패 테스트: rapid toggle, unmount, network delay 결과</div>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>Composite</b><span>rendering pipeline</span></div><div class="g-def">이미 그려진 레이어를 합성하는 단계입니다. <code>transform</code>과 <code>opacity</code>는 layout/paint보다 비용이 낮은 경우가 많지만 무제한은 아닙니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>FLIP</b><span>First · Last · Invert · Play</span></div><div class="g-def">layout 변화 전후 위치를 측정하고 transform으로 차이를 보간하는 기법입니다. 목록 재배치와 shared layout에 자주 쓰입니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>Presence</b><span>exit lifecycle</span></div><div class="g-def">React에서 컴포넌트가 unmount되기 전 exit 애니메이션을 끝낼 수 있게 DOM을 잠시 유지하는 패턴입니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>Spring</b><span>physics motion</span></div><div class="g-def">duration 대신 stiffness, damping 같은 물리 파라미터로 움직임을 정의합니다. 자연스럽지만 튜닝 기준이 없으면 화면마다 느낌이 달라집니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>Reduced motion</b><span>accessibility preference</span></div><div class="g-def">사용자가 큰 이동, 회전, 반복, 패럴랙스 같은 모션을 줄이도록 OS나 브라우저에 표현한 선호입니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>Long task</b><span>50ms+</span></div><div class="g-def">main thread를 50ms 이상 점유하는 작업입니다. 애니메이션 중 long task가 생기면 입력과 paint가 밀립니다.</div></div>
+</div>
+<div class="callout gm"><span class="co-label">DONE CRITERIA</span><p>모션 작업은 구현 화면이 움직일 때 끝나는 것이 아닙니다. 토큰 일치, reduced motion, keyboard/focus, cleanup, performance trace, rapid interaction 테스트를 통과해야 완료로 봅니다.</p></div>
+</section>
+
+<section id="motion-ch9">
+<div class="ch-head"><span class="ch-code">MOTION-09</span><h2>FLIP과 layout animation</h2></div>
+<p class="lede">수준급 모션 구현에서 FLIP은 필수 도구입니다. DOM layout 자체를 매 프레임 움직이는 대신, 변화 전후 위치를 측정하고 transform으로 차이를 보간하면 layout 비용을 줄이면서 사용자가 위치 변화를 이해할 수 있습니다.</p>
+<table>
+<tr><th>단계</th><th>무엇을 하는가</th><th>실무 주의</th><th>실패 모드</th></tr>
+<tr><td>First</td><td>상태 변경 전 요소의 bounding box를 저장</td><td>scroll offset, transform parent, writing mode를 고려</td><td>측정 시점이 늦어 이전 위치를 잃음</td></tr>
+<tr><td>Last</td><td>상태 변경 후 새 bounding box를 측정</td><td>DOM update와 layout flush 비용을 한 번으로 제한</td><td>read/write가 섞여 forced reflow 반복</td></tr>
+<tr><td>Invert</td><td>이전 위치처럼 보이도록 translate/scale을 역적용</td><td>scale은 텍스트/테두리 왜곡을 만들 수 있어 주의</td><td>hit area와 시각 위치가 어긋남</td></tr>
+<tr><td>Play</td><td>transform을 0으로 전환해 새 위치로 이동</td><td>interrupt, reduced motion, unmount cleanup을 포함</td><td>빠른 정렬 반복에서 중간 상태가 고착</td></tr>
+</table>
+<table>
+<tr><th>사용처</th><th>좋은 후보</th><th>피할 후보</th><th>검증</th></tr>
+<tr><td>List reorder</td><td>카드 수가 제한되고 위치 변화가 핵심 정보</td><td>수백 개 이상이 동시에 움직이는 목록</td><td>100개, 500개 데이터에서 frame budget 비교</td></tr>
+<tr><td>Shared element</td><td>카드에서 상세로 확장되는 공간 관계</td><td>데이터 로딩으로 layout이 불안정한 route</td><td>slow network, back navigation, reduced motion</td></tr>
+<tr><td>Accordion</td><td>내용 높이가 동적이고 주변 layout 변화가 중요</td><td>단순 show/hide면 opacity/height token으로 충분</td><td>긴 콘텐츠, 내부 focus, rapid toggle</td></tr>
+<tr><td>Grid filtering</td><td>필터 후 남은 항목의 위치를 사용자가 추적해야 함</td><td>결과가 완전히 새 데이터이고 추적 의미가 없음</td><td>검색 입력 중 연속 필터와 virtual list 충돌</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">FLIP REVIEW PACKET</span>측정 대상과 key 안정성<br>First/Last 측정 시점과 layout flush 횟수<br>read/write batching 방식<br>interrupt/cancel 정책<br>reduced motion 대체 동작<br>large list에서 layout 측정 비용과 frame trace</div>
+<div class="callout warn"><span class="co-label">LAYOUT ANIMATION</span><p>layout animation은 예쁜 전환이 아니라 사용자가 “무엇이 어디로 이동했는지” 잃지 않게 하는 장치입니다. 위치 추적 가치가 없거나 데이터가 너무 많으면 motion보다 즉시 전환, grouping, summary가 더 낫습니다.</p></div>
+</section>
+
+<section id="motion-ch10">
+<div class="ch-head"><span class="ch-code">MOTION-10</span><h2>Spring과 물리 모션</h2></div>
+<p class="lede">Spring 모션은 duration 기반 easing보다 자연스럽지만, 파라미터 의미를 모르면 화면마다 다른 감각과 긴 tail을 만들기 쉽습니다. Spring은 drag, snap, sheet, carousel처럼 사용자의 힘과 해제가 이어지는 인터랙션에 특히 유효합니다.</p>
+<table>
+<tr><th>파라미터</th><th>의미</th><th>올리면</th><th>실무 기준</th></tr>
+<tr><td>Stiffness</td><td>목표 위치로 끌어당기는 힘</td><td>더 빠르고 단단하게 움직임</td><td>sheet, snap, drag release에서 반응성 조정</td></tr>
+<tr><td>Damping</td><td>진동을 줄이는 감쇠</td><td>overshoot와 튐이 줄어듦</td><td>업무 UI는 대체로 과한 bounce를 피함</td></tr>
+<tr><td>Mass</td><td>물체의 무게감</td><td>반응이 느리고 관성이 커짐</td><td>브랜드/게임 외에는 과장하지 않음</td></tr>
+<tr><td>Velocity</td><td>사용자 release 시점의 속도</td><td>사용자 gesture와 결과가 이어짐</td><td>drag end, flick, swipe dismiss에 반영</td></tr>
+<tr><td>Rest threshold</td><td>멈춤으로 간주하는 기준</td><td>너무 낮으면 animation tail이 길어짐</td><td>작업 UI는 빨리 안정 상태로 수렴해야 함</td></tr>
+</table>
+<table>
+<tr><th>패턴</th><th>추천 모션</th><th>이유</th><th>주의</th></tr>
+<tr><td>Bottom sheet</td><td>spring + snap point</td><td>손가락으로 끌고 놓는 감각과 맞음</td><td>scrollable content와 drag handle 경계 분리</td></tr>
+<tr><td>Swipe dismiss</td><td>velocity 기반 threshold</td><td>거리뿐 아니라 의도를 반영</td><td>실수 dismiss는 undo 또는 confirm 제공</td></tr>
+<tr><td>Carousel</td><td>spring 또는 inertia + clamp</td><td>trackpad/touch 조작과 자연스럽게 연결</td><td>focus order, screen reader, reduced motion 대체</td></tr>
+<tr><td>Enterprise form</td><td>duration token</td><td>예측 가능성과 업무 속도가 중요</td><td>spring bounce는 대부분 과함</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">SPRING TUNING RULE</span>업무 UI: overshoot 최소, 빠른 수렴, 다음 입력 방해 금지<br>Gesture UI: release velocity 반영, snap point 명확화<br>Brand UI: signature spring은 한두 surface로 제한<br>Reduced motion: spring 이동 제거 또는 duration token 기반 fade<br>QA: rapid drag, cancel, route leave, low-end trace 필수</div>
+<div class="callout risk"><span class="co-label">BOUNCE DEBT</span><p>Spring은 잘 쓰면 손맛을 만들지만, 모든 컴포넌트에 bounce를 넣으면 제품이 느리고 가볍게 느껴집니다. 수준급 구현은 자연스러운 움직임보다 “사용자 의도와 최종 상태가 정확히 연결되는가”를 먼저 봅니다.</p></div>
+</section>
+
+<section id="motion-ch11">
+<div class="ch-head"><span class="ch-code">MOTION-11</span><h2>Compositor 진단</h2></div>
+<p class="lede">모션 성능은 CSS 속성 이름만 보고 판단하면 안 됩니다. 브라우저는 style, layout, paint, composite 단계로 화면을 갱신하며, 같은 transform이라도 layer 수, texture 크기, filter, clip, backdrop 효과에 따라 비용이 달라집니다.</p>
+<table>
+<tr><th>렌더링 단계</th><th>주요 비용</th><th>모션에서 보는 신호</th><th>도구</th></tr>
+<tr><td>Style</td><td>selector matching, style recalculation</td><td>class 변경이 큰 subtree에 전파</td><td>Performance, Elements changes</td></tr>
+<tr><td>Layout</td><td>box size와 위치 계산</td><td>height/top/left, DOM read/write 반복</td><td>Performance forced reflow, Layout Shift</td></tr>
+<tr><td>Paint</td><td>픽셀 그리기</td><td>box-shadow, filter, clip-path, large background</td><td>Paint flashing, Performance paint</td></tr>
+<tr><td>Composite</td><td>레이어 합성</td><td>transform/opacity, layer promotion, GPU memory</td><td>Layers, Rendering FPS meter</td></tr>
+</table>
+<table>
+<tr><th>기법</th><th>좋은 사용</th><th>위험</th><th>리뷰 기준</th></tr>
+<tr><td><code>will-change</code></td><td>짧은 시간 뒤 실제로 움직일 요소에 제한적으로 사용</td><td>상시 적용하면 layer와 GPU memory 증가</td><td>hover/drag 시작 전후로 수명 제한</td></tr>
+<tr><td>Layer promotion</td><td>큰 repaint를 줄이고 transform 전환 안정화</td><td>레이어가 너무 많으면 composite 비용 증가</td><td>Layers 패널에서 layer count와 크기 확인</td></tr>
+<tr><td>Containment</td><td>영향 범위를 줄이는 <code>contain</code>, <code>content-visibility</code></td><td>접근성, find-in-page, 측정 시점과 충돌 가능</td><td>긴 목록과 offscreen content에서만 신중히 사용</td></tr>
+<tr><td>Read/write batching</td><td>layout read를 모으고 write를 rAF에 배치</td><td>React state와 섞이면 반복 렌더 유발</td><td>forced reflow가 trace에 남지 않는지 확인</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION TRACE ROUTINE</span>1. CPU 4x slowdown에서 interaction을 녹화한다<br>2. Main thread에서 long task, forced reflow, paint burst를 찾는다<br>3. Frames track에서 16.7ms 또는 33ms 초과 frame을 표시한다<br>4. Layers 패널에서 예상 밖 layer와 큰 texture를 확인한다<br>5. 변경 전후 trace를 같은 device와 같은 데이터로 비교한다<br>6. PR에는 감상이 아니라 trace, screenshot, 수치를 첨부한다</div>
+<div class="callout gm"><span class="co-label">SENIOR SIGNAL</span><p>수준급 인터랙티브 개발자는 “transform이라 괜찮다”에서 멈추지 않습니다. 어떤 단계가 병목인지, 왜 그 비용이 생겼는지, 어떤 trade-off로 줄였는지를 trace로 설명합니다.</p></div>
+</section>
+
+<section id="motion-ch12">
+<div class="ch-head"><span class="ch-code">MOTION-12</span><h2>모션 실전 로드맵</h2></div>
+<p class="lede">모션 실력은 라이브러리 API보다 문제 유형별 구현 경험에서 생깁니다. 아래 과제는 CSS token에서 시작해 FLIP, spring, gesture, route transition, 진단 자동화로 이어지는 성장 경로입니다.</p>
+<table>
+<tr><th>레벨</th><th>과제</th><th>핵심 역량</th><th>완료 증거</th></tr>
+<tr><td>1</td><td>Button, Toast, Dialog motion token화</td><td>duration/easing/distance contract</td><td>토큰 밖 임의 값 제거, reduced motion snapshot</td></tr>
+<tr><td>2</td><td>Accordion measured animation</td><td>layout measurement, rapid toggle, cleanup</td><td>forced reflow 없는 trace와 keyboard 테스트</td></tr>
+<tr><td>3</td><td>FLIP list reorder</td><td>First/Last 측정, invert/play, interrupt</td><td>100개 항목 trace, reduced motion 대체</td></tr>
+<tr><td>4</td><td>Bottom sheet spring gesture</td><td>velocity, snap point, pointer capture</td><td>touch/trackpad/keyboard 동등 플로우</td></tr>
+<tr><td>5</td><td>Route transition with data loading</td><td>presence, skeleton, scroll restoration, focus</td><td>slow network와 back navigation 테스트</td></tr>
+<tr><td>6</td><td>Motion regression harness</td><td>visual state capture, trace budget, CI evidence</td><td>Playwright screenshot, Performance trace artifact</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION PORTFOLIO PACKET</span>Motion system token table<br>컴포넌트별 motion contract<br>FLIP 또는 spring 구현 설명<br>reduced motion와 keyboard/focus 증거<br>Performance trace before/after<br>rapid toggle, unmount, route transition 회귀 테스트</div>
+</section>
+
+<section id="motion-ch13">
+<div class="ch-head"><span class="ch-code">MOTION-13</span><h2>구현 패턴 예시</h2></div>
+<p class="lede">모션 구현의 수준은 효과의 화려함보다 수명주기 관리에서 갈립니다. 측정, 적용, 중단, cleanup, reduced motion, 테스트 증거가 한 흐름에 있어야 운영 가능한 애니메이션입니다.</p>
+<table>
+<tr><th>패턴</th><th>적용 대상</th><th>핵심 구현</th><th>테스트</th></tr>
+<tr><td>Measured transition</td><td>accordion, dynamic panel</td><td>height 측정 → pixel height 전환 → auto 복귀</td><td>rapid toggle, 내부 focus, content resize</td></tr>
+<tr><td>FLIP helper</td><td>reorder, grid filter, shared element</td><td>First/Last DOMRect 측정 후 transform invert</td><td>scroll offset, key stability, interrupt</td></tr>
+<tr><td>Presence boundary</td><td>modal, drawer, toast exit</td><td>exit 완료 전 unmount 지연</td><td>route leave, Escape, backdrop click</td></tr>
+<tr><td>Animation controller</td><td>WAAPI, rAF, spring wrapper</td><td>play/cancel/finish 상태를 제품 상태와 연결</td><td>unmount cleanup, reduced motion, stale animation</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">FLIP HELPER 의사코드</span>const first = new Map(items.map(item =&gt; [item.id, item.el.getBoundingClientRect()]));<br>applyStateChange();<br>requestAnimationFrame(() =&gt; {<br>&nbsp;&nbsp;for (const item of items) {<br>&nbsp;&nbsp;&nbsp;&nbsp;const last = item.el.getBoundingClientRect();<br>&nbsp;&nbsp;&nbsp;&nbsp;const prev = first.get(item.id);<br>&nbsp;&nbsp;&nbsp;&nbsp;const dx = prev.left - last.left;<br>&nbsp;&nbsp;&nbsp;&nbsp;const dy = prev.top - last.top;<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el.animate([<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ transform: `translate(${dx}px, ${dy}px)` },<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ transform: "translate(0, 0)" }<br>&nbsp;&nbsp;&nbsp;&nbsp;], { duration: 180, easing: "cubic-bezier(0.2, 0, 0, 1)" });<br>&nbsp;&nbsp;}<br>});</div>
+<table>
+<tr><th>FLIP 구현 주의</th><th>왜 중요한가</th><th>나쁜 증상</th></tr>
+<tr><td>측정 read와 DOM write를 분리</td><td>forced reflow 반복을 막음</td><td>목록이 커질수록 frame drop 증가</td></tr>
+<tr><td>key가 안정적인 항목만 animate</td><td>이전/다음 위치를 정확히 매칭</td><td>필터 후 엉뚱한 카드가 날아감</td></tr>
+<tr><td>scroll container offset을 고려</td><td>보이는 위치와 DOMRect 차이를 보정</td><td>스크롤된 목록에서 이동 방향이 틀림</td></tr>
+<tr><td>reduced motion에서는 위치 전환을 제거</td><td>큰 이동을 피하면서 상태 의미를 유지</td><td>모션 축소 설정에서도 카드가 날아다님</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">ANIMATION CONTROLLER CONTRACT</span>start(): 현재 animation을 cancel하고 새 animation 시작<br>cancel(): 시각 상태와 제품 상태를 마지막 확정 상태로 복구<br>finish(): DOM style을 최종 상태로 고정하고 임시 style 제거<br>reduced(): motion off 또는 단순 fade 경로 제공<br>cleanup(): unmount, route leave, hidden tab에서 listener와 animation 제거<br>observe(): duration, cancelled, interrupted, long frame을 측정</div>
+<div class="callout warn">
+<span class="co-label">CODE REVIEW RULE</span>
+<p>모션 PR에서 가장 먼저 볼 것은 easing 값이 아니라 cleanup입니다. 빠른 토글, route 이동, unmount, reduced motion에서 남는 animation이나 inline style이 없어야 합니다.</p>
+</div>
+</section>
+
+<section id="motion-ch14">
+<div class="ch-head"><span class="ch-code">MOTION-14</span><h2>Hook과 회귀 자동화</h2></div>
+<p class="lede">모션은 눈으로 보기 좋아도 회귀가 숨어 있기 쉽습니다. reduced motion, unmount cleanup, rapid toggle, visual state capture, trace budget을 자동화해야 팀 규모가 커져도 품질이 유지됩니다.</p>
+<table>
+<tr><th>Hook/Utility</th><th>책임</th><th>주의</th><th>검증</th></tr>
+<tr><td><code>useReducedMotion</code></td><td>OS motion preference를 읽고 JS animation 분기</td><td>초기 hydration mismatch와 media query listener cleanup</td><td>OS 설정 변경 후 즉시 반영</td></tr>
+<tr><td><code>usePresence</code></td><td>exit animation 완료 전 DOM 유지</td><td>focus trap, scroll lock, inert 수명과 동기화</td><td>Escape, route leave, rapid close</td></tr>
+<tr><td><code>useFlipList</code></td><td>목록 위치 변화 측정과 transform 보간</td><td>key 안정성, scroll offset, read/write batching</td><td>대량 목록 frame budget</td></tr>
+<tr><td><code>useAnimationController</code></td><td>WAAPI/rAF animation start/cancel/finish 통합</td><td>inline style 정리와 stale animation 무시</td><td>unmount와 reduced motion</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">useReducedMotion 예시</span>function useReducedMotion() {<br>&nbsp;&nbsp;const [reduce, setReduce] = useState(false);<br>&nbsp;&nbsp;useEffect(() =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;const query = window.matchMedia("(prefers-reduced-motion: reduce)");<br>&nbsp;&nbsp;&nbsp;&nbsp;setReduce(query.matches);<br>&nbsp;&nbsp;&nbsp;&nbsp;const onChange = () =&gt; setReduce(query.matches);<br>&nbsp;&nbsp;&nbsp;&nbsp;query.addEventListener("change", onChange);<br>&nbsp;&nbsp;&nbsp;&nbsp;return () =&gt; query.removeEventListener("change", onChange);<br>&nbsp;&nbsp;}, []);<br>&nbsp;&nbsp;return reduce;<br>}</div>
+<table>
+<tr><th>자동화 항목</th><th>방법</th><th>통과 기준</th></tr>
+<tr><td>Reduced motion snapshot</td><td>브라우저 context에 reduced motion emulate</td><td>slide/scale/parallax 제거, 상태 의미 유지</td></tr>
+<tr><td>Rapid toggle</td><td>open/close 10회 반복</td><td>backdrop, inline style, duplicate DOM 없음</td></tr>
+<tr><td>Visual states</td><td>start, active, exit, complete screenshot</td><td>텍스트 겹침, clipping, z-index 회귀 없음</td></tr>
+<tr><td>Trace budget</td><td>CPU slowdown에서 interaction trace 저장</td><td>long task와 forced reflow가 예산 내</td></tr>
+<tr><td>Unmount cleanup</td><td>animation 중 route 이동</td><td>console error, setState after unmount 없음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">PLAYWRIGHT MOTION REGRESSION</span>await page.emulateMedia({ reducedMotion: "reduce" });<br>await page.getByRole("button", { name: "열기" }).click();<br>await expect(page.locator("[data-motion='slide']")).not.toHaveCSS("transform", /translate/);<br><br>for (let i = 0; i &lt; 10; i++) {<br>&nbsp;&nbsp;await page.getByRole("button", { name: "토글" }).click();<br>}<br>await expect(page.locator("[data-backdrop]")).toHaveCount(0);</div>
+<div class="callout warn">
+<span class="co-label">AUTOMATION RULE</span>
+<p>모션 회귀는 “눈으로 보면 알 수 있다”가 통하지 않습니다. 적어도 reduced motion, rapid toggle, unmount cleanup, 핵심 상태 screenshot은 자동화해야 리뷰어가 감이 아니라 증거로 승인할 수 있습니다.</p>
+</div>
+</section>
+
+<section id="motion-ch15">
+<div class="ch-head"><span class="ch-code">MOTION-15</span><h2>근거 기반 모션 예산</h2></div>
+<p class="lede">모션은 감각 품질이지만 운영 기준은 숫자로 관리해야 합니다. duration, frame budget, input delay, layer 수, reduced motion 경로를 함께 보지 않으면 “보기에는 부드러운” 효과가 실제로는 입력 지연, 배터리 소모, 접근성 저하를 만들 수 있습니다.</p>
+<table>
+<tr><th>항목</th><th>실질 숫자</th><th>왜 중요한가</th><th>부수효과</th><th>검증 방법</th></tr>
+<tr><td>입력 피드백 시작</td><td>100ms 안에 pressed/loading/optimistic feedback 시작</td><td>사용자는 입력 직후 시스템이 반응했는지를 먼저 확인한다</td><td>클릭 후 변화가 없으면 중복 클릭, submit 중복, “멈춤” 오해가 발생한다</td><td>click timestamp와 first visual feedback mark 차이 측정</td></tr>
+<tr><td>Core Web Vitals 반응성</td><td>INP &le; 200ms good, 200-500ms 개선 필요, &gt; 500ms poor</td><td>모션이 event handler, layout, paint를 막으면 애니메이션 자체가 INP 악화 원인이 된다</td><td>화려한 entrance가 실제 action 결과 표시를 늦추고, 빠른 사용자는 다음 행동을 놓친다</td><td>route/action별 INP p75/p95와 animation active 여부 비교</td></tr>
+<tr><td>프레임 예산</td><td>60fps 목표는 frame당 16.7ms, 30fps 목표는 33.3ms</td><td>이 시간 안에 JS, style, layout, paint, composite가 모두 끝나야 한다</td><td>JS가 16.7ms를 거의 다 쓰면 브라우저가 그릴 시간이 없어 long frame과 jank가 생긴다</td><td>Performance trace에서 long animation frame, forced reflow, script time 확인</td></tr>
+<tr><td>전환 duration</td><td>micro feedback 80-120ms, panel 160-240ms, 목록 재배치 180-300ms</td><td>짧은 변화는 즉시성, 구조 변화는 이해 시간을 줘야 한다</td><td>모든 전환을 300ms 이상으로 맞추면 제품이 느리게 느껴지고 power user의 흐름을 끊는다</td><td>핵심 flow 총 소요 시간과 animation wait time 비율 측정</td></tr>
+<tr><td>Layer promotion</td><td><code>will-change</code>는 짧은 수명으로 필요한 요소에만 적용</td><td>compositor 친화 속성도 layer가 늘면 GPU memory와 composite 비용을 만든다</td><td>상시 <code>will-change</code>, 큰 blur, 대형 fixed layer는 저사양 기기에서 메모리 압박과 battery drain을 만든다</td><td>DevTools Layers, memory timeline, low-end device trace 확인</td></tr>
+<tr><td>Reduced motion</td><td>비필수 slide, scale, parallax는 reduce에서 제거·축소·대체</td><td>사용자가 명시적으로 움직임 최소화를 요청한 환경이다</td><td>motion을 상태 전달의 유일한 채널로 쓰면 reduced mode에서 의미가 사라진다</td><td>reduced motion screenshot, keyboard path, status text 동시 검증</td></tr>
+</table>
+<p class="lede">근거 출처는 web.dev의 <a href="https://web.dev/articles/inp">INP 문서</a>와 MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a> 문서를 기준으로 삼습니다. 16.7ms와 33.3ms는 각각 60fps, 30fps 목표에서 <code>1000 / fps</code>로 계산한 frame budget입니다.</p>
+<div class="serial-card"><span class="sc-label">MOTION DECISION RECORD</span>효과 이름: drawer-open<br>목적: 공간 관계 설명 / 상태 피드백 / 브랜드 감각 중 하나로 분류<br>예산: duration 180ms, no layout animation, no long frame over 50ms<br>측정: INP p75/p95, first feedback delay, dropped frame, cancellation rate<br>부수효과: focus 이동 지연, scroll lock 누락, backdrop 중복, reduced motion 의미 손실<br>결정: 유지하려면 측정값과 reduced path가 함께 통과해야 함</div>
+<div class="callout warn">
+<span class="co-label">REVIEW STANDARD</span>
+<p>모션 PR은 duration table만으로 승인하지 않습니다. 입력 피드백이 100ms 안에 시작되는지, INP 예산을 침범하지 않는지, layer promotion이 메모리 비용을 만들지 않는지, reduced motion에서 같은 의미가 남는지까지 확인해야 실무 품질입니다.</p>
+</div>
+</section>
+
+<section id="motion-ch16">
+<div class="ch-head"><span class="ch-code">MOTION-16</span><h2>자주 봉착하는 문제와 해결</h2></div>
+<p class="lede">모션 버그는 “애니메이션이 이상하다”로 보이지만 실제 원인은 layout 속성, animation 수명, focus trap, layer 비용, reduced motion 누락인 경우가 많습니다. 해결은 easing을 바꾸는 것이 아니라 어떤 속성을 언제 읽고 쓰며, 취소와 종료를 어떻게 처리하는지 명확히 하는 것입니다.</p>
+<table>
+<tr><th>문제</th><th>대표 증상</th><th>주요 원인</th><th>해결법</th><th>검증</th></tr>
+<tr><td>Animation jank</td><td>열고 닫을 때 끊기거나 한 프레임 멈춤</td><td><code>height</code>, <code>top</code>, <code>left</code> 같은 layout 속성을 매 프레임 변경</td><td><code>transform</code>, <code>opacity</code> 중심으로 바꾸고, FLIP으로 layout read/write를 분리</td><td>Performance trace에서 forced reflow와 long frame 확인</td></tr>
+<tr><td><code>transition: all</code> 부작용</td><td>의도하지 않은 색, 크기, 위치가 같이 움직임</td><td>미래에 추가된 CSS property까지 전환 대상에 포함됨</td><td>전환 property를 명시하고, component token으로 duration/easing 제한</td><td>hover, disabled, error, loading 상태 snapshot 비교</td></tr>
+<tr><td>Rapid toggle 잔상</td><td>modal backdrop이 남거나 panel이 반쯤 열린 채 멈춤</td><td>이전 animation cancel, finish, inline style cleanup이 없음</td><td>animation controller로 start/cancel/finish를 단일화하고 stale animation을 무시</td><td>open/close 10회 반복, route leave, unmount 중 console error 확인</td></tr>
+<tr><td>Exit animation과 접근성 충돌</td><td>닫힌 dialog가 focus trap을 계속 잡거나 screen reader에 남음</td><td>시각 exit와 DOM 제거, inert, aria-hidden, scroll lock 수명이 분리됨</td><td>presence layer와 accessibility state를 같은 state machine에서 관리</td><td>Escape close 뒤 Tab 이동, screen reader tree, scroll lock 해제 확인</td></tr>
+<tr><td>Reduced motion 누락</td><td>OS 설정을 켜도 parallax, scale, slide가 계속 동작</td><td>CSS만 처리하고 JS animation, library transition, scroll effect는 분기하지 않음</td><td>motion token에 reduce variant를 두고 CSS/JS/library 공통 hook으로 적용</td><td>emulate reduced motion에서 상태 의미와 layout이 유지되는지 확인</td></tr>
+<tr><td>Layer 과다와 메모리 압박</td><td>처음엔 부드럽지만 오래 쓰면 mobile에서 느려짐</td><td><code>will-change</code>, blur, fixed overlay, large transform layer를 상시 유지</td><td>animation 직전만 promotion하고 종료 후 제거, 큰 blur와 full-screen filter 제한</td><td>Layers panel, memory timeline, low-end device 장시간 세션 측정</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">MOTION DEBUG ORDER</span>1. 움직이는 CSS property가 layout, paint, composite 중 어디에 걸리는지 분류한다<br>2. animation 시작 전 layout read와 style write가 섞였는지 확인한다<br>3. cancel, interrupt, rapid toggle, unmount 경로를 먼저 재현한다<br>4. focus trap, scroll lock, inert, aria-hidden의 수명이 animation과 맞는지 본다<br>5. reduced motion과 low-end tier에서 같은 의미가 남는지 확인한다</div>
+<div class="callout warn">
+<span class="co-label">PRACTICAL FIX</span>
+<p>모션 문제를 duration만 줄여서 해결하면 원인은 남습니다. 끊김은 속성 선택과 main thread 점유 문제이고, 잔상은 animation lifecycle 문제이며, 접근성 충돌은 DOM 수명과 상태 machine 문제입니다.</p>
+</div>
+</section>
+
+<footer>FRONTEND ANIMATION MOTION HANDBOOK · V1 · 2026-06<br>PRINCIPLE : MOTION EXPLAINS STATE, SPACE, AND CONSEQUENCE</footer>
+
+<section id="doc-graphics">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>그래픽·3D·WebGL</h2></div>
+</section>
+
+<header class="hero">
+  <div class="hero-serial"><span>DOC : FE-GRAPHICS-3D-V1</span><span>SCOPE : SVG · CANVAS · WEBGL · THREE.JS · QA</span><span>LANG : KO</span></div>
+  <h1>프론트엔드 인터랙션<br>애니메이션과 3D</h1>
+  <p class="hero-sub">그래픽 기술 선택은 “멋있게 보이는가”가 아니라 <strong>상호작용 밀도, 픽셀 수, 접근성, 성능 예산, 실패 시 대체 경험</strong>을 동시에 만족하는지로 판단합니다.</p>
+  <div class="hero-meta">AUDIENCE : Frontend · Product UI · Creative Engineering · UPDATED 2026-06</div>
+</header>
+
+<section id="graphics-ch1">
+<div class="ch-head"><span class="ch-code">GFX-01</span><h2>SVG·Canvas·WebGL 선택</h2></div>
+<p class="lede">SVG, Canvas, WebGL은 렌더링 단위와 책임이 다릅니다. SVG는 DOM 기반 벡터, Canvas는 명령형 2D bitmap, WebGL은 GPU 파이프라인입니다. 기술 선택은 나중에 바꾸기 어렵기 때문에 “현재 구현 편의”보다 데이터 크기, hit testing, 접근성, 애니메이션 빈도, 메모리 상한으로 결정합니다.</p>
+<table>
+<tr><th>기술</th><th>가장 잘 맞는 경우</th><th>강점</th><th>실패 모드</th></tr>
+<tr><td>CSS animation</td><td>상태 전환, panel, tooltip, skeleton, transform/opacity 중심 모션</td><td>브라우저 최적화, 접근성·DOM 유지, 구현 비용 낮음</td><td>layout 속성을 매 프레임 바꾸면 reflow와 paint storm 발생</td></tr>
+<tr><td>SVG</td><td>아이콘, 다이어그램, 지도 일부, node 수가 제한된 인터랙티브 벡터</td><td>해상도 독립, DOM event, label 연결, 스타일링 쉬움</td><td>수천 node 이상에서 DOM 비용과 style recalculation 증가</td></tr>
+<tr><td>Canvas 2D</td><td>대량 점·선, 차트, drawing tool, heatmap, 게임형 2D UI</td><td>DOM node 수와 무관하게 픽셀 단위 제어, draw batching 가능</td><td>접근성 tree 없음, hit testing 직접 구현, 고해상도에서 fill-rate 비용 증가</td></tr>
+<tr><td>WebGL</td><td>3D, 많은 sprite/particle, shader 효과, GPU 병렬성이 필요한 화면</td><td>GPU 가속, geometry·texture·shader 제어, 대규모 시각화 가능</td><td>GPU 메모리 누수, context loss, 디버깅 난도, 저사양 fallback 필요</td></tr>
+<tr><td>Three.js</td><td>제품 3D, configurator, scene graph 기반 상호작용</td><td>WebGL 추상화, loader·material·camera·controls 생태계</td><td>추상화 때문에 dispose, draw call, material 수 같은 비용을 놓치기 쉬움</td></tr>
+</table>
+<table>
+<tr><th>판단 질문</th><th>SVG 쪽 신호</th><th>Canvas/WebGL 쪽 신호</th></tr>
+<tr><td>개별 요소가 focus, tooltip, semantic label을 가져야 하는가</td><td>각 요소가 의미 있는 DOM 대상이면 SVG</td><td>픽셀 덩어리이고 별도 DOM overlay로 충분하면 Canvas/WebGL</td></tr>
+<tr><td>화면 요소 수가 얼마나 되는가</td><td>수십~수백 개의 path/node</td><td>수천~수십만 개의 점·선·sprite·triangle</td></tr>
+<tr><td>변경 빈도가 높은가</td><td>가끔 상태 변경, hover, selection</td><td>매 frame 이동, pan/zoom, 물리·shader 애니메이션</td></tr>
+<tr><td>품질 저하 없이 fallback이 가능한가</td><td>정적 SVG 또는 HTML 표로 대체 가능</td><td>정적 이미지, 저해상도 Canvas, 2D viewer, 제품 사진으로 대체 필요</td></tr>
+<tr><td>팀이 디버깅할 수 있는가</td><td>DOM Inspector와 CSS 지식으로 충분</td><td>GPU trace, memory, shader, asset pipeline 운영 역량 필요</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">GRAPHICS DECISION GATE</span>1. 상호작용 대상이 semantic DOM이어야 하는지 먼저 결정한다<br>2. 최악 데이터 크기와 화면 픽셀 수를 숫자로 적는다<br>3. 60fps가 필요한 구간과 정적 렌더가 충분한 구간을 나눈다<br>4. 저사양 기기 fallback과 no-WebGL 경로를 먼저 설계한다<br>5. 성능 예산을 통과한 prototype trace가 없으면 기술 선택을 확정하지 않는다</div>
+<div class="callout warn"><span class="co-label">COMMON MISTAKE</span><p>SVG가 “벡터라 가볍다”거나 WebGL이 “GPU라 무조건 빠르다”는 식으로 고르면 실패합니다. DOM node 수, draw call 수, texture 크기, shader 비용, hit testing 방식 중 실제 병목이 어디 생기는지 prototype으로 확인해야 합니다.</p></div>
+</section>
+
+<section id="graphics-ch2">
+<div class="ch-head"><span class="ch-code">GFX-02</span><h2>Canvas 실무 패턴</h2></div>
+<p class="lede">Canvas는 React 컴포넌트처럼 선언적으로 관리되지 않습니다. 한 번 그린 픽셀은 DOM 요소가 아니므로 상태, invalidation, 좌표계, hit testing, 접근성을 직접 설계해야 합니다. 좋은 Canvas 구현은 매 frame 전체를 무작정 다시 그리지 않고, 무엇이 dirty인지 알고 그립니다.</p>
+<table>
+<tr><th>패턴</th><th>쓸 때</th><th>구현 기준</th><th>실패 모드</th></tr>
+<tr><td>Retained model + redraw</td><td>도형·레이어 상태를 JS model로 보관하고 필요 시 다시 그림</td><td>scene model, dirty flag, deterministic draw order</td><td>model과 픽셀 상태가 어긋나 undo/selection이 깨짐</td></tr>
+<tr><td>Dirty rectangle</td><td>일부 영역만 자주 바뀌는 editor, chart cursor</td><td>변경 전/후 bounding box를 합쳐 clear 후 redraw</td><td>그림자·blur·lineWidth 여백을 빼먹어 잔상이 남음</td></tr>
+<tr><td>Layered canvas</td><td>배경, 데이터, hover, selection 갱신 빈도가 다를 때</td><td>정적 layer와 동적 layer 분리, 같은 CSS size 유지</td><td>canvas 여러 장이 memory와 composite 비용을 증가</td></tr>
+<tr><td>OffscreenCanvas / worker</td><td>렌더 계산이나 rasterization이 main thread를 막을 때</td><td>message contract, cancellation, transfer cost 측정</td><td>데이터 직렬화 비용이 계산 절감보다 커짐</td></tr>
+<tr><td>DOM overlay</td><td>tooltip, focus ring, form control, screen reader label이 필요할 때</td><td>좌표 변환, z-index, keyboard focus 순서 정의</td><td>Canvas pan/zoom과 overlay 위치가 drift</td></tr>
+</table>
+<table>
+<tr><th>Canvas 예산 항목</th><th>출발점 예시</th><th>검증 방법</th></tr>
+<tr><td>Frame time</td><td>drag/zoom 중 p95 16.7ms 이하, 저사양은 30fps 목표를 별도 명시</td><td>Performance Frames, requestAnimationFrame delta</td></tr>
+<tr><td>Canvas bitmap 크기</td><td>CSS 1200x800, DPR 2면 실제 2400x1600 = 약 14.6MB RGBA</td><td>width/height 속성과 GPU memory 추정</td></tr>
+<tr><td>Hit testing</td><td>pointermove당 1-2ms 이하, 고빈도 hit은 spatial index 사용</td><td>Performance mark, quadtree/grid index 비교</td></tr>
+<tr><td>Redraw 범위</td><td>cursor/hover는 overlay layer만 redraw</td><td>paint flashing, custom debug bounds</td></tr>
+<tr><td>Resize</td><td>DPR 변경과 container resize에서 bitmap 재할당 1회로 제한</td><td>ResizeObserver 호출 수와 memory spike 확인</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CANVAS DRAW LOOP</span>state 변경을 scene model에 반영<br>dirty region 또는 dirty layer 표시<br>rAF에서 입력 이벤트를 한 번에 소비<br>좌표계를 CSS pixel과 device pixel로 분리<br>clear → draw static cache → draw dynamic objects → draw overlay 순서 유지<br>성능 mark로 draw, hit test, upload 시간을 나눠 기록</div>
+<div class="callout risk"><span class="co-label">DPR TRAP</span><p>고해상도 디스플레이에서 Canvas를 CSS 크기만큼만 만들면 흐리고, device pixel ratio만큼 키우면 메모리와 fill-rate가 증가합니다. DPR을 무조건 3까지 쓰지 말고 화면 크기와 기기 등급에 따라 1.5 또는 2로 cap을 둡니다.</p></div>
+</section>
+
+<section id="graphics-ch3">
+<div class="ch-head"><span class="ch-code">GFX-03</span><h2>WebGL 기초 모델</h2></div>
+<p class="lede">WebGL은 DOM에 도형을 추가하는 API가 아니라 GPU에게 버퍼, 텍스처, shader, state를 넘겨 draw call을 실행하는 모델입니다. 문제를 빨리 잡으려면 “무엇을 그리는가”보다 “얼마나 자주 state를 바꾸고, 얼마나 많은 데이터를 GPU에 올리고, 몇 번 draw하는가”를 봐야 합니다.</p>
+<table>
+<tr><th>개념</th><th>역할</th><th>실무 판단</th><th>흔한 오류</th></tr>
+<tr><td>Vertex buffer</td><td>위치, normal, uv, color 같은 attribute 저장</td><td>정적 geometry는 한 번 upload, 동적 데이터는 update 범위 최소화</td><td>매 frame 새 buffer 생성으로 GPU memory와 GC 증가</td></tr>
+<tr><td>Index buffer</td><td>정점 재사용 순서 저장</td><td>mesh가 크면 index 사용으로 vertex 중복 감소</td><td>index type 한계와 WebGL extension 지원 확인 누락</td></tr>
+<tr><td>Shader</td><td>vertex와 fragment 계산</td><td>fragment shader는 픽셀 수만큼 실행되므로 full-screen 효과는 특히 측정</td><td>분기·고비용 함수·큰 texture lookup으로 저사양 GPU에서 급락</td></tr>
+<tr><td>Texture</td><td>이미지, normal map, environment map 등 GPU 이미지 데이터</td><td>크기, 포맷, mipmap, anisotropy를 예산화</td><td>4K texture 여러 장으로 모바일 GPU 메모리 초과</td></tr>
+<tr><td>Draw call</td><td>GPU에 한 묶음 그리기 명령 실행</td><td>material·geometry·state 변경이 많으면 CPU overhead 증가</td><td>오브젝트 수만 줄이고 material 수를 방치해 draw call이 줄지 않음</td></tr>
+<tr><td>Render target</td><td>화면이 아닌 texture에 렌더링</td><td>post-processing, picking, reflection에 사용하되 해상도 cap 필요</td><td>멀티패스 효과가 fill-rate와 메모리를 폭증</td></tr>
+</table>
+<table>
+<tr><th>WebGL 장애</th><th>사용자 증상</th><th>원인 후보</th><th>대응</th></tr>
+<tr><td>Context loss</td><td>3D 영역이 검거나 멈춤</td><td>GPU 메모리 압박, 드라이버 reset, 탭 전환</td><td><code>webglcontextlost</code>/<code>webglcontextrestored</code> 처리, 자원 재생성 경로 테스트</td></tr>
+<tr><td>Shader compile 실패</td><td>특정 기기에서만 object가 안 보임</td><td>precision, extension, GLSL 호환성</td><td>compile log 수집, fallback material, device matrix QA</td></tr>
+<tr><td>Texture upload stall</td><td>모델 진입 순간 긴 freeze</td><td>큰 이미지 decode/upload를 interaction 시점에 수행</td><td>프리로드, KTX2/Basis 압축, 점진 로딩, skeleton scene</td></tr>
+<tr><td>Overdraw</td><td>투명 효과가 많은 장면에서 FPS 하락</td><td>겹치는 transparent mesh, particle, post effect</td><td>정렬, alpha test, particle 수 cap, 해상도 scale</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">GPU COST ORDER</span>CPU: scene update → frustum culling → draw call submit<br>GPU upload: buffer/texture 변경 데이터 전송<br>Vertex: 정점 수와 skinning/morph 계산<br>Fragment: 화면 픽셀, overdraw, shader, post-processing<br>Memory: texture, geometry, render target, shadow map</div>
+<div class="callout"><span class="co-label">MENTAL MODEL</span><p>WebGL 성능은 “triangle이 몇 개인가” 하나로 설명되지 않습니다. 같은 polygon 수라도 material이 200개면 draw call이 많아지고, 같은 draw call 수라도 4K texture와 bloom이 있으면 GPU memory와 fragment 비용이 커집니다.</p></div>
+</section>
+
+<section id="graphics-ch4">
+<div class="ch-head"><span class="ch-code">GFX-04</span><h2>Three.js 구조</h2></div>
+<p class="lede">Three.js는 WebGL을 scene graph, camera, material, loader, renderer로 다루게 해줍니다. 추상화는 빠른 제품 개발에 유리하지만, 자원 생명주기와 frame loop 비용은 여전히 개발자가 책임져야 합니다.</p>
+<table>
+<tr><th>구성요소</th><th>역할</th><th>제품 코드 기준</th><th>실패 모드</th></tr>
+<tr><td>Scene</td><td>Object3D 계층과 조명·환경을 담는 root</td><td>제품 상태와 3D object mapping 규칙을 문서화</td><td>React state와 scene mutation이 엇갈려 선택·undo가 깨짐</td></tr>
+<tr><td>Camera</td><td>사용자의 시점과 projection</td><td>default view, reset view, bounds fitting, clipping plane 정의</td><td>near/far 값이 과도해 z-fighting 또는 depth precision 저하</td></tr>
+<tr><td>Renderer</td><td>scene을 canvas에 렌더링</td><td>pixelRatio cap, antialias, toneMapping, shadow 옵션을 기기별 조정</td><td>DPR 3, shadow 고해상도, post effect가 모바일에서 급락</td></tr>
+<tr><td>Geometry</td><td>mesh의 vertex 데이터</td><td>공유 geometry, LOD, instancing 검토</td><td>동일 mesh를 매번 clone해 메모리와 draw call 증가</td></tr>
+<tr><td>Material</td><td>shader와 렌더링 상태 묶음</td><td>material 수 cap, texture atlas, variant 전략</td><td>색상 하나 때문에 material을 무한 생성</td></tr>
+<tr><td>Loader</td><td>glTF, texture, HDRI 등 asset 로딩</td><td>progress, cancellation, cache, dispose 경로 설계</td><td>route 이동 뒤 loader promise가 완료되어 죽은 scene에 추가</td></tr>
+<tr><td>Controls/Raycast</td><td>orbit, drag, picking 상호작용</td><td>pointer capture, keyboard 대체, hit target 우선순위 정의</td><td>DOM overlay와 3D raycast가 서로 pointer event를 빼앗음</td></tr>
+</table>
+<table>
+<tr><th>Frame loop 전략</th><th>적합한 제품</th><th>장점</th><th>주의</th></tr>
+<tr><td>Always render</td><td>게임, particle, 계속 움직이는 scene</td><td>상태 단순, 애니메이션 자연스러움</td><td>정적 제품 viewer에서도 배터리와 CPU/GPU 사용 증가</td></tr>
+<tr><td>Render on demand</td><td>제품 configurator, 3D preview, static model viewer</td><td>상호작용 때만 렌더링해 전력·열 감소</td><td>texture load, resize, control damping, animation 종료 시 invalidate 필요</td></tr>
+<tr><td>Hybrid</td><td>정적 대부분 + 짧은 transition/hover animation</td><td>체감 품질과 비용 균형</td><td>render trigger가 누락되면 상태 변경이 화면에 반영되지 않음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">THREE RESOURCE LIFECYCLE</span>route enter: renderer, scene, camera, controls 생성<br>asset load: geometry, material, texture cache 등록<br>interaction: raycast와 state mutation을 한 방향으로 흐르게 유지<br>route leave: animation frame 중단, listener 제거, geometry/material/texture/render target dispose<br>restore: context restored 또는 재진입 시 asset cache와 scene 재구성 검증</div>
+<div class="callout risk"><span class="co-label">DISPOSE</span><p>Three.js object를 scene에서 제거해도 GPU 자원이 자동으로 모두 해제되는 것은 아닙니다. geometry, material, texture, render target, controls listener를 해제하지 않으면 route를 여러 번 오간 뒤 메모리와 FPS가 무너집니다.</p></div>
+</section>
+
+<section id="graphics-ch5">
+<div class="ch-head"><span class="ch-code">GFX-05</span><h2>3D 제품 경험 설계</h2></div>
+<p class="lede">3D 제품 경험은 모델을 화면에 띄우는 일이 아니라 사용자가 제품을 이해하고, 비교하고, 설정하고, 구매·승인 같은 다음 행동을 결정하게 만드는 흐름입니다. 카메라, 조명, 입력, 상태 표시, fallback은 같은 제품 경험의 일부입니다.</p>
+<table>
+<tr><th>제품 패턴</th><th>핵심 사용 가치</th><th>필수 인터랙션</th><th>품질 기준</th></tr>
+<tr><td>Product viewer</td><td>형태, 크기, 질감 이해</td><td>orbit, zoom, reset, hotspot, 이미지 fallback</td><td>첫 의미 있는 view 2초 내, 조작 p75 100ms 이하</td></tr>
+<tr><td>Configurator</td><td>색상·옵션 변경 결과 확인</td><td>variant switch, price/spec sync, undo, shareable URL</td><td>옵션 변경 후 시각 반영 200ms 내, 잘못된 조합 차단</td></tr>
+<tr><td>Exploded view</td><td>구조·부품 관계 설명</td><td>step navigation, part highlight, label overlay</td><td>텍스트 label이 겹치지 않고 keyboard로 단계 이동 가능</td></tr>
+<tr><td>Spatial dashboard</td><td>물리 공간 또는 설비 상태 파악</td><td>filter, layer toggle, alert focus, minimap</td><td>경고 상태가 색상·3D 위치만으로 전달되지 않음</td></tr>
+<tr><td>AR handoff</td><td>현실 공간 배치 확인</td><td>QR/deep link, model format 분기, scale calibration</td><td>AR 실패 시 3D/2D 경로로 돌아갈 수 있음</td></tr>
+</table>
+<table>
+<tr><th>UX 결정</th><th>좋은 기본값</th><th>나쁜 신호</th></tr>
+<tr><td>카메라</td><td>제품 전체가 보이는 hero angle, reset view, bounds clamp</td><td>첫 화면에서 제품이 잘리거나 zoom 방향이 예측 불가</td></tr>
+<tr><td>조명</td><td>재질을 읽을 수 있는 균형 조명, 과한 bloom 제한</td><td>분위기 때문에 실제 색상·표면 판단이 어려움</td></tr>
+<tr><td>입력</td><td>마우스, 터치, 키보드, trackpad 차이를 별도 테스트</td><td>모바일에서 scroll과 orbit gesture가 충돌</td></tr>
+<tr><td>상태 표시</td><td>로딩 진행률, 저해상도 preview, 실패 메시지, retry</td><td>검은 canvas 또는 무한 spinner만 노출</td></tr>
+<tr><td>측정</td><td>view start, model ready, first interaction, variant applied 이벤트</td><td>3D가 전환율에 기여하는지 비용만 쓰는지 모름</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">3D PRODUCT REVIEW</span>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가<br>정적 이미지보다 나은 상호작용이 명확한가<br>모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가<br>카메라와 조명이 제품 사실성을 왜곡하지 않는가<br>상호작용 로그로 실제 사용 가치를 확인할 수 있는가</div>
+<div class="callout warn"><span class="co-label">PRODUCT RISK</span><p>3D는 강한 첫인상을 만들지만, 제품 과업을 느리게 만들기도 쉽습니다. 핵심 CTA가 모델 로딩 뒤로 밀리거나, 모바일에서 스크롤을 방해하거나, 색상 판단을 왜곡하면 3D는 경험 개선이 아니라 장애물이 됩니다.</p></div>
+</section>
+
+<section id="graphics-ch6">
+<div class="ch-head"><span class="ch-code">GFX-06</span><h2>성능·메모리 예산</h2></div>
+<p class="lede">그래픽 성능은 FPS 하나로 관리하면 부족합니다. CPU frame, GPU frame, draw call, texture memory, geometry memory, shader compile, asset download, battery/thermal을 나눠야 원인과 owner가 선명해집니다.</p>
+<table>
+<tr><th>예산 항목</th><th>초기 목표 예시</th><th>경고 신호</th><th>주요 조치</th></tr>
+<tr><td>Frame time</td><td>desktop p95 16.7ms, mobile p95 33ms 이하</td><td>interaction 중 long frame 연속</td><td>LOD, effect off, render-on-demand, 작업 분할</td></tr>
+<tr><td>Draw call</td><td>제품 viewer 100 이하, 복잡 scene 300 이하부터 경고</td><td>object 수보다 material 수 증가</td><td>instancing, batching, material 공유, atlas</td></tr>
+<tr><td>Triangle</td><td>mobile hero model 100k-300k부터 검토</td><td>카메라에서 보이지 않는 세부 geometry 과다</td><td>decimation, LOD, normal map 대체</td></tr>
+<tr><td>Texture memory</td><td>mobile scene 64-128MB 안에서 출발</td><td>4K texture 여러 장, HDRI 고해상도</td><td>KTX2/Basis, mipmap, atlas, 해상도 tier</td></tr>
+<tr><td>Initial asset</td><td>첫 3D 의미 표시 2MB-5MB 압축 기준에서 출발</td><td>모델 보기 전 10MB 이상 blocking</td><td>progressive load, draco/meshopt, placeholder poster</td></tr>
+<tr><td>Shader compile</td><td>첫 조작 전에 compile spike 제거</td><td>첫 rotate 또는 variant 변경 때 freeze</td><td>warm-up render, material variant cap, async 준비 UI</td></tr>
+<tr><td>Memory slope</td><td>route 10회 왕복 뒤 heap/GPU memory 안정</td><td>진입할 때마다 texture·buffer 증가</td><td>dispose audit, cache limit, context restore test</td></tr>
+</table>
+<table>
+<tr><th>최적화</th><th>효과</th><th>비용·위험</th><th>검증</th></tr>
+<tr><td>Instancing</td><td>동일 geometry/material 반복 draw call 감소</td><td>개별 material·animation 자유도 제한</td><td>draw call과 CPU submit time 비교</td></tr>
+<tr><td>LOD</td><td>거리별 geometry·texture 비용 감소</td><td>전환 튐, QA matrix 증가</td><td>카메라 거리별 품질·FPS 확인</td></tr>
+<tr><td>Texture compression</td><td>download와 GPU memory 감소</td><td>빌드 pipeline, 포맷 호환성</td><td>기기별 시각 품질과 decode/upload 시간 확인</td></tr>
+<tr><td>Post-processing scale</td><td>bloom/SSAO 등 fill-rate 절감</td><td>품질 저하, edge artifact</td><td>render target 해상도별 frame time 비교</td></tr>
+<tr><td>Render-on-demand</td><td>정적 viewer의 배터리·열 감소</td><td>invalidate 누락으로 화면 갱신 실패</td><td>상태 변경·resize·texture load 이벤트별 갱신 테스트</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">TRACE PACKET</span>route와 device class<br>model 파일 크기, texture 크기, material 수, triangle 수<br>draw call, renderer.info.memory, renderer.info.render<br>CPU frame과 GPU 추정 병목<br>첫 표시 시간, 첫 조작 latency, context loss 여부<br>route 재진입 10회 뒤 memory 변화</div>
+<div class="callout risk"><span class="co-label">BUDGET NOTE</span><p>위 숫자는 공식 표준이 아니라 시작 예산입니다. 제품의 사용자 기기, 모델 복잡도, 구매 전환 가치에 맞게 조정하되 PR마다 같은 기준으로 측정해야 합니다. 예산 초과는 기능 가치, 대안, 만료일 있는 예외로 관리합니다.</p></div>
+</section>
+
+<section id="graphics-ch7">
+<div class="ch-head"><span class="ch-code">GFX-07</span><h2>Fallback·접근성</h2></div>
+<p class="lede">Canvas와 WebGL은 보조기술이 내부 픽셀 구조를 이해하지 못합니다. 접근성은 나중에 aria를 붙이는 작업이 아니라, 어떤 정보와 작업을 DOM으로 병렬 제공할지 정하는 설계입니다. Fallback도 “안 보이면 이미지”가 아니라 사용자가 같은 결정을 내릴 수 있는 대체 경로입니다.</p>
+<table>
+<tr><th>상황</th><th>Fallback</th><th>사용자에게 보장할 것</th><th>검증</th></tr>
+<tr><td>WebGL 미지원 또는 차단</td><td>제품 poster, 2D gallery, 핵심 옵션 HTML control</td><td>구매·비교·설정 흐름이 막히지 않음</td><td>WebGL disabled, privacy mode, enterprise browser</td></tr>
+<tr><td>저사양 기기</td><td>낮은 DPR, effect off, low-poly/low-texture tier</td><td>기능은 유지하고 장식 품질만 낮춤</td><td>low-end Android, thermal throttling, battery saver</td></tr>
+<tr><td>모션 민감 사용자</td><td>reduced motion에서 auto-rotate, parallax, camera fly 제거</td><td>움직임 없이도 상태와 위치를 이해</td><td><code>prefers-reduced-motion</code> OS 설정</td></tr>
+<tr><td>키보드 사용자</td><td>DOM controls, step navigation, reset view, hotspot list</td><td>마우스 drag 없이 주요 정보 접근</td><td>Tab, Shift+Tab, Enter, Escape, Arrow 테스트</td></tr>
+<tr><td>스크린리더 사용자</td><td>모델 요약, 옵션 상태, hotspot 설명, 변화 알림</td><td>시각 모델이 전달하는 핵심 정보의 텍스트 등가물</td><td>VoiceOver/NVDA 수동 플로우</td></tr>
+<tr><td>네트워크 실패</td><td>retry, static image, asset size 안내, late load</td><td>검은 canvas나 무한 spinner 방지</td><td>offline, 3G, chunk/model 404</td></tr>
+</table>
+<table>
+<tr><th>접근성 항목</th><th>기준</th><th>나쁜 신호</th></tr>
+<tr><td>대체 텍스트</td><td>3D가 설명하는 제품 특징과 현재 선택 상태를 요약</td><td>“3D 모델” 같은 빈 설명만 제공</td></tr>
+<tr><td>Focus</td><td>3D 영역 진입·탈출이 예측 가능하고 focus trap이 없음</td><td>canvas가 focus를 먹고 빠져나올 수 없음</td></tr>
+<tr><td>Status</td><td>로딩, 옵션 적용, 오류가 텍스트와 live region으로 전달</td><td>진행률이 시각 spinner에만 있음</td></tr>
+<tr><td>Gesture</td><td>drag/rotate에 버튼·키보드 대체 제공</td><td>pinch/drag가 유일한 조작 방법</td></tr>
+<tr><td>Color</td><td>경고·선택·품절 상태가 색 외 텍스트·패턴으로 표현</td><td>3D 재질 색만으로 상태 구분</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">FALLBACK CONTRACT</span>no-WebGL: 어떤 화면과 CTA를 보여줄지 정의<br>low-end: 어떤 effect와 해상도를 끌지 정의<br>reduced-motion: 어떤 camera animation을 제거할지 정의<br>keyboard: 어떤 조작을 DOM control로 제공할지 정의<br>screen reader: 모델의 핵심 정보와 상태 변화를 어떤 문장으로 전달할지 정의</div>
+<div class="callout gm"><span class="co-label">PR CHECK</span><p>3D PR은 멋진 capture보다 fallback capture가 더 중요합니다. WebGL off, reduced motion, keyboard-only, low network, model load failure 화면이 PR 설명에 포함되어야 합니다.</p></div>
+</section>
+
+<section id="graphics-ch8">
+<div class="ch-head"><span class="ch-code">GFX-08</span><h2>QA와 릴리스 게이트</h2></div>
+<p class="lede">그래픽 기능 QA는 화면이 예쁘게 보이는지 확인하는 단계가 아닙니다. 기기·브라우저·GPU·입력 방식·네트워크·메모리 반복 시나리오를 통과해야 운영에서 깨지지 않습니다.</p>
+<table>
+<tr><th>QA 축</th><th>필수 시나리오</th><th>측정·판정</th><th>릴리스 차단 신호</th></tr>
+<tr><td>Device matrix</td><td>desktop high/mid, iOS Safari, low-end Android, integrated GPU</td><td>FPS, model ready time, memory, interaction latency</td><td>한 주요 세그먼트에서 fallback 없이 검은 화면</td></tr>
+<tr><td>Browser matrix</td><td>Chrome, Safari, Firefox, Edge, WebView</td><td>shader compile, texture format, pointer event, resize</td><td>특정 브라우저에서 조작 불가 또는 모델 누락</td></tr>
+<tr><td>Network</td><td>slow 4G, offline, model 404, texture 404, CDN cache miss</td><td>progress, retry, fallback, error logging</td><td>무한 spinner 또는 핵심 CTA 차단</td></tr>
+<tr><td>Memory lifecycle</td><td>route 진입/이탈 10회, variant 50회 변경, tab background/restore</td><td>heap, GPU object count, renderer.info 추세</td><td>반복 후 지속 증가 또는 context loss 미복구</td></tr>
+<tr><td>Input</td><td>mouse drag, touch pan, pinch, wheel, keyboard, screen reader</td><td>gesture conflict, focus order, scroll lock</td><td>페이지 스크롤 불가, keyboard 탈출 불가</td></tr>
+<tr><td>Visual regression</td><td>대표 카메라 angle, option variant, dark/light 배경</td><td>screenshot diff, lighting/material sanity</td><td>제품 색상·형상 판단을 바꾸는 회귀</td></tr>
+</table>
+<table>
+<tr><th>관측 이벤트</th><th>필드 예시</th><th>쓰는 이유</th></tr>
+<tr><td><code>gfx_model_load</code></td><td>route, asset_id, bytes, duration_ms, success, error_code</td><td>모델 로딩 실패와 느린 asset을 운영에서 식별</td></tr>
+<tr><td><code>gfx_interaction</code></td><td>type, latency_ms, device_class, reduced_motion</td><td>3D가 실제로 조작되는지와 반응성을 확인</td></tr>
+<tr><td><code>gfx_fallback_used</code></td><td>reason, browser, device_memory, webgl_available</td><td>fallback이 예외인지 주요 경로인지 판단</td></tr>
+<tr><td><code>gfx_context_loss</code></td><td>route, renderer_info, memory_hint, restored</td><td>GPU 안정성 문제와 복구율 추적</td></tr>
+<tr><td><code>gfx_variant_apply</code></td><td>variant_id, duration_ms, success, visual_tier</td><td>configurator의 핵심 제품 행동 측정</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">RELEASE GATE</span>성능 예산: target device에서 frame time, draw call, texture memory 통과<br>메모리: route 반복과 variant 반복 뒤 증가 추세 없음<br>fallback: WebGL off, asset failure, reduced motion, low-end tier 확인<br>접근성: keyboard-only와 screen reader 핵심 플로우 확인<br>관측성: load failure, context loss, fallback 사용 이벤트 수집<br>롤백: 3D feature flag 또는 static fallback 전환 경로 준비</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Draw call</b><span>GPU command</span></div><div class="g-def">GPU에 한 묶음의 geometry와 material state를 그리라고 보내는 명령입니다. 오브젝트, material, state 변경이 많으면 증가합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Fill-rate</b><span>pixel cost</span></div><div class="g-def">GPU가 화면 픽셀을 채우는 비용입니다. 고해상도, 투명 overdraw, post-processing에서 빠르게 커집니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Context loss</b><span>WebGL reset</span></div><div class="g-def">브라우저가 WebGL context를 잃어 GPU 자원을 다시 만들어야 하는 상태입니다. 이벤트 처리와 복구 경로가 필요합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Instancing</b><span>batching</span></div><div class="g-def">같은 geometry/material을 여러 위치에 반복해 그릴 때 draw call을 줄이는 기법입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LOD</b><span>Level of Detail</span></div><div class="g-def">카메라 거리나 기기 성능에 따라 geometry와 texture 품질을 낮춰 비용을 줄이는 전략입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>KTX2/Basis</b><span>compressed texture</span></div><div class="g-def">GPU 친화적인 압축 texture 전달 방식입니다. 다운로드와 GPU memory를 줄이지만 빌드·호환성 관리가 필요합니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Raycast</b><span>picking</span></div><div class="g-def">포인터 위치에서 scene으로 광선을 쏴 어떤 3D object를 선택했는지 찾는 방식입니다.</div></div>
+</div>
+</section>
+
+<section id="graphics-ch9">
+<div class="ch-head"><span class="ch-code">GFX-09</span><h2>Asset pipeline</h2></div>
+<p class="lede">3D 품질은 코드만으로 결정되지 않습니다. 모델링 툴에서 export된 glTF, mesh 압축, texture 포맷, color management, variant 구조, CDN cache 전략이 모두 런타임 성능과 시각 품질을 좌우합니다.</p>
+<table>
+<tr><th>단계</th><th>결정할 것</th><th>좋은 기준</th><th>실패 모드</th></tr>
+<tr><td>Model source</td><td>원본 툴, 단위, 축, pivot, naming</td><td>meter/cm 단위와 pivot 규칙을 문서화</td><td>모델마다 scale과 중심이 달라 camera fitting 실패</td></tr>
+<tr><td>glTF export</td><td>scene hierarchy, animation, material, texture 연결</td><td>불필요한 node, camera, light, hidden object 제거</td><td>DCC 툴의 임시 object가 그대로 배포됨</td></tr>
+<tr><td>Mesh optimization</td><td>Draco, Meshopt, decimation, LOD</td><td>첫 표시용 LOD와 상세 LOD를 분리</td><td>압축 해제 비용이 download 절감보다 커짐</td></tr>
+<tr><td>Texture</td><td>KTX2/Basis, size tier, mipmap, color space</td><td>baseColor, normal, roughness, metalness 용도별 해상도 cap</td><td>4K texture를 모든 map에 동일 적용</td></tr>
+<tr><td>Material</td><td>PBR, variant, transparency, doubleSide</td><td>material 수 cap과 공유 전략</td><td>색상 variant마다 새 material과 texture를 무한 생성</td></tr>
+<tr><td>Delivery</td><td>lazy load, preload, CDN, cache key</td><td>poster → low LOD → high LOD 순서로 점진 표시</td><td>CTA보다 큰 모델 chunk가 먼저 blocking</td></tr>
+</table>
+<table>
+<tr><th>포맷·기법</th><th>언제 쓰는가</th><th>장점</th><th>주의</th></tr>
+<tr><td>glTF/GLB</td><td>웹 3D 표준 asset 교환</td><td>scene, material, animation, binary bundle 지원</td><td>export 옵션과 extension 호환성을 QA해야 함</td></tr>
+<tr><td>Draco</td><td>geometry download 크기가 병목일 때</td><td>압축률 높음</td><td>decode 비용과 worker 전략 확인</td></tr>
+<tr><td>Meshopt</td><td>geometry 최적화와 빠른 decode 균형</td><td>런타임 decode가 빠른 편</td><td>빌드 파이프라인과 loader 설정 필요</td></tr>
+<tr><td>KTX2/Basis</td><td>texture download와 GPU memory를 줄일 때</td><td>GPU 친화 압축 texture</td><td>기기별 transcoding, 색 품질, alpha 처리 확인</td></tr>
+<tr><td>Texture atlas</td><td>작은 texture/material이 많을 때</td><td>draw call과 state 변경 감소</td><td>UV 관리와 variant 자유도 제한</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">ASSET BUDGET REPORT</span>model: 파일 크기, triangle, mesh, node, animation clip 수<br>texture: map별 해상도, 포맷, memory estimate<br>material: material 수, transparent/doubleSide/shadow 사용 여부<br>compression: Draco/Meshopt/KTX2 적용 전후 크기와 decode 시간<br>delivery: poster, low LOD, high LOD 로딩 순서<br>quality: target device screenshot과 색상/재질 검수</div>
+<div class="callout warn"><span class="co-label">PIPELINE RULE</span><p>3D 성능 최적화는 런타임에서만 해결할 수 없습니다. 모델 export와 texture 제작 단계에서 예산을 넘긴 asset은 코드에서 일부 완화할 수 있을 뿐입니다. 수준급 개발자는 디자이너·3D 아티스트와 예산 언어를 공유해야 합니다.</p></div>
+</section>
+
+<section id="graphics-ch10">
+<div class="ch-head"><span class="ch-code">GFX-10</span><h2>R3F와 상호작용 구조</h2></div>
+<p class="lede">React Three Fiber는 React 컴포넌트 모델로 Three.js scene을 구성하게 해주지만, 3D scene은 여전히 imperative한 GPU 자원을 다룹니다. React state, scene mutation, frame loop, pointer event, asset lifecycle의 경계를 명확히 해야 합니다.</p>
+<table>
+<tr><th>영역</th><th>좋은 구조</th><th>실패 모드</th><th>검토 질문</th></tr>
+<tr><td>State ownership</td><td>제품 상태는 React/store, 일시적 pointer state는 ref/frame loop</td><td>매 frame React state 업데이트로 render 폭발</td><td>이 상태가 UI 계약인가, frame-local 값인가?</td></tr>
+<tr><td>Frame loop</td><td>정적 viewer는 demand/hybrid, 게임형 scene은 always</td><td>정적 제품 뷰어가 계속 60fps 렌더</td><td>사용자가 멈춰 있을 때 GPU가 계속 도는가?</td></tr>
+<tr><td>Raycast</td><td>hit target 우선순위, invisible helper mesh, DOM overlay 충돌 정의</td><td>작은 mesh를 클릭하기 어렵고 overlay가 event를 가로챔</td><td>선택 가능한 object와 장식 object가 분리됐는가?</td></tr>
+<tr><td>Controls</td><td>Orbit/Drag/Transform controls의 활성 상태를 명시적으로 전환</td><td>drag 중 camera orbit도 같이 움직임</td><td>조작 모드가 사용자에게 보이고 취소 가능한가?</td></tr>
+<tr><td>Asset lifecycle</td><td>loader cache, suspense boundary, dispose, route leave cleanup</td><td>route 재진입마다 texture와 geometry가 증가</td><td>10회 왕복 뒤 renderer.info가 안정적인가?</td></tr>
+</table>
+<table>
+<tr><th>상호작용 패턴</th><th>구현 기준</th><th>대체 경로</th><th>관측 이벤트</th></tr>
+<tr><td>Object select</td><td>raycast target과 hover/focus 상태 분리</td><td>DOM list에서 같은 object 선택</td><td><code>gfx_select</code>, object_id, input_type</td></tr>
+<tr><td>Hotspot</td><td>3D anchor와 DOM label 위치 동기화</td><td>hotspot 목록과 step navigation</td><td><code>gfx_hotspot_open</code></td></tr>
+<tr><td>Variant switch</td><td>material/texture 교체를 preload하고 적용 시간 측정</td><td>static preview 또는 옵션 표</td><td><code>gfx_variant_apply</code>, duration_ms</td></tr>
+<tr><td>Camera reset</td><td>bounds fitting, target, distance, easing, reduced motion 분기</td><td>Reset view 버튼과 keyboard shortcut</td><td><code>gfx_camera_reset</code></td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">R3F ARCHITECTURE PACKET</span>Canvas boundary: route, Suspense, fallback 위치<br>State split: product state, interaction ref, frame-local 값<br>Render mode: always, demand, hybrid 선택 이유<br>Event map: raycast 대상, DOM overlay, controls 충돌 처리<br>Cleanup: dispose 대상, listener, animation frame, cache policy<br>Test: canvas nonblank, object select, camera reset, fallback 캡처</div>
+<div class="callout risk"><span class="co-label">R3F TRAP</span><p>R3F를 쓰면 JSX로 scene을 쓰기 쉬워지지만, GPU 자원이 React DOM처럼 자동으로 안전해지는 것은 아닙니다. 특히 texture, render target, custom material, external controls는 수명주기와 dispose 전략을 명시해야 합니다.</p></div>
+</section>
+
+<section id="graphics-ch11">
+<div class="ch-head"><span class="ch-code">GFX-11</span><h2>그래픽 진단 도구</h2></div>
+<p class="lede">그래픽 성능 문제는 “FPS가 낮다”로 끝나면 해결되지 않습니다. CPU submit, GPU fragment, texture upload, shader compile, memory leak, context loss 중 어디가 병목인지 나눠야 합니다.</p>
+<table>
+<tr><th>도구</th><th>보는 것</th><th>좋은 질문</th><th>증거</th></tr>
+<tr><td>Chrome Performance</td><td>Main thread, Frames, long task, image decode</td><td>JS와 texture decode가 첫 조작을 막는가?</td><td>trace 파일, long frame 표시</td></tr>
+<tr><td>Chrome Memory</td><td>heap, detached objects, route 반복 증가</td><td>scene을 떠난 뒤 JS object가 남는가?</td><td>heap snapshot before/after</td></tr>
+<tr><td>Layers/Rendering</td><td>layer count, paint flashing, FPS meter</td><td>canvas 주변 DOM overlay가 과도하게 repaint되는가?</td><td>layer screenshot, FPS capture</td></tr>
+<tr><td>Three renderer.info</td><td>calls, triangles, points, lines, geometries, textures</td><td>variant 변경 후 material/texture 수가 계속 늘어나는가?</td><td>route 반복 로그</td></tr>
+<tr><td>Spector.js</td><td>WebGL draw call, shader, texture, framebuffer</td><td>draw call이 왜 많고 어떤 shader가 비싼가?</td><td>capture 파일과 draw call breakdown</td></tr>
+<tr><td>WebGL debug hooks</td><td>context loss, compile log, extension support</td><td>특정 기기에서 실패하는 이유를 수집하는가?</td><td>error event와 device matrix</td></tr>
+</table>
+<table>
+<tr><th>증상</th><th>먼저 의심할 것</th><th>확인 방법</th><th>수정 방향</th></tr>
+<tr><td>첫 진입 freeze</td><td>큰 texture decode/upload, shader compile</td><td>Performance trace, Spector capture</td><td>preload, warm-up, compressed texture, progressive scene</td></tr>
+<tr><td>회전 중 FPS 하락</td><td>fragment shader, overdraw, shadow, post-processing</td><td>effect off 비교, render target scale 변경</td><td>effect tier, resolution scale, transparent mesh 축소</td></tr>
+<tr><td>route 반복 후 느려짐</td><td>dispose 누락, loader cache 폭증</td><td>renderer.info와 heap snapshot 반복</td><td>resource dispose, cache limit, route cleanup</td></tr>
+<tr><td>특정 모바일에서 검은 화면</td><td>precision, extension, texture format, context loss</td><td>console log, WebGL support probe, fallback event</td><td>fallback material, feature detection, no-WebGL path</td></tr>
+<tr><td>옵션 변경이 느림</td><td>새 material/texture 생성, shader variant compile</td><td>variant apply duration, renderer.info 증가</td><td>precompile, material reuse, variant cap</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">GRAPHICS DIAGNOSTIC ROUTINE</span>1. target device와 scene 데이터를 고정한다<br>2. renderer.info baseline을 저장한다<br>3. Performance trace로 CPU freeze와 image decode를 본다<br>4. Spector.js로 draw call, shader, texture를 확인한다<br>5. effect, shadow, DPR, texture tier를 하나씩 끄며 병목을 분리한다<br>6. route 10회와 variant 50회 반복 뒤 memory slope를 확인한다<br>7. PR에는 before/after 수치와 fallback 캡처를 첨부한다</div>
+</section>
+
+<section id="graphics-ch12">
+<div class="ch-head"><span class="ch-code">GFX-12</span><h2>3D 실전 로드맵</h2></div>
+<p class="lede">수준급 3D 프론트엔드 개발자는 모델을 띄우는 데서 멈추지 않습니다. asset budget, camera, interaction, fallback, performance trace, 운영 관측까지 한 세트로 제출할 수 있어야 합니다.</p>
+<table>
+<tr><th>레벨</th><th>과제</th><th>핵심 역량</th><th>완료 증거</th></tr>
+<tr><td>1</td><td>glTF product viewer</td><td>loader, camera fit, orbit/reset, poster fallback</td><td>model ready time, no-WebGL screenshot</td></tr>
+<tr><td>2</td><td>Hotspot + DOM overlay</td><td>3D 좌표와 DOM label 동기화, keyboard step</td><td>screen reader 설명, label overlap QA</td></tr>
+<tr><td>3</td><td>Configurator</td><td>variant preload, material reuse, URL state</td><td>옵션 50회 변경 뒤 memory와 duration 로그</td></tr>
+<tr><td>4</td><td>Asset optimization pipeline</td><td>Meshopt/Draco/KTX2, LOD, texture tier</td><td>전후 파일 크기, decode 시간, 시각 품질 비교</td></tr>
+<tr><td>5</td><td>Performance tiering</td><td>DPR cap, effect tier, render-on-demand, low-end fallback</td><td>desktop/mobile p95 frame과 battery/thermal 메모</td></tr>
+<tr><td>6</td><td>Production diagnostics</td><td>renderer.info, Spector capture, context loss, observability</td><td>운영 이벤트 설계와 장애 재현 runbook</td></tr>
+</table>
+<table>
+<tr><th>포트폴리오 질문</th><th>좋은 답변 기준</th></tr>
+<tr><td>왜 3D가 필요한가?</td><td>2D 대안과 비교해 사용자의 결정 정확도, 이해, 전환에 기여하는 이유를 설명</td></tr>
+<tr><td>느린 기기에서는 어떻게 되는가?</td><td>low tier, static fallback, effect off, DPR cap, asset tier를 구체적으로 제시</td></tr>
+<tr><td>메모리 누수를 어떻게 잡았는가?</td><td>route 반복, renderer.info, heap snapshot, dispose audit 결과를 제시</td></tr>
+<tr><td>접근성은 어떻게 보장했는가?</td><td>DOM controls, hotspot list, 모델 요약, keyboard flow, reduced motion 증거를 제시</td></tr>
+<tr><td>운영에서 실패를 어떻게 알 수 있는가?</td><td>model load, fallback, context loss, variant apply 이벤트와 dashboard 기준을 제시</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">3D PORTFOLIO PACKET</span>사용자 가치와 2D 대안 비교<br>asset budget report와 optimization 전후 비교<br>camera, controls, hotspot, fallback architecture<br>Performance trace, Spector capture, renderer.info log<br>접근성 대체 경로와 reduced motion 캡처<br>운영 이벤트와 context loss 복구 시나리오</div>
+</section>
+
+<section id="graphics-ch13">
+<div class="ch-head"><span class="ch-code">GFX-13</span><h2>좌표·Shader·Lighting</h2></div>
+<p class="lede">정교한 3D 경험은 모델을 띄우는 수준을 넘어 좌표계, shader 비용, 색과 조명 파이프라인을 이해해야 안정됩니다. 클릭한 DOM 좌표가 어떤 3D object를 의미하는지, 왜 같은 색상이 기기마다 다르게 보이는지 설명할 수 있어야 합니다.</p>
+<table>
+<tr><th>좌표계</th><th>의미</th><th>대표 변환</th><th>실패 모드</th></tr>
+<tr><td>Client</td><td>viewport 기준 pointer 좌표</td><td>client → normalized device coordinates</td><td>canvas offset을 빼지 않아 raycast가 밀림</td></tr>
+<tr><td>NDC</td><td>-1~1 범위의 clip 공간 입력</td><td><code>x = (clientX - rect.left) / rect.width * 2 - 1</code></td><td>DPR을 잘못 섞어 picking 좌표가 틀림</td></tr>
+<tr><td>World</td><td>3D scene의 실제 object 위치</td><td>camera projection과 inverse matrix를 거쳐 ray 생성</td><td>object parent transform을 무시해 label 위치가 어긋남</td></tr>
+<tr><td>Screen overlay</td><td>3D point를 DOM label로 투영</td><td>world position → project(camera) → CSS pixel</td><td>카메라 이동 뒤 hotspot이 drift</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">RAYCAST COORDINATE 예시</span>const rect = canvas.getBoundingClientRect();<br>const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;<br>const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;<br>raycaster.setFromCamera({ x, y }, camera);<br>const hits = raycaster.intersectObjects(selectableObjects, true);</div>
+<table>
+<tr><th>Shader/Material 개념</th><th>실무 의미</th><th>비용 신호</th><th>검증</th></tr>
+<tr><td>Vertex shader</td><td>정점 위치, skinning, morph target 계산</td><td>skinned mesh와 morph가 많은 scene</td><td>animation on/off 비교</td></tr>
+<tr><td>Fragment shader</td><td>픽셀 색상, 조명, texture lookup 계산</td><td>고해상도, 투명, post effect, full-screen pass</td><td>resolution scale과 effect off 비교</td></tr>
+<tr><td>PBR material</td><td>baseColor, metalness, roughness, normal로 재질 표현</td><td>map 수와 texture 해상도 증가</td><td>map별 해상도 cap과 compression</td></tr>
+<tr><td>Transparency</td><td>유리, ghost, overlay 표현</td><td>정렬, overdraw, depth issue</td><td>transparent mesh 수와 화면 점유율 확인</td></tr>
+<tr><td>Post-processing</td><td>bloom, SSAO, depth of field, outline</td><td>render target, fill-rate, multi-pass 증가</td><td>mobile tier에서 off 또는 낮은 scale</td></tr>
+</table>
+<table>
+<tr><th>Color/Lighting</th><th>좋은 기준</th><th>나쁜 신호</th></tr>
+<tr><td>Color management</td><td>sRGB/linear 흐름을 명시하고 texture color space를 맞춤</td><td>baseColor가 washed out 또는 과포화</td></tr>
+<tr><td>Environment map</td><td>재질 판단을 돕는 해상도와 노출 값 사용</td><td>분위기는 좋지만 실제 제품 색상 판단이 어려움</td></tr>
+<tr><td>Shadow</td><td>제품 접지감과 공간 관계를 보조</td><td>shadow map 해상도 과다로 mobile frame drop</td></tr>
+<tr><td>Tone mapping</td><td>브랜드/제품 사진과 색감 기준을 맞춤</td><td>디자인 시안과 3D canvas 색이 다름</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">SENIOR GRAPHICS SIGNAL</span>
+<p>정교한 3D 개발자는 “모델이 보인다”가 아니라 picking 좌표, shader 비용, color space, lighting, fallback을 함께 설명합니다. 특히 제품 configurator에서는 색과 재질이 구매 판단을 왜곡하지 않는 것이 성능만큼 중요합니다.</p>
+</div>
+</section>
+
+<section id="graphics-ch14">
+<div class="ch-head"><span class="ch-code">GFX-14</span><h2>Configurator case study</h2></div>
+<p class="lede">아래 사례는 3D product configurator를 설계할 때 어떤 순서로 판단하고 증거를 남길지 보여줍니다. 목표는 멋진 데모가 아니라 사용자가 옵션을 이해하고, 잘못된 조합을 피하고, 느린 기기에서도 구매 결정을 이어가는 것입니다.</p>
+<table>
+<tr><th>단계</th><th>결정</th><th>산출물</th><th>리스크</th></tr>
+<tr><td>1. 가치 검증</td><td>3D가 색상·재질·크기 판단을 실제로 개선하는지 확인</td><td>2D gallery와 3D viewer 비교 가설</td><td>비용은 큰데 전환에 기여하지 않음</td></tr>
+<tr><td>2. 옵션 모델</td><td>색상, 재질, 부품, 가격, 재고, 호환성 규칙 분리</td><td>variant schema, invalid combination rule</td><td>3D 상태와 상품 상태가 어긋남</td></tr>
+<tr><td>3. Asset 예산</td><td>기본 모델, variant texture, LOD, poster를 나눔</td><td>asset budget report</td><td>첫 진입이 모델 로딩에 막힘</td></tr>
+<tr><td>4. Interaction</td><td>orbit, reset, hotspot, variant apply, share URL 설계</td><td>state machine과 event map</td><td>모바일 scroll과 orbit gesture 충돌</td></tr>
+<tr><td>5. Fallback</td><td>no-WebGL, low-end, reduced motion, asset failure 경로</td><td>fallback contract와 캡처</td><td>검은 canvas가 CTA를 막음</td></tr>
+<tr><td>6. Diagnostics</td><td>model load, variant apply, fallback, context loss 측정</td><td>dashboard event spec</td><td>운영에서 실패 원인을 모름</td></tr>
+</table>
+<table>
+<tr><th>상태</th><th>전이 이벤트</th><th>UI 책임</th><th>관측</th></tr>
+<tr><td>poster</td><td>viewer_visible</td><td>정적 이미지와 CTA 유지</td><td><code>gfx_viewer_seen</code></td></tr>
+<tr><td>loading_low</td><td>low_model_request</td><td>progress와 skip/fallback 제공</td><td><code>gfx_model_load</code></td></tr>
+<tr><td>ready</td><td>model_ready</td><td>orbit, hotspot, option controls 활성화</td><td><code>gfx_ready</code></td></tr>
+<tr><td>applying_variant</td><td>variant_selected</td><td>옵션 control pending, 가격/spec 즉시 동기화</td><td><code>gfx_variant_apply</code></td></tr>
+<tr><td>degraded</td><td>low_device 또는 effect_budget_exceeded</td><td>effect off, DPR cap, low texture tier 표시</td><td><code>gfx_tier_changed</code></td></tr>
+<tr><td>fallback</td><td>webgl_unavailable 또는 asset_failed</td><td>2D gallery와 옵션 표로 구매 흐름 유지</td><td><code>gfx_fallback_used</code></td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CONFIGURATOR ACCEPTANCE CRITERIA</span>첫 의미 있는 제품 표시: target mobile에서 2초 안에 poster 또는 low LOD 표시<br>옵션 반영: 이미 로드된 variant는 200ms 안에 시각 상태와 가격/spec 동기화<br>상호작용: orbit, reset, hotspot, option select가 mouse/touch/keyboard로 가능<br>성능: mobile p95 frame 33ms 이하 또는 low tier 자동 전환<br>접근성: 같은 정보가 DOM option list와 hotspot summary로 제공<br>복구: asset 404, WebGL off, context loss에서 구매 CTA 유지</div>
+<div class="callout warn">
+<span class="co-label">CASE STUDY RULE</span>
+<p>Configurator 사례에서 가장 중요한 것은 3D 자체가 아니라 제품 상태와 3D 상태의 동기화입니다. 옵션은 상품 데이터의 진실이고, 3D는 그 상태를 이해시키는 표현입니다. 3D가 늦거나 실패해도 상품 선택과 구매 흐름은 무너지면 안 됩니다.</p>
+</div>
+</section>
+
+<section id="graphics-ch15">
+<div class="ch-head"><span class="ch-code">GFX-15</span><h2>추가 case studies</h2></div>
+<p class="lede">정교한 인터랙티브 개발자는 3D configurator만 만드는 사람이 아닙니다. 대량 데이터 편집, 스크롤 기반 설명, workflow 조작, 공간 dashboard처럼 서로 다른 입력·렌더링·접근성 문제를 풀 수 있어야 합니다.</p>
+<table>
+<tr><th>사례</th><th>핵심 문제</th><th>기술 선택</th><th>완료 증거</th></tr>
+<tr><td>Canvas data editor</td><td>1만 개 object 선택, pan/zoom, undo/redo</td><td>Canvas 2D, retained scene model, spatial index, DOM overlay</td><td>hit test p95 2ms 이하, DPR 2 trace, keyboard object list</td></tr>
+<tr><td>Scroll storytelling</td><td>긴 설명에서 현재 단계와 시각 변화 연결</td><td>native scroll, IntersectionObserver, CSS/Canvas progressive reveal</td><td>reduced motion 정적 경로, anchor/focus 안정성, scroll jank trace</td></tr>
+<tr><td>Workflow builder</td><td>node drag, edge connect, validation, keyboard editing</td><td>SVG 또는 Canvas, command model, keyboard reorder/connect</td><td>undo/redo, screen reader summary, invalid edge announcement</td></tr>
+<tr><td>Spatial dashboard</td><td>지도/설비/알림 layer와 대량 marker</td><td>Canvas/WebGL layer, DOM alert list, clustering</td><td>filter latency, marker count budget, 색 외 경고 표현</td></tr>
+</table>
+<table>
+<tr><th>Case study 질문</th><th>좋은 답변</th></tr>
+<tr><td>왜 DOM/SVG/Canvas/WebGL 중 이것을 골랐는가?</td><td>데이터 크기, hit testing, 접근성, frame budget, fallback 기준으로 설명</td></tr>
+<tr><td>보조기술 사용자는 같은 작업을 어떻게 하는가?</td><td>DOM list, command buttons, live announcement, summary text 제공</td></tr>
+<tr><td>느린 기기에서 무엇을 낮추는가?</td><td>DPR, effect, marker density, LOD, animation, texture tier를 단계적으로 조정</td></tr>
+<tr><td>운영에서 실패를 어떻게 감지하는가?</td><td>load failure, long frame, fallback used, interaction result, memory slope 이벤트 수집</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CANVAS EDITOR ACCEPTANCE</span>pan/zoom 중 p95 frame 16.7ms 또는 mobile 33ms 이하<br>object 10k에서 hit test p95 2ms 이하<br>키보드 object list로 선택·이동·삭제 가능<br>undo/redo command stack과 optimistic rollback 가능<br>canvas와 DOM overlay 좌표 drift 없음<br>저사양 기기에서 DPR cap과 density reduction 적용</div>
+</section>
+
+<section id="graphics-ch16">
+<div class="ch-head"><span class="ch-code">GFX-16</span><h2>Canvas·WebGL 자동화</h2></div>
+<p class="lede">Canvas와 WebGL은 DOM snapshot만으로 품질을 검증하기 어렵습니다. 최소한 canvas가 비어 있지 않은지, fallback이 동작하는지, renderer.info가 반복 후 증가하지 않는지, reduced motion과 low-end tier가 적용되는지 자동화해야 합니다.</p>
+<table>
+<tr><th>자동화</th><th>목적</th><th>방법</th><th>차단 기준</th></tr>
+<tr><td>Canvas nonblank</td><td>검은/빈 canvas 회귀 탐지</td><td>pixel sample 또는 screenshot diff</td><td>의미 있는 픽셀 비율이 임계값 미만</td></tr>
+<tr><td>Fallback route</td><td>WebGL 실패 시 제품 흐름 유지</td><td>WebGL context 생성 실패 mock</td><td>CTA가 사라지거나 무한 spinner</td></tr>
+<tr><td>renderer.info regression</td><td>geometry/texture 누수 탐지</td><td>route 10회, variant 50회 뒤 counts 비교</td><td>textures/geometries가 지속 증가</td></tr>
+<tr><td>Asset budget</td><td>모델/texture 크기 회귀 차단</td><td>CI에서 asset manifest 검사</td><td>예산 초과에 예외 근거 없음</td></tr>
+<tr><td>Interaction smoke</td><td>raycast, camera reset, option apply 검증</td><td>Playwright pointer와 keyboard 병행</td><td>선택/초기화/옵션 변경 실패</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CANVAS NONBLANK 예시</span>const pixels = await page.locator("canvas").evaluate((canvas) =&gt; {<br>&nbsp;&nbsp;const ctx = canvas.getContext("2d") || canvas.getContext("webgl");<br>&nbsp;&nbsp;// WebGL이면 테스트 전용 debug readback helper를 앱에 노출한다.<br>&nbsp;&nbsp;return window.__readCanvasNonBlankRatio?.() ?? 0;<br>});<br>expect(pixels).toBeGreaterThan(0.02);</div>
+<div class="serial-card"><span class="sc-label">renderer.info regression 예시</span>await openViewerAndWaitReady(page);<br>const baseline = await page.evaluate(() =&gt; window.__threeInfo());<br>for (let i = 0; i &lt; 10; i++) {<br>&nbsp;&nbsp;await page.goto("/other");<br>&nbsp;&nbsp;await page.goto("/viewer");<br>&nbsp;&nbsp;await openViewerAndWaitReady(page);<br>}<br>const after = await page.evaluate(() =&gt; window.__threeInfo());<br>expect(after.memory.textures).toBeLessThanOrEqual(baseline.memory.textures + 1);</div>
+<div class="callout warn">
+<span class="co-label">TEST HOOK POLICY</span>
+<p>그래픽 테스트를 위해 <code>window.__threeInfo</code> 같은 debug hook을 둘 수 있습니다. 단, production에서는 feature flag나 test build에서만 노출하고, 사용자 데이터나 원본 입력값을 노출하지 않아야 합니다.</p>
+</div>
+</section>
+
+<section id="graphics-ch17">
+<div class="ch-head"><span class="ch-code">GFX-17</span><h2>근거 기반 그래픽 예산과 부수효과</h2></div>
+<p class="lede">Canvas와 WebGL 품질은 “GPU를 썼다”로 보장되지 않습니다. 픽셀 수, DPR, texture 해상도, draw call, context loss 복구, fallback 비용을 숫자로 계산해야 저사양 기기와 긴 세션에서 품질이 유지됩니다.</p>
+<table>
+<tr><th>항목</th><th>실질 숫자·계산</th><th>근거와 의미</th><th>부수효과</th><th>대응</th></tr>
+<tr><td>Canvas backing store</td><td><code>width * height * DPR^2 * 4 bytes</code>. 1200x800 DPR 2는 약 14.6MiB, 1920x1080 DPR 2는 약 31.6MiB</td><td>CSS 크기가 같아도 DPR이 2면 픽셀 수와 메모리·fill-rate가 4배가 된다</td><td>고해상도 canvas를 여러 개 유지하면 스크롤, tab 전환, mobile memory pressure에서 끊김이 커진다</td><td>DPR cap, offscreen canvas 수 제한, resize debounce, hidden 상태 render 중지</td></tr>
+<tr><td>Texture memory</td><td>RGBA 2048x2048은 16MiB, 4096x4096은 64MiB. mipmap을 포함하면 대략 33% 추가</td><td>다운로드 용량이 작아도 GPU에 올라간 뒤에는 압축이 풀리거나 mip chain이 추가될 수 있다</td><td>큰 texture 몇 장만으로도 mobile GPU budget을 압박하고 context loss 가능성이 높아진다</td><td>KTX2/Basis 같은 GPU texture compression, texture atlas, LOD, max texture tier 적용</td></tr>
+<tr><td>Frame budget</td><td>60fps는 16.7ms/frame, mobile fallback 30fps는 33.3ms/frame</td><td>render, physics, raycast, layout overlay, postprocessing이 모두 같은 frame 안에서 경쟁한다</td><td>raycast나 postprocessing이 늘면 pointer hover가 늦어지고 camera 조작이 끊긴다</td><td>dirty render, demand frameloop, BVH/spatial index, effect tier 분리</td></tr>
+<tr><td>Draw call·material 수</td><td>정답 숫자는 scene마다 다르지만, 증가 추세와 variant별 차이를 release gate로 본다</td><td>draw call은 GPU뿐 아니라 CPU submit 비용도 만든다</td><td>옵션을 바꿀 때 material을 계속 생성하면 긴 세션에서 memory slope와 stutter가 생긴다</td><td>instancing, material reuse, geometry merge, dispose audit, renderer.info 회귀 테스트</td></tr>
+<tr><td>WebGL context loss</td><td><code>webglcontextlost</code> 이벤트는 drawing buffer가 손실될 때 발생하며, <code>WEBGL_lose_context</code>로 시뮬레이션 가능</td><td>브라우저·드라이버·메모리 압박 상황에서 실제로 canvas가 검게 비거나 렌더러가 멈출 수 있다</td><td>복구 경로가 없으면 configurator, map, editor의 핵심 작업이 빈 화면으로 중단된다</td><td>context lost/restore handler, asset reload, fallback UI, current selection 복구 테스트</td></tr>
+<tr><td>Fallback 비용</td><td>fallback 자체도 LCP, INP, accessibility tree에 포함된다</td><td>3D 실패 시 단순 “지원하지 않음”보다 제품 행동을 계속할 수 있어야 한다</td><td>fallback이 무거운 이미지 묶음이면 WebGL을 끈 사용자에게도 느린 경험을 준다</td><td>poster image, option list, static preview, server-rendered summary, lazy asset load</td></tr>
+</table>
+<p class="lede">근거 출처는 MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/webglcontextlost_event">webglcontextlost</a> 문서와 WebGL 메모리 계산식을 기준으로 삼습니다. Canvas와 texture 예산은 압축 다운로드 크기가 아니라 실제 backing store와 GPU 업로드 후 비용을 기준으로 봅니다.</p>
+<div class="serial-card"><span class="sc-label">GRAPHICS BUDGET FORMULAS</span>Canvas memory MiB = width * height * DPR^2 * 4 / 1024 / 1024<br>RGBA texture MiB = textureWidth * textureHeight * 4 / 1024 / 1024<br>Mipmap 포함 texture MiB ~= base texture MiB * 1.33<br>Frame budget ms = 1000 / targetFPS<br>GPU 위험 신호 = texture count 증가 + context loss + long frame + fallback used</div>
+<div class="callout warn">
+<span class="co-label">OPERATING STANDARD</span>
+<p>그래픽 기능의 근거는 “Three.js로 구현했다”가 아니라 “DPR 2에서 backing store가 31.6MiB이고, 4096 texture 2장을 쓰며, route 10회 왕복 뒤 renderer.info가 증가하지 않고, context loss를 시뮬레이션해도 선택 상태가 복구된다” 같은 운영 문장이어야 합니다.</p>
+</div>
+</section>
+
+<section id="graphics-ch18">
+<div class="ch-head"><span class="ch-code">GFX-18</span><h2>자주 봉착하는 문제와 해결</h2></div>
+<p class="lede">그래픽/3D 문제는 눈에 보이는 증상이 강해서 즉흥적으로 수정하기 쉽지만, 실제 원인은 GPU resource 수명, 좌표계 변환, asset pipeline, fallback 계약에 있는 경우가 많습니다. 해결은 shader나 camera 값을 찍어 맞추는 것이 아니라 재현 조건과 resource lifecycle을 고정하는 데서 시작합니다.</p>
+<table>
+<tr><th>문제</th><th>대표 증상</th><th>주요 원인</th><th>해결법</th><th>검증</th></tr>
+<tr><td>검은 canvas·빈 화면</td><td>일부 기기에서 viewer가 비어 있거나 로딩이 끝나지 않음</td><td>WebGL context 생성 실패, shader compile 실패, asset load 실패를 같은 spinner로 처리</td><td>capability check, timeout, error boundary, static fallback, 실패 원인별 telemetry 분리</td><td>WebGL off, asset 404, slow network, shader error mock</td></tr>
+<tr><td>Context loss 복구 실패</td><td>탭 전환이나 긴 세션 뒤 canvas가 멈춤</td><td>context lost/restore listener가 없고 GPU resource 재업로드 경로가 없음</td><td><code>webglcontextlost</code>에서 기본 동작 제어, restore 시 geometry/texture/material 재생성, 현재 selection 복구</td><td><code>WEBGL_lose_context</code>로 loss/restore 자동화</td></tr>
+<tr><td>GPU 메모리 누수</td><td>route를 반복하면 점점 느려지고 mobile에서 crash</td><td>geometry, material, texture, render target dispose 누락</td><td>scene cleanup checklist, resource registry, loader cache 정책, renderer.info 회귀 테스트</td><td>viewer 10회 진입/이탈 후 textures/geometries 증가 여부 확인</td></tr>
+<tr><td>Picking 좌표 오차</td><td>클릭한 물체가 아닌 옆 object가 선택됨</td><td>canvas rect, CSS transform, DPR, scroll offset, camera matrix를 혼동</td><td>client 좌표에서 canvas rect를 빼고 NDC로 변환, overlay와 raycast 좌표계를 분리</td><td>DPR 1/2, 스크롤된 컨테이너, resized canvas, mobile touch 테스트</td></tr>
+<tr><td>Asset 용량·품질 균형 실패</td><td>첫 진입이 느리거나 texture가 뭉개짐</td><td>모델과 texture tier가 없고 모든 사용자에게 동일 asset 제공</td><td>LOD, poster, progressive loading, KTX2/Basis compression, device tier별 texture cap 적용</td><td>cold load, repeat load, low-end tier, visual QA capture 비교</td></tr>
+<tr><td>Fallback이 제품 행동을 막음</td><td>WebGL 실패 시 구매, 선택, 비교가 불가능함</td><td>3D viewer를 상품 상태의 유일한 표현으로 설계</td><td>DOM option list, static preview, text summary, CTA를 viewer 밖 독립 layer로 유지</td><td>No-WebGL 환경에서 핵심 task completion 확인</td></tr>
+<tr><td>Post-processing 과다</td><td>bloom, blur, SSAO를 켜면 mobile 조작이 끊김</td><td>full-screen pass와 render target이 frame budget을 초과</td><td>effect tier, dynamic resolution, interaction 중 effect off, 중요 정보와 장식 효과 분리</td><td>orbit/drag 중 frame time, effect on/off trace 비교</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">GRAPHICS DEBUG ORDER</span>1. 재현 기기, DPR, GPU tier, WebGL version, reduced motion 여부를 기록한다<br>2. 실패가 context 생성, asset load, shader compile, render loop, interaction 중 어디인지 나눈다<br>3. renderer.info와 resource registry로 memory slope를 먼저 확인한다<br>4. 좌표 문제는 client, canvas, NDC, world, overlay를 단계별로 로그한다<br>5. fallback에서도 사용자가 같은 제품 결정을 완료할 수 있는지 확인한다</div>
+<div class="callout warn">
+<span class="co-label">NO BLACK BOX</span>
+<p>3D 라이브러리를 쓰더라도 resource 수명은 팀의 책임입니다. 모델이 보이는 데서 끝내면 운영에서 검은 화면, 메모리 누수, 선택 오차, fallback 실패가 뒤늦게 드러납니다. 정교한 그래픽 개발자는 렌더링 결과와 함께 실패 경로를 설계합니다.</p>
+</div>
+</section>
+
+<footer>FRONTEND GRAPHICS · 3D HANDBOOK · V1 · 2026-06</footer>
+</main></div></body></html>

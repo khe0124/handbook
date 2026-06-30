@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Handbook — 평가·품질 관리</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-title">LLM 평가</div>
+  <a href="#ch1"><span class="code">EVAL-01</span>평가 체계</a>
+  <a href="#ch2"><span class="code">EVAL-02</span>Golden Dataset</a>
+  <a href="#ch3"><span class="code">EVAL-03</span>Retrieval Eval</a>
+  <a href="#ch4"><span class="code">EVAL-04</span>Groundedness</a>
+  <a href="#ch5"><span class="code">EVAL-05</span>LLM-as-Judge</a>
+  <a href="#ch6"><span class="code">EVAL-06</span>Regression</a>
+  <a href="#ch7"><span class="code">EVAL-07</span>Report</a>
+  <a href="#depth"><span class="code">DEPTH</span>릴리스 게이트</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : LLM-EVALUATION-V2</span>
+    <span>SCOPE : GOLDEN DATASET · JUDGE · HALLUCINATION · REGRESSION</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>LLM 평가와<br>품질 관리</h1>
+  <p class="hero-sub">컨설팅과 PoC에서 차이를 만드는 질문은 “잘 되나요?”가 아니라 “좋다는 걸 어떻게 증명하나요?”입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">EVAL-01</span><h2>Evaluation Architecture</h2></div>
+<p class="lede">LLM 평가는 모델 점수 놀이가 아니라 제품 위험을 줄이는 장치입니다. 프롬프트, 모델, chunking, reranking 변경이 품질을 떨어뜨리지 않는지 감시합니다.</p>
+<div class="serial-card">
+<span class="sc-label">eval record</span>
+input · prompt_version · model_version · retrieved_chunks · model_output · parsed_output · judge_score · human_label · cost · latency · trace_id
+</div>
+<table>
+<tr><th>평가 축</th><th>질문</th><th>지표</th></tr>
+<tr><td>정확성</td><td>답이 사실인가</td><td>accuracy, factuality</td></tr>
+<tr><td>근거성</td><td>답이 제공된 문서로 뒷받침되는가</td><td>groundedness, faithfulness, citation precision</td></tr>
+<tr><td>검색</td><td>정답 근거가 검색됐는가</td><td>recall@k, MRR, nDCG</td></tr>
+<tr><td>형식</td><td>schema와 UI 계약을 지키는가</td><td>parse success rate, schema failure rate</td></tr>
+<tr><td>안전</td><td>민감 정보와 권한 경계를 지키는가</td><td>policy violation rate</td></tr>
+<tr><td>운영</td><td>비용과 지연이 목표 안에 있는가</td><td>cost/request, p95 latency</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">EVAL-02</span><h2>GOLDEN DATASET · golden-dataset-fields</h2></div>
+<p class="lede">골든 데이터셋은 “정답셋”입니다. 실제 고객 질문, 어려운 edge case, 권한/보안 케이스, 근거 문서 id를 함께 저장합니다.</p>
+<table>
+<tr><th>필드</th><th>예</th><th>이유</th></tr>
+<tr><td>question</td><td>휴가 정책에서 병가 증빙 기준은?</td><td>사용자 입력</td></tr>
+<tr><td>expected_answer</td><td>정책 문서에 근거한 기준</td><td>정확성 비교</td></tr>
+<tr><td>expected_evidence</td><td>doc_id, chunk_id, page</td><td>retrieval 평가</td></tr>
+<tr><td>allowed_answer_range</td><td>동의어, 숫자 단위 허용 범위</td><td>표현 차이 수용</td></tr>
+<tr><td>tags</td><td>factual, ambiguous, no-answer, adversarial, permission-denied</td><td>영역별 회귀 분석</td></tr>
+<tr><td>difficulty</td><td>easy, medium, hard</td><td>품질 변화의 위치 파악</td></tr>
+<tr><td>owner</td><td>domain expert</td><td>라벨 신뢰도 관리</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">dataset split</span>
+dev set for prompt iteration · regression set for release gate · holdout human-labeled set for judge calibration
+</div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">EVAL-03</span><h2>retrieval-metrics</h2></div>
+<p class="lede">RAG에서는 검색 실패와 생성 실패를 분리해야 합니다. 검색이 틀렸다면 프롬프트를 고쳐도 답변 품질이 안정되지 않습니다.</p>
+<table>
+<tr><th>지표</th><th>의미</th><th>질문</th></tr>
+<tr><td>recall@k</td><td>정답 근거가 top-k 안에 있는가</td><td>k=5에서 업무 기준을 만족하는가</td></tr>
+<tr><td>MRR</td><td>첫 정답 근거의 순위가 빠른가</td><td>좋은 근거가 첫 화면에 오는가</td></tr>
+<tr><td>nDCG</td><td>관련도 높은 근거가 상위에 정렬되는가</td><td>부분 관련 문서가 정답보다 앞서지 않는가</td></tr>
+<tr><td>context precision</td><td>context에 노이즈가 적은가</td><td>불필요한 chunk가 답변을 오염하지 않는가</td></tr>
+<tr><td>context recall</td><td>답변에 필요한 근거가 충분히 포함됐는가</td><td>근거 부족으로 no-answer가 과도하지 않은가</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">EVAL-04</span><h2>groundedness-taxonomy</h2></div>
+<p class="lede">환각 평가는 “맞다/틀리다”만으로 부족합니다. 어떤 주장이 어떤 근거와 연결되지 않았는지 분해해야 디버깅이 가능합니다.</p>
+<table>
+<tr><th>실패 유형</th><th>증상</th><th>대응</th></tr>
+<tr><td>unsupported claim</td><td>citation 없는 핵심 주장</td><td>claim-level citation 요구</td></tr>
+<tr><td>wrong citation</td><td>citation은 있으나 근거 문장이 다름</td><td>citation precision 평가</td></tr>
+<tr><td>contradiction</td><td>근거 문서와 반대 답변</td><td>judge rubric과 human review</td></tr>
+<tr><td>overbroad answer</td><td>특정 조건을 일반화</td><td>answer constraint 강화</td></tr>
+<tr><td>missing refusal</td><td>근거가 없는데 답함</td><td>no-answer golden case 추가</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">EVAL-05</span><h2>LLM-AS-JUDGE · llm-judge-calibration</h2></div>
+<p class="lede">LLM-as-judge는 모델이 모델 답변을 채점하게 하는 방법입니다. 빠르지만 편향과 불안정성이 있으므로 rubric, pairwise 비교, 사람 검수가 필요합니다.</p>
+<table>
+<tr><th>Rubric</th><th>0점</th><th>1점</th><th>2점</th></tr>
+<tr><td>정확성</td><td>문서와 모순</td><td>일부 맞지만 핵심 누락</td><td>문서와 일치</td></tr>
+<tr><td>근거성</td><td>근거 없음</td><td>일부 근거만 연결</td><td>모든 핵심 주장에 citation</td></tr>
+<tr><td>완전성</td><td>핵심 누락</td><td>보조 정보 누락</td><td>요구사항 충족</td></tr>
+<tr><td>안전성</td><td>정책 위반</td><td>애매함</td><td>거절/마스킹 적절</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">judge drift</span>
+<p>judge 모델도 틀립니다. 사람 라벨 일부를 holdout으로 두고 judge 점수와 상관을 확인하며, judge 모델 변경도 regression 대상에 포함합니다.</p>
+</div>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">EVAL-06</span><h2>PROMPT REGRESSION · prompt-regression-gate</h2></div>
+<p class="lede">프롬프트 변경은 코드 변경입니다. 변경 전후 점수, 실패 케이스, 비용, 지연을 비교하고 임계값을 넘으면 릴리스를 막아야 합니다.</p>
+<table>
+<tr><th>Gate</th><th>예시 기준</th><th>실패 시 조치</th></tr>
+<tr><td>retrieval recall@5</td><td>기준선보다 2%p 이상 하락 금지</td><td>chunk/rewrite/rerank 원인 분리</td></tr>
+<tr><td>groundedness</td><td>핵심 claim 근거율 95% 이상</td><td>prompt rollback 또는 citation 정책 강화</td></tr>
+<tr><td>schema success</td><td>99% 이상</td><td>schema repair loop 보강</td></tr>
+<tr><td>p95 latency</td><td>SLO 초과 금지</td><td>model routing, cache, async 적용</td></tr>
+<tr><td>cost/request</td><td>예산 초과 금지</td><td>token budget, cheaper model routing</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">failure triage</span>
+prompt failure · retrieval failure · model failure · data freshness failure · permission policy failure · judge failure
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">EVAL-07</span><h2>QUALITY REPORT · quality-report-template</h2></div>
+<p class="lede">품질 리포트는 고객사와 팀이 PoC를 판단하는 한 장짜리 증거입니다. 좋은 리포트는 성공률뿐 아니라 실패 유형과 다음 개선 우선순위를 보여줍니다.</p>
+<table>
+<tr><th>항목</th><th>포함 내용</th></tr>
+<tr><td>Scope</td><td>문서 범위, 질문 수, 제외 영역, risk tier</td></tr>
+<tr><td>Dataset</td><td>golden set 규모, 태그 분포, 난이도, 라벨 소유자</td></tr>
+<tr><td>Retrieval</td><td>recall@k, MRR, nDCG, context precision</td></tr>
+<tr><td>Answer</td><td>accuracy, groundedness, faithfulness, citation precision</td></tr>
+<tr><td>Operations</td><td>평균 비용, p95 latency, retry rate, schema failure rate</td></tr>
+<tr><td>Risk</td><td>hallucination, permission-denied, adversarial case 결과</td></tr>
+<tr><td>Decision</td><td>ship, limited beta, more data, redesign 중 하나</td></tr>
+</table>
+<div class="callout gm">
+<span class="co-label">공고 매핑</span>
+<p>“PoC부터 배포까지”, “실제 구현 역량”은 평가 하니스와 품질 리포트가 있을 때 설득력이 생깁니다.</p>
+</div>
+</section>
+<section id="depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>평가를 릴리스 의사결정으로 연결하기</h2></div>
+<h3>MARKER: concept-depth — 평가는 모델 점수가 아니라 변경 관리다</h3>
+<p>LLM 평가를 모델 순위표처럼 다루면 제품 품질을 지키기 어렵습니다. 실제 시스템에서 품질을 흔드는 변경은 모델 교체뿐 아니라 prompt 수정, chunk size 변경, parser 업데이트, reranker 추가, 권한 필터 변경까지 다양합니다. 평가는 이 변경들이 사용자에게 나가기 전에 어떤 위험을 만들었는지 확인하는 release gate입니다. 평균 점수가 조금 올랐더라도 permission-denied 케이스가 깨졌다면 배포하면 안 됩니다.</p>
+<p>좋은 평가 체계는 원인을 분리합니다. retrieval recall@k가 낮으면 답변 모델을 바꿔도 정답 근거가 context에 없으므로 개선이 제한됩니다. MRR이 낮으면 후보는 있지만 순위가 문제이므로 reranker나 query rewrite를 봐야 합니다. groundedness가 낮으면 검색은 됐지만 생성이 근거 밖 주장을 만들고 있는 것입니다. schema success가 낮으면 프롬프트보다 output contract와 repair loop를 봐야 할 수 있습니다.</p>
+<h3>MARKER: artifact-ready — Golden dataset JSONL</h3>
+<pre><code>{"id":"q1","case_type":"factual","question":"환불 가능 기간은?","expected_answer":"결제일로부터 7일 이내","expected_evidence":["refund#03"],"risk_level":"low"}
+{"id":"q2","case_type":"no-answer","question":"전화 상담 번호는?","expected_answer":null,"expected_behavior":"provided_docs_do_not_contain_answer","risk_level":"medium"}
+{"id":"q3","case_type":"permission-denied","actor_role":"external","question":"내부 정산 기준은?","expected_evidence":[],"expected_behavior":"permission_denied_or_empty_retrieval","risk_level":"high"}</code></pre>
+<p>Golden dataset은 정답표가 아니라 실패 지도입니다. 실제 사용자 질문만 모으면 happy path에 치우치고, 개발자가 만든 synthetic question만 쓰면 제품 현실과 멀어집니다. factual, ambiguous, no-answer, adversarial, permission-denied, stale data를 함께 넣어야 prompt와 retrieval 변경이 어떤 위험을 키우는지 볼 수 있습니다. 또한 문서와 정책이 바뀌면 expected evidence도 낡기 때문에 dataset decay를 주기적으로 점검해야 합니다.</p>
+<h3>MARKER: failure-driven — Metric interpretation</h3>
+<pre><code>low recall@5 -> candidate generation problem -> inspect parser/chunking/query rewrite/hybrid
+low MRR -> ranking problem -> test reranker and score fusion
+low context precision -> noisy context -> reduce top_k, dedupe, compress parent context
+low groundedness -> generation problem -> tighten citation policy and no-answer rule
+low schema success -> output contract problem -> repair prompt or schema evolution</code></pre>
+<h3>MARKER: artifact-ready — Claim-level groundedness</h3>
+<pre><code>claim: "환불은 결제일로부터 7일 이내 가능하다"
+evidence_chunk: refund#03
+supported: true
+failure_type: null
+fix: none
+claim: "전화 상담도 가능하다"
+evidence_chunk: null
+supported: false
+failure_type: unsupported_claim
+fix: remove claim or return no-answer</code></pre>
+<p>LLM-as-judge는 편리하지만 최종 권위가 아닙니다. judge prompt가 너무 관대하면 그럴듯한 오답을 통과시키고, judge 모델을 바꾸면 이전 release gate와 점수 분포가 달라집니다. 따라서 judge output schema를 고정하고, 사람 라벨이 있는 holdout set으로 agreement를 확인해야 합니다. 중요한 변경에서는 scalar score보다 baseline과 candidate를 나란히 비교하는 pairwise 평가가 더 안정적일 수 있습니다.</p>
+<h3>MARKER: artifact-ready — RELEASE GATE regression report</h3>
+<pre><code>baseline: prompt@42
+candidate: prompt@43
+recall@5: 0.87 -> 0.88
+groundedness: 0.94 -> 0.90 BLOCK
+schema_success: 0.992 -> 0.991
+p95_latency: 4.2s -> 4.4s
+decision: block release
+top_failures: ["unsupported refund claim", "wrong citation on policy exception", "permission-denied answer leaked category name"]</code></pre>
+<h3>MARKER: failure-driven — LLM-as-judge 점수만 믿고 릴리스하는 실패</h3>
+<p>LLM-as-judge는 유용하지만 단독 승인자는 될 수 없습니다. judge prompt가 관대하거나, 정답셋에 없는 표현을 과대평가하거나, 모델이 긴 답변을 더 성실한 답변으로 착각하면 실제 품질보다 높은 점수가 나옵니다. 특히 고객 문서 분석처럼 근거성이 중요한 기능에서는 문체 점수와 정확도 점수가 섞이면 위험합니다. 따라서 judge 결과는 golden dataset의 사람이 검토한 샘플, retrieval hit rate, citation precision, no-answer accuracy와 함께 해석해야 합니다. 릴리스 게이트는 평균 점수가 아니라 “중요 실패 유형이 증가하지 않았는가”를 기준으로 닫혀야 합니다.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

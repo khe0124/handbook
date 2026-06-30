@@ -10,6 +10,9 @@
   <a href="#ch4"><span class="code">DT-04</span>Performance·Memory</a>
   <a href="#ch5"><span class="code">DT-05</span>Application·Security</a>
   <a href="#ch6"><span class="code">DT-06</span>React DevTools</a>
+  <a href="#ch7"><span class="code">DT-07</span>Performance trace 해석</a>
+  <a href="#ch8"><span class="code">DT-08</span>회귀 재현 패킷</a>
+  <a href="#ch9"><span class="code">DT-09</span>AI 성능 진단 방법론</a>
 </nav><main>
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-DEVTOOLS-V1</span><span>SCOPE : ELEMENTS · NETWORK · PERFORMANCE · MEMORY · REACT</span><span>LANG : KO</span></div>
@@ -20,60 +23,73 @@
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">DT-01</span><h2>디버깅 루틴</h2></div>
-<p class="lede">DevTools를 열기 전에 문제를 한 문장으로 정의합니다. "느리다"가 아니라 "검색어 입력 후 목록 갱신까지 600ms 걸린다"처럼 관찰 가능한 증상이어야 합니다.</p>
-<div class="serial-card"><span class="sc-label">DEBUG LOOP</span>재현 조건 고정<br>증상과 기대 동작 기록<br>Network로 데이터 문제 배제<br>Console로 runtime error 확인<br>Elements로 DOM/CSS 확인<br>Performance/Profiler로 비용 측정<br>수정 후 같은 조건에서 비교</div>
+<p class="lede">DevTools를 열기 전에 문제를 한 문장으로 정의합니다. "느리다"가 아니라 "검색어 입력 후 목록 갱신까지 600ms 걸린다"처럼 관찰 가능한 증상이어야 합니다. 좋은 디버깅은 패널을 많이 여는 것이 아니라 가설을 하나씩 제거하는 일입니다.</p>
+<div class="serial-card"><span class="sc-label">DEBUG LOOP</span>재현 조건 고정: route, 로그인 상태, 데이터 크기, device throttling<br>증상과 기대 동작 기록: 어떤 사용자 행동이 얼마나 느린가<br>Network로 리소스·API·cache 문제 배제<br>Console로 runtime error와 CSP violation 확인<br>Elements로 DOM/CSS/accessibility 상태 확인<br>Performance와 React Profiler로 비용 계층 분해<br>수정 후 같은 조건에서 before/after delta 비교</div>
+<table>
+<tr><th>증상</th><th>첫 패널</th><th>다음 패널</th><th>확정 증거</th></tr>
+<tr><td>첫 화면 느림</td><td>Network</td><td>Lighthouse, Performance, Coverage</td><td>LCP element와 resource waterfall</td></tr>
+<tr><td>클릭·입력 느림</td><td>Performance</td><td>React Profiler, Event listeners</td><td>interaction 구간의 long task와 다음 paint</td></tr>
+<tr><td>UI 깨짐</td><td>Elements</td><td>Computed, Layout, Accessibility pane</td><td>적용된 CSS rule과 DOM 상태</td></tr>
+<tr><td>중복 요청</td><td>Network</td><td>Initiator, React DevTools, Console</td><td>요청을 만든 callsite와 remount/effect 재실행 원인</td></tr>
+<tr><td>메모리 증가</td><td>Performance monitor</td><td>Memory snapshot, Allocation timeline</td><td>반복 후 heap/DOM node 증가와 retaining path</td></tr>
+</table>
 <div class="callout"><span class="co-label">HYPOTHESIS</span><p>한 번에 여러 것을 고치지 마세요. 하나의 가설을 세우고, DevTools로 근거를 확인하고, 수정 후 같은 조건에서 비교합니다.</p></div>
 </section>
 
 <section id="ch2">
 <div class="ch-head"><span class="ch-code">DT-02</span><h2>Elements·Styles</h2></div>
-<p class="lede">Elements 패널은 DOM과 CSS cascade를 확인하는 곳입니다. UI 깨짐은 대부분 여기서 원인을 찾습니다.</p>
+<p class="lede">Elements 패널은 DOM과 CSS cascade를 확인하는 곳입니다. UI 깨짐은 대부분 여기서 원인을 찾지만, 성능 진단에서도 DOM 수, layout containment, 접근성 tree, focus 상태를 확인하는 출발점이 됩니다.</p>
 <table>
-<tr><th>기능</th><th>사용 상황</th><th>확인할 것</th></tr>
-<tr><td>Computed</td><td>왜 이 스타일이 적용됐는가</td><td>최종 계산값, 상속, overridden rule</td></tr>
-<tr><td>Box Model</td><td>간격/크기 문제</td><td>content, padding, border, margin</td></tr>
-<tr><td>Force state</td><td>hover/focus 상태 확인</td><td>focus-visible 스타일 누락</td></tr>
-<tr><td>Accessibility pane</td><td>보조기술 이름 확인</td><td>accessible name, role, ignored 여부</td></tr>
+<tr><th>기능</th><th>사용 상황</th><th>확인할 것</th><th>흔한 결론</th></tr>
+<tr><td>Computed</td><td>왜 이 스타일이 적용됐는가</td><td>최종 계산값, 상속, overridden rule</td><td>CSS rule 충돌인지 JS state 문제인지 분리</td></tr>
+<tr><td>Box Model</td><td>간격/크기 문제</td><td>content, padding, border, margin</td><td>CLS 원인이 크기 미예약인지 동적 삽입인지 확인</td></tr>
+<tr><td>Force state</td><td>hover/focus/active 상태 확인</td><td>focus-visible 스타일, disabled 상태</td><td>마우스는 되지만 키보드 사용성이 깨진 문제 발견</td></tr>
+<tr><td>Accessibility pane</td><td>보조기술 이름 확인</td><td>accessible name, role, ignored 여부</td><td>보이는 UI와 접근성 tree가 다르게 노출되는지 확인</td></tr>
+<tr><td>DOM search</td><td>불필요한 DOM 증가 의심</td><td>row 수, hidden node, portal, detached 후보</td><td>virtualization 누락이나 modal cleanup 문제 확인</td></tr>
 </table>
 </section>
 
 <section id="ch3">
 <div class="ch-head"><span class="ch-code">DT-03</span><h2>Network</h2></div>
-<p class="lede">Network는 API와 리소스 로딩 문제를 분리하는 첫 관문입니다.</p>
+<p class="lede">Network는 API와 리소스 로딩 문제를 분리하는 첫 관문입니다. 느린 화면을 보면 먼저 서버가 늦은지, 리소스 우선순위가 틀렸는지, 캐시가 깨졌는지, 프론트엔드가 요청을 늦게 시작했는지 나눕니다.</p>
 <table>
-<tr><th>볼 것</th><th>의미</th><th>판단</th></tr>
-<tr><td>Status</td><td>HTTP 결과</td><td>401/403/404/500을 구분</td></tr>
-<tr><td>Waterfall</td><td>요청 시간 분해</td><td>DNS, TTFB, download 중 어디가 느린지 확인</td></tr>
-<tr><td>Initiator</td><td>요청을 만든 코드</td><td>중복 요청의 출처 추적</td></tr>
-<tr><td>Disable cache</td><td>캐시 없는 조건</td><td>초기 방문 성능 재현</td></tr>
-<tr><td>Throttling</td><td>느린 네트워크 시뮬레이션</td><td>실사용 환경 검증</td></tr>
+<tr><th>볼 것</th><th>의미</th><th>판단</th><th>흔한 조치</th></tr>
+<tr><td>Status</td><td>HTTP 결과</td><td>401/403/404/500, redirect chain, CORS 실패 구분</td><td>인증 만료, 경로 오류, 서버 장애, 정책 오류를 분리</td></tr>
+<tr><td>Waterfall</td><td>요청 시간 분해</td><td>queueing, DNS, connect, TLS, TTFB, download 중 어디가 긴지 확인</td><td>preconnect, CDN/cache, API latency, payload 크기 중 원인 선택</td></tr>
+<tr><td>Priority</td><td>브라우저 리소스 우선순위</td><td>LCP 이미지나 CSS가 너무 늦게 시작되는지 확인</td><td>preload, fetchpriority, lazy loading 조건 재검토</td></tr>
+<tr><td>Initiator</td><td>요청을 만든 코드</td><td>중복 요청, 늦은 dynamic import, effect 재실행 추적</td><td>query key, dependency, remount, prefetch 위치 수정</td></tr>
+<tr><td>Cache</td><td>캐시 hit/miss와 revalidation</td><td>304, memory cache, disk cache, service worker 응답 구분</td><td>cache-control, asset hash, service worker update 정책 확인</td></tr>
+<tr><td>Throttling</td><td>느린 네트워크 시뮬레이션</td><td>실사용 환경에서 waterfall 순서가 유지되는지 검증</td><td>route fallback, skeleton, retry UX 보강</td></tr>
 </table>
 <div class="callout warn"><span class="co-label">CACHE CONFUSION</span><p>개발 중 cache 때문에 문제가 사라지거나 생길 수 있습니다. 재현 조건을 명확히 하려면 Disable cache, hard reload, incognito를 구분해서 사용합니다.</p></div>
 </section>
 
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">DT-04</span><h2>Performance·Memory</h2></div>
-<p class="lede">Performance 패널은 main thread의 실제 비용을 보여줍니다. Memory 패널은 누수가 의심될 때 사용합니다.</p>
+<p class="lede">Performance 패널은 main thread의 실제 비용을 보여줍니다. Memory 패널은 누수가 의심될 때 사용합니다. 핵심은 긴 막대를 발견하는 것이 아니라 사용자 action부터 다음 paint까지 어떤 단계가 시간을 썼는지 설명하는 것입니다.</p>
 <table>
-<tr><th>패널</th><th>확인</th><th>대표 문제</th></tr>
-<tr><td>Performance</td><td>long task, scripting, rendering, painting</td><td>입력 지연, scroll jank</td></tr>
-<tr><td>Performance monitor</td><td>CPU, JS heap, DOM nodes</td><td>DOM 증가, heap 증가 추세</td></tr>
-<tr><td>Memory snapshot</td><td>객체 유지 경로</td><td>unmounted 컴포넌트 참조 유지</td></tr>
-<tr><td>Allocation timeline</td><td>상호작용 중 메모리 할당</td><td>반복 작업에서 누적되는 객체</td></tr>
+<tr><th>패널</th><th>확인</th><th>대표 문제</th><th>판정 기준</th></tr>
+<tr><td>Performance</td><td>long task, scripting, style/layout, paint, composite</td><td>입력 지연, scroll jank, hydration blocking</td><td>interaction 구간에서 다음 paint를 늦춘 작업을 특정</td></tr>
+<tr><td>Performance monitor</td><td>CPU, JS heap, DOM nodes, event listeners</td><td>DOM 증가, heap 증가 추세, listener 누적</td><td>동일 시나리오 반복 후 baseline으로 돌아오는지 확인</td></tr>
+<tr><td>Memory snapshot</td><td>retained size, retaining path, detached node</td><td>unmounted 컴포넌트 참조 유지, cache 무제한 증가</td><td>GC 후에도 남는 객체와 참조 경로가 설명되는지 확인</td></tr>
+<tr><td>Allocation timeline</td><td>상호작용 중 메모리 할당 패턴</td><td>반복 작업에서 누적되는 객체, 큰 JSON parsing</td><td>특정 interaction마다 새로 할당되는 큰 객체를 찾음</td></tr>
 </table>
 <table>
 <tr><th>성능 진단 루틴</th><th>기준</th></tr>
 <tr><td>CPU throttling</td><td>고사양 개발 머신 기준을 피하고 중저가 기기 조건으로 재현</td></tr>
-<tr><td>Long task 분해</td><td>scripting, rendering, painting 중 어디가 긴지 flame chart에서 확인</td></tr>
-<tr><td>Lighthouse vs Performance</td><td>Lighthouse는 lab 점수와 힌트, Performance trace는 특정 상호작용 원인 분석에 사용</td></tr>
-<tr><td>React Profiler 결합</td><td>Chrome trace에서 긴 작업을 찾고 React Profiler에서 어떤 컴포넌트 render가 원인인지 연결</td></tr>
-<tr><td>Memory 재현</td><td>동일 동작 반복 후 heap/DOM node 증가 추세 확인</td></tr>
+<tr><td>Long task 분해</td><td>50ms 이상 task를 long task로 보고, scripting, rendering, painting 중 어디가 긴지 flame chart에서 확인</td></tr>
+<tr><td>Forced layout 확인</td><td>Recalculate Style과 Layout이 반복되면 DOM read/write 섞임을 의심</td></tr>
+<tr><td>Frame drop 확인</td><td>60fps 기준 frame 예산은 약 16.7ms입니다. Frames lane에서 30ms 이상 frame이 반복되면 scroll/animation 병목과 연결</td></tr>
+<tr><td>React Profiler 결합</td><td>Chrome trace에서 긴 작업을 찾고 React Profiler에서 같은 시간대 commit을 대조</td></tr>
+<tr><td>Memory 재현</td><td>동일 동작 반복 후 heap/DOM node 증가 추세와 GC 후 회복 여부 확인</td></tr>
 </table>
+<div class="serial-card"><span class="sc-label">MEMORY LEAK CHECK</span>1. 페이지 진입 후 baseline heap과 DOM node 수 기록<br>2. 문제 동작을 5~10회 반복<br>3. 강제 GC 후 수치가 baseline 근처로 돌아오는지 확인<br>4. heap snapshot을 비교해 retained size가 큰 객체를 정렬<br>5. retaining path에서 subscription, timer, cache, detached DOM 참조를 찾음<br>6. cleanup 적용 후 같은 반복 시나리오로 재검증</div>
+<div class="serial-card"><span class="sc-label">MEMORY 숫자 예시</span>Baseline: JS heap 48MB, DOM nodes 2,400개<br>Modal open/close 10회 후 GC: JS heap 83MB, DOM nodes 5,900개<br>해석: 단순 cache 증가가 아니라 unmount 후 DOM 또는 listener가 유지될 가능성이 큽니다. heap snapshot에서 detached node와 retaining path를 확인합니다.</div>
 </section>
 
 <section id="ch5">
 <div class="ch-head"><span class="ch-code">DT-05</span><h2>Application·Security</h2></div>
-<p class="lede">Application 패널은 storage, cookie, cache, service worker를 보는 곳입니다. Security 패널은 HTTPS와 인증서 문제를 확인합니다.</p>
+<p class="lede">Application 패널은 storage, cookie, cache, service worker를 보는 곳입니다. Security 패널은 HTTPS와 인증서 문제를 확인합니다. 프론트엔드 장애 중에는 코드 문제가 아니라 오래된 cache, 잘못된 cookie scope, service worker update 정책 때문에 생기는 문제가 많습니다.</p>
 <table>
 <tr><th>영역</th><th>확인할 것</th></tr>
 <tr><td>Cookies</td><td>HttpOnly, Secure, SameSite, domain/path</td></tr>
@@ -94,15 +110,92 @@
 
 <section id="ch6">
 <div class="ch-head"><span class="ch-code">DT-06</span><h2>React DevTools</h2></div>
-<p class="lede">React DevTools는 컴포넌트 트리, props, state, render 비용을 확인하는 도구입니다.</p>
+<p class="lede">React DevTools는 컴포넌트 트리, props, state, render 비용을 확인하는 도구입니다. Performance 패널이 “main thread에서 오래 걸린 일”을 보여준다면 React Profiler는 “어떤 컴포넌트 commit이 그 비용에 기여했는지”를 좁히는 도구입니다.</p>
 <table>
-<tr><th>기능</th><th>사용</th><th>주의</th></tr>
-<tr><td>Components</td><td>props/state/context 확인</td><td>실제 DOM 구조와 다를 수 있음</td></tr>
-<tr><td>Profiler</td><td>render 비용 측정</td><td>개발 모드 비용은 운영과 다를 수 있음</td></tr>
-<tr><td>Highlight updates</td><td>렌더 범위 시각화</td><td>많이 렌더된다고 항상 문제는 아님</td></tr>
-<tr><td>Why did this render</td><td>props/context 변경 원인 추적</td><td>도구나 설정 필요할 수 있음</td></tr>
+<tr><th>기능</th><th>사용</th><th>주의</th><th>판정</th></tr>
+<tr><td>Components</td><td>props/state/context 확인</td><td>실제 DOM 구조와 다를 수 있음</td><td>상태 소유권과 provider 범위가 의도와 맞는지 확인</td></tr>
+<tr><td>Profiler flamegraph</td><td>commit별 render 비용 측정</td><td>개발 모드 비용은 운영과 다를 수 있음</td><td>가장 비싼 commit과 컴포넌트 subtree를 찾음</td></tr>
+<tr><td>Ranked view</td><td>비용이 큰 컴포넌트 순서 확인</td><td>작은 컴포넌트 다수보다 큰 컴포넌트 하나가 더 중요할 수 있음</td><td>최적화 후보를 비용순으로 좁힘</td></tr>
+<tr><td>Highlight updates</td><td>렌더 범위 시각화</td><td>많이 렌더된다고 항상 문제는 아님</td><td>fan-out이 큰지 직관적으로 확인</td></tr>
+<tr><td>Why did this render</td><td>props/context 변경 원인 추적</td><td>도구나 설정 필요할 수 있음</td><td>새 객체 props, context 변경, hook state 변경을 구분</td></tr>
 </table>
-<div class="glossary"><div class="g-row"><div class="g-term"><b>TTFB</b><span>network</span></div><div class="g-def">서버 첫 바이트까지 걸린 시간입니다.</div></div><div class="g-row"><div class="g-term"><b>Long Task</b><span>performance</span></div><div class="g-def">50ms 이상 main thread를 막은 작업입니다.</div></div></div>
+<div class="serial-card"><span class="sc-label">REACT PROFILER ROUTINE</span>1. 느린 사용자 interaction만 녹화한다<br>2. 가장 긴 commit을 선택한다<br>3. render된 컴포넌트 중 비용 상위와 넓게 퍼진 subtree를 나눈다<br>4. props/state/context/key 중 render 원인을 기록한다<br>5. state 이동, context 분리, props identity 안정화, virtualization 중 하나만 적용한다<br>6. 같은 interaction으로 commit duration과 실제 INP 후보를 다시 비교한다</div>
+<table>
+<tr><th>Profiler 숫자</th><th>좋은 해석</th><th>위험 해석</th></tr>
+<tr><td>commit 8-20ms</td><td>대부분의 일반 interaction에서 부담이 작음</td><td>짧은 commit이 아주 자주 반복되면 fan-out 확인</td></tr>
+<tr><td>commit 50ms 이상</td><td>입력 interaction에서는 개선 후보</td><td>INP p75 200ms 초과와 함께 보이면 우선순위 상승</td></tr>
+<tr><td>commit 150ms 이상</td><td>큰 route 전환이나 초기 hydration이 아니라면 위험</td><td>state 범위, context, virtualization, heavy child를 즉시 분해</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">PROFILER LIMIT</span><p>React Profiler는 browser layout과 paint 비용을 모두 설명하지 않습니다. commit이 짧은데 INP가 나쁘면 Chrome Performance에서 style recalculation, layout, paint, composite를 다시 봐야 합니다.</p></div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">DT-07</span><h2>Performance trace 해석</h2></div>
+<p class="lede">Performance trace는 “느린 것 같다”를 시간축 위의 증거로 바꿉니다. 핵심은 긴 막대를 찾는 것이 아니라 사용자 상호작용부터 다음 paint까지 어떤 단계가 시간을 썼는지 연결하는 것입니다.</p>
+<table>
+<tr><th>Trace 영역</th><th>읽는 방법</th><th>자주 보이는 원인</th><th>다음 도구</th></tr>
+<tr><td>Network</td><td>HTML, JS, CSS, image waterfall과 우선순위 확인</td><td>render-blocking CSS, 늦은 hero image, chunk waterfall</td><td>Coverage, Lighthouse, bundle analyzer</td></tr>
+<tr><td>Main</td><td>scripting, rendering, painting, long task 확인</td><td>큰 JSON parsing, 무거운 event handler, hydration</td><td>React Profiler, source map</td></tr>
+<tr><td>Interactions</td><td>INP 후보 interaction과 presentation delay 확인</td><td>입력 후 render/paint 지연</td><td>Web Vitals attribution</td></tr>
+<tr><td>Frames</td><td>frame drop과 FPS 저하 확인</td><td>scroll handler, layout thrash, paint storm</td><td>Layers, Rendering panel</td></tr>
+<tr><td>Experience</td><td>layout shift, long animation frame, responsiveness 신호 확인</td><td>CLS source, LoAF, slow interaction</td><td>Web Vitals overlay, screenshots</td></tr>
+<tr><td>Memory</td><td>heap과 DOM node 증가 추세 확인</td><td>subscription 미해제, detached DOM</td><td>Heap snapshot, allocation timeline</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">TRACE READING ORDER</span>1. CPU throttling과 network 조건 기록<br>2. 사용자 action marker 또는 interaction 구간 선택<br>3. 가장 긴 long task와 다음 paint 지점 확인<br>4. scripting/rendering/painting 비중을 분리<br>5. call stack에서 앱 코드와 라이브러리 코드를 구분<br>6. React Profiler commit과 같은 시간대인지 대조</div>
+<table>
+<tr><th>trace 신호</th><th>해석</th><th>다음 질문</th></tr>
+<tr><td>Evaluate Script가 김</td><td>큰 JS parse/compile 또는 초기 실행 비용</td><td>initial bundle과 third-party script가 예산을 넘는가?</td></tr>
+<tr><td>Function Call 아래 앱 코드가 김</td><td>handler 또는 동기 계산이 main thread를 막음</td><td>작업을 쪼개거나 worker로 옮길 수 있는가?</td></tr>
+<tr><td>Recalculate Style/Layout 반복</td><td>DOM read/write 섞임 또는 DOM 수 과다</td><td>batching, containment, DOM 축소가 가능한가?</td></tr>
+<tr><td>Paint가 큼</td><td>넓은 영역 repaint 또는 비싼 시각 효과</td><td>paint 영역, box-shadow/filter, layer 전략을 줄일 수 있는가?</td></tr>
+<tr><td>Composite Layers가 큼</td><td>layer 수 또는 texture memory 부담</td><td>will-change나 fixed/sticky 요소를 남발했는가?</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">TRACE 숫자 예시</span>Interaction: grid cell 입력<br>Total interaction: 620ms<br>Input delay: 40ms · handler/script: 180ms · React commit: 210ms · style/layout: 120ms · paint: 70ms<br>해석: handler만 줄여서는 부족합니다. React commit과 layout 비용이 함께 크므로 state fan-out, DOM 수, layout effect를 같이 줄입니다.</div>
+<div class="callout"><span class="co-label">LAYOUT THRASH</span><p>반복문 안에서 DOM 읽기와 쓰기를 섞으면 브라우저가 layout을 여러 번 강제 계산합니다. trace에서 Recalculate Style과 Layout이 짧게 여러 번 반복되면 read/write batching, CSS containment, DOM 수 축소를 검토합니다.</p></div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">DT-08</span><h2>회귀 재현 패킷</h2></div>
+<p class="lede">성능 이슈는 “느립니다”로 공유하면 해결이 늦어집니다. 누가 봐도 같은 조건에서 재현하고 비교할 수 있는 패킷으로 남겨야 합니다.</p>
+<table>
+<tr><th>항목</th><th>포함할 내용</th><th>이유</th></tr>
+<tr><td>환경</td><td>브라우저, OS, device class, CPU/network throttling, build mode</td><td>개발자 고사양 환경 착시와 dev/prod 차이 제거</td></tr>
+<tr><td>시나리오</td><td>route, 로그인 상태, 데이터 크기, 정확한 사용자 행동</td><td>상호작용 비용은 데이터와 권한에 따라 달라짐</td></tr>
+<tr><td>증거</td><td>Performance trace, React Profiler export, Network HAR, screenshot, RUM link</td><td>원인 후보를 계층별로 검증 가능</td></tr>
+<tr><td>비교</td><td>이전 release, 현재 release, 수정 branch의 같은 조건 수치</td><td>개선 여부를 감각이 아니라 delta로 판단</td></tr>
+<tr><td>판정</td><td>사용자 영향, 회귀 범위, 임시 완화, rollback 기준</td><td>기술 이슈를 제품 위험으로 번역</td></tr>
+<tr><td>재발 방지</td><td>bundle budget, RUM alert, synthetic scenario, regression test</td><td>같은 성능 회귀가 다음 배포에서 반복되지 않게 함</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">PERFORMANCE REGRESSION PACKET</span>Issue: 어떤 사용자 행동이 얼마나 느려졌는가<br>Scope: route, device, release, traffic segment<br>Evidence: trace/HAR/profiler/RUM link<br>Root cause: network | JS | render | layout | paint | API<br>Fix options: 빠른 완화와 구조 개선을 분리<br>Verification: before/after 수치와 재발 방지 예산</div>
+<div class="callout risk"><span class="co-label">CLOSE CRITERIA</span><p>성능 이슈는 코드가 merge됐다고 닫지 않습니다. 같은 조건의 before/after trace, field 지표 회복 여부, 남은 예외와 재발 방지 장치가 있어야 닫을 수 있습니다.</p></div>
+</section>
+
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">DT-09</span><h2>AI 성능 진단 방법론</h2></div>
+<p class="lede">AI는 성능 문제를 대신 측정하지 못합니다. 하지만 재현 조건, trace 요약, 코드 경로, 가설 목록, 검증 계획을 구조화하는 데 매우 유용합니다. AI를 잘 쓰는 방법은 “느린데 고쳐줘”가 아니라 “이 증거로 가능한 원인을 좁히고, 가장 작은 실험을 설계해줘”라고 요청하는 것입니다.</p>
+<table>
+<tr><th>AI가 잘하는 일</th><th>입력으로 줘야 할 것</th><th>기대 산출물</th><th>주의</th></tr>
+<tr><td>증상 분류</td><td>사용자 행동, route, 기기 조건, p75/p95 지표</td><td>load, interaction, render, layout, memory 중 분류</td><td>숫자 없이 “느림”만 주면 일반론으로 흐름</td></tr>
+<tr><td>trace 해석 보조</td><td>Performance summary, long task 목록, 주요 call stack</td><td>원인 후보와 추가 확인 질문</td><td>trace 원본을 직접 본 것처럼 단정하게 두면 안 됨</td></tr>
+<tr><td>React 원인 추정</td><td>Profiler commit, render된 컴포넌트, props/state/context 변화</td><td>state fan-out, context invalidation, key remount 후보</td><td>memo를 자동 처방하게 두지 말고 측정 기준을 요구</td></tr>
+<tr><td>코드 변경안 작성</td><td>관련 컴포넌트, 상태 소유권, 데이터 크기, UX 제약</td><td>작은 diff, 위험, rollback 기준</td><td>동작 변경과 접근성 회귀를 반드시 검토</td></tr>
+<tr><td>회귀 방지 설계</td><td>before/after 수치, 실패 원인, 배포 경로</td><td>budget, RUM alert, synthetic scenario, PR checklist</td><td>테스트 불가능한 “주의하자” 문구로 끝내지 않음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">AI PERFORMANCE LOOP</span>1. 재현 패킷을 만든다: route, action, data size, device, network, build mode<br>2. 숫자를 붙인다: LCP/INP/CLS, commit duration, long task, DOM node, heap<br>3. AI에게 원인 후보를 계층별로 분류하게 한다: network | JS | React | layout | paint | memory<br>4. 후보마다 확인할 DevTools 증거를 요구한다<br>5. 가장 작은 코드 변경 실험 하나만 만든다<br>6. before/after 측정 명령과 판정 기준을 함께 생성한다<br>7. 개선이 확인되면 재발 방지 항목을 PR에 남긴다</div>
+<table>
+<tr><th>좋은 프롬프트</th><th>왜 좋은가</th></tr>
+<tr><td>“/grid에서 cell 입력 INP p75가 340ms, p95가 910ms입니다. React Profiler에서 GridPage commit 180ms, Row 1,000개 render가 보입니다. state fan-out, context, key, DOM 수 중 어떤 순서로 확인할지 가설과 DevTools 증거를 표로 정리해줘.”</td><td>증상, 숫자, 도구 증거, 후보 범위를 함께 제공해 일반론을 줄입니다.</td></tr>
+<tr><td>“이 trace 요약에서 handler 180ms, commit 210ms, layout 120ms, paint 70ms입니다. handler만 최적화했을 때 남는 병목과 다음 실험 3개를 작은 변경 순서로 제안해줘.”</td><td>AI가 한 가지 최적화에 과몰입하지 않고 남는 비용을 계산하게 합니다.</td></tr>
+<tr><td>“아래 컴포넌트에서 검색 input 변경이 table 전체 render를 유발합니다. UX는 input echo 100ms 이하, 결과 목록 stale 표시 필요입니다. state 위치 변경안과 검증 기준을 제안해줘.”</td><td>성능 목표와 UX 제약을 같이 줘서 무리한 debounce 처방을 막습니다.</td></tr>
+</table>
+<table>
+<tr><th>나쁜 프롬프트</th><th>문제</th><th>보정</th></tr>
+<tr><td>“이 페이지 느린데 최적화해줘.”</td><td>재현 조건과 병목 계층이 없어 추측 답변이 나옴</td><td>route, action, device, p75/p95, trace 요약을 붙임</td></tr>
+<tr><td>“useMemo 어디에 넣으면 돼?”</td><td>도구를 결론으로 고정함</td><td>Profiler에서 실제 비용과 render 원인을 먼저 설명하게 함</td></tr>
+<tr><td>“Lighthouse 100점 만들 방법 알려줘.”</td><td>제품 UX보다 점수 추격으로 흐름</td><td>핵심 route의 LCP/INP/CLS budget과 사용자 영향 기준을 제시</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">AI에 줄 성능 패킷 템플릿</span>Problem: 어떤 사용자 행동이 얼마나 느린가<br>Environment: browser, device class, CPU/network throttling, build mode<br>Metrics: LCP/INP/CLS, p50/p75/p95, long task, commit duration, DOM nodes, heap<br>Evidence: trace summary, Profiler summary, Network waterfall, RUM segment<br>Code scope: 관련 컴포넌트와 상태 소유권<br>Constraints: 접근성, UX, 데이터 정합성, rollout 위험<br>Ask: 원인 후보, 확인 증거, 가장 작은 실험, before/after 판정 기준</div>
+<div class="callout warn"><span class="co-label">AI 사용 한계</span><p>AI가 만든 성능 결론은 측정으로 검증하기 전까지 가설입니다. 특히 browser trace, Profiler export, RUM 데이터는 누락된 맥락이 많기 때문에 AI 답변을 그대로 merge하지 말고 반드시 같은 조건에서 before/after를 비교합니다.</p></div>
 </section>
 <footer>DEVTOOLS HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>

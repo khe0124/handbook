@@ -1,5 +1,7 @@
 import { createRoot, type Root } from "react-dom/client";
+import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ChecklistCard, type ChecklistItem } from "./ChecklistCard";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
 import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
 import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
@@ -31,9 +33,66 @@ function shouldAttachInlineCodeCopy(itemId: string, code: HTMLElement) {
   );
 }
 
+function getSerialCardText(card: HTMLElement) {
+  return card.textContent?.replace(/\u00a0/g, " ").trim() ?? "";
+}
+
+function shouldUpgradeChecklistCard(card: HTMLElement) {
+  const label = card.querySelector<HTMLElement>(".sc-label")?.textContent?.trim() ?? "";
+
+  return label.includes("CHECKLIST") && getChecklistItems(card).length > 0;
+}
+
+function getChecklistItems(card: HTMLElement): ChecklistItem[] {
+  const label = card.querySelector<HTMLElement>(".sc-label");
+  const lines: string[] = [];
+  let currentLine = "";
+  let foundLabel = false;
+
+  const walk = (node: ChildNode) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      currentLine += node.textContent ?? "";
+      return;
+    }
+
+    if (!(node instanceof HTMLElement)) return;
+    if (node.classList.contains("serial-card-copy-mount")) return;
+    if (node.classList.contains("serial-card-checklist-mount")) return;
+
+    if (node.tagName === "BR") {
+      lines.push(currentLine);
+      currentLine = "";
+      return;
+    }
+
+    node.childNodes.forEach(walk);
+  };
+
+  card.childNodes.forEach((node) => {
+    if (node === label) {
+      foundLabel = true;
+      return;
+    }
+
+    if (!foundLabel) return;
+    walk(node);
+  });
+
+  if (currentLine.trim()) lines.push(currentLine);
+
+  return lines
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("□"))
+    .map((text, index) => ({
+      id: `${index}:${text}`,
+      text,
+    }));
+}
+
 export function HandbookPage({ item, onReady }: HandbookPageProps) {
   const [document, setDocument] = useState<HandbookDocumentContent | null>(null);
   const [failed, setFailed] = useState(false);
+  const [isTocOpen, setIsTocOpen] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
   const practicalExample = PRACTICAL_EXAMPLES[item.id];
   const practicalLens = getPracticalExampleLens(item.id);
@@ -44,6 +103,7 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
 
     setDocument(null);
     setFailed(false);
+    setIsTocOpen(false);
 
     if (!loader) {
       setFailed(true);
@@ -70,8 +130,30 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
 
     const roots: Root[] = [];
     const mounts: HTMLElement[] = [];
+    const restoredCards: Array<{ card: HTMLElement; html: string }> = [];
 
     main.querySelectorAll<HTMLElement>(".serial-card").forEach((card) => {
+      if (shouldUpgradeChecklistCard(card)) {
+        const html = card.innerHTML;
+        const labelText = card.querySelector<HTMLElement>(".sc-label")?.textContent?.trim() ?? "CHECKLIST";
+        const items = getChecklistItems(card);
+        const label = window.document.createElement("span");
+        const mount = window.document.createElement("div");
+
+        label.className = "sc-label";
+        label.textContent = labelText;
+        mount.className = "serial-card-checklist-mount";
+        card.dataset.copyText = getSerialCardText(card);
+        card.replaceChildren(label, mount);
+
+        const root = createRoot(mount);
+        root.render(<ChecklistCard itemId={item.id} label={labelText} items={items} />);
+
+        roots.push(root);
+        mounts.push(mount);
+        restoredCards.push({ card, html });
+      }
+
       const mount = window.document.createElement("div");
       mount.className = "serial-card-copy-mount";
       card.append(mount);
@@ -100,6 +182,10 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
     return () => {
       roots.forEach((root) => root.unmount());
       mounts.forEach((mount) => mount.remove());
+      restoredCards.forEach(({ card, html }) => {
+        card.innerHTML = html;
+        delete card.dataset.copyText;
+      });
     };
   }, [document, item.id]);
 
@@ -108,6 +194,20 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
 
     onReady?.(item.id);
   }, [document, item.id, onReady]);
+
+  useEffect(() => {
+    if (!isTocOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsTocOpen(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isTocOpen]);
 
   if (failed) {
     return (
@@ -127,9 +227,33 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
 
   return (
     <div className="handbook-shell">
+      <button
+        type="button"
+        className="handbook-mobile-toc-toggle"
+        onClick={() => setIsTocOpen((isOpen) => !isOpen)}
+        aria-expanded={isTocOpen}
+        aria-controls="handbook-document-toc"
+        aria-label={isTocOpen ? "목차 닫기" : "목차 열기"}
+        title={isTocOpen ? "목차 닫기" : "목차 열기"}
+      >
+        {isTocOpen ? <X size={17} aria-hidden /> : <Menu size={17} aria-hidden />}
+        <span>목차</span>
+      </button>
+      {isTocOpen ? (
+        <button
+          type="button"
+          className="handbook-toc-backdrop"
+          onClick={() => setIsTocOpen(false)}
+          aria-label="목차 닫기"
+        />
+      ) : null}
       <nav
-        className="handbook-toc"
+        id="handbook-document-toc"
+        className={`handbook-toc${isTocOpen ? " is-open" : ""}`}
         aria-label={`${item.label} 목차`}
+        onClick={(event) => {
+          if ((event.target as HTMLElement).closest("a")) setIsTocOpen(false);
+        }}
         dangerouslySetInnerHTML={{ __html: document.navHtml }}
       />
       <main

@@ -11,13 +11,10 @@
 <div class="nav-brand">ENGINEERING · FRONTEND CORE</div>
   <div class="nav-title">프론트엔드 핵심 · 브라우저와 접근성</div>
   <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
-  <a href="#doc-fe"><span class="code">DOC</span>프론트엔드 개요</a>
-  <a href="#doc-browser"><span class="code">DOC</span>브라우저 동작 원리</a>
-  <a href="#doc-a11y"><span class="code">DOC</span>웹접근성</a>
-  <a href="#doc-fe"><span class="code">SRC</span>프론트엔드 개요</a>
+  <a href="#doc-fe"><span class="code">PART</span>프론트엔드 개요</a>
 <a href="#fe-ch1"><span class="code">FE-01</span>실무 프론트엔드의 역할</a>
-  <a href="#fe-ch2"><span class="code">FE-02</span>브라우저 런타임과 렌더링 모델</a>
-  <a href="#fe-ch3"><span class="code">FE-03</span>HTML·CSS·접근성의 기본 계약</a>
+  <a href="#fe-ch2"><span class="code">FE-02</span>브라우저를 알아야 하는 이유</a>
+  <a href="#fe-ch3"><span class="code">FE-03</span>HTML·CSS UI 계약</a>
   <a href="#fe-ch4"><span class="code">FE-04</span>컴포넌트 설계와 합성</a>
   <a href="#fe-ch5"><span class="code">FE-05</span>상태 관리와 서버 상태</a>
   <a href="#fe-ch6"><span class="code">FE-06</span>API 연동과 에러·로딩 UX</a>
@@ -28,21 +25,26 @@
   <a href="#fe-ch11"><span class="code">FE-11</span>배포와 관측가능성</a>
   <a href="#fe-ch12"><span class="code">FE-12</span>보안: XSS·CSRF·토큰 저장</a>
   <a href="#fe-ch13"><span class="code">FE-13</span>대규모 제품 운영</a>
-  <a href="#fe-ch14"><span class="code">FE-14</span>용어집</a>
-  <a href="#doc-browser"><span class="code">SRC</span>브라우저 동작 원리</a>
+  <a href="#fe-ch14"><span class="code">FE-14</span>실무 의사결정 게이트</a>
+  <a href="#fe-ch15"><span class="code">FE-15</span>용어집</a>
+  <a href="#doc-browser"><span class="code">PART</span>브라우저 동작 원리</a>
 <a href="#browser-ch1"><span class="code">BR-01</span>브라우저는 앱 런타임이다</a>
   <a href="#browser-ch2"><span class="code">BR-02</span>이벤트 루프와 태스크 큐</a>
   <a href="#browser-ch3"><span class="code">BR-03</span>DOM·CSSOM·렌더 트리</a>
   <a href="#browser-ch4"><span class="code">BR-04</span>네트워크와 로딩 우선순위</a>
   <a href="#browser-ch5"><span class="code">BR-05</span>저장소와 worker</a>
-  <a href="#browser-ch6"><span class="code">BR-06</span>치트시트</a>
-  <a href="#doc-a11y"><span class="code">SRC</span>웹접근성</a>
+  <a href="#browser-ch6"><span class="code">BR-06</span>브라우저 문제 진단 루틴</a>
+  <a href="#browser-ch7"><span class="code">BR-07</span>고빈도 브라우저 이슈</a>
+  <a href="#browser-ch8"><span class="code">BR-08</span>치트시트</a>
+  <a href="#doc-a11y"><span class="code">PART</span>웹접근성</a>
 <a href="#a11y-ch1"><span class="code">A11Y-01</span>접근성은 UI의 계약</a>
   <a href="#a11y-ch2"><span class="code">A11Y-02</span>Semantic HTML</a>
   <a href="#a11y-ch3"><span class="code">A11Y-03</span>키보드와 focus</a>
   <a href="#a11y-ch4"><span class="code">A11Y-04</span>ARIA 사용 기준</a>
   <a href="#a11y-ch5"><span class="code">A11Y-05</span>폼·오류·상태 전달</a>
-  <a href="#a11y-ch6"><span class="code">A11Y-06</span>검증 루틴</a>
+  <a href="#a11y-ch6"><span class="code">A11Y-06</span>컴포넌트별 접근성 패턴</a>
+  <a href="#a11y-ch7"><span class="code">A11Y-07</span>검증 루틴</a>
+  <a href="#a11y-ch8"><span class="code">A11Y-08</span>접근성 회귀 방지</a>
 </nav>
 <main>
 <header class="hero">
@@ -58,24 +60,13 @@
 
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
-<p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
+<p class="lede">FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK 원천을 기반으로 역할 판단에서 시작해 브라우저 제약, UI 계약, 접근성 검증으로 이어 읽도록 구성했습니다. 각 파트는 원문을 그대로 나열하지 않고 통합 흐름에서 중복되는 문서 크롬을 제거해 이어 읽기 좋게 정리했습니다.</p>
 <ul><li>프론트엔드 개요</li><li>브라우저 동작 원리</li><li>웹접근성</li></ul>
 </section>
 
 <section id="doc-fe">
 <div class="ch-head"><span class="ch-code">SOURCE</span><h2>프론트엔드 개요</h2></div>
 </section>
-
-<header class="hero">
-  <div class="hero-serial">
-    <span>DOC : FE-HANDBOOK-V1</span>
-    <span>SCOPE : BROWSER · UI ARCHITECTURE · STATE · PERFORMANCE · QUALITY</span>
-    <span>LANG : KO</span>
-  </div>
-  <h1>프론트엔드 엔지니어링 핸드북<br>실무 판단</h1>
-  <p class="hero-sub">프론트엔드는 화면을 그리는 일이 아니라 <strong>사용자 입력, 네트워크, 브라우저 제약, 디자인 시스템, 접근성, 성능</strong>을 하나의 경험으로 묶는 엔지니어링입니다. 좋은 프론트엔드는 예쁜 UI보다 먼저 <strong>예측 가능하고, 복구 가능하고, 느린 환경에서도 견디는 UI</strong>를 만듭니다.</p>
-  <div class="hero-meta">AUDIENCE : 실무 프론트엔드 개발자 · React/TypeScript 기반 제품 개발<br>STANCE : 프레임워크 암기보다 설계 판단 · 품질 기준 · 트레이드오프 중심 · COMPILED 2026-06</div>
-</header>
 
 <section id="fe-ch1">
 <div class="ch-head"><span class="ch-code">FE-01</span><h2>실무 프론트엔드의 역할</h2></div>
@@ -94,8 +85,8 @@
 </section>
 
 <section id="fe-ch2">
-<div class="ch-head"><span class="ch-code">FE-02</span><h2>브라우저 런타임과 렌더링 모델</h2></div>
-<p class="lede">React나 Vue 이전에 브라우저가 있습니다. 프레임워크는 DOM, 이벤트 루프, 네트워크, 렌더링 파이프라인 위에서 동작합니다. 이 층을 모르면 성능과 버그를 추측으로 다루게 됩니다.</p>
+<div class="ch-head"><span class="ch-code">FE-02</span><h2>브라우저를 알아야 하는 이유</h2></div>
+<p class="lede">React나 Vue 이전에 브라우저가 있습니다. 이 장은 상세 원리 설명이 아니라, 프론트엔드 의사결정이 브라우저 제약과 어떻게 연결되는지 보여주는 입구입니다. 이벤트 루프, 렌더링 파이프라인, 네트워크 waterfall의 상세 진단은 브라우저 동작 원리 파트에서 다룹니다.</p>
 <table>
 <tr><th>개념</th><th>의미</th><th>실무 영향</th></tr>
 <tr><td><b>이벤트 루프</b></td><td>콜스택, 태스크, 마이크로태스크, 렌더링 기회를 순서대로 처리</td><td>긴 JS 작업은 입력 반응성을 막음. 무거운 계산은 쪼개거나 worker로 이동</td></tr>
@@ -103,14 +94,6 @@
 <tr><td><b>CSSOM</b></td><td>CSS 규칙 트리</td><td>복잡한 selector와 전역 cascade는 예측 비용을 키움</td></tr>
 <tr><td><b>렌더링 파이프라인</b></td><td>style → layout → paint → composite</td><td>transform/opacity는 비교적 싸고, width/height/top 변경은 layout 비용이 큼</td></tr>
 </table>
-<div class="serial-card">
-<span class="sc-label">RENDERING PIPELINE</span>
-DOM + CSSOM<br>
-<span class="dim">→</span> style calculation<br>
-<span class="dim">→</span> layout <span class="dim">(box size and position)</span><br>
-<span class="dim">→</span> paint <span class="dim">(pixels)</span><br>
-<span class="dim">→</span> composite <span class="dim">(layers on screen)</span>
-</div>
 <p>실무 성능 최적화는 대부분 "무엇이 비싼지"를 구분하는 일입니다. 렌더링을 줄인다고 무조건 빨라지는 것이 아니라, 사용자가 체감하는 병목이 JS 실행인지, 네트워크인지, layout인지, 이미지인지 먼저 측정해야 합니다.</p>
 <div class="callout warn">
 <span class="co-label">MEASURE FIRST</span>
@@ -119,8 +102,8 @@ DOM + CSSOM<br>
 </section>
 
 <section id="fe-ch3">
-<div class="ch-head"><span class="ch-code">FE-03</span><h2>HTML·CSS·접근성의 기본 계약</h2></div>
-<p class="lede">접근성은 옵션이 아니라 UI의 기본 계약입니다. 올바른 HTML은 접근성, 폼 동작, 키보드 탐색, SEO, 테스트 안정성을 동시에 개선합니다.</p>
+<div class="ch-head"><span class="ch-code">FE-03</span><h2>HTML·CSS UI 계약</h2></div>
+<p class="lede">HTML과 CSS는 화면을 꾸미는 재료가 아니라 브라우저, 보조기술, 테스트가 읽는 UI 계약입니다. 이 장은 기본 요소 선택과 스타일 경계만 다루고, accessible name, ARIA, 키보드 패턴은 웹접근성 파트에서 상세히 다룹니다.</p>
 <table>
 <tr><th>선택</th><th>좋은 기본값</th><th>피해야 할 패턴</th></tr>
 <tr><td>버튼</td><td><code>&lt;button type="button"&gt;</code></td><td><code>&lt;div onClick&gt;</code>에 role만 붙이기</td></tr>
@@ -130,8 +113,8 @@ DOM + CSSOM<br>
 </table>
 <p>CSS는 "꾸미기"가 아니라 상태와 구조의 표현입니다. 전역 cascade, specificity 경쟁, 임의 spacing이 쌓이면 작은 변경도 위험해집니다. 토큰, 컴포넌트 경계, 반응형 제약을 일관되게 두면 디자인 품질과 유지보수성이 같이 올라갑니다.</p>
 <div class="callout">
-<span class="co-label">ACCESSIBILITY AS API</span>
-<p>스크린 리더와 키보드 사용자는 DOM을 UI의 API로 사용합니다. 화면에 보이는 것과 DOM 의미가 다르면 API가 거짓말하는 셈입니다. 접근성은 나중에 붙이는 보정이 아니라 처음부터 올바른 요소를 선택하는 습관입니다.</p>
+<span class="co-label">UI CONTRACT</span>
+<p>개요 문서에서는 기본 계약만 잡습니다. 버튼은 버튼으로, 이동은 링크로, 폼은 label과 name으로 시작합니다. 세부 접근성 판단은 별도 접근성 파트에서 한 번만 깊게 다룹니다.</p>
 </div>
 </section>
 
@@ -175,6 +158,14 @@ DOM + CSSOM<br>
 <tr><td><b>클라이언트 도메인 상태</b></td><td>편집 캔버스, 복잡한 builder 상태</td><td>Zustand, reducer, state machine</td></tr>
 </table>
 <p>서버 상태는 클라이언트가 소유하지 않습니다. 캐시된 복사본일 뿐입니다. 그래서 stale time, refetch, optimistic update, invalidation 같은 개념이 필요합니다. "전역 store에 API 결과 저장"은 캐시 무효화, 중복 요청, stale data 문제를 직접 떠안겠다는 뜻입니다.</p>
+<h3>상태 설계 실패 모드</h3>
+<table>
+<tr><th>증상</th><th>대개 원인</th><th>리뷰 질문</th><th>개선 방향</th></tr>
+<tr><td>뒤로 가기 후 필터가 사라짐</td><td>URL 상태를 컴포넌트 내부에만 둠</td><td>공유·복원되어야 하는 상태인가?</td><td>검색어, 정렬, 페이지는 query string으로 승격</td></tr>
+<tr><td>저장 직후 이전 값이 다시 보임</td><td>서버 상태 무효화 누락</td><td>mutation 성공 후 어떤 query가 낡아지는가?</td><td>관련 query invalidate 또는 응답으로 cache 갱신</td></tr>
+<tr><td>모달을 다시 열면 입력값이 남음</td><td>draft 상태 생명주기 불명확</td><td>닫기, 취소, 제출 실패 때 draft를 보존할 것인가?</td><td>컴포넌트 key, explicit reset, 저장 실패 보존 정책 분리</td></tr>
+<tr><td>두 탭에서 수정하면 값이 덮임</td><td>버전·충돌 처리 기준 없음</td><td>충돌을 자동 덮어쓸 것인가, 사용자에게 보여줄 것인가?</td><td>version, updatedAt, 409 처리 계약 추가</td></tr>
+</table>
 <div class="callout">
 <span class="co-label">RULE OF THUMB</span>
 <p>새 상태를 추가할 때 먼저 묻습니다. 새로고침 후에도 유지되어야 하는가? URL로 공유되어야 하는가? 서버가 진실의 원천인가? 두 컴포넌트 이상이 동시에 써야 하는가? 이 질문에 답하면 store부터 만들 필요가 줄어듭니다.</p>
@@ -192,6 +183,18 @@ DOM + CSSOM<br>
 <tr><td>success</td><td>변경 결과를 사용자가 확인 가능하게 함</td><td>낙관 업데이트 시 실패 rollback 설계</td></tr>
 </table>
 <p>백엔드 API는 완벽히 안정적이지 않습니다. 프론트엔드는 실패를 감추는 층이 아니라 실패를 사용자가 이해 가능한 행동으로 바꾸는 층입니다. 같은 500이라도 저장 실패, 조회 실패, 결제 실패의 UI는 다릅니다.</p>
+<h3>에러별 UI 책임</h3>
+<table>
+<tr><th>상태</th><th>사용자 의미</th><th>UI 처리</th><th>재시도</th></tr>
+<tr><td>400</td><td>요청 형식 오류</td><td>일반 toast보다 계약 오류로 기록하고 원인 추적</td><td>자동 재시도 금지</td></tr>
+<tr><td>401</td><td>인증 만료</td><td>세션 갱신 또는 로그인 흐름으로 이동</td><td>토큰 갱신 1회</td></tr>
+<tr><td>403</td><td>권한 없음</td><td>불가능한 액션의 이유와 권한 요청 경로 제공</td><td>금지</td></tr>
+<tr><td>404</td><td>대상이 없음</td><td>목록 복귀, 삭제되었을 가능성 안내</td><td>대부분 금지</td></tr>
+<tr><td>409</td><td>데이터 충돌</td><td>최신 데이터 새로고침, 내 변경분 재확인</td><td>사용자 선택 후</td></tr>
+<tr><td>422</td><td>검증 실패</td><td>필드별 오류와 요약 오류를 함께 연결</td><td>입력 수정 후</td></tr>
+<tr><td>429</td><td>요청 과다</td><td>대기 시간과 비활성화 상태 표시</td><td>Retry-After 기준</td></tr>
+<tr><td>5xx</td><td>서버 장애</td><td>보존 가능한 입력은 보존하고 추적 ID를 노출</td><td>지수 백오프</td></tr>
+</table>
 <div class="callout warn">
 <span class="co-label">DOUBLE SUBMIT</span>
 <p>저장 버튼을 누른 뒤 pending 상태를 잠그지 않으면 같은 mutation이 두 번 나갈 수 있습니다. 프론트에서 버튼을 비활성화하고, 백엔드에서는 멱등성 키나 중복 제약을 둡니다. UI 방어와 서버 방어는 서로 대체가 아니라 겹겹이 쌓는 안전장치입니다.</p>
@@ -265,6 +268,13 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>시각 회귀</td><td>디자인 깨짐</td><td>공통 컴포넌트와 핵심 화면 screenshot diff</td></tr>
 </table>
 <p>테스트는 구현 세부가 아니라 계약을 잡아야 합니다. "이 hook이 두 번 호출된다"보다 "사용자가 저장하면 성공 메시지와 새 데이터가 보인다"가 더 오래 갑니다.</p>
+<div class="serial-card">
+<span class="sc-label">TEST DECISION PACKET</span>
+1. 비즈니스 규칙은 단위 테스트로 빠르게 고정한다.<br>
+2. 사용자 플로우는 통합 테스트에서 네트워크 성공·실패를 모두 검증한다.<br>
+3. 결제, 권한, 데이터 손실 가능성이 있는 흐름은 E2E로 행복 경로와 실패 경로를 둔다.<br>
+4. 접근성 회귀는 키보드 이동, accessible name, 오류 연결을 PR 체크리스트에 포함한다.
+</div>
 <div class="callout warn">
 <span class="co-label">TESTING SMELL</span>
 <p>snapshot이 수백 줄이고 실패할 때 아무도 읽지 않는다면 보호막이 아닙니다. 테스트 실패가 의사결정을 도와야 합니다. 무엇이 깨졌고 사용자가 어떤 영향을 받는지 드러나는 테스트가 좋은 테스트입니다.</p>
@@ -327,8 +337,40 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </section>
 
 <section id="fe-ch14">
-<div class="ch-head"><span class="ch-code">FE-14</span><h2>용어집</h2></div>
-<p class="lede">실무에서 자주 부딪히는 프론트엔드 용어를 의사결정 관점으로 정리합니다.</p>
+<div class="ch-head"><span class="ch-code">FE-14</span><h2>실무 의사결정 게이트</h2></div>
+<p class="lede">좋은 프론트엔드 설계는 멋진 구조보다 결정의 흔적이 남아 있는 구조입니다. PR과 설계 문서는 아래 질문에 답할 수 있어야 합니다.</p>
+
+<table>
+<tr><th>영역</th><th>먼저 물을 질문</th><th>필요 산출물</th><th>실패 신호</th></tr>
+<tr><td>상태</td><td>이 값의 소유자는 URL, 서버, 폼, 컴포넌트 중 어디인가?</td><td>상태 위치 표, 무효화 규칙</td><td>전역 store가 임시 UI 상태까지 포함</td></tr>
+<tr><td>API</td><td>실패 응답을 사용자 행동으로 바꿀 수 있는가?</td><td>에러 코드별 UI 매핑</td><td>모든 실패가 같은 toast</td></tr>
+<tr><td>컴포넌트</td><td>조합 가능한 컴포넌트인가, 화면 전용 구현인가?</td><td>props 계약, 제어·비제어 정책</td><td>도메인 로직과 스타일 분기가 한 파일에 혼재</td></tr>
+<tr><td>접근성</td><td>마우스 없이 완료할 수 있는가?</td><td>키보드 순서, focus 복귀, 오류 연결 캡처</td><td>role만 붙이고 키보드 동작이 없음</td></tr>
+<tr><td>성능</td><td>이 변경이 어떤 지표를 악화시킬 수 있는가?</td><td>번들 diff, 렌더 횟수, Web Vitals 캡처</td><td>측정 없이 memoization만 추가</td></tr>
+<tr><td>릴리즈</td><td>문제가 나면 어떤 단위로 되돌릴 수 있는가?</td><td>feature flag, 로그·알림, 롤백 기준</td><td>배포 후 확인할 지표가 없음</td></tr>
+</table>
+
+<div class="serial-card">
+<span class="sc-label">PR REVIEW PACKET</span>
+1. 사용자 시나리오: 이 변경이 해결하는 작업과 실패했을 때의 사용자 상태를 적는다.<br>
+2. 계약: API, 상태, URL, 접근성 이름, 이벤트 로깅의 변경점을 표로 남긴다.<br>
+3. 증거: 스크린샷보다 테스트, 성능 캡처, 키보드 검증 결과를 우선 첨부한다.<br>
+4. 운영: 배포 후 볼 로그와 롤백 조건을 PR 본문에 포함한다.
+</div>
+
+<h3>상황별 좋은 답변</h3>
+<table>
+<tr><th>상황</th><th>약한 답변</th><th>밀도 있는 답변</th></tr>
+<tr><td>새 필터 추가</td><td>state 하나 추가했습니다</td><td>공유 가능한 검색 조건이라 URL query에 두고, 빈 값은 직렬화하지 않습니다</td></tr>
+<tr><td>목록 성능 저하</td><td>useMemo를 넣었습니다</td><td>렌더 원인은 row props identity였고, 500개 row에서 commit 시간이 80ms에서 24ms로 줄었습니다</td></tr>
+<tr><td>폼 오류 처리</td><td>alert를 띄웁니다</td><td>필드별 오류를 input과 연결하고, 제출 실패 시 첫 오류 필드로 focus를 이동합니다</td></tr>
+<tr><td>권한 변경</td><td>버튼을 숨깁니다</td><td>서버 403을 최종 권한 판단으로 두고, UI는 불가능한 액션을 설명합니다</td></tr>
+</table>
+</section>
+
+<section id="fe-ch15">
+<div class="ch-head"><span class="ch-code">FE-15</span><h2>용어집</h2></div>
+<p class="lede">실무에서 자주 부딪히는 프론트엔드 용어를 의사결정 관점으로 정리합니다. 통합 문서에서는 브라우저·접근성 용어와 함께 마지막 참조 장으로 읽습니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Hydration</b><span>SSR → client 연결</span></div><div class="g-def">서버가 만든 HTML에 클라이언트 JS 이벤트와 상태를 연결하는 과정. hydration 전 UI는 보이지만 상호작용이 제한될 수 있습니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Server State</b><span>remote cache</span></div><div class="g-def">서버가 진실의 원천인 데이터의 클라이언트 캐시. stale, refetch, invalidation을 함께 설계해야 합니다.</div></div>
@@ -345,22 +387,9 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </div>
 </section>
 
-<footer>
-FRONTEND ENGINEERING HANDBOOK · V1 · 2026-06<br>
-STACK : BROWSER · REACT · TYPESCRIPT · DESIGN SYSTEM · PERFORMANCE · SECURITY<br>
-NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 기준 문서
-</footer>
-
 <section id="doc-browser">
 <div class="ch-head"><span class="ch-code">SOURCE</span><h2>브라우저 동작 원리</h2></div>
 </section>
-
-<header class="hero">
-  <div class="hero-serial"><span>DOC : FE-BROWSER-V1</span><span>SCOPE : EVENT LOOP · DOM · NETWORK · STORAGE</span><span>LANG : KO</span></div>
-  <h1>브라우저 동작 원리<br>핸드북</h1>
-  <p class="hero-sub">프레임워크는 브라우저 위에서 동작합니다. 성능 문제, 렌더링 버그, 입력 지연을 다루려면 React 이전에 <strong>브라우저가 어떤 순서로 일을 처리하는지</strong> 알아야 합니다.</p>
-  <div class="hero-meta">AUDIENCE : 실무 프론트엔드 개발자 · React/Vite 기반 제품 개발</div>
-</header>
 
 <section id="browser-ch1">
 <div class="ch-head"><span class="ch-code">BR-01</span><h2>브라우저는 앱 런타임이다</h2></div>
@@ -386,6 +415,14 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td><code>requestAnimationFrame</code></td><td>다음 repaint 전에 애니메이션 콜백 실행을 요청</td><td>애니메이션과 layout 읽기 타이밍</td></tr>
 <tr><td><code>requestIdleCallback</code></td><td>idle period에 낮은 우선순위 작업 예약. 지원 범위와 timeout 필요성 확인</td><td>필수 작업, 입력 직후 피드백, animation에는 사용하지 않음</td></tr>
 </table>
+<h3>시간 예산으로 보는 이벤트 루프</h3>
+<table>
+<tr><th>기준</th><th>의미</th><th>실무 판단</th></tr>
+<tr><td>16.7ms</td><td>60fps에서 한 프레임에 쓸 수 있는 전체 시간</td><td>JS, style, layout, paint를 모두 포함하므로 JS만 16ms를 써도 이미 위험</td></tr>
+<tr><td>50ms 초과</td><td>Long Task 후보</td><td>입력 지연과 INP 악화 원인. 작업 분할 또는 worker 이동 검토</td></tr>
+<tr><td>100ms 이상</td><td>사용자가 반응 지연을 체감하기 쉬움</td><td>클릭 핸들러, validation, formatter, 대량 렌더링을 우선 조사</td></tr>
+<tr><td>500ms 이상</td><td>UI가 멈췄다고 느끼는 구간</td><td>동기 루프, 큰 JSON parse, 차트 초기화, hydration 비용을 flame chart로 확인</td></tr>
+</table>
 <div class="callout warn"><span class="co-label">MICROTASK STARVATION</span><p>Promise 체인을 무한히 이어가면 렌더링 기회가 밀립니다. microtask는 작고 빠르게 끝나야 합니다. 무거운 작업은 task로 쪼개거나 worker로 옮깁니다.</p></div>
 </section>
 
@@ -400,6 +437,14 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td>composite</td><td>레이어 합성</td><td>transform, opacity 변경</td></tr>
 </table>
 <p>성능이 중요한 애니메이션은 가능한 <code>transform</code>과 <code>opacity</code>를 사용합니다. layout을 유발하는 속성을 매 프레임 바꾸면 60fps를 유지하기 어렵습니다.</p>
+<h3>강제 layout을 만드는 패턴</h3>
+<table>
+<tr><th>패턴</th><th>왜 비싼가</th><th>대응</th></tr>
+<tr><td>DOM 쓰기 직후 <code>offsetHeight</code> 읽기</td><td>브라우저가 최신 layout을 즉시 계산해야 함</td><td>읽기와 쓰기를 분리하고 requestAnimationFrame으로 묶음</td></tr>
+<tr><td>scroll handler에서 크기 계산 반복</td><td>스크롤마다 style/layout 계산이 누적</td><td>passive listener, throttle, IntersectionObserver 검토</td></tr>
+<tr><td>큰 테이블에서 행 높이 동적 측정</td><td>많은 DOM node의 위치 계산이 연쇄 발생</td><td>고정 높이, virtualization, 측정 cache 사용</td></tr>
+<tr><td>애니메이션에서 <code>top/left/width</code> 변경</td><td>매 프레임 layout과 paint를 유발</td><td><code>transform</code>, <code>opacity</code> 중심으로 변경</td></tr>
+</table>
 <div class="callout warn"><span class="co-label">COMPOSITE COST</span><p><code>transform</code>과 <code>opacity</code>는 레이아웃을 피하기 쉬워 애니메이션 기본값으로 좋지만 공짜는 아닙니다. 별도 compositing layer가 생기면 GPU 메모리와 layer 관리 비용이 늘 수 있으므로 DevTools의 Layers와 Performance에서 실제 composite 비용을 확인합니다.</p></div>
 </section>
 
@@ -412,6 +457,14 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td><code>prefetch</code></td><td>다음 페이지 후보를 낮은 우선순위로 미리 받음</td><td>데이터 요금과 cache 압박 고려</td></tr>
 <tr><td><code>defer</code></td><td>HTML 파싱을 막지 않고 script 실행</td><td>DOM 준비 이후 실행됨</td></tr>
 <tr><td>lazy image</td><td>아래쪽 이미지를 늦게 로드</td><td>hero image에는 쓰지 않음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">LOADING WATERFALL REVIEW</span>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.<br>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다.<br>3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.<br>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</div>
+<table>
+<tr><th>캐시 대상</th><th>권장 방향</th><th>실패 신호</th></tr>
+<tr><td>해시가 붙은 JS/CSS asset</td><td>길게 cache, immutable</td><td>새 배포마다 같은 URL을 덮어써 사용자가 낡은 코드 실행</td></tr>
+<tr><td><code>index.html</code></td><td>짧게 cache 또는 재검증</td><td>HTML은 새 버전인데 chunk는 오래된 버전이거나 반대 상황 발생</td></tr>
+<tr><td>API 응답</td><td>데이터 신선도와 사용자 작업 기준으로 설정</td><td>권한·가격·재고처럼 민감한 데이터가 오래 남음</td></tr>
+<tr><td>font/image</td><td>크기, 포맷, 우선순위를 명시</td><td>폰트 교체로 layout shift가 발생하거나 hero image가 늦게 로드</td></tr>
 </table>
 </section>
 
@@ -426,30 +479,59 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td>Web Worker</td><td>CPU 무거운 계산</td><td>DOM 접근 불가, 직렬화 비용</td></tr>
 <tr><td>Service Worker</td><td>offline, cache, push</td><td>캐시 무효화와 업데이트 UX 중요</td></tr>
 </table>
+<h3>저장소·worker 실패 모드</h3>
+<table>
+<tr><th>증상</th><th>원인 후보</th><th>확인</th><th>대응</th></tr>
+<tr><td>새 배포 후 일부 사용자만 흰 화면</td><td>Service Worker 또는 CDN이 낡은 chunk 제공</td><td>Application 탭 cache, release id, chunk 404</td><td>SW update 전략, asset hash, index 재검증 정리</td></tr>
+<tr><td>큰 파일 처리 중 UI 멈춤</td><td>main thread에서 parse/encode 수행</td><td>Performance flame chart의 긴 JS task</td><td>Worker 이동, transferable object, chunk 처리</td></tr>
+<tr><td>오프라인 데이터가 깨짐</td><td>IndexedDB schema migration 누락</td><td>DB version, migration 실패 로그</td><td>versioned migration과 fallback 초기화 설계</td></tr>
+<tr><td>저장 버튼이 간헐적으로 실패</td><td>storage quota 또는 private mode 제약</td><td>QuotaExceededError, 브라우저 모드</td><td>저장 실패 UI, 서버 동기화, 최소 로컬 저장</td></tr>
+</table>
 <div class="callout risk"><span class="co-label">TOKEN STORAGE</span><p>인증 토큰을 localStorage에 저장하면 XSS가 읽을 수 있습니다. 저장소 선택은 보안 위협 모델과 함께 판단해야 합니다.</p></div>
 </section>
 
 <section id="browser-ch6">
-<div class="ch-head"><span class="ch-code">BR-06</span><h2>치트시트</h2></div>
+<div class="ch-head"><span class="ch-code">BR-06</span><h2>브라우저 문제 진단 루틴</h2></div>
+<p class="lede">브라우저 문제는 추측으로 고치기 쉽지만, 원인 계층을 잘못 잡으면 해결이 늦어집니다. 증상에서 시작해 main thread, network, rendering, storage를 순서대로 좁힙니다.</p>
+<table>
+<tr><th>증상</th><th>먼저 볼 도구</th><th>확인할 증거</th><th>주요 처방</th></tr>
+<tr><td>클릭 후 반응이 늦음</td><td>Performance, Event Log</td><td>input 이후 long task, handler 비용, render commit</td><td>작업 분할, worker, optimistic feedback, 불필요 렌더 제거</td></tr>
+<tr><td>스크롤이 끊김</td><td>Performance, Rendering FPS</td><td>scroll handler, forced layout, paint 비용</td><td>passive listener, virtualization, layout read/write 분리</td></tr>
+<tr><td>첫 화면이 늦음</td><td>Network, Lighthouse, Coverage</td><td>HTML TTFB, render-blocking CSS/JS, LCP resource timing</td><td>critical resource 우선순위, code splitting, image 최적화</td></tr>
+<tr><td>배포 후 일부 화면만 깨짐</td><td>Network, Application</td><td>chunk 404, service worker cache, mixed release asset</td><td>캐시 정책 수정, reload 안내, SW update flow</td></tr>
+<tr><td>메모리 사용량 증가</td><td>Memory, Performance</td><td>detached DOM, listener 누수, cache 무한 증가</td><td>cleanup, weak reference 검토, cache size 제한</td></tr>
+</table>
+<div class="callout"><span class="co-label">EVIDENCE FIRST</span><p>브라우저 이슈 PR에는 "느려서 수정"보다 flame chart 캡처, waterfall, affected route, 브라우저 버전, 재현 조건을 남깁니다. 그래야 최적화가 실제 병목을 줄였는지 비교할 수 있습니다.</p></div>
+</section>
+
+<section id="browser-ch7">
+<div class="ch-head"><span class="ch-code">BR-07</span><h2>고빈도 브라우저 이슈</h2></div>
+<p class="lede">실무에서 자주 만나는 브라우저 문제는 대부분 같은 패턴으로 반복됩니다. 아래 표는 원인 후보를 빠르게 좁히기 위한 출발점입니다.</p>
+<table>
+<tr><th>문제</th><th>흔한 원인</th><th>확인 방법</th><th>수정 방향</th></tr>
+<tr><td>SSR 화면은 보이는데 버튼이 죽어 있음</td><td>hydration JS 지연, chunk 로드 실패, hydration mismatch</td><td>Console error, Network chunk, React hydration warning</td><td>초기 JS 축소, critical interaction 우선 로드, mismatch 제거</td></tr>
+<tr><td>이미지 때문에 화면이 밀림</td><td>width/height 미지정, font swap, 광고·동적 영역 예약 없음</td><td>Performance layout shift track</td><td>공간 예약, aspect-ratio, skeleton, font-display 정책</td></tr>
+<tr><td>입력 중 글자가 늦게 따라옴</td><td>입력마다 전체 목록 필터링·렌더링</td><td>React Profiler, input event long task</td><td>urgent/non-urgent update 분리, debounce, virtualization</td></tr>
+<tr><td>특정 브라우저에서만 API 실패</td><td>CORS, SameSite cookie, mixed content, third-party cookie 제한</td><td>Network headers, Cookie 탭, Security panel</td><td>credential 정책, SameSite/Secure, HTTPS, 서버 CORS 설정 정리</td></tr>
+<tr><td>뒤로 가기 후 낡은 화면</td><td>bfcache, client cache, stale server state</td><td>pageshow persisted, query cache 상태</td><td>pageshow 처리, invalidation, URL state 재동기화</td></tr>
+</table>
+</section>
+
+<section id="browser-ch8">
+<div class="ch-head"><span class="ch-code">BR-08</span><h2>치트시트</h2></div>
+<p class="lede">브라우저 파트의 마지막 참조 장입니다. 본문을 읽은 뒤 진단 중 자주 확인하는 용어만 모았습니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Long Task</b><span>&gt;50ms</span></div><div class="g-def">main thread를 오래 막아 입력 지연을 유발하는 작업입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Layout Thrash</b><span>read/write mix</span></div><div class="g-def">layout 읽기와 쓰기를 반복해 브라우저가 강제 layout을 여러 번 수행하는 현상입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Critical Path</b><span>initial render</span></div><div class="g-def">첫 화면을 그리기 위해 반드시 필요한 리소스와 작업의 경로입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Forced Reflow</b><span>sync layout</span></div><div class="g-def">DOM 변경 후 layout 값을 즉시 읽어 브라우저가 렌더링 파이프라인을 앞당겨 수행하는 상황입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Hydration Gap</b><span>SSR interactivity</span></div><div class="g-def">HTML은 보이지만 클라이언트 JS 연결 전이라 클릭과 입력이 아직 동작하지 않는 시간입니다.</div></div>
 </div>
 </section>
-
-<footer>BROWSER RUNTIME HANDBOOK · V1 · 2026-06</footer>
 
 <section id="doc-a11y">
 <div class="ch-head"><span class="ch-code">SOURCE</span><h2>웹접근성</h2></div>
 </section>
-
-<header class="hero">
-  <div class="hero-serial"><span>DOC : FE-A11Y-V1</span><span>SCOPE : SEMANTIC · KEYBOARD · ARIA · FORMS</span><span>LANG : KO</span></div>
-  <h1>웹접근성<br>핸드북</h1>
-  <p class="hero-sub">접근성은 특정 사용자만을 위한 부가 기능이 아니라 <strong>브라우저와 보조기술이 이해할 수 있는 UI 계약</strong>입니다. 올바른 HTML은 접근성, 테스트 안정성, SEO, 유지보수성을 동시에 개선합니다.</p>
-  <div class="hero-meta">STANDARD : WCAG 사고방식 · 실무 컴포넌트 기준</div>
-</header>
 
 <section id="a11y-ch1">
 <div class="ch-head"><span class="ch-code">A11Y-01</span><h2>접근성은 UI의 계약</h2></div>
@@ -474,6 +556,14 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td>주요 영역</td><td><code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code></td><td>의미 없는 wrapper 중첩</td></tr>
 <tr><td>제목 구조</td><td>순서 있는 <code>h1</code>~<code>h6</code></td><td>크기 때문에 heading 건너뛰기</td></tr>
 </table>
+<h3>Accessible name 설계</h3>
+<table>
+<tr><th>요소</th><th>좋은 이름</th><th>나쁜 이름</th><th>비고</th></tr>
+<tr><td>아이콘 버튼</td><td><code>aria-label="검색"</code>, <code>aria-label="닫기"</code></td><td>아이콘만 있고 이름 없음</td><td>툴팁은 보조 설명일 뿐 accessible name을 대체하지 않음</td></tr>
+<tr><td>입력 필드</td><td>보이는 <code>label</code>과 input 연결</td><td>placeholder만 사용</td><td>placeholder는 입력하면 사라지고 이름으로 충분하지 않음</td></tr>
+<tr><td>링크</td><td>대상이 드러나는 텍스트</td><td>여기를 클릭, 자세히</td><td>링크 목록만 읽어도 목적지가 이해되어야 함</td></tr>
+<tr><td>상태 배지</td><td>텍스트와 색을 함께 사용</td><td>초록색/빨간색만 표시</td><td>색에 의존하지 않고 의미가 전달되어야 함</td></tr>
+</table>
 </section>
 
 <section id="a11y-ch3">
@@ -493,6 +583,7 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td>Tabs</td><td><code>role="tablist/tab/tabpanel"</code>, <code>aria-selected</code>, <code>aria-controls</code>, keyboard arrow 처리</td><td>일반 링크 목록을 tabs로 꾸미지 않음</td></tr>
 <tr><td>Disclosure</td><td>button + <code>aria-expanded</code> + 연결된 panel</td><td>상태가 시각적으로만 드러나지 않게 함</td></tr>
 </table>
+<div class="serial-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다.<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다.<br>3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다.<br>4. focus가 화면 밖, 숨김 요소, disabled처럼 보이는 요소에 머물지 않는지 본다.</div>
 <div class="callout warn"><span class="co-label">FOCUS RING</span><p>outline을 지우는 것은 접근성 회귀입니다. 디자인에 맞춰 focus style을 새로 정의할 수는 있지만, 키보드 사용자가 현재 위치를 알 수 있어야 합니다.</p></div>
 </section>
 
@@ -506,18 +597,50 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <tr><td>이름을 제공</td><td>아이콘 버튼에는 <code>aria-label</code> 필요</td></tr>
 <tr><td>관계를 연결</td><td><code>aria-controls</code>, <code>aria-describedby</code>로 상태/오류 연결</td></tr>
 </table>
+<h3>ARIA 실패 모드</h3>
+<table>
+<tr><th>패턴</th><th>문제</th><th>수정</th></tr>
+<tr><td><code>role="button"</code>만 붙인 div</td><td>Enter/Space, disabled, form 동작이 자동으로 생기지 않음</td><td>가능하면 native button 사용</td></tr>
+<tr><td><code>aria-hidden="true"</code>를 부모에 적용</td><td>내부 focus 가능한 요소가 보조기술에서 사라짐</td><td>숨김 영역 안에 focusable 요소가 남지 않게 처리</td></tr>
+<tr><td>동적 메시지를 시각적으로만 표시</td><td>스크린 리더 사용자가 저장 성공·실패를 알 수 없음</td><td>중요 상태는 적절한 live region으로 전달</td></tr>
+<tr><td>복잡한 combobox를 직접 구현</td><td>role, active descendant, 키보드, announcement가 빠지기 쉬움</td><td>검증된 headless 컴포넌트 또는 충분한 테스트를 둠</td></tr>
+</table>
 </section>
 
 <section id="a11y-ch5">
 <div class="ch-head"><span class="ch-code">A11Y-05</span><h2>폼·오류·상태 전달</h2></div>
 <p class="lede">폼 접근성은 label, 설명, 오류, 필수 여부, 제출 상태를 사용자가 이해할 수 있게 연결하는 일입니다.</p>
 <div class="serial-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span>label과 input은 htmlFor/id로 연결<br>오류 문구는 aria-describedby로 연결<br>오류 상태는 aria-invalid로 표시<br>제출 실패 후 첫 오류 필드로 focus 이동<br>필수값은 시각 표시와 텍스트 설명을 함께 제공</div>
+<table>
+<tr><th>상황</th><th>구현 기준</th><th>놓치기 쉬운 점</th></tr>
+<tr><td>필수 입력</td><td>label 또는 설명에 필수 여부를 텍스트로 제공</td><td>별표만 표시하면 의미가 전달되지 않음</td></tr>
+<tr><td>필드 오류</td><td><code>aria-invalid</code>와 <code>aria-describedby</code>로 오류 문구 연결</td><td>오류 문구 id가 매 렌더마다 바뀌면 연결이 깨짐</td></tr>
+<tr><td>서버 오류</td><td>필드 오류와 전역 오류를 분리</td><td>모든 오류를 상단 toast로만 보여주면 수정 위치를 잃음</td></tr>
+<tr><td>제출 중</td><td>버튼 pending 상태와 중복 제출 방지</td><td>disabled만 두면 이유를 모를 수 있어 상태 텍스트도 고려</td></tr>
+<tr><td>제출 실패</td><td>첫 오류 필드 또는 오류 요약으로 focus 이동</td><td>화면 위쪽 오류를 보지 못한 채 같은 입력을 반복</td></tr>
+</table>
 <div class="callout"><span class="co-label">ERROR UX</span><p>오류는 "틀렸습니다"가 아니라 "무엇을 어떻게 고쳐야 하는지"를 알려야 합니다. 서버 오류와 클라이언트 검증 오류도 구분합니다.</p></div>
 </section>
 
 <section id="a11y-ch6">
-<div class="ch-head"><span class="ch-code">A11Y-06</span><h2>검증 루틴</h2></div>
-<p class="lede">접근성은 자동 검사만으로 충분하지 않습니다. 자동화와 수동 키보드 검사를 함께 둡니다.</p>
+<div class="ch-head"><span class="ch-code">A11Y-06</span><h2>컴포넌트별 접근성 패턴</h2></div>
+<p class="lede">접근성 품질은 페이지 단위보다 컴포넌트 단위에서 반복적으로 무너집니다. 공통 컴포넌트는 의미, 키보드, focus, 상태 전달을 API 계약으로 가져야 합니다.</p>
+<table>
+<tr><th>컴포넌트</th><th>필수 계약</th><th>회귀 신호</th></tr>
+<tr><td>Dialog</td><td>이름 제공, 배경 inert, focus trap, Esc 닫기, 닫힌 뒤 트리거로 focus 복귀</td><td>Tab이 배경으로 빠지거나 닫힌 뒤 focus가 body로 감</td></tr>
+<tr><td>Dropdown/Menu</td><td>열림 상태 전달, Arrow 이동, Enter/Space 선택, 외부 클릭·Esc 닫기</td><td>마우스로만 선택 가능하거나 menu role을 내비게이션에 남용</td></tr>
+<tr><td>Tabs</td><td>tablist/tab/tabpanel 관계, 선택 상태, Arrow 이동, panel 이름 연결</td><td>선택된 탭과 패널이 보조기술에서 연결되지 않음</td></tr>
+<tr><td>Combobox</td><td>입력값, 목록 열림, active option, 선택 결과를 명확히 전달</td><td>검색 결과 개수와 현재 항목을 알 수 없음</td></tr>
+<tr><td>Toast</td><td>작업을 가로막지 않고 중요한 상태는 live region으로 전달</td><td>오류가 사라져 사용자가 복구 방법을 잃음</td></tr>
+<tr><td>Data grid</td><td>표 의미, 헤더 연결, 정렬 상태, 행 선택 상태, keyboard strategy 정의</td><td>시각적으로 표지만 DOM은 div 목록이고 셀 맥락을 잃음</td></tr>
+<tr><td>Tooltip</td><td>보조 설명으로만 사용, hover와 focus 모두 지원</td><td>필수 정보를 tooltip 안에만 숨김</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">HEADLESS COMPONENT RISK</span><p>headless 컴포넌트는 스타일 자유도가 높지만 접근성 책임이 사라지는 것은 아닙니다. 호출자가 label, description, focus target, disabled reason을 빠뜨릴 수 없게 API를 설계해야 합니다.</p></div>
+</section>
+
+<section id="a11y-ch7">
+<div class="ch-head"><span class="ch-code">A11Y-07</span><h2>검증 루틴</h2></div>
+<p class="lede">접근성은 자동 검사만으로 충분하지 않습니다. 패턴을 설계한 뒤 자동화와 수동 키보드 검사를 함께 둡니다.</p>
 <table>
 <tr><th>도구</th><th>잡는 것</th><th>못 잡는 것</th></tr>
 <tr><td>Lighthouse</td><td>기본 label, contrast, landmark 일부</td><td>실제 키보드 흐름의 자연스러움</td></tr>
@@ -539,7 +662,19 @@ NOTE : 프레임워크 튜토리얼이 아니라 실무 설계 판단을 위한 
 <div class="g-row"><div class="g-term"><b>Live Region</b><span>상태 알림</span></div><div class="g-def">동적으로 바뀐 메시지를 스크린 리더에게 알리는 영역입니다.</div></div>
 </div>
 </section>
-<footer>WEB ACCESSIBILITY HANDBOOK · V1 · 2026-06</footer>
+
+<section id="a11y-ch8">
+<div class="ch-head"><span class="ch-code">A11Y-08</span><h2>접근성 회귀 방지</h2></div>
+<p class="lede">접근성은 한 번 감사해서 끝나는 품질이 아닙니다. 공통 컴포넌트와 핵심 플로우에 자동 검사, 수동 검사, 리뷰 질문을 반복 가능하게 넣어야 합니다.</p>
+<table>
+<tr><th>단계</th><th>확인 항목</th><th>증거</th></tr>
+<tr><td>설계</td><td>상호작용 컴포넌트의 role, keyboard, focus restore 정의</td><td>컴포넌트 명세 또는 Storybook notes</td></tr>
+<tr><td>구현</td><td>label, accessible name, describedby, live region 연결</td><td>DOM 캡처, 테스트 쿼리 이름</td></tr>
+<tr><td>테스트</td><td>keyboard-only 플로우, 오류 상태, zoom 200%, reduced motion 확인</td><td>체크리스트와 실패 재현 링크</td></tr>
+<tr><td>릴리즈</td><td>새 공통 컴포넌트가 기존 화면의 focus 순서를 깨지 않는지 확인</td><td>시각 회귀와 접근성 회귀 결과</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?<br>2. 보이는 label과 보조기술의 이름이 같은 의미인가?<br>3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가?<br>4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?<br>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</div>
+</section>
 </main>
 </div>
 </body>

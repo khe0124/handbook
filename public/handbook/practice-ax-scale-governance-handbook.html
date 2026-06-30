@@ -11,6 +11,7 @@
 <div class="nav-brand">PRACTICE · AX SCALE</div>
   <div class="nav-title">AX 확장 · 멀티 에이전트와 거버넌스</div>
   <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#integrated-ai-native-capstone"><span class="code">CAP</span>AI Native Capstone</a>
   <a href="#doc-axmulti"><span class="code">DOC</span>Multi-Agent Workflow</a>
   <a href="#doc-axverify"><span class="code">DOC</span>검증과 평가</a>
   <a href="#doc-axgov"><span class="code">DOC</span>AI Governance & Security</a>
@@ -65,6 +66,33 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
 <p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
 <ul><li>Multi-Agent Workflow</li><li>검증과 평가</li><li>AI Governance & Security</li><li>AX 실전 적용 사례</li><li>AX 실무 플레이북</li></ul>
+</section>
+
+<section id="integrated-ai-native-capstone">
+<div class="ch-head"><span class="ch-code">CAP</span><h2>INTEGRATED AI NATIVE CAPSTONE</h2></div>
+<p class="lede">통합 capstone은 “LLM Document Intelligence + AX Execution Trace”입니다. 문서 지능 기능을 만들고, 그 기능을 AI와 함께 만든 과정까지 검증 가능한 trace로 제출합니다.</p>
+<table>
+<tr><th>축</th><th>산출물</th><th>검증 기준</th></tr>
+<tr><td>LLM Document Intelligence</td><td>문서 업로드, chunking, RAG answer, citation, no-answer policy</td><td>eval dataset, retrieval trace, citation precision, groundedness</td></tr>
+<tr><td>AX Execution Trace</td><td>episode log, context package, prompt/model record, rejected output</td><td>작업 재현성, 독립 reviewer finding, verification report</td></tr>
+<tr><td>Governance</td><td>security fixture, human approval risk tier, residual risk register</td><td>prompt injection, tenant isolation, write action approval 통과</td></tr>
+<tr><td>Operations</td><td>cost/latency trace, model routing, fallback, release note</td><td>p95 latency, cost per successful answer, rollback path</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">LLM Document Intelligence + AX Execution Trace</span>
+capstone_id: ai-native-doc-intel-ax-trace<br>
+feature_evidence: API contract, RAG trace, eval report, security fixture<br>
+execution_evidence: context package, episode log, reviewer finding, rejected AI output<br>
+release_evidence: human approval risk tier, residual risk register, cost latency trace
+</div>
+<table>
+<tr><th>제출 순서</th><th>필수 질문</th><th>탈락 신호</th></tr>
+<tr><td>1. Context package</td><td>문서 업무, 사용자, 권한, 품질 기준이 명확한가</td><td>“문서 챗봇”처럼 범위가 넓고 판정 기준이 없음</td></tr>
+<tr><td>2. Build episode</td><td>AI가 제안한 변경과 사람이 승인한 변경을 구분했는가</td><td>최종 diff만 있고 과정 판단이 없음</td></tr>
+<tr><td>3. Eval and security</td><td>정상 질문, no-answer, permission-denied, injection을 모두 검증했는가</td><td>잘 된 예시만 남기고 실패 fixture가 없음</td></tr>
+<tr><td>4. Review and residual risk</td><td>reviewer finding과 남은 위험의 owner가 있는가</td><td>위험이 없다고만 쓰고 근거가 없음</td></tr>
+<tr><td>5. Operations trace</td><td>비용·지연·fallback이 출시 기준과 연결되는가</td><td>품질 점수만 있고 운영 지표가 없음</td></tr>
+</table>
 </section>
 
 <section id="doc-axmulti">

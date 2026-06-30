@@ -11,7 +11,9 @@
   <a href="#ch3"><span class="code">BR-03</span>DOM·CSSOM·렌더 트리</a>
   <a href="#ch4"><span class="code">BR-04</span>네트워크와 로딩 우선순위</a>
   <a href="#ch5"><span class="code">BR-05</span>저장소와 worker</a>
-  <a href="#ch6"><span class="code">BR-06</span>치트시트</a>
+  <a href="#ch6"><span class="code">BR-06</span>브라우저 문제 진단 루틴</a>
+  <a href="#ch7"><span class="code">BR-07</span>고빈도 브라우저 이슈</a>
+  <a href="#ch8"><span class="code">BR-08</span>치트시트</a>
 </nav>
 <main>
 <header class="hero">
@@ -45,6 +47,14 @@
 <tr><td><code>requestAnimationFrame</code></td><td>다음 repaint 전에 애니메이션 콜백 실행을 요청</td><td>애니메이션과 layout 읽기 타이밍</td></tr>
 <tr><td><code>requestIdleCallback</code></td><td>idle period에 낮은 우선순위 작업 예약. 지원 범위와 timeout 필요성 확인</td><td>필수 작업, 입력 직후 피드백, animation에는 사용하지 않음</td></tr>
 </table>
+<h3>시간 예산으로 보는 이벤트 루프</h3>
+<table>
+<tr><th>기준</th><th>의미</th><th>실무 판단</th></tr>
+<tr><td>16.7ms</td><td>60fps에서 한 프레임에 쓸 수 있는 전체 시간</td><td>JS, style, layout, paint를 모두 포함하므로 JS만 16ms를 써도 이미 위험</td></tr>
+<tr><td>50ms 초과</td><td>Long Task 후보</td><td>입력 지연과 INP 악화 원인. 작업 분할 또는 worker 이동 검토</td></tr>
+<tr><td>100ms 이상</td><td>사용자가 반응 지연을 체감하기 쉬움</td><td>클릭 핸들러, validation, formatter, 대량 렌더링을 우선 조사</td></tr>
+<tr><td>500ms 이상</td><td>UI가 멈췄다고 느끼는 구간</td><td>동기 루프, 큰 JSON parse, 차트 초기화, hydration 비용을 flame chart로 확인</td></tr>
+</table>
 <div class="callout warn"><span class="co-label">MICROTASK STARVATION</span><p>Promise 체인을 무한히 이어가면 렌더링 기회가 밀립니다. microtask는 작고 빠르게 끝나야 합니다. 무거운 작업은 task로 쪼개거나 worker로 옮깁니다.</p></div>
 </section>
 
@@ -59,6 +69,14 @@
 <tr><td>composite</td><td>레이어 합성</td><td>transform, opacity 변경</td></tr>
 </table>
 <p>성능이 중요한 애니메이션은 가능한 <code>transform</code>과 <code>opacity</code>를 사용합니다. layout을 유발하는 속성을 매 프레임 바꾸면 60fps를 유지하기 어렵습니다.</p>
+<h3>강제 layout을 만드는 패턴</h3>
+<table>
+<tr><th>패턴</th><th>왜 비싼가</th><th>대응</th></tr>
+<tr><td>DOM 쓰기 직후 <code>offsetHeight</code> 읽기</td><td>브라우저가 최신 layout을 즉시 계산해야 함</td><td>읽기와 쓰기를 분리하고 requestAnimationFrame으로 묶음</td></tr>
+<tr><td>scroll handler에서 크기 계산 반복</td><td>스크롤마다 style/layout 계산이 누적</td><td>passive listener, throttle, IntersectionObserver 검토</td></tr>
+<tr><td>큰 테이블에서 행 높이 동적 측정</td><td>많은 DOM node의 위치 계산이 연쇄 발생</td><td>고정 높이, virtualization, 측정 cache 사용</td></tr>
+<tr><td>애니메이션에서 <code>top/left/width</code> 변경</td><td>매 프레임 layout과 paint를 유발</td><td><code>transform</code>, <code>opacity</code> 중심으로 변경</td></tr>
+</table>
 <div class="callout warn"><span class="co-label">COMPOSITE COST</span><p><code>transform</code>과 <code>opacity</code>는 레이아웃을 피하기 쉬워 애니메이션 기본값으로 좋지만 공짜는 아닙니다. 별도 compositing layer가 생기면 GPU 메모리와 layer 관리 비용이 늘 수 있으므로 DevTools의 Layers와 Performance에서 실제 composite 비용을 확인합니다.</p></div>
 </section>
 
@@ -71,6 +89,14 @@
 <tr><td><code>prefetch</code></td><td>다음 페이지 후보를 낮은 우선순위로 미리 받음</td><td>데이터 요금과 cache 압박 고려</td></tr>
 <tr><td><code>defer</code></td><td>HTML 파싱을 막지 않고 script 실행</td><td>DOM 준비 이후 실행됨</td></tr>
 <tr><td>lazy image</td><td>아래쪽 이미지를 늦게 로드</td><td>hero image에는 쓰지 않음</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">LOADING WATERFALL REVIEW</span>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.<br>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다.<br>3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.<br>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</div>
+<table>
+<tr><th>캐시 대상</th><th>권장 방향</th><th>실패 신호</th></tr>
+<tr><td>해시가 붙은 JS/CSS asset</td><td>길게 cache, immutable</td><td>새 배포마다 같은 URL을 덮어써 사용자가 낡은 코드 실행</td></tr>
+<tr><td><code>index.html</code></td><td>짧게 cache 또는 재검증</td><td>HTML은 새 버전인데 chunk는 오래된 버전이거나 반대 상황 발생</td></tr>
+<tr><td>API 응답</td><td>데이터 신선도와 사용자 작업 기준으로 설정</td><td>권한·가격·재고처럼 민감한 데이터가 오래 남음</td></tr>
+<tr><td>font/image</td><td>크기, 포맷, 우선순위를 명시</td><td>폰트 교체로 layout shift가 발생하거나 hero image가 늦게 로드</td></tr>
 </table>
 </section>
 
@@ -85,15 +111,53 @@
 <tr><td>Web Worker</td><td>CPU 무거운 계산</td><td>DOM 접근 불가, 직렬화 비용</td></tr>
 <tr><td>Service Worker</td><td>offline, cache, push</td><td>캐시 무효화와 업데이트 UX 중요</td></tr>
 </table>
+<h3>저장소·worker 실패 모드</h3>
+<table>
+<tr><th>증상</th><th>원인 후보</th><th>확인</th><th>대응</th></tr>
+<tr><td>새 배포 후 일부 사용자만 흰 화면</td><td>Service Worker 또는 CDN이 낡은 chunk 제공</td><td>Application 탭 cache, release id, chunk 404</td><td>SW update 전략, asset hash, index 재검증 정리</td></tr>
+<tr><td>큰 파일 처리 중 UI 멈춤</td><td>main thread에서 parse/encode 수행</td><td>Performance flame chart의 긴 JS task</td><td>Worker 이동, transferable object, chunk 처리</td></tr>
+<tr><td>오프라인 데이터가 깨짐</td><td>IndexedDB schema migration 누락</td><td>DB version, migration 실패 로그</td><td>versioned migration과 fallback 초기화 설계</td></tr>
+<tr><td>저장 버튼이 간헐적으로 실패</td><td>storage quota 또는 private mode 제약</td><td>QuotaExceededError, 브라우저 모드</td><td>저장 실패 UI, 서버 동기화, 최소 로컬 저장</td></tr>
+</table>
 <div class="callout risk"><span class="co-label">TOKEN STORAGE</span><p>인증 토큰을 localStorage에 저장하면 XSS가 읽을 수 있습니다. 저장소 선택은 보안 위협 모델과 함께 판단해야 합니다.</p></div>
 </section>
 
 <section id="ch6">
-<div class="ch-head"><span class="ch-code">BR-06</span><h2>치트시트</h2></div>
+<div class="ch-head"><span class="ch-code">BR-06</span><h2>브라우저 문제 진단 루틴</h2></div>
+<p class="lede">브라우저 문제는 추측으로 고치기 쉽지만, 원인 계층을 잘못 잡으면 해결이 늦어집니다. 증상에서 시작해 main thread, network, rendering, storage를 순서대로 좁힙니다.</p>
+<table>
+<tr><th>증상</th><th>먼저 볼 도구</th><th>확인할 증거</th><th>주요 처방</th></tr>
+<tr><td>클릭 후 반응이 늦음</td><td>Performance, Event Log</td><td>input 이후 long task, handler 비용, render commit</td><td>작업 분할, worker, optimistic feedback, 불필요 렌더 제거</td></tr>
+<tr><td>스크롤이 끊김</td><td>Performance, Rendering FPS</td><td>scroll handler, forced layout, paint 비용</td><td>passive listener, virtualization, layout read/write 분리</td></tr>
+<tr><td>첫 화면이 늦음</td><td>Network, Lighthouse, Coverage</td><td>HTML TTFB, render-blocking CSS/JS, LCP resource timing</td><td>critical resource 우선순위, code splitting, image 최적화</td></tr>
+<tr><td>배포 후 일부 화면만 깨짐</td><td>Network, Application</td><td>chunk 404, service worker cache, mixed release asset</td><td>캐시 정책 수정, reload 안내, SW update flow</td></tr>
+<tr><td>메모리 사용량 증가</td><td>Memory, Performance</td><td>detached DOM, listener 누수, cache 무한 증가</td><td>cleanup, weak reference 검토, cache size 제한</td></tr>
+</table>
+<div class="callout"><span class="co-label">EVIDENCE FIRST</span><p>브라우저 이슈 PR에는 "느려서 수정"보다 flame chart 캡처, waterfall, affected route, 브라우저 버전, 재현 조건을 남깁니다. 그래야 최적화가 실제 병목을 줄였는지 비교할 수 있습니다.</p></div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">BR-07</span><h2>고빈도 브라우저 이슈</h2></div>
+<p class="lede">실무에서 자주 만나는 브라우저 문제는 대부분 같은 패턴으로 반복됩니다. 아래 표는 원인 후보를 빠르게 좁히기 위한 출발점입니다.</p>
+<table>
+<tr><th>문제</th><th>흔한 원인</th><th>확인 방법</th><th>수정 방향</th></tr>
+<tr><td>SSR 화면은 보이는데 버튼이 죽어 있음</td><td>hydration JS 지연, chunk 로드 실패, hydration mismatch</td><td>Console error, Network chunk, React hydration warning</td><td>초기 JS 축소, critical interaction 우선 로드, mismatch 제거</td></tr>
+<tr><td>이미지 때문에 화면이 밀림</td><td>width/height 미지정, font swap, 광고·동적 영역 예약 없음</td><td>Performance layout shift track</td><td>공간 예약, aspect-ratio, skeleton, font-display 정책</td></tr>
+<tr><td>입력 중 글자가 늦게 따라옴</td><td>입력마다 전체 목록 필터링·렌더링</td><td>React Profiler, input event long task</td><td>urgent/non-urgent update 분리, debounce, virtualization</td></tr>
+<tr><td>특정 브라우저에서만 API 실패</td><td>CORS, SameSite cookie, mixed content, third-party cookie 제한</td><td>Network headers, Cookie 탭, Security panel</td><td>credential 정책, SameSite/Secure, HTTPS, 서버 CORS 설정 정리</td></tr>
+<tr><td>뒤로 가기 후 낡은 화면</td><td>bfcache, client cache, stale server state</td><td>pageshow persisted, query cache 상태</td><td>pageshow 처리, invalidation, URL state 재동기화</td></tr>
+</table>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">BR-08</span><h2>치트시트</h2></div>
+<p class="lede">브라우저 파트의 마지막 참조 장입니다. 본문을 읽은 뒤 진단 중 자주 확인하는 용어만 모았습니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Long Task</b><span>&gt;50ms</span></div><div class="g-def">main thread를 오래 막아 입력 지연을 유발하는 작업입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Layout Thrash</b><span>read/write mix</span></div><div class="g-def">layout 읽기와 쓰기를 반복해 브라우저가 강제 layout을 여러 번 수행하는 현상입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Critical Path</b><span>initial render</span></div><div class="g-def">첫 화면을 그리기 위해 반드시 필요한 리소스와 작업의 경로입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Forced Reflow</b><span>sync layout</span></div><div class="g-def">DOM 변경 후 layout 값을 즉시 읽어 브라우저가 렌더링 파이프라인을 앞당겨 수행하는 상황입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Hydration Gap</b><span>SSR interactivity</span></div><div class="g-def">HTML은 보이지만 클라이언트 JS 연결 전이라 클릭과 입력이 아직 동작하지 않는 시간입니다.</div></div>
 </div>
 </section>
 

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Systems Handbook — CPU·메모리·프로세스·네트워크</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:720px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:-.02em}h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}em{font-style:normal;background:linear-gradient(transparent 62%,var(--green-tint) 62%);padding:0 1px}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.callout .co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}.callout.warn .co-label{color:var(--amber)}.callout.risk .co-label{color:var(--red)}.callout p:last-child{margin-bottom:0}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}tr:last-child td{border-bottom:none}.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.seg{color:#FACC6B}.seg2{color:#9DB6E8}.dim{color:#9AA3B8}.checklist{border:1px solid var(--line);background:var(--panel);padding:18px 22px;margin:22px 0}.checklist li{list-style:"□ ";padding-left:4px}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">ENGINEERING · COMPUTER SYSTEMS</div>
+  <div class="nav-title">CPU · 메모리 · 프로세스 · 네트워크</div>
+  <a href="#spine"><span class="code">SYS-01</span>COMPUTER SYSTEMS SPINE</a>
+  <a href="#cpu-cache"><span class="code">SYS-02</span>CPU CACHE LOCALITY</a>
+  <a href="#memory"><span class="code">SYS-03</span>메모리와 가상 메모리</a>
+  <a href="#process-thread"><span class="code">SYS-04</span>PROCESS THREAD SCHEDULING</a>
+  <a href="#syscall"><span class="code">SYS-05</span>FILE SOCKET SYSCALL TRACE</a>
+  <a href="#resources"><span class="code">SYS-06</span>RESOURCE LIMIT PLAYBOOK</a>
+  <a href="#network"><span class="code">SYS-07</span>네트워크 기본</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : ENGINEERING-COMPUTER-SYSTEMS</span><span>SCOPE : CPU · CACHE · VM · PROCESS · SYSCALL · NETWORK</span><span>LANG : KO</span></div>
+  <h1>컴퓨터 시스템: 코드 아래에서 일어나는 일</h1>
+  <p class="hero-sub">시스템 지식은 운영 사고를 줄이는 도구입니다. CPU 캐시, 가상 메모리, 스케줄러, 파일 디스크립터, 소켓, resource limit을 알면 "왜 로컬에서는 빠른데 운영에서는 멈추는가"를 더 빨리 좁힐 수 있습니다.</p>
+  <div class="hero-meta">AUDIENCE : 애플리케이션 엔지니어 · Linux/Cloud runtime 기준 · UPDATED 2026-06</div>
+</header>
+
+<section id="spine">
+<div class="ch-head"><span class="ch-code">SYS-01</span><h2>COMPUTER SYSTEMS SPINE</h2></div>
+<p class="lede">애플리케이션 요청은 CPU 명령, 메모리 접근, 커널 syscall, 파일/소켓 I/O, 스케줄링 대기, 네트워크 왕복으로 분해됩니다. 시스템을 이해한다는 것은 이 비용의 위치를 구분하는 능력입니다.</p>
+<div class="serial-card"><span class="sc-label">COMPUTER SYSTEMS SPINE</span>request → user code → CPU/cache → heap/stack/virtual memory<br>→ syscall boundary → file/socket descriptor → kernel buffer<br>→ scheduler → NIC/disk → response</div>
+<table>
+<tr><th>층</th><th>주요 병목</th><th>관측 도구</th><th>대표 증상</th></tr>
+<tr><td>CPU</td><td>연산, branch, serialization</td><td><code>top</code>, profiler, flame graph</td><td>코어 포화, latency 증가</td></tr>
+<tr><td>Memory</td><td>할당, page fault, swap</td><td><code>vmstat</code>, heap dump</td><td>GC pause, OOM, major fault</td></tr>
+<tr><td>Kernel I/O</td><td>syscall, fd, buffer</td><td><code>strace</code>, <code>lsof</code></td><td>too many open files, blocking read</td></tr>
+<tr><td>Network</td><td>DNS, TCP, TLS, congestion</td><td><code>ss</code>, packet capture, trace</td><td>connect timeout, reset, retransmit</td></tr>
+</table>
+</section>
+
+<section id="cpu-cache">
+<div class="ch-head"><span class="ch-code">SYS-02</span><h2>CPU CACHE LOCALITY</h2></div>
+<p class="lede">CPU는 메모리보다 훨씬 빠릅니다. 그래서 성능은 종종 연산 횟수보다 데이터를 얼마나 캐시에 잘 올려 쓰는지로 갈립니다.</p>
+<table>
+<tr><th>개념</th><th>의미</th><th>개발 영향</th></tr>
+<tr><td>Temporal locality</td><td>방금 쓴 데이터를 곧 다시 씀</td><td>작은 working set, hot data cache</td></tr>
+<tr><td>Spatial locality</td><td>가까운 주소의 데이터를 함께 씀</td><td>배열 순회가 포인터 구조보다 유리</td></tr>
+<tr><td>Cache line</td><td>CPU가 메모리를 줄 단위로 가져옴</td><td>연속 배열, false sharing 주의</td></tr>
+<tr><td>Branch prediction</td><td>분기 방향 예측</td><td>데이터 분포가 random이면 비용 증가</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">CPU CACHE LOCALITY</span>bad: linked nodes → pointer chase → cache miss per node<br>good: packed array → sequential scan → prefetch friendly<br>risk: multiple threads update nearby counters → false sharing</div>
+<div class="callout warn"><span class="co-label">실무 감각</span><p>Hash map이 이론상 <code>O(1)</code>이어도 큰 메모리와 랜덤 접근을 만들면 캐시 미스로 느려질 수 있습니다. 반대로 작은 배열 선형 탐색은 <code>O(n)</code>이어도 n이 작고 연속 메모리라 더 빠를 수 있습니다.</p></div>
+</section>
+
+<section id="memory">
+<div class="ch-head"><span class="ch-code">SYS-03</span><h2>메모리와 가상 메모리</h2></div>
+<p class="lede">프로세스는 자신만의 연속된 주소 공간을 가진 것처럼 보지만 실제 물리 메모리는 OS가 page 단위로 매핑합니다. 이 추상화가 보호와 격리를 만들고, 동시에 page fault와 OOM의 원인이 됩니다.</p>
+<table>
+<tr><th>영역</th><th>담는 것</th><th>장애 신호</th></tr>
+<tr><td>Stack</td><td>함수 호출 프레임, 지역 변수</td><td>깊은 재귀로 stack overflow</td></tr>
+<tr><td>Heap</td><td>동적 할당 객체</td><td>GC pressure, memory leak</td></tr>
+<tr><td>Mapped region</td><td>shared library, mmap file</td><td>파일-backed page fault</td></tr>
+<tr><td>Kernel memory</td><td>socket/file buffer, page cache</td><td>container memory와 함께 압박</td></tr>
+</table>
+<div class="callout risk"><span class="co-label">OOM 해석</span><p>컨테이너에서 OOM은 애플리케이션 heap만의 문제가 아닐 수 있습니다. native memory, thread stack, direct buffer, mmap, page cache까지 cgroup limit에 포함될 수 있으므로 런타임 heap limit과 컨테이너 memory limit을 함께 맞춰야 합니다.</p></div>
+<div class="checklist"><ul>
+<li>heap max, container memory, thread count, direct memory 설정을 함께 기록한다.</li>
+<li>major page fault와 swap 사용 여부를 확인한다.</li>
+<li>대용량 파일은 전체 로드보다 streaming 또는 mmap 비용을 비교한다.</li>
+</ul></div>
+</section>
+
+<section id="process-thread">
+<div class="ch-head"><span class="ch-code">SYS-04</span><h2>PROCESS THREAD SCHEDULING</h2></div>
+<p class="lede">프로세스는 자원 격리 단위이고, 스레드는 실행 스케줄링 단위입니다. 동시성 문제는 CPU를 더 쓰는 문제가 아니라 대기, 경합, context switch를 관리하는 문제입니다.</p>
+<table>
+<tr><th>개념</th><th>역할</th><th>실무 판단</th></tr>
+<tr><td>Process</td><td>주소 공간과 자원 소유</td><td>장애 격리, 배포 단위</td></tr>
+<tr><td>Thread</td><td>같은 주소 공간에서 실행</td><td>공유 상태 lock과 stack memory 비용</td></tr>
+<tr><td>Context switch</td><td>실행 대상을 바꾸는 비용</td><td>스레드 과다 생성 시 throughput 하락</td></tr>
+<tr><td>Scheduler</td><td>CPU 시간을 나눠줌</td><td>run queue, priority, cgroup quota 영향</td></tr>
+<tr><td>Lock contention</td><td>공유 자원 대기</td><td>CPU가 남아도 latency가 증가</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">PROCESS THREAD SCHEDULING</span>runnable threads > available cores → run queue grows<br>blocked threads wait on I/O/lock → throughput flat, latency rises<br>CPU quota throttling → app appears slow even with low host CPU</div>
+<div class="callout"><span class="co-label">스레드 풀 기준</span><p>CPU-bound 작업은 코어 수 근처, I/O-bound 작업은 대기 시간이 길수록 더 많은 스레드가 필요할 수 있습니다. 하지만 무작정 늘리면 stack memory와 context switch가 늘고 하류 DB/API를 압박합니다. 스레드 풀 크기는 하류 커넥션 풀, timeout, queue limit과 함께 정합니다.</p></div>
+</section>
+
+<section id="syscall">
+<div class="ch-head"><span class="ch-code">SYS-05</span><h2>FILE SOCKET SYSCALL TRACE</h2></div>
+<p class="lede">파일과 소켓은 애플리케이션에서 객체처럼 보이지만 커널에서는 file descriptor입니다. 읽기, 쓰기, 연결, accept는 user mode에서 kernel mode로 넘어가는 syscall입니다.</p>
+<div class="serial-card"><span class="sc-label">FILE SOCKET SYSCALL TRACE</span>open/read/write/close for files<br>socket/bind/listen/accept/read/write/close for servers<br>connect/send/recv/close for clients<br>epoll_wait/kqueue for readiness based I/O</div>
+<table>
+<tr><th>syscall</th><th>하는 일</th><th>문제 신호</th></tr>
+<tr><td><code>open</code></td><td>파일을 fd로 연결</td><td>권한 오류, fd 누수</td></tr>
+<tr><td><code>read</code>/<code>write</code></td><td>커널 버퍼와 데이터 이동</td><td>partial read/write, blocking</td></tr>
+<tr><td><code>accept</code></td><td>새 TCP 연결 수락</td><td>backlog overflow</td></tr>
+<tr><td><code>connect</code></td><td>원격 주소 연결</td><td>DNS, SYN timeout, refused</td></tr>
+<tr><td><code>epoll_wait</code></td><td>준비된 fd 대기</td><td>event loop block, readiness starvation</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">fd는 자원이다</span><p>파일, socket, pipe는 모두 fd limit을 소비합니다. HTTP client connection leak, 로그 파일 핸들 누수, 너무 많은 동시 업로드는 같은 에러인 <code>EMFILE</code>로 나타날 수 있습니다.</p></div>
+</section>
+
+<section id="resources">
+<div class="ch-head"><span class="ch-code">SYS-06</span><h2>RESOURCE LIMIT PLAYBOOK</h2></div>
+<p class="lede">운영 장애는 무제한 큐, 무제한 스레드, 무제한 파일, 무제한 메모리에서 시작합니다. limit은 성능 저하가 아니라 장애 반경을 줄이는 안전장치입니다.</p>
+<table>
+<tr><th>자원</th><th>확인값</th><th>장애 증상</th><th>대응</th></tr>
+<tr><td>CPU quota</td><td>container limit, throttling</td><td>낮은 host CPU에서도 요청 지연</td><td>quota 조정, worker 수 제한</td></tr>
+<tr><td>Memory</td><td>RSS, heap, cgroup</td><td>OOMKilled, GC pause</td><td>heap sizing, cache bound</td></tr>
+<tr><td>File descriptor</td><td><code>ulimit -n</code>, open fd</td><td>too many open files</td><td>pool/close 검증, limit 상향</td></tr>
+<tr><td>Threads</td><td>thread count, stack size</td><td>native OOM, context switch 증가</td><td>pool cap, async model 검토</td></tr>
+<tr><td>Ports</td><td>ephemeral port range</td><td>outbound connect failure</td><td>keepalive, reuse, client pool</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">RESOURCE LIMIT PLAYBOOK</span>1. identify exhausted resource<br>2. confirm limit and current usage<br>3. find owner by process/thread/fd/socket<br>4. cap producer or drain queue<br>5. raise limit only with leak check<br>6. add dashboard and alert</div>
+</section>
+
+<section id="network">
+<div class="ch-head"><span class="ch-code">SYS-07</span><h2>네트워크 기본</h2></div>
+<p class="lede">네트워크 문제는 애플리케이션 에러처럼 보입니다. DNS, TCP handshake, TLS, HTTP, load balancer, socket pool 중 어느 단계인지 나눠야 합니다.</p>
+<table>
+<tr><th>단계</th><th>확인 질문</th><th>대표 오류</th></tr>
+<tr><td>DNS</td><td>이름이 어떤 IP로 풀리는가</td><td>NXDOMAIN, stale record</td></tr>
+<tr><td>TCP</td><td>3-way handshake가 완료되는가</td><td>timeout, refused, reset</td></tr>
+<tr><td>TLS</td><td>인증서와 프로토콜이 맞는가</td><td>expired cert, SNI mismatch</td></tr>
+<tr><td>HTTP</td><td>상태코드와 헤더가 맞는가</td><td>4xx/5xx, bad gateway</td></tr>
+<tr><td>Pooling</td><td>연결 재사용과 idle timeout이 맞는가</td><td>stale connection, pool starvation</td></tr>
+</table>
+<div class="callout"><span class="co-label">진단 순서</span><p>connect timeout은 서버 코드 실행 전 문제일 수 있고, read timeout은 서버가 요청을 받은 뒤 응답이 늦은 문제일 수 있습니다. timeout을 하나로 뭉개지 말고 DNS, connect, TLS, request, response timeout을 분리해서 로깅합니다.</p></div>
+</section>
+<footer>ENGINEERING COMPUTER SYSTEMS HANDBOOK · V1 · 2026-06</footer>
+</main>
+</div>
+</body>
+</html>
