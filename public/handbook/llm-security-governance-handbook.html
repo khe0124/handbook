@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM Handbook — 보안·거버넌스</title>
+  <title>LLM Handbook — LLM 보안과 거버넌스</title>
 </head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">LLM 보안</div>
+<div class="nav-title">LLM 보안</div>
   <a href="#ch1"><span class="code">SEC-01</span>원칙</a>
   <a href="#ch2"><span class="code">SEC-02</span>Threat Model</a>
   <a href="#ch3"><span class="code">SEC-03</span>Injection</a>
@@ -16,6 +16,7 @@
   <a href="#ch5"><span class="code">SEC-05</span>Data</a>
   <a href="#ch6"><span class="code">SEC-06</span>Governance</a>
   <a href="#ch7"><span class="code">SEC-07</span>Audit</a>
+  <a href="#ch8"><span class="code">SEC-08</span>OWASP</a>
   <a href="#depth"><span class="code">DEPTH</span>공격 경로</a>
 </nav>
 <main>
@@ -135,6 +136,23 @@ actorId · tenantId · sessionId · model · promptHash · policyDecision · ret
 <tr><td>tool 오작동</td><td>approval log, args hash, tool result</td><td>tool disable, rollback, least privilege 재검토</td></tr>
 <tr><td>PII 로그 저장</td><td>redaction 정책, retention, log sink</td><td>삭제, redaction rule 보강, vendor 확인</td></tr>
 <tr><td>prompt injection 성공</td><td>source document, model output, policy decision</td><td>red team case 추가, prompt/tool policy 수정</td></tr>
+</table>
+</section>
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">SEC-08</span><h2>OWASP LLM TOP 10 COVERAGE</h2></div>
+<p class="lede">보안 문서는 자체 원칙만으로 끝내지 말고 OWASP LLM Top 10과 매핑해야 합니다. 현재 문서는 prompt injection과 excessive agency를 강하게 다루지만, insecure output handling, supply chain, model theft 같은 항목도 release gate에 들어가야 합니다.</p>
+<table>
+<tr><th>OWASP 항목</th><th>핸드북 통제</th><th>추가 확인</th></tr>
+<tr><td>Prompt Injection</td><td>document-as-data, instruction hierarchy, red team fixture</td><td>직접·간접 injection을 별도 fixture로 보유</td></tr>
+<tr><td>Insecure Output Handling</td><td>출력 sink별 sanitizer와 allowlist</td><td>HTML/Markdown, SQL, shell, browser action으로 흘러갈 때 재검증</td></tr>
+<tr><td>Training Data Poisoning</td><td>dataset provenance, label review, holdout</td><td>fine-tuning 데이터 출처와 악성 예시 혼입 점검</td></tr>
+<tr><td>Model Denial of Service</td><td>rate limit, token budget, timeout, quota</td><td>긴 context와 tool loop로 비용 폭주 방지</td></tr>
+<tr><td>Supply Chain Vulnerabilities</td><td>provider due diligence, model registry, dependency review</td><td>외부 모델, plugin, MCP server, vector DB connector의 신뢰 경계 확인</td></tr>
+<tr><td>Sensitive Information Disclosure</td><td>secret 미주입, DLP, redaction, tenant isolation</td><td>로그·cache·eval dataset에도 민감정보가 남지 않는지 확인</td></tr>
+<tr><td>Insecure Plugin Design</td><td>tool allowlist, schema validation, least privilege</td><td>도구가 모델 지시를 권한으로 착각하지 않는지 확인</td></tr>
+<tr><td>Excessive Agency</td><td>risk tier, approval gate, dry-run, rollback</td><td>write/destructive action은 승인 전 실행 금지</td></tr>
+<tr><td>Overreliance</td><td>human review, uncertainty UI, verifier evidence</td><td>사용자가 AI 출력을 검토할 근거를 받는지 확인</td></tr>
+<tr><td>Model Theft</td><td>API key 보호, abuse monitoring, output watermark policy, rate anomaly detection</td><td>모델 추출, prompt scraping, credential abuse 탐지</td></tr>
 </table>
 </section>
 <section id="depth">

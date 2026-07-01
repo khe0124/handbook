@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Handbook — 멀티모달·파일·음성·Realtime</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-title">멀티모달·Realtime</div>
+  <a href="#ch1"><span class="code">MM-01</span>요청 계약</a>
+  <a href="#ch2"><span class="code">MM-02</span>Vision</a>
+  <a href="#ch3"><span class="code">MM-03</span>File</a>
+  <a href="#ch4"><span class="code">MM-04</span>Audio</a>
+  <a href="#ch5"><span class="code">MM-05</span>Realtime</a>
+  <a href="#ch6"><span class="code">MM-06</span>Eval</a>
+  <a href="#depth"><span class="code">DEPTH</span>운영 기준</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : LLM-MULTIMODAL-REALTIME-V1</span>
+    <span>SCOPE : VISION · FILE · AUDIO · REALTIME · EVAL</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>멀티모달·파일·음성·Realtime</h1>
+  <p class="hero-sub">멀티모달 LLM 앱은 텍스트 prompt에 이미지나 음성을 붙이는 일이 아닙니다. 입력 매체마다 신뢰도, 비용, 지연, 접근성, 평가 기준이 다르므로 요청 계약과 실패 모드를 따로 설계해야 합니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">MM-01</span><h2>MULTIMODAL REQUEST ENVELOPE</h2></div>
+<p class="lede">멀티모달 요청은 actor, media, extraction goal, risk tier, consent, retention을 함께 기록해야 합니다. 같은 이미지라도 OCR, 시각 질의응답, 품질 검사, 안전 판정은 서로 다른 평가와 보안 기준을 갖습니다.</p>
+<table>
+<tr><th>필드</th><th>설명</th><th>실패 모드</th></tr>
+<tr><td>media_type</td><td>image, pdf, audio, video, screen, mixed</td><td>모델이 처리할 수 없는 형식을 늦게 발견</td></tr>
+<tr><td>task_type</td><td>extract, classify, summarize, compare, answer, act</td><td>요약 모델에 정밀 추출을 기대</td></tr>
+<tr><td>consent_retention</td><td>사용자 동의, 저장 기간, 삭제 정책</td><td>민감 이미지·음성의 장기 보관</td></tr>
+<tr><td>evidence_required</td><td>bbox, page, timestamp, transcript, citation</td><td>답은 맞아 보여도 근거 위치가 없음</td></tr>
+</table>
+<pre><code>MULTIMODAL REQUEST ENVELOPE
+request_id: mm_4821
+media: [{type: image, id: invoice_7, sha256: ...}]
+task_type: vision extraction
+required_evidence: [field_value, bbox, page, confidence]
+retention: delete_raw_after_24h
+risk_tier: medium
+fallback: human_review_queue</code></pre>
+<h3>MARKER: artifact-ready — Multimodal eval case</h3>
+<pre><code>id: mm_invoice_total_07
+input_media: invoice_page_1.png
+expected_fields: {total: 108000, vendor: "Acme Korea"}
+expected_grounding: {total_bbox: [412,650,88,22], page: 1}
+expected_policy: raw_image_delete_after_24h
+review: field_value + bbox + retention_log</code></pre>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">MM-02</span><h2>vision extraction과 visual grounding</h2></div>
+<p class="lede">이미지 이해 기능은 “이미지를 설명한다”와 “증거 위치를 가진 값을 추출한다”를 구분해야 합니다. 업무 자동화에서는 자연어 설명보다 bbox, page, crop, confidence, reviewer override가 더 중요합니다.</p>
+<table>
+<tr><th>작업</th><th>필수 증거</th><th>검증</th></tr>
+<tr><td>문서 OCR 보정</td><td>page, bbox, raw_text, normalized_text</td><td>샘플링 수동 검수와 field-level accuracy</td></tr>
+<tr><td>영수증·계약 추출</td><td>금액·날짜·상대방 필드별 근거 위치</td><td>schema validation + bbox review</td></tr>
+<tr><td>제품 이미지 QA</td><td>비교 기준 이미지, defect label, crop</td><td>false positive/negative matrix</td></tr>
+<tr><td>스크린샷 분석</td><td>UI element, state, visible text</td><td>DOM 근거와 시각 근거 충돌 확인</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">VISION RISK</span><p>이미지 안의 텍스트도 prompt injection source가 될 수 있습니다. 스크린샷이나 PDF에 “이전 지시를 무시하라”는 문장이 있어도 문서 데이터로만 처리해야 합니다.</p></div>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">MM-03</span><h2>file ingestion과 document intelligence</h2></div>
+<p class="lede">파일 입력은 업로드가 아니라 ingestion pipeline입니다. parser, page segmentation, table extraction, image OCR, metadata, ACL, virus scan, content hash가 검색과 평가의 기초가 됩니다.</p>
+<table>
+<tr><th>단계</th><th>설계 기준</th><th>증거</th></tr>
+<tr><td>intake</td><td>파일 크기, MIME, 바이러스 검사, tenant scope</td><td>upload audit</td></tr>
+<tr><td>parse</td><td>텍스트, 표, 이미지, 페이지 구조 분리</td><td>parser_version, parse_error_rate</td></tr>
+<tr><td>normalize</td><td>날짜·금액·단위·언어 정규화</td><td>field transform log</td></tr>
+<tr><td>index</td><td>chunk, embedding, metadata, ACL</td><td>content_hash, index_version</td></tr>
+</table>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">MM-04</span><h2>audio turn-taking과 voice UX</h2></div>
+<p class="lede">음성 앱은 STT, VAD, partial transcript, interruption, TTS, latency budget이 함께 움직입니다. 텍스트 챗봇보다 오류 수정과 사용자 중단 처리가 훨씬 중요합니다.</p>
+<table>
+<tr><th>요소</th><th>좋은 설계</th><th>실패</th></tr>
+<tr><td>VAD</td><td>말 시작·끝 감지와 침묵 timeout 조정</td><td>사용자 말이 끊기거나 대기 시간이 길어짐</td></tr>
+<tr><td>partial transcript</td><td>임시 표시, 최종 transcript 전 저장 금지</td><td>잘못 인식된 중간 텍스트로 tool 실행</td></tr>
+<tr><td>barge-in</td><td>사용자가 말하면 TTS와 tool proposal 중단</td><td>사용자 정정 뒤에도 이전 행동 계속 실행</td></tr>
+<tr><td>accessibility</td><td>caption, keyboard fallback, transcript export</td><td>음성만 가능한 폐쇄 경험</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">MM-05</span><h2>realtime session state machine</h2></div>
+<p class="lede">Realtime은 websocket을 여는 기능이 아니라 세션 상태 머신입니다. 입력 스트림, 모델 응답, 도구 제안, 사용자 중단, 재연결, 비용 예산을 같은 trace 안에서 관리해야 합니다.</p>
+<pre><code>realtime session
+created -> listening -> transcribing -> thinking -> speaking
+-> interrupted -> tool_pending -> approval_required -> completed
+-> reconnecting | failed | cancelled</code></pre>
+<table>
+<tr><th>상태</th><th>서버 책임</th><th>로그</th></tr>
+<tr><td>listening</td><td>audio buffer와 consent 확인</td><td>session_id, input_ms</td></tr>
+<tr><td>tool_pending</td><td>tool schema, permission, idempotency 검증</td><td>proposed_tool, blocked_reason</td></tr>
+<tr><td>interrupted</td><td>출력과 미승인 tool action 취소</td><td>cancelled_generation_id</td></tr>
+<tr><td>reconnecting</td><td>중복 실행 방지와 transcript 복구</td><td>resume_token, replay_range</td></tr>
+</table>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">MM-06</span><h2>multimodal eval</h2></div>
+<p class="lede">멀티모달 평가는 텍스트 정답만 비교하면 부족합니다. 위치, 시간, 시각 근거, transcript 품질, 사용자 중단 처리까지 케이스로 고정해야 합니다.</p>
+<table>
+<tr><th>평가</th><th>측정</th><th>예시</th></tr>
+<tr><td>field accuracy</td><td>정답 필드 값 일치</td><td>청구 금액과 결제일 추출</td></tr>
+<tr><td>grounding accuracy</td><td>bbox/page/timestamp가 실제 근거를 가리킴</td><td>계약 조항 위치</td></tr>
+<tr><td>transcript WER</td><td>음성 인식 오류율과 도메인 용어</td><td>고객명, 상품명, 숫자</td></tr>
+<tr><td>interaction quality</td><td>barge-in, reconnect, latency p95</td><td>사용자 정정 후 이전 tool proposal 취소</td></tr>
+</table>
+</section>
+
+<section id="depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>멀티모달을 운영 가능한 제품으로 만들기</h2></div>
+<h3>MARKER: concept-depth — 매체가 늘어나면 실패 증거도 늘어난다</h3>
+<p>텍스트 RAG에서는 citation이 핵심 증거지만, 이미지와 음성에서는 citation만으로 부족합니다. 이미지 추출은 bbox와 crop, PDF는 page와 table cell, 음성은 timestamp와 final transcript, realtime은 session event trace가 있어야 리뷰어가 결과를 검증할 수 있습니다. 증거 단위가 없으면 모델이 맞았는지 사람이 다시 원문 전체를 뒤져야 하고, 자동화 가치는 사라집니다.</p>
+<h3>MARKER: artifact-ready — Multimodal failure trace</h3>
+<pre><code>case: invoice_total_wrong
+media_hash: sha256:...
+model_output: total=180000
+expected: total=108000
+bbox: page=1 x=412 y=650 w=88 h=22
+failure_class: visual_ocr_confusion
+next: add crop fixture + route low_confidence to human_review</code></pre>
+<h3>MARKER: failure-driven — Realtime을 채팅 API처럼 다루는 실패</h3>
+<p>Realtime 세션에서 사용자가 말을 끊었는데 서버가 이전 generation과 tool proposal을 취소하지 않으면, 사용자가 정정한 뒤에도 오래된 의도로 외부 전송이나 예약 변경이 실행될 수 있습니다. 세션에는 generation id, cancel token, pending tool action, approval state가 있어야 하며, 재연결 후에도 같은 side effect가 두 번 실행되지 않도록 idempotency가 필요합니다.</p>
+<h3>MARKER: failure-driven — Vision 추출을 텍스트 요약처럼 평가하는 실패</h3>
+<p>이미지나 PDF에서 금액, 날짜, 수신자 같은 필드를 추출하는 기능을 최종 답변 텍스트만 보고 평가하면 실제 업무 품질을 놓칩니다. 모델이 총액을 맞췄더라도 bbox가 다른 숫자를 가리키거나, page가 누락되거나, 표의 헤더와 셀을 잘못 연결하면 리뷰어는 오류를 재현할 수 없습니다. 멀티모달 추출은 값의 정답 여부와 근거 위치의 정답 여부를 분리해 측정해야 하며, 낮은 confidence나 겹치는 후보가 있으면 자동 승인 대신 human review queue로 보내야 합니다.</p>
+<h3>MARKER: artifact-ready — Realtime cancellation contract</h3>
+<pre><code>generation_id: gen_82
+user_event: barge_in
+cancelled_outputs: [tts_82, tool_proposal_14]
+pending_tool_state: cancelled_before_approval
+resume_state: listening
+idempotency_key: session_9:turn_12</code></pre>
+</section>
+</main>
+</div>
+</body>
+</html>

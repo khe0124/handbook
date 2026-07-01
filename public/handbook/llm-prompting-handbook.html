@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM Handbook — 프로덕션 프롬프팅·구조화 출력</title>
+  <title>LLM Handbook — 프로덕션 프롬프팅과 구조화 출력</title>
 </head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">프롬프팅</div>
+<div class="nav-title">프롬프팅</div>
   <a href="#ch1"><span class="code">PRM-01</span>Prompt Contract</a>
   <a href="#ch2"><span class="code">PRM-02</span>Structured Output</a>
   <a href="#ch3"><span class="code">PRM-03</span>Repair Loop</a>
   <a href="#ch4"><span class="code">PRM-04</span>Tool Use</a>
   <a href="#ch5"><span class="code">PRM-05</span>Streaming</a>
   <a href="#ch6"><span class="code">PRM-06</span>Economics</a>
+  <a href="#ch7"><span class="code">PRM-07</span>Output Sink</a>
   <a href="#depth"><span class="code">DEPTH</span>계약 실전</a>
 </nav>
 <main>
@@ -149,6 +150,19 @@ model proposes tool call → app validates schema and permission<br>
 <span class="sc-label">Phase 1 Reference API</span>
 POST /documents/analyze → validates input → builds prompt contract → calls model → validates structured output → logs model/token/latency/schema_retry_count
 </div>
+</section>
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">PRM-07</span><h2>OUTPUT SINK SECURITY</h2></div>
+<p class="lede">모델 출력은 사용자에게 보이는 텍스트에서 끝나지 않습니다. HTML/Markdown, SQL, shell command, browser action, email, ticket, DB write 같은 sink로 흘러갈 때는 다시 비신뢰 데이터로 검증해야 합니다.</p>
+<table>
+<tr><th>sink</th><th>위험</th><th>통제</th></tr>
+<tr><td>HTML/Markdown</td><td>XSS, 악성 링크, 이미지 추적 pixel</td><td>sanitize, link allowlist, raw HTML 금지</td></tr>
+<tr><td>SQL</td><td>권한 밖 조회, destructive query, injection</td><td>read-only role, query parser, allowlisted template</td></tr>
+<tr><td>shell command</td><td>임의 명령 실행, 파일 삭제, secret 노출</td><td>승인 게이트, sandbox, command allowlist, dry-run</td></tr>
+<tr><td>browser action</td><td>폼 제출, 결제, 외부 전송</td><td>preview, user confirmation, idempotency</td></tr>
+<tr><td>email/ticket</td><td>개인정보 유출, 잘못된 수신자</td><td>recipient validation, PII scan, approval payload</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">OUTPUT SINK RULE</span>모델이 생성한 것은 파싱 성공 후에도 신뢰 입력이 아니다. sink 직전의 서버 코드가 정책, 권한, sanitizer, audit를 다시 적용한다.</div>
 </section>
 <section id="depth">
 <div class="ch-head"><span class="ch-code">DEPTH</span><h2>프롬프트를 제품 계약으로 운영하기</h2></div>

@@ -93,10 +93,10 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 54);
+  assert.equal(HANDBOOK_ITEMS.length, 56);
   assert.equal(careerGroup?.items.length, 8);
   assert.equal(engineeringGroup?.items.length, 14);
-  assert.equal(llmGroup?.items.length, 10);
+  assert.equal(llmGroup?.items.length, 12);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
   assert.equal(axGroup?.items.length, 3);
   assert.equal(designGroup?.items.length, 2);
@@ -140,7 +140,9 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("06 Agent·Tool Use·Workflow"));
   assert.ok(labels.includes("07 LLM 보안·거버넌스"));
   assert.ok(labels.includes("08 LLM 앱 아키텍처·운영"));
-  assert.ok(labels.includes("09 포트폴리오 프로젝트"));
+  assert.ok(labels.includes("09 멀티모달·파일·음성·Realtime"));
+  assert.ok(labels.includes("10 Fine-tuning·Customization·Model Routing"));
+  assert.ok(labels.includes("11 포트폴리오 프로젝트"));
   assert.ok(labels.includes("00 인프라·운영 로드맵"));
   assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
   assert.ok(labels.includes("00 AX 기반·조직 적용"));
@@ -174,6 +176,45 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   for (const item of HANDBOOK_ITEMS) {
     const searchable = `${item.id}\n${item.file}\n${item.label}\n${item.kind}`;
     assert.doesNotMatch(searchable, /carbon|lca|vcm|탄소|업무현황/i);
+  }
+});
+
+test("llm menu covers multimodal, customization, security, governance, output sinks, and feedback", async () => {
+  assert.equal(LLM_HANDBOOKS.length, 12);
+  assert.deepEqual(
+    LLM_HANDBOOKS.map((item) => item.label),
+    [
+      "00 LLM 로드맵·AI Native 개발자 모델",
+      "01 AI Native 작업 표준·Definition of Done",
+      "02 LLM 기초·모델 동작 원리",
+      "03 프로덕션 프롬프팅·구조화 출력",
+      "04 RAG·임베딩·벡터DB",
+      "05 LLM 평가·품질 관리",
+      "06 Agent·Tool Use·Workflow",
+      "07 LLM 보안·거버넌스",
+      "08 LLM 앱 아키텍처·운영",
+      "09 멀티모달·파일·음성·Realtime",
+      "10 Fine-tuning·Customization·Model Routing",
+      "11 포트폴리오 프로젝트",
+    ],
+  );
+
+  const requiredSourceMarkers = [
+    ["src/handbook/documents/llm-multimodal-realtime.ts", ["MULTIMODAL REQUEST ENVELOPE", "vision extraction", "audio turn-taking", "realtime session", "multimodal eval"]],
+    ["src/handbook/documents/llm-model-customization.ts", ["CUSTOMIZATION DECISION MATRIX", "prompt vs RAG vs fine-tuning", "distillation", "routing policy", "reasoning effort"]],
+    ["src/handbook/documents/llm-security-governance.ts", ["OWASP LLM TOP 10 COVERAGE", "Insecure Output Handling", "Supply Chain Vulnerabilities", "Model Theft"]],
+    ["src/handbook/documents/llm-app-architecture-operations.ts", ["DATA RESIDENCY", "provider due diligence", "routing policy", "reasoning_budget"]],
+    ["src/handbook/documents/llm-prompting.ts", ["OUTPUT SINK SECURITY", "HTML/Markdown", "SQL", "shell command"]],
+    ["src/handbook/documents/llm-evaluation.ts", ["ONLINE FEEDBACK LOOP", "human-labeled holdout", "thumbs feedback", "production drift"]],
+    ["src/handbook/documents/llm-portfolio-projects.ts", ["AI UX EVIDENCE", "uncertainty UI", "citation UX", "human handoff"]],
+  ];
+
+  for (const [sourcePath, markers] of requiredSourceMarkers) {
+    const source = await readFile(sourcePath, "utf8");
+
+    for (const marker of markers) {
+      assert.match(source, new RegExp(marker, "i"), `${sourcePath} should include ${marker}`);
+    }
   }
 });
 
@@ -435,12 +476,20 @@ test("LLM handbook group covers AI Native developer concepts from fundamentals t
       evidence: ["LLM OBSERVABILITY", "RATE LIMIT", "COST DASHBOARD"],
     },
     {
+      file: "llm-multimodal-realtime-handbook.html",
+      evidence: ["MULTIMODAL REQUEST ENVELOPE", "vision extraction", "audio turn-taking", "realtime session", "multimodal eval"],
+    },
+    {
+      file: "llm-model-customization-handbook.html",
+      evidence: ["CUSTOMIZATION DECISION MATRIX", "prompt vs RAG vs fine-tuning", "distillation", "routing policy", "reasoning effort"],
+    },
+    {
       file: "llm-portfolio-projects-handbook.html",
       evidence: ["문서 요약 \\+ 자동 분석 API", "문서 지식 검색 챗봇", "평가 하니스", "QUALITY REPORT", "AX EXECUTION EVIDENCE PACK"],
     },
   ];
 
-  assert.equal(llmGroup?.items.length, 10);
+  assert.equal(llmGroup?.items.length, 12);
   assert.deepEqual(
     LLM_HANDBOOKS.map((item) => item.file),
     documents.map((document) => document.file),

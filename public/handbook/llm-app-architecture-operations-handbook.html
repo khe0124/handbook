@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM Handbook — 앱 아키텍처·운영</title>
+  <title>LLM Handbook — LLM 앱 아키텍처와 운영</title>
 </head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">LLM 운영</div>
+<div class="nav-title">LLM 운영</div>
   <a href="#ch1"><span class="code">OPS-01</span>Architecture</a>
   <a href="#ch2"><span class="code">OPS-02</span>Lifecycle</a>
   <a href="#ch3"><span class="code">OPS-03</span>Gateway</a>
   <a href="#ch4"><span class="code">OPS-04</span>Queue·Cache</a>
   <a href="#ch5"><span class="code">OPS-05</span>Observability</a>
   <a href="#ch6"><span class="code">OPS-06</span>Release·Runbook</a>
+  <a href="#ch7"><span class="code">OPS-07</span>Vendor·Data</a>
   <a href="#depth"><span class="code">DEPTH</span>장애 운영</a>
 </nav>
 <main>
@@ -138,6 +139,24 @@ requests by feature · model mix · input/output token · cache hit rate · retr
 <span class="sc-label">production_readiness_checklist</span>
 □ 모든 요청에 request_id/trace_id가 있다 · □ prompt_version과 model_version이 로그에 남는다 · □ user/org quota가 있다 · □ cache key에 tenant/ACL/document version이 포함된다 · □ provider 장애 시 fallback/degradation 경로가 있다 · □ prompt 변경은 eval_gate를 통과해야 배포된다
 </div>
+</section>
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">OPS-07</span><h2>Vendor governance · DATA RESIDENCY · routing policy</h2></div>
+<p class="lede">프로덕션 LLM 운영은 모델 gateway 내부 문제만이 아닙니다. provider due diligence, 데이터 국외 이전, 보존 기간, 학습 사용 여부, SLA, 장애 공지, 비용 계약까지 운영 설계에 포함해야 합니다.</p>
+<table>
+<tr><th>검토 축</th><th>필수 질문</th><th>증거</th></tr>
+<tr><td>provider due diligence</td><td>입력·출력 데이터가 학습에 쓰이는가, retention은 얼마인가</td><td>DPA, security whitepaper, vendor policy snapshot</td></tr>
+<tr><td>DATA RESIDENCY</td><td>tenant나 산업 규제로 region 제한이 필요한가</td><td>region policy, routing denylist, audit export</td></tr>
+<tr><td>SLA와 장애</td><td>provider 장애 시 어떤 기능을 degrade할 것인가</td><td>fallback matrix, incident runbook</td></tr>
+<tr><td>routing policy</td><td>risk, cost, latency, context, reasoning_budget에 따라 모델을 고르는가</td><td>route decision log, model mix dashboard</td></tr>
+</table>
+<pre><code>model_route_decision
+risk_tier: high
+region_policy: kr_only
+reasoning_budget: high
+primary: quality_model_regional
+fallback: human_review_queue
+blocked: providers_without_data_residency_commitment</code></pre>
 </section>
 <section id="depth">
 <div class="ch-head"><span class="ch-code">DEPTH</span><h2>운영 가능한 LLM 앱의 증거 설계</h2></div>

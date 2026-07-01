@@ -107,7 +107,9 @@ export const LLM_HANDBOOKS = [
   { id: "llm-agents-tool-use", label: "06 Agent·Tool Use·Workflow", kind: "LLM", file: "llm-agents-tool-use-handbook.html" },
   { id: "llm-security-governance", label: "07 LLM 보안·거버넌스", kind: "LLM", file: "llm-security-governance-handbook.html" },
   { id: "llm-app-architecture-operations", label: "08 LLM 앱 아키텍처·운영", kind: "LLM", file: "llm-app-architecture-operations-handbook.html" },
-  { id: "llm-portfolio-projects", label: "09 포트폴리오 프로젝트", kind: "LLM", file: "llm-portfolio-projects-handbook.html" },
+  { id: "llm-multimodal-realtime", label: "09 멀티모달·파일·음성·Realtime", kind: "LLM", file: "llm-multimodal-realtime-handbook.html" },
+  { id: "llm-model-customization", label: "10 Fine-tuning·Customization·Model Routing", kind: "LLM", file: "llm-model-customization-handbook.html" },
+  { id: "llm-portfolio-projects", label: "11 포트폴리오 프로젝트", kind: "LLM", file: "llm-portfolio-projects-handbook.html" },
 ];
 
 export const NETWORK_HANDBOOKS = [
