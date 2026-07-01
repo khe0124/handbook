@@ -678,6 +678,16 @@
   margin-top: 10px;
 }
 
+.handbook-main .practical-example-training {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--line);
+}
+
+.handbook-main .practical-example-training > h3 {
+  margin-top: 0;
+}
+
 .handbook-empty {
   max-width: 760px;
   margin: 80px auto;

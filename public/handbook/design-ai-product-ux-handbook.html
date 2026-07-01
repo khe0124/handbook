@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Practice — AI 제품 UX</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-title">AI 제품 UX</div>
+  <a href="#ch1"><span class="code">AI-UX-01</span>핵심 문제</a>
+  <a href="#ch2"><span class="code">AI-UX-02</span>불확실성</a>
+  <a href="#ch3"><span class="code">AI-UX-03</span>출처와 근거</a>
+  <a href="#ch4"><span class="code">AI-UX-04</span>검토/승인</a>
+  <a href="#ch5"><span class="code">AI-UX-05</span>Handoff</a>
+  <a href="#ch6"><span class="code">AI-UX-06</span>QA Matrix</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : DESIGN-AI-PRODUCT-UX</span>
+    <span>SCOPE : UNCERTAINTY · CITATION · HUMAN HANDOFF</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AI 제품 UX와<br>신뢰 설계</h1>
+  <p class="hero-sub">AI 제품의 UX는 예쁜 입력창이 아니라 <strong>불확실성, 근거, 검토, 거절, 사람 개입</strong>을 사용자가 이해할 수 있게 만드는 일입니다.</p>
+</header>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">AI-UX-01</span><h2>AI 제품 UX의 핵심 문제</h2></div>
+<table>
+<tr><th>문제</th><th>UX 질문</th></tr>
+<tr><td>확률적 출력</td><td>사용자는 결과를 어느 정도 믿어도 되는지 알 수 있는가</td></tr>
+<tr><td>근거 부족</td><td>주장의 출처와 한계를 확인할 수 있는가</td></tr>
+<tr><td>권한/정책 거절</td><td>거절 이유와 다음 행동이 명확한가</td></tr>
+<tr><td>검토 필요</td><td>생성 결과를 승인/수정/폐기하는 흐름이 있는가</td></tr>
+<tr><td>실패 복구</td><td>사용자가 오류를 신고하고 대체 경로로 갈 수 있는가</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">AI-UX-02</span><h2>불확실성 표시</h2></div>
+<p class="lede">confidence 숫자를 그대로 보여주는 것은 종종 오해를 만듭니다. 사용자가 해야 할 행동 중심으로 표현합니다.</p>
+<table>
+<tr><th>상태</th><th>표현</th><th>행동</th></tr>
+<tr><td>근거 충분</td><td>근거 문서와 함께 답변</td><td>사용 가능, 출처 열기</td></tr>
+<tr><td>근거 일부</td><td>확인 필요 표시</td><td>검토 요청, 질문 좁히기</td></tr>
+<tr><td>근거 없음</td><td>답변하지 않음</td><td>문서 추가, 사람에게 문의</td></tr>
+<tr><td>정책 제한</td><td>거절 이유와 허용 범위 안내</td><td>권한 요청, 대체 자료 보기</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">AI-UX-03</span><h2>출처와 근거 UI</h2></div>
+<div class="serial-card">
+<span class="sc-label">CITATION UX CONTRACT</span>
+answer claim → source chip → evidence preview → document location<br>
+→ last updated → permission state → report wrong citation
+</div>
+<div class="callout warn">
+<span class="co-label">금지 패턴</span>
+<p>출처 링크가 실제 주장을 뒷받침하지 않거나, "AI가 그렇게 판단했다"를 근거처럼 보여주면 신뢰를 망칩니다.</p>
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">AI-UX-04</span><h2>생성 결과 검토/승인</h2></div>
+<table>
+<tr><th>결과 유형</th><th>기본 정책</th><th>UI</th></tr>
+<tr><td>읽기 전용 요약</td><td>출처와 수정 제안 제공</td><td>copy, cite, report</td></tr>
+<tr><td>외부 발송 문안</td><td>사람 승인 필수</td><td>review diff, approve, reject</td></tr>
+<tr><td>코드/설정 변경</td><td>검증 결과 필요</td><td>tests, risk, rollback</td></tr>
+<tr><td>결제/삭제/권한 변경</td><td>고위험 승인</td><td>2-step confirmation, audit</td></tr>
+</table>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">AI-UX-05</span><h2>Human handoff</h2></div>
+<p class="lede">좋은 AI UX는 사람이 개입해야 하는 순간을 숨기지 않습니다.</p>
+<pre class="snippet-card"><code>handoff_trigger:
+  - low evidence
+  - high risk action
+  - policy ambiguity
+  - repeated user correction
+handoff_packet:
+  - user question
+  - model answer
+  - retrieved evidence
+  - confidence reason
+  - user feedback
+  - suggested next action</code></pre>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">AI-UX-06</span><h2>AI UX QA Matrix</h2></div>
+<table>
+<tr><th>검증</th><th>질문</th></tr>
+<tr><td>불확실성</td><td>근거 부족 상태가 happy path와 다른 UI로 보이는가</td></tr>
+<tr><td>출처</td><td>모든 핵심 주장에 확인 가능한 근거가 있는가</td></tr>
+<tr><td>거절</td><td>정책상 답할 수 없는 경우 다음 행동이 있는가</td></tr>
+<tr><td>피드백</td><td>사용자가 오류를 수정/신고할 수 있는가</td></tr>
+<tr><td>접근성</td><td>상태 변화와 citation이 키보드/스크린리더로 전달되는가</td></tr>
+</table>
+</section>
+</main>
+</div>
+</body>
+</html>

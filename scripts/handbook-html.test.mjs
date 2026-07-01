@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  AI_NATIVE_TRAINING_HANDBOOKS,
   AX_HANDBOOKS,
   BACKEND_HANDBOOKS,
   CAREER_HANDBOOKS,
@@ -79,7 +80,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "engineering", "llm", "operations", "ax", "design", "practice", "career"],
+    ["home", "engineering", "llm", "ai-native", "operations", "ax", "design", "practice", "career"],
   );
 
   const labels = [
@@ -90,22 +91,25 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
   const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
+  const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
   const axGroup = HANDBOOK_GROUPS.find((group) => group.key === "ax");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 61);
-  assert.equal(careerGroup?.items.length, 9);
+  assert.equal(HANDBOOK_ITEMS.length, 70);
+  assert.equal(careerGroup?.items.length, 10);
   assert.equal(engineeringGroup?.items.length, 15);
   assert.equal(llmGroup?.items.length, 12);
-  assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
+  assert.equal(aiNativeGroup?.items.length, 6);
+  assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 14);
   assert.equal(axGroup?.items.length, 3);
-  assert.ok((designGroup?.items.length ?? 0) >= 5);
+  assert.ok((designGroup?.items.length ?? 0) >= 6);
   assert.equal(practiceGroup?.items.length, 3);
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("면접·커리어"));
   assert.ok(labels.includes("개발 핸드북"));
   assert.ok(labels.includes("LLM"));
+  assert.ok(labels.includes("AI Native 훈련"));
   assert.ok(labels.includes("인프라·운영"));
   assert.ok(labels.includes("AX 실무"));
   assert.ok(labels.includes("디자인 실무"));
@@ -119,6 +123,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("06 시스템 설계·프로젝트 심층"));
   assert.ok(labels.includes("07 컬처·협업·코드리뷰"));
   assert.ok(labels.includes("08 코딩테스트 패턴"));
+  assert.ok(labels.includes("09 AI Native 포트폴리오"));
   assert.ok(labels.includes("00 CS 기초와 알고리즘 사고"));
   assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
@@ -146,6 +151,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("09 멀티모달·파일·음성·Realtime"));
   assert.ok(labels.includes("10 Fine-tuning·Customization·Model Routing"));
   assert.ok(labels.includes("11 포트폴리오 프로젝트"));
+  assert.ok(labels.includes("00 역량 매트릭스·진단"));
+  assert.ok(labels.includes("01 실습 랩"));
+  assert.ok(labels.includes("02 템플릿 키트"));
+  assert.ok(labels.includes("03 평가 하네스"));
+  assert.ok(labels.includes("04 보안 레드팀 Fixture"));
+  assert.ok(labels.includes("05 Agent Runtime 구현"));
   assert.ok(labels.includes("00 인프라·운영 로드맵"));
   assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
   assert.ok(labels.includes("00 AX 기반·조직 적용"));
@@ -156,6 +167,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("02 시각디자인 기초·조형 원리"));
   assert.ok(labels.includes("03 색채·타이포그래피·브랜드 시각 언어"));
   assert.ok(labels.includes("04 사진학·이미지 리터러시"));
+  assert.ok(labels.includes("05 AI 제품 UX·신뢰 설계"));
   assert.ok(labels.includes("00 실무 치트시트 모음"));
   assert.ok(labels.includes("01 실무 준비·작업 루프"));
   assert.ok(labels.includes("02 빌드·설정·릴리스 운영"));
@@ -172,6 +184,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("10 Incident Response·Rollback·DR"));
   assert.ok(labels.includes("11 운영 체크리스트·면접 답변"));
   assert.ok(labels.includes("12 AWS·Azure 실전 시나리오"));
+  assert.ok(labels.includes("13 AI·LLM 운영 Addendum"));
   assert.ok(!HANDBOOK_GROUPS.some((group) => group.key === "examples" || group.label === "예시 사례"));
   assert.ok(!labels.includes("개발핸드북"));
   assert.ok(!labels.includes("업무현황"));
@@ -236,7 +249,7 @@ test("home shortcut links point to catalog items", async () => {
   }
 });
 
-test("career menu consolidates interview and personalized career documents into nine items", async () => {
+test("career menu consolidates interview, personalized career, and AI Native portfolio documents", async () => {
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const bundles = [
     {
@@ -284,9 +297,14 @@ test("career menu consolidates interview and personalized career documents into 
       sources: ["코딩테스트 패턴"],
       evidence: ["COMPLEXITY LIMIT TABLE", "INVARIANT PROOF DRILL", "REAL PROBLEM TRAINING LOOP"],
     },
+    {
+      file: "career-ai-native-portfolio-handbook.html",
+      sources: ["AI Native 포트폴리오"],
+      evidence: ["AI Native", "EVIDENCE PACKET", "30초 결론"],
+    },
   ];
 
-  assert.equal(careerGroup?.items.length, 9);
+  assert.equal(careerGroup?.items.length, 10);
   assert.deepEqual(
     careerGroup?.items.map((item) => item.file),
     bundles.map((bundle) => bundle.file),
@@ -746,8 +764,9 @@ test("public handbook index is a Dev Handbook entrypoint, not a carbon portal", 
   assert.match(source, /풀스택/);
   assert.match(source, /프론트엔드/);
   assert.match(source, /백엔드/);
-  assert.match(source, /DevOps/);
-  assert.match(source, /fullstack-growth-roadmap-handbook\.html/);
+  assert.match(source, /AI Native/);
+  assert.match(source, /인프라·운영/);
+  assert.match(source, /ai-native-competency-map-handbook\.html/);
   assert.match(source, /home-handbook\.html/);
   assert.doesNotMatch(source, /탄소|LCA|VCM|CBAM|K-ETS|carbon-accounting|lca-|vcm-/i);
 });
@@ -1467,6 +1486,9 @@ test("every handbook item has a rendered practical example", async () => {
   assert.match(pageSource, /검증 증거/);
   assert.match(pageSource, /실패 신호/);
   assert.match(pageSource, /완료 기준/);
+  assert.match(pageSource, /훈련 기준/);
+  assert.match(pageSource, /제출 산출물/);
+  assert.match(pageSource, /통과 기준/);
   assert.match(pageSource, /리뷰 질문/);
   assert.match(cssSource, /\.handbook-main \.handbook-practical-example/);
   assert.match(cssSource, /\.handbook-main \.practical-example-grid/);
@@ -1479,7 +1501,7 @@ test("every handbook item has a rendered practical example", async () => {
   for (const item of HANDBOOK_ITEMS) {
     assert.match(
       examplesSource,
-      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*example\\(`),
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*(?:example|trainingExample)\\(`),
       `${item.id} should have a practical example`,
     );
     assert.match(
@@ -2075,6 +2097,7 @@ test("operations handbook follows a service operations lifecycle roadmap", async
     "10 Incident Response·Rollback·DR",
     "11 운영 체크리스트·면접 답변",
     "12 AWS·Azure 실전 시나리오",
+    "13 AI·LLM 운영 Addendum",
   ]);
 
   const docs = await Promise.all(

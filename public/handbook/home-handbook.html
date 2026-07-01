@@ -16,6 +16,9 @@
   <a href="#ch5"><span class="code">HOME-05</span>핸드북 사용법</a>
   <a href="#ch6"><span class="code">HOME-06</span>실전 루프</a>
   <a href="#ch7"><span class="code">HOME-07</span>바로가기</a>
+  <a href="#ch8"><span class="code">HOME-08</span>AI Native 진단</a>
+  <a href="#ch9"><span class="code">HOME-09</span>훈련 트랙</a>
+  <a href="#ch10"><span class="code">HOME-10</span>산출물 지도</a>
 </nav>
 <main>
 <header class="hero">
@@ -187,10 +190,30 @@
     <strong>LLM 로드맵</strong>
     <span>AI Native 개발자 모델과 학습 순서 확인</span>
   </a>
+  <a class="shortcut-link" href="#handbook-ai-native-competency-map" data-handbook-id="ai-native-competency-map">
+    <span class="shortcut-kicker">AI Native 훈련</span>
+    <strong>역량 매트릭스·진단</strong>
+    <span>현재 수준과 다음 실습 산출물을 판정</span>
+  </a>
+  <a class="shortcut-link" href="#handbook-ai-native-labs" data-handbook-id="ai-native-labs">
+    <span class="shortcut-kicker">AI Native 훈련</span>
+    <strong>실습 랩</strong>
+    <span>fixture, 산출물, 통과 기준으로 훈련 시작</span>
+  </a>
+  <a class="shortcut-link" href="#handbook-ai-native-toolkit" data-handbook-id="ai-native-toolkit">
+    <span class="shortcut-kicker">AI Native 훈련</span>
+    <strong>템플릿 키트</strong>
+    <span>context, eval, security, episode 템플릿 사용</span>
+  </a>
   <a class="shortcut-link" href="#handbook-operations-roadmap" data-handbook-id="operations-roadmap">
     <span class="shortcut-kicker">인프라·운영</span>
     <strong>인프라·운영 로드맵</strong>
     <span>요청 경로, 배포, 관측, 장애 대응을 연결</span>
+  </a>
+  <a class="shortcut-link" href="#handbook-operations-ai-llm-operations" data-handbook-id="operations-ai-llm-operations">
+    <span class="shortcut-kicker">인프라·운영</span>
+    <strong>AI·LLM 운영 Addendum</strong>
+    <span>groundedness, schema, cost, fallback 지표 운영</span>
   </a>
   <a class="shortcut-link" href="#handbook-operations-incident-dr" data-handbook-id="operations-incident-dr">
     <span class="shortcut-kicker">인프라·운영</span>
@@ -206,6 +229,11 @@
     <span class="shortcut-kicker">디자인 실무</span>
     <strong>디자인 기반·사용자 흐름</strong>
     <span>문제 정의, IA, 사용자 흐름부터 잡기</span>
+  </a>
+  <a class="shortcut-link" href="#handbook-design-ai-product-ux" data-handbook-id="design-ai-product-ux">
+    <span class="shortcut-kicker">디자인 실무</span>
+    <strong>AI 제품 UX·신뢰 설계</strong>
+    <span>불확실성, 출처, 검토, handoff 흐름 설계</span>
   </a>
   <a class="shortcut-link" href="#handbook-practice-cheat-sheets" data-handbook-id="practice-cheat-sheets">
     <span class="shortcut-kicker">실무 도구</span>
@@ -227,7 +255,57 @@
     <strong>개인 이력 정리</strong>
     <span>프로젝트, 성과, 경험 경계를 증거로 정리</span>
   </a>
+  <a class="shortcut-link" href="#handbook-career-ai-native-portfolio" data-handbook-id="career-ai-native-portfolio">
+    <span class="shortcut-kicker">면접·커리어</span>
+    <strong>AI Native 포트폴리오</strong>
+    <span>평가, 보안, 운영 증거로 AI 경험을 설명</span>
+  </a>
 </div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">HOME-08</span><h2>AI Native 빠른 진단</h2></div>
+<p class="lede">AI Native 역량은 도구 사용 경험이 아니라 재현 가능한 증거로 판정합니다. 아래 질문에 산출물로 답하지 못하면 해당 역량은 아직 훈련 대상입니다.</p>
+<table>
+<tr><th>질문</th><th>초기 신호</th><th>실무 가능 신호</th><th>독립 운영 신호</th></tr>
+<tr><td>LLM 품질을 어떻게 판단하는가</td><td>샘플 답변을 본다</td><td>golden set과 eval report를 만든다</td><td>CI gate와 운영 지표로 연결한다</td></tr>
+<tr><td>RAG 오답을 어떻게 고치는가</td><td>프롬프트를 고친다</td><td>retrieval/generation 실패를 분리한다</td><td>index freshness와 citation precision을 운영한다</td></tr>
+<tr><td>에이전트 도구 호출을 어떻게 통제하는가</td><td>도구 schema를 정의한다</td><td>approval과 idempotency를 둔다</td><td>audit/replay/kill switch를 설계한다</td></tr>
+<tr><td>AI 작업 경험을 어떻게 설명하는가</td><td>사용한 모델을 말한다</td><td>구현 기능과 테스트를 말한다</td><td>평가, 보안, 운영, 실패 대응 증거를 말한다</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">첫 행동</span>
+<p>진단 결과가 애매하면 `AI Native 훈련 > 역량 매트릭스·진단`에서 현재 수준을 정하고, `실습 랩`에서 가장 약한 축 하나를 fixture로 통과시킵니다.</p>
+</div>
+</section>
+
+<section id="ch9">
+<div class="ch-head"><span class="ch-code">HOME-09</span><h2>훈련 트랙</h2></div>
+<p class="lede">모든 문서를 순서대로 소비하지 않습니다. 현재 목표에 맞는 트랙을 고르고, 각 트랙의 산출물로 완료 여부를 판단합니다.</p>
+<table>
+<tr><th>트랙</th><th>읽을 순서</th><th>완료 산출물</th></tr>
+<tr><td>입문</td><td>실무 준비 → CS → 시스템 → 언어 → 프론트/백엔드 핵심</td><td>개발 환경 체크, 작은 기능 구현 기록, 디버깅 노트</td></tr>
+<tr><td>풀스택 제품 개발</td><td>디자인 기반 → 프론트엔드 핵심 → 백엔드 핵심 → 데이터 → 인증·보안 → 릴리스</td><td>user flow, API 계약, DB 변경 계획, 테스트 리포트</td></tr>
+<tr><td>AI Native 제품</td><td>LLM 로드맵 → 프롬프팅 → RAG → 평가 → Agent → 보안 → 운영</td><td>prompt contract, eval dataset, retrieval report, security report</td></tr>
+<tr><td>AX 작업 체계</td><td>AX 기반 → 실행 루프 → 확장/거버넌스 → 템플릿 키트</td><td>context package, episode log, failure taxonomy, approval trace</td></tr>
+<tr><td>커리어 증거화</td><td>커리어 전략 → 프로젝트 심층 → AI Native 포트폴리오</td><td>evidence pack, 30초/90초 답변, portfolio README</td></tr>
+</table>
+</section>
+
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">HOME-10</span><h2>완료 산출물 지도</h2></div>
+<p class="lede">핸드북을 읽었다는 증거는 요약문이 아니라 다음 작업에서 재사용 가능한 산출물입니다.</p>
+<table>
+<tr><th>그룹</th><th>완료 산출물</th></tr>
+<tr><td>개발 핸드북</td><td>기능 설계 메모, API 계약서, DB 변경 계획, 테스트 리포트</td></tr>
+<tr><td>LLM</td><td>prompt contract, eval dataset, retrieval eval report, security review packet</td></tr>
+<tr><td>AI Native 훈련</td><td>competency scorecard, lab result, context package, red-team report, replay trace</td></tr>
+<tr><td>인프라·운영</td><td>SLO 초안, dashboard spec, incident runbook, rollback/fallback plan</td></tr>
+<tr><td>AX 실무</td><td>task spec, context package, agent episode log, verification log</td></tr>
+<tr><td>디자인 실무</td><td>problem brief, flow map, uncertainty matrix, handoff packet</td></tr>
+<tr><td>실무 도구</td><td>반복 명령 runbook, 환경 체크리스트, 릴리스 체크리스트</td></tr>
+<tr><td>면접·커리어</td><td>evidence pack, STAR 답변, 시스템 설계 다이어그램, 공개 README</td></tr>
+</table>
 </section>
 
 <footer>

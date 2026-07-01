@@ -40,6 +40,7 @@ export const CAREER_HANDBOOKS = [
   { id: "career-system-project", label: "06 시스템 설계·프로젝트 심층", kind: "면접·커리어", file: "career-system-project-handbook.html" },
   { id: "career-culture-collaboration", label: "07 컬처·협업·코드리뷰", kind: "면접·커리어", file: "career-culture-collaboration-handbook.html" },
   { id: "career-coding-test", label: "08 코딩테스트 패턴", kind: "면접·커리어", file: "career-coding-test-handbook.html" },
+  { id: "career-ai-native-portfolio", label: "09 AI Native 포트폴리오", kind: "면접·커리어", file: "career-ai-native-portfolio-handbook.html" },
 ];
 
 export const DEV_EXAMPLES = [
@@ -114,6 +115,15 @@ export const LLM_HANDBOOKS = [
   { id: "llm-portfolio-projects", label: "11 포트폴리오 프로젝트", kind: "LLM", file: "llm-portfolio-projects-handbook.html" },
 ];
 
+export const AI_NATIVE_TRAINING_HANDBOOKS = [
+  { id: "ai-native-competency-map", label: "00 역량 매트릭스·진단", kind: "AI Native 훈련", file: "ai-native-competency-map-handbook.html" },
+  { id: "ai-native-labs", label: "01 실습 랩", kind: "AI Native 훈련", file: "ai-native-labs-handbook.html" },
+  { id: "ai-native-toolkit", label: "02 템플릿 키트", kind: "AI Native 훈련", file: "ai-native-toolkit-handbook.html" },
+  { id: "ai-native-evaluation-harness", label: "03 평가 하네스", kind: "AI Native 훈련", file: "ai-native-evaluation-harness-handbook.html" },
+  { id: "ai-native-security-red-team", label: "04 보안 레드팀 Fixture", kind: "AI Native 훈련", file: "ai-native-security-red-team-handbook.html" },
+  { id: "ai-native-agent-runtime", label: "05 Agent Runtime 구현", kind: "AI Native 훈련", file: "ai-native-agent-runtime-handbook.html" },
+];
+
 export const NETWORK_HANDBOOKS = [
   { id: "network", label: "00 로드맵과 패킷 사고", kind: "네트워크 인프라 핸드북", file: "network-infrastructure-handbook.html" },
   { id: "network-vpc", label: "01 IP·CIDR·서브넷 설계", kind: "네트워크 인프라 핸드북", file: "network-vpc-subnet-cidr-handbook.html" },
@@ -156,6 +166,7 @@ export const OPERATIONS_HANDBOOKS = [
   { id: "operations-incident-dr", label: "10 Incident Response·Rollback·DR", kind: "인프라·운영 핸드북", file: "operations-incident-dr-handbook.html" },
   { id: "operations-checklist-interview", label: "11 운영 체크리스트·면접 답변", kind: "인프라·운영 핸드북", file: "operations-checklist-interview-handbook.html" },
   { id: "operations-cloud-scenarios", label: "12 AWS·Azure 실전 시나리오", kind: "인프라·운영 핸드북", file: "operations-cloud-scenarios-handbook.html" },
+  { id: "operations-ai-llm-operations", label: "13 AI·LLM 운영 Addendum", kind: "인프라·운영 핸드북", file: "operations-ai-llm-operations-handbook.html" },
 ];
 
 export const AX_HANDBOOKS = [
@@ -226,6 +237,7 @@ export const DESIGN_PRACTICE_HANDBOOKS = [
   { id: "practice-visual-design-foundations", label: "02 시각디자인 기초·조형 원리", kind: "디자인 실무", file: "practice-visual-design-foundations-handbook.html" },
   { id: "practice-color-typography-brand", label: "03 색채·타이포그래피·브랜드 시각 언어", kind: "디자인 실무", file: "practice-color-typography-brand-handbook.html" },
   { id: "practice-photography-image-literacy", label: "04 사진학·이미지 리터러시", kind: "디자인 실무", file: "practice-photography-image-literacy-handbook.html" },
+  { id: "design-ai-product-ux", label: "05 AI 제품 UX·신뢰 설계", kind: "디자인 실무", file: "design-ai-product-ux-handbook.html" },
 ];
 
 export const PRACTICE_HANDBOOKS = [
@@ -238,6 +250,7 @@ export const HANDBOOK_GROUPS = [
   { key: "home", label: "홈", items: HOME_HANDBOOKS },
   { key: "engineering", label: "개발 핸드북", items: ENGINEERING_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
+  { key: "ai-native", label: "AI Native 훈련", items: AI_NATIVE_TRAINING_HANDBOOKS },
   { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
   { key: "ax", label: "AX 실무", items: AX_PRACTICE_HANDBOOKS },
   { key: "design", label: "디자인 실무", items: DESIGN_PRACTICE_HANDBOOKS },
@@ -249,6 +262,7 @@ export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
   ...ENGINEERING_HANDBOOKS,
   ...LLM_HANDBOOKS,
+  ...AI_NATIVE_TRAINING_HANDBOOKS,
   ...OPERATIONS_HANDBOOKS,
   ...AX_PRACTICE_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,

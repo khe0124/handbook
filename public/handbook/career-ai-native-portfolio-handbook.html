@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career — AI Native 포트폴리오</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-brand">CAREER · AI NATIVE</div>
+<div class="nav-title">AI Native 포트폴리오</div>
+  <a href="#parts"><span class="code">PART</span>Curated Path</a>
+  <a href="#ch1"><span class="code">PORT-01</span>포지셔닝</a>
+  <a href="#ch2"><span class="code">PORT-02</span>JD 매핑</a>
+  <a href="#ch3"><span class="code">PORT-03</span>증거팩</a>
+  <a href="#ch4"><span class="code">PORT-04</span>답변 카드</a>
+  <a href="#ch5"><span class="code">PORT-05</span>README</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : CAREER-AI-NATIVE-PORTFOLIO</span>
+    <span>SCOPE : JD · EVIDENCE · INTERVIEW</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>AI Native<br>포트폴리오</h1>
+  <p class="hero-sub">AI Native 경험은 과장되기 쉽습니다. 좋은 포트폴리오는 <strong>평가, 보안, 운영, 실패 대응 증거</strong>로 말합니다.</p>
+  <div class="hero-meta">CURATED INTERVIEW PATH · CAREER READINESS GATE · EVIDENCE PACKET</div>
+</header>
+
+<section id="parts">
+<div class="ch-head"><span class="ch-code">PART</span><h2>CURATED INTERVIEW PATH</h2></div>
+<p class="lede">이 문서는 기존 커리어 문서의 30초 결론, 90초 확장, 압박 꼬리질문 구조를 AI Native 증거에 맞게 재구성합니다.</p>
+<table>
+<tr><th>파트</th><th>면접 준비 결과</th></tr>
+<tr><td>CAREER READINESS GATE</td><td>JD 키워드와 포트폴리오 증거가 연결된다</td></tr>
+<tr><td>ANSWER QUALITY RUBRIC</td><td>문제, 판단, 검증, 결과 지표가 답변에 들어간다</td></tr>
+<tr><td>PRESSURE RESPONSE LOOP</td><td>직접 경험과 설계 지식의 경계를 과장 없이 설명한다</td></tr>
+<tr><td>EVIDENCE PACKET</td><td>PR·ADR·지표·장애기록·QA ticket과 eval/security/runbook을 묶는다</td></tr>
+<tr><td>DANGEROUS PHRASES</td><td>"AI를 활용했다"처럼 검증 없는 표현을 제거한다</td></tr>
+<tr><td>FINAL 10 MINUTE DRILL</td><td>면접 직전 30초 결론, 90초 확장, 압박 꼬리질문을 반복한다</td></tr>
+</table>
+</section>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">PORT-01</span><h2>AI Native 포트폴리오</h2></div>
+<h3>경력 포지셔닝</h3>
+<table>
+<tr><th>약한 표현</th><th>강한 표현</th></tr>
+<tr><td>AI를 활용해 생산성을 높였습니다</td><td>AI가 만든 변경을 task spec, test, eval, security fixture로 검증하는 작업 루프를 운영했습니다</td></tr>
+<tr><td>RAG 챗봇을 만들었습니다</td><td>30개 golden query와 citation precision 기준으로 RAG 품질을 릴리스 게이트에 연결했습니다</td></tr>
+<tr><td>에이전트를 사용했습니다</td><td>도구 호출 승인, idempotency key, replay trace를 가진 agent runtime을 설계했습니다</td></tr>
+</table>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">PORT-02</span><h2>JD 키워드 매핑</h2></div>
+<table>
+<tr><th>JD 키워드</th><th>보여줄 증거</th></tr>
+<tr><td>RAG</td><td>retrieval eval report, chunking tradeoff, citation failure analysis</td></tr>
+<tr><td>LLM evaluation</td><td>eval dataset, baseline/candidate report, CI gate</td></tr>
+<tr><td>Agent/tool use</td><td>tool contract, approval policy, audit trace</td></tr>
+<tr><td>AI security</td><td>prompt injection fixture, tenant isolation test, red-team report</td></tr>
+<tr><td>LLM operations</td><td>dashboard spec, SLO, incident packet, fallback plan</td></tr>
+</table>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">PORT-03</span><h2>Portfolio evidence pack</h2></div>
+<pre class="snippet-card"><code># Evidence Pack
+Problem:
+Users:
+Architecture:
+LLM/RAG design:
+Evaluation:
+Security:
+Operations:
+UX:
+Tradeoffs:
+Failure handled:
+Metrics:
+What I would improve:</code></pre>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">PORT-04</span><h2>30초/90초 답변 카드</h2></div>
+<table>
+<tr><th>길이</th><th>구조</th></tr>
+<tr><td>30초</td><td>문제 → 내가 맡은 범위 → 핵심 판단 → 결과 지표</td></tr>
+<tr><td>90초</td><td>문제 → 대안 → 구현 → 평가/보안/운영 → 실패와 개선 → 배운 점</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">좋은 답변</span>
+<p>문서 검색 기능에서 30개 golden query를 만들고 recall@5와 citation precision을 릴리스 기준으로 뒀습니다. prompt 변경 때마다 baseline/candidate report를 남겼고, prompt injection fixture를 회귀 테스트에 포함했습니다.</p>
+</div>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">PORT-05</span><h2>README 구조</h2></div>
+<ol>
+<li>어떤 사용자 문제를 풀었는가</li>
+<li>왜 LLM/RAG/Agent가 필요한가</li>
+<li>시스템 구조와 데이터 경계는 무엇인가</li>
+<li>품질을 어떻게 평가했는가</li>
+<li>어떤 보안 fixture를 통과했는가</li>
+<li>운영 지표와 장애 대응은 무엇인가</li>
+<li>남은 한계와 다음 개선은 무엇인가</li>
+</ol>
+</section>
+</main>
+</div>
+</body>
+</html>

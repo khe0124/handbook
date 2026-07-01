@@ -2,6 +2,15 @@ export type PracticalExample = {
   scenario: string;
   actions: string[];
   outcome: string;
+  difficulty?: "intro" | "practice" | "independent" | "lead";
+  estimatedTime?: string;
+  prerequisites?: string[];
+  dataset?: string;
+  failureFixtures?: string[];
+  artifactsToSubmit?: string[];
+  passCriteria?: string[];
+  rubric?: string[];
+  reviewerPrompts?: string[];
 };
 
 export type PracticalExampleLens = {
@@ -15,6 +24,18 @@ const example = (scenario: string, actions: string[], outcome: string): Practica
   scenario,
   actions,
   outcome,
+});
+
+const trainingExample = (
+  scenario: string,
+  actions: string[],
+  outcome: string,
+  training: Omit<PracticalExample, "scenario" | "actions" | "outcome">,
+): PracticalExample => ({
+  scenario,
+  actions,
+  outcome,
+  ...training,
 });
 
 const lens = (
@@ -172,6 +193,12 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "llm-multimodal-realtime": "llm",
   "llm-model-customization": "llm",
   "llm-portfolio-projects": "llm",
+  "ai-native-competency-map": "llm",
+  "ai-native-labs": "llm",
+  "ai-native-toolkit": "llm",
+  "ai-native-evaluation-harness": "llm",
+  "ai-native-security-red-team": "llm",
+  "ai-native-agent-runtime": "ax",
   db: "backend",
   "auth-security": "backend",
   architecture: "backend",
@@ -228,6 +255,7 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "operations-incident-dr": "devops",
   "operations-checklist-interview": "devops",
   "operations-cloud-scenarios": "devops",
+  "operations-ai-llm-operations": "llm",
   ax: "ax",
   "practice-ax-foundation": "ax",
   "practice-ax-workflow": "ax",
@@ -237,6 +265,7 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "practice-visual-design-foundations": "design",
   "practice-color-typography-brand": "design",
   "practice-photography-image-literacy": "design",
+  "design-ai-product-ux": "design",
   "practice-cheat-sheets": "practical",
   "practice-workflow-setup": "practical",
   "practice-build-release": "practical",
@@ -288,6 +317,7 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "db-seeding": "practical",
   cicd: "practical",
   "logs-tooling": "practical",
+  "career-ai-native-portfolio": "personal",
 };
 
 export const getPracticalExampleLens = (itemId: string): PracticalExampleLens =>
@@ -304,6 +334,12 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   "career-system-project": example("시스템 설계와 프로젝트 심층 질문을 하나의 스토리로 연결한다.", ["시스템 설계 질문은 요구사항, 데이터, API, 상태, 관측성 순서로 답한다.", "프로젝트 심층 질문은 문제, 제약, 선택, 결과, 배운 점으로 압축한다.", "풀스택 개발자 대응 문서로 프론트 중심 경험을 API 계약과 운영 경계까지 확장한다."], "설계 질문과 프로젝트 질문이 따로 놀지 않고 같은 판단 구조로 이어진다."),
   "career-culture-collaboration": example("컬처·협업 질문에서 일하는 방식과 제품 맥락을 함께 보여준다.", ["컬처·압박 질문은 STAR 구조와 경험 경계 문장으로 답한다.", "Git·협업·코드리뷰 질문은 변경 관리, 리뷰 품질, rollback 기준으로 정리한다.", "B2B·SaaS 어드민 대응 문서로 운영자 UX와 감사 가능성 경험을 연결한다."], "협업 답변이 태도 표현이 아니라 실제 변경 관리와 제품 책임으로 설명된다."),
   "career-coding-test": example("코딩테스트를 패턴 암기보다 문제 분류와 설명 능력 중심으로 준비한다.", ["입력 크기와 시간복잡도로 가능한 접근을 먼저 좁힌다.", "투 포인터, 해시, 이분탐색, DFS/BFS, DP 패턴을 대표 문제와 연결한다.", "풀이 후 boundary, off-by-one, 자료구조 선택을 말로 점검한다."], "코딩테스트에서 정답 코드뿐 아니라 사고 과정과 디버깅 루프를 설명한다."),
+  "career-ai-native-portfolio": trainingExample("AI Native 프로젝트를 과장 없는 포트폴리오 증거팩으로 정리한다.", ["JD 키워드를 RAG, eval, agent, security, operations 증거와 매핑한다.", "30초/90초 답변 카드에 문제, 범위, 판단, 지표를 넣는다.", "README에 평가, 보안, 운영, 실패 대응, 남은 한계를 포함한다."], "AI 활용 경험이 추상 주장 대신 검증 가능한 경력 증거로 바뀐다.", {
+    difficulty: "practice",
+    estimatedTime: "2-3시간",
+    artifactsToSubmit: ["portfolio-evidence-pack.md", "jd-keyword-map.md", "interview-answer-cards.md"],
+    passCriteria: ["AI 도구명보다 품질/보안/운영 증거가 먼저 나온다.", "직접 경험과 설계 지식의 경계가 분리된다.", "README에 남은 한계와 다음 개선이 있다."],
+  }),
   interview: example("기술면접 핵심 질문 20개를 실전 답변으로 압축한다.", ["각 질문을 30초, 90초, 3분 답변으로 나눠 녹음한다.", "답변마다 직접 경험, 일부 경험, 설계 지식의 경계를 표시한다.", "압박 꼬리질문 2개를 붙여 선택 기준과 실패 모드를 말한다."], "면접장에서 기술명을 나열하지 않고 판단 구조와 검증 가능한 경험으로 답한다."),
   "interview-frontend": example("프론트엔드 핵심 질문을 브라우저와 제품 품질 관점으로 연습한다.", ["렌더링, 상태관리, 성능, 접근성, 보안 질문을 30초 답변으로 압축한다.", "각 질문마다 꼬리질문 3개를 붙여 trade-off를 말한다.", "직접 경험이 없는 영역은 안전한 표현으로 경계를 표시한다."], "React API 암기가 아니라 브라우저 비용과 사용자 경험 기준으로 답한다."),
   "interview-backend-db": example("백엔드와 DB 질문을 계약, 정합성, 운영성 기준으로 정리한다.", ["API, 인증, validation, 인덱스, 트랜잭션 질문을 개념과 실무 기준으로 나눈다.", "실행 계획, 락, idempotency 같은 꼬리질문 답변을 준비한다.", "프론트엔드 중심 경험과 설계 지식의 경계를 명확히 둔다."], "백엔드 깊이 질문에서 과장하지 않고 정확한 설계 판단을 말한다."),
@@ -354,6 +390,46 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   "llm-multimodal-realtime": example("영수증 이미지와 음성 입력을 받는 멀티모달 분석 흐름을 설계한다.", ["media type, consent, retention, required evidence를 request envelope에 기록한다.", "이미지 추출 결과에는 값뿐 아니라 page, bbox, confidence를 붙인다.", "Realtime 세션은 interruption, reconnect, pending tool cancellation을 상태 머신으로 관리한다."], "멀티모달 기능이 텍스트 답변 데모가 아니라 검증 가능한 증거와 취소 가능한 세션 흐름을 가진다."),
   "llm-model-customization": example("지원 티켓 분류 기능에서 fine-tuning이 필요한지 판단한다.", ["실패 원인이 지식 부족, 형식 불안정, 스타일 불일치, 비용 중 어디인지 분류한다.", "prompt, RAG, schema, routing으로 해결 가능한 항목을 먼저 제거한다.", "튜닝 후보에는 dataset card, holdout, safety regression, rollback route를 붙인다."], "커스터마이징 결정이 유행어가 아니라 평가 가능한 비용·품질·위험 trade-off로 설명된다."),
   "llm-portfolio-projects": example("LLM 포트폴리오 README를 증거 중심으로 작성한다.", ["문서 분석 API, RAG 챗봇, 평가 하니스 구조를 한 장으로 설명한다.", "quality report, 비용/지연 지표, 실패 케이스를 README에 포함한다.", "공고 문구와 산출물을 매핑해 면접 답변을 만든다."], "포트폴리오가 기능 소개가 아니라 AI Native 개발 역량의 증거 패킷이 된다."),
+  "ai-native-competency-map": trainingExample("현재 AI Native 역량을 증거 기준으로 진단한다.", ["소프트웨어 기본기, LLM 설계, RAG, 평가, 보안, Agent Runtime, 운영, AX, 증거화 축을 L1-L4로 표시한다.", "각 축마다 지금 제출할 수 있는 산출물과 없는 산출물을 분리한다.", "가장 낮은 축 하나를 다음 실습 랩으로 연결한다."], "학습 계획이 감각이 아니라 evidence ledger와 다음 fixture로 정리된다.", {
+    difficulty: "intro",
+    estimatedTime: "60-90분",
+    artifactsToSubmit: ["competency-scorecard.md", "evidence-ledger.yaml", "next-lab-plan.md"],
+    passCriteria: ["모든 역량 축에 현재 수준이 표시된다.", "각 수준 판단에 산출물 근거가 붙는다.", "다음 랩이 하나로 좁혀진다."],
+  }),
+  "ai-native-labs": trainingExample("RAG 챗봇 데모를 실습 랩 기준으로 재검증한다.", ["prompt/schema, retrieval, security, incident 중 가장 약한 랩 하나를 고른다.", "fixture를 만들고 baseline 결과를 기록한다.", "수정 후 pass criteria를 통과했는지 report로 남긴다."], "데모 기능이 실패를 재현하고 통과 기준을 가진 훈련 결과로 바뀐다.", {
+    difficulty: "practice",
+    estimatedTime: "반나절-1일",
+    dataset: "정상 질문, no-answer, permission-denied, prompt injection fixture",
+    artifactsToSubmit: ["lab-result.md", "fixture.jsonl", "failure-analysis.md"],
+    passCriteria: ["입력 fixture가 저장소에 남아 있다.", "실패 전/후 결과가 비교된다.", "남은 위험과 다음 실습이 기록된다."],
+  }),
+  "ai-native-toolkit": trainingExample("AI 작업 위임 전에 context package와 episode log를 작성한다.", ["작업 목표, 제약, 허용 도구, 금지 행동, 검증 명령을 context package에 적는다.", "AI 실행 중 승인과 거절 판단을 episode log에 남긴다.", "최종 결과를 quality report나 evidence pack으로 옮긴다."], "AI 활용이 대화 기록이 아니라 재현 가능한 작업 패킷으로 남는다.", {
+    difficulty: "practice",
+    estimatedTime: "45-60분",
+    artifactsToSubmit: ["context-package.yaml", "agent-episode-log.md", "quality-report.md"],
+    passCriteria: ["작업 전 제약과 검증 명령이 명시된다.", "AI 제안과 사람 승인이 분리된다.", "다음 사람이 같은 검증을 재실행할 수 있다."],
+  }),
+  "ai-native-evaluation-harness": trainingExample("프롬프트 변경을 릴리스 게이트로 검증한다.", ["baseline과 candidate prompt를 같은 eval dataset으로 실행한다.", "schema success, groundedness, recall@k, cost, latency를 비교한다.", "threshold 미달 항목을 release block 또는 risk acceptance로 판정한다."], "프롬프트 변경이 감이 아니라 평가 리포트와 gate 결과로 승인된다.", {
+    difficulty: "independent",
+    estimatedTime: "1-2일",
+    dataset: "eval-dataset.jsonl",
+    failureFixtures: ["wrong citation", "permission-denied leak", "schema break"],
+    artifactsToSubmit: ["eval-config.yaml", "eval-result.md", "failure-clusters.md"],
+    passCriteria: ["baseline/candidate 비교가 있다.", "block 기준이 수치로 명시된다.", "실패 유형별 다음 조치가 있다."],
+  }),
+  "ai-native-security-red-team": trainingExample("LLM 보안 공격 fixture를 회귀 테스트로 고정한다.", ["직접/간접 injection, tool injection, tenant leak, PII 누출 fixture를 만든다.", "각 fixture의 기대 block/allow와 evidence log를 정의한다.", "완화 후 high severity bypass가 0건인지 확인한다."], "보안 검토가 원칙 설명이 아니라 재실행 가능한 공격 테스트가 된다.", {
+    difficulty: "independent",
+    estimatedTime: "1일",
+    failureFixtures: ["direct prompt injection", "indirect prompt injection", "tool injection", "cross-tenant access", "PII in eval row"],
+    artifactsToSubmit: ["security-fixtures.jsonl", "threat-model.md", "red-team-report.md"],
+    passCriteria: ["fixture마다 기대 결과가 있다.", "차단 근거 로그 필드가 정의된다.", "high severity bypass가 릴리스 차단 기준이다."],
+  }),
+  "ai-native-agent-runtime": trainingExample("위험 도구를 호출하는 에이전트 런타임을 설계한다.", ["도구를 read-only, local write, external write, destructive로 분류한다.", "approval policy, idempotency key, audit ledger, replay trace를 설계한다.", "재시도 가능한 실패와 중단해야 하는 실패를 분리한다."], "Agent가 도구를 실행했다는 사실보다 실행을 통제하고 재현할 수 있는 구조가 남는다.", {
+    difficulty: "lead",
+    estimatedTime: "2-3일",
+    artifactsToSubmit: ["tool-contract.md", "approval-policy.yaml", "replay-trace.json", "runtime-risk-review.md"],
+    passCriteria: ["위험 도구는 승인 없이는 실행되지 않는다.", "외부 쓰기에는 idempotency key가 있다.", "episode replay에 필요한 hash와 검증 명령이 남는다."],
+  }),
   db: example("느린 주문 목록 쿼리를 개선한다.", ["실제 실행 계획과 cardinality를 확인한다.", "필터·정렬·페이지네이션에 맞는 복합 인덱스를 검토한다.", "변경 전후 latency와 lock 위험을 기록한다."], "인덱스를 감으로 추가하지 않고 쿼리 패턴과 운영 비용을 함께 판단한다."),
   "auth-security": example("관리자 전용 기능의 인가 누락을 점검한다.", ["라우트 보호와 서버 측 권한 검사를 분리해 확인한다.", "소유자 변경, 역할 변경, 만료 토큰 케이스를 테스트한다.", "감사 로그에 actor, target, action, result를 남긴다."], "프론트 가드에 의존하지 않는 서버 중심 보안 경계가 생긴다."),
   architecture: example("기존 모놀리스 일부를 분리할지 판단한다.", ["변경 빈도, 데이터 소유권, 장애 전파, 팀 경계를 표로 정리한다.", "strangler fig 또는 모듈화 중 더 작은 선택지를 먼저 검토한다.", "분리 후 생길 네트워크·트랜잭션 비용을 ADR에 남긴다."], "유행이 아니라 비용과 경계를 근거로 아키텍처 결정을 내린다."),
@@ -411,6 +487,12 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   "operations-incident-dr": example("장애 대응 모의훈련을 진행한다.", ["Incident Commander, 기록자, 커뮤니케이션 담당을 지정한다.", "rollback, restore, traffic shift 중 복구 경로를 선택한다.", "RPO/RTO, DR 절차, postmortem 액션을 검증한다."], "장애 대응이 개인 역량이 아니라 팀이 반복할 수 있는 절차가 된다."),
   "operations-checklist-interview": example("운영 인수 전 마지막 점검과 면접 답변을 준비한다.", ["운영 인수 체크리스트에 owner, SLO, runbook, dashboard, rollback을 채운다.", "예상 면접 질문을 요청 경로, 배포, 장애 대응 순서로 답한다.", "직접 경험과 설계 지식의 경계를 표시한다."], "운영 문서를 실제 인수인계와 면접 답변 모두에 사용할 수 있다."),
   "operations-cloud-scenarios": example("AWS와 Azure 중 하나로 실제 서비스 배포안을 만든다.", ["DNS, WAF/CDN, Load Balancer, runtime, database, secret, observability 서비스를 매핑한다.", "public/private subnet 또는 VNet, NAT, Private Link/Endpoint 경계를 그린다.", "장애 시나리오와 rollback, DR, 비용 관측 기준을 함께 작성한다."], "클라우드 서비스 이름 암기가 아니라 실제 제품 운영 구성으로 설명할 수 있다."),
+  "operations-ai-llm-operations": trainingExample("LLM 기능의 운영 대시보드와 사고 드릴을 만든다.", ["schema success, groundedness, citation precision, cost, fallback, tool blocked rate를 SLI로 정의한다.", "provider outage, cost spike, retrieval corruption, runaway agent loop 사고 드릴을 작성한다.", "각 사고에 탐지 지표, 즉시 완화, rollback/fallback, 회고 항목을 붙인다."], "AI 기능 장애가 프롬프트 수정이 아니라 운영 runbook으로 대응된다.", {
+    difficulty: "independent",
+    estimatedTime: "1일",
+    artifactsToSubmit: ["llm-slo.md", "dashboard-spec.md", "incident-packet-llm.md"],
+    passCriteria: ["각 SLI에 사용자 영향과 임계값이 있다.", "사고별 first mitigation이 정해져 있다.", "fallback 또는 rollback 조건이 명시된다."],
+  }),
   ax: example("팀의 AX 도입 지도를 만든다.", ["업무 흐름, 컨텍스트, 도구 권한, 검증, 감사 기록을 한 장으로 정리한다.", "개인 프롬프트 팁이 아니라 조직의 실행 시스템으로 설명한다.", "파일럿 후보와 금지 업무를 먼저 분리한다."], "AX를 도구 사용법이 아니라 검증 가능한 업무 운영 체계로 이해한다."),
   "practice-ax-foundation": example("팀의 AX 도입 기준과 조직 적용 범위를 정한다.", ["AX 역량 모델로 현재 팀의 실행 수준을 진단한다.", "조직 적용 패턴에서 이해관계자와 승인 경계를 표시한다.", "파일럿 후보와 금지 업무를 분리해 rollout memo를 만든다."], "AX 도입이 개인 도구 사용이 아니라 조직 운영 체계로 정의된다."),
   "practice-ax-workflow": example("반복 업무 하나를 AX 실행 루프로 전환한다.", ["업무 자동화 판단 기준으로 자동화 수준을 고른다.", "context package와 harness policy를 만들고 tool permission을 제한한다.", "Plan → Act → Verify → Reflect 루프와 실패 분류를 episode로 남긴다."], "AI 작업이 빠른 생성이 아니라 검증 가능한 실행 루프로 관리된다."),
@@ -420,6 +502,12 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   "practice-visual-design-foundations": example("랜딩 페이지 시안을 조형 원리로 비평하고 개선한다.", ["점·선·면, 대비, 균형, 리듬, 여백을 기준으로 시선 흐름을 표시한다.", "게슈탈트 원리와 그리드 기준으로 정보 묶음과 강조 지점을 다시 정한다.", "수정 전후 화면에 visual hierarchy audit과 composition critique를 남긴다."], "시각 판단이 취향 평가가 아니라 조형 원리와 사용자의 읽기 순서로 설명된다."),
   "practice-color-typography-brand": example("브랜드 소개 화면의 색채와 타이포그래피를 정리한다.", ["색상, 명도, 채도, 대비, 접근성 기준으로 팔레트를 검토한다.", "폰트 조합, 자간, 행간, 줄 길이, 계층을 typography scale로 고정한다.", "브랜드 톤, 이미지 방향, 아이콘 스타일을 visual language audit으로 연결한다."], "브랜드 표현이 감각적 선호가 아니라 반복 가능한 색채·타이포 시스템으로 정리된다."),
   "practice-photography-image-literacy": example("제품 상세 페이지의 이미지를 사진학 기준으로 고른다.", ["노출, 초점거리, 심도, 빛 방향, 왜곡을 보고 이미지 품질을 평가한다.", "구도, crop tension, negative space가 제품 이해를 돕는지 확인한다.", "스톡·AI 이미지 사용 시 진정성, 저작권, 편집 윤리, 브랜드 적합성을 점검한다."], "이미지 선택이 분위기 맞추기가 아니라 정보 전달과 브랜드 신뢰를 높이는 판단이 된다."),
+  "design-ai-product-ux": trainingExample("AI 요약 기능의 신뢰 UX를 설계한다.", ["근거 충분, 일부 근거, 근거 없음, 정책 제한 상태를 분리한다.", "citation chip, evidence preview, wrong citation report 흐름을 설계한다.", "human handoff packet과 생성 결과 승인/거절 흐름을 추가한다."], "AI 기능의 불확실성과 실패가 사용자 흐름 안에서 처리된다.", {
+    difficulty: "practice",
+    estimatedTime: "반나절",
+    artifactsToSubmit: ["uncertainty-state-matrix.md", "citation-ux-flow.md", "handoff-packet.md"],
+    passCriteria: ["근거 부족 상태가 happy path와 다른 UI로 표현된다.", "사용자가 생성 결과를 검토/수정/거부할 수 있다.", "보안/평가 정책이 화면 흐름에 반영된다."],
+  }),
   "practice-cheat-sheets": example("리뷰 전 빠른 점검표로 변경 위험을 훑는다.", ["변경 범위에 맞는 Frontend, Backend, DB, Network, DevOps 치트시트를 고른다.", "Review Gate와 Failure Playbook 항목을 PR 체크리스트로 옮긴다.", "차단 기준에 걸리는 항목은 수정 또는 명시적 리스크로 남긴다."], "치트시트가 암기장이 아니라 리뷰 품질과 장애 예방 도구가 된다."),
   "practice-workflow-setup": example("새 프로젝트 시작 전 작업 환경과 실행 루프를 만든다.", ["풀스택 로드맵에서 이번 프로젝트의 약한 축을 고른다.", "FAQ, 새 PC 설정, 실무 플레이북을 따라 재현 가능한 환경을 만든다.", "작업 전 수용 기준과 검증 명령을 기록한다."], "프로젝트 시작이 즉흥 설정이 아니라 재현 가능한 작업 루프로 정리된다."),
   "practice-build-release": example("릴리스 전 빌드·설정·DB·CI/CD 위험을 점검한다.", ["Gradle과 패키지 버전을 잠그고 CI와 로컬 명령을 맞춘다.", "환경변수, DB migration/seed, 배포 파이프라인, 로그 확인 명령을 정리한다.", "배포 후 검증과 rollback 기준을 문서화한다."], "빌드와 배포가 한 번 성공한 명령이 아니라 반복 가능한 운영 절차가 된다."),

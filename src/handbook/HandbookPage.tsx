@@ -51,6 +51,17 @@ function attachSnippetCopyButton(card: HTMLElement, roots: Root[], mounts: HTMLE
   mounts.push(mount);
 }
 
+function getDifficultyLabel(difficulty: string) {
+  const labels: Record<string, string> = {
+    intro: "입문",
+    practice: "실습",
+    independent: "독립 수행",
+    lead: "리드",
+  };
+
+  return labels[difficulty] ?? difficulty;
+}
+
 function shouldUpgradeChecklistCard(card: HTMLElement) {
   const label = card.querySelector<HTMLElement>(".sc-label")?.textContent?.trim() ?? "";
 
@@ -347,6 +358,80 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
               <span className="co-label">완료 기준</span>
               <p>{practicalExample.outcome}</p>
             </div>
+            {practicalExample.difficulty ||
+            practicalExample.estimatedTime ||
+            practicalExample.prerequisites?.length ||
+            practicalExample.dataset ||
+            practicalExample.failureFixtures?.length ||
+            practicalExample.artifactsToSubmit?.length ||
+            practicalExample.passCriteria?.length ||
+            practicalExample.rubric?.length ? (
+              <div className="practical-example-training" aria-labelledby="practical-training-title">
+                <h3 id="practical-training-title">훈련 기준</h3>
+                <div className="practical-example-grid">
+                  {practicalExample.difficulty || practicalExample.estimatedTime || practicalExample.dataset ? (
+                    <div className="practical-example-block">
+                      <h3>실습 범위</h3>
+                      <ul>
+                        {practicalExample.difficulty ? <li>난이도: {getDifficultyLabel(practicalExample.difficulty)}</li> : null}
+                        {practicalExample.estimatedTime ? <li>예상 시간: {practicalExample.estimatedTime}</li> : null}
+                        {practicalExample.dataset ? <li>데이터셋: {practicalExample.dataset}</li> : null}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {practicalExample.prerequisites?.length ? (
+                    <div className="practical-example-block">
+                      <h3>선행 조건</h3>
+                      <ul>
+                        {practicalExample.prerequisites.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {practicalExample.failureFixtures?.length ? (
+                    <div className="practical-example-block">
+                      <h3>실패 Fixture</h3>
+                      <ul>
+                        {practicalExample.failureFixtures.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {practicalExample.artifactsToSubmit?.length ? (
+                    <div className="practical-example-block">
+                      <h3>제출 산출물</h3>
+                      <ul>
+                        {practicalExample.artifactsToSubmit.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {practicalExample.passCriteria?.length ? (
+                    <div className="practical-example-block">
+                      <h3>통과 기준</h3>
+                      <ul>
+                        {practicalExample.passCriteria.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {practicalExample.rubric?.length ? (
+                    <div className="practical-example-block">
+                      <h3>리뷰 루브릭</h3>
+                      <ul>
+                        {practicalExample.rubric.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
             <div className="practical-example-review">
               <span className="co-label">리뷰 질문</span>
               <ul>
