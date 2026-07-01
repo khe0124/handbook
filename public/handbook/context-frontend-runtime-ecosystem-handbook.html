@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프론트엔드 빌드·런타임·생태계</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:760px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:-.02em}h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}tr:last-child td{border-bottom:none}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0;font-size:14.5px;line-height:1.75}.semantic-card.process-card{background:var(--green-tint)}.semantic-card.answer-card{border-left-color:var(--green-deep)}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-brand">ENGINEERING CONTEXT · FRONTEND RUNTIME</div>
+  <div class="nav-title">FE 빌드·런타임</div>
+  <a href="#index"><span class="code">INDEX</span>학습 위치</a>
+  <a href="#fer-01"><span class="code">FER-01</span>프론트엔드는 빌드 결과가 제품이다</a>
+  <a href="#fer-02"><span class="code">FER-02</span>번들러의 역할</a>
+  <a href="#fer-03"><span class="code">FER-03</span>ESM/CJS와 패키지 경계</a>
+  <a href="#fer-04"><span class="code">FER-04</span>Hydration과 클라이언트 런타임</a>
+  <a href="#fer-05"><span class="code">FER-05</span>브라우저 호환성과 Polyfill</a>
+  <a href="#fer-06"><span class="code">FER-06</span>읽히는 신호</a>
+  <a href="#review"><span class="code">REVIEW</span>학습 확인 질문</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : CONTEXT-FRONTEND-RUNTIME-ECOSYSTEM</span>
+    <span>SCOPE : BUNDLER · RUNTIME · PACKAGE · BROWSER</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>프론트엔드 빌드·런타임·생태계</h1>
+  <p class="hero-sub">React 사용법 아래의 번들러, 패키지 형식, 브라우저 런타임, 생태계 제약을 이해합니다.</p>
+  <div class="hero-meta">FORMAT : 개념 → 맥락 → 판단 기준 → 실패 신호 · UPDATED 2026-07</div>
+</header>
+
+<section id="index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>이 문서의 위치</h2></div>
+<p class="lede">이 문서는 경험담을 흉내 내기 위한 글이 아니라, 고급 엔지니어링 사례가 자연스럽게 읽히도록 만드는 기반 개념서입니다. 기술명보다 규모, 소유권, 품질, 지표, 호환성, 운영 책임의 언어를 먼저 익힙니다.</p>
+<div class="semantic-card process-card"><span class="sc-label">READING MODEL</span>기술 블로그의 문장 → 숨은 조직/운영 압력 → 관련 개념 → 판단 기준 → 실패 신호</div>
+<div class="serial-card"><span class="sc-label">RECALL TARGET</span>이 문서를 외운다는 것은 용어를 정의하는 데서 끝나지 않는다. 글에서 어떤 문제가 규모, 플랫폼, 품질, 성능, 호환성, 운영 책임 중 어디에 걸리는지 즉시 분류할 수 있어야 한다.</div>
+</section>
+
+<section id="fer-01">
+<div class="ch-head"><span class="ch-code">FER-01</span><h2>프론트엔드는 빌드 결과가 제품이다</h2></div>
+<p class="lede">개발자가 쓴 소스가 아니라 브라우저가 받은 HTML, CSS, JS, asset, cache header가 실제 제품이다. 빌드 시스템은 이 산출물을 만드는 compiler pipeline이다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>산출물</td><td>HTML entry</td><td>초기 로딩과 asset 참조</td></tr>
+<tr><td>산출물</td><td>JS chunk</td><td>다운로드, parse, execute 비용</td></tr>
+<tr><td>산출물</td><td>CSS/asset</td><td>렌더링 차단, 이미지 최적화, 캐시</td></tr>
+</table>
+</section>
+
+<section id="fer-02">
+<div class="ch-head"><span class="ch-code">FER-02</span><h2>번들러의 역할</h2></div>
+<p class="lede">번들러는 모듈 그래프를 읽고, 변환하고, 쪼개고, 최적화한다. tree-shaking, code splitting, minification, asset hashing은 런타임 성능과 배포 안정성을 만든다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>기능</td><td>tree-shaking</td><td>쓰지 않는 export 제거</td></tr>
+<tr><td>기능</td><td>code splitting</td><td>필요한 시점에 chunk 로드</td></tr>
+<tr><td>기능</td><td>hashing</td><td>내용 기반 파일명으로 캐시 안정화</td></tr>
+</table>
+</section>
+
+<section id="fer-03">
+<div class="ch-head"><span class="ch-code">FER-03</span><h2>ESM/CJS와 패키지 경계</h2></div>
+<p class="lede">프론트엔드 생태계의 많은 문제는 패키지 형식과 module resolution에서 나온다. ESM-only 패키지, dual package hazard, default export 차이, browser field를 이해해야 빌드 오류를 읽을 수 있다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>개념</td><td>module resolution</td><td>import가 실제 파일로 해석되는 규칙</td></tr>
+<tr><td>개념</td><td>dual package</td><td>ESM/CJS를 동시에 제공할 때 생기는 경계 문제</td></tr>
+<tr><td>개념</td><td>browser field</td><td>브라우저용 대체 entry 지정</td></tr>
+</table>
+</section>
+
+<section id="fer-04">
+<div class="ch-head"><span class="ch-code">FER-04</span><h2>Hydration과 클라이언트 런타임</h2></div>
+<p class="lede">SSR/SSG 앱은 HTML이 먼저 보이고 JavaScript가 나중에 붙는다. hydration mismatch, client-only state, browser API 접근, streaming은 렌더링 전략의 핵심 제약이다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>문제</td><td>hydration mismatch</td><td>서버 HTML과 클라이언트 첫 렌더가 다름</td></tr>
+<tr><td>문제</td><td>client boundary</td><td>브라우저 API는 서버에서 없음</td></tr>
+<tr><td>문제</td><td>islands/partial hydration</td><td>필요한 부분만 상호작용 부여</td></tr>
+</table>
+</section>
+
+<section id="fer-05">
+<div class="ch-head"><span class="ch-code">FER-05</span><h2>브라우저 호환성과 Polyfill</h2></div>
+<p class="lede">브라우저 기능은 사용 가능성과 비용을 함께 본다. polyfill은 호환성을 주지만 번들 비용과 전역 오염을 만들 수 있다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>개념</td><td>transpile</td><td>문법을 낮은 버전으로 변환</td></tr>
+<tr><td>개념</td><td>polyfill</td><td>없는 런타임 기능을 구현</td></tr>
+<tr><td>개념</td><td>browserslist</td><td>지원 브라우저 범위가 빌드 결과를 결정</td></tr>
+</table>
+</section>
+
+<section id="fer-06">
+<div class="ch-head"><span class="ch-code">FER-06</span><h2>읽히는 신호</h2></div>
+<p class="lede">프론트엔드 생태계 글은 사용자 코드보다 빌드 산출물과 브라우저 비용을 자주 다룬다. chunk, ESM, tree-shaking, hydration, cache가 함께 보이면 이 층의 이야기다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>신호</td><td>bundle analysis</td><td>어떤 코드가 왜 포함됐는가</td></tr>
+<tr><td>신호</td><td>runtime cost</td><td>parse/execute/hydration 비용</td></tr>
+<tr><td>신호</td><td>compat policy</td><td>지원 브라우저와 polyfill 기준</td></tr>
+</table>
+</section>
+
+<section id="review">
+<div class="ch-head"><span class="ch-code">REVIEW</span><h2>학습 확인 질문</h2></div>
+<p class="lede">아래 질문에 막힘없이 답하면 이 주제의 글을 읽을 때 핵심 맥락을 놓칠 가능성이 줄어듭니다.</p>
+<table>
+<tr><th>질문</th><th>기대 답변</th><th>미달 신호</th></tr>
+<tr><td>이 주제에서 가장 중요한 압력은 무엇인가?</td><td>사용자 규모, 변경 규모, 조직 규모, 호환성, 운영 책임 중 하나로 분류한다.</td><td>도구명만 말하고 왜 어려운지 설명하지 못한다.</td></tr>
+<tr><td>좋은 해결책을 무엇으로 검증하는가?</td><td>지표, adoption, 회귀 방지, rollback, 사용자 영향 중 하나 이상을 말한다.</td><td>“좋아졌다”, “편해졌다”처럼 감상으로 끝난다.</td></tr>
+<tr><td>다른 조직에 적용할 때 무엇을 조정해야 하는가?</td><td>규모, 팀 구조, 배포 주기, 위험 허용치, 기존 시스템을 분리한다.</td><td>유명 회사 사례를 그대로 따라 하면 된다고 생각한다.</td></tr>
+</table>
+</section>
+
+<footer>
+ENGINEERING CONTEXT HANDBOOK · 프론트엔드 빌드·런타임·생태계 · 2026-07<br>
+PRINCIPLE : 좋은 엔지니어링 글을 술술 읽으려면 기술명보다 규모, 책임, 지표, 호환성, 운영 압력의 언어가 먼저 필요하다.
+</footer>
+</main>
+</div>
+</body>
+</html>

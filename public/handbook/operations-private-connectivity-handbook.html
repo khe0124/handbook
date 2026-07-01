@@ -40,6 +40,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
 <ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+
 </section>
 
       <section id="ch1">
@@ -133,6 +134,7 @@
           <tr><td>Routing / Firewall</td><td>local CIDR, peer CIDR, route table, firewall, return path</td><td>양쪽 네트워크가 같은 증거를 보고 있어야 한다.</td></tr>
           <tr><td>Application path</td><td>source IP, destination IP, port, DNS, tcpdump, nc/curl result</td><td>ICMP 성공만으로 API 성공을 판단하지 않는다.</td></tr>
         </table>
+
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>협상</td><td>VPN tunnel status, IKE log, Phase 1/2 proposal 비교</td><td>encryption, DH group, PFS, lifetime mismatch를 찾는다.</td></tr>
@@ -197,7 +199,7 @@ curl_status=timeout</code></pre></td><td>VPN 자체보다 고객사 방화벽, r
         </div>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>IKE/Phase 2 status, lifetime, proposal, rekey log, packet counter 기준으로 영향 범위를 고정한다.</td><td>VPN tunnel status, IKE log, Phase 1/2 proposal 비교에서 증거를 모아 완화책을 실행한다.</td><td>다음 연동 때 합의 누락을 줄인다.</td></tr>
+          <tr><td>IKE/Phase 2 status, lifetime, proposal, rekey log, packet counter 기준으로 영향 범위를 고정한다.</td><td>VPN tunnel status, IKE log, Phase 1/2 proposal 비교 항목에서 증거를 모아 완화책을 실행한다.</td><td>다음 연동 때 합의 누락을 줄인다.</td></tr>
         </table>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
@@ -205,6 +207,7 @@ curl_status=timeout</code></pre></td><td>VPN 자체보다 고객사 방화벽, r
           <tr><td>완화</td><td>backup tunnel, traffic selector 수정, 방화벽 임시 rule</td><td>임시 rule은 만료와 승인자를 반드시 둔다.</td></tr>
           <tr><td>사후</td><td>CIDR registry, proposal baseline, packet evidence template 추가</td><td>다음 연동 때 합의 누락을 줄인다.</td></tr>
         </table>
+
       </section>
 
       <section id="ch11">
@@ -227,6 +230,7 @@ curl_status=timeout</code></pre></td><td>VPN 자체보다 고객사 방화벽, r
           2. Phase 1/2 협상 성공과 업무 통신 성공을 구분한다.<br>
           3. 고객사와 공유 가능한 packet evidence를 남긴다.<br>
         </div>
+
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

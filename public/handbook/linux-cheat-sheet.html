@@ -1,135 +1,148 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>Linux Cheat Sheet</title></head>
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Linux Cheat Sheet</title>
+</head>
 <body>
 <nav aria-label="목차">
-  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Linux</div>
-  <a href="#ch1"><span class="code">LX-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">LX-CS-02</span>핵심 명령/개념</a>
-  <a href="#ch3"><span class="code">LX-CS-03</span>판단 기준</a>
-  <a href="#ch4"><span class="code">LX-CS-04</span>자주 나는 실수</a>
-  <a href="#ch5"><span class="code">LX-CS-05</span>면접/리뷰용 한 줄 답변</a>
-  <a href="#ch6"><span class="code">LX-CS-06</span>Red Flags</a>
-  <a href="#ch7"><span class="code">LX-CS-07</span>Review Gate</a>
-  <a href="#ch8"><span class="code">LX-CS-08</span>Failure Playbook</a>
-  <a href="#ch9"><span class="code">LX-CS-09</span>운영 명령 카드</a>
-  <a href="#ch10"><span class="code">LX-CS-10</span>안전 판정표</a>
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Linux</div>
+  <a href="#ch1"><span class="code">LX-CS-01</span>핵심 명령·스니펫</a>
+  <a href="#ch2"><span class="code">LX-CS-02</span>판단 한 줄</a>
+  <a href="#ch3"><span class="code">LX-CS-03</span>자주 터지는 것 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">LX-CS-04</span>장애 증거 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial"><span>DOC : CHEAT-LINUX-V1</span><span>SCOPE : FILE · PROCESS · NETWORK · LOG · SYSTEM</span><span>LANG : KO</span></div>
+    <div class="hero-serial"><span>DOC : CHEAT-LINUX-V2</span><span>SCOPE : PROCESS · DISK · LOG · NETWORK</span><span>LANG : KO</span></div>
     <h1>Linux<br>Cheat Sheet</h1>
-    <p class="hero-sub">서버나 로컬 셸에서 파일, 프로세스, 포트, 로그, 디스크를 빠르게 확인하는 명령 중심 참조입니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <p class="hero-sub">서버 셸에서 프로세스, 디스크, 로그, 포트를 5초 안에 찾아 복붙하는 명령 참조.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
+
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">LX-CS-01</span><h2>개요</h2></div>
-    <p class="lede">운영 조사에서는 명령을 많이 아는 것보다 현재 위치, 대상 파일, 프로세스, 포트, 로그 범위를 안전하게 좁히는 것이 중요합니다.</p>
+    <div class="ch-head"><span class="ch-code">LX-CS-01</span><h2>핵심 명령·스니펫</h2></div>
+
+    <h3>프로세스</h3>
+    <pre class="snippet-card"><code># 메모리 많이 먹는 순으로 상위 프로세스
+ps aux --sort=-%mem | head
+
+# CPU 많이 먹는 순
+ps aux --sort=-%cpu | head
+
+# 실시간 모니터 (htop 있으면 더 편함)
+top
+htop
+
+# 특정 프로세스 찾기
+pgrep -a node
+ps aux | grep '[n]ode'
+
+# 정상 종료 요청 (SIGTERM) → 안 죽으면 강제 종료
+kill -TERM &lt;pid&gt;
+kill -9 &lt;pid&gt;
+
+# 이름으로 종료
+pkill -TERM -f 'my-service'</code></pre>
+
+    <h3>로그</h3>
+    <pre class="snippet-card"><code># systemd 서비스 로그 실시간
+journalctl -u &lt;svc&gt; -f
+
+# 최근 시간 범위만
+journalctl -u &lt;svc&gt; --since '10 min ago'
+journalctl --since '2026-07-01 09:00' --until '2026-07-01 10:00'
+
+# 부팅 이후 / 이전 부팅
+journalctl -b
+journalctl -b -1
+
+# 파일 로그 실시간 추적 (rotation엔 -F)
+tail -f app.log
+tail -F app.log
+
+# 여러 로그에서 에러 재귀 검색
+grep -rn 'err' /var/log
+grep -rni 'error\|panic\|fatal' /var/log/myapp/</code></pre>
+
+    <h3>디스크</h3>
+    <pre class="snippet-card"><code># 파일시스템 사용량
+df -h
+df -i          # inode 고갈은 별개로 확인
+
+# 현재 디렉터리에서 큰 것부터
+du -sh * | sort -h
+du -xhd1 /var | sort -h
+
+# 삭제됐지만 프로세스가 열고 있어 공간 점유 중인 파일
+lsof +L1</code></pre>
+
+    <div class="callout warn"><span class="co-label">주의</span><p><code>rm -rf</code>와 <code>kill -9</code>는 되돌릴 수 없다. 삭제 전 <code>pwd</code>와 대상 경로 확장 결과를 먼저 출력하고, 종료는 <code>kill -TERM</code>으로 시작한다. <code>kill -9</code>는 flush/cleanup을 건너뛴다.</p></div>
+
+    <h3>포트·소켓</h3>
+    <pre class="snippet-card"><code># 특정 포트를 누가 쓰는지
+lsof -i :8080
+
+# LISTEN 중인 TCP 소켓과 프로세스
+ss -tlnp
+
+# 모든 연결 상태
+ss -tunap</code></pre>
+
+    <h3>서비스·검색</h3>
     <table>
-      <tr><th>상황</th><th>먼저 확인할 것</th><th>주의할 점</th></tr>
-      <tr><td>파일 찾기</td><td><code>pwd</code>, <code>ls -la</code>, <code>find</code>, <code>rg</code></td><td>대상 경로와 숨김 파일 포함 여부 확인</td></tr>
-      <tr><td>포트 점유</td><td><code>lsof -i :3000</code>, <code>ss -tlnp</code></td><td>localhost bind인지 0.0.0.0 bind인지 구분</td></tr>
-      <tr><td>로그 확인</td><td><code>tail -f</code>, <code>less</code>, <code>grep</code>, <code>journalctl</code></td><td>시간대, rotation, service unit 확인</td></tr>
-      <tr><td>리소스 확인</td><td><code>df -h</code>, <code>du -sh *</code>, <code>top</code>, <code>free -h</code></td><td>디스크 full과 inode full은 별개</td></tr>
-      <tr><td>권한 오류</td><td><code>ls -l</code>, <code>id</code>, <code>stat</code>, <code>namei -l</code></td><td>파일뿐 아니라 상위 디렉터리 실행 권한도 확인</td></tr>
+      <tr><th>명령</th><th>용도</th><th>주의</th></tr>
+      <tr><td><code>systemctl status &lt;svc&gt;</code></td><td>서비스 상태·최근 로그·PID 확인</td><td>Active/exit code/restart 횟수 함께 본다</td></tr>
+      <tr><td><code>systemctl restart &lt;svc&gt;</code></td><td>서비스 재시작</td><td>재시작 전 영향 범위·rollback 확인</td></tr>
+      <tr><td><code>find / -name '*.log' -mtime -1</code></td><td>최근 1일 내 수정된 로그 찾기</td><td><code>/</code> 전체는 느림, 경로 좁히기</td></tr>
+      <tr><td><code>free -h</code></td><td>메모리·swap 사용량</td><td>available와 free는 다르다</td></tr>
+      <tr><td><code>uptime</code></td><td>load average 확인</td><td>코어 수 대비로 해석</td></tr>
     </table>
   </section>
+
   <section id="ch2">
-    <div class="ch-head"><span class="ch-code">LX-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <div class="ch-head"><span class="ch-code">LX-CS-02</span><h2>판단 한 줄</h2></div>
     <table>
-      <tr><th>명령</th><th>압축 설명</th><th>해석 포인트</th></tr>
-      <tr><td><code>rg "text"</code></td><td>현재 디렉터리 이하에서 빠른 텍스트 검색</td><td><code>.gitignore</code>를 따르므로 숨은 대상은 옵션 확인</td></tr>
-      <tr><td><code>less app.log</code></td><td>큰 파일을 페이지 단위로 탐색</td><td><code>/pattern</code>, <code>Shift+F</code>로 검색/추적</td></tr>
-      <tr><td><code>tail -f app.log</code></td><td>로그를 실시간으로 따라감</td><td>rotation 환경에서는 <code>-F</code>가 더 적합할 수 있음</td></tr>
-      <tr><td><code>ps aux</code></td><td>프로세스 목록 확인</td><td>CPU, MEM, command, 사용자 확인</td></tr>
-      <tr><td><code>kill PID</code></td><td>SIGTERM으로 정상 종료 요청</td><td>graceful shutdown 로그를 먼저 확인</td></tr>
-      <tr><td><code>du -sh * | sort -rh</code></td><td>용량 큰 항목을 정렬</td><td>현재 디렉터리 기준이라 mount point를 확인</td></tr>
-      <tr><td><code>journalctl -u service -f</code></td><td>systemd 서비스 로그 추적</td><td>서비스 재시작, exit code, 시간 범위 확인</td></tr>
+      <tr><th>선택</th><th>언제 쓰나</th><th>주의</th></tr>
+      <tr><td><code>SIGTERM</code> (<code>kill -15</code>)</td><td>기본. 프로세스에 정리할 시간을 줌</td><td>graceful shutdown 로그를 먼저 확인</td></tr>
+      <tr><td><code>SIGKILL</code> (<code>kill -9</code>)</td><td>SIGTERM 실패 시 마지막 수단</td><td>cleanup hook·flush 없이 즉사, 상태 손상 가능</td></tr>
+      <tr><td>hard link</td><td>같은 inode에 이름 여러 개, 원본 지워도 데이터 유지</td><td>파일시스템 경계·디렉터리 불가</td></tr>
+      <tr><td>soft link (<code>ln -s</code>)</td><td>경로를 가리키는 참조, 파일시스템 넘나듦</td><td>원본 지우면 dangling link</td></tr>
+      <tr><td><code>&gt;</code></td><td>파일 새로 덮어쓰기</td><td>기존 내용 즉시 날아감</td></tr>
+      <tr><td><code>&gt;&gt;</code></td><td>파일 끝에 이어붙이기</td><td>로그 누적엔 이쪽</td></tr>
+      <tr><td>systemd</td><td>상시 데몬, 의존성·재시작·로그 관리 필요할 때</td><td>unit 파일과 journal에 통합</td></tr>
+      <tr><td>cron</td><td>정해진 시각에 주기 실행</td><td>환경변수·PATH가 셸과 다름</td></tr>
     </table>
   </section>
+
   <section id="ch3">
-    <div class="ch-head"><span class="ch-code">LX-CS-03</span><h2>판단 기준</h2></div>
+    <div class="ch-head"><span class="ch-code">LX-CS-03</span><h2>자주 터지는 것 · 즉시 확인</h2></div>
     <table>
-      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
-      <tr><td><code>cat</code></td><td>작은 파일 전체를 즉시 볼 때</td><td>큰 로그에는 사용하지 않음</td></tr>
-      <tr><td><code>less</code></td><td>큰 파일을 검색하며 볼 때</td><td>원본을 수정하지 않고 안전하게 탐색</td></tr>
-      <tr><td><code>tail -f</code></td><td>새로 쌓이는 로그를 실시간 확인할 때</td><td>과거 원인은 <code>less</code>/<code>journalctl --since</code>가 낫다</td></tr>
-      <tr><td><code>kill</code></td><td>정상 종료 요청이 가능할 때</td><td>데이터 flush, connection drain 기회를 줌</td></tr>
-      <tr><td><code>kill -9</code></td><td>정상 종료가 실패한 마지막 수단</td><td>cleanup hook이 실행되지 않음</td></tr>
-      <tr><td><code>sudo</code></td><td>권한 상승이 명확히 필요한 작업</td><td>원인 확인 없이 권한 문제를 덮지 않음</td></tr>
+      <tr><th>신호</th><th>왜 위험</th><th>즉시 확인</th></tr>
+      <tr><td>디스크 100%인데 <code>df</code>상 용량이 남아 보임</td><td>삭제됐지만 프로세스가 연 파일이 공간을 점유</td><td><code>lsof +L1</code> → 해당 프로세스 restart</td></tr>
+      <tr><td>좀비(defunct)·고아 프로세스 누적</td><td>부모가 <code>wait()</code>로 회수(reaping)하지 않음. 컨테이너에선 <b>PID 1</b>이 init로서 reaping 책임</td><td><code>ps aux | grep defunct</code>, 컨테이너면 init(예: tini) 여부</td></tr>
+      <tr><td>프로세스가 갑자기 죽고 로그에 흔적 없음</td><td>OOM killer가 메모리 부족으로 강제 종료</td><td><code>dmesg | grep -i 'oom\|killed'</code>, <code>journalctl -k</code></td></tr>
+      <tr><td><code>chmod 777</code> 남용</td><td>누구나 쓰기·실행 가능, 권한 문제를 덮기만 함</td><td><code>id</code>, <code>stat</code>, <code>namei -l &lt;path&gt;</code>로 실제 원인</td></tr>
+      <tr><td>로그 로테이션 부재</td><td>단일 로그 파일이 디스크를 서서히 채움</td><td><code>ls -lh</code>로 크기, <code>logrotate</code> 설정 확인</td></tr>
+      <tr><td>보는 로그 파일과 앱이 쓰는 파일이 다름</td><td>rotation으로 inode가 바뀜</td><td><code>tail -F</code>, <code>journalctl --since</code></td></tr>
     </table>
   </section>
+
   <section id="ch4">
-    <div class="ch-head"><span class="ch-code">LX-CS-04</span><h2>자주 나는 실수</h2></div>
-    <ul>
-      <li><code>rm -rf</code> 전에 대상 경로를 확인하지 않는다. 절대경로, 현재 디렉터리, 변수 확장을 먼저 출력해 본다.</li>
-      <li>큰 로그를 <code>cat</code>으로 터미널에 모두 쏟는다. 검색과 paging이 필요한 파일은 <code>less</code>를 쓴다.</li>
-      <li><code>kill -9</code>를 먼저 써서 graceful shutdown 기회를 없앤다. lock file과 임시 파일이 남을 수 있다.</li>
-      <li>권한 문제를 무조건 <code>sudo</code>로 덮고 원인을 보지 않는다. 소유자, 그룹, 상위 디렉터리 권한을 확인한다.</li>
-      <li>macOS BSD 명령과 GNU/Linux 옵션 차이를 고려하지 않는다. <code>sed</code>, <code>stat</code>, <code>date</code> 옵션이 다를 수 있다.</li>
-      <li>디스크 여유만 보고 inode 고갈을 놓친다. 작은 파일이 많으면 <code>df -i</code>도 확인한다.</li>
-    </ul>
-  </section>
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">LX-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
-    <div class="glossary">
-      <div class="g-row"><div class="g-term"><b>파이프</b><span>pipe</span></div><div class="g-def">셸의 힘은 작은 명령의 표준 출력을 다음 명령의 표준 입력으로 연결해 조합하는 데 있습니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>권한</b><span>permission</span></div><div class="g-def">Unix 권한은 소유자, 그룹, 기타 사용자에게 읽기, 쓰기, 실행 권한을 나눠 부여하는 모델입니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>프로세스 종료</b><span>signal</span></div><div class="g-def">먼저 SIGTERM으로 정리할 시간을 주고, 실패할 때만 SIGKILL을 사용합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>로그 조사</b><span>triage</span></div><div class="g-def">로그는 최신 줄만 보는 것이 아니라 배포 시각, 오류 최초 발생 시각, 같은 requestId의 흐름을 함께 봐야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>리소스</b><span>system</span></div><div class="g-def">CPU, 메모리, 디스크, 네트워크는 각각 병목 신호가 다르므로 한 명령으로 시스템 상태를 단정하지 않습니다.</div></div>
-    </div>
-  </section>
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">LX-CS-06</span><h2>Red Flags</h2></div>
+    <div class="ch-head"><span class="ch-code">LX-CS-04</span><h2>장애 증거 1카드</h2></div>
+    <div class="serial-card"><span class="sc-label">DISK FULL TRIAGE</span>1. <code>df -h</code> · <code>df -i</code>로 block/inode 중 무엇이 찼는지 구분<br>2. <code>du -xhd1 /path | sort -h</code>로 큰 디렉터리 추적<br>3. <code>lsof +L1</code>로 삭제됐지만 열린 파일 확인 (핵심 함정)<br>4. 로그·코어덤프(<code>/var/log</code>, <code>core.*</code>) 크기 확인<br>5. 백업·owner·서비스 영향 확인 후 안전 삭제</div>
     <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
-      <tr><td><code>rm -rf</code>에 변수/와일드카드 사용</td><td>대상 경로 오해 시 대량 삭제</td><td><code>pwd</code>, <code>printf '%s\n' "$TARGET"</code>, dry-run</td></tr>
-      <tr><td>disk full인데 삭제 후 용량 회복 안 됨</td><td>삭제된 파일을 프로세스가 열고 있을 수 있음</td><td><code>lsof +L1</code>, process restart</td></tr>
-      <tr><td><code>kill -9</code> 먼저 사용</td><td>flush/cleanup 없이 종료되어 상태가 손상될 수 있음</td><td><code>kill</code>, graceful shutdown log</td></tr>
-      <tr><td>권한 오류를 sudo로만 해결</td><td>소유권/umask/deploy user 문제가 숨어 남음</td><td><code>id</code>, <code>namei -l</code>, <code>stat</code></td></tr>
-      <tr><td>log rotation 무시</td><td>보고 있는 파일과 앱이 쓰는 파일이 다를 수 있음</td><td><code>tail -F</code>, <code>journalctl --since</code></td></tr>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>block이 찼나 inode가 찼나?</td><td><code>df -h</code>, <code>df -i</code>의 Use%</td></tr>
+      <tr><td>2</td><td>어느 디렉터리가 큰가?</td><td><code>du -xhd1 /path | sort -h</code></td></tr>
+      <tr><td>3</td><td>지웠는데 공간이 안 돌아오나?</td><td><code>lsof +L1</code>의 열린 삭제 파일</td></tr>
+      <tr><td>4</td><td>로그·덤프가 원인인가?</td><td>큰 <code>.log</code>, <code>core.*</code> 파일</td></tr>
     </table>
+    <div class="callout warn"><span class="co-label">복구·중단</span><p>3번에서 열린 삭제 파일이 잡히면 파일을 더 지우지 말고 해당 프로세스를 restart해 fd를 놓게 한다. 대상 경로를 눈으로 확인하지 못하면 삭제를 중단한다.</p></div>
   </section>
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">LX-CS-07</span><h2>Review Gate</h2></div>
-    <table>
-      <tr><th>작업</th><th>차단 기준</th><th>필수 증거</th></tr>
-      <tr><td>삭제 명령</td><td>대상 경로 출력과 백업/복구 기준 없음</td><td>dry-run, backup, owner 확인</td></tr>
-      <tr><td>서비스 재시작</td><td>graceful shutdown, 영향 범위, rollback 미정</td><td>systemd unit, health check, logs</td></tr>
-      <tr><td>권한 변경</td><td>recursive chmod/chown 범위 불명확</td><td>대상 tree, user/group, 최소 권한</td></tr>
-      <tr><td>디스크 정리</td><td>큰 파일 원인과 재발 방지 없음</td><td><code>du</code>, <code>df -h</code>, <code>df -i</code>, logrotate</td></tr>
-      <tr><td>운영 조사</td><td>시간대, host, service, request id가 기록되지 않음</td><td>명령 로그, timestamp, hostname</td></tr>
-    </table>
-  </section>
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">LX-CS-08</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">DISK FULL TRIAGE</span>1. <code>df -h</code>와 <code>df -i</code>로 block/inode 확인<br>2. <code>du -xhd1 /path | sort -h</code>로 큰 디렉터리 확인<br>3. <code>lsof +L1</code>로 삭제됐지만 열린 파일 확인<br>4. 로그면 logrotate와 retention 확인<br>5. 삭제 전 백업/owner/서비스 영향 확인<br>6. 정리 후 재발 방지 알림과 보존 정책 추가</div>
-    <div class="callout warn"><span class="co-label">운영 원칙</span><p>서버 명령은 빠르지만 되돌리기 어렵습니다. destructive command는 항상 현재 경로, 대상 확장 결과, 백업 가능성, 서비스 영향 범위를 확인한 뒤 실행합니다.</p></div>
-  </section>
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">LX-CS-09</span><h2>운영 명령 카드</h2></div>
-    <p class="lede">Linux 명령은 결과를 얻는 속도보다 실수로 증거를 지우지 않는 것이 중요합니다. 삭제·재시작·권한 변경 전에는 항상 현재 위치와 대상 범위를 출력합니다.</p>
-    <table>
-      <tr><th>상황</th><th>명령</th><th>정상 신호</th><th>다음 행동</th></tr>
-      <tr><td>디스크 full</td><td><code>df -h</code>, <code>df -i</code>, <code>du -xhd1 /path | sort -h</code></td><td>block과 inode 중 병목이 구분됨</td><td>큰 파일, 작은 파일 폭증, 열린 삭제 파일을 분리</td></tr>
-      <tr><td>로그 조사</td><td><code>journalctl -u service --since "30 min ago"</code></td><td>배포 시각과 오류 최초 발생 시각이 맞춰짐</td><td>request id 또는 error fingerprint로 좁힘</td></tr>
-      <tr><td>포트 충돌</td><td><code>lsof -i :PORT</code>, <code>ss -tlnp</code></td><td>프로세스와 bind address가 확인됨</td><td>localhost/0.0.0.0/container port를 구분</td></tr>
-      <tr><td>권한 오류</td><td><code>id</code>, <code>stat path</code>, <code>namei -l path</code></td><td>파일과 상위 디렉터리 권한이 함께 보임</td><td>sudo로 덮기 전 owner/group/umask 원인 수정</td></tr>
-      <tr><td>프로세스 종료</td><td><code>kill PID</code> 후 로그 확인</td><td>graceful shutdown 로그와 health 회복 확인</td><td>실패할 때만 <code>kill -9</code> 검토</td></tr>
-    </table>
-  </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">LX-CS-10</span><h2>안전 판정표</h2></div>
-    <table>
-      <tr><th>작업</th><th>실행 전 확인</th><th>위험 신호</th><th>중단 기준</th></tr>
-      <tr><td>삭제</td><td><code>pwd</code>, 대상 경로 출력, 백업/복구 가능성</td><td>변수, wildcard, 빈 문자열 확장</td><td>대상 목록을 눈으로 확인하지 못하면 중단</td></tr>
-      <tr><td>권한 변경</td><td>현재 owner/group, 재귀 범위, 서비스 사용자</td><td><code>chmod -R 777</code>, 광범위 chown</td><td>최소 권한 설명 없으면 중단</td></tr>
-      <tr><td>서비스 재시작</td><td>현재 health, 연결 drain, 재시작 후 확인 명령</td><td>상태 확인 없이 재시작 반복</td><td>사용자 영향과 rollback이 불명확하면 중단</td></tr>
-      <tr><td>로그 압축/전달</td><td>시간 범위, 민감 정보, request id</td><td>secret/token 포함 가능</td><td>마스킹 기준 없이 공유 금지</td></tr>
-      <tr><td>디스크 정리</td><td>원인 디렉터리, 열린 파일, retention 정책</td><td>삭제 후 용량 미회복</td><td><code>lsof +L1</code> 확인 전 반복 삭제 금지</td></tr>
-    </table>
-  </section>
+
+  <footer>Linux CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 지우기 전에 무엇을 지우는지 먼저 출력한다.</footer>
 </main>
 </body>
 </html>

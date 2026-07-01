@@ -13,6 +13,7 @@ import {
   DESIGN_HANDBOOKS,
   DESIGN_PRACTICE_HANDBOOKS,
   DEVOPS_HANDBOOKS,
+  ENGINEERING_CONTEXT_HANDBOOKS,
   FRONTEND_HANDBOOKS,
   HANDBOOK_GROUPS,
   HANDBOOK_ITEMS,
@@ -80,7 +81,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "engineering", "llm", "ai-native", "operations", "ax", "design", "practice", "career"],
+    ["home", "engineering", "engineering-context", "llm", "ai-native", "operations", "ax", "design", "practice", "career"],
   );
 
   const labels = [
@@ -90,15 +91,17 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
 
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const engineeringGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering");
+  const engineeringContextGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering-context");
   const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
   const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
   const axGroup = HANDBOOK_GROUPS.find((group) => group.key === "ax");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 73);
+  assert.equal(HANDBOOK_ITEMS.length, 81);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(engineeringGroup?.items.length, 15);
+  assert.equal(engineeringContextGroup?.items.length, 8);
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 6);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 14);
@@ -108,6 +111,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("면접·커리어"));
   assert.ok(labels.includes("개발 핸드북"));
+  assert.ok(labels.includes("엔지니어링 맥락"));
   assert.ok(labels.includes("LLM"));
   assert.ok(labels.includes("AI Native 훈련"));
   assert.ok(labels.includes("인프라·운영"));
@@ -118,6 +122,27 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("01 개인 이력 정리"));
   assert.ok(labels.includes("02 프론트엔드·JS/TS 면접"));
   assert.ok(labels.includes("03 백엔드·Java/Spring 면접"));
+  assert.deepEqual(
+    ENGINEERING_CONTEXT_HANDBOOKS.map((item) => item.id),
+    [
+      "context-scale-systems",
+      "context-platform-productivity",
+      "context-quality-release",
+      "context-performance-metrics",
+      "context-library-oss",
+      "context-migration-compatibility",
+      "context-frontend-runtime-ecosystem",
+      "context-operational-ownership",
+    ],
+  );
+  assert.ok(labels.includes("00 엔지니어링 규모 감각"));
+  assert.ok(labels.includes("01 플랫폼 엔지니어링·개발자 생산성"));
+  assert.ok(labels.includes("02 품질 엔지니어링·릴리즈 시스템"));
+  assert.ok(labels.includes("03 성능 측정·지표 해석"));
+  assert.ok(labels.includes("04 라이브러리·패키지·오픈소스 설계"));
+  assert.ok(labels.includes("05 마이그레이션·호환성"));
+  assert.ok(labels.includes("06 프론트엔드 빌드·런타임·생태계"));
+  assert.ok(labels.includes("07 운영 책임·장애 대응 언어"));
   assert.ok(labels.includes("04 CS·DB·보안 심화 면접"));
   assert.ok(labels.includes("05 인프라·분산·클라우드 면접"));
   assert.ok(labels.includes("06 시스템 설계·프로젝트 심층"));
@@ -1537,7 +1562,7 @@ test("every handbook item has a rendered practical example", async () => {
     );
     assert.match(
       examplesSource,
-      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|network|devops|ax|design|practical|llm|fundamentals)"`),
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|network|devops|ax|design|practical|llm|fundamentals|context)"`),
       `${item.id} should have a practical example lens`,
     );
   }
@@ -2430,6 +2455,35 @@ test("design practice navigation follows the intended learning order", async () 
   assert.ok(systems.indexOf("AX 인터랙션·마이크로인터랙션") < systems.indexOf("접근성과 인클루시브 디자인"));
   assert.match(systems, /왼쪽 목차는 문서 단위로 압축했습니다/);
   assert.doesNotMatch(systems.match(/<nav aria-label="목차">[\s\S]*?<\/nav>/)?.[0] ?? "", /designforms-ch1/);
+});
+
+test("engineering context handbooks teach product-organization engineering literacy", async () => {
+  const docs = await Promise.all(
+    ENGINEERING_CONTEXT_HANDBOOKS.map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+  );
+  const source = docs.join("\n");
+
+  assert.match(source, /고급 엔지니어링 사례가 자연스럽게 읽히도록 만드는 기반 개념서/);
+  assert.match(source, /사용자 규모/);
+  assert.match(source, /변경 규모/);
+  assert.match(source, /조직 규모/);
+  assert.match(source, /golden path/i);
+  assert.match(source, /개발자 생산성/);
+  assert.match(source, /release candidate/i);
+  assert.match(source, /smoke test/i);
+  assert.match(source, /flaky test/i);
+  assert.match(source, /p95/);
+  assert.match(source, /p99/);
+  assert.match(source, /cost per success/i);
+  assert.match(source, /API surface/i);
+  assert.match(source, /compat layer/i);
+  assert.match(source, /expand/);
+  assert.match(source, /contract/);
+  assert.match(source, /tree-shaking/i);
+  assert.match(source, /hydration/i);
+  assert.match(source, /on-call/i);
+  assert.match(source, /postmortem/i);
+  assert.match(source, /error budget/i);
 });
 
 test("snippet cards expose lucide-powered copy buttons", async () => {

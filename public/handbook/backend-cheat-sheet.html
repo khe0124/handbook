@@ -1,145 +1,158 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>Backend Cheat Sheet</title></head>
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Backend Cheat Sheet</title>
+</head>
 <body>
 <nav aria-label="목차">
-  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Backend</div>
-  <a href="#ch1"><span class="code">BE-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">BE-CS-02</span>핵심 명령/개념</a>
-  <a href="#ch3"><span class="code">BE-CS-03</span>판단 기준</a>
-  <a href="#ch4"><span class="code">BE-CS-04</span>자주 나는 실수</a>
-  <a href="#ch5"><span class="code">BE-CS-05</span>면접/리뷰용 한 줄 답변</a>
-  <a href="#ch6"><span class="code">BE-CS-06</span>Red Flags</a>
-  <a href="#ch7"><span class="code">BE-CS-07</span>Review Gate</a>
-  <a href="#ch8"><span class="code">BE-CS-08</span>Failure Playbook</a>
-  <a href="#ch9"><span class="code">BE-CS-09</span>API 실행 카드</a>
-  <a href="#ch10"><span class="code">BE-CS-10</span>장애 판정표</a>
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Backend</div>
+  <a href="#ch1"><span class="code">BE-CS-01</span>핵심 명령·스니펫</a>
+  <a href="#ch2"><span class="code">BE-CS-02</span>판단 한 줄</a>
+  <a href="#ch3"><span class="code">BE-CS-03</span>자주 터지는 것 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">BE-CS-04</span>장애 증거 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial"><span>DOC : CHEAT-BACKEND-V1</span><span>SCOPE : API · AUTH · TRANSACTION · ASYNC</span><span>LANG : KO</span></div>
+    <div class="hero-serial"><span>DOC : CHEAT-BACKEND-V2</span><span>SCOPE : API · AUTH · TRANSACTION · ASYNC</span><span>LANG : KO</span></div>
     <h1>Backend<br>Cheat Sheet</h1>
-    <p class="hero-sub">API와 서버 변경을 리뷰할 때 contract, validation, auth, transaction, async, idempotency를 빠르게 확인하는 압축 참조입니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <p class="hero-sub">API를 찌르고, 응답을 파싱하고, 부하를 걸고, 토큰을 까보고, 장애를 좁힐 때 바로 복붙하는 명령 참조.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
+
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">BE-CS-01</span><h2>개요</h2></div>
-    <p class="lede">백엔드 변경은 정상 응답보다 실패, 재시도, 권한, 정합성에서 깨집니다. 구현 전에 계약과 실패 모드를 먼저 고정합니다.</p>
+    <div class="ch-head"><span class="ch-code">BE-CS-01</span><h2>핵심 명령·스니펫</h2></div>
+
+    <h3>요청 찌르기 (curl / HTTPie)</h3>
+    <pre class="snippet-card"><code># 헤더까지 보기 — status, 응답 헤더 확인 (가장 많이 씀)
+curl -i https://api.example.com/orders/42
+
+# 상태코드만 뽑기
+curl -s -o /dev/null -w '%{http_code}\n' https://api.example.com/health
+
+# POST + JSON + 멱등키 (재시도 안전)
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: 8f14e45f-ceea-467a-9c3d-1b2c3d4e5f60' \
+  -d '{"amount":1000,"currency":"KRW"}' \
+  https://api.example.com/payments
+
+# Bearer 토큰 인증
+curl -H 'Authorization: Bearer &lt;token&gt;' https://api.example.com/me
+
+# 타임/트레이스 프로파일 (DNS→connect→TTFB→total)
+curl -s -o /dev/null \
+  -w 'dns:%{time_namelookup} conn:%{time_connect} ttfb:%{time_starttransfer} total:%{time_total}\n' \
+  https://api.example.com/orders</code></pre>
+    <pre class="snippet-card"><code># HTTPie — 키=값이면 자동 JSON, 사람이 읽기 좋게 출력
+http POST api.example.com/payments amount=1000 currency=KRW \
+  Idempotency-Key:8f14e45f-ceea-467a Authorization:'Bearer &lt;token&gt;'
+
+# 헤더만 보기
+http --headers GET api.example.com/orders/42</code></pre>
+
+    <h3>응답 파싱 (jq)</h3>
+    <pre class="snippet-card"><code># 특정 필드
+curl -s api.example.com/orders/42 | jq '.status'
+
+# 배열에서 골라 뽑기
+curl -s api.example.com/orders | jq '.data[] | {id, status}'
+
+# 조건 필터 (실패 건만)
+curl -s api.example.com/orders | jq '.data[] | select(.status=="FAILED")'
+
+# 개수 세기
+curl -s api.example.com/orders | jq '.data | length'</code></pre>
+
+    <h3>부하 테스트</h3>
+    <pre class="snippet-card"><code># hey — 10초 동안 동시 50 (p50/p95/p99 히스토그램)
+hey -z 10s -c 50 https://api.example.com/orders
+
+# hey — 총 1000요청, POST + body
+hey -n 1000 -c 50 -m POST -T 'application/json' \
+  -d '{"amount":1000}' https://api.example.com/payments
+
+# ApacheBench — 총 1000요청, 동시 50
+ab -n 1000 -c 50 https://api.example.com/orders</code></pre>
+
+    <h3>JWT 디코드 (payload 까보기)</h3>
+    <pre class="snippet-card"><code># 2번째 파트(payload)만 base64 디코드 → exp, sub, role 확인
+echo &lt;jwt&gt; | cut -d. -f2 | base64 -d | jq
+
+# padding 에러 나면 base64 대신 (macOS)
+echo &lt;jwt&gt; | cut -d. -f2 | base64 -D 2&gt;/dev/null | jq</code></pre>
+
+    <h3>로그 추적</h3>
+    <pre class="snippet-card"><code># requestId로 한 요청의 전 구간 따라가기
+grep 'req-8f14e45f' app.log
+
+# 5xx만 실시간
+tail -f app.log | grep -E '"status":5[0-9]{2}'
+
+# errorCode별 집계 top
+grep -oE '"errorCode":"[^"]+"' app.log | sort | uniq -c | sort -rn | head</code></pre>
+
     <table>
-      <tr><th>리뷰 대상</th><th>먼저 볼 것</th><th>깨지는 지점</th></tr>
-      <tr><td>신규 API</td><td>request/response schema, status code, error shape</td><td>클라이언트가 실패 사유를 구분하지 못함</td></tr>
-      <tr><td>권한 기능</td><td>authentication과 authorization 책임 분리</td><td>로그인만 확인하고 소유권/역할 검사를 빠뜨림</td></tr>
-      <tr><td>쓰기 작업</td><td>transaction boundary, retry, idempotency</td><td>timeout 후 재시도로 중복 생성/중복 결제 발생</td></tr>
-      <tr><td>비동기 처리</td><td>timeout, backoff, duplicate message, dead letter</td><td>실패 메시지가 무한 재시도되거나 조용히 유실됨</td></tr>
-      <tr><td>외부 연동</td><td>rate limit, circuit breaker, fallback, audit log</td><td>외부 장애가 전체 요청 지연으로 전파됨</td></tr>
+      <tr><th>명령</th><th>용도</th><th>주의</th></tr>
+      <tr><td><code>curl -i &lt;url&gt;</code></td><td>status·헤더 확인, 첫 진단</td><td><code>-s</code>로 progress 끄기</td></tr>
+      <tr><td><code>curl -sS -f &lt;url&gt;</code></td><td>스크립트용: 4xx/5xx면 exit≠0</td><td><code>-f</code>는 body 안 보여줌</td></tr>
+      <tr><td><code>curl -L &lt;url&gt;</code></td><td>redirect 따라가기</td><td>POST가 GET으로 바뀔 수 있음</td></tr>
+      <tr><td><code>jq -r '.token'</code></td><td>따옴표 없는 raw 값 추출</td><td>파이프 대입 시 필수</td></tr>
+      <tr><td><code>hey -z 10s -c 50</code></td><td>p95/p99 지연 측정</td><td>prod 대상 금지</td></tr>
+      <tr><td><code>ab -n 1000 -c 50</code></td><td>간단 처리량 측정</td><td>keep-alive는 <code>-k</code></td></tr>
     </table>
+    <div class="callout warn"><span class="co-label">주의</span><p>부하 명령(<code>hey</code>, <code>ab</code>)은 staging/local에만. prod에 걸면 self-DoS. JWT 디코드는 서명 검증이 아니라 payload 열람일 뿐이니 신뢰 판단에 쓰지 말 것.</p></div>
   </section>
+
   <section id="ch2">
-    <div class="ch-head"><span class="ch-code">BE-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <div class="ch-head"><span class="ch-code">BE-CS-02</span><h2>판단 한 줄</h2></div>
     <table>
-      <tr><th>개념</th><th>압축 설명</th><th>실무 체크</th></tr>
-      <tr><td>Authentication</td><td>누구인지 확인</td><td>세션/JWT 만료, 재발급, 폐기 정책 확인</td></tr>
-      <tr><td>Authorization</td><td>무엇을 할 수 있는지 판단</td><td>role뿐 아니라 resource ownership 확인</td></tr>
-      <tr><td>Validation</td><td>입력 형식, 범위, 상태 전이 가능성 확인</td><td>client 검증은 UX, server 검증은 신뢰 경계</td></tr>
-      <tr><td>Transaction</td><td>함께 성공하거나 함께 실패해야 하는 변경 묶음</td><td>외부 API 호출과 긴 작업을 경계 밖으로 빼기</td></tr>
-      <tr><td>Idempotency key</td><td>같은 요청이 여러 번 와도 결과를 한 번처럼 만드는 식별자</td><td>POST, 결제, 주문, 메시지 소비에 우선 적용</td></tr>
-      <tr><td>Backpressure</td><td>처리량보다 입력이 클 때 시스템이 무너지지 않도록 제어</td><td>queue length, rate limit, reject 전략 필요</td></tr>
-      <tr><td>Timeout</td><td>응답을 무한히 기다리지 않기 위한 상한</td><td>client, server, DB, 외부 API timeout 정렬</td></tr>
+      <tr><th>선택</th><th>언제 쓰나</th><th>주의</th></tr>
+      <tr><td>Session</td><td>즉시 폐기·서버 제어가 중요할 때</td><td>scale-out 시 공용 session store 필요</td></tr>
+      <tr><td>JWT</td><td>stateless·분산 검증이 중요할 때</td><td>즉시 폐기 어려움 → 짧은 만료 + refresh</td></tr>
+      <tr><td>RBAC</td><td>역할이 명확하고 조직이 단순할 때</td><td>예외 늘면 role explosion</td></tr>
+      <tr><td>ABAC</td><td>소유자·조직·상태 등 속성 기반 판단 필요</td><td>정책 테스트·설명가능성 확보</td></tr>
+      <tr><td>Optimistic lock</td><td>충돌이 드물고 재시도 UX가 가능할 때</td><td>version 충돌 시 재시도 흐름 필요</td></tr>
+      <tr><td>Pessimistic lock</td><td>충돌 비용이 크고 직렬 처리가 필요할 때</td><td>lock wait·deadlock 관리</td></tr>
+      <tr><td>Sync 호출</td><td>결과가 즉시 필요하고 빠를 때</td><td>외부 장애가 요청 pool로 전파</td></tr>
+      <tr><td>Queue(async)</td><td>부하 평탄화·재시도·장애 격리가 우선일 때</td><td>중복 소비·순서 별도 설계</td></tr>
     </table>
-    <div class="serial-card"><span class="sc-label">API CHECK</span>읽기 API는 cache와 pagination, 쓰기 API는 validation, transaction, idempotency, audit log를 먼저 확인합니다.</div>
+    <div class="callout gm"><span class="co-label">쿠키 옵션</span><p>인증 쿠키는 <code>HttpOnly</code>(JS 접근 차단) + <code>Secure</code>(HTTPS 전용) + <code>SameSite</code>(CSRF 완화) 세 개 세트로. <code>SameSite=Lax</code>가 기본 권장, 크로스사이트 전송이 꼭 필요하면 <code>SameSite=None; Secure</code>.</p></div>
   </section>
+
   <section id="ch3">
-    <div class="ch-head"><span class="ch-code">BE-CS-03</span><h2>판단 기준</h2></div>
+    <div class="ch-head"><span class="ch-code">BE-CS-03</span><h2>자주 터지는 것 · 즉시 확인</h2></div>
     <table>
-      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
-      <tr><td>Session</td><td>서버 제어와 즉시 폐기가 중요하고 상태 저장 비용을 감당할 수 있음</td><td>scale-out 시 session store 필요</td></tr>
-      <tr><td>JWT</td><td>분산 검증과 stateless가 중요함</td><td>폐기, claim drift, 짧은 만료/refresh 설계 필요</td></tr>
-      <tr><td>RBAC</td><td>역할 단위 권한이 명확하고 조직이 단순함</td><td>예외가 늘면 role explosion 발생</td></tr>
-      <tr><td>ABAC</td><td>소유자, 조직, 상태, 시간 등 속성 기반 판단이 필요함</td><td>정책 테스트와 설명 가능성 확보 필요</td></tr>
-      <tr><td>Optimistic lock</td><td>충돌이 드물고 사용자에게 재시도 경험을 줄 수 있음</td><td>충돌 메시지와 재시도 흐름 필요</td></tr>
-      <tr><td>Pessimistic lock</td><td>충돌 비용이 크고 동시에 하나만 처리해야 함</td><td>lock wait, deadlock, 처리 시간 관리 필요</td></tr>
-      <tr><td>Queue</td><td>즉시 응답보다 평탄화, 재시도, 외부 연동 분리가 더 중요함</td><td>중복 소비와 순서 보장을 별도로 설계</td></tr>
+      <tr><th>신호</th><th>왜 위험</th><th>즉시 확인</th></tr>
+      <tr><td>프론트 validation 있으니 server validation 생략</td><td>클라이언트는 신뢰 경계 밖 — API 직접 호출로 우회</td><td>server 측 형식·범위·상태전이 검증 존재 여부</td></tr>
+      <tr><td>권한 검사를 controller 일부 경로에만</td><td>다른 진입점으로 우회 경로 생김</td><td>service/data layer 기준 authorization + resource ownership</td></tr>
+      <tr><td>POST 재시도로 중복 생성/결제</td><td>timeout·새로고침·모바일 재시도는 정상 조건</td><td><b>idempotency</b> key + unique constraint + 재시도 응답 정책</td></tr>
+      <tr><td>transaction 안에서 외부 API 호출</td><td>lock 시간이 외부 장애 시간만큼 늘어남</td><td>외부호출을 경계 밖으로 / outbox·사후 보상</td></tr>
+      <tr><td>에러를 전부 500으로 뭉갬</td><td>클라이언트가 재시도/수정/권한요청을 구분 못함</td><td>status + machine-readable code + retryable 여부</td></tr>
+      <tr><td>로그에 requestId/actor 없음</td><td>장애 때 한 요청을 추적 불가</td><td>requestId·actor·target·result 로깅(PII·secret 제외)</td></tr>
     </table>
   </section>
+
   <section id="ch4">
-    <div class="ch-head"><span class="ch-code">BE-CS-04</span><h2>자주 나는 실수</h2></div>
-    <ul>
-      <li>프론트 validation이 있으니 서버 validation을 생략한다. 클라이언트는 신뢰 경계 밖에 있다.</li>
-      <li>권한 검사를 controller 일부 경로에만 넣고 service/data layer 기준을 만들지 않는다. 우회 경로가 생긴다.</li>
-      <li>POST 요청이 timeout 후 재시도될 수 있다는 점을 설계하지 않는다. 중복 요청은 예외가 아니라 정상 조건이다.</li>
-      <li>transaction 안에서 외부 API 호출이나 긴 작업을 수행한다. lock 시간이 길어지고 장애가 DB 정합성 문제로 번진다.</li>
-      <li>로그에 requestId, actor, target, result가 없어 장애 분석이 어렵다. 개인정보와 secret은 남기지 않는다.</li>
-      <li>에러 응답을 모두 500으로 뭉갠다. 클라이언트가 재시도/수정/권한 요청을 구분할 수 없다.</li>
-    </ul>
-  </section>
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">BE-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
-    <div class="glossary">
-      <div class="g-row"><div class="g-term"><b>API 계약</b><span>contract</span></div><div class="g-def">API는 함수가 아니라 팀 간 계약이므로 성공 응답보다 실패 응답과 호환성을 먼저 고정합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>멱등성</b><span>idempotency</span></div><div class="g-def">네트워크와 클라이언트 재시도는 정상 입력이므로 쓰기 작업은 중복 요청을 견뎌야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>트랜잭션</b><span>transaction</span></div><div class="g-def">트랜잭션 경계는 데이터 정합성 단위이며, 오래 잡을수록 lock과 장애 전파 비용이 커집니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>인증/인가</b><span>auth</span></div><div class="g-def">인증은 신원 확인이고 인가는 특정 리소스에 대한 행동 권한 판단이라 둘을 분리해 설계해야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>비동기 처리</b><span>async</span></div><div class="g-def">큐는 일을 나중에 하게 만드는 도구가 아니라 부하 평탄화, 재시도, 장애 격리를 위한 경계입니다.</div></div>
+    <div class="ch-head"><span class="ch-code">BE-CS-04</span><h2>장애 증거 1카드</h2></div>
+    <div class="serial-card"><span class="sc-label">API INCIDENT TRIAGE</span>
+      1. 어떤 route·status·errorCode·requestId가 늘었나 (증거 확보)<br>
+      2. 상류 timeout인가 slow query인가 (upstream span vs DB metric)<br>
+      3. 이 요청이 재시도 안전한가 (idempotency 있으면 재시도 OK)<br>
+      4. 사용자 영향 범위는 (특정 tenant/actor/전체)
     </div>
-  </section>
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">BE-CS-06</span><h2>Red Flags</h2></div>
-    <p class="lede">아래 신호가 보이면 구현 디테일보다 장애·권한·정합성 경계를 먼저 재검토합니다.</p>
-    <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
-      <tr><td>프론트에서 버튼을 숨기는 것으로 권한을 처리</td><td>API를 직접 호출하면 우회됩니다.</td><td>서버 authorization과 resource ownership 검사를 확인합니다.</td></tr>
-      <tr><td>transaction 안에서 외부 API 호출</td><td>lock 시간이 외부 장애 시간만큼 늘어납니다.</td><td>outbox, 사후 보상, 상태 전이 분리를 검토합니다.</td></tr>
-      <tr><td>쓰기 API에 idempotency 기준 없음</td><td>timeout, 새로고침, 모바일 재시도에서 중복 생성됩니다.</td><td>idempotency key, unique constraint, 재시도 응답 정책을 정합니다.</td></tr>
-      <tr><td>admin 작업 audit log 없음</td><td>장애·보안 사고 때 누가 무엇을 바꿨는지 추적할 수 없습니다.</td><td>actor, target, before/after, requestId, result를 남깁니다.</td></tr>
-      <tr><td>에러 응답 contract가 없음</td><td>클라이언트가 재시도, 사용자 수정, 권한 요청을 구분하지 못합니다.</td><td>status, machine-readable code, message, retryability를 고정합니다.</td></tr>
-    </table>
-  </section>
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">BE-CS-07</span><h2>Review Gate</h2></div>
-    <table>
-      <tr><th>변경 유형</th><th>merge/deploy 차단 기준</th><th>통과 증거</th></tr>
-      <tr><td>인증·인가</td><td>역할, 소유권, 조직 경계, 만료·폐기 정책이 불명확함</td><td>권한 matrix와 negative test가 있습니다.</td></tr>
-      <tr><td>쓰기 API</td><td>중복 요청, 부분 실패, 재시도 응답이 정의되지 않음</td><td>idempotency와 transaction 경계가 문서화돼 있습니다.</td></tr>
-      <tr><td>비동기 처리</td><td>중복 소비, poison message, dead letter 정책이 없음</td><td>retry 횟수, backoff, DLQ, 재처리 절차가 있습니다.</td></tr>
-      <tr><td>외부 연동</td><td>timeout, rate limit, circuit breaker, fallback이 없음</td><td>연동 장애 때 사용자 영향과 복구 절차가 설명됩니다.</td></tr>
-      <tr><td>운영 관측</td><td>requestId, actor, target, errorCode, latency가 추적되지 않음</td><td>로그·메트릭·trace에서 하나의 요청을 따라갈 수 있습니다.</td></tr>
-    </table>
-  </section>
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">BE-CS-08</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">API INCIDENT TRIAGE</span>장애 대응은 “최근 배포”만 보지 말고 요청 contract, 권한, DB, 외부 연동, retry를 같은 순서로 좁힙니다.</div>
     <table>
       <tr><th>순서</th><th>질문</th><th>증거</th></tr>
-      <tr><td>1</td><td>어떤 route, status, errorCode, requestId가 증가했는가?</td><td>API gateway log, app log, dashboard</td></tr>
-      <tr><td>2</td><td>특정 actor, tenant, resource, payload에서만 실패하는가?</td><td>권한 로그, validation 실패, 샘플 요청</td></tr>
-      <tr><td>3</td><td>DB lock, slow query, connection pool 고갈이 있는가?</td><td>DB metric, query log, pool saturation</td></tr>
-      <tr><td>4</td><td>외부 API timeout/rate limit이 내부 장애로 전파됐는가?</td><td>trace span, upstream status, retry count</td></tr>
-      <tr><td>5</td><td>rollback, feature flag off, traffic shedding 중 무엇이 가장 빠른가?</td><td>변경 범위, data migration 여부, 사용자 영향</td></tr>
+      <tr><td>1</td><td>어떤 route·status·errorCode·requestId가 증가했나?</td><td>gateway/app log, dashboard, <code>grep errorCode</code></td></tr>
+      <tr><td>2</td><td>상류(외부 API) timeout인가, 내부 slow query인가?</td><td>trace span, upstream status vs DB slow query log</td></tr>
+      <tr><td>3</td><td>이 요청은 재시도해도 안전한가?</td><td>메서드(GET/PUT), idempotency key 유무</td></tr>
+      <tr><td>4</td><td>사용자 영향 범위는? (특정 tenant/전체)</td><td>actor·tenant 분포, 성공/실패 비율</td></tr>
     </table>
+    <div class="callout risk"><span class="co-label">복구/중단 기준</span><p>중복 생성·결제가 진행 중이면 쓰기 경로를 먼저 <b>중단</b>(flag off)하고 affected row를 식별한다. 단일 release 회귀면 rollback, 상류 장애면 traffic shedding·retry 축소로 격리. data migration이 얽힌 변경은 rollback 전에 정합성부터 확인.</p></div>
   </section>
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">BE-CS-09</span><h2>API 실행 카드</h2></div>
-    <p class="lede">백엔드 치트시트는 API를 만들거나 고칠 때 정상 응답보다 실패, 권한, 재시도, 관측 증거를 먼저 고정하는 도구입니다.</p>
-    <table>
-      <tr><th>작업</th><th>필수 확인</th><th>복붙 템플릿</th><th>완료 기준</th></tr>
-      <tr><td>신규 API</td><td>성공/실패 status, machine code, retryable 여부</td><td><code>{ "code": "ORDER_ALREADY_PAID", "message": "...", "retryable": false }</code></td><td>프론트가 오류별 UI 행동을 분기할 수 있음</td></tr>
-      <tr><td>쓰기 API</td><td>idempotency key, unique constraint, timeout 후 재시도</td><td><code>Idempotency-Key: order-{clientRequestId}</code></td><td>같은 요청 2회 호출 결과가 중복 생성으로 이어지지 않음</td></tr>
-      <tr><td>권한 변경</td><td>role, ownership, tenant/org boundary, negative test</td><td><code>actor=A, resource owned by B =&gt; 403</code></td><td>UI 숨김 없이 API 직접 호출도 차단됨</td></tr>
-      <tr><td>외부 연동</td><td>timeout, retry budget, fallback, circuit breaker, audit</td><td><code>upstream_timeout_ms &lt; server_timeout_ms</code></td><td>외부 장애가 전체 요청 pool 고갈로 전파되지 않음</td></tr>
-      <tr><td>비동기 소비</td><td>중복 메시지, poison message, DLQ, 재처리 절차</td><td><code>messageId + consumerName</code> 기준 dedupe</td><td>실패 메시지를 추적하고 안전하게 재처리 가능</td></tr>
-    </table>
-  </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">BE-CS-10</span><h2>장애 판정표</h2></div>
-    <table>
-      <tr><th>증상</th><th>먼저 볼 로그/지표</th><th>위험 신호</th><th>즉시 조치</th></tr>
-      <tr><td>5xx 증가</td><td>route, errorCode, requestId, deploy SHA</td><td>특정 release 이후 같은 stack trace 반복</td><td>flag off 또는 rollback 후보 확인, 샘플 요청 보관</td></tr>
-      <tr><td>403/401 증가</td><td>actor, role, tenant, resource id</td><td>특정 tenant 또는 신규 권한 정책에서만 실패</td><td>정책 diff와 negative test 확인, 임시 우회 금지</td></tr>
-      <tr><td>중복 생성</td><td>idempotency key, unique violation, client retry log</td><td>timeout 뒤 같은 payload가 여러 번 성공</td><td>쓰기 경로 중단, unique 보정, affected row 식별</td></tr>
-      <tr><td>latency 급증</td><td>DB pool, slow query, upstream span, queue lag</td><td>pool saturation 또는 retry storm</td><td>traffic shedding, retry 축소, 가장 느린 dependency 격리</td></tr>
-      <tr><td>비동기 적체</td><td>queue depth, consumer error, DLQ count</td><td>같은 메시지 무한 재시도</td><td>consumer pause, poison message 격리, 재처리 runbook 작성</td></tr>
-    </table>
-  </section>
+
+  <footer>Backend CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 정상 응답이 아니라 실패·재시도·권한·정합성을 먼저 고정한다.</footer>
 </main>
 </body>
 </html>

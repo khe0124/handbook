@@ -1,0 +1,668 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "홈으로 이동" [level=1] [ref=e6]:
+        - button "홈으로 이동" [ref=e7] [cursor=pointer]: Dev Handbook
+      - paragraph [ref=e8]: Dev Handbook · 00 홈
+    - navigation "문서 분류" [ref=e9]:
+      - button "홈" [ref=e11] [cursor=pointer]:
+        - text: 홈
+        - generic [ref=e12]: ▾
+      - button "개발 핸드북" [ref=e14] [cursor=pointer]:
+        - text: 개발 핸드북
+        - generic [ref=e15]: ▾
+      - button "LLM" [ref=e17] [cursor=pointer]:
+        - text: LLM
+        - generic [ref=e18]: ▾
+      - button "AI Native 훈련" [ref=e20] [cursor=pointer]:
+        - text: AI Native 훈련
+        - generic [ref=e21]: ▾
+      - button "인프라·운영" [ref=e23] [cursor=pointer]:
+        - text: 인프라·운영
+        - generic [ref=e24]: ▾
+      - button "AX 실무" [ref=e26] [cursor=pointer]:
+        - text: AX 실무
+        - generic [ref=e27]: ▾
+      - button "디자인 실무" [ref=e29] [cursor=pointer]:
+        - text: 디자인 실무
+        - generic [ref=e30]: ▾
+      - button "실무 도구" [ref=e32] [cursor=pointer]:
+        - text: 실무 도구
+        - generic [ref=e33]: ▾
+      - button "면접·커리어" [ref=e35] [cursor=pointer]:
+        - text: 면접·커리어
+        - generic [ref=e36]: ▾
+  - generic [ref=e37]:
+    - navigation "00 홈 목차" [ref=e38]:
+      - generic [ref=e39]: Dev Handbook 홈
+      - link "HOME-01 큰그림" [ref=e40] [cursor=pointer]:
+        - /url: "#ch1"
+        - generic [ref=e41]: HOME-01
+        - text: 큰그림
+      - link "HOME-02 전체 로드맵" [ref=e42] [cursor=pointer]:
+        - /url: "#ch2"
+        - generic [ref=e43]: HOME-02
+        - text: 전체 로드맵
+      - link "HOME-03 학습 순서" [ref=e44] [cursor=pointer]:
+        - /url: "#ch3"
+        - generic [ref=e45]: HOME-03
+        - text: 학습 순서
+      - link "HOME-04 메뉴별 목적" [ref=e46] [cursor=pointer]:
+        - /url: "#ch4"
+        - generic [ref=e47]: HOME-04
+        - text: 메뉴별 목적
+      - link "HOME-05 핸드북 사용법" [ref=e48] [cursor=pointer]:
+        - /url: "#ch5"
+        - generic [ref=e49]: HOME-05
+        - text: 핸드북 사용법
+      - link "HOME-06 실전 루프" [ref=e50] [cursor=pointer]:
+        - /url: "#ch6"
+        - generic [ref=e51]: HOME-06
+        - text: 실전 루프
+      - link "HOME-07 바로가기" [ref=e52] [cursor=pointer]:
+        - /url: "#ch7"
+        - generic [ref=e53]: HOME-07
+        - text: 바로가기
+      - link "HOME-08 AI Native 진단" [ref=e54] [cursor=pointer]:
+        - /url: "#ch8"
+        - generic [ref=e55]: HOME-08
+        - text: AI Native 진단
+      - link "HOME-09 훈련 트랙" [ref=e56] [cursor=pointer]:
+        - /url: "#ch9"
+        - generic [ref=e57]: HOME-09
+        - text: 훈련 트랙
+      - link "HOME-10 산출물 지도" [ref=e58] [cursor=pointer]:
+        - /url: "#ch10"
+        - generic [ref=e59]: HOME-10
+        - text: 산출물 지도
+    - main [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]: "DOC : DEV-HANDBOOK-HOME-V1"
+            - generic [ref=e65]: "SCOPE : ROADMAP · SEQUENCE · PURPOSE · PRACTICE"
+            - generic [ref=e66]: "LANG : KO"
+          - heading "Dev Handbook" [level=1] [ref=e67]
+          - paragraph [ref=e68]:
+            - text: 이 핸드북은 개발자가
+            - strong [ref=e69]: CS 기본기, 시스템 사고, 제품 개발, 인프라 운영, AI Native 실행, 디자인 실무, 커리어 증거까지 연결해서 제품을 끝까지 책임지는 역량
+            - text: 을 기르기 위한 작업 지도입니다. 대메뉴는 성격이 같은 문서끼리 묶고, 각 묶음 안에서 목적별로 찾도록 정리했습니다.
+          - generic [ref=e70]: "STANCE : 개념 → 구조 → 운영 → 검증 → 실전 반복 · UPDATED 2026-06"
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - generic [ref=e73]: HOME-01
+            - heading "AI Native 개발자 역량 지도" [level=2] [ref=e74]
+          - paragraph [ref=e75]:
+            - text: 이 핸드북의 큰그림은 많은 기술을 나열하는 것이 아니라,
+            - strong [ref=e76]: 기능 하나를 끝까지 책임지는 개발자
+            - text: 를 만드는 것입니다. 기본기, 제품 구현, 운영 책임, AI Native 실행, 사용자 경험, 반복 작업 자동화, 커리어 증거가 서로 끊기지 않아야 합니다.
+          - table [ref=e77]:
+            - rowgroup [ref=e78]:
+              - row "역량 층 담당하는 질문 이 핸드북에서 확인할 문서 남겨야 할 증거" [ref=e79]:
+                - columnheader "역량 층" [ref=e80]
+                - columnheader "담당하는 질문" [ref=e81]
+                - columnheader "이 핸드북에서 확인할 문서" [ref=e82]
+                - columnheader "남겨야 할 증거" [ref=e83]
+              - row "기본기 왜 이 구조가 맞고 어디서 깨지는가 CS 기초, 컴퓨터 시스템, 언어 런타임, 응용 수학·측정 복잡도 판단, resource trace, benchmark evidence, 불변식 설명" [ref=e84]:
+                - cell "기본기" [ref=e85]
+                - cell "왜 이 구조가 맞고 어디서 깨지는가" [ref=e86]
+                - cell "CS 기초, 컴퓨터 시스템, 언어 런타임, 응용 수학·측정" [ref=e87]
+                - cell "복잡도 판단, resource trace, benchmark evidence, 불변식 설명" [ref=e88]
+              - row "제품 구현 사용자 흐름이 UI, API, DB 상태로 안전하게 닫히는가 프론트엔드 핵심, 백엔드 핵심, 데이터 계층, Java·Spring·JPA UI state model, API contract, transaction boundary, 테스트 결과" [ref=e89]:
+                - cell "제품 구현" [ref=e90]
+                - cell "사용자 흐름이 UI, API, DB 상태로 안전하게 닫히는가" [ref=e91]
+                - cell "프론트엔드 핵심, 백엔드 핵심, 데이터 계층, Java·Spring·JPA" [ref=e92]
+                - cell "UI state model, API contract, transaction boundary, 테스트 결과" [ref=e93]
+              - row "운영 책임 배포 후 문제가 생기면 어떻게 감지하고 되돌리는가 인프라·운영, 런타임 품질, 플랫폼 도구 runbook, log/metric/trace, rollback plan, incident note" [ref=e94]:
+                - cell "운영 책임" [ref=e95]
+                - cell "배포 후 문제가 생기면 어떻게 감지하고 되돌리는가" [ref=e96]
+                - cell "인프라·운영, 런타임 품질, 플랫폼 도구" [ref=e97]
+                - cell "runbook, log/metric/trace, rollback plan, incident note" [ref=e98]
+              - row "AI Native 실행 AI를 빠른 초안이 아니라 검증 가능한 작업 시스템으로 쓰는가 LLM, AX 실무 task spec, context package, eval dataset, security fixture, cost/latency trace" [ref=e99]:
+                - cell "AI Native 실행" [ref=e100]
+                - cell "AI를 빠른 초안이 아니라 검증 가능한 작업 시스템으로 쓰는가" [ref=e101]
+                - cell "LLM, AX 실무" [ref=e102]
+                - cell "task spec, context package, eval dataset, security fixture, cost/latency trace" [ref=e103]
+              - row "제품 경험 기능이 실제 사용 흐름과 의사결정 구조에 맞는가 디자인 실무, 프론트엔드 인터랙션·품질 IA, user flow, accessibility check, QA gate, before/after 화면" [ref=e104]:
+                - cell "제품 경험" [ref=e105]
+                - cell "기능이 실제 사용 흐름과 의사결정 구조에 맞는가" [ref=e106]
+                - cell "디자인 실무, 프론트엔드 인터랙션·품질" [ref=e107]
+                - cell "IA, user flow, accessibility check, QA gate, before/after 화면" [ref=e108]
+              - row "증거화 내가 한 판단과 결과를 면접·포트폴리오에서 방어할 수 있는가 면접·커리어, 실무 도구 PR, ADR, metric, 장애기록, 포트폴리오 narrative, 30초·90초 답변" [ref=e109]:
+                - cell "증거화" [ref=e110]
+                - cell "내가 한 판단과 결과를 면접·포트폴리오에서 방어할 수 있는가" [ref=e111]
+                - cell "면접·커리어, 실무 도구" [ref=e112]
+                - cell "PR, ADR, metric, 장애기록, 포트폴리오 narrative, 30초·90초 답변" [ref=e113]
+          - heading "기능 하나를 끝까지 책임지는 작동 모델" [level=3] [ref=e114]
+          - paragraph [ref=e115]: 실무에서는 메뉴가 따로 움직이지 않습니다. 요구사항을 받는 순간부터 사용자 흐름, UI 상태, API 계약, 데이터·권한, 배포·관측, AI 보조, 커리어 증거가 하나의 작업 단위로 이어져야 합니다.
+          - generic [ref=e116]:
+            - generic [ref=e117]: 요구사항
+            - generic [ref=e118]: →
+            - generic [ref=e119]: 사용자 흐름
+            - generic [ref=e120]: →
+            - generic [ref=e121]: UI 상태
+            - generic [ref=e122]: →
+            - generic [ref=e123]: API 계약
+            - generic [ref=e124]: →
+            - generic [ref=e125]: 데이터·권한
+            - generic [ref=e126]: →
+            - generic [ref=e127]: 배포·관측
+            - generic [ref=e128]: →
+            - generic [ref=e129]: AI 보조
+            - generic [ref=e130]: →
+            - generic [ref=e131]: 커리어 증거
+          - table [ref=e132]:
+            - rowgroup [ref=e133]:
+              - row "작업 순간 연결할 핸드북 확인 질문" [ref=e134]:
+                - columnheader "작업 순간" [ref=e135]
+                - columnheader "연결할 핸드북" [ref=e136]
+                - columnheader "확인 질문" [ref=e137]
+              - row "요구사항을 받았을 때 디자인 실무 · 개발 핸드북 · LLM 작업 표준 사용자 문제, 비목표, 수용 기준, AI에 줄 context package가 분리됐는가" [ref=e138]:
+                - cell "요구사항을 받았을 때" [ref=e139]
+                - cell "디자인 실무 · 개발 핸드북 · LLM 작업 표준" [ref=e140]
+                - cell "사용자 문제, 비목표, 수용 기준, AI에 줄 context package가 분리됐는가" [ref=e141]
+              - row "구현을 시작할 때 프론트엔드 · 백엔드 · 데이터 · Java/Spring 화면 상태, 요청/응답, 트랜잭션, 권한, 실패 응답이 같은 모델을 공유하는가" [ref=e142]:
+                - cell "구현을 시작할 때" [ref=e143]
+                - cell "프론트엔드 · 백엔드 · 데이터 · Java/Spring" [ref=e144]
+                - cell "화면 상태, 요청/응답, 트랜잭션, 권한, 실패 응답이 같은 모델을 공유하는가" [ref=e145]
+              - row "리뷰를 요청할 때 품질·릴리스 · LLM 평가 · AX 실행 루프 테스트, 접근성, 성능, eval, security fixture, 비용/지연 근거가 있는가" [ref=e146]:
+                - cell "리뷰를 요청할 때" [ref=e147]
+                - cell "품질·릴리스 · LLM 평가 · AX 실행 루프" [ref=e148]
+                - cell "테스트, 접근성, 성능, eval, security fixture, 비용/지연 근거가 있는가" [ref=e149]
+              - row "배포할 때 인프라·운영 · 플랫폼 도구 · 런타임 품질 환경 차이, rollback, 로그·메트릭·트레이스, 장애 시나리오가 준비됐는가" [ref=e150]:
+                - cell "배포할 때" [ref=e151]
+                - cell "인프라·운영 · 플랫폼 도구 · 런타임 품질" [ref=e152]
+                - cell "환경 차이, rollback, 로그·메트릭·트레이스, 장애 시나리오가 준비됐는가" [ref=e153]
+              - row "경험을 정리할 때 면접·커리어 문제, 선택지, 버린 대안, 결과 지표, 후속 개선을 증거로 말할 수 있는가" [ref=e154]:
+                - cell "경험을 정리할 때" [ref=e155]
+                - cell "면접·커리어" [ref=e156]
+                - cell "문제, 선택지, 버린 대안, 결과 지표, 후속 개선을 증거로 말할 수 있는가" [ref=e157]
+          - generic [ref=e158]:
+            - generic [ref=e159]: 읽는 기준
+            - paragraph [ref=e160]: 어떤 문서를 보든 “이 지식이 기능의 어느 경계에서 쓰이는가”를 먼저 묻습니다. CS는 설계 근거가 되고, 프론트엔드는 사용자 흐름이 되고, 백엔드는 상태와 권한이 되고, 운영은 신뢰성이 되고, AI Native는 작업 속도와 검증 체계가 되고, 커리어 문서는 그 모든 판단을 증거로 바꿉니다.
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]: HOME-02
+            - heading "전체 로드맵" [level=2] [ref=e164]
+          - paragraph [ref=e165]: 전체 흐름은 CS·시스템·런타임·측정 기본기에서 출발해, 화면과 서버, 데이터와 운영, LLM/AX 실행 체계, 제품 경험 설계, 커리어 증거로 확장됩니다.
+          - generic [ref=e166]:
+            - generic [ref=e167]: 홈
+            - generic [ref=e168]: →
+            - generic [ref=e169]: 개발 핸드북
+            - generic [ref=e170]: →
+            - generic [ref=e171]: LLM
+            - generic [ref=e172]: →
+            - generic [ref=e173]: 인프라·운영
+            - generic [ref=e174]: →
+            - generic [ref=e175]: AX 실무
+            - generic [ref=e176]: →
+            - generic [ref=e177]: 디자인 실무
+            - generic [ref=e178]: →
+            - generic [ref=e179]: 실무 도구
+            - generic [ref=e180]: →
+            - generic [ref=e181]: 면접·커리어
+          - table [ref=e182]:
+            - rowgroup [ref=e183]:
+              - row "축 핵심 질문 도달해야 할 상태" [ref=e184]:
+                - columnheader "축" [ref=e185]
+                - columnheader "핵심 질문" [ref=e186]
+                - columnheader "도달해야 할 상태" [ref=e187]
+              - row "기본기 복잡도, 시스템 자원, 런타임, 측정을 판단 근거로 쓰는가 CS, OS, 네트워크, 언어 런타임, 통계·측정으로 설계 선택을 설명" [ref=e188]:
+                - cell "기본기" [ref=e189]
+                - cell "복잡도, 시스템 자원, 런타임, 측정을 판단 근거로 쓰는가" [ref=e190]
+                - cell "CS, OS, 네트워크, 언어 런타임, 통계·측정으로 설계 선택을 설명" [ref=e191]
+              - row "제품 화면 사용자가 빠르고 명확하게 목적을 달성하는가 렌더링, 접근성, 성능, 테스트, 배포를 함께 판단" [ref=e192]:
+                - cell "제품 화면" [ref=e193]
+                - cell "사용자가 빠르고 명확하게 목적을 달성하는가" [ref=e194]
+                - cell "렌더링, 접근성, 성능, 테스트, 배포를 함께 판단" [ref=e195]
+              - row "서버와 데이터 요청, 상태, 트랜잭션, 권한이 안전하게 설계되었는가 API 계약, DB, 인증, 아키텍처, 장애 대응을 연결" [ref=e196]:
+                - cell "서버와 데이터" [ref=e197]
+                - cell "요청, 상태, 트랜잭션, 권한이 안전하게 설계되었는가" [ref=e198]
+                - cell "API 계약, DB, 인증, 아키텍처, 장애 대응을 연결" [ref=e199]
+              - row "인프라 경계 패킷이 어떤 주소, 경로, 정책을 거쳐 이동하는가 VPC, 라우팅, 방화벽, DNS, VPN 문제를 설명하고 디버깅" [ref=e200]:
+                - cell "인프라 경계" [ref=e201]
+                - cell "패킷이 어떤 주소, 경로, 정책을 거쳐 이동하는가" [ref=e202]
+                - cell "VPC, 라우팅, 방화벽, DNS, VPN 문제를 설명하고 디버깅" [ref=e203]
+              - row "전달 시스템 변경이 반복 가능하고 되돌릴 수 있게 배포되는가 CI/CD, IaC, 컨테이너, 관측 가능성, 신뢰성을 운영" [ref=e204]:
+                - cell "전달 시스템" [ref=e205]
+                - cell "변경이 반복 가능하고 되돌릴 수 있게 배포되는가" [ref=e206]
+                - cell "CI/CD, IaC, 컨테이너, 관측 가능성, 신뢰성을 운영" [ref=e207]
+              - row "AI Native 실행 AI와 LLM 기능이 검증 가능한 변경과 제품 기능으로 닫히는가 context package, eval dataset, security fixture, cost/latency trace, approval gate 활용" [ref=e208]:
+                - cell "AI Native 실행" [ref=e209]
+                - cell "AI와 LLM 기능이 검증 가능한 변경과 제품 기능으로 닫히는가" [ref=e210]
+                - cell "context package, eval dataset, security fixture, cost/latency trace, approval gate 활용" [ref=e211]
+              - row "디자인 실무 기능이 실제 사용 흐름과 의사결정 구조에 맞는가 문제 정의, IA, user flow에서 UI 시스템, AX 인터랙션, QA까지 연결" [ref=e212]:
+                - cell "디자인 실무" [ref=e213]
+                - cell "기능이 실제 사용 흐름과 의사결정 구조에 맞는가" [ref=e214]
+                - cell "문제 정의, IA, user flow에서 UI 시스템, AX 인터랙션, QA까지 연결" [ref=e215]
+              - row "실무 도구 반복 작업을 빠르고 안전하게 처리하는 절차가 있는가 치트시트, 환경 설정, 빌드, 설정, 릴리스 절차를 재사용" [ref=e216]:
+                - cell "실무 도구" [ref=e217]
+                - cell "반복 작업을 빠르고 안전하게 처리하는 절차가 있는가" [ref=e218]
+                - cell "치트시트, 환경 설정, 빌드, 설정, 릴리스 절차를 재사용" [ref=e219]
+        - generic [ref=e220]:
+          - generic [ref=e221]:
+            - generic [ref=e222]: HOME-03
+            - heading "학습 순서" [level=2] [ref=e223]
+          - paragraph [ref=e224]: 순서대로 읽되, 모든 문서를 한 번에 끝내려 하지 말고 현재 프로젝트에서 바로 검증할 수 있는 주제부터 실험합니다.
+          - table [ref=e225]:
+            - rowgroup [ref=e226]:
+              - row "단계 읽을 메뉴 목표 실전 과제" [ref=e227]:
+                - columnheader "단계" [ref=e228]
+                - columnheader "읽을 메뉴" [ref=e229]
+                - columnheader "목표" [ref=e230]
+                - columnheader "실전 과제" [ref=e231]
+              - row "1 개발 핸드북 CS, 시스템, 런타임, 측정 기본기를 제품 개발 판단으로 전환 자료구조 선택, syscall/resource trace, benchmark evidence packet을 하나씩 작성" [ref=e232]:
+                - cell "1" [ref=e233]
+                - cell "개발 핸드북" [ref=e234]
+                - cell "CS, 시스템, 런타임, 측정 기본기를 제품 개발 판단으로 전환" [ref=e235]
+                - cell "자료구조 선택, syscall/resource trace, benchmark evidence packet을 하나씩 작성" [ref=e236]
+              - row "2 개발 핸드북 프론트엔드와 백엔드의 화면·API·DB·보안 경계 이해 기능 하나를 UI 상태, API 계약, 트랜잭션, 실패 응답까지 설계" [ref=e237]:
+                - cell "2" [ref=e238]
+                - cell "개발 핸드북" [ref=e239]
+                - cell "프론트엔드와 백엔드의 화면·API·DB·보안 경계 이해" [ref=e240]
+                - cell "기능 하나를 UI 상태, API 계약, 트랜잭션, 실패 응답까지 설계" [ref=e241]
+              - row "3 LLM LLM 기능을 prompt, RAG, eval, security, operations 체계로 제품화 AI Native Definition of Done으로 task spec, eval dataset, cost/latency trace를 제출" [ref=e242]:
+                - cell "3" [ref=e243]
+                - cell "LLM" [ref=e244]
+                - cell "LLM 기능을 prompt, RAG, eval, security, operations 체계로 제품화" [ref=e245]
+                - cell "AI Native Definition of Done으로 task spec, eval dataset, cost/latency trace를 제출" [ref=e246]
+              - row "4 인프라·운영 네트워크 경로, 배포, 관측, 장애 대응의 기본기 확보 서비스 요청이 브라우저에서 서버까지 가는 경로와 배포 후 확인 절차를 설명" [ref=e247]:
+                - cell "4" [ref=e248]
+                - cell "인프라·운영" [ref=e249]
+                - cell "네트워크 경로, 배포, 관측, 장애 대응의 기본기 확보" [ref=e250]
+                - cell "서비스 요청이 브라우저에서 서버까지 가는 경로와 배포 후 확인 절차를 설명" [ref=e251]
+              - row "5 AX 실무 AI 작업을 검증 가능한 실행 루프와 거버넌스로 통제 작업 하나를 Plan → Act → Verify → Reflect episode로 기록" [ref=e252]:
+                - cell "5" [ref=e253]
+                - cell "AX 실무" [ref=e254]
+                - cell "AI 작업을 검증 가능한 실행 루프와 거버넌스로 통제" [ref=e255]
+                - cell "작업 하나를 Plan → Act → Verify → Reflect episode로 기록" [ref=e256]
+              - row "6 디자인 실무 문제 정의·IA·Flow와 Layout·Form·Component·System·QA를 연결 핵심 흐름 하나를 IA, user flow, interaction checklist, QA gate로 검증" [ref=e257]:
+                - cell "6" [ref=e258]
+                - cell "디자인 실무" [ref=e259]
+                - cell "문제 정의·IA·Flow와 Layout·Form·Component·System·QA를 연결" [ref=e260]
+                - cell "핵심 흐름 하나를 IA, user flow, interaction checklist, QA gate로 검증" [ref=e261]
+              - row "7 실무 도구 치트시트, 환경 설정, 빌드·릴리스 절차를 작업 루프로 정리 반복 명령과 리뷰 체크리스트를 프로젝트 runbook에 반영" [ref=e262]:
+                - cell "7" [ref=e263]
+                - cell "실무 도구" [ref=e264]
+                - cell "치트시트, 환경 설정, 빌드·릴리스 절차를 작업 루프로 정리" [ref=e265]
+                - cell "반복 명령과 리뷰 체크리스트를 프로젝트 runbook에 반영" [ref=e266]
+              - row "8 면접·커리어 앞 단계의 산출물을 답변, 포트폴리오, 직무별 포지셔닝으로 정리 대표 질문 하나를 30초·90초 답변과 꼬리질문으로 녹음" [ref=e267]:
+                - cell "8" [ref=e268]
+                - cell "면접·커리어" [ref=e269]
+                - cell "앞 단계의 산출물을 답변, 포트폴리오, 직무별 포지셔닝으로 정리" [ref=e270]
+                - cell "대표 질문 하나를 30초·90초 답변과 꼬리질문으로 녹음" [ref=e271]
+        - generic [ref=e272]:
+          - generic [ref=e273]:
+            - generic [ref=e274]: HOME-04
+            - heading "메뉴별 목적" [level=2] [ref=e275]
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - generic [ref=e278]:
+                - generic [ref=e279]: 홈
+                - text: starting point
+              - generic [ref=e280]: 전체 로드맵과 학습 순서를 확인하는 입구입니다. 세부 문서를 바로 찾기보다 어떤 묶음에서 시작할지 결정합니다.
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - generic [ref=e283]: 면접·커리어
+                - text: interview & positioning
+              - generic [ref=e284]: 기술면접, 프로젝트 심층 답변, 컬처·압박 대응, 개인화 포지셔닝을 한곳에 묶었습니다. 면접 준비와 직무별 답변 조정은 여기서 시작합니다.
+            - generic [ref=e285]:
+              - generic [ref=e286]:
+                - generic [ref=e287]: 개발 핸드북
+                - text: product engineering
+              - generic [ref=e288]: CS 기초, 컴퓨터 시스템, 언어 런타임, 응용 측정에서 시작해 프론트엔드, 백엔드, 데이터, 아키텍처, 런타임 품질, Java·Spring·JPA와 백엔드 예시를 제품 개발의 한 흐름으로 봅니다.
+            - generic [ref=e289]:
+              - generic [ref=e290]:
+                - generic [ref=e291]: LLM
+                - text: ai native systems
+              - generic [ref=e292]: LLM 기능을 모델 호출이 아니라 prompt contract, RAG, eval, security, cost/latency operations, AI Native Definition of Done으로 다룹니다.
+            - generic [ref=e293]:
+              - generic [ref=e294]:
+                - generic [ref=e295]: 인프라·운영
+                - text: delivery & reliability
+              - generic [ref=e296]: 네트워크 인프라와 DevOps를 묶었습니다. 요청 경로, VPC, DNS, VPN, CI/CD, 컨테이너, 관측 가능성, 장애 대응을 한 운영 흐름으로 정리합니다.
+            - generic [ref=e297]:
+              - generic [ref=e298]:
+                - generic [ref=e299]: AX 실무
+                - text: ai execution
+              - generic [ref=e300]: AI 작업을 조직, 자동화, 컨텍스트, 하네스, 루프, 거버넌스 관점으로 관리합니다. 생성 결과보다 검증 가능한 실행 체계를 다룹니다.
+            - generic [ref=e301]:
+              - generic [ref=e302]:
+                - generic [ref=e303]: 디자인 실무
+                - text: product experience
+              - generic [ref=e304]: 문제 정의, 정보구조, 사용자 흐름을 먼저 잡고 레이아웃, 인터랙션, 폼, 컴포넌트, 디자인 시스템, AX 인터랙션, 접근성, QA로 실행 품질을 검증합니다.
+            - generic [ref=e305]:
+              - generic [ref=e306]:
+                - generic [ref=e307]: 실무 도구
+                - text: working tools
+              - generic [ref=e308]: 치트시트, 환경 설정, 빌드, 설정, DB 시딩, CI/CD, 로그처럼 매일 반복하는 작업 절차를 빠르게 찾는 메뉴입니다.
+        - generic [ref=e309]:
+          - generic [ref=e310]:
+            - generic [ref=e311]: HOME-05
+            - heading "핸드북 사용법" [level=2] [ref=e312]
+          - paragraph [ref=e313]: 이 문서는 읽는 자료라기보다 작업 전에 확인하고, 작업 중에 기준으로 삼고, 작업 후에 회고하는 체크리스트에 가깝습니다.
+          - table [ref=e314]:
+            - rowgroup [ref=e315]:
+              - row "상황 사용 방식 남길 산출물" [ref=e316]:
+                - columnheader "상황" [ref=e317]
+                - columnheader "사용 방식" [ref=e318]
+                - columnheader "남길 산출물" [ref=e319]
+              - row "새 기능 시작 관련 메뉴의 개요와 실패 모드를 먼저 읽고 범위를 정한다 요구사항, 비목표, 수용 기준, 리스크 목록" [ref=e320]:
+                - cell "새 기능 시작" [ref=e321]
+                - cell "관련 메뉴의 개요와 실패 모드를 먼저 읽고 범위를 정한다" [ref=e322]
+                - cell "요구사항, 비목표, 수용 기준, 리스크 목록" [ref=e323]
+              - row "설계 판단 각 메뉴의 트레이드오프 표를 보고 선택 근거를 적는다 ADR, API 계약, 데이터 모델, 운영 가정" [ref=e324]:
+                - cell "설계 판단" [ref=e325]
+                - cell "각 메뉴의 트레이드오프 표를 보고 선택 근거를 적는다" [ref=e326]
+                - cell "ADR, API 계약, 데이터 모델, 운영 가정" [ref=e327]
+              - row "구현 중 개발 핸드북의 기본기와 예시, LLM 작업 표준, AX 실무의 루프, 디자인 실무의 상태 기준, 실무 도구의 명령어를 참고한다 작은 diff, 테스트, eval report, 검증 로그" [ref=e328]:
+                - cell "구현 중" [ref=e329]
+                - cell "개발 핸드북의 기본기와 예시, LLM 작업 표준, AX 실무의 루프, 디자인 실무의 상태 기준, 실무 도구의 명령어를 참고한다" [ref=e330]
+                - cell "작은 diff, 테스트, eval report, 검증 로그" [ref=e331]
+              - row "리뷰 전 보안, 접근성, 성능, 관측 가능성, 배포 위험을 점검한다 리뷰 체크리스트, 남은 리스크, 롤백 방법" [ref=e332]:
+                - cell "리뷰 전" [ref=e333]
+                - cell "보안, 접근성, 성능, 관측 가능성, 배포 위험을 점검한다" [ref=e334]
+                - cell "리뷰 체크리스트, 남은 리스크, 롤백 방법" [ref=e335]
+              - row "장애·버그 네트워크, 백엔드, 프론트엔드, DevOps 문서를 따라 계층별로 좁힌다 재현 조건, 원인 가설, 검증 결과, 재발 방지책" [ref=e336]:
+                - cell "장애·버그" [ref=e337]
+                - cell "네트워크, 백엔드, 프론트엔드, DevOps 문서를 따라 계층별로 좁힌다" [ref=e338]
+                - cell "재현 조건, 원인 가설, 검증 결과, 재발 방지책" [ref=e339]
+          - generic [ref=e340]:
+            - generic [ref=e341]: 운영 기준
+            - paragraph [ref=e342]: 좋은 개발자는 “내 코드가 맞다”가 아니라 “이 변경이 어떤 조건에서 안전하고, 어떤 조건에서 깨지며, 깨졌을 때 어떻게 알 수 있는가”를 설명합니다. 이 핸드북의 모든 메뉴는 그 설명을 더 잘하기 위한 재료입니다.
+        - generic [ref=e343]:
+          - generic [ref=e344]:
+            - generic [ref=e345]: HOME-06
+            - heading "실전 루프" [level=2] [ref=e346]
+          - paragraph [ref=e347]: 한 주 단위로 아래 루프를 반복하면 읽은 지식이 프로젝트 판단으로 전환됩니다.
+          - generic [ref=e348]:
+            - generic [ref=e349]: WEEKLY HANDBOOK LOOP
+            - text: 1. 이번 주 작업 하나를 고른다
+            - text: 2. 관련 메뉴 2개 이상을 연결해 읽는다
+            - text: 3. 작업 전 가정과 수용 기준을 적는다
+            - text: 4. 구현 또는 분석을 진행한다
+            - text: 5. 테스트·빌드·수동 시나리오로 검증한다
+            - text: 6. 놓친 지식, 실패한 가정, 다음에 볼 문서를 기록한다
+            - button "스니펫 복사" [ref=e350] [cursor=pointer]:
+              - img [ref=e351]
+              - generic [ref=e354]: Copy
+          - table [ref=e355]:
+            - rowgroup [ref=e356]:
+              - row "훈련 주제 연결할 메뉴 완료 기준" [ref=e357]:
+                - columnheader "훈련 주제" [ref=e358]
+                - columnheader "연결할 메뉴" [ref=e359]
+                - columnheader "완료 기준" [ref=e360]
+              - row "로그인 기능 프론트엔드 보안 · 인증과 보안 · 테스트 전략 세션, 토큰, 오류 상태, 회귀 테스트를 함께 설명" [ref=e361]:
+                - cell "로그인 기능" [ref=e362]
+                - cell "프론트엔드 보안 · 인증과 보안 · 테스트 전략" [ref=e363]
+                - cell "세션, 토큰, 오류 상태, 회귀 테스트를 함께 설명" [ref=e364]
+              - row "기본기 강화 CS 기초와 알고리즘 사고 · 컴퓨터 시스템 · 응용 수학·측정 복잡도, resource limit, p95/p99 측정으로 설계 선택을 설명" [ref=e365]:
+                - cell "기본기 강화" [ref=e366]
+                - cell "CS 기초와 알고리즘 사고 · 컴퓨터 시스템 · 응용 수학·측정" [ref=e367]
+                - cell "복잡도, resource limit, p95/p99 측정으로 설계 선택을 설명" [ref=e368]
+              - row "느린 화면 성능과 지표 · DB · 관측 가능성 Lighthouse, 쿼리, API latency 중 병목을 분리" [ref=e369]:
+                - cell "느린 화면" [ref=e370]
+                - cell "성능과 지표 · DB · 관측 가능성" [ref=e371]
+                - cell "Lighthouse, 쿼리, API latency 중 병목을 분리" [ref=e372]
+              - row "VPN 연동 네트워크 인프라 · IPsec VPN · 네트워크 디버깅 L3/L4/L7 순서로 통신 실패 지점을 설명" [ref=e373]:
+                - cell "VPN 연동" [ref=e374]
+                - cell "네트워크 인프라 · IPsec VPN · 네트워크 디버깅" [ref=e375]
+                - cell "L3/L4/L7 순서로 통신 실패 지점을 설명" [ref=e376]
+              - row "배포 개선 CI 파이프라인 · CD와 배포 전략 · 보안과 신뢰성 자동 검증, 승인, 롤백, 배포 후 확인을 문서화" [ref=e377]:
+                - cell "배포 개선" [ref=e378]
+                - cell "CI 파이프라인 · CD와 배포 전략 · 보안과 신뢰성" [ref=e379]
+                - cell "자동 검증, 승인, 롤백, 배포 후 확인을 문서화" [ref=e380]
+              - row "AI 작업 위임 AI Native 작업 표준 · AX 하네스 · Loop Engineering · 검증과 평가 task spec, context package, eval dataset, security fixture, cost/latency trace를 episode로 보관" [ref=e381]:
+                - cell "AI 작업 위임" [ref=e382]
+                - cell "AI Native 작업 표준 · AX 하네스 · Loop Engineering · 검증과 평가" [ref=e383]
+                - cell "task spec, context package, eval dataset, security fixture, cost/latency trace를 episode로 보관" [ref=e384]
+        - generic [ref=e385]:
+          - generic [ref=e386]:
+            - generic [ref=e387]: HOME-07
+            - heading "메뉴 바로가기" [level=2] [ref=e388]
+          - paragraph [ref=e389]: 상단 메뉴 구조를 그대로 따라가되, 자주 시작하는 문서만 먼저 열 수 있게 묶었습니다. 처음 읽을 때는 각 묶음의 첫 문서로 들어가고, 작업 중에는 목적에 맞는 대표 문서로 바로 이동합니다.
+          - generic "홈 바로가기" [ref=e390]:
+            - link "개발 핸드북 CS 기초와 알고리즘 사고 기본기, 시스템 사고, 구현 판단의 시작점" [ref=e391] [cursor=pointer]:
+              - /url: "#handbook-engineering-cs-foundations"
+              - generic [ref=e392]: 개발 핸드북
+              - strong [ref=e393]: CS 기초와 알고리즘 사고
+              - generic [ref=e394]: 기본기, 시스템 사고, 구현 판단의 시작점
+            - link "개발 핸드북 프론트엔드 성능·진단 렌더링, LCP/INP, DevTools 진단을 빠르게 확인" [ref=e395] [cursor=pointer]:
+              - /url: "#handbook-engineering-frontend-performance"
+              - generic [ref=e396]: 개발 핸드북
+              - strong [ref=e397]: 프론트엔드 성능·진단
+              - generic [ref=e398]: 렌더링, LCP/INP, DevTools 진단을 빠르게 확인
+            - link "개발 핸드북 백엔드 핵심 API, DB, 트랜잭션, 장애 대응 설계의 기준점" [ref=e399] [cursor=pointer]:
+              - /url: "#handbook-engineering-backend-core"
+              - generic [ref=e400]: 개발 핸드북
+              - strong [ref=e401]: 백엔드 핵심
+              - generic [ref=e402]: API, DB, 트랜잭션, 장애 대응 설계의 기준점
+            - link "LLM LLM 로드맵 AI Native 개발자 모델과 학습 순서 확인" [ref=e403] [cursor=pointer]:
+              - /url: "#handbook-llm-roadmap"
+              - generic [ref=e404]: LLM
+              - strong [ref=e405]: LLM 로드맵
+              - generic [ref=e406]: AI Native 개발자 모델과 학습 순서 확인
+            - link "AI Native 훈련 역량 매트릭스·진단 현재 수준과 다음 실습 산출물을 판정" [ref=e407] [cursor=pointer]:
+              - /url: "#handbook-ai-native-competency-map"
+              - generic [ref=e408]: AI Native 훈련
+              - strong [ref=e409]: 역량 매트릭스·진단
+              - generic [ref=e410]: 현재 수준과 다음 실습 산출물을 판정
+            - link "AI Native 훈련 실습 랩 fixture, 산출물, 통과 기준으로 훈련 시작" [ref=e411] [cursor=pointer]:
+              - /url: "#handbook-ai-native-labs"
+              - generic [ref=e412]: AI Native 훈련
+              - strong [ref=e413]: 실습 랩
+              - generic [ref=e414]: fixture, 산출물, 통과 기준으로 훈련 시작
+            - link "AI Native 훈련 템플릿 키트 context, eval, security, episode 템플릿 사용" [ref=e415] [cursor=pointer]:
+              - /url: "#handbook-ai-native-toolkit"
+              - generic [ref=e416]: AI Native 훈련
+              - strong [ref=e417]: 템플릿 키트
+              - generic [ref=e418]: context, eval, security, episode 템플릿 사용
+            - link "인프라·운영 인프라·운영 로드맵 요청 경로, 배포, 관측, 장애 대응을 연결" [ref=e419] [cursor=pointer]:
+              - /url: "#handbook-operations-roadmap"
+              - generic [ref=e420]: 인프라·운영
+              - strong [ref=e421]: 인프라·운영 로드맵
+              - generic [ref=e422]: 요청 경로, 배포, 관측, 장애 대응을 연결
+            - link "인프라·운영 AI·LLM 운영 Addendum groundedness, schema, cost, fallback 지표 운영" [ref=e423] [cursor=pointer]:
+              - /url: "#handbook-operations-ai-llm-operations"
+              - generic [ref=e424]: 인프라·운영
+              - strong [ref=e425]: AI·LLM 운영 Addendum
+              - generic [ref=e426]: groundedness, schema, cost, fallback 지표 운영
+            - link "인프라·운영 Incident Response·Rollback·DR 장애 대응과 복구 절차를 바로 점검" [ref=e427] [cursor=pointer]:
+              - /url: "#handbook-operations-incident-dr"
+              - generic [ref=e428]: 인프라·운영
+              - strong [ref=e429]: Incident Response·Rollback·DR
+              - generic [ref=e430]: 장애 대응과 복구 절차를 바로 점검
+            - link "AX 실무 AX 기반·조직 적용 AI 작업 방식을 팀 실행 체계로 정리" [ref=e431] [cursor=pointer]:
+              - /url: "#handbook-practice-ax-foundation"
+              - generic [ref=e432]: AX 실무
+              - strong [ref=e433]: AX 기반·조직 적용
+              - generic [ref=e434]: AI 작업 방식을 팀 실행 체계로 정리
+            - link "디자인 실무 디자인 기반·사용자 흐름 문제 정의, IA, 사용자 흐름부터 잡기" [ref=e435] [cursor=pointer]:
+              - /url: "#handbook-practice-design-foundation"
+              - generic [ref=e436]: 디자인 실무
+              - strong [ref=e437]: 디자인 기반·사용자 흐름
+              - generic [ref=e438]: 문제 정의, IA, 사용자 흐름부터 잡기
+            - link "디자인 실무 AI 제품 UX·신뢰 설계 불확실성, 출처, 검토, handoff 흐름 설계" [ref=e439] [cursor=pointer]:
+              - /url: "#handbook-design-ai-product-ux"
+              - generic [ref=e440]: 디자인 실무
+              - strong [ref=e441]: AI 제품 UX·신뢰 설계
+              - generic [ref=e442]: 불확실성, 출처, 검토, handoff 흐름 설계
+            - link "실무 도구 실무 치트시트 모음 명령, 판정 기준, 상황별 실행 카드를 빠르게 사용" [ref=e443] [cursor=pointer]:
+              - /url: "#handbook-practice-cheat-sheets"
+              - generic [ref=e444]: 실무 도구
+              - strong [ref=e445]: 실무 치트시트 모음
+              - generic [ref=e446]: 명령, 판정 기준, 상황별 실행 카드를 빠르게 사용
+            - link "실무 도구 실무 준비·작업 루프 환경 설정, 반복 루프, 작업 준비 절차 확인" [ref=e447] [cursor=pointer]:
+              - /url: "#handbook-practice-workflow-setup"
+              - generic [ref=e448]: 실무 도구
+              - strong [ref=e449]: 실무 준비·작업 루프
+              - generic [ref=e450]: 환경 설정, 반복 루프, 작업 준비 절차 확인
+            - link "면접·커리어 면접 전략·커리어 포지셔닝 경험을 답변과 포지셔닝으로 정리" [ref=e451] [cursor=pointer]:
+              - /url: "#handbook-career-strategy-foundation"
+              - generic [ref=e452]: 면접·커리어
+              - strong [ref=e453]: 면접 전략·커리어 포지셔닝
+              - generic [ref=e454]: 경험을 답변과 포지셔닝으로 정리
+            - link "면접·커리어 개인 이력 정리 프로젝트, 성과, 경험 경계를 증거로 정리" [ref=e455] [cursor=pointer]:
+              - /url: "#handbook-career-personal-history"
+              - generic [ref=e456]: 면접·커리어
+              - strong [ref=e457]: 개인 이력 정리
+              - generic [ref=e458]: 프로젝트, 성과, 경험 경계를 증거로 정리
+            - link "면접·커리어 AI Native 포트폴리오 평가, 보안, 운영 증거로 AI 경험을 설명" [ref=e459] [cursor=pointer]:
+              - /url: "#handbook-career-ai-native-portfolio"
+              - generic [ref=e460]: 면접·커리어
+              - strong [ref=e461]: AI Native 포트폴리오
+              - generic [ref=e462]: 평가, 보안, 운영 증거로 AI 경험을 설명
+        - generic [ref=e463]:
+          - generic [ref=e464]:
+            - generic [ref=e465]: HOME-08
+            - heading "AI Native 빠른 진단" [level=2] [ref=e466]
+          - paragraph [ref=e467]: AI Native 역량은 도구 사용 경험이 아니라 재현 가능한 증거로 판정합니다. 아래 질문에 산출물로 답하지 못하면 해당 역량은 아직 훈련 대상입니다.
+          - table [ref=e468]:
+            - rowgroup [ref=e469]:
+              - row "질문 초기 신호 실무 가능 신호 독립 운영 신호" [ref=e470]:
+                - columnheader "질문" [ref=e471]
+                - columnheader "초기 신호" [ref=e472]
+                - columnheader "실무 가능 신호" [ref=e473]
+                - columnheader "독립 운영 신호" [ref=e474]
+              - row "LLM 품질을 어떻게 판단하는가 샘플 답변을 본다 golden set과 eval report를 만든다 CI gate와 운영 지표로 연결한다" [ref=e475]:
+                - cell "LLM 품질을 어떻게 판단하는가" [ref=e476]
+                - cell "샘플 답변을 본다" [ref=e477]
+                - cell "golden set과 eval report를 만든다" [ref=e478]
+                - cell "CI gate와 운영 지표로 연결한다" [ref=e479]
+              - row "RAG 오답을 어떻게 고치는가 프롬프트를 고친다 retrieval/generation 실패를 분리한다 index freshness와 citation precision을 운영한다" [ref=e480]:
+                - cell "RAG 오답을 어떻게 고치는가" [ref=e481]
+                - cell "프롬프트를 고친다" [ref=e482]
+                - cell "retrieval/generation 실패를 분리한다" [ref=e483]
+                - cell "index freshness와 citation precision을 운영한다" [ref=e484]
+              - row "에이전트 도구 호출을 어떻게 통제하는가 도구 schema를 정의한다 approval과 idempotency를 둔다 audit/replay/kill switch를 설계한다" [ref=e485]:
+                - cell "에이전트 도구 호출을 어떻게 통제하는가" [ref=e486]
+                - cell "도구 schema를 정의한다" [ref=e487]
+                - cell "approval과 idempotency를 둔다" [ref=e488]
+                - cell "audit/replay/kill switch를 설계한다" [ref=e489]
+              - row "AI 작업 경험을 어떻게 설명하는가 사용한 모델을 말한다 구현 기능과 테스트를 말한다 평가, 보안, 운영, 실패 대응 증거를 말한다" [ref=e490]:
+                - cell "AI 작업 경험을 어떻게 설명하는가" [ref=e491]
+                - cell "사용한 모델을 말한다" [ref=e492]
+                - cell "구현 기능과 테스트를 말한다" [ref=e493]
+                - cell "평가, 보안, 운영, 실패 대응 증거를 말한다" [ref=e494]
+          - generic [ref=e495]:
+            - generic [ref=e496]: 첫 행동
+            - paragraph [ref=e497]: "진단 결과가 애매하면 `AI Native 훈련 > 역량 매트릭스·진단`에서 현재 수준을 정하고, `실습 랩`에서 가장 약한 축 하나를 fixture로 통과시킵니다."
+        - generic [ref=e498]:
+          - generic [ref=e499]:
+            - generic [ref=e500]: HOME-09
+            - heading "훈련 트랙" [level=2] [ref=e501]
+          - paragraph [ref=e502]: 모든 문서를 순서대로 소비하지 않습니다. 현재 목표에 맞는 트랙을 고르고, 각 트랙의 산출물로 완료 여부를 판단합니다.
+          - table [ref=e503]:
+            - rowgroup [ref=e504]:
+              - row "트랙 읽을 순서 완료 산출물" [ref=e505]:
+                - columnheader "트랙" [ref=e506]
+                - columnheader "읽을 순서" [ref=e507]
+                - columnheader "완료 산출물" [ref=e508]
+              - row "입문 실무 준비 → CS → 시스템 → 언어 → 프론트/백엔드 핵심 개발 환경 체크, 작은 기능 구현 기록, 디버깅 노트" [ref=e509]:
+                - cell "입문" [ref=e510]
+                - cell "실무 준비 → CS → 시스템 → 언어 → 프론트/백엔드 핵심" [ref=e511]
+                - cell "개발 환경 체크, 작은 기능 구현 기록, 디버깅 노트" [ref=e512]
+              - row "풀스택 제품 개발 디자인 기반 → 프론트엔드 핵심 → 백엔드 핵심 → 데이터 → 인증·보안 → 릴리스 user flow, API 계약, DB 변경 계획, 테스트 리포트" [ref=e513]:
+                - cell "풀스택 제품 개발" [ref=e514]
+                - cell "디자인 기반 → 프론트엔드 핵심 → 백엔드 핵심 → 데이터 → 인증·보안 → 릴리스" [ref=e515]
+                - cell "user flow, API 계약, DB 변경 계획, 테스트 리포트" [ref=e516]
+              - row "AI Native 제품 LLM 로드맵 → 프롬프팅 → RAG → 평가 → Agent → 보안 → 운영 prompt contract, eval dataset, retrieval report, security report" [ref=e517]:
+                - cell "AI Native 제품" [ref=e518]
+                - cell "LLM 로드맵 → 프롬프팅 → RAG → 평가 → Agent → 보안 → 운영" [ref=e519]
+                - cell "prompt contract, eval dataset, retrieval report, security report" [ref=e520]
+              - row "AX 작업 체계 AX 기반 → 실행 루프 → 확장/거버넌스 → 템플릿 키트 context package, episode log, failure taxonomy, approval trace" [ref=e521]:
+                - cell "AX 작업 체계" [ref=e522]
+                - cell "AX 기반 → 실행 루프 → 확장/거버넌스 → 템플릿 키트" [ref=e523]
+                - cell "context package, episode log, failure taxonomy, approval trace" [ref=e524]
+              - row "커리어 증거화 커리어 전략 → 프로젝트 심층 → AI Native 포트폴리오 evidence pack, 30초/90초 답변, portfolio README" [ref=e525]:
+                - cell "커리어 증거화" [ref=e526]
+                - cell "커리어 전략 → 프로젝트 심층 → AI Native 포트폴리오" [ref=e527]
+                - cell "evidence pack, 30초/90초 답변, portfolio README" [ref=e528]
+        - generic [ref=e529]:
+          - generic [ref=e530]:
+            - generic [ref=e531]: HOME-10
+            - heading "완료 산출물 지도" [level=2] [ref=e532]
+          - paragraph [ref=e533]: 핸드북을 읽었다는 증거는 요약문이 아니라 다음 작업에서 재사용 가능한 산출물입니다.
+          - table [ref=e534]:
+            - rowgroup [ref=e535]:
+              - row "그룹 완료 산출물" [ref=e536]:
+                - columnheader "그룹" [ref=e537]
+                - columnheader "완료 산출물" [ref=e538]
+              - row "개발 핸드북 기능 설계 메모, API 계약서, DB 변경 계획, 테스트 리포트" [ref=e539]:
+                - cell "개발 핸드북" [ref=e540]
+                - cell "기능 설계 메모, API 계약서, DB 변경 계획, 테스트 리포트" [ref=e541]
+              - row "LLM prompt contract, eval dataset, retrieval eval report, security review packet" [ref=e542]:
+                - cell "LLM" [ref=e543]
+                - cell "prompt contract, eval dataset, retrieval eval report, security review packet" [ref=e544]
+              - row "AI Native 훈련 competency scorecard, lab result, context package, red-team report, replay trace" [ref=e545]:
+                - cell "AI Native 훈련" [ref=e546]
+                - cell "competency scorecard, lab result, context package, red-team report, replay trace" [ref=e547]
+              - row "인프라·운영 SLO 초안, dashboard spec, incident runbook, rollback/fallback plan" [ref=e548]:
+                - cell "인프라·운영" [ref=e549]
+                - cell "SLO 초안, dashboard spec, incident runbook, rollback/fallback plan" [ref=e550]
+              - row "AX 실무 task spec, context package, agent episode log, verification log" [ref=e551]:
+                - cell "AX 실무" [ref=e552]
+                - cell "task spec, context package, agent episode log, verification log" [ref=e553]
+              - row "디자인 실무 problem brief, flow map, uncertainty matrix, handoff packet" [ref=e554]:
+                - cell "디자인 실무" [ref=e555]
+                - cell "problem brief, flow map, uncertainty matrix, handoff packet" [ref=e556]
+              - row "실무 도구 반복 명령 runbook, 환경 체크리스트, 릴리스 체크리스트" [ref=e557]:
+                - cell "실무 도구" [ref=e558]
+                - cell "반복 명령 runbook, 환경 체크리스트, 릴리스 체크리스트" [ref=e559]
+              - row "면접·커리어 evidence pack, STAR 답변, 시스템 설계 다이어그램, 공개 README" [ref=e560]:
+                - cell "면접·커리어" [ref=e561]
+                - cell "evidence pack, STAR 답변, 시스템 설계 다이어그램, 공개 README" [ref=e562]
+        - generic [ref=e563]:
+          - text: DEV HANDBOOK HOME · V1 · 2026-06
+          - text: "PRINCIPLE : 지식은 메뉴별로 배우되, 실무 판단은 경계면에서 연결한다."
+      - region "실무 예시" [ref=e564]:
+        - generic [ref=e565]:
+          - generic [ref=e566]: PRACTICE
+          - heading "실무 예시" [level=2] [ref=e567]
+        - paragraph [ref=e568]: 새 프로젝트를 맡았을 때 핸드북을 읽는 순서를 정한다.
+        - generic [ref=e569]:
+          - generic "현장 조건" [ref=e570]:
+            - heading "현장 조건" [level=3] [ref=e571]
+            - list [ref=e572]:
+              - listitem [ref=e573]: 읽는 순서보다 현재 프로젝트의 병목을 먼저 정한다.
+              - listitem [ref=e574]: 학습 주제는 이번 주 작업과 연결되는 것만 고른다.
+          - generic "실행 절차" [ref=e575]:
+            - heading "실행 절차" [level=3] [ref=e576]
+            - list [ref=e577]:
+              - listitem [ref=e578]: 홈의 로드맵에서 현재 약한 영역을 표시한다.
+              - listitem [ref=e579]: 이번 스프린트 작업과 연결되는 메뉴 2개를 고른다.
+              - listitem [ref=e580]: 작업 전 수용 기준과 검증 명령을 노트로 남긴다.
+          - generic "검증 증거" [ref=e581]:
+            - heading "검증 증거" [level=3] [ref=e582]
+            - list [ref=e583]:
+              - listitem [ref=e584]: 학습 로드맵
+              - listitem [ref=e585]: 이번 주 적용 항목
+              - listitem [ref=e586]: 검증 로그
+          - generic "실패 신호" [ref=e587]:
+            - heading "실패 신호" [level=3] [ref=e588]
+            - list [ref=e589]:
+              - listitem [ref=e590]: 문서를 많이 읽었지만 실제 작업 산출물이 없다.
+              - listitem [ref=e591]: 메뉴를 순서대로 소비하느라 현재 병목을 놓친다.
+        - generic [ref=e592]:
+          - generic [ref=e593]: 완료 기준
+          - paragraph [ref=e594]: 학습이 독서로 끝나지 않고 실제 작업의 체크리스트가 된다.
+        - generic [ref=e595]:
+          - text: 리뷰 질문
+          - list [ref=e596]:
+            - listitem [ref=e597]: 이번 주 작업의 가장 약한 경계면은 어디인가?
+            - listitem [ref=e598]: 읽은 내용을 어떤 PR이나 운영 절차에 반영했는가?
+  - navigation "문서 이동":
+    - generic [ref=e599]:
+      - button "이전 항목 없음" [disabled] [ref=e600]:
+        - img [ref=e601]
+        - generic [ref=e603]:
+          - generic [ref=e604]: 이전
+          - generic [ref=e605]: 없음
+      - button "맨 위로 이동" [disabled] [ref=e606]:
+        - img [ref=e607]
+        - generic [ref=e609]: Top
+      - 'button "다음 항목: 00 CS 기초와 알고리즘 사고" [ref=e610] [cursor=pointer]':
+        - generic [ref=e611]:
+          - generic [ref=e612]: 다음
+          - generic [ref=e613]: 00 CS 기초와 알고리즘 사고
+        - img [ref=e614]

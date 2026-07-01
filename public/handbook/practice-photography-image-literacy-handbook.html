@@ -8,115 +8,227 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-<div class="nav-brand">PRACTICE · PHOTOGRAPHY</div>
+  <div class="nav-brand">PRACTICE · PHOTOGRAPHY</div>
   <div class="nav-title">사진학 · 이미지 리터러시</div>
-  <a href="#photo-literacy-map"><span class="code">MAP</span>사진학 기본 개념</a>
+  <a href="#photo-literacy-map"><span class="code">MAP</span>사진학 지도</a>
   <a href="#exposure-triangle"><span class="code">EXP</span>Exposure triangle</a>
   <a href="#lens-perspective"><span class="code">LENS</span>렌즈·원근·심도</a>
-  <a href="#light-composition"><span class="code">LIGHT</span>빛과 구도</a>
-  <a href="#image-quality-review"><span class="code">RUBRIC</span>Image quality review</a>
+  <a href="#light-composition"><span class="code">LIGHT</span>빛과 조명</a>
+  <a href="#color-processing"><span class="code">PROC</span>색·현상 처리</a>
+  <a href="#composition-photo"><span class="code">COMP</span>구도 심화</a>
+  <a href="#image-quality-review"><span class="code">RUBRIC</span>이미지 품질 리뷰</a>
+  <a href="#image-pipeline"><span class="code">PIPE</span>이미지 파이프라인</a>
   <a href="#ai-stock-risk"><span class="code">RISK</span>AI·스톡 이미지 점검</a>
+  <a href="#glossary"><span class="code">GLOSSARY</span>용어집</a>
 </nav>
 <main>
 <header class="hero">
   <div class="hero-serial">
     <span>DOC : PRACTICE-PHOTOGRAPHY-IMAGE-LITERACY</span>
-    <span>SCOPE : PHOTOGRAPHY · IMAGE SELECTION · AI IMAGE RISK</span>
+    <span>SCOPE : PHOTOGRAPHY · IMAGE PIPELINE · AI IMAGE RISK</span>
     <span>LANG : KO</span>
   </div>
   <h1>사진학·이미지 리터러시</h1>
-  <p class="hero-sub">Exposure triangle, aperture, shutter speed, ISO, focal length, depth of field, light direction부터 AI image와 stock image 판단까지 제품과 브랜드에 필요한 이미지 읽기 능력을 정리합니다.</p>
-  <div class="hero-meta">PHOTOGRAPHY IMAGE LITERACY MAP · MARKER: artifact-ready · UPDATED 2026-07</div>
+  <p class="hero-sub">사진은 분위기를 채우는 장식이 아니라 정보와 신뢰를 전달하는 시각 증거다. 이 문서는 exposure triangle, 렌즈와 심도, 빛과 조명, 색·현상 처리, 구도 심화를 원리로 정리하고, 개발자 관점에서 이미지를 웹으로 전달하는 파이프라인(포맷 선택, srcset, LCP, alt text)과 AI·스톡 이미지의 권리·정확성·bias 리스크까지 실무 판단으로 착지시킨다.</p>
+  <div class="hero-meta">PHOTOGRAPHY · IMAGE PIPELINE · AI RISK · MARKER: artifact-ready · UPDATED 2026-07</div>
 </header>
 
 <section id="photo-literacy-map">
-<div class="ch-head"><span class="ch-code">MAP</span><h2>사진학·이미지 리터러시</h2></div>
-<p class="lede">사진은 분위기를 채우는 배경이 아니라 정보와 신뢰를 전달하는 시각 증거입니다. 제품 사진, 프로필 사진, 리포트 이미지, 랜딩 페이지 비주얼은 촬영 조건과 편집 의도가 읽혀야 합니다.</p>
+<div class="ch-head"><span class="ch-code">MAP</span><h2>사진학 지도</h2></div>
+<p class="lede">이미지를 잘 쓴다는 것은 예쁜 사진을 고르는 감각이 아니라, 촬영 조건과 편집 의도를 읽고 목적에 맞는지 판단하는 능력이다. 제품 사진, 프로필, 리포트 그래픽, 랜딩 hero는 각각 다른 정보를 전달해야 하고, 잘못된 노출·왜곡·과보정은 곧 신뢰의 손상이다. 아래 표는 이 문서가 다루는 영역과 각 영역에서 물어야 할 핵심 질문을 요약한다.</p>
 <table>
-<tr><th>영역</th><th>핵심 질문</th><th>산출물</th></tr>
-<tr><td>Exposure</td><td>밝기, 움직임, 노이즈가 의도에 맞는가</td><td>EXPOSURE TRIANGLE 판단</td></tr>
-<tr><td>Lens</td><td>초점거리와 왜곡이 대상을 정직하게 보여주는가</td><td>렌즈·원근 리뷰</td></tr>
-<tr><td>Light</td><td>빛 방향과 질감이 형태와 분위기를 설명하는가</td><td>light direction 분석</td></tr>
-<tr><td>Composition</td><td>구도와 crop이 정보 이해를 돕는가</td><td>구도·크롭 비평</td></tr>
-<tr><td>Ethics</td><td>편집, 보정, AI 생성이 신뢰를 해치지 않는가</td><td>AI STOCK IMAGE RISK CHECKLIST</td></tr>
+<tr><th>영역</th><th>핵심 질문</th><th>실무 판단·산출물</th></tr>
+<tr><td>Exposure</td><td>밝기·움직임·노이즈가 의도에 맞는가</td><td>날아간 하이라이트/뭉갠 그림자는 정보 손실 — 재촬영 또는 반려</td></tr>
+<tr><td>Lens &amp; DOF</td><td>초점거리와 심도가 대상을 정직하게 보여주는가</td><td>제품 왜곡, 인물 비율 확인 — 렌즈·크롭 리뷰</td></tr>
+<tr><td>Light</td><td>빛 방향·질·색온도가 형태와 톤을 설명하는가</td><td>three-point 세팅 점검, 혼합 광원 경계</td></tr>
+<tr><td>Color / Process</td><td>화이트밸런스와 grading이 사실을 지키는가</td><td>제품·피부색 검증, retouch ethics 라인</td></tr>
+<tr><td>Composition</td><td>구도와 crop이 정보 이해를 돕는가</td><td>시선 흐름·negative space·crop tension 비평</td></tr>
+<tr><td>Pipeline</td><td>웹 전달에서 화질·용량·성능이 균형인가</td><td>포맷 선택, srcset, LCP, alt text</td></tr>
+<tr><td>AI / Stock</td><td>진정성·권리·정확성·bias가 문제없는가</td><td>AI STOCK RISK CHECKLIST</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준</span><p>이미지 리뷰는 "예쁜가"가 아니라 "이 이미지가 여기서 하려는 판단을 도와주는가"로 시작한다. 운영 분석 대시보드의 프로젝트 카드 썸네일이라면, 감성적인 풍경 스톡 사진보다 실제 사업 부지·측정 현장 사진 한 장이 신뢰를 만든다.</p></div>
 </section>
 
 <section id="exposure-triangle">
-<div class="ch-head"><span class="ch-code">EXP</span><h2>EXPOSURE TRIANGLE</h2></div>
-<p class="lede">Exposure triangle은 aperture, shutter speed, ISO의 관계입니다. 세 값은 밝기뿐 아니라 심도, 움직임 표현, 노이즈를 함께 바꾸기 때문에 사진의 정보성과 감정 톤을 결정합니다.</p>
+<div class="ch-head"><span class="ch-code">EXP</span><h2>Exposure triangle</h2></div>
+<p class="lede">Exposure triangle은 aperture(조리개), shutter speed(셔터 속도), ISO(감도)의 상호관계다. 세 값은 어떤 조합으로든 같은 밝기(exposure value)를 만들 수 있지만, 밝기만 같을 뿐 심도·움직임 표현·노이즈는 전혀 달라진다. 그래서 "적정 노출"은 하나가 아니라, 무엇을 살릴지에 따라 선택하는 것이다. 개발자에게 이 관계는 "같은 결과를 내는 여러 파라미터 조합, 각각 side effect가 다른" 구조로 이해하면 정확하다.</p>
 <table>
-<tr><th>요소</th><th>영향</th><th>실무 판단</th></tr>
-<tr><td>Aperture</td><td>렌즈 조리개와 depth of field</td><td>얕은 심도는 주제를 분리하지만 제품 정보 일부를 흐릴 수 있다.</td></tr>
-<tr><td>Shutter speed</td><td>움직임 정지 또는 흐림</td><td>빠른 셔터는 명확성을, 느린 셔터는 동세와 분위기를 만든다.</td></tr>
-<tr><td>ISO</td><td>센서 감도와 노이즈</td><td>높은 ISO의 거친 질감이 의도인지 품질 저하인지 구분한다.</td></tr>
-<tr><td>Exposure value</td><td>전체 밝기 균형</td><td>하이라이트가 날아가거나 그림자가 뭉개지면 정보가 사라진다.</td></tr>
+<tr><th>요소</th><th>밝기 외 동시 변화</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>Aperture (f-number)</td><td>depth of field. 낮은 f값(f/1.8)은 얕은 심도, 높은 f값(f/11)은 깊은 심도</td><td>얕은 심도는 주제를 분리하지만 제품 라벨·디테일 일부를 흐린다. 제품컷은 f/8 내외로 전면 초점 확보</td></tr>
+<tr><td>Shutter speed</td><td>움직임. 빠른 셔터는 정지, 느린 셔터는 motion blur</td><td>느린 셔터는 손떨림/피사체 흔들림 위험. 삼각대 없이 1/60초 이하는 blur 신호. 동세 연출인지 실수인지 구분</td></tr>
+<tr><td>ISO</td><td>노이즈. 높을수록 감도↑, 그레인·색 노이즈↑</td><td>어두운 현장에서 ISO를 올려 얻은 거친 질감이 의도된 무드인지 품질 저하인지 판단. 브랜드 제품컷에서는 저ISO 우선</td></tr>
+<tr><td>Exposure value (EV)</td><td>전체 밝기 균형과 dynamic range 배분</td><td>하이라이트 clipping(날아감)과 shadow crush(뭉갬)는 복구 불가 정보 손실. 히스토그램 양끝이 벽에 붙으면 경고</td></tr>
 </table>
+<div class="callout gm"><span class="co-label">보조 노트</span><p>stop이라는 단위는 빛의 양이 2배/절반 되는 간격이다. 조리개 한 stop, 셔터 한 stop, ISO 한 stop은 서로 교환 가능하다. "f값은 한 stop 열고, 셔터는 한 stop 빠르게"로 밝기를 유지한 채 심도만 바꾸는 식의 trade-off가 exposure triangle의 핵심이다.</p></div>
+<div class="callout warn"><span class="co-label">실패 신호</span><p>날아간 하이라이트(순백 255)와 뭉갠 그림자(순흑 0)는 후보정으로 되살릴 수 없다. RAW라도 clipping된 채널은 데이터 자체가 없다. 리뷰 시 히스토그램을 보고, 양 끝에 데이터가 잘려 쌓여 있으면 재촬영을 요청한다.</p></div>
 </section>
 
 <section id="lens-perspective">
-<div class="ch-head"><span class="ch-code">LENS</span><h2>Focal length, perspective, depth of field</h2></div>
-<p class="lede">focal length는 단순 확대가 아니라 원근감과 얼굴·제품 형태의 인상을 바꿉니다. 광각은 공간감을 주지만 왜곡을 만들고, 망원은 배경을 압축해 대상을 차분하게 보이게 합니다.</p>
+<div class="ch-head"><span class="ch-code">LENS</span><h2>렌즈·원근·심도</h2></div>
+<p class="lede">focal length(초점거리)는 단순한 확대 배율이 아니다. 초점거리가 바뀌면 원근감, 배경 압축, 얼굴·제품 형태의 인상이 함께 바뀐다. 흔히 "광각은 왜곡, 망원은 압축"이라고 하지만, 실제 왜곡의 원인은 렌즈보다 촬영 거리(카메라와 대상의 거리)다. 가까이서 광각으로 찍으면 가까운 부분이 과장되고, 멀리서 망원으로 찍으면 원근이 눌린다.</p>
 <table>
-<tr><th>개념</th><th>시각 효과</th><th>위험</th></tr>
-<tr><td>Wide angle</td><td>공간과 가까움을 강조</td><td>제품 모서리와 얼굴 비율이 왜곡될 수 있다.</td></tr>
-<tr><td>Normal lens</td><td>사람 눈에 가까운 자연스러운 관계</td><td>특징이 약해 보일 수 있어 구도와 빛이 중요하다.</td></tr>
-<tr><td>Telephoto</td><td>배경 압축과 주제 분리</td><td>공간 정보가 사라져 맥락 전달이 약해질 수 있다.</td></tr>
-<tr><td>Depth of field</td><td>초점 면으로 주제와 배경을 분리</td><td>너무 얕으면 필요한 정보까지 흐려진다.</td></tr>
-<tr><td>Lens distortion</td><td>직선, 비율, 얼굴 형태의 변형</td><td>제품 신뢰성과 인물 인상을 해칠 수 있다.</td></tr>
+<tr><th>개념</th><th>시각 효과</th><th>위험·실무 판단</th></tr>
+<tr><td>Wide angle (광각, ~24mm 이하)</td><td>공간감·가까움 강조, 넓은 화각</td><td>가까이 찍으면 코·손·제품 모서리가 과장. 인물 클로즈업 부적합. 공간·건축·현장 전경에 유효</td></tr>
+<tr><td>Normal (표준, ~50mm)</td><td>사람 눈에 가까운 자연스러운 원근</td><td>왜곡이 적어 정직하지만 임팩트가 약할 수 있어 빛·구도로 보완</td></tr>
+<tr><td>Telephoto (망원, 85mm+)</td><td>배경 압축, 주제 분리, 안정된 비율</td><td>인물 인상이 차분·고급스러워짐(85~135mm가 인물 표준). 공간 맥락은 사라짐</td></tr>
+<tr><td>Depth of field (심도)</td><td>초점 면의 두께로 주제/배경 분리</td><td>얕으면 bokeh로 주제 강조, 너무 얕으면 필요한 정보까지 흐려짐. 심도는 조리개·초점거리·촬영거리 함께 결정</td></tr>
+<tr><td>Lens distortion (왜곡)</td><td>직선 휘어짐(barrel/pincushion), 비율 변형</td><td>제품의 곧은 모서리가 휘면 신뢰 하락. 인물 얼굴 비율 왜곡은 인상 조작. 보정 프로파일로 교정</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준</span><p>인물·프로필 사진은 85mm 내외에서 적당한 거리를 두고 찍으면 얼굴 비율이 자연스럽다. 셀카나 광각 근접 촬영이 코를 크게 보이게 하는 이유가 이것이다. 제품 사진은 왜곡이 적은 표준~중망원 + 적당한 조리개(f/8 전후)로 전면 초점을 확보하고, 후보정에서 렌즈 프로파일로 왜곡을 교정한다.</p></div>
 </section>
 
 <section id="light-composition">
-<div class="ch-head"><span class="ch-code">LIGHT</span><h2>Light direction and composition</h2></div>
+<div class="ch-head"><span class="ch-code">LIGHT</span><h2>빛과 조명</h2></div>
+<p class="lede">사진은 결국 빛을 기록하는 것이다. 같은 대상도 빛의 방향·질·색온도가 바뀌면 형태와 감정 톤이 완전히 달라진다. 방향은 입체감을, 질(hard/soft)은 그림자의 성격을, 색온도는 분위기와 색 정확성을 결정한다. 인공광을 다룰 때는 three-point lighting이 기본 문법이다.</p>
 <table>
-<tr><th>요소</th><th>판단 질문</th><th>실무 적용</th></tr>
-<tr><td>Light direction</td><td>빛이 형태를 설명하는가 감추는가</td><td>측면광은 입체감을, 정면광은 평면적 명확성을 만든다.</td></tr>
-<tr><td>Light quality</td><td>딱딱한 그림자인가 부드러운 그림자인가</td><td>고급 제품은 질감과 하이라이트 제어가 중요하다.</td></tr>
-<tr><td>Color temperature</td><td>따뜻함과 차가움이 브랜드 톤과 맞는가</td><td>혼합 광원은 피부색과 제품 색을 불안정하게 만든다.</td></tr>
-<tr><td>Rule of thirds</td><td>주제가 안정적인 위치에 있는가</td><td>기본 안정감을 만들되 기계적으로 적용하지 않는다.</td></tr>
-<tr><td>Leading lines</td><td>선이 시선을 주제로 이끄는가</td><td>건축, 공간, 제품 상세 컷에서 유용하다.</td></tr>
-<tr><td>Negative space</td><td>여백이 텍스트와 주제를 살리는가</td><td>랜딩 페이지 hero나 광고 소재에서 카피 공간을 확보한다.</td></tr>
-<tr><td>Crop tension</td><td>잘린 위치가 의도적인가 불안정한가</td><td>관절, 제품 모서리, 로고 일부가 어색하게 잘리지 않게 한다.</td></tr>
+<tr><th>요소</th><th>의미</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>빛 방향</td><td>정면광은 평면적 명확성, 측면광은 입체감, 역광은 실루엣·분리, top light는 극적</td><td>제품 질감을 보이려면 측면광. 정면 플래시는 형태를 납작하게 만들고 그림자를 지운다</td></tr>
+<tr><td>빛의 질 (hard/soft)</td><td>광원이 대상 대비 작으면 hard(선명하고 진한 그림자), 크면 soft(부드러운 그라데이션)</td><td>고급 제품·인물은 대개 soft. hard light는 질감·드라마를 강조하되 결점도 드러냄</td></tr>
+<tr><td>색온도 (Kelvin)</td><td>낮으면 따뜻(주광색 텅스텐 ~3200K), 높으면 차가움(그늘 ~7000K)</td><td>혼합 광원(창빛+형광등)은 피부·제품색을 불안정하게 만듦. 광원 통일 또는 화이트밸런스 기준 고정</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준 · Three-point lighting</span><p><strong>Key light</strong>는 주광으로 형태의 기본 밝기와 그림자 방향을 만든다(보통 대상 45도 측상단). <strong>Fill light</strong>는 key 반대편에서 그림자를 부드럽게 채워 대비를 조절한다(key보다 약하게 — key:fill 비율로 명암비 결정). <strong>Rim light(back light)</strong>는 대상 뒤에서 윤곽을 밝혀 배경과 분리한다. 이 세 축만 이해하면 대부분의 인물·제품 조명을 읽고 재현할 수 있다.</p></div>
+<div class="callout gm"><span class="co-label">보조 노트 · 그림자 제어</span><p>그림자의 부드러움은 "광원이 대상에게 보이는 크기"로 결정된다. 소프트박스·엄브렐러·디퓨저는 작은 스트로브를 큰 면광원으로 바꿔 그림자를 부드럽게 한다. 광원을 대상에 가까이 붙일수록(상대 크기가 커져) 더 부드러워진다. 반대로 그림자를 살리고 싶으면 광원을 작게, 멀리 둔다. 반사판(reflector)은 fill light의 저렴한 대안으로, key의 빛을 되받아 그림자 쪽을 채운다.</p></div>
+</section>
+
+<section id="color-processing">
+<div class="ch-head"><span class="ch-code">PROC</span><h2>색·현상 처리</h2></div>
+<p class="lede">촬영 후 색과 톤을 다루는 단계다. 개발자에게 이 단계는 "raw 데이터를 렌더링 가능한 표현으로 encode하는 파이프라인"에 가깝다. white balance로 색 기준을 잡고, RAW/JPEG 중 어디서 작업할지 정하고, tone curve와 color grading으로 톤을 설계한다. 여기서 넘지 말아야 할 선이 retouching ethics — 보기 좋게 만드는 것과 사실을 바꾸는 것은 다르다.</p>
+<table>
+<tr><th>개념</th><th>의미</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>White balance</td><td>흰색이 흰색으로 보이도록 색온도·tint 기준을 잡는 것</td><td>WB가 틀어지면 제품색·피부색이 실제와 달라져 신뢰·반품 문제. gray card로 기준 확보가 안전</td></tr>
+<tr><td>RAW vs JPEG</td><td>RAW는 센서 원데이터(넓은 관용도, 큰 용량), JPEG는 카메라가 이미 현상·압축한 결과</td><td>보정 여지가 필요하면 RAW. WB·노출을 나중에 되돌릴 수 있음. JPEG는 clipping·WB가 이미 구워져 복구 어려움</td></tr>
+<tr><td>Tone curve</td><td>입력 밝기→출력 밝기 매핑. 대비·밝기·톤 분포를 제어</td><td>S자 커브는 대비 강화. 그림자를 들어올리면 매트한 느낌. 과하면 밴딩·톤 분리</td></tr>
+<tr><td>Color grading</td><td>색으로 무드를 설계(shadow/midtone/highlight별 색조)</td><td>브랜드 톤과 일관되게. 제품 정확색을 해치지 않는 범위. 시리즈 간 grading 일관성 유지</td></tr>
+<tr><td>Retouching</td><td>먼지·잡티·산만한 요소 제거, 노출 국소 조정</td><td>정보를 "명확히" 하는 선까지. 결함·실사용 조건을 숨기면 왜곡</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">Retouch ethics · 사실 왜곡 금지</span><p>보정은 "실제를 더 잘 보이게"와 "실제가 아닌 것을 보이게" 사이에 선이 있다. 조명·색을 정리해 실물에 가깝게 만드는 것은 정당하다. 하지만 제품의 실제 색을 바꾸거나(반품·과대광고), 결함을 지우거나, 인물 신체를 실제와 다르게 변형하거나, 리포트의 데이터 시각화를 오해하게 만드는 편집은 금지다. 공공·규제 산업 맥락에서는 사실 왜곡이 규제·신뢰 리스크로 직결된다. 원칙: "이 이미지를 보고 내린 판단이, 실물을 봤을 때도 유효한가?"</p></div>
+</section>
+
+<section id="composition-photo">
+<div class="ch-head"><span class="ch-code">COMP</span><h2>구도 심화</h2></div>
+<p class="lede">구도는 프레임 안에서 시선을 배치하는 문법이다. 규칙 자체가 목적이 아니라, 사람의 시지각(어디를 먼저 보고 어떻게 이동하는가)을 이용해 정보 우선순위를 만드는 도구다. 규칙은 안정감을 주지만 기계적으로 적용하면 밋밋해진다. 언제 따르고 언제 깰지가 실력이다.</p>
+<table>
+<tr><th>원리</th><th>작동 방식</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>Rule of thirds</td><td>3분할 교차점에 주제 배치 — 정중앙보다 동적 안정감</td><td>기본값으로 안전하나 기계적 적용은 단조로움. 대칭 의도면 중앙이 맞음</td></tr>
+<tr><td>Golden ratio</td><td>1:1.618 비례·나선형 배치로 자연스러운 흐름</td><td>thirds의 정교한 버전. 강제하지 말고 결과 검증용으로</td></tr>
+<tr><td>Leading lines</td><td>선(길·난간·시선)이 눈을 주제로 유도</td><td>건축·공간·제품 상세컷에 유효. 선이 프레임 밖으로 새면 시선이 이탈</td></tr>
+<tr><td>Framing</td><td>창·아치·전경 요소로 주제를 감싸 시선 고정</td><td>깊이감·맥락 부여. 과하면 주제를 가리거나 산만</td></tr>
+<tr><td>Symmetry / Pattern</td><td>대칭·반복이 질서와 리듬을 만듦</td><td>패턴 속 파격(break)이 강한 focal point. 미세한 어긋남은 불안정으로 읽힘</td></tr>
+<tr><td>Negative space</td><td>여백이 주제를 살리고 카피 공간을 확보</td><td>랜딩 hero·광고에서 텍스트 영역 확보. 여백이 목적 없으면 그냥 빈 컷</td></tr>
+<tr><td>Crop tension</td><td>잘린 위치가 만드는 긴장·리듬</td><td>관절·제품 모서리·로고 일부가 어정쩡하게 잘리면 실수로 읽힘. 의도적 crop은 대담하게</td></tr>
+</table>
+<div class="callout"><span class="co-label">실전 비평 · before/after</span><p><strong>Before:</strong> 운영 분석 대시보드 프로젝트 카드에 풍경 스톡 사진을 정중앙·꽉 채워 배치. 카드 위 텍스트(사업명·상태)가 이미지 위에 겹쳐 가독성 저하, 여백 없음. <strong>After:</strong> 실제 사업 부지 사진으로 교체하고, 상단 1/3에 하늘·여백을 두는 crop으로 그 위에 텍스트를 얹음(negative space 확보). 주제(설비/부지)를 thirds 교차점에 두어 시선 유도. 결과적으로 "감성"이 아니라 "이 사업이 실재한다"는 정보가 전달된다.</p></div>
 </section>
 
 <section id="image-quality-review">
-<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>IMAGE QUALITY REVIEW RUBRIC</h2></div>
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>이미지 품질 리뷰</h2></div>
+<p class="lede">이미지를 승인·반려할 때 감이 아니라 항목으로 본다. 아래 rubric은 리뷰의 최소 체크 축이다. 각 항목은 "좋은 상태"와 "탈락 신호"를 함께 두어, 무엇을 보면 반려해야 하는지 명확히 한다.</p>
 <table>
 <tr><th>검토 항목</th><th>좋은 상태</th><th>탈락 신호</th></tr>
-<tr><td>Resolution</td><td>표시 크기와 retina 환경에서 선명하다</td><td>확대 시 압축 artifact와 blur가 보인다.</td></tr>
-<tr><td>Compression</td><td>파일 크기와 품질이 균형을 이룬다</td><td>밴딩, 계단, 노이즈가 브랜드 품질을 낮춘다.</td></tr>
-<tr><td>Color correction</td><td>제품색, 피부색, 배경색이 안정적이다</td><td>화이트밸런스가 틀어져 실제 인상과 다르다.</td></tr>
-<tr><td>Retouching ethics</td><td>정보를 명확히 하되 사실을 왜곡하지 않는다</td><td>제품 결함이나 실제 사용 조건을 숨긴다.</td></tr>
-<tr><td>Context fit</td><td>UI, 랜딩, 포트폴리오, 리포트 목적에 맞다</td><td>예쁘지만 사용자가 판단할 정보가 부족하다.</td></tr>
+<tr><td>Resolution</td><td>표시 크기 및 retina(2x)에서 선명</td><td>확대 시 blur·업스케일 흔적, 픽셀 부족</td></tr>
+<tr><td>Compression</td><td>용량과 화질이 균형, artifact 없음</td><td>밴딩, blocky 계단, 색번짐이 품질을 낮춤</td></tr>
+<tr><td>Color</td><td>제품색·피부색·배경색이 안정, WB 정확</td><td>WB 틀어짐, 색 캐스트, 실물과 다른 색</td></tr>
+<tr><td>Retouch ethics</td><td>명확히 하되 사실을 지킴</td><td>결함·실사용 조건 은폐, 데이터 오도</td></tr>
+<tr><td>Context fit</td><td>UI·랜딩·리포트 목적에 맞는 정보 전달</td><td>예쁘지만 판단에 필요한 정보 없음</td></tr>
 </table>
 <div class="serial-card">
 <span class="sc-label">PHOTO BRIEF TEMPLATE</span>
-Purpose: 이미지를 어디에서 어떤 판단에 쓰는가<br>
-Subject: 무엇을 보여주고 무엇을 숨기지 말아야 하는가<br>
-Lighting: 방향, 질감, 색온도, 그림자 기준<br>
-Composition: 여백, crop, 텍스트 영역, 시선 흐름<br>
-Delivery: 비율, 해상도, 포맷, 압축, 대체 텍스트
+1. Purpose: 이미지를 어디에서 어떤 판단에 쓰는가<br>
+2. Subject: 무엇을 보여주고 무엇을 숨기지 말아야 하는가<br>
+3. Lighting: 방향, 질(hard/soft), 색온도, 그림자 기준<br>
+4. Lens/Framing: 초점거리, 심도, 크롭, 왜곡 허용 범위<br>
+5. Composition: 여백, 시선 흐름, 텍스트 영역 확보<br>
+6. Color: WB 기준(gray card), 브랜드 grading, 정확색 대상<br>
+7. Delivery: 비율, 해상도(1x/2x), 포맷, 압축 타깃, alt text<br>
+8. Ethics: 하지 말아야 할 편집(색 변경·결함 은폐 등) 명시
 </div>
 </section>
 
+<section id="image-pipeline">
+<div class="ch-head"><span class="ch-code">PIPE</span><h2>이미지 파이프라인</h2></div>
+<p class="lede">촬영·보정이 끝난 이미지를 웹으로 전달하는 단계는 프론트엔드 개발자의 직접 책임 영역이다. 화질과 용량, 성능(LCP)과 접근성(alt) 사이에서 판단해야 하고, 잘못하면 아무리 좋은 사진도 느리고 흐릿하게 나간다. 큰 흐름은 아래와 같다.</p>
+<div class="flow">
+  <span class="step">선별</span><span class="arr">→</span>
+  <span class="step">보정</span><span class="arr">→</span>
+  <span class="step">export</span><span class="arr">→</span>
+  <span class="step">포맷/압축</span><span class="arr">→</span>
+  <span class="step">srcset/sizes</span><span class="arr">→</span>
+  <span class="step">전달(LCP/alt)</span>
+</div>
+<table>
+<tr><th>포맷</th><th>특성</th><th>용도·판단</th></tr>
+<tr><td>AVIF</td><td>최신 코덱, 같은 화질에서 최소 용량, 넓은 색역·HDR</td><td>사진 우선 선택. 인코딩 느리고 구형 브라우저 미지원 — fallback 필요</td></tr>
+<tr><td>WebP</td><td>JPEG/PNG 대체, 손실·무손실·투명 지원, 지원 폭 넓음</td><td>AVIF fallback으로 견고. 사진·그래픽 모두 무난</td></tr>
+<tr><td>JPEG</td><td>손실 압축, 사진에 강함, 보편적 지원</td><td>최종 fallback. 투명 불가. 로고·라인아트엔 부적합</td></tr>
+<tr><td>PNG</td><td>무손실, 투명(alpha) 지원</td><td>투명 필요·스크린샷·평면 그래픽. 사진엔 용량 과다</td></tr>
+<tr><td>SVG</td><td>벡터, 무한 확대, 작은 용량</td><td>로고·아이콘·차트. 사진엔 부적합. XSS 위해 신뢰된 소스만</td></tr>
+</table>
+<div class="callout"><span class="co-label">실무 기준 · 반응형 이미지</span><p><code>srcset</code>은 브라우저에 여러 해상도 후보를 주고, <code>sizes</code>로 "이 이미지가 실제 레이아웃에서 차지할 폭"을 알려준다. 브라우저는 이 둘과 device pixel ratio를 조합해 가장 적합한 파일을 고른다. retina 대응은 같은 이미지를 2배 픽셀로 준비해 <code>srcset</code>의 <code>2x</code>(또는 <code>w</code> 서술자)로 제공하면 된다. 아트 디렉션(뷰포트별로 다른 크롭)이 필요하면 <code>&lt;picture&gt;</code>의 <code>&lt;source media=...&gt;</code>를 쓴다.</p></div>
+<pre class="snippet-card"><code>&lt;picture&gt;
+  &lt;source
+    type="image/avif"
+    srcset="hero-480.avif 480w, hero-960.avif 960w, hero-1440.avif 1440w"
+    sizes="(max-width: 600px) 100vw, 960px"&gt;
+  &lt;source
+    type="image/webp"
+    srcset="hero-480.webp 480w, hero-960.webp 960w, hero-1440.webp 1440w"
+    sizes="(max-width: 600px) 100vw, 960px"&gt;
+  &lt;img
+    src="hero-960.jpg"
+    srcset="hero-480.jpg 480w, hero-960.jpg 960w, hero-1440.jpg 1440w"
+    sizes="(max-width: 600px) 100vw, 960px"
+    width="960" height="540"
+    alt="제품 상세 히어로 이미지, 실제 사용 장면"
+    fetchpriority="high"&gt;
+&lt;/picture&gt;</code></pre>
+<table>
+<tr><th>성능·접근성 항목</th><th>의미</th><th>실무 판단</th></tr>
+<tr><td>LCP (Largest Contentful Paint)</td><td>대개 hero 이미지가 LCP 요소</td><td>hero엔 <code>fetchpriority="high"</code>, lazy 금지. preload 고려. Core Web Vitals 직결</td></tr>
+<tr><td>지연 로딩 (lazy)</td><td>뷰포트 밖 이미지 로드를 미룸</td><td>fold 아래 이미지에 <code>loading="lazy"</code>. hero엔 절대 쓰지 않음(LCP 지연)</td></tr>
+<tr><td>width/height 지정</td><td>레이아웃 예약으로 CLS 방지</td><td>속성으로 종횡비 예약 — 로드 중 layout shift 방지</td></tr>
+<tr><td>alt text</td><td>스크린리더·이미지 실패 시 대체</td><td>정보 전달 이미지는 내용을 서술, 순수 장식은 <code>alt=""</code>. "이미지"·파일명 나열 금지</td></tr>
+<tr><td>압축 타깃</td><td>화질과 용량의 균형점</td><td>사진은 눈으로 artifact 안 보이는 최소 품질(대략 q75~85). 자동 파이프라인이라도 결과를 샘플 검수</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">안티패턴</span><p>원본 4000px 이미지를 CSS로 200px에 욱여넣는 것. 사용자는 20배 큰 파일을 내려받고, 모바일에서 느려진다. 반드시 실제 표시 크기에 맞춰 리사이즈·다중 해상도를 준비한다. 또한 alt에 "image", "photo", 파일명(IMG_2931.jpg)을 넣는 것도 안티패턴 — 스크린리더 사용자에게 소음이다.</p></div>
+</section>
+
 <section id="ai-stock-risk">
-<div class="ch-head"><span class="ch-code">RISK</span><h2>AI STOCK IMAGE RISK CHECKLIST</h2></div>
-<p class="lede">스톡 이미지와 AI image는 빠르게 시각 분위기를 만들지만, 진정성·권리·정확성·브랜드 적합성 리스크를 동시에 만듭니다.</p>
+<div class="ch-head"><span class="ch-code">RISK</span><h2>AI·스톡 이미지 점검</h2></div>
+<p class="lede">스톡 이미지와 AI 생성 이미지는 빠르게 시각 분위기를 만들지만, 진정성·권리·정확성·bias·브랜드 적합성 리스크를 동시에 가져온다. 특히 공공·규제 산업 맥락에서는 "실재하지 않는 것을 실재처럼" 보이게 하는 것이 규제·신뢰 문제로 직결된다.</p>
 <table>
 <tr><th>리스크</th><th>질문</th><th>대응</th></tr>
-<tr><td>Authenticity</td><td>실제 제품과 팀, 고객 경험을 과장하지 않는가</td><td>핵심 증거 화면에는 실제 제품 이미지를 우선한다.</td></tr>
-<tr><td>Rights</td><td>라이선스, 초상권, 상표권, 학습 데이터 문제가 없는가</td><td>출처와 사용 범위를 기록한다.</td></tr>
-<tr><td>Accuracy</td><td>손, 텍스트, UI, 도구 형태가 틀리지 않는가</td><td>AI 생성물은 세부 구조를 확대 검수한다.</td></tr>
-<tr><td>Bias</td><td>인물, 직업, 문화 표현이 고정관념을 강화하지 않는가</td><td>다양성과 맥락 적합성을 검토한다.</td></tr>
-<tr><td>Brand fit</td><td>색, 조명, 구도, 질감이 브랜드 시각 언어와 맞는가</td><td>이미지 moodboard와 브랜드 audit에 연결한다.</td></tr>
+<tr><td>Authenticity</td><td>실제 제품·팀·고객 경험을 과장·조작하지 않는가</td><td>핵심 증거 화면(사업 부지·실측·팀)에는 실제 사진 우선. 스톡/AI는 배경 무드 한정</td></tr>
+<tr><td>Rights</td><td>라이선스·초상권·상표권·학습데이터 출처 문제가 없는가</td><td>출처·라이선스·사용 범위를 기록. 인물 사진은 model release 확인. 상표·로고 노출 주의</td></tr>
+<tr><td>Accuracy</td><td>손가락·텍스트·UI·도구·구조가 틀리지 않는가</td><td>AI 생성물은 손·글자·기계 구조를 확대 검수. 태양광 패널·설비 형태가 실제와 다르면 폐기</td></tr>
+<tr><td>Bias</td><td>인물·직업·문화 표현이 고정관념을 강화하지 않는가</td><td>다양성·맥락 적합성 검토. 특정 성별·인종에 역할 고정 경계</td></tr>
+<tr><td>Brand fit</td><td>색·조명·구도·질감이 브랜드 시각 언어와 맞는가</td><td>moodboard·브랜드 audit에 대조. 시리즈 간 톤 일관성 유지</td></tr>
 </table>
+<div class="callout risk"><span class="co-label">고위험 · AI 생성 이미지</span><p>AI 이미지의 저작권 지위는 관할·사례마다 불확실하다. "생성물에 저작권이 인정되지 않을 수 있다", "학습 데이터에 저작권·상표가 섞여 침해 소지가 있다", "실존 인물과 닮으면 초상권 문제"가 대표 리스크다. 실무에서는 (1) 사용 서비스의 상업 이용·소유권 약관을 확인하고, (2) 실존 인물·브랜드·저작물을 닮은 결과물은 피하고, (3) 사실 증거로 쓰이는 이미지(사업 실적, 데이터, 실제 현장)에는 AI 생성물을 쓰지 않는다. 이 영역은 법률 자문이 필요한 부분이며, 여기 서술은 원칙일 뿐 단정적 법 해석이 아니다.</p></div>
+</section>
+
+<section id="glossary">
+<div class="ch-head"><span class="ch-code">GLOSSARY</span><h2>용어집</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Aperture</b><span>조리개</span></div><div class="g-def">렌즈로 들어오는 빛의 양과 depth of field를 조절하는 구멍. f-number로 표기하며 값이 작을수록 많이 열림.</div></div>
+<div class="g-row"><div class="g-term"><b>Shutter speed</b><span>셔터 속도</span></div><div class="g-def">센서가 빛에 노출되는 시간. 빠르면 움직임 정지, 느리면 motion blur.</div></div>
+<div class="g-row"><div class="g-term"><b>ISO</b><span>감도</span></div><div class="g-def">센서의 빛 민감도. 높이면 어두운 곳에서 밝아지지만 노이즈가 늘어남.</div></div>
+<div class="g-row"><div class="g-term"><b>Exposure value (EV)</b><span>노출값</span></div><div class="g-def">조리개·셔터·ISO 조합이 만드는 전체 밝기 수준. 같은 EV라도 조합에 따라 심도·움직임이 다름.</div></div>
+<div class="g-row"><div class="g-term"><b>Depth of field</b><span>피사계 심도</span></div><div class="g-def">초점이 맞아 보이는 앞뒤 범위. 얕으면 배경 흐림(bokeh), 깊으면 전면 선명.</div></div>
+<div class="g-row"><div class="g-term"><b>Focal length</b><span>초점거리</span></div><div class="g-def">렌즈의 화각과 원근 인상을 결정하는 값(mm). 짧으면 광각, 길면 망원.</div></div>
+<div class="g-row"><div class="g-term"><b>White balance</b><span>화이트밸런스</span></div><div class="g-def">흰색이 흰색으로 보이도록 색온도·tint 기준을 맞추는 것. 틀어지면 색 캐스트 발생.</div></div>
+<div class="g-row"><div class="g-term"><b>RAW</b><span>로우 파일</span></div><div class="g-def">센서 원데이터를 담은 파일. 관용도가 넓어 노출·WB를 나중에 되돌리기 쉬움. 용량이 큼.</div></div>
+<div class="g-row"><div class="g-term"><b>Tone curve</b><span>톤 커브</span></div><div class="g-def">입력 밝기를 출력 밝기로 매핑하는 곡선. 대비·톤 분포를 제어.</div></div>
+<div class="g-row"><div class="g-term"><b>Color grading</b><span>컬러 그레이딩</span></div><div class="g-def">색으로 무드를 설계하는 후반 작업. shadow/midtone/highlight별 색조 조정.</div></div>
+<div class="g-row"><div class="g-term"><b>Three-point lighting</b><span>3점 조명</span></div><div class="g-def">key·fill·rim 세 광원으로 형태·명암비·분리를 만드는 기본 조명 구성.</div></div>
+<div class="g-row"><div class="g-term"><b>srcset / sizes</b><span>반응형 이미지 속성</span></div><div class="g-def">여러 해상도 후보와 표시 폭 정보를 브라우저에 줘 최적 이미지를 고르게 하는 HTML 속성.</div></div>
+<div class="g-row"><div class="g-term"><b>LCP</b><span>최대 콘텐츠 페인트</span></div><div class="g-def">뷰포트 내 가장 큰 요소가 그려지는 시점. 웹 성능 핵심 지표로, 주로 hero 이미지가 대상.</div></div>
+<div class="g-row"><div class="g-term"><b>Alt text</b><span>대체 텍스트</span></div><div class="g-def">이미지를 볼 수 없을 때 대신 읽히는 텍스트. 정보 이미지는 내용 서술, 장식은 빈 값.</div></div>
+</div>
 </section>
 
 <footer>
-PHOTOGRAPHY IMAGE LITERACY · V1 · 2026-07<br>
-PRINCIPLE : 이미지는 분위기 장식이 아니라 정보, 신뢰, 브랜드 맥락을 전달하는 시각 증거다.
+PHOTOGRAPHY IMAGE LITERACY · V2 · 2026-07<br>
+PRINCIPLE : 이미지는 분위기 장식이 아니라 정보, 신뢰, 브랜드 맥락을 전달하는 시각 증거다. 촬영 조건과 편집 의도가 읽히지 않으면 반려한다.
 </footer>
 </main>
 </div>

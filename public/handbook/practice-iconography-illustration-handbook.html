@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이콘·일러스트레이션 시스템</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">PRACTICE · ICON ILLUSTRATION</div>
+  <div class="nav-title">아이콘 · 일러스트레이션 시스템</div>
+  <a href="#icon-illust-map"><span class="code">MAP</span>아이콘·일러스트 지도</a>
+  <a href="#icon-grid"><span class="code">GRID</span>아이콘 조형 원칙</a>
+  <a href="#icon-meaning"><span class="code">SEM</span>의미·메타포·일관성</a>
+  <a href="#icon-delivery"><span class="code">SVG</span>제작·전달(구현)</a>
+  <a href="#illust-style"><span class="code">STYLE</span>일러스트 스타일 시스템</a>
+  <a href="#illust-ops"><span class="code">OPS</span>일러스트 운영</a>
+  <a href="#pictogram-public"><span class="code">PUB</span>픽토그램·공공 맥락</a>
+  <a href="#review-checklist"><span class="code">CRIT</span>리뷰 체크리스트</a>
+  <a href="#glossary"><span class="code">GLOSSARY</span>용어집</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : PRACTICE-ICONOGRAPHY-ILLUSTRATION</span>
+    <span>SCOPE : ICON GRID · METAPHOR · ILLUSTRATION SYSTEM · DELIVERY</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>아이콘·일러스트레이션 시스템</h1>
+  <p class="hero-sub">아이콘과 일러스트를 개별 그림이 아니라 시스템으로 다룹니다. keyline grid와 optical balance 같은 조형 원칙, 메타포와 라벨의 의미 설계, SVG 최적화와 currentColor·접근성 같은 전달·구현, 그리고 spot/hero/empty-state 일러스트의 스타일과 운영까지 반복 가능한 규칙으로 정리합니다.</p>
+  <div class="hero-meta">ICON ILLUSTRATION SYSTEM · MARKER: artifact-ready · UPDATED 2026-07</div>
+</header>
+
+<section id="icon-illust-map">
+<div class="ch-head"><span class="ch-code">MAP</span><h2>아이콘·일러스트 지도</h2></div>
+<p class="lede">아이콘과 일러스트는 목적이 다릅니다. 아이콘은 좁은 공간에서 개념을 빠르게 지시하는 기능 부품이고, 일러스트는 분위기와 맥락을 설명하는 서사 요소입니다. 둘을 같은 잣대로 다루면 아이콘은 장식이 되고 일러스트는 파편이 됩니다. 먼저 영역별 책임을 나눕니다.</p>
+<table>
+<tr><th>영역</th><th>다루는 것</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>아이콘 시스템</td><td>grid, stroke, radius, 사이즈 세트 등 조형 규칙</td><td>규칙 없이 개별 제작하면 굵기·크기가 제각각이 된다. 나란히 놓았을 때 어색하면 실패.</td></tr>
+<tr><td>의미(semantics)</td><td>메타포, 라벨 병행, 한 개념=한 아이콘</td><td>같은 개념에 다른 아이콘이 쓰이거나, 라벨 없이 뜻을 짐작해야 하면 실패.</td></tr>
+<tr><td>전달(delivery)</td><td>SVG 최적화, currentColor, sprite/컴포넌트, 접근성</td><td>색이 하드코딩되어 상태·테마에 안 따라오거나, 스크린리더가 장식 아이콘을 읽으면 실패.</td></tr>
+<tr><td>일러스트 스타일</td><td>선 굵기, 팔레트, 원근, 디테일, 질감</td><td>화면마다 다른 세계관이 섞이면 실패. spot과 3D가 근거 없이 혼재.</td></tr>
+<tr><td>운영(ops)</td><td>brief, 재사용, 외주·AI 관리, 네이밍·export</td><td>파일이 흩어지고 재사용이 안 되면 매번 새로 그린다. export 규칙이 없으면 전달 품질이 흔들린다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">실무 기준</span><p>아이콘은 색(03 색채·타이포 문서)과 접근성 대비 규칙을 그대로 상속받는 부품으로 취급합니다. 그림을 "예쁘게 그리는" 문제가 아니라 시스템의 일부로 정의하는 것이 이 문서의 목표입니다.</p></div>
+</section>
+
+<section id="icon-grid">
+<div class="ch-head"><span class="ch-code">GRID</span><h2>아이콘 조형 원칙</h2></div>
+<p class="lede">아이콘이 한 세트처럼 보이는 이유는 그림 실력이 아니라 공유된 조형 규칙 때문입니다. keyline grid, 일정한 stroke weight, 통일된 corner radius와 terminal, 그리고 눈에 맞춘 optical balance가 그 규칙입니다. 규칙을 문서로 고정해야 여러 사람이 그려도 한 손에서 나온 것처럼 맞습니다.</p>
+<table>
+<tr><th>원칙</th><th>의미</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>Keyline grid</td><td>정사각·원·세로·가로 keyline으로 기본 형태의 크기 기준을 잡는 틀</td><td>원형 아이콘과 사각 아이콘을 같은 bounding box에 맞추면 원이 작아 보인다. keyline으로 보정한다.</td></tr>
+<tr><td>Live area / padding</td><td>실제 형태가 들어가는 안쪽 영역과 그 바깥의 여백</td><td>padding을 무시하고 꽉 채우면 버튼 안에서 아이콘만 커 보이고 정렬이 깨진다.</td></tr>
+<tr><td>Stroke weight</td><td>선 굵기. 세트 전체가 같은 굵기를 공유</td><td>어떤 아이콘은 1.5px, 어떤 건 2px면 나란히 놓았을 때 무게가 튄다. 굵기를 한 값으로 고정.</td></tr>
+<tr><td>Corner radius</td><td>모서리 둥글기. 형태의 성격(딱딱함/부드러움)을 결정</td><td>radius가 아이콘마다 다르면 성격이 흩어진다. 외곽과 내부 corner 규칙을 함께 정한다.</td></tr>
+<tr><td>Terminal / cap</td><td>선 끝 처리(round/butt/square)와 join 방식</td><td>같은 세트에서 round cap과 square cap이 섞이면 이질적이다. cap·join을 통일한다.</td></tr>
+<tr><td>Optical balance</td><td>수학적 중심이 아니라 시각 무게 중심에 맞추는 보정</td><td>재생(▶) 삼각형을 정중앙에 두면 왼쪽으로 쏠려 보인다. 시각 중심으로 살짝 밀어야 가운데로 읽힌다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">실무 기준</span><p>사이즈 세트는 보통 16 / 20 / 24 px 같은 몇 개의 고정 크기로 운영합니다. 하나만 그려서 비율로 늘리면 작은 크기에서 선이 흐릿해집니다. 각 크기에서 stroke가 <strong>픽셀 그리드에 스냅</strong>되도록 별도 조정하는 것이 원칙입니다. 특히 16px는 hinting에 예민하므로 24px를 축소한 것으로 대체하지 않습니다.</p></div>
+<div class="callout gm"><span class="co-label">보조 노트</span><p>optical balance는 취향이 아니라 지각 보정입니다. 원은 사각보다 크게, 삼각형은 무게중심 쪽으로, 십자·별처럼 뾰족한 형태는 keyline 밖으로 약간 넘겨야 같은 크기로 읽힙니다. "숫자로는 맞는데 눈에는 안 맞는다"가 정상이라는 것을 팀에 공유하세요.</p></div>
+</section>
+
+<section id="icon-meaning">
+<div class="ch-head"><span class="ch-code">SEM</span><h2>의미·메타포·일관성</h2></div>
+<p class="lede">아이콘의 가치는 조형이 아니라 의미 전달 속도입니다. 좋은 메타포는 설명 없이 읽히고, 나쁜 메타포는 라벨을 읽어야만 이해됩니다. 문제는 대부분의 개념에 보편적 메타포가 없다는 점입니다. 무엇이 학습 없이 통하고 무엇이 학습을 요구하는지 구분해야 합니다.</p>
+<table>
+<tr><th>개념</th><th>의미/설명</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>보편 메타포</td><td>돋보기=검색, 집=홈, 휴지통=삭제처럼 학습이 끝난 관습</td><td>관습을 깨고 창의적으로 바꾸면 인지 비용만 늘어난다. 검증된 관습은 지킨다.</td></tr>
+<tr><td>학습필요 메타포</td><td>추상 개념(리포트, 정산, 검증 등)에 대한 임의 그림</td><td>혼자서는 못 읽힌다. 반드시 라벨과 함께 쓴다.</td></tr>
+<tr><td>라벨 병행</td><td>아이콘과 텍스트 라벨을 함께 제시</td><td>아이콘만으로 액션을 표시하면 사용자가 hover해서 확인해야 한다. 공공 UI에서는 라벨 기본.</td></tr>
+<tr><td>한 개념 = 한 아이콘</td><td>같은 뜻은 항상 같은 그림으로</td><td>같은 "다운로드"에 화살표와 트레이가 섞여 쓰이면 사용자가 다른 기능으로 오해한다.</td></tr>
+<tr><td>문화적 해석</td><td>손동작, 색, 동물, 통화 기호 등의 지역 편차</td><td>OK 제스처, 우편함 모양, 돼지저금통 등은 문화권마다 다르게 읽힌다. 중립 형태를 고른다.</td></tr>
+<tr><td>상태 vs 액션</td><td>상태(현재 무엇인가) 아이콘과 액션(누르면 무엇을 하는가) 아이콘의 구분</td><td>토글에서 "현재 상태"와 "누르면 될 상태"를 같은 아이콘으로 표현하면 반드시 헷갈린다.</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">안티패턴</span><p>모호한 아이콘의 전형: 톱니바퀴가 화면마다 "설정", "처리 중", "고급 옵션"을 각각 뜻하거나, 별(★)이 즐겨찾기·평점·중요 표시로 혼용되는 경우입니다. 하나의 그림이 여러 뜻을 지면 사용자는 매번 추측합니다. <strong>의미가 겹치면 아이콘을 나누거나 라벨로 못 박으세요.</strong> "아이콘 하나로 다 표현되면 세련되다"는 착각을 버립니다.</p></div>
+</section>
+
+<section id="icon-delivery">
+<div class="ch-head"><span class="ch-code">SVG</span><h2>제작·전달(구현)</h2></div>
+<p class="lede">아이콘은 디자인 파일에서 끝나지 않고 코드로 전달되어야 의미가 있습니다. 프론트엔드 관점에서 아이콘은 SVG라는 텍스트 자산이고, 색 상속·접근성·번들 방식이 실제 사용성을 좌우합니다. 여기서 결정을 잘못하면 테마 전환에서 색이 안 따라오거나, 스크린리더가 장식을 읽거나, 번들이 불필요하게 커집니다.</p>
+<table>
+<tr><th>결정 항목</th><th>의미/설명</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>SVG 최적화</td><td>svgo 등으로 편집기 메타데이터·불필요 소수점·중복 path 제거</td><td>Figma export 원본은 지저분하다. 최적화 안 하면 용량과 diff 노이즈가 커진다.</td></tr>
+<tr><td>currentColor</td><td>fill/stroke를 <code>currentColor</code>로 두어 CSS <code>color</code>를 상속</td><td>색을 하드코딩하면 hover·disabled·dark mode에서 색이 안 바뀐다. 다색 아이콘은 예외 처리 필요.</td></tr>
+<tr><td>viewBox·정렬</td><td>일관된 viewBox(예: 0 0 24 24)와 내부 정렬 기준</td><td>viewBox가 아이콘마다 다르면 같은 크기로 렌더해도 시각 크기가 튄다.</td></tr>
+<tr><td>배포 방식</td><td>SVG sprite / 프레임워크 컴포넌트 / icon font 중 선택</td><td>아래 비교 참조. 잘못 고르면 접근성·트리셰이킹·색 제어 중 하나를 잃는다.</td></tr>
+<tr><td>접근성</td><td>장식은 <code>aria-hidden</code>, 의미가 있으면 <code>role="img"</code>+<code>title</code></td><td>버튼 안 아이콘에 라벨이 없으면 스크린리더가 "버튼"만 읽는다.</td></tr>
+<tr><td>라이브러리 관리</td><td>lucide 등 오픈 세트 + 커스텀 아이콘의 혼용 규칙</td><td>버전 고정 없이 업데이트하면 아이콘 형태가 바뀐다. 커스텀과 스타일이 안 맞으면 이질적.</td></tr>
+</table>
+<div class="callout"><span class="co-label">배포 방식 비교</span><p><strong>Icon font</strong>는 색·크기 제어가 쉽지만 접근성이 나쁘고(글리프가 텍스트로 읽힘) 형태가 뭉개질 수 있어 신규 프로젝트에는 권하지 않습니다. <strong>SVG sprite</strong>는 캐시가 잘 되고 요청 수가 적지만 개별 트리셰이킹이 약합니다. <strong>프레임워크 컴포넌트</strong>(React 등)는 트리셰이킹·타입·props 제어가 좋아 컴포넌트 기반 앱의 기본 선택입니다. 셋 중 컴포넌트 방식을 기본으로, 대량 정적 아이콘은 sprite를 섞는 조합이 무난합니다.</p></div>
+<pre class="snippet-card"><code>&lt;!-- 장식용: 옆에 텍스트 라벨이 이미 있는 경우 --&gt;
+&lt;button&gt;
+  &lt;svg width="20" height="20" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" aria-hidden="true"&gt;
+    &lt;path d="M12 5v14M5 12h14" /&gt;
+  &lt;/svg&gt;
+  &lt;span&gt;항목 추가&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- 의미 전달용: 아이콘만 있고 텍스트 라벨이 없는 경우 --&gt;
+&lt;button aria-label="항목 추가"&gt;
+  &lt;svg width="20" height="20" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" role="img"&gt;
+    &lt;title&gt;항목 추가&lt;/title&gt;
+    &lt;path d="M12 5v14M5 12h14" /&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+<div class="callout gm"><span class="co-label">보조 노트</span><p><code>aria-label</code>을 버튼에 주면 내부 <code>&lt;title&gt;</code>은 중복이 됩니다. 둘 중 한 곳에만 접근 가능한 이름을 두세요. 장식 아이콘은 반드시 <code>aria-hidden="true"</code>로 감춰야 스크린리더가 라벨을 두 번 읽지 않습니다.</p></div>
+</section>
+
+<section id="illust-style">
+<div class="ch-head"><span class="ch-code">STYLE</span><h2>일러스트 스타일 시스템</h2></div>
+<p class="lede">일러스트가 브랜드처럼 보이려면 개별 그림의 완성도보다 스타일 속성의 일관성이 중요합니다. 선 굵기, 컬러 팔레트, 원근, 디테일 밀도, 질감이라는 몇 개의 축을 고정하면 서로 다른 장면도 한 세계관으로 묶입니다. 먼저 속성을 정의하고, 그다음 용도별 유형을 나눕니다.</p>
+<table>
+<tr><th>스타일 속성</th><th>의미/설명</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>선 굵기</td><td>outline 유무와 stroke 두께, 아이콘 세트와의 관계</td><td>일러스트 선과 아이콘 선의 성격이 다르면 두 시스템이 따로 논다.</td></tr>
+<tr><td>컬러 팔레트</td><td>브랜드 색에서 파생된 제한된 색 수와 명도 범위</td><td>장면마다 새 색이 추가되면 통일감이 무너진다. 팔레트를 토큰으로 고정한다.</td></tr>
+<tr><td>원근/시점</td><td>flat, isometric, 2.5D, 정면 등 공간 표현 방식</td><td>flat과 isometric이 한 제품에 근거 없이 섞이면 어수선하다.</td></tr>
+<tr><td>디테일 밀도</td><td>형태를 얼마나 단순화/상세화하는가</td><td>어떤 그림은 미니멀, 어떤 건 과밀이면 세트로 안 보인다.</td></tr>
+<tr><td>질감(texture)</td><td>grain, gradient, 그림자 처리 방식</td><td>질감 규칙이 없으면 그라데이션 유무가 제각각이 된다.</td></tr>
+</table>
+<table>
+<tr><th>일러스트 유형</th><th>쓰임</th><th>실무 기준</th></tr>
+<tr><td>Spot</td><td>본문·카드에 작게 곁들이는 보조 그림</td><td>작게 축소되므로 디테일을 줄이고 실루엣이 살아야 한다.</td></tr>
+<tr><td>Hero</td><td>랜딩·헤더의 큰 대표 이미지</td><td>브랜드 인상을 좌우한다. 메시지와 어긋나면 임팩트를 잃는다.</td></tr>
+<tr><td>Empty state</td><td>데이터·검색결과 없음 화면</td><td>막막함을 줄이고 다음 행동을 유도해야 한다. 장식만 있고 안내가 없으면 실패.</td></tr>
+<tr><td>Onboarding</td><td>개념·절차를 단계로 설명하는 그림</td><td>순서와 정보 전달이 우선. 예쁨보다 이해가 목적.</td></tr>
+</table>
+<div class="callout"><span class="co-label">실무 기준</span><p>일관성 유지의 실전 기준은 "같은 화가가 그렸다고 믿기는가"입니다. 새 일러스트를 만들면 기존 3~4개와 나란히 놓고 선·색·원근이 튀지 않는지 봅니다. empty-state 하나가 spot들과 다른 세계에서 왔다면, 완성도가 높아도 시스템 관점에서는 불합격입니다.</p></div>
+</section>
+
+<section id="illust-ops">
+<div class="ch-head"><span class="ch-code">OPS</span><h2>일러스트 운영</h2></div>
+<p class="lede">일러스트는 한 번 그리고 끝이 아니라 계속 늘어나는 자산입니다. 요청 방식, 재사용 구조, 외주·AI 생성 관리, 파일·export 규칙이 없으면 매번 처음부터 그리게 되고 품질이 흔들립니다. 운영은 "다음 사람이 최소 비용으로 일관되게 이어갈 수 있는가"의 문제입니다.</p>
+<div class="serial-card">
+<span class="sc-label">ILLUSTRATION BRIEF 템플릿</span>
+1. 목적 — 이 그림이 해결하는 문제와 놓일 화면(예: 정산 내역 없음 empty-state).<br>
+2. 유형 — spot / hero / empty-state / onboarding 중 무엇인가.<br>
+3. 메시지 — 사용자가 보고 느끼거나 하게 할 한 문장.<br>
+4. 스타일 참조 — 따라야 할 기존 일러스트 3개와 팔레트 토큰.<br>
+5. 제약 — 최소 크기, 여백, 다국어 텍스트 포함 여부, dark mode 대응.<br>
+6. 산출물 — 파일 형식(SVG/PNG), 사이즈, 네이밍, export 경로.
+</div>
+<div class="callout warn"><span class="co-label">주의</span><p>3D 렌더와 2D spot 일러스트를 한 제품에서 섞을 때는 근거가 있어야 합니다. 근거 없이 혼용하면 "hero만 외주 3D, 나머지는 내부 flat" 같은 균열이 그대로 드러납니다. 혼용이 필요하면 용도를 명확히 나누고(예: 마케팅=3D, 제품 UI=flat) 그 경계를 규칙으로 적으세요.</p></div>
+<div class="callout risk"><span class="co-label">고위험</span><p>외주·AI 생성물은 <strong>스타일 일관성과 라이선스</strong> 두 지점에서 위험합니다. AI 생성 일러스트는 팔레트·원근이 미묘하게 어긋나 세트에 안 붙는 경우가 많고, 상업적 사용 권리와 학습 데이터 출처가 불분명할 수 있습니다. 공공 B2B 납품물이라면 사용 권리를 계약·문서로 확인하고, 생성물은 반드시 스타일 기준 대비 검수 후에만 반영하세요.</p></div>
+<div class="callout"><span class="co-label">실무 기준</span><p>파일·네이밍은 검색 가능하게 규칙화합니다. 예: <code>illust-empty-invoices-24.svg</code>처럼 유형-맥락-사이즈 순서로 짓고, master 소스(편집 가능)와 export 산출물을 폴더로 분리합니다. 재사용은 "장면 통째"보다 <strong>부품(인물, 배경, 오브젝트) 조합</strong>으로 설계하면 새 장면을 빠르게 만들 수 있습니다.</p></div>
+</section>
+
+<section id="pictogram-public">
+<div class="ch-head"><span class="ch-code">PUB</span><h2>픽토그램·공공 맥락</h2></div>
+<p class="lede">공공·규제 산업 UI에서 아이콘은 취향의 영역이 아니라 명료성과 신뢰의 문제입니다. ISO 계열 공공 픽토그램의 원칙은 단순함이 곧 안전이라는 것입니다. 결제·정산·승인처럼 상태가 곧 돈·규제와 연결되는 화면에서는, 오독 가능한 그림 하나가 실무 사고로 이어질 수 있습니다.</p>
+<table>
+<tr><th>원칙</th><th>의미/설명</th><th>실무 판단·실패 신호</th></tr>
+<tr><td>명료성 우선</td><td>공공 픽토그램은 최소 요소로 한 뜻만 지시</td><td>디테일·장식이 많을수록 작은 크기·저해상에서 뭉개진다.</td></tr>
+<tr><td>실루엣 인식</td><td>색 없이 형태만으로 구분되어야 함</td><td>색으로만 구분한 상태 아이콘은 색각 차이·흑백 인쇄에서 무너진다.</td></tr>
+<tr><td>도메인 상태</td><td>승인·반려·대기·완료·검증 상태 등 업무 도메인 개념의 시각화</td><td>추상 개념이라 보편 메타포가 없다. 라벨·범례 병행이 필수.</td></tr>
+<tr><td>신뢰 톤</td><td>과장·유희적 표현을 절제</td><td>규제·거래 화면에 캐주얼한 일러스트가 붙으면 신뢰가 깎인다.</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">도메인 주의</span><p>업무 도메인 상태 아이콘(승인, 반려, 대기, 완료, 검증 완료/반려 등)은 <strong>임의로 의미를 추측해 그리지 마세요.</strong> "검증 상태"의 단계(제출·검토 중·승인·반려)가 ENUM으로 무엇인지 먼저 확인하고, 각 상태에 하나의 아이콘을 못 박습니다. 상태 아이콘은 색만으로 구분하지 말고 형태와 라벨을 함께 씁니다(예: 승인=체크, 반려=금지, 검토 중=시계). 이 규칙은 접근성 대비 기준(색채 문서)과도 연결됩니다.</p></div>
+<div class="callout"><span class="co-label">실무 기준</span><p>신뢰가 핵심인 공공 UI에서는 장식을 최소화합니다. hero 일러스트나 유희적 스팟은 로그인·마케팅 페이지에 한정하고, 실제 정산·리포트 화면은 픽토그램과 데이터 위주로 둡니다. before/after로 말하면 — before: 검증 대시보드 상단에 웃는 캐릭터 hero. after: 상태 요약 카드 + 명료한 상태 픽토그램. 후자가 "이 숫자를 믿어도 되는가"라는 사용자 질문에 더 정직하게 답합니다.</p></div>
+</section>
+
+<section id="review-checklist">
+<div class="ch-head"><span class="ch-code">CRIT</span><h2>리뷰 체크리스트</h2></div>
+<p class="lede">아이콘·일러스트 리뷰는 "예쁜가"가 아니라 조형 일관성, 의미 명료성, 접근성, 전달 품질 네 축으로 봅니다. 아래를 통과하지 못하면 완성도와 무관하게 시스템에 반영하지 않습니다.</p>
+<div class="serial-card">
+<span class="sc-label">ICON / ILLUSTRATION REVIEW CHECKLIST</span>
+1. 조형 일관성 — 기존 세트와 나란히 놓았을 때 stroke·radius·크기가 튀지 않는가.<br>
+2. optical balance — 원·삼각형·뾰족한 형태가 시각적으로 같은 크기·중심으로 읽히는가.<br>
+3. 의미 명료성 — 라벨 없이도 읽히는가. 아니라면 라벨이 병행되는가. 한 개념=한 아이콘을 지키는가.<br>
+4. 상태/액션 구분 — 토글·상태 아이콘이 현재 상태와 다음 행동을 혼동시키지 않는가.<br>
+5. 접근성 — 장식은 <code>aria-hidden</code>, 의미는 접근 가능한 이름을 갖는가. 색 없이도 구분되는가.<br>
+6. 전달 품질 — SVG가 최적화되고 <code>currentColor</code>로 색을 상속하며 viewBox가 일관된가.<br>
+7. 일러스트 세계관 — 선·팔레트·원근·디테일이 기존 자산과 한 세계관인가.<br>
+8. 공공 맥락 — 정산·검증 화면에서 장식이 과하지 않고 신뢰 톤을 지키는가.<br>
+9. 운영 — 네이밍·export·재사용 규칙을 따르고 master 소스가 보관되는가.
+</div>
+</section>
+
+<section id="glossary">
+<div class="ch-head"><span class="ch-code">GLOSSARY</span><h2>용어집</h2></div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Keyline grid</b><span>키라인 그리드</span></div><div class="g-def">사각·원·세로·가로 보조선으로 아이콘 형태의 크기 기준을 잡는 틀. 서로 다른 형태를 같은 크기로 보이게 보정한다.</div></div>
+<div class="g-row"><div class="g-term"><b>Live area</b><span>라이브 영역</span></div><div class="g-def">아이콘 프레임 안에서 실제 형태가 들어가는 안쪽 영역. 바깥은 padding 여백으로 남긴다.</div></div>
+<div class="g-row"><div class="g-term"><b>Stroke weight</b><span>선 굵기</span></div><div class="g-def">아이콘 선의 두께. 세트 전체가 같은 값을 공유해야 한 손에서 나온 것처럼 보인다.</div></div>
+<div class="g-row"><div class="g-term"><b>Terminal / cap</b><span>선 끝 처리</span></div><div class="g-def">선 끝의 마감(round/butt/square)과 꺾이는 지점의 join 방식. 세트 안에서 통일한다.</div></div>
+<div class="g-row"><div class="g-term"><b>Optical balance</b><span>시각 균형</span></div><div class="g-def">수학적 중심이 아니라 눈에 맞는 무게 중심에 형태를 맞추는 지각 보정. 원은 크게, 삼각형은 무게중심 쪽으로.</div></div>
+<div class="g-row"><div class="g-term"><b>Pixel snapping</b><span>픽셀 스냅</span></div><div class="g-def">작은 크기에서 선이 픽셀 그리드에 정확히 맞도록 조정하는 것. hinting이 흐릿함을 막는다.</div></div>
+<div class="g-row"><div class="g-term"><b>Metaphor</b><span>메타포</span></div><div class="g-def">개념을 가리키는 시각적 은유. 보편 관습(돋보기=검색)과 학습 필요 은유를 구분해야 한다.</div></div>
+<div class="g-row"><div class="g-term"><b>currentColor</b><span>커런트컬러</span></div><div class="g-def">SVG의 fill/stroke가 CSS <code>color</code> 값을 상속하게 하는 키워드. 테마·상태별 색 전환을 가능하게 한다.</div></div>
+<div class="g-row"><div class="g-term"><b>viewBox</b><span>뷰박스</span></div><div class="g-def">SVG 좌표계와 표시 영역을 정의하는 속성. 세트 전체가 일관된 값이어야 크기가 안 튄다.</div></div>
+<div class="g-row"><div class="g-term"><b>Sprite</b><span>스프라이트</span></div><div class="g-def">여러 아이콘을 한 SVG에 <code>symbol</code>로 묶어 참조하는 배포 방식. 캐시와 요청 수에 유리하다.</div></div>
+<div class="g-row"><div class="g-term"><b>Spot illustration</b><span>스팟 일러스트</span></div><div class="g-def">본문·카드에 작게 곁들이는 보조 일러스트. 축소되므로 실루엣과 단순화가 중요하다.</div></div>
+<div class="g-row"><div class="g-term"><b>Empty state</b><span>빈 상태</span></div><div class="g-def">데이터·결과가 없는 화면. 막막함을 줄이고 다음 행동을 안내하는 일러스트가 붙는다.</div></div>
+<div class="g-row"><div class="g-term"><b>Pictogram</b><span>픽토그램</span></div><div class="g-def">최소 요소로 한 뜻만 지시하는 공공용 그림 기호. 명료성과 실루엣 인식이 핵심이다.</div></div>
+</div>
+</section>
+
+<footer>
+ICON ILLUSTRATION SYSTEM · V1 · 2026-07<br>
+PRINCIPLE : 아이콘과 일러스트는 개별 그림이 아니라 조형·의미·전달 규칙을 공유하는 시스템이다.
+</footer>
+</main>
+</div>
+</body>
+</html>

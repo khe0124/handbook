@@ -40,6 +40,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
 <ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+
 </section>
 
       <section id="ch1">
@@ -133,6 +134,7 @@
           <tr><td>Identity / Secret</td><td>IAM principal, role assumption, secret location, rotation record</td><td>장기 key와 wildcard 권한은 예외로 관리한다.</td></tr>
           <tr><td>Auditability</td><td>WAF log, auth failure, admin action, egress log, exception expiry</td><td>차단과 허용의 근거가 나중에 조사 가능해야 한다.</td></tr>
         </table>
+
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>공개면 점검</td><td>DNS record, LB listener, WAF rule, security group ingress 목록화</td><td>인터넷에서 접근 가능한 표면을 실제로 열거한다.</td></tr>
@@ -197,7 +199,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
         </div>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>DNS, CDN/WAF, LB listener, allowed path, rate limit 기준으로 영향 범위를 고정한다.</td><td>DNS record, LB listener, WAF rule, security group ingress 목록화에서 증거를 모아 완화책을 실행한다.</td><td>보안 조치가 운영 절차로 남아야 한다.</td></tr>
+          <tr><td>DNS, CDN/WAF, LB listener, allowed path, rate limit 기준으로 영향 범위를 고정한다.</td><td>DNS record, LB listener, WAF rule, security group ingress 목록화 항목에서 증거를 모아 완화책을 실행한다.</td><td>보안 조치가 운영 절차로 남아야 한다.</td></tr>
         </table>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
@@ -205,6 +207,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
           <tr><td>완화</td><td>token revoke, WAF rule tighten, role disable, egress block</td><td>임시 차단은 고객 영향과 만료 조건을 같이 기록한다.</td></tr>
           <tr><td>사후</td><td>least privilege diff, audit alert, rotation drill 추가</td><td>보안 조치가 운영 절차로 남아야 한다.</td></tr>
         </table>
+
       </section>
 
       <section id="ch11">
@@ -227,6 +230,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
           2. WAF와 SG/NACL/IAM은 서로 대체하지 않는 통제라고 말한다.<br>
           3. 침해를 막는 것뿐 아니라 탐지와 피해 제한까지 설계한다.<br>
         </div>
+
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

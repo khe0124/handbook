@@ -11,51 +11,51 @@ const docs = [
     sections: [
       {
         code: "OP-00",
-        title: "전체 흐름",
-        body: "인프라·운영은 네트워크, 배포, 모니터링을 따로 외우는 영역이 아니다. 사용자의 요청은 DNS → CDN/WAF → Load Balancer → App → DB 경로를 지나고, 변경은 CI/CD → artifact → environment → runtime → observability → incident response로 검증된다. 이 두 흐름을 한 장에 연결해야 장애 질문과 시스템 설계 질문에 깊이가 생긴다.",
-        question: "요청 경로와 변경 경로가 같은 운영 지도에 연결되어 있는가?",
-        evidence: "DNS/CDN/WAF/LB/App/DB dependency map, deploy marker, SLO, runbook owner",
-        judgment: "사용자 영향과 최근 변경을 한 timeline에서 설명할 수 있어야 한다.",
-        command: "service catalog, dependency map, release note, SLO dashboard, incident runbook",
-        commandJudgment: "어느 계층이 사용자 영향과 연결되는지 15분 안에 찾을 수 있어야 한다.",
-        incidentSignal: "요청 실패와 배포 marker가 같은 시간대에 발생",
-        incidentJudgment: "요청 경로와 변경 경로를 동시에 좁히고 완화책을 먼저 선택한다.",
+        title: "운영 전체 지도",
+        body: "인프라·운영은 네트워크, 배포, 모니터링을 따로 외우는 영역이 아니다. 운영자는 request path, change path, control plane, data plane, recovery path를 한 장으로 연결해야 한다. 사용자의 요청은 DNS → CDN/WAF → Load Balancer → Runtime → Data store를 지나고, 변경은 CI/CD → artifact → config → runtime → metric gate → rollback 또는 incident response로 검증된다.",
+        question: "요청 경로, 변경 경로, 복구 경로가 같은 운영 지도에 연결되어 있는가?",
+        evidence: "request path map, deploy marker, service catalog, dependency map, SLO, rollback/restore owner",
+        judgment: "사용자 영향과 최근 변경, 완화 후보를 한 timeline에서 설명할 수 있어야 한다.",
+        command: "service catalog, dependency map, release note, SLO dashboard, incident runbook, rollback drill record",
+        commandJudgment: "어느 계층이 사용자 영향과 연결되는지 15분 안에 찾고, 원인 확정 전 완화책을 고를 수 있어야 한다.",
+        incidentSignal: "요청 실패, deploy marker, SLO burn이 같은 시간대에 발생",
+        incidentJudgment: "요청 경로와 변경 경로를 동시에 좁히고 rollback, feature off, traffic shift 중 사용자 영향을 가장 빨리 줄이는 조치를 먼저 선택한다.",
       },
       {
         code: "OP-01",
-        title: "학습 순서",
-        body: "먼저 요청 경로를 그린다. 그다음 VPC, subnet, route table, NAT, ingress, egress를 붙인다. 이후 DNS, TLS, VPN, Private Endpoint 같은 연결 경계를 이해하고, CI/CD, 컨테이너, IaC, SLO, rollback, DR을 운영 루프로 연결한다.",
-        question: "학습 순서가 실제 운영 판단 순서와 연결되는가?",
-        evidence: "request path diagram, route table, DNS/TLS check, CI/CD stage, rollback drill record",
-        judgment: "개념을 외운 순서가 아니라 장애 때 배제할 순서로 정리되어야 한다.",
-        command: "draw request path, list ingress/egress, check deploy pipeline, review rollback/restore drill",
-        commandJudgment: "각 단계가 확인 명령과 산출물로 이어지면 실무 학습 경로로 본다.",
-        incidentSignal: "네트워크는 아는데 배포/복구 증거를 설명하지 못함",
-        incidentJudgment: "다음 학습 항목을 runbook과 drill로 연결한다.",
+        title: "4주 학습 순서",
+        body: "학습 순서는 서비스 장애를 좁히는 순서와 같아야 한다. 1주차에는 브라우저에서 DB까지 요청 경로를 그리고, 2주차에는 VPC, subnet, route table, NAT, ingress, egress, private endpoint를 붙인다. 3주차에는 CI/CD, artifact, runtime, health check, IaC 변경을 배포 경로로 묶고, 4주차에는 Observability, SLO, Incident Response, Rollback, Restore, DR drill로 운영 루프를 닫는다.",
+        question: "학습 순서가 실제 장애 triage와 운영 인수 순서로 이어지는가?",
+        evidence: "request path diagram, VPC route table readback, deploy pipeline stage, SLO dashboard, rollback/restore drill record",
+        judgment: "개념 이름을 외운 순서가 아니라 장애 때 배제할 계층과 산출물 순서로 정리되어야 한다.",
+        command: "draw request path, list ingress/egress, check deploy pipeline, run smoke/rollback drill, review SLO burn alert",
+        commandJudgment: "각 단계가 확인 명령, 판독 기준, 제출 산출물로 이어지면 실무 학습 경로로 본다.",
+        incidentSignal: "네트워크는 설명하지만 배포 marker, SLO burn, rollback 가능성을 함께 설명하지 못함",
+        incidentJudgment: "다음 학습 항목을 runbook, dashboard, drill packet으로 연결해 운영 증거를 만든다.",
       },
       {
         code: "OP-02",
-        title: "운영자가 보는 산출물",
-        body: "운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. owner, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 운영 인수 체크리스트가 있어야 다음 사람이 같은 판단을 반복할 수 있다.",
-        question: "운영 산출물이 다음 담당자의 실행을 가능하게 하는가?",
-        evidence: "owner matrix, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, access owner",
-        judgment: "담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야 한다.",
-        command: "service catalog, alert route, dashboard link, rollback command, restore drill date",
-        commandJudgment: "문서 링크만 있고 권한과 owner가 없으면 운영 인수 미완료다.",
-        incidentSignal: "장애 중 dashboard와 rollback owner를 찾지 못함",
-        incidentJudgment: "인수 체크리스트에 owner, 권한, 마지막 drill 시간을 추가한다.",
+        title: "계층별 실패 모드",
+        body: "운영 실력은 장애 때 어떤 계층을 먼저 의심하고 어떤 증거로 배제하는지에서 드러난다. DNS/TLS, CDN/WAF, Load Balancer, runtime, DB, network policy, deploy pipeline, observability, incident process마다 대표 실패 모드와 첫 확인 증거가 다르다.",
+        question: "각 계층의 실패 모드와 첫 확인 증거를 구분할 수 있는가?",
+        evidence: "DNS answer, TLS chain, WAF log, target health, trace waterfall, DB wait event, flow log, deploy marker, burn-rate alert",
+        judgment: "앱 로그만 보거나 클라우드 서비스명만 나열하면 운영 판단으로 부족하다.",
+        command: "dig/curl/openssl, LB target health, kubectl describe/logs, DB performance insight, flow log, CI release note",
+        commandJudgment: "증거는 같은 timestamp, traceId, version, environment로 연결되어야 한다.",
+        incidentSignal: "프론트 화면 오류 하나를 보고 API 코드 문제로 단정",
+        incidentJudgment: "가장 앞단 계층부터 요청이 도달한 지점을 찾고, 최근 변경과 SLO burn을 함께 본다.",
       },
       {
         code: "OP-03",
-        title: "면접 답변 구조",
-        body: "인프라 질문을 받으면 도구 이름보다 경로, 경계, 실패 모드, 검증 증거를 먼저 말한다. 예를 들어 '배포를 어떻게 운영했나요?'에는 pipeline stage, artifact digest, environment config, smoke test, metric gate, rollback 조건을 순서대로 답한다.",
-        question: "면접 답변이 도구 나열이 아니라 운영 판단 구조를 보여주는가?",
-        evidence: "path, boundary, failure mode, evidence, mitigation, follow-up action",
-        judgment: "직접 경험과 설계 지식을 구분하고 검증 증거를 말해야 한다.",
-        command: "incident packet, postmortem, release note, runbook diff, dashboard screenshot",
-        commandJudgment: "증거 없이 서비스명만 나열하면 실무 역량 설명으로 부족하다.",
-        incidentSignal: "답변이 AWS/Azure/Kubernetes 이름 나열로 끝남",
-        incidentJudgment: "요청 경로, 실패 모드, 검증 증거, 복구 절차 순서로 답변을 재구성한다.",
+        title: "운영 산출물과 답변 구조",
+        body: "운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. owner, escalation, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 비용 owner, access owner, 마지막 drill 날짜가 있어야 다음 사람이 같은 판단을 반복할 수 있다. 면접에서도 도구 이름보다 경로, 경계, 실패 모드, 증거, 완화, 후속 개선 순서로 말해야 한다.",
+        question: "운영 산출물과 면접 답변이 실행 가능한 증거로 닫히는가?",
+        evidence: "owner matrix, service catalog, SLO, dashboard, alert, runbook, rollback command, restore drill date, incident packet",
+        judgment: "담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야 한다.",
+        command: "service catalog, alert route, dashboard link, rollback command, restore drill report, postmortem, runbook diff",
+        commandJudgment: "문서 링크만 있고 권한, owner, 마지막 drill 날짜가 없으면 운영 인수 미완료다.",
+        incidentSignal: "장애 중 dashboard, alert owner, rollback owner를 찾지 못함",
+        incidentJudgment: "인수 체크리스트에 owner, 권한, 마지막 drill, incident packet, runbook diff를 필수 항목으로 추가한다.",
       },
     ],
   },
@@ -735,10 +735,201 @@ const docs = [
 
 const detailsByFile = {
   "operations-roadmap-handbook.html": {
-    checklist: ["요청 흐름과 배포 흐름을 한 장에 연결한다.", "owner, SLO, dashboard, alert, runbook, rollback plan을 확인한다.", "단일 실패 지점과 수동 복구 지점을 표시한다.", "운영 인수 전에 Rollback drill과 Restore drill을 실행한다."],
-    scenario: "신규 서비스를 런칭하기 전 운영 준비도 리뷰를 진행한다. 요청 경로는 DNS, CDN/WAF, Load Balancer, App, DB로 그려 보고, 변경 경로는 CI/CD, artifact, environment, runtime, observability, incident response로 확인한다. 빠진 항목은 런칭 후 장애가 아니라 런칭 전 차단 이슈로 다룬다.",
-    pitfalls: ["아키텍처 다이어그램은 있지만 알림 owner가 없다.", "배포 절차는 있지만 rollback 검증이 없다.", "SLO가 없어서 장애와 단순 오류를 같은 우선순위로 처리한다.", "운영 인수 문서가 사람 이름과 구두 설명에 의존한다."],
-    interview: "인프라·운영은 요청 경로와 변경 경로를 함께 보는 영역이라고 답합니다. 사용자의 요청은 DNS부터 DB까지 계층별로 흐르고, 코드 변경은 artifact와 환경 설정, 런타임, 관측, 장애 대응 절차를 거쳐 안전해집니다. 저는 각 단계의 실패 모드와 검증 증거를 연결해 운영 준비도를 판단하겠습니다.",
+    checklist: ["요청 경로, 변경 경로, 복구 경로를 한 장에 연결한다.", "owner, SLO, dashboard, alert, runbook, rollback plan, restore drill 날짜를 확인한다.", "DNS/TLS, edge, LB, runtime, DB, network policy, deploy pipeline의 대표 실패 모드를 표시한다.", "운영 인수 전에 rollback drill, restore drill, traffic shift drill 중 최소 하나를 실행한다.", "비용 owner와 access owner를 서비스 카탈로그에 포함한다."],
+    scenario: "신규 서비스를 런칭하기 전 운영 준비도 리뷰를 진행한다. 요청 경로는 DNS, CDN/WAF, Load Balancer, Runtime, DB로 그리고, 변경 경로는 CI/CD, artifact, config, environment, metric gate로 확인한다. 복구 경로는 rollback, feature flag off, traffic shift, restore, failback으로 분리한다. 빠진 항목은 런칭 후 장애가 아니라 런칭 전 차단 이슈로 다룬다.",
+    pitfalls: ["아키텍처 다이어그램은 있지만 알림 owner와 escalation 경로가 없다.", "배포 절차는 있지만 artifact digest, metric gate, rollback 검증이 없다.", "SLO가 없어서 장애와 단순 오류를 같은 우선순위로 처리한다.", "운영 인수 문서가 사람 이름과 구두 설명에 의존한다.", "백업은 있지만 restore drill과 failback 절차가 없다.", "NAT/egress 비용 급증을 운영 incident가 아니라 비용 이슈로만 본다."],
+    interview: "인프라·운영은 요청 경로, 변경 경로, 복구 경로를 함께 보는 영역이라고 답합니다. 사용자의 요청은 DNS부터 DB까지 계층별로 흐르고, 코드 변경은 artifact와 환경 설정, 런타임, 관측, 장애 대응 절차를 거쳐 안전해집니다. 저는 각 단계의 실패 모드와 검증 증거를 연결하고, 원인 확정 전에도 사용자 영향 완화책을 선택하는 방식으로 운영 준비도를 판단하겠습니다.",
+    learningPlan: [
+      ["1주차 · 요청 경로", "서비스 요청 경로 → DNS/TLS → LB/App/DB 경계", "request path diagram, dig/curl/openssl 결과, target health 판독"],
+      ["2주차 · 네트워크 경계", "VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity", "route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증"],
+      ["3주차 · 변경과 런타임", "CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리", "release note, artifact digest, health check gate, terraform plan review"],
+      ["4주차 · 관측과 복구", "Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오", "SLO burn alert, incident packet, rollback/restore drill, postmortem action"],
+    ],
+    failureMatrix: [
+      ["DNS/TLS", "NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락", "dig +trace, resolver 비교, openssl s_client, curl -v"],
+      ["Edge/CDN/WAF", "WAF false positive, stale cache, origin policy mismatch", "edge request id, WAF log, cache policy, origin status"],
+      ["Load Balancer", "502 upstream fail, 503 no healthy target, 504 timeout", "target health, listener rule, deregistration delay, idle timeout"],
+      ["Runtime", "OOMKilled, readiness 실패, selector mismatch, graceful shutdown 누락", "kubectl describe/logs --previous, endpoints, rollout status"],
+      ["Data store", "connection pool 고갈, lock wait, slow query, migration lock", "pool pending, DB wait event, slow query, migration version"],
+      ["Network policy", "route miss, SG/NACL block, NAT saturation, private DNS 누락", "route table, flow log ACCEPT/REJECT, NAT metric, DNS query log"],
+      ["Change path", "잘못된 artifact/config/secret/migration 배포", "commit SHA, image digest, config diff, secret version, deploy marker"],
+      ["Recovery path", "rollback 불가, restore 미검증, failback 누락", "rollback command, backup age, restore duration, reconciliation result"],
+    ],
+    readinessScore: [
+      ["0점", "문서 없음 또는 개인 기억에 의존", "런칭/인수 차단"],
+      ["1점", "다이어그램과 담당자만 있음", "장애 때 실행 불가. owner, dashboard, runbook 보강 필요"],
+      ["2점", "dashboard, alert, runbook, rollback plan이 있음", "기본 운영 가능. drill 증거가 없으면 위험"],
+      ["3점", "rollback/restore drill, SLO, incident packet, cost/access owner까지 있음", "독립 운영 가능"],
+      ["4점", "game day, failback, runbook diff, error budget policy가 반복 운영됨", "팀 표준화 가능"],
+    ],
+    audienceContract: [
+      ["대상 독자", "미들급 개발자. API, DB, 배포 경험은 있으나 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람", "서비스 장애를 계층별 증거로 좁히고 운영 인수 산출물을 만들 수 있어야 한다."],
+      ["선행 지식", "HTTP, TLS 기초, Linux process/log, DB connection, CI/CD 기본, container 기본", "이 지식이 없으면 도구명을 외우는 학습으로 흐르므로 먼저 보완한다."],
+      ["학습 산출물", "request path diagram, deploy timeline, incident packet, rollback/restore drill report, service readiness score", "말로 아는 것이 아니라 다른 담당자가 재현 가능한 문서와 증거를 제출해야 한다."],
+      ["강연 목표", "청중이 장애 상황에서 어떤 계층을 먼저 확인하고 어떤 증거로 배제할지 말할 수 있게 한다.", "서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남긴다."],
+    ],
+    lectureFlow: [
+      ["0-5분", "왜 운영은 아키텍처 그림만으로 부족한가", "요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다."],
+      ["5-15분", "전체 운영 지도", "DNS → Edge → LB → Runtime → Data store와 CI/CD → artifact → runtime → metric gate를 겹쳐 설명한다."],
+      ["15-30분", "장애 triage 실전", "5xx 증가 케이스로 사용자 영향, 최근 변경, 계층별 증거, rollback 판단을 연습한다."],
+      ["30-42분", "네트워크·보안 경계", "VPC, subnet, route, SG/NACL, Private Endpoint, DNS override의 대표 오판을 짚는다."],
+      ["42-52분", "SLO·Incident·DR", "burn rate, IC/scribe/comms, RPO/RTO, restore drill을 운영 성숙도 기준으로 연결한다."],
+      ["52-60분", "체크리스트와 면접 답변", "운영 인수 packet과 30초/90초 답변 구조로 마무리한다."],
+    ],
+    providerEvidence: [
+      ["DNS/Edge", "Route 53, CloudFront, AWS WAF, ACM, ALB access log", "Azure DNS, Front Door, WAF Policy, Managed Certificate, Application Gateway log", "edge request id와 origin status를 분리해 WAF 차단과 origin 장애를 나눈다."],
+      ["Network", "VPC, subnet route table, Security Group, NACL, NAT Gateway, VPC Flow Logs, PrivateLink", "VNet, subnet route table, NSG, NAT Gateway, Network Watcher flow log, Private Endpoint", "route miss, policy reject, DNS public resolution, NAT saturation을 각각 다른 원인으로 본다."],
+      ["Runtime", "ECS/EKS, target group health, CloudWatch Container Insights, ECR image digest", "AKS/App Service, backend health, Azure Monitor, ACR digest", "readiness, rollout, image/config mismatch, connection draining을 배포 timeline에 연결한다."],
+      ["Data/DR", "RDS/Aurora metrics, Performance Insights, snapshots, PITR, replica lag", "Azure SQL metrics, Query Performance Insight, backups, PITR, geo-replica lag", "백업 존재가 아니라 restore duration, backup age, missing rows, failback 결과로 판단한다."],
+    ],
+    decisionTree: [
+      ["1. 사용자가 실제로 영향을 받는가?", "SLI, support ticket, synthetic check, region/device 분포", "영향이 없으면 ticket으로 낮추고, 영향이 있으면 incident channel과 IC를 세운다."],
+      ["2. 최근 변경과 같은 시간축인가?", "deploy marker, image digest, config diff, migration version, feature flag audit", "같은 시간축이면 rollback/flag off 후보를 먼저 준비한다. 아니면 요청 경로와 의존성 장애를 본다."],
+      ["3. 요청이 어디까지 도달했는가?", "DNS answer, WAF request id, LB target health, app access log, trace span, DB wait event", "도달하지 못한 첫 계층이 현재의 가장 강한 원인 후보가 된다."],
+      ["4. 원인 확정 전 완화가 가능한가?", "rollback command, traffic shift, circuit breaker, rate limit, queue pause, read-only mode", "사용자 영향을 줄이는 조치가 있으면 원인 분석과 병행한다."],
+      ["5. 복구가 검증됐는가?", "SLI 회복, error budget burn 정상화, data reconciliation, customer comms, runbook diff", "지표 회복만으로 종료하지 말고 데이터·공지·문서 갱신까지 확인한다."],
+    ],
+    readinessPacketTemplate: `service: checkout-api
+tier: customer-critical
+owner: payments-platform
+oncall: payments-primary
+dependencies: auth-api, payment-provider, orders-db, redis-cache
+request_path: DNS -> CDN/WAF -> ALB -> ECS service -> RDS
+change_path: GitHub Actions -> ECR image digest -> ECS deploy -> metric gate
+slo: checkout_success 99.9%, p95_latency 600ms
+dashboards: sli, alb, app, db, egress, cost
+alerts: fast burn, slow burn, 5xx, db pool, provider timeout, NAT anomaly
+rollback: previous image digest + config version, verified 2026-06-20
+restore: PITR drill pass 2026-06-21, RPO 5m, RTO 30m
+cost_owner: platform-finops
+access_owner: security-platform
+last_game_day: 2026-06-25
+launch_gate: blocked if owner, rollback, restore, alert route, or SLO is missing`,
+    incidentPacketTemplate: `incident: INC-2026-0715-checkout-fast-burn
+severity: SEV1
+started_at: 2026-07-15T10:04+09:00
+customer_impact: checkout success down from 99.94% to 91.2%, KR/JP mobile users
+current_sli: checkout_success burn_5m=14x, alb_5xx=3.8%, p95=2.4s
+recent_changes:
+  - api image sha-9f31 deployed at T-8m
+  - feature flag payment_retry_v2 enabled at T-6m
+evidence:
+  - DNS/TLS ok
+  - WAF request id present, no block spike
+  - ALB target health unstable on new task set
+  - DB wait event baseline
+decision:
+  - rollback api image to sha-prev
+  - keep feature flag off until replay test passes
+verification:
+  - burn_5m < 1x for 20m
+  - missing orders reconciliation complete
+  - customer update sent
+runbook_diff:
+  - add metric gate for checkout_success burn
+  - add target health canary stop rule`,
+    lectureDemoScript: [
+      ["데모 1", "정상 요청 경로 그리기", "브라우저에서 DB까지 6개 hop을 그리고 각 hop의 증거를 하나씩 붙인다.", "청중이 app log 이전 계층의 증거를 말할 수 있어야 한다."],
+      ["데모 2", "5xx fast burn triage", "incident snapshot을 보여주고 rollback, scale-out, DB restart 중 무엇을 먼저 할지 투표시킨다.", "최근 변경과 DB baseline을 근거로 rollback 후보를 고르는지 확인한다."],
+      ["데모 3", "private subnet egress 오판", "flow log ACCEPT와 NAT bytes 4x를 함께 보여준다.", "네트워크 차단이 아니라 retry storm/외부 API 지연을 의심하는지 본다."],
+      ["데모 4", "restore drill 채점", "backup_age, restore_duration, missing_rows를 보여주고 RPO/RTO 판정을 시킨다.", "복구 성공과 목표 충족을 구분하는지 확인한다."],
+    ],
+    expertReviewQuestions: [
+      ["SRE 리뷰", "SLO, burn rate, incident role, postmortem action이 실제 운영 정책으로 이어지는가?", "알림 피로, error budget 정책, paging 기준이 빠져 있으면 보강한다."],
+      ["Cloud network 리뷰", "route table, SG/NACL/NSG, DNS override, private endpoint, NAT 비용 설명이 provider별로 정확한가?", "AWS/Azure 차이를 서비스명 치환으로 처리한 부분을 수정한다."],
+      ["Kubernetes/runtime 리뷰", "readiness/liveness/startup, graceful shutdown, rollout, target health가 정확히 분리되어 있는가?", "무중단 배포와 health check를 섞어 설명한 부분을 수정한다."],
+      ["DB/DR 리뷰", "connection pool, lock wait, migration lock, PITR, replica lag, failback 설명이 실제 복구 절차와 맞는가?", "백업 존재와 복구 가능성을 혼동한 표현을 제거한다."],
+      ["보안 리뷰", "IAM/Managed Identity, secret rotation, audit log, incident comms가 과도하게 단순화되지 않았는가?", "장기 키, broad permission, secret leakage 대응을 명확히 한다."],
+    ],
+    officialReferences: [
+      ["SLO/Burn rate", "Google SRE Workbook · Alerting on SLOs", "https://sre.google/workbook/alerting-on-slos/", "burn rate, error budget, multi-window alert는 서비스별 baseline과 page load에 맞춰 조정해야 한다."],
+      ["Kubernetes probes", "Kubernetes Docs · Liveness, Readiness, and Startup Probes", "https://kubernetes.io/docs/concepts/workloads/pods/probes/", "liveness는 재시작, readiness는 traffic 수신 여부, startup은 느린 시작 보호로 분리한다."],
+      ["AWS VPC Flow Logs", "AWS Docs · Flow log records", "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html", "ACCEPT/REJECT는 aggregation interval과 log-status를 함께 봐야 하며 delivery delay가 있을 수 있다."],
+      ["AWS PrivateLink", "AWS Docs · AWS PrivateLink concepts", "https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html", "endpoint 생성만으로 충분하지 않고 DNS, endpoint policy, route/security 경계를 함께 확인한다."],
+      ["Azure Private Endpoint", "Microsoft Learn · Private endpoint overview", "https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview", "private endpoint는 private IP로 Azure service에 연결하므로 Private DNS Zone 연결과 public access 정책을 같이 본다."],
+      ["AWS ALB health", "AWS Docs · Target group health checks", "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html", "target health는 health check path, matcher, timeout, deregistration/draining과 함께 해석한다."],
+      ["AWS RDS PITR", "AWS Docs · Restoring a DB instance to a specified time", "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html", "PITR은 새 DB instance를 만들며 latest restorable time, parameter/security group, engine 제약을 확인해야 한다."],
+      ["Azure SQL restore", "Microsoft Learn · Restore a database from a backup", "https://learn.microsoft.com/en-us/azure/azure-sql/database/recovery-using-backups", "restore 가능성과 RPO/RTO 충족은 다르므로 restore duration과 data reconciliation을 따로 측정한다."],
+    ],
+    accuracyBoundaries: [
+      ["클라우드 서비스명", "AWS/Azure 서비스명은 계속 바뀌고 기능도 region/sku에 따라 다르다.", "문서의 서비스 매핑은 책임 경계 학습용이며, 실제 설계 전 공식 문서와 현재 계정 설정을 확인한다."],
+      ["SLO 임계값", "14.4x, 6x 같은 burn rate 예시는 출발점이지 절대값이 아니다.", "트래픽 규모, on-call 부담, error budget policy에 맞춰 page/ticket 기준을 재산정한다."],
+      ["Flow log 판독", "flow log는 aggregation과 delivery delay가 있고 일부 metadata는 best effort다.", "패킷 단위 진실로 단정하지 말고 app log, target health, DNS query log와 교차 검증한다."],
+      ["Kubernetes probe", "probe 설정은 runtime, startup 특성, downstream 의존성에 따라 달라진다.", "liveness에 DB 등 외부 의존성을 넣어 전체 재시작 루프를 만들지 않도록 리뷰한다."],
+      ["DR/RPO/RTO", "백업이 존재해도 복구 목표를 만족한다는 뜻은 아니다.", "restore drill, reconciliation, failback, customer communication을 따로 검증한다."],
+      ["보안/IAM", "권한과 secret 운영은 조직의 identity, audit, compliance 정책에 종속된다.", "예시는 최소 기준이며 실제 운영 전 security owner review를 필수로 둔다."],
+    ],
+    providerGotchas: [
+      ["Route 53 / Azure DNS", "record가 맞아도 resolver cache, delegation, split-horizon/private DNS가 다르면 사용자는 실패할 수 있다.", "authoritative answer, public resolver, private resolver를 분리해 기록한다."],
+      ["CloudFront / Front Door", "edge 403, stale cache, origin 5xx는 같은 화면 오류로 보일 수 있다.", "edge request id, cache status, WAF log, origin status를 같은 request timeline에 붙인다."],
+      ["ALB / Application Gateway", "health check 성공은 business readiness 보장이 아니다.", "health path가 dependency-free인지, matcher/timeout/draining이 배포 전략과 맞는지 확인한다."],
+      ["PrivateLink / Private Endpoint", "endpoint를 만들어도 DNS가 public endpoint를 반환하면 사설 경로가 아니다.", "private DNS, endpoint policy, route/security rule, public access setting을 함께 검증한다."],
+      ["EKS/AKS/App Service", "새 버전이 뜬 것과 traffic을 받아도 되는 것은 다르다.", "readiness, startup, rollout status, target/backend health, image digest를 연결한다."],
+      ["RDS / Azure SQL", "PITR 가능과 실제 업무 복구 가능은 다르다.", "latest restorable time, restore duration, schema/app compatibility, missing rows reconciliation을 기록한다."],
+    ],
+    reproducibleLabPacket: [
+      ["입력 데이터", "incident snapshot, edge evidence, egress evidence, restore drill output", "각 lab은 정상/비정상 출력과 판단 기준을 같이 제공한다."],
+      ["학습자 제출물", "원인 후보 3개, 배제한 증거, 즉시 완화 1개, 영구 수정 2개, 종료 조건", "원인 정답보다 증거 기반 의사결정 과정을 채점한다."],
+      ["채점 방식", "증거 연결 40%, 완화 선택 25%, 영구 수정 20%, 커뮤니케이션/owner 15%", "서비스명 암기와 단일 로그 의존 답변은 감점한다."],
+      ["재현 범위", "실제 cloud 계정 없이도 읽을 수 있는 synthetic packet", "실제 실습으로 확장할 때는 sandbox 계정, 비용 한도, 삭제 스크립트, IAM boundary를 추가한다."],
+    ],
+    caseStudies: [
+      {
+        title: "Case 1 · 배포 후 checkout 5xx fast burn",
+        context: "결제 API 신규 artifact 배포 8분 뒤 checkout_success SLO가 14x fast burn을 보이고 ALB 5xx와 app error가 동시에 증가한다.",
+        timeline: [
+          ["T+00", "burn alert 수신, incident channel 생성, IC/scribe 지정", "사용자 영향과 의사결정권을 먼저 고정한다."],
+          ["T+05", "deploy marker, image digest, config diff, DB migration version 확인", "최근 변경이 사용자 영향과 같은 시간축인지 확인한다."],
+          ["T+10", "target health, app log, DB wait event, feature flag 상태 확인", "DB 압박이 아니라 새 runtime 오류와 연결되면 rollback 후보가 강해진다."],
+          ["T+15", "canary stop 또는 previous artifact rollback", "원인 확정 전이라도 사용자 영향을 줄인다."],
+          ["T+45", "postmortem에 metric gate, rollback decision log, runbook diff 추가", "재발 방지가 운영 산출물로 닫혀야 한다."],
+        ],
+        trap: "앱 로그 stack trace만 보고 디버깅을 계속하면서 rollback 결정을 늦추는 것.",
+        outcome: "burn rate가 baseline으로 회복되고 rollback artifact, config version, 의사결정 시간이 incident packet에 남으면 종료한다.",
+      },
+      {
+        title: "Case 2 · Private subnet egress와 NAT 비용 급증",
+        context: "private subnet batch가 외부 결제사 API timeout을 반복하고 NAT bytes가 4배 증가한다.",
+        timeline: [
+          ["T+00", "route table, SG/NACL, DNS resolution, flow log를 확인", "네트워크가 막힌 것인지, 통신은 되지만 retry storm인지 분리한다."],
+          ["T+10", "provider 429/timeout, app retry rate, batch concurrency 확인", "flow log ACCEPT와 NAT bytes 증가는 차단이 아니라 과도한 재시도일 수 있다."],
+          ["T+20", "batch concurrency 축소, retry backoff, circuit breaker 적용", "비용과 장애 영향을 동시에 줄이는 완화책을 선택한다."],
+          ["T+60", "egress dependency map, retry budget, NAT cost anomaly alert 추가", "비용 신호를 운영 incident 신호로 편입한다."],
+        ],
+        trap: "flow log ACCEPT만 보고 네트워크는 정상이라고 끝내거나, NAT 비용을 FinOps 문제로만 분리하는 것.",
+        outcome: "retry rate, NAT bytes, batch success, 외부 API 오류율이 baseline으로 돌아오면 종료한다.",
+      },
+      {
+        title: "Case 3 · Restore drill RPO/RTO 실패",
+        context: "DB restore drill에서 backup_age 17분, restore_duration 42분, missing_rows 128건으로 RPO 5분/RTO 30분을 모두 위반한다.",
+        timeline: [
+          ["T+00", "backup age, replica lag, restore duration, reconciliation 범위 기록", "복구 성공 여부보다 목표 위반을 먼저 판정한다."],
+          ["T+20", "write freeze, 영향 고객 산정, reconciliation job 실행", "데이터 정합성 회복을 장애 완화와 분리해 관리한다."],
+          ["T+60", "backup frequency, replica lag alert, restore automation 개선", "다음 drill에서 같은 목표로 재검증할 수 있어야 한다."],
+          ["T+N", "failback drill과 runbook diff 수행", "복구 후 원래 경로로 돌아오는 절차까지 검증한다."],
+        ],
+        trap: "복구가 됐다는 사실만 보고 RPO/RTO 위반과 누락 데이터 reconciliation을 덮는 것.",
+        outcome: "다음 drill에서 RPO/RTO met, missing rows 0, failback 완료가 증거로 남아야 한다.",
+      },
+    ],
+    gradingRubric: [
+      ["초급", "도구 이름과 서비스명을 나열한다.", "장애 때 앱 로그나 콘솔 화면 하나에 의존한다.", "불합격. 운영 판단 순서와 증거 연결이 없다."],
+      ["중급", "요청 경로와 변경 경로를 그리고 주요 증거를 확인한다.", "rollback 후보와 owner를 말하지만 drill 증거가 약하다.", "내부 운영 참여 가능. 공개 강연/출판용 설명으로는 보강 필요."],
+      ["상급", "사용자 영향, 최근 변경, 계층별 증거, 완화, 사후 개선을 incident packet으로 닫는다.", "SLO burn, 비용, 보안, DR까지 같은 timeline에서 설명한다.", "강연/출판 사례의 기준점으로 삼을 수 있다."],
+      ["리뷰어", "청중/독자가 같은 결론에 도달하도록 출력 샘플, 오판 사례, 채점 기준을 제공한다.", "클라우드별 차이와 조직 운영 체계의 한계를 명시한다.", "외부 공개 전 기술 리뷰를 맡길 수 있는 수준."],
+    ],
+    publicationChecklist: [
+      ["개념 정확성", "DNS/TLS, LB, VPC, runtime, DB, SLO, DR 용어가 책임 경계와 함께 설명되는가?", "서비스명 번역이나 벤더 마케팅 문구로 대체하지 않는다."],
+      ["사례 완결성", "각 케이스가 증상, timeline, 증거, 완화, 영구 수정, 종료 조건을 포함하는가?", "장애 원인만 맞히는 퍼즐이 아니라 운영 판단 훈련이어야 한다."],
+      ["실습 재현성", "정상/비정상 출력, 해석, mitigation, verification이 모두 있는가?", "명령어만 던지고 정답 기준을 생략하지 않는다."],
+      ["강연 가능성", "60분 흐름, 청중 수준, 데모 지점, Q&A 답변 구조가 있는가?", "슬라이드로 옮겼을 때 메시지가 순서대로 쌓여야 한다."],
+      ["전문 리뷰", "SRE/클라우드 네트워크/Kubernetes/IaC/DB 운영 관점의 리뷰를 받을 지점이 표시되는가?", "출판 전 최소 1회 이상 실제 운영자 리뷰를 거친다."],
+    ],
+    answerCards: [
+      ["30초 답변", "인프라·운영은 요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해 보는 일입니다. DNS부터 DB까지 어디서 요청이 멈췄는지 증거로 좁히고, 배포 변경은 artifact와 metric gate로 추적하며, 장애 때는 원인 확정 전에도 rollback이나 feature off로 사용자 영향을 줄입니다."],
+      ["90초 답변", "저는 먼저 사용자 영향 SLI와 최근 변경을 같은 timeline에 둡니다. 그 다음 DNS/TLS, CDN/WAF, Load Balancer, runtime, DB, network policy 순서로 요청이 도달한 지점을 확인하고, 배포 관련이면 commit SHA, image digest, config diff, migration version을 봅니다. 완화는 rollback, traffic shift, feature flag off, restore 중 폭발 반경이 가장 작은 선택지를 고르고, 복구 후에는 incident packet, runbook diff, SLO/alert 개선으로 닫습니다."],
+      ["나쁜 답변", "AWS에서 ALB, ECS, RDS, CloudWatch를 써봤습니다. 장애가 나면 로그를 보고 서버를 재시작합니다."],
+    ],
   },
   "operations-request-path-handbook.html": {
     checklist: ["사용자 증상, 지역, 시간, 브라우저 조건을 먼저 기록한다.", "DNS, TLS, CDN/WAF, Load Balancer, App, DB 로그를 같은 시간축에 맞춘다.", "502, 503, 504, timeout, TLS error를 분리한다.", "traceId로 프론트, API, DB 관측 신호를 연결한다."],
@@ -1123,6 +1314,66 @@ const practiceLabsByFile = {
       permanentFix: "운영 인수 체크리스트에 owner, SLO, rollback, restore drill, cost owner를 필수 항목으로 둔다.",
       verification: "readiness packet의 모든 owner와 마지막 drill 시간이 채워지고 smoke/rollback 검증이 통과한다.",
     },
+    {
+      title: "배포 직후 5xx 증가 triage",
+      scenario: "새 artifact 배포 8분 뒤 checkout 5xx와 p95 latency가 동시에 증가한다.",
+      command: "incident snapshot\nsli=checkout_success burn=14x\ndeploy_marker=api:sha-9f31 at T-8m\nalb_5xx=up\napp_error=up\ndb_pool_pending=flat\nrollback=available",
+      purpose: "사용자 영향과 최근 변경을 같은 시간축에 두고 rollback 후보를 판단한다.",
+      normalOutput: "burn=0.7x\ndeploy_marker=none\nalb_5xx=baseline\nrollback=not_needed",
+      abnormalOutput: "burn=14x\ndeploy_marker=api:sha-9f31\nalb_5xx=up\napp_error=up\nrollback=available",
+      interpretation: "최근 배포와 사용자 영향이 강하게 연결되어 원인 확정 전 rollback 또는 feature flag off를 검토해야 한다.",
+      mitigation: "canary stop, feature flag off, previous artifact rollback 중 폭발 반경이 가장 작은 조치를 실행한다.",
+      permanentFix: "metric gate에 checkout_success burn rate와 app 5xx를 추가하고 rollback decision log를 release runbook에 넣는다.",
+      verification: "burn rate 1x 이하, 5xx baseline 복귀, rollback artifact와 config version 기록 완료.",
+    },
+    {
+      title: "DNS/TLS edge 장애 판독",
+      scenario: "일부 지역 사용자만 접속 실패를 보고하고 앱 로그에는 요청이 없다.",
+      command: "edge evidence\ndig_public=NXDOMAIN\ndig_authoritative=NOERROR ttl=60\nopenssl_verify=ok\nwaf_request_id=missing\napp_log=missing",
+      purpose: "앱 장애와 edge 이전 장애를 분리한다.",
+      normalOutput: "dig_public=NOERROR\ndig_authoritative=NOERROR\nwaf_request_id=present\napp_log=present",
+      abnormalOutput: "dig_public=NXDOMAIN\nwaf_request_id=missing\napp_log=missing\nresolver_region=ap-northeast",
+      interpretation: "요청이 edge/app까지 도달하지 않았으므로 DNS resolver cache, delegation, record 변경을 먼저 의심한다.",
+      mitigation: "이전 record 복구, TTL 전파 모니터링, status update, affected resolver 확인.",
+      permanentFix: "DNS 변경 티켓에 TTL 사전 조정, authoritative/public resolver 검증, rollback record를 필수화한다.",
+      verification: "public resolver와 authoritative resolver 모두 NOERROR, WAF request id와 app access log 재등장.",
+    },
+    {
+      title: "Private subnet egress 장애 판독",
+      scenario: "private subnet의 배치 작업이 외부 결제 API timeout을 반복하고 NAT 비용도 증가한다.",
+      command: "egress evidence\nroute_0_0_0_0=nat-123\nflow_log=ACCEPT\nnat_bytes=4x\nretry_rate=9x\napi_timeout=up",
+      purpose: "라우팅 성공, 정책 허용, retry storm, 비용 신호를 한 incident로 묶는다.",
+      normalOutput: "nat_bytes=baseline\nretry_rate=baseline\napi_timeout=0\nflow_log=ACCEPT",
+      abnormalOutput: "nat_bytes=4x\nretry_rate=9x\napi_timeout=up\nprovider_429=up",
+      interpretation: "네트워크가 막힌 것이 아니라 외부 API 지연/429와 재시도가 NAT 비용과 timeout을 키우는 상황일 수 있다.",
+      mitigation: "retry backoff 강화, batch concurrency 축소, circuit breaker 또는 queue pause.",
+      permanentFix: "egress dependency map, retry budget, NAT cost anomaly alert, external API SLO를 추가한다.",
+      verification: "retry rate baseline, NAT bytes 정상화, batch success 회복, provider 429 감소.",
+    },
+    {
+      title: "SLO burn과 incident 역할 판독",
+      scenario: "결제 성공률 fast burn이 발생했는데 장애 채널에서 여러 명이 동시에 명령한다.",
+      command: "incident channel\nburn_5m=18x\nIC=missing\nscribe=missing\ncommands=rollback,scale-out,db-restart\ncustomer_comms=missing",
+      purpose: "기술 신호와 incident command 실패를 동시에 판정한다.",
+      normalOutput: "burn_5m=0.8x\nIC=assigned\nscribe=assigned\ncommands=single_owner\ncustomer_comms=ready",
+      abnormalOutput: "burn_5m=18x\nIC=missing\nmultiple_commands=true\ncustomer_comms=missing",
+      interpretation: "fast burn 자체도 문제지만 역할과 의사결정 기록이 없어 완화 품질이 떨어지는 상태다.",
+      mitigation: "IC 지정, 명령권 단일화, scribe와 comms owner 지정, 완화 후보 하나를 선택한다.",
+      permanentFix: "incident role checklist, decision log template, fast burn paging runbook을 추가한다.",
+      verification: "timeline, decision owner, customer update, recovery signal, runbook diff가 postmortem에 남음.",
+    },
+    {
+      title: "Restore drill RPO/RTO 판독",
+      scenario: "DB 장애 대비 restore drill을 수행했지만 목표 시간을 초과했다.",
+      command: "restore drill\nbackup_age=17m\nrestore_duration=42m\nreplica_lag=11m\nmissing_rows=128\nRPO=5m\nRTO=30m",
+      purpose: "백업 존재와 복구 가능성을 구분하고 RPO/RTO 위반을 판정한다.",
+      normalOutput: "backup_age=4m\nrestore_duration=18m\nreplica_lag=30s\nmissing_rows=0\nRPO=met\nRTO=met",
+      abnormalOutput: "backup_age=17m\nrestore_duration=42m\nreplica_lag=11m\nmissing_rows=128\nRPO=breach\nRTO=breach",
+      interpretation: "복구는 됐지만 허용 데이터 손실과 복구 시간 목표를 모두 넘었고 reconciliation이 필요하다.",
+      mitigation: "write freeze, 영향 고객 범위 산정, reconciliation job 실행, failback 계획 고정.",
+      permanentFix: "backup frequency, replica lag alert, restore automation, failback drill을 개선한다.",
+      verification: "다음 drill에서 RPO/RTO met, missing rows 0, failback 절차 완료.",
+    },
   ],
   "operations-request-path-handbook.html": [
     {
@@ -1465,6 +1716,36 @@ const renderRows = (rows) =>
 
 const renderCodeBlock = (value) => `<pre><code>${escapeHtml(value)}</code></pre>`;
 
+const renderOptionalTable = ({ rows, headers }) => {
+  if (!rows?.length) return "";
+
+  return `        <table>
+          <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
+${renderRows(rows)}
+        </table>`;
+};
+
+const renderCaseStudies = (caseStudies) => {
+  if (!caseStudies?.length) return "";
+
+  return caseStudies
+    .map(
+      (caseStudy) => `        <div class="practice-lab">
+          <span class="sc-label">${escapeHtml(caseStudy.title)}</span>
+          <p>${escapeHtml(caseStudy.context)}</p>
+          <table>
+            <tr><th>시점</th><th>판단/행동</th><th>해석 기준</th></tr>
+${renderRows(caseStudy.timeline)}
+          </table>
+          <table>
+            <tr><th>대표 오판</th><th>종료 조건</th></tr>
+            <tr><td>${escapeHtml(caseStudy.trap)}</td><td>${escapeHtml(caseStudy.outcome)}</td></tr>
+          </table>
+        </div>`,
+    )
+    .join("\n");
+};
+
 const renderPracticeLabs = (labs) =>
   labs
     .map(
@@ -1533,6 +1814,70 @@ const render = (doc) => {
   const nav = navItems
     .map(({ code, title }, index) => `  <a href="#ch${index === 0 ? "index" : index}"><span class="code">${code}</span>${escapeHtml(title)}</a>`)
     .join("\n");
+  const indexExtras = [
+    detail.audienceContract?.length
+      ? `      <h3>대상 독자와 학습 계약</h3>
+${renderOptionalTable({ headers: ["항목", "내용", "완료 기준"], rows: detail.audienceContract })}`
+      : "",
+    detail.learningPlan?.length
+      ? `      <h3>로드맵으로 읽는 순서</h3>
+${renderOptionalTable({ headers: ["단계", "읽을 문서", "완료 산출물"], rows: detail.learningPlan })}`
+      : "",
+    detail.lectureFlow?.length
+      ? `      <h3>60분 강연 흐름</h3>
+${renderOptionalTable({ headers: ["시간", "주제", "핵심 메시지"], rows: detail.lectureFlow })}`
+      : "",
+    detail.failureMatrix?.length
+      ? `      <h3>계층별 실패 모드</h3>
+${renderOptionalTable({ headers: ["계층", "대표 실패", "첫 확인 증거"], rows: detail.failureMatrix })}`
+      : "",
+    detail.providerEvidence?.length
+      ? `      <h3>AWS/Azure 증거 비교</h3>
+${renderOptionalTable({ headers: ["영역", "AWS 증거", "Azure 증거", "판단 기준"], rows: detail.providerEvidence })}`
+      : "",
+    detail.decisionTree?.length
+      ? `      <h3>운영 의사결정 트리</h3>
+${renderOptionalTable({ headers: ["질문", "확인 증거", "다음 선택"], rows: detail.decisionTree })}`
+      : "",
+    detail.readinessScore?.length
+      ? `      <h3>운영 준비도 점수표</h3>
+${renderOptionalTable({ headers: ["점수", "상태", "판정"], rows: detail.readinessScore })}`
+      : "",
+    detail.lectureDemoScript?.length
+      ? `      <h3>강연 데모 스크립트</h3>
+${renderOptionalTable({ headers: ["데모", "주제", "진행 방식", "확인 질문"], rows: detail.lectureDemoScript })}`
+      : "",
+    detail.gradingRubric?.length
+      ? `      <h3>실습 채점 루브릭</h3>
+${renderOptionalTable({ headers: ["수준", "답변 특징", "증거 사용", "판정"], rows: detail.gradingRubric })}`
+      : "",
+    detail.expertReviewQuestions?.length
+      ? `      <h3>전문가 리뷰 질문</h3>
+${renderOptionalTable({ headers: ["리뷰 영역", "확인 질문", "보강 기준"], rows: detail.expertReviewQuestions })}`
+      : "",
+    detail.officialReferences?.length
+      ? `      <h3>공식 근거 맵</h3>
+${renderOptionalTable({ headers: ["영역", "공식 문서", "URL", "반영 기준"], rows: detail.officialReferences })}`
+      : "",
+    detail.accuracyBoundaries?.length
+      ? `      <h3>정확도 한계와 공개 시 주의 문구</h3>
+${renderOptionalTable({ headers: ["영역", "공격받기 쉬운 지점", "문서의 안전한 표현"], rows: detail.accuracyBoundaries })}`
+      : "",
+    detail.providerGotchas?.length
+      ? `      <h3>벤더별 세부 함정</h3>
+${renderOptionalTable({ headers: ["영역", "함정", "검증 방식"], rows: detail.providerGotchas })}`
+      : "",
+    detail.reproducibleLabPacket?.length
+      ? `      <h3>재현 실습 패킷</h3>
+${renderOptionalTable({ headers: ["항목", "내용", "채점/운영 기준"], rows: detail.reproducibleLabPacket })}`
+      : "",
+    detail.publicationChecklist?.length
+      ? `      <h3>출판 전 검수 기준</h3>
+${renderOptionalTable({ headers: ["검수 영역", "확인 질문", "탈락 기준"], rows: detail.publicationChecklist })}`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
   const sections = docSections
     .map((section, index) => `
       <section id="ch${index + 1}">
@@ -1585,6 +1930,11 @@ ${docSections.map((section) => `          <tr><td>${section.code} · ${escapeHtm
           <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
 ${renderRows(playbook.evidenceRows)}
         </table>
+${detail.readinessPacketTemplate || detail.incidentPacketTemplate ? `        <h3>운영 산출물 템플릿</h3>
+        <table>
+          <tr><th>Readiness packet</th><th>Incident packet</th></tr>
+          <tr><td>${detail.readinessPacketTemplate ? renderCodeBlock(detail.readinessPacketTemplate) : ""}</td><td>${detail.incidentPacketTemplate ? renderCodeBlock(detail.incidentPacketTemplate) : ""}</td></tr>
+        </table>` : ""}
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
 ${renderRows(playbook.commandRows)}
@@ -1616,12 +1966,14 @@ ${renderTerms(terms)}
         </div>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>${escapeHtml(playbook.evidenceRows[0][1])} 기준으로 영향 범위를 고정한다.</td><td>${escapeHtml(playbook.commandRows[0][1])}에서 증거를 모아 완화책을 실행한다.</td><td>${escapeHtml(playbook.incidentRows.at(-1)[2])}</td></tr>
+          <tr><td>${escapeHtml(playbook.evidenceRows[0][1])} 기준으로 영향 범위를 고정한다.</td><td>${escapeHtml(playbook.commandRows[0][1])} 항목에서 증거를 모아 완화책을 실행한다.</td><td>${escapeHtml(playbook.incidentRows.at(-1)[2])}</td></tr>
         </table>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
 ${renderRows(playbook.incidentRows)}
         </table>
+${detail.caseStudies?.length ? `        <h3>강연/출판용 실전 케이스</h3>
+${renderCaseStudies(detail.caseStudies)}` : ""}
       </section>
 
       <section id="ch${detailStart + 6}">
@@ -1637,6 +1989,10 @@ ${renderRows(playbook.incidentRows)}
           <span class="sc-label">OPERATIONS ANSWER FRAME</span>
 ${renderAnswerShape(playbook.answerShape)}
         </div>
+${detail.answerCards?.length ? `        <table>
+          <tr><th>답변 유형</th><th>예시</th></tr>
+${renderRows(detail.answerCards)}
+        </table>` : ""}
       </section>`;
 
   return `<!DOCTYPE html>
@@ -1669,6 +2025,7 @@ ${nav}
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
 <ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+${indexExtras}
 </section>
 ${sections}
 ${detailSections}

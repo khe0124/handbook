@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>플랫폼 엔지니어링과 개발자 생산성</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:760px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:-.02em}h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}tr:last-child td{border-bottom:none}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0;font-size:14.5px;line-height:1.75}.semantic-card.process-card{background:var(--green-tint)}.semantic-card.answer-card{border-left-color:var(--green-deep)}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+<div class="nav-brand">ENGINEERING CONTEXT · PLATFORM</div>
+  <div class="nav-title">플랫폼·생산성</div>
+  <a href="#index"><span class="code">INDEX</span>학습 위치</a>
+  <a href="#plat-01"><span class="code">PLAT-01</span>플랫폼은 공통 책임을 제품화한 것이다</a>
+  <a href="#plat-02"><span class="code">PLAT-02</span>Golden path</a>
+  <a href="#plat-03"><span class="code">PLAT-03</span>개발자 생산성 지표</a>
+  <a href="#plat-04"><span class="code">PLAT-04</span>사내 도구의 함정</a>
+  <a href="#plat-05"><span class="code">PLAT-05</span>플랫폼과 제품팀의 계약</a>
+  <a href="#plat-06"><span class="code">PLAT-06</span>읽히는 신호</a>
+  <a href="#review"><span class="code">REVIEW</span>학습 확인 질문</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : CONTEXT-PLATFORM-PRODUCTIVITY</span>
+    <span>SCOPE : PLATFORM · INTERNAL TOOLS · DX · GOLDEN PATH</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>플랫폼 엔지니어링과 개발자 생산성</h1>
+  <p class="hero-sub">사내 도구, 공통 플랫폼, 개발자 경험이 왜 제품 속도와 품질의 기반이 되는지 이해합니다.</p>
+  <div class="hero-meta">FORMAT : 개념 → 맥락 → 판단 기준 → 실패 신호 · UPDATED 2026-07</div>
+</header>
+
+<section id="index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>이 문서의 위치</h2></div>
+<p class="lede">이 문서는 경험담을 흉내 내기 위한 글이 아니라, 고급 엔지니어링 사례가 자연스럽게 읽히도록 만드는 기반 개념서입니다. 기술명보다 규모, 소유권, 품질, 지표, 호환성, 운영 책임의 언어를 먼저 익힙니다.</p>
+<div class="semantic-card process-card"><span class="sc-label">READING MODEL</span>기술 블로그의 문장 → 숨은 조직/운영 압력 → 관련 개념 → 판단 기준 → 실패 신호</div>
+<div class="serial-card"><span class="sc-label">RECALL TARGET</span>이 문서를 외운다는 것은 용어를 정의하는 데서 끝나지 않는다. 글에서 어떤 문제가 규모, 플랫폼, 품질, 성능, 호환성, 운영 책임 중 어디에 걸리는지 즉시 분류할 수 있어야 한다.</div>
+</section>
+
+<section id="plat-01">
+<div class="ch-head"><span class="ch-code">PLAT-01</span><h2>플랫폼은 공통 책임을 제품화한 것이다</h2></div>
+<p class="lede">플랫폼 엔지니어링은 팀마다 반복하던 배포, 권한, 관측, 템플릿, 테스트 환경을 공통 제품으로 만드는 일이다. 핵심 고객은 내부 개발자이고, 성공 기준은 사용 팀의 속도와 안전성이다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>공통 문제</td><td>배포</td><td>팀마다 다른 스크립트를 표준 pipeline으로</td></tr>
+<tr><td>공통 문제</td><td>권한</td><td>수동 계정 발급을 self-service + audit로</td></tr>
+<tr><td>공통 문제</td><td>관측</td><td>로그/메트릭/트레이스 기본값 제공</td></tr>
+</table>
+</section>
+
+<section id="plat-02">
+<div class="ch-head"><span class="ch-code">PLAT-02</span><h2>Golden path</h2></div>
+<p class="lede">Golden path는 조직이 권장하는 안전한 기본 경로다. 모든 선택지를 금지하는 것이 아니라, 대부분의 팀이 빠르게 시작하고 안전하게 운영할 수 있는 기본 조합을 제공한다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>요소</td><td>template</td><td>프로젝트 생성, lint, test, CI 기본값</td></tr>
+<tr><td>요소</td><td>guardrail</td><td>보안 스캔, 배포 승인, secret 차단</td></tr>
+<tr><td>요소</td><td>escape hatch</td><td>특수 요구를 위한 예외 경로와 승인 기준</td></tr>
+</table>
+</section>
+
+<section id="plat-03">
+<div class="ch-head"><span class="ch-code">PLAT-03</span><h2>개발자 생산성 지표</h2></div>
+<p class="lede">생산성은 커밋 수가 아니라 대기 시간, 반복 작업, 실패 후 복구 시간, 변경 리드타임으로 본다. 좋은 플랫폼 글은 도구 기능보다 개발자가 덜 기다리고 덜 실수하게 된 구조를 설명한다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>지표</td><td>lead time</td><td>작업 시작부터 production 반영까지 시간</td></tr>
+<tr><td>지표</td><td>review latency</td><td>리뷰 요청부터 승인까지 대기</td></tr>
+<tr><td>지표</td><td>self-service rate</td><td>플랫폼 팀 개입 없이 완료된 작업 비율</td></tr>
+</table>
+</section>
+
+<section id="plat-04">
+<div class="ch-head"><span class="ch-code">PLAT-04</span><h2>사내 도구의 함정</h2></div>
+<p class="lede">사내 도구는 만들기보다 유지가 어렵다. 문서, 권한, 장애 대응, 호환성, 지원 채널이 없으면 도구가 생산성을 높이는 대신 또 다른 병목이 된다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>위험</td><td>도구 owner 없음</td><td>문의와 장애가 방치된다</td></tr>
+<tr><td>위험</td><td>강제 표준화</td><td>특수 케이스가 편법으로 빠진다</td></tr>
+<tr><td>위험</td><td>측정 없음</td><td>좋아졌는지 감으로만 판단한다</td></tr>
+</table>
+</section>
+
+<section id="plat-05">
+<div class="ch-head"><span class="ch-code">PLAT-05</span><h2>플랫폼과 제품팀의 계약</h2></div>
+<p class="lede">플랫폼은 제품팀의 책임을 없애지 않는다. 공통 기반은 안전한 기본값을 제공하고, 제품팀은 도메인 요구, 사용자 영향, 출시 판단을 책임진다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>책임</td><td>플랫폼 팀</td><td>기본 경로, guardrail, 운영 지원</td></tr>
+<tr><td>책임</td><td>제품 팀</td><td>사용자 가치, 도메인 테스트, 출시 결정</td></tr>
+<tr><td>책임</td><td>공동</td><td>장애 대응, migration, adoption plan</td></tr>
+</table>
+</section>
+
+<section id="plat-06">
+<div class="ch-head"><span class="ch-code">PLAT-06</span><h2>읽히는 신호</h2></div>
+<p class="lede">플랫폼 글을 읽을 때는 ‘무엇을 만들었나’보다 ‘누구의 반복 문제를 줄였나’를 본다. 내부 고객, adoption, migration, support cost, guardrail이 함께 나오면 플랫폼 맥락이 있는 글이다.</p>
+<table>
+<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
+<tr><td>신호</td><td>내부 고객</td><td>사용 팀과 사용 시나리오가 명확하다</td></tr>
+<tr><td>신호</td><td>adoption path</td><td>기존 팀이 어떻게 옮겨오는지 설명한다</td></tr>
+<tr><td>신호</td><td>운영 모델</td><td>문의, 장애, 예외 승인 방식이 있다</td></tr>
+</table>
+</section>
+
+<section id="review">
+<div class="ch-head"><span class="ch-code">REVIEW</span><h2>학습 확인 질문</h2></div>
+<p class="lede">아래 질문에 막힘없이 답하면 이 주제의 글을 읽을 때 핵심 맥락을 놓칠 가능성이 줄어듭니다.</p>
+<table>
+<tr><th>질문</th><th>기대 답변</th><th>미달 신호</th></tr>
+<tr><td>이 주제에서 가장 중요한 압력은 무엇인가?</td><td>사용자 규모, 변경 규모, 조직 규모, 호환성, 운영 책임 중 하나로 분류한다.</td><td>도구명만 말하고 왜 어려운지 설명하지 못한다.</td></tr>
+<tr><td>좋은 해결책을 무엇으로 검증하는가?</td><td>지표, adoption, 회귀 방지, rollback, 사용자 영향 중 하나 이상을 말한다.</td><td>“좋아졌다”, “편해졌다”처럼 감상으로 끝난다.</td></tr>
+<tr><td>다른 조직에 적용할 때 무엇을 조정해야 하는가?</td><td>규모, 팀 구조, 배포 주기, 위험 허용치, 기존 시스템을 분리한다.</td><td>유명 회사 사례를 그대로 따라 하면 된다고 생각한다.</td></tr>
+</table>
+</section>
+
+<footer>
+ENGINEERING CONTEXT HANDBOOK · 플랫폼 엔지니어링과 개발자 생산성 · 2026-07<br>
+PRINCIPLE : 좋은 엔지니어링 글을 술술 읽으려면 기술명보다 규모, 책임, 지표, 호환성, 운영 압력의 언어가 먼저 필요하다.
+</footer>
+</main>
+</div>
+</body>
+</html>

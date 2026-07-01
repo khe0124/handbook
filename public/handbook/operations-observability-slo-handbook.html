@@ -40,6 +40,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
 <ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+
 </section>
 
       <section id="ch1">
@@ -137,6 +138,7 @@
           <tr><td>Telemetry</td><td>log schema, metric label, trace sampling, deploy marker</td><td>traceId와 version이 없으면 원인 연결이 약해진다.</td></tr>
           <tr><td>Alert</td><td>multi-window burn rate, runbook, owner, silence policy</td><td>알림은 사람이 취할 행동과 연결되어야 한다.</td></tr>
         </table>
+
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>로그</td><td>timestamp, level, service, env, version, trace_id, user/tenant scope</td><td>PII와 secret은 redaction하고 검색 가능한 필드를 남긴다.</td></tr>
@@ -217,7 +219,7 @@ freshness_p95: 48m</code></pre></td><td>사용자 요청 실패가 없어도 fre
         </div>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>request success, latency, freshness, durability, business success 기준으로 영향 범위를 고정한다.</td><td>timestamp, level, service, env, version, trace_id, user/tenant scope에서 증거를 모아 완화책을 실행한다.</td><td>알림 수보다 행동 품질을 개선한다.</td></tr>
+          <tr><td>request success, latency, freshness, durability, business success 기준으로 영향 범위를 고정한다.</td><td>timestamp, level, service, env, version, trace_id, user/tenant scope 항목에서 증거를 모아 완화책을 실행한다.</td><td>알림 수보다 행동 품질을 개선한다.</td></tr>
         </table>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
@@ -225,6 +227,7 @@ freshness_p95: 48m</code></pre></td><td>사용자 요청 실패가 없어도 fre
           <tr><td>완화</td><td>bad dependency timeout 축소, traffic shed, feature degrade</td><td>SLO burn이 빠르면 원인 확정보다 완화가 우선이다.</td></tr>
           <tr><td>사후</td><td>dashboard decision panel과 alert-to-action mapping 개선</td><td>알림 수보다 행동 품질을 개선한다.</td></tr>
         </table>
+
       </section>
 
       <section id="ch11">
@@ -247,6 +250,7 @@ freshness_p95: 48m</code></pre></td><td>사용자 요청 실패가 없어도 fre
           2. SLI/SLO/error budget으로 알림 우선순위를 나눈다.<br>
           3. 로그, 메트릭, 트레이스를 traceId와 version으로 연결한다.<br>
         </div>
+
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

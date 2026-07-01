@@ -8,14 +8,20 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-<div class="nav-brand">PRACTICE · COLOR TYPOGRAPHY</div>
+  <div class="nav-brand">PRACTICE · COLOR TYPOGRAPHY</div>
   <div class="nav-title">색채 · 타이포그래피 · 브랜드 시각 언어</div>
-  <a href="#color-typography-map"><span class="code">MAP</span>시각 언어 시스템</a>
-  <a href="#color-fundamentals"><span class="code">COLOR</span>색채 기본 개념</a>
+  <a href="#color-typography-map"><span class="code">MAP</span>시각 언어 지도</a>
+  <a href="#color-fundamentals"><span class="code">COLOR</span>색채 기본</a>
+  <a href="#color-models"><span class="code">MODEL</span>색 공간과 모델</a>
+  <a href="#color-harmony"><span class="code">HARMONY</span>배색 이론</a>
   <a href="#palette-decision"><span class="code">PAL</span>팔레트 결정표</a>
+  <a href="#color-accessibility"><span class="code">A11Y</span>색 접근성</a>
   <a href="#typography-fundamentals"><span class="code">TYPE</span>타이포그래피 기본</a>
-  <a href="#typography-scale"><span class="code">SCALE</span>Typography scale checklist</a>
+  <a href="#typography-advanced"><span class="code">DEEP</span>타이포그래피 심화</a>
+  <a href="#typography-scale"><span class="code">SCALE</span>타입 스케일</a>
+  <a href="#typesetting"><span class="code">SET</span>본문 조판</a>
   <a href="#brand-language"><span class="code">BRAND</span>브랜드 시각 언어</a>
+  <a href="#glossary"><span class="code">GLOSSARY</span>용어집</a>
 </nav>
 <main>
 <header class="hero">
@@ -25,89 +31,229 @@
     <span>LANG : KO</span>
   </div>
   <h1>색채·타이포그래피·브랜드 시각 언어</h1>
-  <p class="hero-sub">Hue, saturation, value, chroma, contrast부터 typography fundamentals, font pairing, optical alignment, brand visual language까지 반복 가능한 시각 시스템으로 정리합니다.</p>
-  <div class="hero-meta">COLOR TYPOGRAPHY BRAND SYSTEM · MARKER: artifact-ready · UPDATED 2026-07</div>
+  <p class="hero-sub">색과 글자는 화면을 예쁘게 만드는 장식이 아니다. 상태를 구분하고, 정보를 읽는 속도와 정확도를 결정하고, 브랜드 신뢰를 쌓는 시스템이다. 이 문서는 hue·saturation·value·chroma 같은 색의 기본 축부터 OKLCH 같은 지각 균등 색 공간, WCAG·APCA 대비, type classification·pairing·hierarchy, 한글 조판의 특수성, 그리고 이 모든 것을 한 태도로 묶는 브랜드 시각 언어까지 반복 가능한 판단 기준으로 정리한다.</p>
+  <div class="hero-meta">COLOR · TYPE · BRAND · MARKER: artifact-ready · UPDATED 2026-07</div>
 </header>
 
 <section id="color-typography-map">
-<div class="ch-head"><span class="ch-code">MAP</span><h2>색채·타이포그래피·브랜드 시각 언어</h2></div>
-<p class="lede">색과 글자는 제품의 첫인상만 만드는 장식이 아닙니다. 상태를 구분하고, 브랜드 신뢰를 만들고, 사용자가 정보를 읽는 속도와 정확도를 결정합니다.</p>
+<div class="ch-head"><span class="ch-code">MAP</span><h2>시각 언어 지도</h2></div>
+<p class="lede">시각 언어는 네 층이 겹쳐 작동한다. 색이 의미를 나르고, 대비가 그 의미를 읽을 수 있게 하고, 타이포그래피가 위계와 읽기 리듬을 만들고, 브랜드가 이 셋을 하나의 태도로 묶는다. 어느 한 층만 잘해도 제품은 흔들린다. 이 표는 각 층에서 물어야 할 질문과 그 층이 남겨야 할 산출물을 한눈에 정리한다.</p>
 <table>
-<tr><th>영역</th><th>핵심 질문</th><th>산출물</th></tr>
-<tr><td>Color</td><td>색이 의미와 상태를 안정적으로 전달하는가</td><td>COLOR PALETTE DECISION TABLE</td></tr>
-<tr><td>Contrast</td><td>읽기와 접근성 기준을 만족하는가</td><td>accessibility contrast review</td></tr>
-<tr><td>Typography</td><td>글의 위계와 읽기 리듬이 분명한가</td><td>TYPOGRAPHY SCALE CHECKLIST</td></tr>
-<tr><td>Brand</td><td>색, 글자, 이미지, 아이콘이 같은 태도를 갖는가</td><td>BRAND VISUAL LANGUAGE AUDIT</td></tr>
+<tr><th>영역</th><th>핵심 질문</th><th>산출물 / 실패 신호</th></tr>
+<tr><td>Color</td><td>색이 의미와 상태를 안정적으로, 색맹·다크모드에서도 전달하는가</td><td>팔레트 결정표. 실패: 색이 화면마다 다른 뜻으로 쓰임</td></tr>
+<tr><td>Contrast / A11Y</td><td>본문·보조·버튼 텍스트가 각각 읽기 기준을 넘는가</td><td>대비 리뷰 로그. 실패: 회색 위 회색, 색만으로 상태 표시</td></tr>
+<tr><td>Typography</td><td>글의 위계와 읽기 리듬이 크기 외의 수단으로도 분명한가</td><td>타입 스케일. 실패: 제목·본문이 크기만 다르고 관계가 안 보임</td></tr>
+<tr><td>Brand</td><td>색·글자·이미지·아이콘·모션이 같은 성격을 공유하는가</td><td>브랜드 시각 언어 audit. 실패: 페이지마다 다른 제품처럼 보임</td></tr>
 </table>
+<div class="callout gm"><span class="co-label">이 문서의 착지점</span><p>각 섹션은 "이건 뭐다"에서 끝내지 않는다. "그래서 실무에서 어떻게 판단하고 검증하는가"와 "무엇이 실패 신호인가"까지 간다. 감각이 아니라 원리·인지구조·사용목적으로 시안을 설명할 수 있게 하는 것이 목표다.</p></div>
 </section>
 
 <section id="color-fundamentals">
-<div class="ch-head"><span class="ch-code">COLOR</span><h2>Hue, saturation, value, chroma</h2></div>
-<p class="lede">Hue, saturation, value는 색을 설명하는 기본 축입니다. Hue는 색상 계열, saturation은 선명도, value는 밝기이며, chroma는 지각되는 색의 강도를 설명할 때 유용합니다.</p>
+<div class="ch-head"><span class="ch-code">COLOR</span><h2>색채 기본</h2></div>
+<p class="lede">색을 말로 다루려면 축이 필요하다. Hue는 색상 계열, saturation은 선명도, value는 밝기다. 여기에 chroma(지각되는 색의 순도), temperature(색온도 인상), harmony(색 사이의 관계)를 더하면 색을 취향이 아니라 좌표로 논의할 수 있다. 좌표로 논의해야 팀이 재현할 수 있다.</p>
 <table>
-<tr><th>개념</th><th>의미</th><th>실무 판단</th></tr>
-<tr><td>Hue</td><td>빨강, 파랑, 초록 같은 색상 계열</td><td>브랜드 인상과 상태 의미가 충돌하지 않는지 본다.</td></tr>
-<tr><td>Saturation</td><td>색의 선명함</td><td>강한 채도는 CTA나 위험 신호에 제한적으로 쓴다.</td></tr>
-<tr><td>Value</td><td>밝고 어두운 정도</td><td>명도 차이는 색각 차이보다 더 안정적인 정보 구분 수단이다.</td></tr>
-<tr><td>Temperature</td><td>따뜻함과 차가움의 인상</td><td>브랜드 톤과 사진 색온도가 서로 맞는지 확인한다.</td></tr>
-<tr><td>Harmony</td><td>색 조합의 관계</td><td>monochromatic, analogous, complementary, triadic을 목적에 맞게 고른다.</td></tr>
+<tr><th>개념</th><th>의미</th><th>실무 판단 · 실패 신호</th></tr>
+<tr><td>Hue</td><td>빨강·파랑·초록 같은 색상 계열. 색상환에서의 각도</td><td>브랜드 인상과 상태 의미가 충돌하지 않는지 본다. 브랜드 primary가 빨강인데 danger도 빨강이면 신호가 겹친다.</td></tr>
+<tr><td>Saturation</td><td>색의 선명함. 회색이 섞인 정도의 반대</td><td>강한 채도는 CTA·위험 신호처럼 시선을 끌어야 할 곳에만 제한적으로. 화면 전체가 고채도면 어디를 봐야 할지 사라진다.</td></tr>
+<tr><td>Value (lightness)</td><td>밝고 어두운 정도</td><td>명도 차이는 색상 차이보다 훨씬 안정적인 구분 수단이다. 색각 이상, 흑백 인쇄, 저품질 모니터를 모두 통과한다.</td></tr>
+<tr><td>Chroma</td><td>지각되는 색의 순도·강도. saturation과 달리 밝기와 독립적으로 다루려는 개념</td><td>OKLCH 같은 지각 색 공간에서 chroma를 고정하면 밝기를 바꿔도 색이 탁해지지 않는다(MODEL 섹션 참조).</td></tr>
+<tr><td>Temperature</td><td>따뜻함(빨강·주황)과 차가움(파랑·청록)의 인상</td><td>UI 색온도와 사진·일러스트 색온도가 어긋나면 브랜드가 갈라져 보인다. 사진 화이트밸런스를 UI 뉴트럴에 맞춘다.</td></tr>
+<tr><td>Harmony</td><td>여러 색 사이의 관계 규칙</td><td>monochromatic·analogous·complementary·triadic을 목적에 맞게 고른다(HARMONY 섹션). 규칙 없이 색을 더하면 팔레트가 아니라 색 목록이 된다.</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준</span><p>색을 새로 정할 때 가장 먼저 확정할 축은 hue가 아니라 <strong>value</strong>다. 밝기 순서(명도 계단)를 먼저 설계하면 다크모드 반전, 접근성 대비, 흑백 출력이 자동으로 따라온다. hue와 채도는 그 위에 얹는 장식에 가깝다.</p></div>
+</section>
+
+<section id="color-models">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>색 공간과 모델</h2></div>
+<p class="lede">같은 색도 어떤 좌표계로 표현하느냐에 따라 다루기 쉬움이 완전히 달라진다. RGB는 기계가 빛을 섞는 방식이고, HSL/HSB는 사람이 조절하기 편한 방식이며, LCH/OKLCH는 사람의 눈이 실제로 느끼는 차이에 맞춘 방식이다. 디자인 토큰을 만들 때는 이 차이가 곧 유지보수 비용이 된다.</p>
+<table>
+<tr><th>모델</th><th>구성 축</th><th>성격 · 언제 쓰나</th></tr>
+<tr><td>RGB / HEX</td><td>Red, Green, Blue</td><td>디스플레이의 물리적 표현. 사람이 직관으로 조절하기 어렵다. <code>#3366ff</code>를 조금 어둡게가 곧바로 안 나온다.</td></tr>
+<tr><td>HSL / HSB(HSV)</td><td>Hue, Saturation, Lightness / Brightness</td><td>사람이 조절하기 쉽다. 하지만 지각 균등하지 않다. lightness를 같게 둬도 노랑은 밝게, 파랑은 어둡게 보인다.</td></tr>
+<tr><td>LCH / OKLCH</td><td>Lightness, Chroma, Hue(지각 기반)</td><td>지각 균등(perceptual uniformity)에 가깝다. L을 고정하면 hue를 돌려도 밝기 인상이 유지된다. 토큰·팔레트 생성에 유리.</td></tr>
+</table>
+<p>지각 균등이 왜 중요한가. HSL에서 여러 색의 lightness를 50%로 맞춰도, 실제로 노랑은 눈부시고 파랑은 침침하게 보인다. 그래서 HSL 값만 믿고 semantic 색을 만들면 success(초록)와 info(파랑)의 체감 밝기가 달라 위계가 흐트러진다. OKLCH는 L 값이 실제 지각 밝기에 대응하므로, "모든 상태 색을 같은 밝기로"가 값 하나로 성립한다.</p>
+<p>디자인 토큰에 OKLCH가 유리한 이유는 <strong>계단 생성과 유지보수</strong>다. 뉴트럴 회색 10단계, brand 색의 hover/active 변형, 다크모드 대응을 만들 때 L만 규칙적으로 내리거나 올리면 된다. hue와 chroma를 고정한 채 L을 조절하면 색이 탁해지지 않고, 명도 관계가 예측 가능하게 유지된다. HEX로 이걸 손으로 맞추면 매번 눈으로 보정해야 한다.</p>
+<p>색역(gamut) 이야기도 짧게. sRGB는 오래된 표준 색역이고, Display P3는 그보다 넓다(특히 선명한 빨강·초록). 최신 기기 대부분이 P3를 지원하므로 브랜드 accent를 더 선명하게 뽑을 수 있지만, P3에만 있는 색은 sRGB 환경에서 clip되어 다르게 보인다. CSS는 <code>color(display-p3 ...)</code>와 <code>@media (color-gamut: p3)</code>로 fallback을 줄 수 있다. 실무에서는 sRGB로 성립하는 팔레트를 기준선으로 두고, P3는 넓힘(enhancement)으로만 쓴다.</p>
+<div class="callout"><span class="co-label">실무 기준</span><p>새 색 시스템은 OKLCH로 설계하고 sRGB HEX로 <strong>내보낸다</strong>. 소스는 지각 좌표, 산출물은 호환 좌표. 이렇게 하면 "primary를 5% 어둡게"가 재현 가능한 편집이 되고, 팔레트가 취향 다툼이 아니라 규칙이 된다.</p></div>
+</section>
+
+<section id="color-harmony">
+<div class="ch-head"><span class="ch-code">HARMONY</span><h2>배색 이론</h2></div>
+<p class="lede">배색 규칙은 색상환 위의 위치 관계다. 규칙 자체가 아름다움을 보장하지는 않지만, 색을 왜 이렇게 골랐는지 설명 가능하게 만들고 팔레트를 재현 가능하게 만든다. 아래는 자주 쓰는 다섯 관계와, 그 위에 얹는 60-30-10 분배 규칙이다.</p>
+<table>
+<tr><th>배색</th><th>관계</th><th>성격 · 실무 판단</th></tr>
+<tr><td>Monochromatic</td><td>한 hue의 명도·채도 변형만</td><td>가장 안전하고 차분하다. 대시보드·데이터 UI 기본값. 강조가 약해 CTA는 accent 하나를 따로 빌려야 한다.</td></tr>
+<tr><td>Analogous</td><td>색상환에서 인접한 색(예: 파랑·청록·초록)</td><td>자연스럽고 조화롭다. 대비가 약하니 위계는 명도로 만든다.</td></tr>
+<tr><td>Complementary</td><td>색상환 반대편 두 색</td><td>대비가 가장 강하다. accent/CTA에 좋지만 넓은 면적에 나란히 두면 눈이 진동(vibration)한다. 면적을 크게 차이 낸다.</td></tr>
+<tr><td>Split-complementary</td><td>보색 대신 보색의 양옆 두 색</td><td>complementary의 긴장을 유지하면서 덜 날카롭다. 초보 배색의 안전한 선택.</td></tr>
+<tr><td>Triadic</td><td>색상환을 3등분한 세 색</td><td>활기차고 균형 있다. 셋을 같은 비중으로 쓰면 산만해진다. 하나를 주연으로.</td></tr>
+</table>
+<div class="callout gm"><span class="co-label">60-30-10 규칙</span><p>화면을 대략 dominant 60%(배경·뉴트럴), secondary 30%(구획·표면), accent 10%(강조·CTA)로 나눈다. 비율 자체보다 "지배·보조·강조에 면적 위계를 준다"는 원리가 핵심이다. accent가 30%를 넘어가면 강조가 아니라 소음이 된다.</p></div>
+<p>실무 판단: 색상환 놀이로 팔레트를 시작하지 마라. 먼저 <strong>뉴트럴 계단</strong>(배경·표면·경계·본문 텍스트)을 세우고, 그 위에 brand primary 하나, 그 위에 semantic 색 몇 개를 얹는다. harmony 규칙은 accent를 고를 때와 데이터 시각화에서 여러 계열을 나란히 놓을 때 가장 쓸모 있다. 운영 분석 대시보드처럼 여러 카테고리(요청 유형·지역·플랜 종류)를 색으로 구분해야 하면, 채도·명도를 균등하게 맞춘 analogous 또는 triadic 세트가 카테고리 간 우열 없는 구분을 만든다.</p>
 </section>
 
 <section id="palette-decision">
-<div class="ch-head"><span class="ch-code">PAL</span><h2>COLOR PALETTE DECISION TABLE</h2></div>
+<div class="ch-head"><span class="ch-code">PAL</span><h2>팔레트 결정표</h2></div>
+<p class="lede">팔레트는 색 목록이 아니라 역할의 집합이다. 각 색이 "무엇을 위한 색인가"로 정의되어야 재사용되고, 화면이 늘어도 무너지지 않는다. 아래 표는 역할별로 무엇을 결정하고 무엇으로 검증하는지 정리한다.</p>
 <table>
-<tr><th>색 역할</th><th>결정 질문</th><th>검증 기준</th></tr>
-<tr><td>Primary</td><td>브랜드와 핵심 행동을 동시에 대표하는가</td><td>CTA, 링크, 선택 상태에서 일관되게 보인다.</td></tr>
-<tr><td>Semantic</td><td>success, warning, danger, info 의미가 명확한가</td><td>색만으로 의미를 전달하지 않고 텍스트·아이콘을 병행한다.</td></tr>
-<tr><td>Neutral</td><td>본문, 배경, 경계, disabled 상태를 충분히 지원하는가</td><td>회색 단계가 너무 많아 계층이 흐려지지 않는다.</td></tr>
-<tr><td>Contrast</td><td>accessibility contrast 기준을 통과하는가</td><td>본문, 보조 텍스트, 버튼 텍스트의 대비를 각각 확인한다.</td></tr>
-<tr><td>Mode</td><td>light/dark 또는 인쇄 환경에서 유지되는가</td><td>명도 관계가 반전되어도 의미가 유지된다.</td></tr>
+<tr><th>색 역할</th><th>결정 질문</th><th>검증 기준 · 실패 신호</th></tr>
+<tr><td>Primary (brand)</td><td>브랜드와 핵심 행동을 동시에 대표하는가</td><td>CTA·링크·선택 상태에서 일관되게 보인다. 실패: primary가 장식으로도 쓰여 클릭 가능 신호가 희석됨.</td></tr>
+<tr><td>Semantic</td><td>success·warning·danger·info 의미가 문화·색맹과 무관하게 읽히는가</td><td>색만으로 의미 전달 금지 — 아이콘·텍스트 병행. 실패: 빨강/초록만으로 상태 구분(적록 색맹에게 동일).</td></tr>
+<tr><td>Neutral (gray scale)</td><td>본문·배경·표면·경계·disabled를 충분한 단계로 지원하는가</td><td>단계가 규칙적(OKLCH L 균등)이고 인접 단계가 구별된다. 실패: 회색이 12개인데 실제로 쓰는 건 3개, 나머지는 구별 안 됨.</td></tr>
+<tr><td>Contrast pair</td><td>배경-전경 짝이 접근성 대비를 통과하는가</td><td>본문·보조 텍스트·버튼 텍스트 대비를 각각 측정(A11Y 섹션). 실패: 디자인 시안에서만 통과하고 실제 배경색 위에서 탈락.</td></tr>
+<tr><td>Mode</td><td>light/dark, 인쇄 환경에서 의미가 유지되는가</td><td>명도 관계가 반전돼도 위계·상태가 유지된다. 실패: 다크모드에서 danger가 배경에 묻힘.</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준</span><p>토큰 이름을 <code>blue-500</code>처럼 색으로 짓지 말고 <code>--color-action</code>, <code>--color-danger</code>처럼 역할로 짓는다. 리브랜딩·다크모드에서 값만 바꾸면 되고, 코드에서 "왜 여기에 파랑을 썼지"가 아니라 "여기는 action이다"가 읽힌다. 색-이름 팔레트는 원자재(primitive)로 한 층 아래 두고, 역할-이름이 그것을 참조하게 한다.</p></div>
+</section>
+
+<section id="color-accessibility">
+<div class="ch-head"><span class="ch-code">A11Y</span><h2>색 접근성</h2></div>
+<p class="lede">접근성은 선택이 아니다. 공공·규제 산업 B2B 제품은 특히 대비·색맹 기준을 문서로 요구받는다. 핵심 원리는 셋이다. 텍스트는 배경과 충분히 대비되어야 하고, 의미는 색 하나에만 실리면 안 되고, 색맹 사용자에게도 구분이 살아야 한다.</p>
+<table>
+<tr><th>기준</th><th>원리</th><th>실무 적용</th></tr>
+<tr><td>WCAG 본문 대비</td><td>본문 텍스트는 배경 대비 최소 4.5:1 (AA)</td><td>보조·placeholder 텍스트도 같은 기준. "연한 회색이 예쁘다"는 대비 탈락의 흔한 핑계.</td></tr>
+<tr><td>WCAG 큰 텍스트</td><td>큰 텍스트(대략 24px 이상, 또는 굵은 19px 이상)는 3:1</td><td>제목은 여유 있지만 얇은 굵기는 지각 대비가 떨어지니 방심 금지.</td></tr>
+<tr><td>비텍스트 대비</td><td>아이콘·입력 경계·차트 요소 등 UI 구성요소는 3:1</td><td>경계선·포커스 링·토글 상태도 대상. 흔히 빠뜨린다.</td></tr>
+<tr><td>APCA (차세대)</td><td>WCAG 2.x의 단순 명도비 대신, 사람의 지각·글자 크기·굵기를 함께 반영하는 대비 모델</td><td>WCAG 3 후보. 얇은 작은 글자에 더 엄격, 큰 글자엔 합리적. 현재는 보조 지표로 참고, 규정 준수는 WCAG 2.x로.</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">안티패턴 · 색만으로 의미 전달</span><p>필수 입력 항목을 빨간 라벨로만 표시, 폼 에러를 테두리 색만 빨갛게, 차트 범례를 색 점만으로 구분 — 모두 적록 색맹(남성 약 8%)에게 정보가 사라진다. 반드시 색 + 두 번째 채널(아이콘, 텍스트, 패턴, 위치, 명도 차이)을 함께 준다. 상태 배지는 색 + 텍스트("승인됨"), 차트는 색 + 직접 라벨 또는 명도 대비.</p></div>
+<p>적록 색맹(deuteranopia/protanopia)이 가장 흔하므로 빨강-초록 쌍을 상태 구분의 유일한 축으로 쓰지 않는다. 대안: 빨강-파랑, 또는 채도가 아니라 <strong>명도</strong> 차이로 구분. 검증은 색맹 시뮬레이션으로 스크린샷을 돌려 상태가 여전히 구별되는지 눈으로 확인하고, 대비는 계산기로 실제 배경색(디자인 시안이 아니라 구현된 배경) 위에서 측정한다.</p>
+<div class="callout gm"><span class="co-label">보조 노트</span><p>다크모드는 대비를 새로 검증해야 한다. light에서 4.5:1이던 짝이 dark에서 탈락하는 일이 흔하다. 특히 semantic 색은 어두운 배경 위에서 채도를 조금 낮추고 명도를 올려야 눈부심 없이 읽힌다.</p></div>
 </section>
 
 <section id="typography-fundamentals">
-<div class="ch-head"><span class="ch-code">TYPE</span><h2>Typography fundamentals</h2></div>
-<p class="lede">타이포그래피는 글꼴 선택이 아니라 읽기 조건을 설계하는 일입니다. type classification, font pairing, hierarchy, tracking, leading, line length, optical alignment를 함께 판단해야 합니다.</p>
+<div class="ch-head"><span class="ch-code">TYPE</span><h2>타이포그래피 기본</h2></div>
+<p class="lede">타이포그래피는 글꼴을 고르는 취미가 아니라 읽기 조건을 설계하는 일이다. classification, pairing, hierarchy, leading, line length, optical alignment를 함께 판단해야 한다. 하나만 어긋나도 "왠지 아마추어 같다"는 인상이 만들어진다.</p>
 <table>
-<tr><th>개념</th><th>설명</th><th>실무 기준</th></tr>
-<tr><td>Classification</td><td>serif, sans-serif, mono, display 등 글꼴 성격</td><td>본문용과 장식용을 혼동하지 않는다.</td></tr>
-<tr><td>Font pairing</td><td>두 글꼴의 대비와 조화</td><td>차이가 너무 작으면 우연처럼 보이고 너무 크면 브랜드가 갈라진다.</td></tr>
-<tr><td>Hierarchy</td><td>제목, 본문, 보조 텍스트의 계층</td><td>크기만이 아니라 굵기, 색, 여백으로 계층을 만든다.</td></tr>
-<tr><td>Leading</td><td>줄 사이 간격</td><td>긴 본문은 촘촘한 행간보다 안정적인 호흡이 중요하다.</td></tr>
-<tr><td>Line length</td><td>한 줄의 글자 수</td><td>너무 긴 줄은 다음 줄을 찾기 어렵고 너무 짧은 줄은 리듬이 끊긴다.</td></tr>
-<tr><td>Optical alignment</td><td>수학적 정렬보다 눈에 맞는 정렬</td><td>아이콘, 따옴표, 원형 버튼은 시각 중심을 따로 조정한다.</td></tr>
+<tr><th>개념</th><th>설명</th><th>실무 기준 · 실패 신호</th></tr>
+<tr><td>Classification</td><td>serif, sans-serif, mono, display 등 글꼴 성격 분류</td><td>본문용과 display용을 혼동하지 않는다. display 글꼴로 긴 본문을 짜면 읽기가 무너진다.</td></tr>
+<tr><td>Pairing</td><td>두 글꼴의 대비와 조화</td><td>차이가 너무 작으면 우연처럼(실수처럼) 보이고, 너무 크면 브랜드가 갈라진다. 안전책: 한 슈퍼패밀리 내 굵기·너비로 대비.</td></tr>
+<tr><td>Hierarchy</td><td>제목·본문·보조의 계층</td><td>크기 하나에 의존하지 말고 weight·color·여백·대문자화로 계층을 만든다. 실패: 제목이 본문보다 2px 클 뿐 관계가 안 읽힘.</td></tr>
+<tr><td>Leading (행간)</td><td>줄과 줄 사이 간격(baseline 간격)</td><td>긴 본문은 촘촘함보다 안정적 호흡. 본문 line-height 대략 1.5~1.7, 제목은 더 좁게.</td></tr>
+<tr><td>Line length (measure)</td><td>한 줄의 글자 수</td><td>너무 길면 다음 줄을 놓치고, 너무 짧으면 리듬이 끊긴다(SET 섹션에 수치).</td></tr>
+<tr><td>Optical alignment</td><td>수학적 정렬이 아니라 눈에 맞는 정렬</td><td>아이콘·따옴표·원형·삼각형·구두점은 시각 중심을 따로 조정한다. 픽셀 정렬이 오히려 어긋나 보이는 지점.</td></tr>
 </table>
+<div class="callout"><span class="co-label">실무 기준</span><p>글꼴 개수는 최소로. 대부분의 제품은 본문용 한 패밀리 + 필요하면 mono 하나면 충분하다. 위계는 새 글꼴을 추가해서가 아니라 <strong>한 패밀리의 굵기·크기·색·여백</strong>으로 만든다. pairing이 필요하면 극단적으로 다른 두 개(예: 뚜렷한 serif 제목 + 중립 sans 본문)를 골라 "의도한 대비"임을 분명히 한다.</p></div>
+</section>
+
+<section id="typography-advanced">
+<div class="ch-head"><span class="ch-code">DEEP</span><h2>타이포그래피 심화</h2></div>
+<p class="lede">기본을 넘어 글자를 세밀하게 다루려면 용어부터 정확해야 한다. kerning·tracking·leading은 자주 혼용되지만 다른 것을 가리키고, 한글은 라틴 폰트의 상식이 그대로 통하지 않는다. 여기에 OpenType 기능과 variable font까지 알면 UI에서 숫자·표·다국어를 훨씬 깔끔하게 짤 수 있다.</p>
+<table>
+<tr><th>용어</th><th>정확한 정의</th><th>혼동 주의</th></tr>
+<tr><td>Kerning</td><td>특정 <strong>글자 쌍</strong> 사이 간격 조정(예: "AV", "To")</td><td>전체가 아니라 쌍 단위. 폰트에 내장된 kerning table을 켜는 것이 기본.</td></tr>
+<tr><td>Tracking (letter-spacing)</td><td>글자들 <strong>전체</strong>에 일괄로 주는 간격</td><td>kerning과 다르다. 대문자·작은 캡션은 살짝 늘리고, 큰 제목은 살짝 줄인다.</td></tr>
+<tr><td>Leading (line-height)</td><td>줄과 줄 사이 <strong>세로</strong> 간격</td><td>위 둘은 가로, 이건 세로. CSS <code>line-height</code>.</td></tr>
+<tr><td>x-height</td><td>소문자 x의 높이. 실제 체감 크기를 좌우</td><td>x-height 큰 폰트는 같은 pt라도 커 보이고 본문 가독성이 좋다.</td></tr>
+<tr><td>Cap height</td><td>대문자 높이</td><td>서로 다른 폰트를 나란히 맞출 때 pt가 아니라 cap height/x-height로 맞춘다.</td></tr>
+</table>
+<p><strong>한글 타이포그래피의 특수성.</strong> 라틴 폰트 상식을 그대로 옮기면 한글은 어색해진다. 몇 가지 실무 포인트.</p>
+<table>
+<tr><th>항목</th><th>한글에서의 차이</th><th>실무 판단</th></tr>
+<tr><td>자간(letter-spacing)</td><td>한글 글자는 네모틀에 꽉 차 라틴보다 자간이 붙어 보인다</td><td>본문은 대체로 자간을 거의 주지 않거나 아주 미세하게만. 과한 음수 자간은 받침이 붙어 뭉갠다.</td></tr>
+<tr><td>장평</td><td>글자의 가로 폭 비율. 한글은 장평 왜곡이 라틴보다 눈에 띈다</td><td>가로/세로 비율을 임의로 늘리거나 줄이지 않는다. 필요하면 그 너비로 설계된 폰트를 쓴다.</td></tr>
+<tr><td>공백·줄바꿈</td><td>한글은 단어 사이 공백이 라틴만큼 많지 않아 양끝정렬 시 공백 벌어짐이 다르게 나타난다</td><td>양끝정렬을 피하고 좌측정렬을 기본으로. 줄바꿈은 어절 단위(<code>word-break: keep-all</code>)로 낱글자 끊김 방지.</td></tr>
+<tr><td>적정 자수</td><td>한글은 한 글자의 정보 밀도가 높아 라틴과 적정 줄 길이가 다르다</td><td>라틴 45~75자 상식이 한글엔 과하게 길다. 한글 본문은 더 짧게 잡는다(SET 섹션).</td></tr>
+<tr><td>세로쓰기</td><td>전통적으로 가능하나 현대 UI에서는 사실상 배제</td><td>웹/앱 UI에서는 다루지 않는다. 가로쓰기 전제.</td></tr>
+</table>
+<p><strong>OpenType 기능</strong>은 폰트 안에 숨은 기능을 켜는 스위치다. UI에서 특히 쓸모 있는 것.</p>
+<table>
+<tr><th>기능</th><th>무엇</th><th>언제 켠다</th></tr>
+<tr><td>Ligatures (리가처)</td><td>"fi", "fl" 등을 하나의 글리프로 잇기</td><td>본문은 표준 리가처만. 코드/mono에서는 오히려 끄는 게 안전(문자 오해 방지).</td></tr>
+<tr><td>Tabular figures</td><td>모든 숫자 폭을 동일하게(<code>font-feature-settings:"tnum"</code>)</td><td>표·금액·대시보드 수치. 세로로 자릿수가 딱 맞아 비교가 쉽다. 매출/거래량 표에 필수.</td></tr>
+<tr><td>Oldstyle figures</td><td>높이가 들쭉날쭉한 본문용 숫자</td><td>긴 본문 속 연도·수치. 본문 흐름에 자연스럽게 섞인다. UI 표엔 부적합.</td></tr>
+<tr><td>Fractions / superscript</td><td>분수·위첨자 글리프</td><td>단위 표기(m², CO₂ 등)에서 폰트 지원 시 활용.</td></tr>
+</table>
+<p><strong>Variable font</strong>은 굵기·너비·optical size 같은 축을 하나의 파일에서 연속적으로 조절한다. 여러 굵기를 개별 파일로 싣던 것을 하나로 줄여 로딩 비용을 낮추고, weight를 100~900 사이 임의 값으로 미세 조정할 수 있다. <strong>Optical sizing</strong>은 같은 폰트라도 큰 제목용과 작은 본문용의 글자 형태를 다르게 하는 축이다(작은 크기에서 획을 두껍게·간격을 넓게). <strong>Hinting과 rendering</strong>은 저해상도·소형 크기에서 글자가 픽셀 그리드에 어떻게 얹히는지의 문제다. 요즘 고해상도 화면에선 비중이 줄었지만, 얇은 웹폰트가 작은 크기에서 흐릿하게 뭉개진다면 폰트의 hinting 품질과 렌더링 환경을 의심한다.</p>
+<div class="callout gm"><span class="co-label">보조 노트</span><p>대시보드에서 숫자가 표 안에서 흔들려 보인다면 십중팔구 tabular figures를 안 켠 것이다. <code>font-variant-numeric: tabular-nums</code> 한 줄로 자릿수 정렬이 잡힌다. 이건 취향이 아니라 비교 가능성의 문제다.</p></div>
 </section>
 
 <section id="typography-scale">
-<div class="ch-head"><span class="ch-code">SCALE</span><h2>TYPOGRAPHY SCALE CHECKLIST</h2></div>
+<div class="ch-head"><span class="ch-code">SCALE</span><h2>타입 스케일</h2></div>
+<p class="lede">타입 스케일은 크기를 임의로 정하지 않고 하나의 비율로 묶은 계단이다. 비율이 있으면 새 크기가 필요할 때 계산으로 나오고, 화면 사이 위계가 일관된다. 아래 체크리스트로 스케일을 정의하고, 표에서 흔한 비율을 고른다.</p>
 <div class="serial-card">
-<span class="sc-label">TYPOGRAPHY SCALE CHECKLIST</span>
-1. H1, H2, H3, body, caption, label, button의 역할을 분리한다.<br>
-2. 크기, line-height, weight, color, margin을 함께 정의한다.<br>
-3. 모바일에서 줄바꿈과 line length가 깨지지 않는지 확인한다.<br>
-4. 숫자, 통화, 코드, 긴 한글 단어가 UI 안에서 안정적으로 보이는지 확인한다.<br>
-5. 브랜드용 display type이 본문 가독성을 침해하지 않는지 점검한다.
+<span class="sc-label">TYPE SCALE 정의 체크리스트</span>
+1. H1·H2·H3·body·caption·label·button의 역할을 먼저 분리한다(크기가 아니라 쓰임).<br>
+2. 각 역할에 size·line-height·weight·color·margin을 함께 정의한다(크기만 정하지 않는다).<br>
+3. 기준 크기(body, 보통 16px)와 비율을 정하고 나머지를 그 비율로 파생한다.<br>
+4. 모바일에서 줄바꿈·line length가 깨지지 않는지, 제목이 화면을 넘지 않는지 확인한다.<br>
+5. 숫자·통화·코드·긴 한글 단어가 각 스타일에서 안정적으로 보이는지 실제 데이터로 확인한다.<br>
+6. display type이 본문 가독성을 침해하지 않는지, 큰 크기 전용으로만 쓰이는지 점검한다.
 </div>
+<table>
+<tr><th>비율</th><th>이름</th><th>성격 · 언제</th></tr>
+<tr><td>1.125</td><td>Major Second</td><td>가장 촘촘. 정보 밀도 높은 대시보드·데이터 UI. 단계 차이가 미묘해 위계는 weight로 보강.</td></tr>
+<tr><td>1.200</td><td>Minor Third</td><td>UI에서 널리 쓰는 균형점. 제목과 본문 차이가 과하지 않다.</td></tr>
+<tr><td>1.250</td><td>Major Third</td><td>제목이 뚜렷해진다. 마케팅·랜딩 성격에 좋다.</td></tr>
+<tr><td>1.333</td><td>Perfect Fourth</td><td>드라마틱한 대비. editorial·히어로 중심 페이지. 좁은 화면에서 큰 제목이 넘치지 않는지 주의.</td></tr>
+<tr><td>1.414 / 1.618</td><td>Aug. Fourth / Golden</td><td>강한 대비. 중간 단계가 비어 UI 전반엔 과할 수 있다. 표지·포스터 성격.</td></tr>
+</table>
+<div class="callout"><span class="co-label">실무 기준</span><p>한 비율을 화면 전체에 기계적으로 적용하지 마라. 제목 계열은 큰 비율(1.25~1.333)로 대비를 주되, 본문 근처(body·caption·label)는 작은 비율로 촘촘하게 두는 <strong>이중 스케일</strong>이 실전에서 잘 맞는다. 모바일에서는 상단 몇 단계를 눌러(clamp) 큰 제목이 화면을 잡아먹지 않게 한다.</p></div>
+</section>
+
+<section id="typesetting">
+<div class="ch-head"><span class="ch-code">SET</span><h2>본문 조판</h2></div>
+<p class="lede">스케일이 크기의 문제라면, 조판은 텍스트 덩어리를 읽기 좋게 앉히는 문제다. 줄 길이, 정렬, 문단 끝 처리, 줄바꿈 — 눈에 잘 안 띄지만 읽기 속도와 피로를 실제로 좌우한다. 리포트·약관·공공 문서처럼 긴 텍스트가 많은 제품일수록 여기서 품질이 갈린다.</p>
+<table>
+<tr><th>항목</th><th>기준</th><th>실패 신호</th></tr>
+<tr><td>Line length (measure)</td><td>라틴 본문 대략 45~75자(공백 포함), 이상적 66자 근처. <strong>한글은 더 짧게 25~40자</strong>를 목표로</td><td>넓은 컨테이너에 본문이 화면 끝까지 늘어져 다음 줄을 놓침. <code>max-width</code>로 폭을 제한한다.</td></tr>
+<tr><td>정렬</td><td>좌측정렬(ragged right)을 기본으로</td><td>양끝정렬(justify)은 단어 사이가 벌어져 세로로 흰 강(river)이 흐른다. 한글은 공백이 적어 더 심하다. 웹에서 justify는 피한다.</td></tr>
+<tr><td>Widow / Orphan</td><td>문단 마지막 한 단어만 다음 줄로, 또는 한 줄만 다음 컬럼/페이지로 넘어가는 것</td><td>제목의 마지막 단어 하나가 홀로 줄바꿈. 줄바꿈 조정(<code>&amp;nbsp;</code>, <code>text-wrap: balance/pretty</code>)으로 막는다.</td></tr>
+<tr><td>하이픈 · 줄바꿈</td><td>라틴은 필요 시 hyphenation, 한글은 어절 단위 유지</td><td>한글 낱글자가 줄 끝에서 끊김. <code>word-break: keep-all</code>로 어절 보존. URL·긴 토큰은 <code>overflow-wrap</code>로 예외 처리.</td></tr>
+<tr><td>문단 간격</td><td>문단 구분은 들여쓰기 또는 문단 간 여백 중 하나만</td><td>들여쓰기와 큰 여백을 동시에 주면 간격이 과하다. 웹 UI는 보통 여백 방식.</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">before / after · 리포트 본문</span><p><strong>Before</strong>: 월간 운영 리포트 상세 페이지에서 설명 문단이 컨테이너 폭(1200px)을 꽉 채워 한 줄이 100자를 넘고, 양끝정렬로 단어 간격이 들쭉날쭉하며, 제목의 마지막 단어가 홀로 다음 줄로 떨어졌다. <strong>After</strong>: 본문 컬럼을 <code>max-width</code>로 한글 32자 안팎(약 40rem)으로 좁히고, 좌측정렬로 바꾸고, 제목에 <code>text-wrap: balance</code>를 줘 두 줄이 고르게 나뉘게 했다. 폰트 크기를 바꾸지 않고 읽기 편안함이 확 올라간다 — 조판은 크기가 아니라 배치의 문제라는 증거다.</p></div>
 </section>
 
 <section id="brand-language">
-<div class="ch-head"><span class="ch-code">BRAND</span><h2>BRAND VISUAL LANGUAGE AUDIT</h2></div>
-<p class="lede">브랜드 시각 언어는 로고 파일보다 넓습니다. 색채, 타이포그래피, 이미지 방향, 아이콘 스타일, 레이아웃 리듬, 모션 태도가 같은 성격을 공유해야 합니다.</p>
+<div class="ch-head"><span class="ch-code">BRAND</span><h2>브랜드 시각 언어</h2></div>
+<p class="lede">브랜드 시각 언어는 로고 파일보다 훨씬 넓다. 색·타이포·이미지 방향·아이콘 스타일·레이아웃 리듬·모션 태도가 같은 성격을 공유할 때 사용자는 "같은 제품"으로 느낀다. 아래 표로 요소를 점검하고, 카드로 정기 audit을 돌린다.</p>
 <table>
 <tr><th>요소</th><th>질문</th><th>나쁜 신호</th></tr>
-<tr><td>Tone</td><td>차분한가, 대담한가, 전문적인가, 친근한가</td><td>페이지마다 브랜드 성격이 달라진다.</td></tr>
-<tr><td>Motif</td><td>반복되는 형태, 선, 여백, 패턴이 있는가</td><td>장식 요소가 기능과 무관하게 붙는다.</td></tr>
-<tr><td>Imagery</td><td>사진, 일러스트, 3D, 아이콘의 세계관이 맞는가</td><td>스톡 이미지와 제품 UI가 서로 다른 브랜드처럼 보인다.</td></tr>
-<tr><td>Layout rhythm</td><td>콘텐츠 밀도와 여백 규칙이 반복되는가</td><td>각 화면이 개별 시안처럼 따로 논다.</td></tr>
-<tr><td>Medium</td><td>UI, editorial, presentation, print에서 규칙이 어떻게 달라지는가</td><td>인쇄물 규칙을 그대로 UI에 가져와 조작성이 떨어진다.</td></tr>
+<tr><td>Tone</td><td>차분한가·대담한가·전문적인가·친근한가, 그리고 그게 일관되는가</td><td>페이지마다 브랜드 성격이 달라진다.</td></tr>
+<tr><td>Motif</td><td>반복되는 형태·선·여백·패턴이 있는가</td><td>장식 요소가 기능과 무관하게 붙는다.</td></tr>
+<tr><td>Imagery</td><td>사진·일러스트·3D·아이콘이 한 세계관인가</td><td>스톡 이미지와 제품 UI가 서로 다른 브랜드처럼 보인다.</td></tr>
+<tr><td>Layout rhythm</td><td>콘텐츠 밀도·여백·그리드 규칙이 반복되는가</td><td>각 화면이 개별 시안처럼 따로 논다.</td></tr>
+<tr><td>Motion</td><td>전환·강조의 속도·easing 태도가 일관되는가</td><td>어떤 화면은 튀고 어떤 화면은 무겁다.</td></tr>
+<tr><td>Medium</td><td>UI·editorial·발표자료·인쇄에서 규칙이 어떻게 번역되는가</td><td>인쇄물 규칙을 그대로 UI에 옮겨 조작성이 떨어진다.</td></tr>
 </table>
+<div class="serial-card">
+<span class="sc-label">BRAND VISUAL LANGUAGE AUDIT</span>
+1. 서로 다른 화면 5개를 나란히 놓고, 로고를 가려도 같은 제품으로 보이는지 본다.<br>
+2. 색: 역할-토큰이 실제로 지켜지는가, 정의 밖 색이 새로 들어와 있지 않은가.<br>
+3. 타이포: 같은 위계에 같은 스타일이 쓰이는가, 임의 크기가 끼어들지 않았는가.<br>
+4. 이미지/아이콘: 획 두께·모서리·채색 방식이 한 세트인가.<br>
+5. 여백·그리드: 밀도 규칙이 반복되는가, 한 화면만 유독 빽빽하거나 헐겁지 않은가.<br>
+6. 매체 번역: 발표자료·인쇄·소셜 카드가 UI와 같은 태도를 유지하는가.
+</div>
+<div class="callout gm"><span class="co-label">보조 노트</span><p>공공·규제 산업 B2B에서 브랜드는 화려함이 아니라 <strong>신뢰와 명료함</strong>이 태도다. 데이터가 정확해 보이고, 상태가 오해 없이 읽히고, 규정(접근성·표기)을 지키는 것 자체가 브랜드다. 여기서 과한 장식·고채도·유행 모션은 오히려 신뢰를 깎는다.</p></div>
+</section>
+
+<section id="glossary">
+<div class="ch-head"><span class="ch-code">GLOSSARY</span><h2>용어집</h2></div>
+<p class="lede">색과 타이포에서 자주 쓰지만 혼용되기 쉬운 핵심 용어를 정리한다. 팀 안에서 같은 단어를 같은 뜻으로 쓰는 것이 시각 시스템 유지의 시작이다.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Hue</b><span>색상</span></div><div class="g-def">색상환에서의 위치(빨강·파랑 등). 채도·밝기와 독립된 축.</div></div>
+<div class="g-row"><div class="g-term"><b>Saturation</b><span>채도</span></div><div class="g-def">색의 선명함. 회색이 섞일수록 낮아진다.</div></div>
+<div class="g-row"><div class="g-term"><b>Value / Lightness</b><span>명도</span></div><div class="g-def">밝고 어두운 정도. 색각·흑백을 통과하는 가장 안정적인 구분 축.</div></div>
+<div class="g-row"><div class="g-term"><b>Chroma</b><span>순도</span></div><div class="g-def">밝기와 분리해 본 색의 강도. OKLCH의 C 축.</div></div>
+<div class="g-row"><div class="g-term"><b>OKLCH</b><span>지각 색 공간</span></div><div class="g-def">Lightness·Chroma·Hue를 지각 균등하게 다루는 색 좌표. 토큰·팔레트 생성에 유리.</div></div>
+<div class="g-row"><div class="g-term"><b>Gamut</b><span>색역</span></div><div class="g-def">표현 가능한 색의 범위. sRGB(기준)보다 Display P3가 넓다.</div></div>
+<div class="g-row"><div class="g-term"><b>Contrast ratio</b><span>명도대비</span></div><div class="g-def">전경-배경 밝기 비. WCAG 본문 4.5:1, 큰 텍스트 3:1.</div></div>
+<div class="g-row"><div class="g-term"><b>APCA</b><span>지각 대비</span></div><div class="g-def">글자 크기·굵기·지각을 반영한 차세대 대비 모델(WCAG 3 후보).</div></div>
+<div class="g-row"><div class="g-term"><b>Kerning</b><span>커닝</span></div><div class="g-def">특정 글자 쌍 사이 간격 조정. tracking(전체 간격)과 다르다.</div></div>
+<div class="g-row"><div class="g-term"><b>Tracking</b><span>자간(일괄)</span></div><div class="g-def">글자 전체에 주는 letter-spacing. 캡션은 살짝 넓게, 큰 제목은 살짝 좁게.</div></div>
+<div class="g-row"><div class="g-term"><b>Leading</b><span>행간</span></div><div class="g-def">줄 사이 세로 간격. CSS line-height. 본문 대략 1.5~1.7.</div></div>
+<div class="g-row"><div class="g-term"><b>x-height</b><span>엑스하이트</span></div><div class="g-def">소문자 x 높이. 같은 pt라도 체감 크기·가독성을 좌우.</div></div>
+<div class="g-row"><div class="g-term"><b>Measure</b><span>줄 길이</span></div><div class="g-def">한 줄의 글자 수. 라틴 45~75자, 한글 25~40자 목표.</div></div>
+<div class="g-row"><div class="g-term"><b>Tabular figures</b><span>고정폭 숫자</span></div><div class="g-def">모든 숫자 폭을 같게. 표·금액·대시보드 수치 정렬에 필수.</div></div>
+</div>
 </section>
 
 <footer>
-COLOR TYPOGRAPHY BRAND · V1 · 2026-07<br>
-PRINCIPLE : 색과 글자는 장식이 아니라 의미, 위계, 브랜드 신뢰를 전달하는 시스템이다.
+COLOR TYPOGRAPHY BRAND · V2 · 2026-07<br>
+PRINCIPLE : 색과 글자는 장식이 아니라 의미·위계·브랜드 신뢰를 나르는 시스템이다. 취향이 아니라 원리로 설명할 수 있어야 재현된다.
 </footer>
 </main>
 </div>

@@ -2,192 +2,181 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>Tools Shortcuts Commands Cheat Sheet</title>
+  <title>Tools·Shortcuts·Commands Cheat Sheet</title>
 </head>
 <body>
 <nav aria-label="목차">
   <div class="nav-brand">CHEAT SHEET</div>
-  <div class="nav-title">Tools · Shortcuts · Commands</div>
-  <a href="#ch1"><span class="code">TOOL-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">TOOL-CS-02</span>유용한 툴</a>
-  <a href="#ch3"><span class="code">TOOL-CS-03</span>IDE·브라우저 단축키</a>
-  <a href="#ch4"><span class="code">TOOL-CS-04</span>Git·터미널 명령어</a>
-  <a href="#ch5"><span class="code">TOOL-CS-05</span>Node·API·DB 명령어</a>
-  <a href="#ch6"><span class="code">TOOL-CS-06</span>Docker·운영 명령어</a>
-  <a href="#ch7"><span class="code">TOOL-CS-07</span>Red Flags</a>
-  <a href="#ch8"><span class="code">TOOL-CS-08</span>Review Gate</a>
-  <a href="#ch9"><span class="code">TOOL-CS-09</span>Failure Playbook</a>
-  <a href="#ch10"><span class="code">TOOL-CS-10</span>출력 판정·증거 패킷</a>
+  <div class="nav-title">Tools·Shortcuts·Commands</div>
+  <a href="#ch1"><span class="code">TL-CS-01</span>핵심 명령·스니펫</a>
+  <a href="#ch2"><span class="code">TL-CS-02</span>판단 한 줄</a>
+  <a href="#ch3"><span class="code">TL-CS-03</span>자주 터지는 것 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">TL-CS-04</span>장애 증거 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial">
-      <span>DOC : CHEAT-TOOLS-SHORTCUTS-COMMANDS-V1</span>
-      <span>SCOPE : TOOLS · SHORTCUTS · CLI · DEBUGGING</span>
-      <span>LANG : KO</span>
-    </div>
-    <h1>Tools · Shortcuts<br>Commands Cheat Sheet</h1>
-    <p class="hero-sub">실무 속도를 높이는 툴, 단축키, 명령어를 역할별로 압축했습니다. 외우는 목록이 아니라 장애 진단, 코드 탐색, API 확인, 배포 검증 때 바로 꺼내 쓰는 기준표입니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <div class="hero-serial"><span>DOC : CHEAT-TOOLS-SHORTCUTS-COMMANDS-V2</span><span>SCOPE : GIT · TERMINAL · IDE · HTTP</span><span>LANG : KO</span></div>
+    <h1>Tools·Shortcuts<br>Commands Cheat Sheet</h1>
+    <p class="hero-sub">히스토리를 다시 쓰고, 유실을 복구하고, 로그를 뒤지고, API를 찌르고, 에디터를 손 안 떼고 움직일 때 바로 복붙하는 명령·단축키 참조.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
 
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-01</span><h2>개요</h2></div>
-    <p class="lede">툴과 명령어는 많이 아는 것보다 “어떤 문제에서 어떤 증거를 빠르게 얻는가”가 중요합니다. 코드 탐색, 실행 재현, 네트워크 확인, 데이터 확인, 배포 검증 순서로 손에 익히면 실무 대응 속도가 크게 올라갑니다.</p>
+    <div class="ch-head"><span class="ch-code">TL-CS-01</span><h2>핵심 명령·스니펫</h2></div>
+
+    <h3>Git — 상태 · 이력 보기</h3>
+    <pre class="snippet-card"><code># 변경 파일 짧게 (가장 많이 씀)
+git status --short
+
+# 그래프로 전체 브랜치 흐름
+git log --oneline --graph --all
+
+# 특정 파일 변경 이력 (이름 변경 추적 포함)
+git log --follow -- path/to/file
+
+# 스테이지된 것 vs 작업 중인 것 분리 확인
+git diff            # 아직 add 안 한 변경
+git diff --staged   # add 한 변경</code></pre>
+
+    <h3>Git — 히스토리 고치기</h3>
+    <pre class="snippet-card"><code># 최근 3개 커밋 정리 (squash/reword/drop)
+git rebase -i HEAD~3
+
+# 방금 커밋 취소하되 변경은 스테이지에 남김
+git reset --soft HEAD~1
+
+# 마지막 커밋 메시지/내용 수정
+git commit --amend
+
+# 다른 브랜치의 특정 커밋만 가져오기
+git cherry-pick &lt;sha&gt;</code></pre>
+
+    <h3>Git — 잠깐 치워두기 · 복구</h3>
+    <pre class="snippet-card"><code># 작업 중인 변경 임시 저장 → 되돌리기
+git stash
+git stash pop
+
+# 유실 복구의 핵심 — 모든 HEAD 이동 기록
+git reflog
+git reset --hard HEAD@{2}   # reflog에서 찾은 지점으로 복구</code></pre>
+
+    <h3>Git — 버그 커밋 이분 탐색 (bisect)</h3>
+    <pre class="snippet-card"><code># 언제 깨졌는지 자동 이분 탐색
+git bisect start
+git bisect bad              # 현재(깨진) 상태
+git bisect good &lt;sha&gt;       # 정상이던 과거 커밋
+# git이 중간 커밋 체크아웃 → 테스트 후 good/bad 반복
+git bisect reset           # 끝나면 원위치</code></pre>
+
+    <h3>Terminal — 검색 · 파싱 · 파이프</h3>
+    <pre class="snippet-card"><code># 재귀 검색 + 줄번호 (파일명·API path 추적)
+grep -rn 'keyword' src/
+
+# JSON 필드 뽑기
+curl -s api.example.com/orders | jq '.data[] | {id, status}'
+
+# 검색 결과를 다음 명령으로 넘기기
+grep -rl 'TODO' src/ | xargs wc -l
+
+# 예전에 친 명령 다시 찾기
+history | grep rebase</code></pre>
+
+    <h3>HTTP — API 찌르기</h3>
+    <pre class="snippet-card"><code># 헤더까지 보기 — status·응답 헤더 확인 (첫 진단)
+curl -i https://api.example.com/health
+
+# POST + JSON
+curl -X POST -H 'Content-Type: application/json' \
+  -d '{"amount":1000}' https://api.example.com/payments
+
+# 연결 전 구간 프로파일 (2&gt;&amp;1로 stderr 합치기)
+curl -v https://api.example.com/orders 2&gt;&amp;1 | head -20</code></pre>
+
+    <h3>Node · 패키지</h3>
+    <pre class="snippet-card"><code># 설치 없이 일회성 실행
+pnpm dlx create-next-app my-app
+npx tsc --noEmit
+
+# 프로젝트가 제공하는 스크립트 목록 확인
+npm run</code></pre>
+
     <table>
-      <tr><th>상황</th><th>먼저 쓸 도구</th><th>얻어야 할 증거</th></tr>
-      <tr><td>코드 위치를 모름</td><td>VS Code Search, <code>rg</code>, Git history</td><td>진입점, 호출자, 최근 변경 커밋</td></tr>
-      <tr><td>화면/API가 깨짐</td><td>DevTools, curl, Postman/Insomnia</td><td>status, request header, response body, console stack</td></tr>
-      <tr><td>DB 값이 이상함</td><td>psql, DBeaver/TablePlus, migration history</td><td>실제 row, index, transaction, migration 적용 여부</td></tr>
-      <tr><td>배포 후 장애</td><td>logs, health check, Docker/Kubernetes CLI</td><td>릴리스 버전, pod/container 상태, 오류 로그</td></tr>
-      <tr><td>내 로컬만 안 됨</td><td>env 확인, port/process 확인, clean install</td><td>Node/Java 버전, env 누락, 충돌 포트, lockfile 차이</td></tr>
+      <tr><th>명령</th><th>용도</th><th>주의</th></tr>
+      <tr><td><code>git status --short</code></td><td>변경 파일 빠른 확인, 첫 진단</td><td>습관화 1순위</td></tr>
+      <tr><td><code>git reset --soft HEAD~1</code></td><td>커밋만 취소, 변경 보존</td><td><code>--hard</code>와 혼동 금지</td></tr>
+      <tr><td><code>git reflog</code></td><td>유실 커밋·브랜치 복구 진입점</td><td>대부분의 "날아갔다"는 여기서 복구</td></tr>
+      <tr><td><code>git stash</code> / <code>pop</code></td><td>브랜치 안 만들고 잠깐 치우기</td><td>여러 개 쌓이면 <code>stash list</code></td></tr>
+      <tr><td><code>grep -rn</code></td><td>재귀 검색 + 줄번호</td><td>큰 저장소는 <code>rg</code>가 빠름</td></tr>
+      <tr><td><code>curl -i &lt;url&gt;</code></td><td>status·헤더 확인</td><td><code>-s</code>로 progress 끄기</td></tr>
+      <tr><td><code>pnpm dlx</code> / <code>npx</code></td><td>전역 설치 없이 CLI 실행</td><td>버전 고정 필요하면 명시</td></tr>
     </table>
+    <div class="callout warn"><span class="co-label">주의</span><p><code>git reset --hard</code>는 작업 중 변경을 <b>복구 없이</b> 날린다. 실행 전 <code>git stash</code>나 커밋으로 대피시켜라. rebase로 이미 push한 커밋을 고친 뒤 <code>git push --force</code>하면 팀의 히스토리가 깨진다 — 공유 브랜치엔 <code>--force-with-lease</code>를 쓰고, main엔 아예 하지 마라.</p></div>
   </section>
 
   <section id="ch2">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-02</span><h2>유용한 툴</h2></div>
+    <div class="ch-head"><span class="ch-code">TL-CS-02</span><h2>판단 한 줄</h2></div>
     <table>
-      <tr><th>분류</th><th>툴</th><th>실무 용도</th></tr>
-      <tr><td>코드 탐색</td><td>VS Code, WebStorm/IntelliJ, ripgrep</td><td>symbol 이동, 전체 검색, rename, call hierarchy, 빠른 영향 범위 확인</td></tr>
-      <tr><td>Git GUI</td><td>GitLens, Fork, SourceTree, GitHub Desktop</td><td>blame, 변경 흐름, conflict 확인, 커밋 단위 리뷰</td></tr>
-      <tr><td>API</td><td>Postman, Insomnia, Bruno, curl, httpie</td><td>인증 헤더, 요청 payload, error contract, 재현 가능한 API 케이스 저장</td></tr>
-      <tr><td>브라우저</td><td>Chrome/Edge DevTools, Lighthouse</td><td>Network waterfall, console, storage, performance, accessibility 점검</td></tr>
-      <tr><td>DB</td><td>DBeaver, DataGrip, TablePlus, psql</td><td>쿼리 실행, explain, index 확인, 데이터 보정 전 검증</td></tr>
-      <tr><td>컨테이너</td><td>Docker Desktop, OrbStack, Docker CLI</td><td>로컬 의존 서비스 실행, log 확인, image/layer 정리</td></tr>
-      <tr><td>문서·다이어그램</td><td>Obsidian, Notion, Mermaid, Excalidraw, draw.io</td><td>장애 기록, API 흐름, 시스템 구성도, 의사결정 기록</td></tr>
-      <tr><td>운영·관측</td><td>Grafana, Kibana/OpenSearch Dashboards, Sentry, Datadog</td><td>로그, metric, trace, release regression, 사용자 영향 범위 확인</td></tr>
+      <tr><th>선택</th><th>언제 쓰나</th><th>주의</th></tr>
+      <tr><td>rebase</td><td>내 로컬 브랜치 히스토리를 선형으로 정리할 때</td><td>이미 push·공유된 커밋엔 금지 (히스토리 재작성)</td></tr>
+      <tr><td>merge</td><td>공유 브랜치 통합, 실제 병합 시점을 남기고 싶을 때</td><td>graph가 복잡해짐, 하지만 안전</td></tr>
+      <tr><td><code>reset --soft</code></td><td>커밋만 취소, 변경은 스테이지에 그대로</td><td>커밋 다시 묶을 때</td></tr>
+      <tr><td><code>reset --mixed</code></td><td>커밋·스테이지 취소, 작업 변경은 보존 (기본값)</td><td>add부터 다시</td></tr>
+      <tr><td><code>reset --hard</code></td><td>커밋·스테이지·작업 변경 전부 폐기</td><td>복구 어려움 — reflog 외엔 없음</td></tr>
+      <tr><td>stash</td><td>잠깐(분~시간) 치웠다 곧 되돌릴 때</td><td>오래 두면 잊음 → 브랜치가 나음</td></tr>
+      <tr><td>branch</td><td>수명이 길거나 남과 공유할 작업일 때</td><td>이름으로 맥락이 남음</td></tr>
+      <tr><td>npm</td><td>표준·호환성 우선, CI 단순함</td><td>디스크·설치속도 불리</td></tr>
+      <tr><td>pnpm</td><td>모노레포·디스크 절약·빠른 설치</td><td>lockfile·hoisting 동작 팀과 합의</td></tr>
     </table>
-    <div class="callout">
-      <span class="co-label">선택 기준</span>
-      <p>팀 표준 도구가 있으면 먼저 맞춥니다. 개인 도구는 생산성을 높일 수 있지만, API 컬렉션, DB 접속 정보, 운영 로그 같은 공유 자산은 팀이 접근 가능한 위치에 남겨야 합니다.</p>
-    </div>
   </section>
 
   <section id="ch3">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-03</span><h2>IDE·브라우저 단축키</h2></div>
+    <div class="ch-head"><span class="ch-code">TL-CS-03</span><h2>자주 터지는 것 · 즉시 확인</h2></div>
     <table>
-      <tr><th>목적</th><th>macOS</th><th>Windows/Linux</th><th>용도</th></tr>
-      <tr><td>파일 빠른 열기</td><td><code>Cmd+P</code></td><td><code>Ctrl+P</code></td><td>파일명 일부로 바로 이동</td></tr>
-      <tr><td>전체 검색</td><td><code>Cmd+Shift+F</code></td><td><code>Ctrl+Shift+F</code></td><td>문자열, API path, feature flag 추적</td></tr>
-      <tr><td>명령 팔레트</td><td><code>Cmd+Shift+P</code></td><td><code>Ctrl+Shift+P</code></td><td>설정, formatter, extension command 실행</td></tr>
-      <tr><td>정의로 이동</td><td><code>F12</code> 또는 <code>Cmd+Click</code></td><td><code>F12</code> 또는 <code>Ctrl+Click</code></td><td>타입, 함수, 컴포넌트 정의 확인</td></tr>
-      <tr><td>참조 찾기</td><td><code>Shift+F12</code></td><td><code>Shift+F12</code></td><td>삭제/변경 영향 범위 확인</td></tr>
-      <tr><td>심볼 이동</td><td><code>Cmd+Shift+O</code></td><td><code>Ctrl+Shift+O</code></td><td>큰 파일에서 함수·섹션 이동</td></tr>
-      <tr><td>멀티 커서</td><td><code>Option+Click</code>, <code>Cmd+D</code></td><td><code>Alt+Click</code>, <code>Ctrl+D</code></td><td>반복 수정, 같은 토큰 순차 선택</td></tr>
-      <tr><td>DevTools 열기</td><td><code>Cmd+Option+I</code></td><td><code>Ctrl+Shift+I</code></td><td>Console, Network, Elements, Performance 확인</td></tr>
-      <tr><td>강력 새로고침</td><td><code>Cmd+Shift+R</code></td><td><code>Ctrl+Shift+R</code></td><td>브라우저 캐시 영향 제거</td></tr>
-      <tr><td>페이지 검색</td><td><code>Cmd+F</code></td><td><code>Ctrl+F</code></td><td>DOM text, 로그 뷰어, 문서 빠른 탐색</td></tr>
+      <tr><th>신호</th><th>왜 위험</th><th>즉시 확인</th></tr>
+      <tr><td><code>git reset --hard</code>로 작업이 사라짐</td><td>스테이지·작업 변경이 되돌릴 수 없이 폐기됨</td><td><b><code>git reflog</code></b>로 직전 HEAD 찾아 <code>reset --hard HEAD@{n}</code></td></tr>
+      <tr><td>rebase 후 <code>push --force</code>로 팀 히스토리가 깨짐</td><td>남이 받은 커밋이 사라져 pull 충돌·유실</td><td>공유 브랜치는 <code>--force-with-lease</code>, main은 금지. 이미 깼으면 동료 reflog로 복원</td></tr>
+      <tr><td>.gitignore 누락으로 secret이 커밋됨</td><td>토큰 유출 — 히스토리에 남아 삭제해도 추적됨</td><td>즉시 <b>토큰 재발급</b>, history 정리(filter-repo), .gitignore 추가</td></tr>
+      <tr><td>detached HEAD 상태에서 커밋함</td><td>브랜치에 안 붙은 커밋 → 체크아웃 옮기면 유실</td><td><code>git switch -c fix-branch</code>로 지금 커밋을 브랜치로 고정</td></tr>
+      <tr><td>내 로컬만 빌드/실행 실패</td><td>런타임·env·lockfile 차이로 재현 안 됨</td><td>버전 확인 → clean install → 팀/CI와 diff (ch4 triage)</td></tr>
     </table>
-    <div class="serial-card"><span class="sc-label">HABIT</span>처음 보는 코드베이스에서는 <code>Cmd/Ctrl+P</code>, 전체 검색, 참조 찾기, Git blame만 익혀도 탐색 시간이 크게 줄어듭니다.</div>
   </section>
 
   <section id="ch4">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-04</span><h2>Git·터미널 명령어</h2></div>
+    <div class="ch-head"><span class="ch-code">TL-CS-04</span><h2>장애 증거 1카드</h2></div>
+
+    <h3>IDE·브라우저 단축키 (mac / win)</h3>
     <table>
-      <tr><th>목적</th><th>명령어</th><th>해석</th></tr>
-      <tr><td>상태 확인</td><td><code>git status --short</code></td><td>변경/추적/삭제 파일을 짧게 확인</td></tr>
-      <tr><td>변경 diff</td><td><code>git diff</code>, <code>git diff --staged</code></td><td>작업 중 변경과 stage된 변경 분리 확인</td></tr>
-      <tr><td>커밋 이력</td><td><code>git log --oneline --graph --decorate -20</code></td><td>최근 흐름과 branch 위치 확인</td></tr>
-      <tr><td>파일 이력</td><td><code>git log --follow -- path/to/file</code></td><td>이름 변경 포함 파일 변경 추적</td></tr>
-      <tr><td>작성자/변경 시점</td><td><code>git blame path/to/file</code></td><td>현재 줄이 언제 왜 들어왔는지 추적</td></tr>
-      <tr><td>문자열 검색</td><td><code>rg "keyword"</code></td><td>코드베이스 전체에서 빠른 검색</td></tr>
-      <tr><td>파일 찾기</td><td><code>rg --files | rg "name"</code></td><td>파일명 일부로 후보 좁히기</td></tr>
-      <tr><td>포트 사용 확인</td><td><code>lsof -i :3000</code></td><td>개발 서버 충돌 프로세스 확인</td></tr>
-      <tr><td>프로세스 확인</td><td><code>ps aux | rg node</code></td><td>실행 중인 런타임/서버 확인</td></tr>
-      <tr><td>디스크 확인</td><td><code>df -h</code>, <code>du -sh *</code></td><td>공간 부족과 큰 디렉터리 확인</td></tr>
+      <tr><th>목적</th><th>macOS</th><th>Windows/Linux</th><th>도구·용도</th></tr>
+      <tr><td>파일 빠른 열기</td><td><code>Cmd+P</code></td><td><code>Ctrl+P</code></td><td>VS Code — 파일명 일부로 이동</td></tr>
+      <tr><td>명령 팔레트</td><td><code>Cmd+Shift+P</code></td><td><code>Ctrl+Shift+P</code></td><td>VS Code — 모든 command 실행</td></tr>
+      <tr><td>전체 검색</td><td><code>Cmd+Shift+F</code></td><td><code>Ctrl+Shift+F</code></td><td>VS Code — 문자열·API path 추적</td></tr>
+      <tr><td>심볼 이동</td><td><code>Cmd+Shift+O</code></td><td><code>Ctrl+Shift+O</code></td><td>VS Code — 큰 파일 내 함수 점프</td></tr>
+      <tr><td>정의로 이동</td><td><code>F12</code></td><td><code>F12</code></td><td>VS Code — 타입·함수 정의</td></tr>
+      <tr><td>멀티 커서</td><td><code>Cmd+D</code> / <code>Option+Click</code></td><td><code>Ctrl+D</code> / <code>Alt+Click</code></td><td>VS Code — 같은 토큰 반복 수정</td></tr>
+      <tr><td>DevTools 열기</td><td><code>Cmd+Option+I</code></td><td><code>Ctrl+Shift+I</code></td><td>브라우저 — Network·Console</td></tr>
+      <tr><td>요청 다시 보내기</td><td><code>Cmd+Enter</code></td><td><code>Ctrl+Enter</code></td><td>Postman — 저장한 API 재현</td></tr>
     </table>
-    <div class="callout warn">
-      <span class="co-label">주의</span>
-      <p><code>git reset --hard</code>, <code>git clean -fd</code>, <code>rm -rf</code>는 복구 비용이 큰 명령입니다. 실행 전 현재 branch, stash 필요 여부, 삭제 범위를 반드시 확인합니다.</p>
+
+    <div class="serial-card"><span class="sc-label">TOOLING INCIDENT TRIAGE</span>
+      "내 로컬만 깨짐"은 아래 순서로 좁히면 대부분 분리된다.<br>
+      1. runtime version — 나와 팀/CI의 런타임 버전이 같은가<br>
+      2. env diff — 환경변수·credential 누락 또는 값 차이<br>
+      3. port/process — 충돌 포트·좀비 프로세스가 잡고 있는가<br>
+      4. clean install — lockfile 기준 재설치로 의존성 오염 제거<br>
+      5. container — 그래도 재현 안 되면 컨테이너 기준으로 통제
     </div>
-  </section>
-
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-05</span><h2>Node·API·DB 명령어</h2></div>
-    <table>
-      <tr><th>목적</th><th>명령어</th><th>실무 해석</th></tr>
-      <tr><td>Node 버전</td><td><code>node -v</code>, <code>npm -v</code>, <code>pnpm -v</code></td><td>로컬/CI 버전 차이 확인</td></tr>
-      <tr><td>의존성 설치</td><td><code>npm ci</code>, <code>pnpm install --frozen-lockfile</code></td><td>lockfile 기준 재현 가능한 설치</td></tr>
-      <tr><td>스크립트 확인</td><td><code>npm run</code>, <code>pnpm run</code></td><td>프로젝트가 제공하는 표준 명령 확인</td></tr>
-      <tr><td>빌드/테스트</td><td><code>npm run build</code>, <code>npm test</code></td><td>로컬 변경이 CI에서 깨질 가능성 점검</td></tr>
-      <tr><td>HTTP 상태 확인</td><td><code>curl -i https://example.com/health</code></td><td>status, header, redirect, cache 확인</td></tr>
-      <tr><td>POST 요청</td><td><code>curl -X POST -H "Content-Type: application/json" -d '{"name":"test"}' URL</code></td><td>프론트 없이 API 재현</td></tr>
-      <tr><td>DNS 확인</td><td><code>dig example.com</code>, <code>nslookup example.com</code></td><td>도메인, TTL, record 전파 확인</td></tr>
-      <tr><td>DB 접속</td><td><code>psql "$DATABASE_URL"</code></td><td>애플리케이션 밖에서 직접 데이터 확인</td></tr>
-      <tr><td>느린 쿼리</td><td><code>EXPLAIN (ANALYZE, BUFFERS) SELECT ...</code></td><td>실제 실행 시간, index 사용, buffer 비용 확인</td></tr>
-      <tr><td>마이그레이션 확인</td><td><code>SELECT * FROM flyway_schema_history ORDER BY installed_rank DESC;</code></td><td>적용된 DB 변경 이력 확인</td></tr>
-    </table>
-  </section>
-
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-06</span><h2>Docker·운영 명령어</h2></div>
-    <table>
-      <tr><th>목적</th><th>명령어</th><th>실무 해석</th></tr>
-      <tr><td>컨테이너 목록</td><td><code>docker ps -a</code></td><td>실행/종료 상태와 포트 매핑 확인</td></tr>
-      <tr><td>로그 확인</td><td><code>docker logs -f container</code></td><td>부팅 실패, health check 실패, runtime error 확인</td></tr>
-      <tr><td>컨테이너 접속</td><td><code>docker exec -it container sh</code></td><td>컨테이너 내부 파일, env, network 확인</td></tr>
-      <tr><td>compose 실행</td><td><code>docker compose up -d</code></td><td>DB, Redis, API 등 로컬 의존 서비스 시작</td></tr>
-      <tr><td>compose 로그</td><td><code>docker compose logs -f service</code></td><td>특정 서비스 로그만 추적</td></tr>
-      <tr><td>이미지 정리</td><td><code>docker system df</code>, <code>docker image prune</code></td><td>디스크 사용량과 불필요 이미지 정리</td></tr>
-      <tr><td>서버 로그</td><td><code>journalctl -u service -f</code></td><td>systemd 서비스 실시간 로그 확인</td></tr>
-      <tr><td>네트워크 연결</td><td><code>curl -v URL</code>, <code>nc -vz host port</code></td><td>TLS, timeout, port open 여부 확인</td></tr>
-      <tr><td>리소스 확인</td><td><code>top</code>, <code>free -h</code>, <code>df -h</code></td><td>CPU, memory, disk 병목 확인</td></tr>
-      <tr><td>압축/전달</td><td><code>tar -czf logs.tgz logs/</code></td><td>로그 묶음, 재현 자료 전달</td></tr>
-    </table>
-  </section>
-
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-07</span><h2>Red Flags</h2></div>
-    <p class="lede">툴과 명령어 사용에서 가장 큰 위험은 속도가 아니라 증거를 잃거나, 공유 환경을 망가뜨리거나, 민감 정보를 노출하는 것입니다.</p>
-    <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
-      <tr><td>운영 DB에서 검증 없이 update/delete 실행</td><td>데이터 손상이 즉시 사용자 장애로 이어집니다.</td><td>transaction, where 조건, affected rows, backup/rollback 계획</td></tr>
-      <tr><td>secret이 command history나 문서에 남음</td><td>토큰 유출과 재발급 비용이 발생합니다.</td><td>shell history, 공유 문서, 로그 마스킹 여부</td></tr>
-      <tr><td>curl 결과 중 header/body를 저장하지 않음</td><td>장애 재현 증거가 사라집니다.</td><td>status, request id, response body, timestamp 기록</td></tr>
-      <tr><td>강제 명령으로 로컬 변경을 날림</td><td>원인 분석과 복구에 필요한 diff가 사라집니다.</td><td><code>git status</code>, stash/commit 필요 여부 확인</td></tr>
-      <tr><td>툴 결과를 해석하지 않고 캡처만 공유</td><td>다음 담당자가 다시 같은 조사를 반복합니다.</td><td>관찰, 해석, 다음 행동을 같이 기록</td></tr>
-    </table>
-  </section>
-
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-08</span><h2>Review Gate</h2></div>
-    <table>
-      <tr><th>상황</th><th>차단 기준</th><th>통과 증거</th></tr>
-      <tr><td>새 개발 환경 문서</td><td>필수 버전, env, 실행 명령, 실패 복구가 없음</td><td>clean clone 기준 실행 절차와 troubleshooting이 있습니다.</td></tr>
-      <tr><td>운영 명령 공유</td><td>대상 환경, 읽기/쓰기 여부, rollback 조건이 불명확함</td><td>환경, 명령, 예상 결과, 실패 시 중단 기준이 명시됩니다.</td></tr>
-      <tr><td>API 재현 케이스</td><td>인증 방식, payload, expected status가 없음</td><td>curl 또는 컬렉션으로 재현 가능합니다.</td></tr>
-      <tr><td>DB 확인 쿼리</td><td>where 조건과 row 수 제한이 없음</td><td>read-only 쿼리, limit, transaction, explain 기준이 있습니다.</td></tr>
-      <tr><td>단축키/툴 표준화</td><td>개인 취향만 있고 팀 공유 자산으로 남지 않음</td><td>팀 문서, onboarding checklist, 공통 collection에 반영됩니다.</td></tr>
-    </table>
-  </section>
-
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-09</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">TOOLING INCIDENT TRIAGE</span>툴 문제처럼 보이는 장애는 version, env, network, credential, cache, permission 순서로 좁히면 빠르게 분리됩니다.</div>
     <table>
       <tr><th>순서</th><th>질문</th><th>증거</th></tr>
-      <tr><td>1</td><td>나만 실패하는가, 팀/CI/운영도 실패하는가?</td><td>동료 재현 여부, CI log, 배포 환경 log</td></tr>
-      <tr><td>2</td><td>버전 차이인가?</td><td><code>node -v</code>, <code>java -version</code>, package manager, lockfile</td></tr>
-      <tr><td>3</td><td>환경변수나 credential 누락인가?</td><td><code>.env</code> template, secret 이름, 권한, 만료 여부</td></tr>
-      <tr><td>4</td><td>네트워크/DNS/프록시 문제인가?</td><td><code>curl -v</code>, <code>dig</code>, VPN, firewall, proxy 설정</td></tr>
-      <tr><td>5</td><td>캐시나 의존성 오염인가?</td><td>clean install, lockfile diff, Docker image rebuild</td></tr>
-      <tr><td>6</td><td>복구 뒤 재발 방지 문서가 남았는가?</td><td>원인, 확인 명령, 수정 커밋, runbook 업데이트</td></tr>
+      <tr><td>1</td><td>런타임 버전이 팀/CI와 같은가?</td><td><code>node -v</code>, <code>java -version</code>, lockfile</td></tr>
+      <tr><td>2</td><td>env·credential 누락/차이인가?</td><td><code>.env</code> template diff, secret 이름·만료</td></tr>
+      <tr><td>3</td><td>포트·프로세스 충돌인가?</td><td><code>lsof -i :3000</code>, <code>ps aux | grep node</code></td></tr>
+      <tr><td>4</td><td>의존성·캐시 오염인가?</td><td><code>rm -rf node_modules</code> + <code>npm ci</code>, lockfile diff</td></tr>
+      <tr><td>5</td><td>컨테이너 기준으론 재현되나?</td><td><code>docker compose up</code>, image digest</td></tr>
     </table>
+    <div class="callout risk"><span class="co-label">복구/중단 기준</span><p>작업 유실이 의심되면 다른 명령을 치기 전에 <b><code>git reflog</code>부터</b> — HEAD 이동 기록이 남아 있는 동안이 복구 골든타임이다. secret이 커밋·push됐다면 history 정리보다 <b>토큰 재발급이 먼저</b>다. 히스토리 재작성(rebase/force)은 공유 브랜치에서 중단하고 merge로 우회한다.</p></div>
   </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">TOOL-CS-10</span><h2>출력 판정·증거 패킷</h2></div>
-    <p class="lede">명령어 결과는 캡처만 남기면 다시 해석해야 합니다. 관찰, 해석, 다음 행동을 같이 남겨야 실무 증거가 됩니다.</p>
-    <table>
-      <tr><th>명령</th><th>볼 출력</th><th>위험 신호</th><th>기록할 것</th></tr>
-      <tr><td><code>git status --short</code></td><td>수정, 삭제, untracked 파일</td><td>의도하지 않은 생성 파일이나 삭제 파일</td><td>작업 전/후 변경 파일 목록</td></tr>
-      <tr><td><code>git diff</code></td><td>행 단위 변경, 설정/lockfile 변화</td><td>관련 없는 파일, secret, generated diff 대량 포함</td><td>리뷰 대상 diff와 제외할 변경</td></tr>
-      <tr><td><code>curl -v</code></td><td>DNS, connect, TLS, status, header, body</td><td>redirect loop, TLS mismatch, 5xx, unexpected cache</td><td>URL, status, request id, timestamp, response sample</td></tr>
-      <tr><td><code>psql</code></td><td>row count, plan, lock, migration history</td><td>조건 없는 update/delete, 예상보다 큰 affected rows</td><td>SELECT dry-run, transaction 여부, rollback 방법</td></tr>
-      <tr><td><code>docker logs</code></td><td>first error, exit reason, healthcheck 실패</td><td>secret 출력, 반복 restart, missing env</td><td>container name, image digest, first failing log line</td></tr>
-      <tr><td><code>journalctl</code></td><td>unit, exit code, restart, timestamp</td><td>같은 오류 반복, 배포 시각 이후 급증</td><td>host, service, since 범위, error fingerprint</td></tr>
-    </table>
-    <div class="semantic-card evidence-card"><span class="sc-label">증거 패킷 템플릿</span><br>Problem: 어떤 작업/화면/API가 실패했는가<br>Scope: 나만/팀/CI/운영, route, host, tenant, release<br>Command: 실행한 명령과 대상 환경<br>Observed: status, error, row count, log line, trace id<br>Interpretation: 어떤 계층 문제로 좁혔는가<br>Next: 수정, rollback, 재시도, 추가 확인 중 무엇을 할 것인가</div>
-  </section>
+
+  <footer>Tools·Shortcuts·Commands CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 명령을 외우지 말고, 유실 전에 대피시키고 유실 후엔 reflog로 되찾는다.</footer>
 </main>
 </body>
 </html>

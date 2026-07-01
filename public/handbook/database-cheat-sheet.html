@@ -1,135 +1,220 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>Database Cheat Sheet</title></head>
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Database Cheat Sheet</title>
+</head>
 <body>
 <nav aria-label="목차">
-  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Database</div>
-  <a href="#ch1"><span class="code">DB-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">DB-CS-02</span>핵심 명령/개념</a>
-  <a href="#ch3"><span class="code">DB-CS-03</span>판단 기준</a>
-  <a href="#ch4"><span class="code">DB-CS-04</span>자주 나는 실수</a>
-  <a href="#ch5"><span class="code">DB-CS-05</span>면접/리뷰용 한 줄 답변</a>
-  <a href="#ch6"><span class="code">DB-CS-06</span>Red Flags</a>
-  <a href="#ch7"><span class="code">DB-CS-07</span>Review Gate</a>
-  <a href="#ch8"><span class="code">DB-CS-08</span>Failure Playbook</a>
-  <a href="#ch9"><span class="code">DB-CS-09</span>쿼리·마이그레이션 카드</a>
-  <a href="#ch10"><span class="code">DB-CS-10</span>출력 판정표</a>
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Database</div>
+  <a href="#ch1"><span class="code">DB-CS-01</span>핵심 명령·스니펫</a>
+  <a href="#ch2"><span class="code">DB-CS-02</span>판단 한 줄</a>
+  <a href="#ch3"><span class="code">DB-CS-03</span>자주 터지는 것 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">DB-CS-04</span>장애 증거 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial"><span>DOC : CHEAT-DATABASE-V1</span><span>SCOPE : SQL · INDEX · PLAN · MIGRATION</span><span>LANG : KO</span></div>
+    <div class="hero-serial"><span>DOC : CHEAT-DATABASE-V2</span><span>SCOPE : QUERY · INDEX · LOCK · MIGRATION</span><span>LANG : KO</span></div>
     <h1>Database<br>Cheat Sheet</h1>
-    <p class="hero-sub">쿼리와 스키마 변경을 빠르게 점검하기 위한 참조입니다. SQL 문법보다 인덱스, 실행 계획, lock, 마이그레이션 안전성을 우선합니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <p class="hero-sub">느린 쿼리, 안 먹는 인덱스, 블로킹 락, 위험한 마이그레이션을 5초 안에 찾아 복붙하는 참조. 기본 PostgreSQL, 다른 DB는 주석.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
+
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">DB-CS-01</span><h2>개요</h2></div>
-    <p class="lede">DB 문제는 대부분 잘못된 접근 경로, 과한 lock, 되돌릴 수 없는 migration에서 시작합니다. 변경 전 실행 계획과 rollback을 확인합니다.</p>
+    <div class="ch-head"><span class="ch-code">DB-CS-01</span><h2>핵심 명령·스니펫</h2></div>
+
+    <p class="lede">실행계획 → 인덱스 → 락 → 통계 순으로 본다. 아래 스니펫은 대부분 복붙 후 테이블/컬럼명만 바꾸면 된다.</p>
+
+    <h3>실행계획 (EXPLAIN)</h3>
+    <pre class="snippet-card"><code># 실제 실행 + 버퍼까지 (진짜 느린 원인 찾을 때 이거)
+EXPLAIN (ANALYZE, BUFFERS) SELECT ... FROM orders WHERE user_id = 42;
+
+# 계획만 (쿼리 실제 실행 안 함, 안전)
+EXPLAIN SELECT ... FROM orders WHERE user_id = 42;
+
+# 포맷 옵션
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT ...;
+
+# MySQL:  EXPLAIN ANALYZE SELECT ...;   /  EXPLAIN FORMAT=JSON SELECT ...;
+# MySQL 8: EXPLAIN ANALYZE 는 실제 실행됨 (Postgres와 동일 주의)</code></pre>
+    <div class="callout warn"><span class="co-label">주의</span><p><code>ANALYZE</code>는 쿼리를 <b>실제로 실행</b>한다. UPDATE/DELETE/INSERT에 붙이면 데이터가 바뀐다. 쓰기 쿼리는 <code>BEGIN; EXPLAIN (ANALYZE) ...; ROLLBACK;</code> 로 감싼다.</p></div>
+
+    <h3>인덱스 확인·생성</h3>
+    <pre class="snippet-card"><code># 테이블의 인덱스/컬럼/제약 한눈에 (psql)
+\d orders
+\d+ orders
+
+# 인덱스 목록만
+SELECT * FROM pg_indexes WHERE tablename = 'orders';
+
+# 인덱스 정의 + 크기
+SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'orders';
+SELECT pg_size_pretty(pg_relation_size('idx_orders_user_id'));
+
+# 락 없이 인덱스 생성 (운영 테이블은 반드시 CONCURRENTLY)
+CREATE INDEX CONCURRENTLY idx_orders_user_id ON orders (user_id);
+
+# 복합 인덱스 (컬럼 순서 = 좌측 우선 규칙)
+CREATE INDEX idx_orders_user_created ON orders (user_id, created_at DESC);
+
+# 부분 인덱스 (조건 걸린 행만 색인 → 작고 빠름)
+CREATE INDEX idx_orders_active ON orders (user_id) WHERE status = 'ACTIVE';
+
+# 안 쓰이는 인덱스 찾기 (idx_scan = 0)
+SELECT relname, indexrelname, idx_scan
+FROM pg_stat_user_indexes ORDER BY idx_scan ASC;</code></pre>
+    <div class="callout warn"><span class="co-label">주의</span><p><code>CREATE INDEX CONCURRENTLY</code>는 transaction block 안에서 못 쓴다. 실패하면 <b>INVALID 인덱스</b>가 남으니 <code>DROP INDEX</code> 후 재시도. MySQL은 <code>ALGORITHM=INPLACE, LOCK=NONE</code>.</p></div>
+
+    <h3>블로킹 락 / 활성 쿼리</h3>
+    <pre class="snippet-card"><code># 지금 잡혀 있는 락 (누가 무엇을)
+SELECT * FROM pg_locks WHERE NOT granted;
+
+# 무엇이 무엇을 막는지 (blocking → blocked) — 가장 실전적
+SELECT blocked.pid   AS blocked_pid,
+       blocking.pid  AS blocking_pid,
+       blocked.query AS blocked_query,
+       blocking.query AS blocking_query
+FROM pg_stat_activity blocked
+JOIN pg_stat_activity blocking
+  ON blocking.pid = ANY(pg_blocking_pids(blocked.pid))
+WHERE blocked.wait_event_type = 'Lock';
+
+# 오래 도는 쿼리 (5초 이상)
+SELECT pid, now() - query_start AS runtime, state, query
+FROM pg_stat_activity
+WHERE state != 'idle' AND now() - query_start &gt; interval '5 seconds'
+ORDER BY runtime DESC;
+
+# 문제 세션 죽이기 (cancel = 쿼리만, terminate = 연결까지)
+SELECT pg_cancel_backend(&lt;pid&gt;);
+SELECT pg_terminate_backend(&lt;pid&gt;);</code></pre>
+    <div class="callout warn"><span class="co-label">주의</span><p><code>pg_terminate_backend</code>는 연결을 끊는다. 트랜잭션 중이면 rollback된다. 운영에서 남의 세션 죽이기 전에 <b>무슨 쿼리인지</b> 반드시 확인.</p></div>
+
+    <h3>느린 쿼리 통계 (pg_stat_statements)</h3>
+    <pre class="snippet-card"><code># 확장 켜기 (한 번, 재시작 필요할 수 있음)
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+
+# 총 소요시간 상위 쿼리 (범인 후보)
+SELECT query, calls, total_exec_time, mean_exec_time, rows
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC LIMIT 20;
+
+# 평균 느린 쿼리
+SELECT query, calls, mean_exec_time
+FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 20;
+
+# 통계 리셋
+SELECT pg_stat_statements_reset();
+
+# MySQL: SELECT * FROM sys.statement_analysis ORDER BY total_latency DESC;
+#        performance_schema.events_statements_summary_by_digest</code></pre>
+
+    <h3>통계·정리 (VACUUM / ANALYZE)</h3>
+    <pre class="snippet-card"><code># 통계 갱신 (실행계획이 이상하면 제일 먼저)
+VACUUM (ANALYZE) orders;
+ANALYZE orders;              -- 통계만, 락 가벼움
+
+# dead tuple / 마지막 vacuum 시점 확인
+SELECT relname, n_dead_tup, last_autovacuum, last_analyze
+FROM pg_stat_user_tables ORDER BY n_dead_tup DESC;
+
+# 테이블/인덱스 크기
+SELECT pg_size_pretty(pg_total_relation_size('orders'));</code></pre>
+    <div class="callout risk"><span class="co-label">위험</span><p><code>VACUUM FULL</code>은 테이블을 <b>ACCESS EXCLUSIVE 락</b>으로 완전히 잠그고 재작성한다. 대형 테이블에 운영 중 실행 금지. 공간 회수는 <code>pg_repack</code> 고려.</p></div>
+
+    <h3>안전한 마이그레이션 패턴 (NOT NULL 컬럼 추가)</h3>
+    <pre class="snippet-card"><code># 1) nullable로 먼저 추가 (즉시, 락 짧음)
+ALTER TABLE orders ADD COLUMN region text;
+
+# 2) 배치로 backfill (한 번에 UPDATE 금지 — 락+WAL 폭증)
+UPDATE orders SET region = 'KR'
+WHERE id BETWEEN 1 AND 10000 AND region IS NULL;
+-- id 범위 올려가며 반복 / 사이에 sleep
+
+# 3) 기본값·제약은 backfill 끝난 뒤
+ALTER TABLE orders ALTER COLUMN region SET DEFAULT 'KR';
+
+# 4) NOT NULL 은 CHECK로 먼저 검증 후 승격 (풀스캔 락 회피)
+ALTER TABLE orders ADD CONSTRAINT region_nn CHECK (region IS NOT NULL) NOT VALID;
+ALTER TABLE orders VALIDATE CONSTRAINT region_nn;   -- 락 가벼움
+ALTER TABLE orders ALTER COLUMN region SET NOT NULL;</code></pre>
+    <div class="callout warn"><span class="co-label">주의</span><p>대형 테이블 <code>ALTER TABLE</code>은 <b>ACCESS EXCLUSIVE 락</b>을 잡는다. 배포 시 <code>SET lock_timeout = '3s';</code> 를 먼저 걸어 락 대기가 서비스를 막지 않게 한다.</p></div>
+
+    <h3>psql 자주 쓰는 것</h3>
     <table>
-      <tr><th>상황</th><th>먼저 확인할 것</th><th>위험 신호</th></tr>
-      <tr><td>느린 쿼리</td><td>filter, join, sort, row estimate, actual rows</td><td>actual rows가 추정치와 크게 다름, sort/hash가 디스크 사용</td></tr>
-      <tr><td>인덱스 추가</td><td>WHERE/JOIN/ORDER BY와 column order</td><td>쓰기 많은 테이블에 사용 빈도 낮은 인덱스 추가</td></tr>
-      <tr><td>스키마 변경</td><td>table rewrite, lock level, default, backfill</td><td>큰 테이블에 NOT NULL/default/backfill을 한 번에 수행</td></tr>
-      <tr><td>정합성 이슈</td><td>transaction boundary, isolation, lost update</td><td>읽고 계산한 뒤 업데이트하는 로직에 충돌 제어 없음</td></tr>
-      <tr><td>페이지네이션</td><td>정렬 기준, index, offset 크기, cursor 후보</td><td>큰 offset에서 응답 시간이 선형 증가</td></tr>
+      <tr><th>명령</th><th>용도</th><th>주의</th></tr>
+      <tr><td><code>\dt</code></td><td>테이블 목록</td><td><code>\dt+</code> 는 크기까지</td></tr>
+      <tr><td><code>\d+ orders</code></td><td>컬럼·인덱스·제약·크기 전체</td><td>디버깅 첫 명령</td></tr>
+      <tr><td><code>\di</code></td><td>인덱스 목록</td><td>—</td></tr>
+      <tr><td><code>\timing</code></td><td>쿼리 실행시간 표시 on/off</td><td>체감 측정용</td></tr>
+      <tr><td><code>\x</code></td><td>세로 출력 (넓은 행)</td><td>EXPLAIN 볼 때 편함</td></tr>
+      <tr><td><code>\l</code></td><td>DB 목록</td><td>—</td></tr>
+      <tr><td><code>\du</code></td><td>role/권한 목록</td><td>—</td></tr>
+      <tr><td><code>\e</code></td><td>에디터로 쿼리 편집</td><td>긴 쿼리에</td></tr>
     </table>
   </section>
+
   <section id="ch2">
-    <div class="ch-head"><span class="ch-code">DB-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <div class="ch-head"><span class="ch-code">DB-CS-02</span><h2>판단 한 줄</h2></div>
+
     <table>
-      <tr><th>개념/명령</th><th>압축 설명</th><th>볼 것</th></tr>
-      <tr><td><code>EXPLAIN ANALYZE</code></td><td>계획과 실제 실행 시간을 함께 확인</td><td>rows, loops, sort method, buffers, execution time</td></tr>
-      <tr><td>Sequential scan</td><td>테이블 전체를 읽음</td><td>작은 테이블이면 정상, 큰 테이블에서 반복되면 위험</td></tr>
-      <tr><td>Index scan</td><td>인덱스로 후보를 좁히고 row를 읽음</td><td>선택도가 낮으면 기대만큼 빨라지지 않음</td></tr>
-      <tr><td>Covering index</td><td>쿼리에 필요한 컬럼을 인덱스에서 대부분 해결</td><td>읽기는 빨라지지만 인덱스 크기와 쓰기 비용 증가</td></tr>
-      <tr><td>Isolation level</td><td>동시 트랜잭션이 서로 어떻게 보이는지 정하는 규칙</td><td>dirty read, non-repeatable read, phantom, serialization failure</td></tr>
-      <tr><td>Backfill</td><td>새 컬럼이나 파생 데이터를 기존 row에 채우는 작업</td><td>batch size, lock, retry, progress, 검증 쿼리</td></tr>
-      <tr><td>Constraint validation</td><td>기존 데이터가 새 규칙을 만족하는지 확인</td><td>운영에서는 NOT VALID 후 VALIDATE 같은 단계화 검토</td></tr>
+      <tr><th>선택</th><th>언제 쓰나</th><th>주의</th></tr>
+      <tr><td>B-tree 인덱스</td><td>등호·범위·정렬·<code>LIKE 'x%'</code> 대부분의 기본</td><td><code>LIKE '%x'</code> 선행 와일드카드엔 안 먹음</td></tr>
+      <tr><td>Partial 인덱스</td><td>일부 행만 자주 조회 (예: status='ACTIVE')</td><td>WHERE 조건이 쿼리와 일치해야 사용됨</td></tr>
+      <tr><td>Composite 인덱스</td><td>여러 컬럼 AND 조건이 함께 자주 옴</td><td>좌측 우선 — 컬럼 순서가 곧 사용 범위</td></tr>
+      <tr><td>Covering 인덱스</td><td>인덱스만으로 SELECT 컬럼 다 충당 (<code>INCLUDE</code>)</td><td>Index Only Scan 노림, 인덱스 커짐</td></tr>
+      <tr><td>Normalization</td><td>쓰기 정합성이 중요한 OLTP, 중복 제거</td><td>조인 늘어 읽기 비용 증가</td></tr>
+      <tr><td>Denormalization</td><td>읽기 폭증·리포트, 조인 비용이 병목</td><td>중복 갱신 로직·정합성 책임이 앱으로 옴</td></tr>
+      <tr><td>OLTP 튜닝</td><td>짧고 잦은 트랜잭션 → 인덱스·락 최소화</td><td>인덱스 과다는 쓰기 느리게 함</td></tr>
+      <tr><td>분석 쿼리</td><td>대량 집계 → 풀스캔·병렬·partition이 오히려 유리</td><td>OLTP 인덱스 전략과 반대일 수 있음</td></tr>
     </table>
-  </section>
-  <section id="ch3">
-    <div class="ch-head"><span class="ch-code">DB-CS-03</span><h2>판단 기준</h2></div>
-    <table>
-      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
-      <tr><td>정규화</td><td>쓰기 정합성과 중복 제거가 중요함</td><td>조회 시 join 비용과 쿼리 복잡도 증가</td></tr>
-      <tr><td>비정규화</td><td>읽기 성능이 중요하고 중복 갱신 비용을 통제할 수 있음</td><td>동기화 실패와 stale data 감시 필요</td></tr>
-      <tr><td>복합 인덱스</td><td>동등 조건, 범위 조건, 정렬 순서가 반복됨</td><td>컬럼 순서가 쿼리 패턴과 맞아야 함</td></tr>
-      <tr><td>Partial index</td><td>특정 상태나 subset만 자주 조회함</td><td>쿼리 조건이 index predicate와 맞아야 사용됨</td></tr>
-      <tr><td>Cursor pagination</td><td>큰 데이터에서 안정적인 다음 페이지가 중요함</td><td>고유하고 변하지 않는 정렬 키 필요</td></tr>
-      <tr><td>단계적 migration</td><td>운영 데이터가 크고 신/구 코드가 공존함</td><td>expand → deploy → backfill → validate → contract 순서</td></tr>
-    </table>
-  </section>
-  <section id="ch4">
-    <div class="ch-head"><span class="ch-code">DB-CS-04</span><h2>자주 나는 실수</h2></div>
-    <ul>
-      <li>인덱스를 추가하면 모든 쿼리가 빨라진다고 생각한다. 읽기 패턴과 선택도가 맞지 않으면 쓰기 비용만 늘어난다.</li>
-      <li>실행 계획의 estimated rows와 actual rows 차이를 보지 않는다. 통계가 틀리면 optimizer가 잘못된 경로를 고른다.</li>
-      <li>큰 테이블에 default와 not null을 한 번에 추가해 lock 위험을 만든다. nullable 추가, backfill, 검증, NOT NULL 순서로 나눠야 한다.</li>
-      <li>마이그레이션 rollback은 코드 rollback과 별개라는 점을 놓친다. 데이터 변경은 되돌릴 스크립트나 보정 절차가 필요하다.</li>
-      <li>pagination에서 offset이 커질수록 비용이 커지는 문제를 무시한다. 무한 스크롤과 대량 목록은 cursor 방식을 검토한다.</li>
-      <li>foreign key와 unique constraint를 앱 로직으로만 보장한다. 경쟁 조건에서는 DB 제약이 최후의 방어선이다.</li>
-    </ul>
-  </section>
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">DB-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
+
+    <h3>Transaction isolation level</h3>
     <div class="glossary">
-      <div class="g-row"><div class="g-term"><b>인덱스</b><span>index</span></div><div class="g-def">인덱스는 읽기를 빠르게 하지만 쓰기 비용과 저장 공간을 늘리므로 쿼리 패턴에 맞춰 설계해야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>실행 계획</b><span>plan</span></div><div class="g-def">실행 계획은 DB가 데이터를 어떤 경로로 읽고 조인하고 정렬하는지 보여주는 비용 지도입니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>마이그레이션</b><span>migration</span></div><div class="g-def">운영 마이그레이션은 DDL이 아니라 lock, backfill, rollback, 신구 코드 호환성까지 포함한 변경 절차입니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>트랜잭션</b><span>isolation</span></div><div class="g-def">트랜잭션은 원자성만이 아니라 동시에 실행될 때 어떤 값을 볼 수 있는지까지 포함해 설계해야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>제약조건</b><span>constraint</span></div><div class="g-def">중복, 참조, 필수값 같은 핵심 정합성은 애플리케이션 검증뿐 아니라 DB 제약으로도 막아야 합니다.</div></div>
+      <div class="g-row"><div class="g-term"><b>Read Committed</b><span>기본값(PG/Oracle)</span></div><div class="g-def">커밋된 것만 읽음. non-repeatable read 허용. 대부분의 앱 기본으로 충분.</div></div>
+      <div class="g-row"><div class="g-term"><b>Repeatable Read</b><span>MySQL 기본</span></div><div class="g-def">트랜잭션 내 같은 읽기 보장. PG에선 phantom도 막음. 재시도(serialization error) 필요할 수 있음.</div></div>
+      <div class="g-row"><div class="g-term"><b>Serializable</b><span>가장 엄격</span></div><div class="g-def">순차 실행처럼 보장. 정합성 최상, 대신 conflict 시 rollback 잦음 → 재시도 로직 필수.</div></div>
     </div>
   </section>
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">DB-CS-06</span><h2>Red Flags</h2></div>
+
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">DB-CS-03</span><h2>자주 터지는 것 · 즉시 확인</h2></div>
     <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
-      <tr><td>대용량 테이블에 한 번에 NOT NULL/default/backfill</td><td>table rewrite와 장시간 lock 위험</td><td>row count, lock level, 단계적 migration</td></tr>
-      <tr><td>EXPLAIN 없이 인덱스 추가</td><td>쓰기 비용만 늘고 쿼리는 그대로일 수 있음</td><td><code>EXPLAIN (ANALYZE, BUFFERS)</code></td></tr>
-      <tr><td>offset pagination이 깊어짐</td><td>페이지가 깊을수록 읽는 row가 선형 증가</td><td>cursor key, index order</td></tr>
-      <tr><td>앱 로직만으로 uniqueness 보장</td><td>동시 요청에서 중복 row 생성 가능</td><td>unique constraint, 409 처리</td></tr>
-      <tr><td>마이그레이션 rollback 미정</td><td>코드 rollback 후 데이터가 이전 형태와 맞지 않음</td><td>expand-contract 계획, 보정 SQL</td></tr>
+      <tr><th>신호</th><th>왜 위험</th><th>즉시 확인</th></tr>
+      <tr><td>N+1 쿼리</td><td>목록 1 + 항목당 1 → 수백 쿼리, 지연 폭증</td><td>ORM 로그의 반복 SELECT, <code>JOIN</code>/eager fetch/<code>IN</code> 배치로 전환</td></tr>
+      <tr><td>함수로 감싼 컬럼<br><code>WHERE lower(email)=...</code></td><td>인덱스 미사용 → 풀스캔</td><td>EXPLAIN에 Seq Scan, expression index <code>ON t(lower(email))</code> 필요</td></tr>
+      <tr><td>대형 테이블 DDL</td><td><code>ALTER/CREATE INDEX</code>가 ACCESS EXCLUSIVE 락 → 서비스 정지</td><td><code>CONCURRENTLY</code>/<code>NOT VALID</code> 여부, <code>lock_timeout</code> 설정</td></tr>
+      <tr><td>무제한 SELECT</td><td><code>LIMIT</code>/<code>WHERE</code> 없는 조회 → 메모리·전송 폭발</td><td>pagination(keyset), 페이지 크기 상한 존재?</td></tr>
+      <tr><td>마이그레이션 rollback 부재</td><td>실패 시 되돌릴 수 없어 배포가 막힘</td><td>down 스크립트, 배포 전 트랜잭션 감싸기 여부</td></tr>
+      <tr><td>암묵적 형변환<br><code>id = '42'</code></td><td>text↔int 캐스팅 → 인덱스 무력화</td><td>파라미터 타입 일치, EXPLAIN에 cast 흔적</td></tr>
+      <tr><td>낮은 선택도 인덱스</td><td><code>status</code>처럼 값 몇 개뿐 → 인덱스 무시됨</td><td>partial/composite로 재설계, 카디널리티 확인</td></tr>
+      <tr><td>SELECT * 대량 컬럼</td><td>불필요 컬럼·TOAST 로드로 I/O 낭비, covering 불가</td><td>필요한 컬럼만 명시</td></tr>
+      <tr><td>긴 트랜잭션</td><td>락 오래 잡고 VACUUM 방해(dead tuple 누적)</td><td><code>pg_stat_activity</code>의 idle in transaction 확인</td></tr>
     </table>
   </section>
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">DB-CS-07</span><h2>Review Gate</h2></div>
+
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">DB-CS-04</span><h2>장애 증거 1카드</h2></div>
+    <div class="serial-card"><span class="sc-label">SLOW QUERY FIRST LOOK</span>
+      1. <b>EXPLAIN (ANALYZE, BUFFERS)</b> 로 실제 실행계획을 뜬다.<br>
+      2. <b>인덱스 사용 여부</b> — Seq Scan인가 Index Scan인가. 예상 인덱스가 왜 안 먹나.<br>
+      3. <b>row 수 / 버퍼</b> — estimated vs actual rows 괴리(통계 낡음?), read 버퍼량.<br>
+      4. <b>lock 대기</b> — 느린 게 아니라 막힌 것일 수 있다. <code>pg_blocking_pids</code> 확인.<br>
+      5. 그다음 <b>쿼리 → 인덱스 → 스키마</b> 순으로 고친다. 스키마 변경이 가장 무겁고 마지막.
+    </div>
     <table>
-      <tr><th>변경</th><th>merge/deploy 차단 기준</th><th>필수 증거</th></tr>
-      <tr><td>DDL</td><td>lock, rewrite, rollback, 신/구 코드 호환성 설명 없음</td><td>migration plan, table size, dry run</td></tr>
-      <tr><td>쿼리 변경</td><td>실행 계획과 p95/p99 비교 없음</td><td>before/after EXPLAIN, latency</td></tr>
-      <tr><td>인덱스 추가</td><td>쿼리 패턴, 선택도, 쓰기 영향 미검토</td><td>query frequency, index size, write path</td></tr>
-      <tr><td>데이터 보정</td><td>idempotency, batch size, progress, 재시도 기준 없음</td><td>backfill script, verification query</td></tr>
-      <tr><td>삭제/soft delete</td><td>참조, export, audit, cache 영향 미검토</td><td>deletion policy, cascade 영향</td></tr>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>1</td><td>실제로 무엇이 느린가</td><td><code>EXPLAIN (ANALYZE, BUFFERS)</code> 출력, 가장 비싼 노드</td></tr>
+      <tr><td>2</td><td>인덱스가 쓰였나</td><td>Index Scan / Seq Scan / Bitmap 여부, <code>\d orders</code> 인덱스 목록</td></tr>
+      <tr><td>3</td><td>추정과 실제가 맞나</td><td>estimated vs actual rows, <code>last_analyze</code> 시점</td></tr>
+      <tr><td>4</td><td>느린 게 아니라 막힌 건 아닌가</td><td><code>pg_stat_activity</code> wait_event, <code>pg_blocking_pids</code></td></tr>
+      <tr><td>5</td><td>반복적으로 비싼가</td><td><code>pg_stat_statements</code> total/mean_exec_time 순위</td></tr>
     </table>
+    <div class="callout gm"><span class="co-label">복구·중단 기준</span><p>인덱스 추가는 <code>CONCURRENTLY</code>로 무중단. 원인이 특정 세션의 blocking이면 <code>pg_cancel_backend</code>로 완화. DDL이 락으로 서비스를 막고 있으면 즉시 취소하고 배치·CONCURRENTLY로 재설계 — <b>운영 중 대형 테이블 락은 롤백이 최우선</b>.</p></div>
   </section>
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">DB-CS-08</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">SLOW QUERY FIRST LOOK</span>1. 느린 route와 query fingerprint 확인<br>2. <code>EXPLAIN (ANALYZE, BUFFERS)</code>로 실제 실행 확인<br>3. estimated rows와 actual rows 차이 확인<br>4. sort/hash spill, lock wait, sequential scan 분리<br>5. index 후보를 쿼리 조건/정렬 순서와 맞춤<br>6. 변경 전후 p95/p99와 write latency 기록</div>
-    <div class="callout warn"><span class="co-label">운영 원칙</span><p>DB 변경은 코드 변경보다 되돌리기 어렵습니다. "쿼리가 빨라질 것"이 아니라 어떤 실행 계획이 어떻게 바뀌고, lock과 rollback 위험이 어떤지 증거로 남겨야 합니다.</p></div>
-  </section>
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">DB-CS-09</span><h2>쿼리·마이그레이션 카드</h2></div>
-    <p class="lede">DB 치트시트는 SQL 문법보다 운영 안전성 판단에 씁니다. 쿼리 변경은 실행 계획으로, 스키마 변경은 lock과 rollback으로 닫습니다.</p>
-    <table>
-      <tr><th>작업</th><th>바로 실행/확인</th><th>정상 신호</th><th>위험 신호</th></tr>
-      <tr><td>느린 SELECT</td><td><code>EXPLAIN (ANALYZE, BUFFERS) SELECT ...</code></td><td>예상 rows와 실제 rows가 크게 다르지 않고 sort spill 없음</td><td>Seq Scan 반복, rows 오차 큼, temp read/write 발생</td></tr>
-      <tr><td>인덱스 후보</td><td>WHERE 동등 조건, 범위 조건, ORDER BY 순서 정리</td><td>쿼리 패턴과 컬럼 순서가 설명됨</td><td>사용 빈도 모름, 쓰기 많은 테이블에 무조건 추가</td></tr>
-      <tr><td>DDL 변경</td><td>row count, table size, lock level, rewrite 여부</td><td>expand/deploy/backfill/validate/contract 순서가 있음</td><td>대용량 테이블에 NOT NULL/default/backfill 일괄 실행</td></tr>
-      <tr><td>Backfill</td><td>batch size, idempotency, progress, verification query</td><td>중단 후 재시작 가능하고 affected rows 추적 가능</td><td>한 transaction으로 전체 update, 진행률/검증 없음</td></tr>
-      <tr><td>삭제/보정</td><td>transaction, WHERE, LIMIT, SELECT dry-run, backup</td><td>대상 row를 먼저 조회하고 복구 방법이 있음</td><td>운영에서 조건 없는 UPDATE/DELETE</td></tr>
-    </table>
-  </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">DB-CS-10</span><h2>출력 판정표</h2></div>
-    <table>
-      <tr><th>출력</th><th>보는 값</th><th>위험 판정</th><th>다음 행동</th></tr>
-      <tr><td>EXPLAIN</td><td>actual time, rows, loops, buffers</td><td>추정 rows와 실제 rows 차이가 크면 통계/조건/인덱스 의심</td><td>ANALYZE, 조건 선택도 확인, 인덱스 후보 재검토</td></tr>
-      <tr><td>Sort/Hash</td><td>Sort Method, Disk, temp read/write</td><td>디스크 spill이면 메모리 또는 인덱스/정렬 전략 문제</td><td>ORDER BY 인덱스, work_mem, 결과 크기 축소 검토</td></tr>
-      <tr><td>Lock wait</td><td>대기 query, blocking pid, lock type</td><td>DDL이나 긴 transaction이 쓰기 경로를 막음</td><td>blocking session 확인, migration 중단/재시도 판단</td></tr>
-      <tr><td>Migration dry-run</td><td>실행 시간, lock, affected rows</td><td>운영 table size와 다른 작은 데이터에서만 검증</td><td>운영 유사 row count에서 재검증, rollback SQL 준비</td></tr>
-      <tr><td>Verification query</td><td>불일치 row count, null count, duplicate count</td><td>검증 쿼리 없이 완료 선언</td><td>변경 전후 검증 SQL을 PR에 첨부</td></tr>
-    </table>
-  </section>
+
+  <footer>Database CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 추측 말고 EXPLAIN. 느린 것과 막힌 것을 먼저 구분한다.</footer>
 </main>
 </body>
 </html>

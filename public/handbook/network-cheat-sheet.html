@@ -1,135 +1,112 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>Network Cheat Sheet</title></head>
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Network Cheat Sheet</title>
+</head>
 <body>
 <nav aria-label="목차">
-  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Network</div>
-  <a href="#ch1"><span class="code">NW-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">NW-CS-02</span>핵심 명령/개념</a>
-  <a href="#ch3"><span class="code">NW-CS-03</span>판단 기준</a>
-  <a href="#ch4"><span class="code">NW-CS-04</span>자주 나는 실수</a>
-  <a href="#ch5"><span class="code">NW-CS-05</span>면접/리뷰용 한 줄 답변</a>
-  <a href="#ch6"><span class="code">NW-CS-06</span>Red Flags</a>
-  <a href="#ch7"><span class="code">NW-CS-07</span>Review Gate</a>
-  <a href="#ch8"><span class="code">NW-CS-08</span>Failure Playbook</a>
-  <a href="#ch9"><span class="code">NW-CS-09</span>연결 진단 카드</a>
-  <a href="#ch10"><span class="code">NW-CS-10</span>출력 판정표</a>
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Network</div>
+  <a href="#ch1"><span class="code">NW-CS-01</span>핵심 명령·스니펫</a>
+  <a href="#ch2"><span class="code">NW-CS-02</span>판단 한 줄</a>
+  <a href="#ch3"><span class="code">NW-CS-03</span>자주 터지는 것 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">NW-CS-04</span>장애 증거 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial"><span>DOC : CHEAT-NETWORK-V1</span><span>SCOPE : DNS · TCP · TLS · ROUTING · FIREWALL</span><span>LANG : KO</span></div>
+    <div class="hero-serial"><span>DOC : CHEAT-NETWORK-V2</span><span>SCOPE : DNS · TCP · TLS · ROUTING</span><span>LANG : KO</span></div>
     <h1>Network<br>Cheat Sheet</h1>
-    <p class="hero-sub">연결 장애를 DNS, 경로, 포트, TLS, HTTP 단계로 좁히기 위한 빠른 참조입니다. 한 번에 추측하지 않고 계층별로 확인합니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <p class="hero-sub">연결 장애를 DNS → TCP → TLS → HTTP 계층 순으로 좁히기 위한 복붙 명령 모음.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
+
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">NW-CS-01</span><h2>개요</h2></div>
-    <p class="lede">네트워크 디버깅은 source, destination, name, route, policy, protocol 순서로 좁히면 빠릅니다. ping 성공은 서비스 성공을 의미하지 않습니다.</p>
+    <div class="ch-head"><span class="ch-code">NW-CS-01</span><h2>핵심 명령·스니펫</h2></div>
+
+    <h3>DNS 해석</h3>
+    <pre class="snippet-card"><code>dig +short example.com          # A record만 간결하게
+dig example.com A               # A record + TTL + 권위 응답
+dig example.com CNAME           # CNAME chain 확인
+dig +short example.com @1.1.1.1 # 특정 resolver로 질의 (내부/외부 비교)
+dig +trace example.com          # root부터 authoritative까지 추적
+nslookup example.com            # 빠른 확인 (레거시, 출력은 dig가 정확)</code></pre>
+
+    <h3>연결·HTTP</h3>
+    <pre class="snippet-card"><code>nc -vz example.com 443          # TCP 도달성만 빠르게 (succeeded/refused/timeout)
+curl -v https://example.com     # DNS→connect→TLS→HTTP 전 흐름 한 번에
+curl -vkI https://example.com/  # 헤더만 (-k: 인증서 무시, -I: HEAD)
+curl -w 'dns:%{time_namelookup} conn:%{time_connect} tls:%{time_appconnect} total:%{time_total}\n' -o /dev/null -s https://example.com
+                                # 단계별 소요 시간 분해 (병목 위치 특정)</code></pre>
+
+    <h3>리슨 소켓·경로</h3>
+    <pre class="snippet-card"><code>ss -tlnp                        # 서버에서 listening TCP 소켓 (bind address:port)
+ss -tnp state established        # 현재 맺힌 연결
+traceroute example.com          # hop별 경로 추정 (방화벽/ICMP로 불완전)
+mtr example.com                 # traceroute + ping 연속 (packet loss/hop 관찰)</code></pre>
+
+    <h3>TLS·패킷</h3>
+    <pre class="snippet-card"><code>openssl s_client -connect example.com:443 -servername example.com
+                                # SNI 지정 handshake, chain/SAN/만료 확인
+openssl s_client -connect example.com:443 -servername example.com 2&gt;&amp;1 | openssl x509 -noout -dates
+                                # 인증서 만료일만 추출
+sudo tcpdump -ni any port 443   # 443 패킷 실시간 (인터페이스 any, 이름 해석 끔)</code></pre>
+
     <table>
-      <tr><th>증상</th><th>먼저 확인할 것</th><th>분리 기준</th></tr>
-      <tr><td>도메인이 안 열림</td><td>DNS record, TTL, authoritative response</td><td>이름이 틀린 문제인지 IP 이후 문제인지 분리</td></tr>
-      <tr><td>포트 연결 실패</td><td>route table, security group, firewall, listening port</td><td>클라이언트에서 못 나가는지 서버가 안 듣는지 확인</td></tr>
-      <tr><td>TLS 오류</td><td>certificate chain, SNI, hostname, expiration</td><td>인증서 신뢰 문제인지 앱 HTTP 문제인지 분리</td></tr>
-      <tr><td>HTTP 오류</td><td>status code, header, proxy, upstream log</td><td>네트워크는 됐고 앱/프록시 계층 문제로 이동</td></tr>
-      <tr><td>간헐 장애</td><td>DNS cache, connection pool, load balancer target health</td><td>특정 AZ, 특정 upstream, 특정 클라이언트인지 비교</td></tr>
+      <tr><th>명령</th><th>용도</th><th>주의</th></tr>
+      <tr><td><code>dig +short example.com</code></td><td>A record 간결 확인</td><td>캐시된 값일 수 있음, TTL은 안 보임</td></tr>
+      <tr><td><code>nc -vz host 443</code></td><td>TCP 도달성</td><td>HTTP 이전 계층만, 앱 정상 여부 아님</td></tr>
+      <tr><td><code>curl -v https://host</code></td><td>전 계층 흐름</td><td>어느 단계에서 멈추는지 로그를 읽어라</td></tr>
+      <tr><td><code>ss -tlnp</code></td><td>listen 소켓</td><td>root 아니면 프로세스명 안 보일 수 있음</td></tr>
+      <tr><td><code>openssl s_client -connect host:443 -servername host</code></td><td>TLS handshake</td><td><code>-servername</code> 빼면 SNI 미전송으로 다른 인증서</td></tr>
     </table>
+
+    <div class="callout warn"><span class="co-label">주의</span><p><code>tcpdump</code>는 <code>sudo</code> 필요, 트래픽에 PII/토큰이 캡처될 수 있으니 파일 저장·공유 주의. <code>traceroute</code>/<code>mtr</code>는 방화벽·ICMP rate limit로 hop이 <code>*</code>로 비어도 정상일 수 있어 경로 단정 금지.</p></div>
   </section>
+
   <section id="ch2">
-    <div class="ch-head"><span class="ch-code">NW-CS-02</span><h2>핵심 명령/개념</h2></div>
+    <div class="ch-head"><span class="ch-code">NW-CS-02</span><h2>판단 한 줄</h2></div>
     <table>
-      <tr><th>명령/개념</th><th>압축 설명</th><th>해석 포인트</th></tr>
-      <tr><td><code>dig example.com</code></td><td>DNS record와 TTL 확인</td><td>권위 응답, CNAME chain, split-horizon DNS 확인</td></tr>
-      <tr><td><code>curl -v https://host</code></td><td>TLS와 HTTP 요청/응답 흐름 확인</td><td>DNS, connect, TLS, status, redirect를 한 번에 관찰</td></tr>
-      <tr><td><code>nc -zv host 443</code></td><td>특정 host:port 연결 가능 여부 확인</td><td>HTTP 이전의 TCP 연결 여부만 빠르게 확인</td></tr>
-      <tr><td><code>traceroute host</code></td><td>패킷이 지나가는 hop 추정</td><td>방화벽/ICMP 정책 때문에 완전한 증거는 아님</td></tr>
-      <tr><td><code>ss -tlnp</code></td><td>서버에서 listening socket 확인</td><td>서비스가 어느 address/port에 bind됐는지 확인</td></tr>
-      <tr><td>CIDR</td><td>IP 범위를 prefix 길이로 표현하는 방식</td><td>route table과 firewall rule의 적용 범위를 결정</td></tr>
-      <tr><td>SNI</td><td>TLS handshake에서 접속하려는 hostname 전달</td><td>여러 인증서를 쓰는 LB/proxy에서 중요</td></tr>
+      <tr><th>선택</th><th>언제 쓰나</th><th>주의</th></tr>
+      <tr><td>TCP</td><td>순서·신뢰성 필요 (HTTP, DB, gRPC)</td><td>handshake·재전송 지연, head-of-line blocking</td></tr>
+      <tr><td>UDP</td><td>저지연·손실 허용 (DNS, QUIC, 실시간)</td><td>재전송·순서 보장 없음, 앱이 책임</td></tr>
+      <tr><td>A / AAAA</td><td>이름 → IPv4 / IPv6</td><td>AAAA만 있고 IPv6 경로 없으면 timeout</td></tr>
+      <tr><td>CNAME</td><td>이름 → 다른 이름 (별칭)</td><td>chain이 길면 지연, zone apex엔 못 씀</td></tr>
+      <tr><td>TLS 1.2 vs 1.3</td><td>1.3 우선 (RTT 적고 안전)</td><td>구형 클라이언트/미들박스는 1.2 fallback</td></tr>
+      <tr><td>SNI</td><td>한 IP에 여러 인증서일 때 hostname 전달</td><td>IP 직접 접속·SNI 누락 시 잘못된 인증서</td></tr>
+      <tr><td>timeout</td><td>SYN에 응답 없음 → drop/방화벽/route</td><td>서버 도달 자체를 의심</td></tr>
+      <tr><td>connection refused</td><td>RST 응답 → 호스트는 있는데 포트 안 들음</td><td>앱 미기동, 잘못된 포트, localhost bind</td></tr>
+      <tr><td>no route to host</td><td>경로 없음 → route table/subnet</td><td>방화벽 drop과 구분, L3 문제</td></tr>
     </table>
   </section>
+
   <section id="ch3">
-    <div class="ch-head"><span class="ch-code">NW-CS-03</span><h2>판단 기준</h2></div>
+    <div class="ch-head"><span class="ch-code">NW-CS-03</span><h2>자주 터지는 것 · 즉시 확인</h2></div>
     <table>
-      <tr><th>선택</th><th>기준</th><th>주의점</th></tr>
-      <tr><td>Public subnet</td><td>인터넷에서 직접 들어와야 하고 public route가 필요함</td><td>public IP와 route만으로는 보안 허용이 아님</td></tr>
-      <tr><td>Private subnet</td><td>외부 직접 접근을 막고 NAT나 내부 경로만 허용함</td><td>outbound 필요 시 NAT/egress proxy 확인</td></tr>
-      <tr><td>NAT</td><td>private 자원이 외부로 나가야 하지만 외부에서 들어오면 안 됨</td><td>return path, port exhaustion, 비용 확인</td></tr>
-      <tr><td>Security group</td><td>instance 또는 interface 기준 stateful 정책</td><td>응답 트래픽은 상태 추적으로 허용됨</td></tr>
-      <tr><td>NACL/firewall</td><td>subnet 또는 경계 기준 stateless 정책이 필요함</td><td>inbound/outbound와 ephemeral port를 모두 봐야 함</td></tr>
-      <tr><td>Load balancer</td><td>target health, TLS termination, path routing이 필요함</td><td>client IP 전달, timeout, health check path 확인</td></tr>
+      <tr><th>신호</th><th>왜 위험</th><th>즉시 확인</th></tr>
+      <tr><td>ping 성공만으로 정상 판단</td><td>ICMP 성공과 TCP/TLS/HTTP 성공은 별개</td><td><code>nc -vz host port</code>, <code>curl -v</code>, 서버 access log</td></tr>
+      <tr><td>return path/방화벽 미확인</td><td>outbound만 열고 응답 경로·inbound 규칙을 안 봄</td><td>양쪽 firewall, route table, stateless 장비 양방향 rule</td></tr>
+      <tr><td>DNS 캐시/TTL 간과</td><td>변경했는데 캐시된 옛 record로 접속</td><td><code>dig host @resolver</code>로 내부·외부 비교, TTL 확인</td></tr>
+      <tr><td>TLS SNI/체인 누락</td><td>SNI 미전송·중간 인증서 누락으로 handshake 실패</td><td><code>openssl s_client -connect host:443 -servername host</code></td></tr>
+      <tr><td>출발지·목적지·포트 미특정</td><td>"열었다"만으로는 검증 불가, 장애 시간 증가</td><td>source/dest/port/direction 4개를 명령에 박아 재현</td></tr>
+      <tr><td>localhost bind</td><td>0.0.0.0 대신 127.0.0.1 bind로 외부 연결 거부</td><td><code>ss -tlnp</code>로 bind address 확인</td></tr>
     </table>
   </section>
+
   <section id="ch4">
-    <div class="ch-head"><span class="ch-code">NW-CS-04</span><h2>자주 나는 실수</h2></div>
-    <ul>
-      <li>DNS가 맞는지 확인하지 않고 애플리케이션 문제로 단정한다. 같은 이름이 내부/외부에서 다르게 해석될 수 있다.</li>
-      <li>outbound는 열었지만 return path나 inbound rule을 확인하지 않는다. stateless 장비에서는 양방향 규칙이 필요하다.</li>
-      <li>TLS 인증서의 CN/SAN과 실제 접속 hostname이 다른 문제를 놓친다. IP로 접속하면 인증서 검증이 실패할 수 있다.</li>
-      <li>보안 그룹과 NACL의 stateful/stateless 차이를 혼동한다. ephemeral port 때문에 한쪽만 열어서는 실패할 수 있다.</li>
-      <li>VPN tunnel up을 서비스 통신 성공과 같은 의미로 본다. routing, DNS, firewall, app bind까지 별도 확인해야 한다.</li>
-      <li>proxy나 load balancer timeout을 앱 timeout보다 짧게 둔다. 요청은 처리됐는데 클라이언트는 실패로 보고 재시도할 수 있다.</li>
-    </ul>
-  </section>
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">NW-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
-    <div class="glossary">
-      <div class="g-row"><div class="g-term"><b>요청 흐름</b><span>request path</span></div><div class="g-def">브라우저 요청은 DNS, TCP, TLS, HTTP, proxy, application 순서로 지나가며 각 단계의 실패 신호가 다릅니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>방화벽</b><span>policy</span></div><div class="g-def">네트워크 정책은 출발지, 목적지, 포트, 방향, 상태 추적 여부를 함께 봐야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>디버깅</b><span>debug</span></div><div class="g-def">연결 장애는 추측보다 계층별 증거로 좁혀야 하며, ping 하나로 서비스 정상 여부를 판단할 수 없습니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>CIDR</b><span>addressing</span></div><div class="g-def">CIDR은 IP 범위의 언어라서 subnet, route, firewall rule을 설계할 때 가장 먼저 맞아야 합니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>TLS</b><span>certificate</span></div><div class="g-def">TLS 문제는 인증서 체인, 만료, hostname, SNI를 나눠 보면 애플리케이션 오류와 빠르게 분리됩니다.</div></div>
-    </div>
-  </section>
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">NW-CS-06</span><h2>Red Flags</h2></div>
+    <div class="ch-head"><span class="ch-code">NW-CS-04</span><h2>장애 증거 1카드</h2></div>
+    <div class="serial-card"><span class="sc-label">L3-L7 TRIAGE</span>1. DNS — <code>dig +short host @resolver</code>로 이름 해석 확인 (내부/외부 비교)<br>2. TCP — <code>nc -vz host port</code>로 도달성 확인<br>3. TLS — <code>openssl s_client -connect host:443 -servername host</code>로 chain/SAN 확인<br>4. HTTP — <code>curl -v https://host/path</code>로 status/redirect/header 확인<br>5. 서버 — <code>ss -tlnp</code>로 bind, access log/target health 대조</div>
     <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 확인</th></tr>
-      <tr><td>ping 성공만으로 정상 판단</td><td>ICMP와 TCP/TLS/HTTP 성공은 별개</td><td><code>nc -zv</code>, <code>curl -v</code>, 서버 access log</td></tr>
-      <tr><td>VPN tunnel up인데 서비스 실패</td><td>터널 협상과 route/DNS/firewall/app bind는 별개</td><td>route table, return path, 양쪽 firewall</td></tr>
-      <tr><td>간헐 timeout</td><td>특정 target, AZ, connection pool, LB health 문제일 수 있음</td><td>target health, 5xx/timeout 분포, trace</td></tr>
-      <tr><td>TLS hostname mismatch</td><td>사용자는 보안 경고 또는 handshake 실패를 봄</td><td><code>openssl s_client -servername host -connect host:443</code></td></tr>
-      <tr><td>NACL/stateless 장비 변경</td><td>응답 ephemeral port가 막혀 한 방향만 성공할 수 있음</td><td>inbound/outbound 양방향 rule</td></tr>
+      <tr><th>순서</th><th>질문</th><th>증거</th></tr>
+      <tr><td>DNS</td><td>기대 IP로 해석되나, resolver별로 같나</td><td><code>dig</code> record + TTL, 내부/외부 일치</td></tr>
+      <tr><td>TCP</td><td>포트까지 패킷이 닿나</td><td><code>nc -vz</code> succeeded (아니면 refused/timeout 구분)</td></tr>
+      <tr><td>TLS</td><td>인증서 신뢰·hostname 일치하나</td><td><code>openssl</code> chain 검증, SAN에 host 포함, 미만료</td></tr>
+      <tr><td>HTTP</td><td>앱이 응답하나, 어느 계층 오류인가</td><td><code>curl -v</code> status code, request id, upstream log</td></tr>
     </table>
+    <div class="callout warn"><span class="co-label">중단 기준</span><p>출발지·목적지·포트·방향을 특정하기 전엔 "네트워크 정상"으로 판단 금지. 한 계층에서 증거가 확정되면 다음 계층으로 내려가고, 상위 계층 수정 전 하위 계층 증거를 먼저 확보한다.</p></div>
   </section>
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">NW-CS-07</span><h2>Review Gate</h2></div>
-    <table>
-      <tr><th>변경</th><th>merge/deploy 차단 기준</th><th>필수 증거</th></tr>
-      <tr><td>방화벽/SG/NACL</td><td>source, destination, protocol, port, direction이 불명확함</td><td>규칙 diff, 허용 CIDR, 검증 명령</td></tr>
-      <tr><td>DNS 변경</td><td>TTL, rollback record, 내부/외부 resolver 차이를 모름</td><td><code>dig</code> 결과, TTL, 이전 record</td></tr>
-      <tr><td>LB/proxy 변경</td><td>health check, timeout, header forwarding 검증 없음</td><td>target health, <code>curl -v</code>, upstream log</td></tr>
-      <tr><td>VPN/peering</td><td>CIDR 충돌, return route, 상대 방화벽 담당자 확인 없음</td><td>route table, peer CIDR, 테스트 source</td></tr>
-      <tr><td>TLS 인증서</td><td>SAN, chain, expiry, SNI 검증 없음</td><td><code>openssl s_client</code>, browser/curl 검증</td></tr>
-    </table>
-  </section>
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">NW-CS-08</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">L3-L7 TRIAGE</span>1. <code>dig host</code>로 이름 해석 확인<br>2. <code>nc -zv host port</code>로 TCP 도달성 확인<br>3. <code>curl -vk https://host</code>로 TLS/HTTP 확인<br>4. 서버에서 <code>ss -tlnp</code>로 listen 확인<br>5. LB/proxy/access log와 target health 비교<br>6. route table, firewall, return path를 양쪽에서 대조</div>
-    <div class="callout warn"><span class="co-label">운영 원칙</span><p>네트워크 장애는 "열었다"가 아니라 어떤 출발지에서 어떤 목적지의 어떤 포트를 어떤 방향으로 검증했는지로 기록합니다. 증거 없는 네트워크 정상 판단은 장애 시간을 늘립니다.</p></div>
-  </section>
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">NW-CS-09</span><h2>연결 진단 카드</h2></div>
-    <p class="lede">네트워크 치트시트는 계층을 건너뛰지 않는 데 씁니다. 항상 source, destination, port, protocol, time을 기록합니다.</p>
-    <table>
-      <tr><th>증상</th><th>명령</th><th>정상 신호</th><th>다음 행동</th></tr>
-      <tr><td>DNS 의심</td><td><code>dig host +short</code>, <code>dig host @resolver</code></td><td>기대 record와 TTL이 resolver별로 일치</td><td>내부/외부 resolver, CNAME chain, split horizon 확인</td></tr>
-      <tr><td>TCP 연결 실패</td><td><code>nc -vz host 443</code></td><td>succeeded 또는 open</td><td>route, firewall, security group, server listen 순서로 확인</td></tr>
-      <tr><td>TLS 실패</td><td><code>openssl s_client -servername host -connect host:443</code></td><td>chain 검증 가능, SAN에 hostname 포함</td><td>인증서 chain, SNI, 만료, LB listener 확인</td></tr>
-      <tr><td>HTTP 오류</td><td><code>curl -vkI https://host/path</code></td><td>status, redirect, header, request id 확인 가능</td><td>proxy/LB/access log와 upstream app log 대조</td></tr>
-      <tr><td>서버 bind 의심</td><td><code>ss -tlnp</code></td><td>앱이 기대 address:port에서 listen</td><td>localhost bind, container port, host firewall 확인</td></tr>
-    </table>
-  </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">NW-CS-10</span><h2>출력 판정표</h2></div>
-    <table>
-      <tr><th>증거</th><th>위험 신호</th><th>해석</th><th>중단 기준</th></tr>
-      <tr><td><code>dig</code></td><td>내부와 외부 resolver 결과가 다름</td><td>split-horizon, 캐시, 잘못된 record 가능</td><td>DNS 정상이라고 단정 금지</td></tr>
-      <tr><td><code>nc</code></td><td>timeout</td><td>route 또는 firewall drop 가능성이 큼</td><td>서버 앱 로그만 보고 원인 단정 금지</td></tr>
-      <tr><td><code>curl -v</code></td><td>connected 후 TLS에서 실패</td><td>네트워크 도달은 됐고 인증서/SNI 문제로 이동</td><td>HTTP handler 수정 전 TLS 증거 확인</td></tr>
-      <tr><td>LB target health</td><td>일부 AZ/target만 unhealthy</td><td>네트워크 전체 장애보다 특정 target/app 상태 의심</td><td>전체 방화벽 변경 전에 target별 로그 비교</td></tr>
-      <tr><td>Firewall diff</td><td>source/destination/port/direction 중 하나가 비어 있음</td><td>검증 불가능한 정책 변경</td><td>승인 또는 배포 중단</td></tr>
-    </table>
-  </section>
+
+  <footer>Network CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 추측 대신 계층별 증거로 좁힌다. 출발지·목적지·포트 없이 정상 판단 없다.</footer>
 </main>
 </body>
 </html>

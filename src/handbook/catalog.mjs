@@ -124,6 +124,17 @@ export const AI_NATIVE_TRAINING_HANDBOOKS = [
   { id: "ai-native-agent-runtime", label: "05 Agent Runtime 구현", kind: "AI Native 훈련", file: "ai-native-agent-runtime-handbook.html" },
 ];
 
+export const ENGINEERING_CONTEXT_HANDBOOKS = [
+  { id: "context-scale-systems", label: "00 엔지니어링 규모 감각", kind: "엔지니어링 맥락", file: "context-scale-systems-handbook.html" },
+  { id: "context-platform-productivity", label: "01 플랫폼 엔지니어링·개발자 생산성", kind: "엔지니어링 맥락", file: "context-platform-productivity-handbook.html" },
+  { id: "context-quality-release", label: "02 품질 엔지니어링·릴리즈 시스템", kind: "엔지니어링 맥락", file: "context-quality-release-handbook.html" },
+  { id: "context-performance-metrics", label: "03 성능 측정·지표 해석", kind: "엔지니어링 맥락", file: "context-performance-metrics-handbook.html" },
+  { id: "context-library-oss", label: "04 라이브러리·패키지·오픈소스 설계", kind: "엔지니어링 맥락", file: "context-library-oss-handbook.html" },
+  { id: "context-migration-compatibility", label: "05 마이그레이션·호환성", kind: "엔지니어링 맥락", file: "context-migration-compatibility-handbook.html" },
+  { id: "context-frontend-runtime-ecosystem", label: "06 프론트엔드 빌드·런타임·생태계", kind: "엔지니어링 맥락", file: "context-frontend-runtime-ecosystem-handbook.html" },
+  { id: "context-operational-ownership", label: "07 운영 책임·장애 대응 언어", kind: "엔지니어링 맥락", file: "context-operational-ownership-handbook.html" },
+];
+
 export const NETWORK_HANDBOOKS = [
   { id: "network", label: "00 로드맵과 패킷 사고", kind: "네트워크 인프라 핸드북", file: "network-infrastructure-handbook.html" },
   { id: "network-vpc", label: "01 IP·CIDR·서브넷 설계", kind: "네트워크 인프라 핸드북", file: "network-vpc-subnet-cidr-handbook.html" },
@@ -236,8 +247,11 @@ export const DESIGN_PRACTICE_HANDBOOKS = [
   { id: "practice-design-systems", label: "01 디자인 실행·시스템 품질", kind: "디자인 실무", file: "practice-design-systems-handbook.html" },
   { id: "practice-visual-design-foundations", label: "02 시각디자인 기초·조형 원리", kind: "디자인 실무", file: "practice-visual-design-foundations-handbook.html" },
   { id: "practice-color-typography-brand", label: "03 색채·타이포그래피·브랜드 시각 언어", kind: "디자인 실무", file: "practice-color-typography-brand-handbook.html" },
-  { id: "practice-photography-image-literacy", label: "04 사진학·이미지 리터러시", kind: "디자인 실무", file: "practice-photography-image-literacy-handbook.html" },
-  { id: "design-ai-product-ux", label: "05 AI 제품 UX·신뢰 설계", kind: "디자인 실무", file: "design-ai-product-ux-handbook.html" },
+  { id: "practice-iconography-illustration", label: "04 아이콘·일러스트레이션 시스템", kind: "디자인 실무", file: "practice-iconography-illustration-handbook.html" },
+  { id: "practice-data-visualization", label: "05 데이터 시각화", kind: "디자인 실무", file: "practice-data-visualization-handbook.html" },
+  { id: "practice-motion-animation", label: "06 모션·애니메이션 원리", kind: "디자인 실무", file: "practice-motion-animation-handbook.html" },
+  { id: "practice-photography-image-literacy", label: "07 사진학·이미지 리터러시", kind: "디자인 실무", file: "practice-photography-image-literacy-handbook.html" },
+  { id: "design-ai-product-ux", label: "08 AI 제품 UX·신뢰 설계", kind: "디자인 실무", file: "design-ai-product-ux-handbook.html" },
 ];
 
 export const PRACTICE_HANDBOOKS = [
@@ -249,6 +263,7 @@ export const PRACTICE_HANDBOOKS = [
 export const HANDBOOK_GROUPS = [
   { key: "home", label: "홈", items: HOME_HANDBOOKS },
   { key: "engineering", label: "개발 핸드북", items: ENGINEERING_HANDBOOKS },
+  { key: "engineering-context", label: "엔지니어링 맥락", items: ENGINEERING_CONTEXT_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   { key: "ai-native", label: "AI Native 훈련", items: AI_NATIVE_TRAINING_HANDBOOKS },
   { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
@@ -261,6 +276,7 @@ export const HANDBOOK_GROUPS = [
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
   ...ENGINEERING_HANDBOOKS,
+  ...ENGINEERING_CONTEXT_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_TRAINING_HANDBOOKS,
   ...OPERATIONS_HANDBOOKS,

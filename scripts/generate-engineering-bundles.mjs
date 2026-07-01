@@ -686,25 +686,12 @@ Validation: 성공 지표, 실패 신호, 출시 후 판정 시점, rollback 또
     navTitle: "치트시트 · 빠른 점검표",
     title: "실무 치트시트 모음",
     subtitle: "Frontend, Backend, Database, Network, DevOps, Linux, Docker, Interview, Tools·Shortcuts·Commands 치트시트를 통합했습니다.",
-    scope: "CHEAT SHEETS · REVIEW GATES · FAILURE PLAYBOOKS",
+    scope: "COMMANDS · SNIPPETS · TRIAGE",
+    stripNestedChrome: true,
     indexDescription:
-      "이 문서는 암기용 요약이 아니라 작업 중 5분 안에 확인할 실행 기준입니다. 기존 치트시트의 약점은 좋은 원칙은 있지만 상황별 명령, 출력 판정, 다음 행동이 부족하다는 점이었습니다. 따라서 각 항목은 증상 → 바로 확인할 증거 → 정상/위험 신호 → 다음 행동 순서로 보강합니다.",
-    afterIndexNav: `  <a href="#cheat-audit"><span class="code">AUDIT</span>문제점 분석과 보강 계획</a>
-  <a href="#cheat-routes"><span class="code">ROUTES</span>상황별 사용 루트</a>`,
-    afterIndexHtml: `<section id="cheat-audit">
-<div class="ch-head"><span class="ch-code">AUDIT</span><h2>문제점 분석과 보강 계획</h2></div>
-<p class="lede">실무 치트시트는 많이 설명하는 문서가 아니라, 작업자가 지금 무엇을 확인하고 어떤 결과면 멈춰야 하는지 알려주는 도구여야 합니다. 아래 기준으로 기존 항목을 보강합니다.</p>
-<table>
-<tr><th>문제점</th><th>현재 증상</th><th>보강 방향</th></tr>
-<tr><td>템플릿 반복</td><td>개요, 개념, Red Flags가 분야별로 같은 모양이라 실제 작업 흐름이 약함</td><td>분야별로 자주 맞닥뜨리는 상황 카드를 앞쪽에 추가</td></tr>
-<tr><td>출력 판정 부족</td><td>명령어는 있지만 결과가 정상인지 위험인지 판단하기 어려움</td><td>명령, 정상 신호, 위험 신호, 다음 행동을 한 줄로 연결</td></tr>
-<tr><td>복붙성 부족</td><td>원칙은 있으나 바로 실행할 curl, SQL, docker, log query 예시가 적음</td><td>실무에서 안전하게 바꿔 쓸 수 있는 최소 명령 템플릿 제공</td></tr>
-<tr><td>리뷰 게이트 약함</td><td>차단 기준이 추상적이라 PR에서 체크박스로 쓰기 어려움</td><td>필수 증거와 중단 조건을 구체화</td></tr>
-<tr><td>장애 플레이북 짧음</td><td>triage 순서만 있고 증거 보관, 커뮤니케이션, 복구 판단이 약함</td><td>10분 안에 수집할 증거와 rollback/flag/off 기준을 명시</td></tr>
-</table>
-</section>
-
-<section id="cheat-routes">
+      "암기용 요약이 아니라 작업 중 5초 안에 찾아 복사할 참조입니다. 도메인마다 핵심 명령·스니펫, 판단 한 줄, 자주 터지는 것, 장애 증거 카드 네 블록으로 정리했습니다. 개념 설명은 개발 핸드북, 면접 답변은 커리어 핸드북이 담당합니다.",
+    afterIndexNav: `  <a href="#cheat-routes"><span class="code">ROUTES</span>상황별 사용 루트</a>`,
+    afterIndexHtml: `<section id="cheat-routes">
 <div class="ch-head"><span class="ch-code">ROUTES</span><h2>상황별 사용 루트</h2></div>
 <p class="lede">전체를 처음부터 읽지 않습니다. 지금 겪는 상황에 맞는 문서 2~3개만 연결해 빠르게 증거를 모읍니다.</p>
 <table>

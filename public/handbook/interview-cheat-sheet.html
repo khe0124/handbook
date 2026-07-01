@@ -1,144 +1,119 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><title>Interview Cheat Sheet</title></head>
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Interview Cheat Sheet</title>
+</head>
 <body>
 <nav aria-label="목차">
-  <div class="nav-brand">CHEAT SHEET</div><div class="nav-title">Interview</div>
-  <a href="#ch1"><span class="code">IV-CS-01</span>개요</a>
-  <a href="#ch2"><span class="code">IV-CS-02</span>핵심 명령/개념</a>
-  <a href="#ch3"><span class="code">IV-CS-03</span>판단 기준</a>
-  <a href="#ch4"><span class="code">IV-CS-04</span>자주 나는 실수</a>
-  <a href="#ch5"><span class="code">IV-CS-05</span>면접/리뷰용 한 줄 답변</a>
-  <a href="#ch6"><span class="code">IV-CS-06</span>Red Flags</a>
-  <a href="#ch7"><span class="code">IV-CS-07</span>Review Gate</a>
-  <a href="#ch8"><span class="code">IV-CS-08</span>Failure Playbook</a>
-  <a href="#ch9"><span class="code">IV-CS-09</span>답변 카드 템플릿</a>
-  <a href="#ch10"><span class="code">IV-CS-10</span>증거 점검표</a>
+  <div class="nav-brand">CHEAT SHEET</div>
+  <div class="nav-title">Interview</div>
+  <a href="#ch1"><span class="code">IV-CS-01</span>즉답 구조 템플릿</a>
+  <a href="#ch2"><span class="code">IV-CS-02</span>질문 유형별 접근</a>
+  <a href="#ch3"><span class="code">IV-CS-03</span>감점 신호 · 즉시 확인</a>
+  <a href="#ch4"><span class="code">IV-CS-04</span>모르는 질문 1카드</a>
 </nav>
 <main>
   <header class="hero">
-    <div class="hero-serial"><span>DOC : CHEAT-INTERVIEW-V1</span><span>SCOPE : ANSWER FRAME · FOLLOW-UP · UNKNOWN QUESTIONS</span><span>LANG : KO</span></div>
+    <div class="hero-serial"><span>DOC : CHEAT-INTERVIEW-V2</span><span>SCOPE : STRUCTURE · TRADE-OFF · EVIDENCE</span><span>LANG : KO</span></div>
     <h1>Interview<br>Cheat Sheet</h1>
-    <p class="hero-sub">면접 답변을 결론, 근거, trade-off, 경험 증거 순서로 빠르게 정리하기 위한 참조입니다. 모르는 질문을 다루는 방식까지 포함합니다.</p>
-    <div class="hero-meta">COMPILED : 2026-06 · FORMAT : QUICK REFERENCE</div>
+    <p class="hero-sub">면접 자리에서 바로 꺼내 쓰는 답변 구조 참조. 결론·근거·trade-off·경험 증거 순서를 복기하고, 모르는 질문을 다루는 방식까지 한 장에.</p>
+    <div class="hero-meta">COMPILED : 2026-07 · FORMAT : QUICK REFERENCE</div>
   </header>
+
   <section id="ch1">
-    <div class="ch-head"><span class="ch-code">IV-CS-01</span><h2>개요</h2></div>
-    <p class="lede">좋은 답변은 많이 아는 티보다 정확한 경계와 판단 구조를 보여줍니다. 직접 경험, 일부 경험, 개념 지식을 같은 톤으로 말하지 않습니다.</p>
-    <table>
-      <tr><th>상황</th><th>먼저 할 것</th><th>좋은 신호</th></tr>
-      <tr><td>기술 질문</td><td>정의, 왜 필요한지, trade-off, 실패 모드 순서로 답함</td><td>항상/무조건 대신 조건을 말함</td></tr>
-      <tr><td>프로젝트 질문</td><td>문제, 제약, 선택, 결과, 배운 점 순서로 답함</td><td>내 역할과 의사결정 근거가 분명함</td></tr>
-      <tr><td>모르는 질문</td><td>모르는 범위를 밝히고 유추 과정과 확인 방법을 말함</td><td>추측을 사실처럼 포장하지 않음</td></tr>
-      <tr><td>압박 질문</td><td>방어하지 말고 전제, 기준, 증거로 답변을 재구성함</td><td>반박보다 판단 기준을 명확히 함</td></tr>
-      <tr><td>꼬리 질문</td><td>방금 답변의 약한 부분을 좁혀서 보완함</td><td>모르는 경계를 인정하고 다음 확인을 제시</td></tr>
-    </table>
-  </section>
-  <section id="ch2">
-    <div class="ch-head"><span class="ch-code">IV-CS-02</span><h2>핵심 명령/개념</h2></div>
-    <table>
-      <tr><th>프레임</th><th>압축 설명</th><th>쓸 때</th></tr>
-      <tr><td>30초 답변</td><td>결론, 핵심 기준, 한 문장 근거</td><td>정의, 차이, 가벼운 확인 질문</td></tr>
-      <tr><td>90초 답변</td><td>개념, 선택 기준, trade-off, 실무 예시</td><td>기술 이해도와 실무 감각을 함께 볼 때</td></tr>
-      <tr><td>3분 답변</td><td>문제 배경, 대안 비교, 실패 모드, 검증 결과</td><td>프로젝트/설계/장애 경험 질문</td></tr>
-      <tr><td>STAR</td><td>Situation, Task, Action, Result로 행동 질문 정리</td><td>협업, 갈등, 실패, 리더십 질문</td></tr>
-      <tr><td>직접 경험</td><td>내가 한 일, 의사결정, 결과를 구체적으로 말함</td><td>숫자, 로그, 장애, 리뷰, 운영 증거가 있을 때</td></tr>
-      <tr><td>개념 지식</td><td>직접 경험이 없음을 밝히고 설계 기준 중심으로 말함</td><td>경험은 없지만 원리와 확인 방법을 설명할 수 있을 때</td></tr>
-      <tr><td>Trade-off 답변</td><td>A가 항상 좋다고 하지 않고 비용과 조건을 같이 말함</td><td>Redis, MSA, JWT, SSR, NoSQL 같은 선택 질문</td></tr>
-    </table>
-  </section>
-  <section id="ch3">
-    <div class="ch-head"><span class="ch-code">IV-CS-03</span><h2>판단 기준</h2></div>
-    <table>
-      <tr><th>답변 선택</th><th>기준</th><th>예시 시작</th></tr>
-      <tr><td>짧게 답함</td><td>질문이 정의나 차이를 묻고 꼬리질문 여지를 남길 때</td><td>“핵심 차이는 소유권입니다.”</td></tr>
-      <tr><td>깊게 답함</td><td>경험 검증이나 설계 판단을 묻는 질문일 때</td><td>“제가 봤던 제약은 세 가지였습니다.”</td></tr>
-      <tr><td>경험으로 답함</td><td>실제 구현, 장애, 리뷰, 운영 증거가 있을 때</td><td>“비슷한 상황에서 제가 맡은 부분은...”</td></tr>
-      <tr><td>원리로 답함</td><td>직접 경험이 부족하지만 개념과 trade-off를 설명할 수 있을 때</td><td>“직접 운영 경험은 없지만 설계한다면...”</td></tr>
-      <tr><td>질문을 되묻음</td><td>요구사항, 규모, 제약에 따라 답이 달라질 때</td><td>“트래픽 규모와 일관성 요구를 먼저 확인하고 싶습니다.”</td></tr>
-      <tr><td>실패를 말함</td><td>배운 점을 검증 가능한 행동 변화로 연결할 수 있을 때</td><td>“그 뒤로는 배포 전 이 체크를 추가했습니다.”</td></tr>
-    </table>
-  </section>
-  <section id="ch4">
-    <div class="ch-head"><span class="ch-code">IV-CS-04</span><h2>자주 나는 실수</h2></div>
-    <ul>
-      <li>질문을 받자마자 기술명 목록부터 나열한다. 면접관은 키워드보다 판단 구조를 보려 한다.</li>
-      <li>직접 해본 일과 읽어서 아는 일을 같은 확신으로 말한다. 경계를 숨기면 꼬리질문에서 신뢰가 무너진다.</li>
-      <li>trade-off 없이 항상 좋은 선택처럼 말한다. 좋은 엔지니어링 선택은 조건과 비용을 함께 설명한다.</li>
-      <li>실패 사례를 남 탓이나 환경 탓으로 설명한다. 내가 바꾼 행동과 재발 방지 장치가 핵심이다.</li>
-      <li>모르는 질문에서 추측을 사실처럼 말한다. “모르지만 이렇게 확인하겠다”가 더 좋은 답일 때가 많다.</li>
-      <li>프로젝트 성과를 팀 전체 표현으로만 말한다. 본인의 역할, 결정, 결과, 배운 점을 분리해야 한다.</li>
-    </ul>
-  </section>
-  <section id="ch5">
-    <div class="ch-head"><span class="ch-code">IV-CS-05</span><h2>면접/리뷰용 한 줄 답변</h2></div>
-    <div class="glossary">
-      <div class="g-row"><div class="g-term"><b>모르는 질문</b><span>unknown</span></div><div class="g-def">그 부분은 직접 경험은 없지만, 제가 확인한다면 먼저 전제와 실패 모드를 나누고 작은 검증부터 하겠습니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>Trade-off</b><span>choice</span></div><div class="g-def">이 선택은 장점만 있는 것이 아니라 성능, 복잡도, 운영 비용 중 무엇을 더 감수할지의 문제입니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>프로젝트 설명</b><span>project</span></div><div class="g-def">문제는 무엇이었고, 제약 안에서 어떤 대안을 비교했으며, 결과를 어떻게 검증했는지 순서로 말씀드리겠습니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>실패 경험</b><span>failure</span></div><div class="g-def">실패 자체보다 그 뒤에 어떤 관측, 테스트, 리뷰 기준을 추가했는지가 더 중요하다고 봅니다.</div></div>
-      <div class="g-row"><div class="g-term"><b>설계 질문</b><span>architecture</span></div><div class="g-def">요구사항, 트래픽, 데이터 일관성, 장애 허용 범위를 먼저 정해야 설계 선택을 평가할 수 있습니다.</div></div>
+    <div class="ch-head"><span class="ch-code">IV-CS-01</span><h2>즉답 구조 템플릿</h2></div>
+    <p class="lede">질문을 받으면 키워드부터 쏟지 말고 아래 구조를 머릿속에 세운다. 결론 먼저, 근거는 조건과 함께.</p>
+
+    <div class="serial-card"><span class="sc-label">30초 답변 — 정의 · 차이 · 가벼운 확인</span>
+      1. 결론 한 문장: "핵심은 X입니다."<br>
+      2. 근거 한 문장: "왜냐하면 Y이기 때문입니다."<br>
+      3. 경계 한 문장: "다만 Z 조건에서는 달라집니다."<br>
+      <b>예)</b> "REST와 GraphQL의 핵심 차이는 데이터를 서버가 정하느냐 클라이언트가 정하느냐입니다. 그래서 화면마다 필요한 필드가 크게 다르면 GraphQL이 유리합니다. 다만 캐싱과 러닝커브 비용은 감수해야 합니다."
     </div>
-  </section>
-  <section id="ch6">
-    <div class="ch-head"><span class="ch-code">IV-CS-06</span><h2>Red Flags</h2></div>
-    <p class="lede">면접 답변의 전문성은 많이 말하는 데서 나오지 않습니다. 경험의 경계, 판단 기준, 실패 모드, 검증 증거가 있어야 합니다.</p>
+
+    <div class="serial-card"><span class="sc-label">90초 답변 — 개념 · 기준 · trade-off · 예시</span>
+      1. 개념 정의 + 왜 필요한가<br>
+      2. 선택 기준 2~3개 (트래픽, 일관성, 운영 비용 등)<br>
+      3. trade-off: 무엇을 얻고 무엇을 포기하나<br>
+      4. 실무 예시 한 줄 (직접/개념 경계 명시)<br>
+      <b>예)</b> "Redis 캐시는 반복 조회 비용을 줄이려고 씁니다. 판단 기준은 읽기 빈도, 데이터 신선도 요구, 캐시 무효화 비용입니다. 속도는 얻지만 정합성 경계를 직접 관리해야 하는 게 비용입니다. 제가 맡았던 조회 API에서는 TTL과 write-through로 처리했습니다."
+    </div>
+
+    <div class="serial-card"><span class="sc-label">STAR — 행동 질문 (협업 · 갈등 · 실패 · 리더십)</span>
+      <b>S</b>ituation: 언제, 어떤 맥락에서 (한 문장)<br>
+      <b>T</b>ask: 내가 맡은 과제와 제약<br>
+      <b>A</b>ction: 내가 한 결정과 행동 (여기가 핵심, 가장 길게)<br>
+      <b>R</b>esult: 결과 지표 + 배운 점 / 바꾼 행동<br>
+      <b>예)</b> "배포 후 장애가 반복됐고(S), 저는 원인 파악과 재발 방지를 맡았습니다(T). 로그를 추적해 특정 쿼리 타임아웃을 찾고, 배포 전 부하 체크를 파이프라인에 넣었습니다(A). 이후 같은 유형 장애가 사라졌고, 배포 전 검증 습관이 팀에 남았습니다(R)."
+    </div>
+
+    <div class="serial-card"><span class="sc-label">Trade-off 답변 프레임</span>
+      "<b>A</b>는 X 때문에 좋고, <b>B</b>는 Y 때문에 좋습니다. 그래서 <b>우리 상황</b>에선 Z 기준이 더 중요하니 [선택]입니다."<br>
+      <b>예)</b> "MSA는 팀 독립 배포 때문에 좋고, 모놀리식은 운영 단순함 때문에 좋습니다. 그래서 팀이 작고 도메인 경계가 아직 흐린 지금은 배포 속도보다 단순함이 중요해서 모놀리식으로 시작하겠습니다."
+    </div>
+
     <table>
-      <tr><th>신호</th><th>왜 위험한가</th><th>즉시 보완</th></tr>
-      <tr><td>키워드만 나열</td><td>실제 판단과 적용 경험이 보이지 않습니다.</td><td>정의, 선택 기준, trade-off, 실패 모드로 재구성합니다.</td></tr>
-      <tr><td>직접 경험과 개념 지식을 구분하지 않음</td><td>꼬리질문에서 신뢰가 무너집니다.</td><td>“직접 해본 부분”과 “설계한다면”을 분리합니다.</td></tr>
-      <tr><td>항상, 무조건, 절대 같은 표현</td><td>조건과 제약을 고려하지 않는 답으로 들립니다.</td><td>규모, latency, consistency, 운영 비용 기준을 붙입니다.</td></tr>
-      <tr><td>실패 사례에 재발 방지 행동이 없음</td><td>학습 능력보다 변명처럼 들릴 수 있습니다.</td><td>관측, 테스트, 리뷰 기준을 어떻게 바꿨는지 말합니다.</td></tr>
-      <tr><td>성과가 팀 단위 표현으로만 끝남</td><td>본인의 기여와 의사결정이 흐려집니다.</td><td>내 역할, 내가 바꾼 선택, 결과 지표를 분리합니다.</td></tr>
+      <tr><th>프레임</th><th>구조</th><th>언제</th></tr>
+      <tr><td>30초</td><td>결론 · 근거 · 경계</td><td>정의, 차이, 가벼운 확인</td></tr>
+      <tr><td>90초</td><td>개념 · 기준 · trade-off · 예시</td><td>기술 이해도 + 실무 감각</td></tr>
+      <tr><td>3분</td><td>문제 · 대안 · 실패 모드 · 검증</td><td>프로젝트 · 설계 · 장애</td></tr>
+      <tr><td>STAR</td><td>Situation · Task · Action · Result</td><td>협업 · 갈등 · 실패 · 리더십</td></tr>
+      <tr><td>Trade-off</td><td>A는 X, B는 Y, 우리는 Z</td><td>Redis · MSA · JWT · SSR · NoSQL 선택</td></tr>
     </table>
   </section>
-  <section id="ch7">
-    <div class="ch-head"><span class="ch-code">IV-CS-07</span><h2>Review Gate</h2></div>
+
+  <section id="ch2">
+    <div class="ch-head"><span class="ch-code">IV-CS-02</span><h2>질문 유형별 접근</h2></div>
+    <p class="lede">질문 유형을 먼저 분류하면 무엇을 첫 문장으로 말할지 정해진다.</p>
     <table>
-      <tr><th>답변 유형</th><th>부족한 답변 기준</th><th>전문적인 답변 증거</th></tr>
-      <tr><td>프로젝트 답변</td><td>기술 스택과 결과만 있고 문제·제약·역할이 없음</td><td>문제, 대안, 선택 이유, 내 역할, 결과가 연결됩니다.</td></tr>
-      <tr><td>시스템 설계</td><td>컴포넌트 나열만 있고 병목과 failure mode가 없음</td><td>트래픽, 데이터, 장애, 운영 기준으로 좁힙니다.</td></tr>
-      <tr><td>기술 개념</td><td>정의만 말하고 언제 쓰지 않을지 설명하지 못함</td><td>장점, 비용, 대안, 적용 조건을 함께 말합니다.</td></tr>
-      <tr><td>행동 질문</td><td>상황 설명이 길고 내 행동이 모호함</td><td>STAR 구조에서 Action과 Result가 구체적입니다.</td></tr>
-      <tr><td>모르는 질문</td><td>추측을 사실처럼 말하거나 답변을 회피함</td><td>아는 범위, 모르는 범위, 확인 방법을 분리합니다.</td></tr>
+      <tr><th>질문 유형</th><th>먼저 말할 것</th><th>예시 시작 문장</th></tr>
+      <tr><td>경험형</td><td>문제와 내 역할부터. 스택 나열 금지.</td><td>"제가 맡은 문제는 ~였고, 제 역할은 ~였습니다."</td></tr>
+      <tr><td>설계형</td><td>요구사항·제약을 먼저 되묻고 좁힌다.</td><td>"트래픽 규모와 일관성 요구를 먼저 확인하고 싶습니다."</td></tr>
+      <tr><td>트레이드오프형</td><td>양쪽 장점 → 우리 상황 기준 → 선택.</td><td>"A는 ~ 때문에, B는 ~ 때문에 좋습니다. 우리 상황에선 ~"</td></tr>
+      <tr><td>디버깅형</td><td>증상 → 가설 → 좁히는 순서. 재현부터.</td><td>"먼저 재현하고, 범위를 로그로 좁히겠습니다."</td></tr>
+      <tr><td>모르는 질문</td><td>아는 경계 명시 → 원리 추론 → 확인 방법.</td><td>"직접 경험은 없지만 원리로 추론하면 ~"</td></tr>
+      <tr><td>압박 질문</td><td>방어 대신 전제·기준·증거로 재구성.</td><td>"그 지적의 전제를 먼저 정리하면 ~"</td></tr>
     </table>
   </section>
-  <section id="ch8">
-    <div class="ch-head"><span class="ch-code">IV-CS-08</span><h2>Failure Playbook</h2></div>
-    <div class="serial-card"><span class="sc-label">STUCK ANSWER TRIAGE</span>답변이 막히면 조급하게 키워드를 쏟지 말고 전제, 아는 범위, 모르는 범위, 검증 방법 순서로 회복합니다.</div>
+
+  <section id="ch3">
+    <div class="ch-head"><span class="ch-code">IV-CS-03</span><h2>감점 신호 · 즉시 확인</h2></div>
+    <p class="lede">전문성은 말의 양이 아니라 경계·기준·증거에서 드러난다. 아래는 면접관이 즉시 감점하는 신호.</p>
     <table>
-      <tr><th>순서</th><th>말할 내용</th><th>예시</th></tr>
-      <tr><td>1</td><td>질문의 범위를 좁힙니다.</td><td>“운영 트래픽 기준인지, 개념 비교 기준인지 먼저 나누겠습니다.”</td></tr>
-      <tr><td>2</td><td>아는 범위와 모르는 범위를 분리합니다.</td><td>“직접 운영 경험은 없지만 장애 모드는 이렇게 예상합니다.”</td></tr>
-      <tr><td>3</td><td>첫 원리로 판단 기준을 세웁니다.</td><td>“일관성, latency, 복구 비용 중 무엇이 중요한지에 따라 달라집니다.”</td></tr>
-      <tr><td>4</td><td>trade-off와 실패 모드를 붙입니다.</td><td>“이 방식은 단순하지만 traffic spike에서 병목이 될 수 있습니다.”</td></tr>
-      <tr><td>5</td><td>검증 방법으로 마무리합니다.</td><td>“그래서 먼저 작은 부하 테스트와 rollback 리허설로 확인하겠습니다.”</td></tr>
+      <tr><th>감점 신호</th><th>왜 위험한가</th><th>즉시 확인 / 보정</th></tr>
+      <tr><td>결론 없이 장황</td><td>판단 구조가 안 보이고 시간만 쓴다.</td><td>첫 문장을 결론으로. "핵심은 X입니다"로 시작.</td></tr>
+      <tr><td>직접 경험과 이론을 같은 톤으로</td><td>꼬리질문에서 신뢰가 무너진다.</td><td>"직접 해본 부분"과 "설계한다면"을 분리해 말함.</td></tr>
+      <tr><td>기술명만 나열</td><td>키워드는 있고 적용 판단이 없다.</td><td>정의 → 선택 기준 → trade-off로 재구성.</td></tr>
+      <tr><td>trade-off 없이 정답 단정</td><td>"항상/무조건"은 조건을 무시한 답.</td><td>규모·latency·consistency·비용 조건을 붙임.</td></tr>
+      <tr><td>모른다는 걸 숨김</td><td>추측을 사실처럼 말하면 바로 들킨다.</td><td>모르는 범위 인정 + 확인 방법 제시로 닫음.</td></tr>
+      <tr><td>성과가 팀 단위 표현뿐</td><td>본인 기여와 의사결정이 흐려진다.</td><td>내 역할·내가 바꾼 선택·결과 지표를 분리.</td></tr>
+      <tr><td>실패에 재발 방지가 없음</td><td>학습 능력 대신 변명으로 들린다.</td><td>관측·테스트·리뷰 기준을 어떻게 바꿨는지 말함.</td></tr>
     </table>
   </section>
-  <section id="ch9">
-    <div class="ch-head"><span class="ch-code">IV-CS-09</span><h2>답변 카드 템플릿</h2></div>
-    <p class="lede">면접 치트시트는 말하기 직전 답변 구조를 복구하는 데 씁니다. 아래 카드 하나를 채우면 30초 답변과 90초 답변을 동시에 만들 수 있습니다.</p>
+
+  <section id="ch4">
+    <div class="ch-head"><span class="ch-code">IV-CS-04</span><h2>모르는 질문 1카드</h2></div>
+    <div class="serial-card"><span class="sc-label">STUCK ANSWER TRIAGE</span>
+      모르는 질문에서 조급하게 키워드를 쏟지 않는다. 아래 순서로 회복한다.<br>
+      1. 질문 재정의 — "운영 기준인지, 개념 비교 기준인지 먼저 나누겠습니다."<br>
+      2. 아는 경계 명시 — "직접 운영 경험은 없지만, 원리는 이렇게 이해합니다."<br>
+      3. 원리로 추론 — "일관성·latency·복구 비용 중 무엇이 중요하냐에 따라 갈립니다."<br>
+      4. 검증 방법 제안 — "그래서 작은 부하 테스트와 rollback 리허설로 확인하겠습니다."<br>
+      5. 솔직히 모른다 + 학습 계획 — "이 부분은 확실치 않아 끝나고 문서로 확인하겠습니다."
+    </div>
     <table>
-      <tr><th>항목</th><th>채울 내용</th><th>예시 문장</th></tr>
-      <tr><td>결론</td><td>질문에 대한 한 문장 판단</td><td>“이 문제의 핵심은 캐시보다 정합성 경계입니다.”</td></tr>
-      <tr><td>기준</td><td>왜 그렇게 판단했는지 2~3개 기준</td><td>“트래픽, 데이터 손실 비용, rollback 가능성을 봤습니다.”</td></tr>
-      <tr><td>경험 경계</td><td>직접 경험/일부 참여/개념 지식 분리</td><td>“제가 직접 맡은 부분은 API 계약과 장애 재현이었습니다.”</td></tr>
-      <tr><td>대안</td><td>버린 선택지와 이유</td><td>“단순 캐시는 빠르지만 invalidation 비용이 커서 제외했습니다.”</td></tr>
-      <tr><td>증거</td><td>PR, 지표, 로그, 장애기록, 테스트</td><td>“전후 p95와 에러율을 배포 대시보드로 확인했습니다.”</td></tr>
-      <tr><td>남은 한계</td><td>아직 모르는 것과 확인 계획</td><td>“장기 부하는 별도 soak test로 확인해야 합니다.”</td></tr>
+      <tr><th>순서</th><th>질문</th><th>말할 증거 / 예시</th></tr>
+      <tr><td>1</td><td>이 질문이 진짜 묻는 건 뭔가?</td><td>"운영 트래픽 기준인지 개념 비교인지 나누겠습니다."</td></tr>
+      <tr><td>2</td><td>내가 확실히 아는 경계는?</td><td>"직접 해본 건 API 계약과 장애 재현입니다."</td></tr>
+      <tr><td>3</td><td>원리로 어디까지 추론되나?</td><td>"CAP상 일관성을 택하면 가용성을 일부 포기합니다."</td></tr>
+      <tr><td>4</td><td>어떻게 검증할 수 있나?</td><td>"작은 부하 테스트로 병목 지점부터 확인합니다."</td></tr>
+      <tr><td>5</td><td>모르는 건 어떻게 닫나?</td><td>"확실치 않으니 확인 후 정확히 답 드리겠습니다."</td></tr>
     </table>
+    <div class="callout warn"><span class="co-label">중단 기준</span><p>추측을 사실처럼 이어 붙이는 순간 멈춘다. 모르면 "여기까지는 알고, 그다음은 확인이 필요합니다"로 경계를 긋는 게 지어내는 답보다 항상 낫다.</p></div>
   </section>
-  <section id="ch10">
-    <div class="ch-head"><span class="ch-code">IV-CS-10</span><h2>증거 점검표</h2></div>
-    <table>
-      <tr><th>답변 주제</th><th>강한 증거</th><th>약한 표현</th><th>보정</th></tr>
-      <tr><td>성능 개선</td><td>before/after p75/p95, trace, profiler, 병목 분리</td><td>“빨라졌습니다”</td><td>어떤 병목을 얼마만큼 줄였는지 말함</td></tr>
-      <tr><td>장애 대응</td><td>timeline, 영향 범위, mitigations, 재발 방지 PR</td><td>“잘 해결했습니다”</td><td>탐지, 판단, 복구, 후속 조치를 분리</td></tr>
-      <tr><td>협업</td><td>의견 충돌, 선택 기준, 합의 기록, 결과</td><td>“소통했습니다”</td><td>어떤 기준으로 결정을 수렴했는지 말함</td></tr>
-      <tr><td>설계</td><td>요구사항, 대안, trade-off, 실패 모드, 검증 계획</td><td>기술 스택 나열</td><td>왜 그 구조가 제약에 맞았는지 말함</td></tr>
-      <tr><td>모르는 질문</td><td>아는 범위, 모르는 범위, 확인 절차</td><td>추측을 단정</td><td>불확실성을 숨기지 않고 검증 계획으로 닫음</td></tr>
-    </table>
-  </section>
+
+  <footer>Interview CHEAT SHEET · V2 · 2026-07<br>PRINCIPLE : 결론 먼저, trade-off와 함께, 경험과 이론의 경계를 정직하게.</footer>
 </main>
 </body>
 </html>

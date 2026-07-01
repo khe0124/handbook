@@ -1,0 +1,2444 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "홈으로 이동" [level=1] [ref=e6]:
+        - button "홈으로 이동" [ref=e7] [cursor=pointer]: Dev Handbook
+      - paragraph [ref=e8]: 실무 도구 · 00 실무 치트시트 모음
+    - navigation "문서 분류" [ref=e9]:
+      - button "홈" [ref=e11] [cursor=pointer]:
+        - text: 홈
+        - generic [ref=e12]: ▾
+      - button "개발 핸드북" [ref=e14] [cursor=pointer]:
+        - text: 개발 핸드북
+        - generic [ref=e15]: ▾
+      - button "LLM" [ref=e17] [cursor=pointer]:
+        - text: LLM
+        - generic [ref=e18]: ▾
+      - button "AI Native 훈련" [ref=e20] [cursor=pointer]:
+        - text: AI Native 훈련
+        - generic [ref=e21]: ▾
+      - button "인프라·운영" [ref=e23] [cursor=pointer]:
+        - text: 인프라·운영
+        - generic [ref=e24]: ▾
+      - button "AX 실무" [ref=e26] [cursor=pointer]:
+        - text: AX 실무
+        - generic [ref=e27]: ▾
+      - button "디자인 실무" [ref=e29] [cursor=pointer]:
+        - text: 디자인 실무
+        - generic [ref=e30]: ▾
+      - button "실무 도구" [ref=e32] [cursor=pointer]:
+        - text: 실무 도구
+        - generic [ref=e33]: ▾
+      - button "면접·커리어" [ref=e35] [cursor=pointer]:
+        - text: 면접·커리어
+        - generic [ref=e36]: ▾
+  - generic [ref=e37]:
+    - navigation "00 실무 치트시트 모음 목차" [ref=e38]:
+      - generic [ref=e39]: PRACTICE · CHEAT SHEETS
+      - generic [ref=e40]: 치트시트 · 빠른 점검표
+      - link "INDEX 통합 문서" [ref=e41] [cursor=pointer]:
+        - /url: "#bundle-index"
+        - generic [ref=e42]: INDEX
+        - text: 통합 문서
+      - link "ROUTES 상황별 사용 루트" [ref=e43] [cursor=pointer]:
+        - /url: "#cheat-routes"
+        - generic [ref=e44]: ROUTES
+        - text: 상황별 사용 루트
+      - link "DOC Frontend" [ref=e45] [cursor=pointer]:
+        - /url: "#doc-cheatfe"
+        - generic [ref=e46]: DOC
+        - text: Frontend
+      - link "DOC Backend" [ref=e47] [cursor=pointer]:
+        - /url: "#doc-cheatbe"
+        - generic [ref=e48]: DOC
+        - text: Backend
+      - link "DOC Database" [ref=e49] [cursor=pointer]:
+        - /url: "#doc-cheatdb"
+        - generic [ref=e50]: DOC
+        - text: Database
+      - link "DOC Network" [ref=e51] [cursor=pointer]:
+        - /url: "#doc-cheatnet"
+        - generic [ref=e52]: DOC
+        - text: Network
+      - link "DOC DevOps" [ref=e53] [cursor=pointer]:
+        - /url: "#doc-cheatdevops"
+        - generic [ref=e54]: DOC
+        - text: DevOps
+      - link "DOC Linux" [ref=e55] [cursor=pointer]:
+        - /url: "#doc-cheatlinux"
+        - generic [ref=e56]: DOC
+        - text: Linux
+      - link "DOC Docker" [ref=e57] [cursor=pointer]:
+        - /url: "#doc-cheatdocker"
+        - generic [ref=e58]: DOC
+        - text: Docker
+      - link "DOC Interview" [ref=e59] [cursor=pointer]:
+        - /url: "#doc-cheatinterview"
+        - generic [ref=e60]: DOC
+        - text: Interview
+      - link "DOC Tools·Shortcuts·Commands" [ref=e61] [cursor=pointer]:
+        - /url: "#doc-cheattools"
+        - generic [ref=e62]: DOC
+        - text: Tools·Shortcuts·Commands
+      - link "SRC Frontend" [ref=e63] [cursor=pointer]:
+        - /url: "#doc-cheatfe"
+        - generic [ref=e64]: SRC
+        - text: Frontend
+      - link "FE-CS-01 핵심 명령·스니펫" [ref=e65] [cursor=pointer]:
+        - /url: "#cheatfe-ch1"
+        - generic [ref=e66]: FE-CS-01
+        - text: 핵심 명령·스니펫
+      - link "FE-CS-02 판단 한 줄" [ref=e67] [cursor=pointer]:
+        - /url: "#cheatfe-ch2"
+        - generic [ref=e68]: FE-CS-02
+        - text: 판단 한 줄
+      - link "FE-CS-03 자주 터지는 것 · 즉시 확인" [ref=e69] [cursor=pointer]:
+        - /url: "#cheatfe-ch3"
+        - generic [ref=e70]: FE-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "FE-CS-04 장애 증거 1카드" [ref=e71] [cursor=pointer]:
+        - /url: "#cheatfe-ch4"
+        - generic [ref=e72]: FE-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Backend" [ref=e73] [cursor=pointer]:
+        - /url: "#doc-cheatbe"
+        - generic [ref=e74]: SRC
+        - text: Backend
+      - link "BE-CS-01 핵심 명령·스니펫" [ref=e75] [cursor=pointer]:
+        - /url: "#cheatbe-ch1"
+        - generic [ref=e76]: BE-CS-01
+        - text: 핵심 명령·스니펫
+      - link "BE-CS-02 판단 한 줄" [ref=e77] [cursor=pointer]:
+        - /url: "#cheatbe-ch2"
+        - generic [ref=e78]: BE-CS-02
+        - text: 판단 한 줄
+      - link "BE-CS-03 자주 터지는 것 · 즉시 확인" [ref=e79] [cursor=pointer]:
+        - /url: "#cheatbe-ch3"
+        - generic [ref=e80]: BE-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "BE-CS-04 장애 증거 1카드" [ref=e81] [cursor=pointer]:
+        - /url: "#cheatbe-ch4"
+        - generic [ref=e82]: BE-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Database" [ref=e83] [cursor=pointer]:
+        - /url: "#doc-cheatdb"
+        - generic [ref=e84]: SRC
+        - text: Database
+      - link "DB-CS-01 핵심 명령·스니펫" [ref=e85] [cursor=pointer]:
+        - /url: "#cheatdb-ch1"
+        - generic [ref=e86]: DB-CS-01
+        - text: 핵심 명령·스니펫
+      - link "DB-CS-02 판단 한 줄" [ref=e87] [cursor=pointer]:
+        - /url: "#cheatdb-ch2"
+        - generic [ref=e88]: DB-CS-02
+        - text: 판단 한 줄
+      - link "DB-CS-03 자주 터지는 것 · 즉시 확인" [ref=e89] [cursor=pointer]:
+        - /url: "#cheatdb-ch3"
+        - generic [ref=e90]: DB-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "DB-CS-04 장애 증거 1카드" [ref=e91] [cursor=pointer]:
+        - /url: "#cheatdb-ch4"
+        - generic [ref=e92]: DB-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Network" [ref=e93] [cursor=pointer]:
+        - /url: "#doc-cheatnet"
+        - generic [ref=e94]: SRC
+        - text: Network
+      - link "NW-CS-01 핵심 명령·스니펫" [ref=e95] [cursor=pointer]:
+        - /url: "#cheatnet-ch1"
+        - generic [ref=e96]: NW-CS-01
+        - text: 핵심 명령·스니펫
+      - link "NW-CS-02 판단 한 줄" [ref=e97] [cursor=pointer]:
+        - /url: "#cheatnet-ch2"
+        - generic [ref=e98]: NW-CS-02
+        - text: 판단 한 줄
+      - link "NW-CS-03 자주 터지는 것 · 즉시 확인" [ref=e99] [cursor=pointer]:
+        - /url: "#cheatnet-ch3"
+        - generic [ref=e100]: NW-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "NW-CS-04 장애 증거 1카드" [ref=e101] [cursor=pointer]:
+        - /url: "#cheatnet-ch4"
+        - generic [ref=e102]: NW-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC DevOps" [ref=e103] [cursor=pointer]:
+        - /url: "#doc-cheatdevops"
+        - generic [ref=e104]: SRC
+        - text: DevOps
+      - link "DO-CS-01 핵심 명령·스니펫" [ref=e105] [cursor=pointer]:
+        - /url: "#cheatdevops-ch1"
+        - generic [ref=e106]: DO-CS-01
+        - text: 핵심 명령·스니펫
+      - link "DO-CS-02 판단 한 줄" [ref=e107] [cursor=pointer]:
+        - /url: "#cheatdevops-ch2"
+        - generic [ref=e108]: DO-CS-02
+        - text: 판단 한 줄
+      - link "DO-CS-03 자주 터지는 것 · 즉시 확인" [ref=e109] [cursor=pointer]:
+        - /url: "#cheatdevops-ch3"
+        - generic [ref=e110]: DO-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "DO-CS-04 장애 증거 1카드" [ref=e111] [cursor=pointer]:
+        - /url: "#cheatdevops-ch4"
+        - generic [ref=e112]: DO-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Linux" [ref=e113] [cursor=pointer]:
+        - /url: "#doc-cheatlinux"
+        - generic [ref=e114]: SRC
+        - text: Linux
+      - link "LX-CS-01 핵심 명령·스니펫" [ref=e115] [cursor=pointer]:
+        - /url: "#cheatlinux-ch1"
+        - generic [ref=e116]: LX-CS-01
+        - text: 핵심 명령·스니펫
+      - link "LX-CS-02 판단 한 줄" [ref=e117] [cursor=pointer]:
+        - /url: "#cheatlinux-ch2"
+        - generic [ref=e118]: LX-CS-02
+        - text: 판단 한 줄
+      - link "LX-CS-03 자주 터지는 것 · 즉시 확인" [ref=e119] [cursor=pointer]:
+        - /url: "#cheatlinux-ch3"
+        - generic [ref=e120]: LX-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "LX-CS-04 장애 증거 1카드" [ref=e121] [cursor=pointer]:
+        - /url: "#cheatlinux-ch4"
+        - generic [ref=e122]: LX-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Docker" [ref=e123] [cursor=pointer]:
+        - /url: "#doc-cheatdocker"
+        - generic [ref=e124]: SRC
+        - text: Docker
+      - link "DK-CS-01 핵심 명령·스니펫" [ref=e125] [cursor=pointer]:
+        - /url: "#cheatdocker-ch1"
+        - generic [ref=e126]: DK-CS-01
+        - text: 핵심 명령·스니펫
+      - link "DK-CS-02 판단 한 줄" [ref=e127] [cursor=pointer]:
+        - /url: "#cheatdocker-ch2"
+        - generic [ref=e128]: DK-CS-02
+        - text: 판단 한 줄
+      - link "DK-CS-03 자주 터지는 것 · 즉시 확인" [ref=e129] [cursor=pointer]:
+        - /url: "#cheatdocker-ch3"
+        - generic [ref=e130]: DK-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "DK-CS-04 장애 증거 1카드" [ref=e131] [cursor=pointer]:
+        - /url: "#cheatdocker-ch4"
+        - generic [ref=e132]: DK-CS-04
+        - text: 장애 증거 1카드
+      - link "SRC Interview" [ref=e133] [cursor=pointer]:
+        - /url: "#doc-cheatinterview"
+        - generic [ref=e134]: SRC
+        - text: Interview
+      - link "IV-CS-01 즉답 구조 템플릿" [ref=e135] [cursor=pointer]:
+        - /url: "#cheatinterview-ch1"
+        - generic [ref=e136]: IV-CS-01
+        - text: 즉답 구조 템플릿
+      - link "IV-CS-02 질문 유형별 접근" [ref=e137] [cursor=pointer]:
+        - /url: "#cheatinterview-ch2"
+        - generic [ref=e138]: IV-CS-02
+        - text: 질문 유형별 접근
+      - link "IV-CS-03 감점 신호 · 즉시 확인" [ref=e139] [cursor=pointer]:
+        - /url: "#cheatinterview-ch3"
+        - generic [ref=e140]: IV-CS-03
+        - text: 감점 신호 · 즉시 확인
+      - link "IV-CS-04 모르는 질문 1카드" [ref=e141] [cursor=pointer]:
+        - /url: "#cheatinterview-ch4"
+        - generic [ref=e142]: IV-CS-04
+        - text: 모르는 질문 1카드
+      - link "SRC Tools·Shortcuts·Commands" [ref=e143] [cursor=pointer]:
+        - /url: "#doc-cheattools"
+        - generic [ref=e144]: SRC
+        - text: Tools·Shortcuts·Commands
+      - link "TL-CS-01 핵심 명령·스니펫" [ref=e145] [cursor=pointer]:
+        - /url: "#cheattools-ch1"
+        - generic [ref=e146]: TL-CS-01
+        - text: 핵심 명령·스니펫
+      - link "TL-CS-02 판단 한 줄" [ref=e147] [cursor=pointer]:
+        - /url: "#cheattools-ch2"
+        - generic [ref=e148]: TL-CS-02
+        - text: 판단 한 줄
+      - link "TL-CS-03 자주 터지는 것 · 즉시 확인" [ref=e149] [cursor=pointer]:
+        - /url: "#cheattools-ch3"
+        - generic [ref=e150]: TL-CS-03
+        - text: 자주 터지는 것 · 즉시 확인
+      - link "TL-CS-04 장애 증거 1카드" [ref=e151] [cursor=pointer]:
+        - /url: "#cheattools-ch4"
+        - generic [ref=e152]: TL-CS-04
+        - text: 장애 증거 1카드
+    - main [ref=e153]:
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - generic [ref=e156]:
+            - generic [ref=e157]: "DOC : PRACTICE-CHEAT-SHEETS"
+            - generic [ref=e158]: "SCOPE : COMMANDS · SNIPPETS · TRIAGE"
+            - generic [ref=e159]: "LANG : KO"
+          - heading "실무 치트시트 모음" [level=1] [ref=e160]
+          - paragraph [ref=e161]: Frontend, Backend, Database, Network, DevOps, Linux, Docker, Interview, Tools·Shortcuts·Commands 치트시트를 통합했습니다.
+          - generic [ref=e162]: "CURATED HANDBOOK PATH · SOURCES : 9 DOCUMENTS · UPDATED 2026-06"
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - generic [ref=e165]: INDEX
+            - heading "통합 문서" [level=2] [ref=e166]
+          - paragraph [ref=e167]: 암기용 요약이 아니라 작업 중 5초 안에 찾아 복사할 참조입니다. 도메인마다 핵심 명령·스니펫, 판단 한 줄, 자주 터지는 것, 장애 증거 카드 네 블록으로 정리했습니다. 개념 설명은 개발 핸드북, 면접 답변은 커리어 핸드북이 담당합니다.
+          - list [ref=e168]:
+            - listitem [ref=e169]: Frontend
+            - listitem [ref=e170]: Backend
+            - listitem [ref=e171]: Database
+            - listitem [ref=e172]: Network
+            - listitem [ref=e173]: DevOps
+            - listitem [ref=e174]: Linux
+            - listitem [ref=e175]: Docker
+            - listitem [ref=e176]: Interview
+            - listitem [ref=e177]: Tools·Shortcuts·Commands
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - generic [ref=e180]: ROUTES
+            - heading "상황별 사용 루트" [level=2] [ref=e181]
+          - paragraph [ref=e182]: 전체를 처음부터 읽지 않습니다. 지금 겪는 상황에 맞는 문서 2~3개만 연결해 빠르게 증거를 모읍니다.
+          - table [ref=e183]:
+            - rowgroup [ref=e184]:
+              - row "상황 먼저 볼 치트시트 10분 안에 남길 증거 멈출 기준" [ref=e185]:
+                - columnheader "상황" [ref=e186]
+                - columnheader "먼저 볼 치트시트" [ref=e187]
+                - columnheader "10분 안에 남길 증거" [ref=e188]
+                - columnheader "멈출 기준" [ref=e189]
+              - row "화면이 느림 Frontend → Tools → DevOps Network waterfall, Performance trace, release SHA, before/after 수치 병목 계층을 못 나누면 코드 변경 중단" [ref=e190]:
+                - cell "화면이 느림" [ref=e191]
+                - cell "Frontend → Tools → DevOps" [ref=e192]
+                - cell "Network waterfall, Performance trace, release SHA, before/after 수치" [ref=e193]
+                - cell "병목 계층을 못 나누면 코드 변경 중단" [ref=e194]
+              - row "API 오류 증가 Backend → Database → Tools route, status, errorCode, requestId, slow query 또는 upstream timeout 재시도 가능 여부와 사용자 영향이 불명확하면 배포 중단" [ref=e195]:
+                - cell "API 오류 증가" [ref=e196]
+                - cell "Backend → Database → Tools" [ref=e197]
+                - cell "route, status, errorCode, requestId, slow query 또는 upstream timeout" [ref=e198]
+                - cell "재시도 가능 여부와 사용자 영향이 불명확하면 배포 중단" [ref=e199]
+              - row "DB 변경 리뷰 Database → Backend → DevOps DDL lock 위험, EXPLAIN, backfill plan, rollback/verification SQL 큰 테이블 변경에 단계화 계획이 없으면 merge 중단" [ref=e200]:
+                - cell "DB 변경 리뷰" [ref=e201]
+                - cell "Database → Backend → DevOps" [ref=e202]
+                - cell "DDL lock 위험, EXPLAIN, backfill plan, rollback/verification SQL" [ref=e203]
+                - cell "큰 테이블 변경에 단계화 계획이 없으면 merge 중단" [ref=e204]
+              - row "연결 장애 Network → Linux → Tools dig, nc, curl -v, server listen, firewall/route diff 출발지·목적지·포트가 특정되지 않으면 정상 판단 금지" [ref=e205]:
+                - cell "연결 장애" [ref=e206]
+                - cell "Network → Linux → Tools" [ref=e207]
+                - cell "dig, nc, curl -v, server listen, firewall/route diff" [ref=e208]
+                - cell "출발지·목적지·포트가 특정되지 않으면 정상 판단 금지" [ref=e209]
+              - row "배포 후 장애 DevOps → Docker → Backend 또는 Frontend image digest, config version, health check, error rate, rollback 후보 데이터 변경 동반 여부를 모르면 rollback 실행 보류" [ref=e210]:
+                - cell "배포 후 장애" [ref=e211]
+                - cell "DevOps → Docker → Backend 또는 Frontend" [ref=e212]
+                - cell "image digest, config version, health check, error rate, rollback 후보" [ref=e213]
+                - cell "데이터 변경 동반 여부를 모르면 rollback 실행 보류" [ref=e214]
+              - row "로컬만 깨짐 Tools → Linux → Docker runtime version, env diff, port/process, clean install, container logs 팀/CI 재현 여부를 확인하기 전 원인 단정 금지" [ref=e215]:
+                - cell "로컬만 깨짐" [ref=e216]
+                - cell "Tools → Linux → Docker" [ref=e217]
+                - cell "runtime version, env diff, port/process, clean install, container logs" [ref=e218]
+                - cell "팀/CI 재현 여부를 확인하기 전 원인 단정 금지" [ref=e219]
+        - generic [ref=e221]:
+          - generic [ref=e222]: SOURCE
+          - heading "Frontend" [level=2] [ref=e223]
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - generic [ref=e226]: FE-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e227]
+          - paragraph [ref=e228]: 화면을 고치기 전에 증거부터 고정한다. DevTools로 병목을 나누고, CLI로 번들·성능·리소스 크기를 측정한다.
+          - heading "DevTools 실전 순서" [level=3] [ref=e229]
+          - generic [ref=e230]:
+            - code [ref=e231]: "# 1) Performance 탭 — 느린 상호작용/로딩 원인 분리 # Record 시작 → 문제 동작 재현 → Stop # Main thread flame chart에서 Scripting/Rendering/Painting 비중 확인 # Long Task(>50ms) 노란 삼각형, INP 후보 interaction 클릭해 breakdown # 2) Network 탭 — waterfall로 로딩 순서 확인 # Disable cache 체크, throttling을 Fast 4G로 두고 새로고침 # LCP 이미지가 initial JS 뒤에 늦게 시작하는지, TTFB가 큰지 확인 # Priority 컬럼(우클릭 헤더로 표시)으로 우선순위 오지정 탐지 # 3) Coverage 탭 — 안 쓰는 JS/CSS 비율 # Cmd+Shift+P → \"Show Coverage\" → reload → Unused Bytes 확인 # 4) React DevTools Profiler — 렌더 원인 # Profiler 탭 → 녹화 → 상호작용 1회 → 멈춤 # \"Ranked\" 뷰에서 commit 비싼 컴포넌트, \"Why did this render?\" 활성화"
+            - button "스니펫 복사" [ref=e232] [cursor=pointer]:
+              - img [ref=e233]
+              - generic [ref=e236]: Copy
+          - heading "빌드 · 번들 분석" [level=3] [ref=e237]
+          - generic [ref=e238]:
+            - code [ref=e239]: "# 프로덕션 빌드 (번들 에러/사이즈 먼저 확인) npm run build # 빌드 결과를 로컬에서 프로덕션과 유사하게 서빙 npx serve dist # Vite 계열 npx serve build # CRA 계열 # 번들에서 뭐가 큰지 시각화 (source map 필요) npx source-map-explorer 'dist/**/*.js' # gzip/brotli 실제 전송 크기 확인 npx vite-bundle-visualizer # Vite ANALYZE=true npm run build # next.js (@next/bundle-analyzer 설정 시)"
+            - button "스니펫 복사" [ref=e240] [cursor=pointer]:
+              - img [ref=e241]
+              - generic [ref=e244]: Copy
+          - heading "성능 측정 (Lighthouse / Web Vitals)" [level=3] [ref=e245]
+          - code [ref=e247]: "# 성능 카테고리만 로컬 audit npx lighthouse http://localhost:3000 --only-categories=performance # 헤드리스로 JSON 저장 (CI 비교용) npx lighthouse http://localhost:3000 \\ --only-categories=performance \\ --output=json --output-path=./lh.json --chrome-flags=\"--headless\" # 모바일 프리셋 대신 데스크톱으로 npx lighthouse http://localhost:3000 --preset=desktop"
+          - heading "응답 헤더 · 리소스 크기 확인" [level=3] [ref=e248]
+          - code [ref=e250]: "# 캐시/압축 헤더만 빠르게 (cache-control, etag, content-encoding) curl -sI https://example.com/app.js # 압축이 실제 적용되는지 (Accept-Encoding 보내고 헤더 확인) curl -sI -H \"Accept-Encoding: br,gzip\" https://example.com/app.js # 실제 전송 바이트 (전송 크기 = size_download) curl -s -o /dev/null -w \"%{size_download} bytes / %{time_total}s\\n\" https://example.com/app.js # 이미지 파일 크기 확인 ls -lh public/*.{png,jpg,webp,avif} 2>/dev/null"
+          - heading "접근성 빠른 점검 (코드 없이 손으로)" [level=3] [ref=e251]
+          - code [ref=e253]: "# 1) Tab 키만으로 핵심 흐름 완주 — 마우스 금지 # 포커스 순서가 시각 순서와 같은가? 갇히는 곳(trap) 없는가? # 2) focus visible — Tab 이동 시 포커스 링이 보이는가? (outline:none 사고) # 3) accessible name — 아이콘 버튼에 이름이 있는가? # DevTools Elements → Accessibility 패널 → Computed Properties의 Name 확인 # 4) 대비 — DevTools에서 텍스트 요소 클릭 → color picker의 Contrast ratio (AA≥4.5:1)"
+          - table [ref=e254]:
+            - rowgroup [ref=e255]:
+              - row "명령 용도 주의" [ref=e256]:
+                - columnheader "명령" [ref=e257]
+                - columnheader "용도" [ref=e258]
+                - columnheader "주의" [ref=e259]
+              - row "npm run build 번들 에러·사이즈 확인 dev에선 안 잡히는 타입/트리셰이킹 문제가 여기서 남" [ref=e260]:
+                - cell "npm run build" [ref=e261]:
+                  - code [ref=e262]: npm run build
+                - cell "번들 에러·사이즈 확인" [ref=e263]
+                - cell "dev에선 안 잡히는 타입/트리셰이킹 문제가 여기서 남" [ref=e264]
+              - row "npx serve dist 빌드 산출물 로컬 서빙 dev 서버가 아닌 실제 정적 파일로 검증" [ref=e265]:
+                - cell "npx serve dist" [ref=e266]:
+                  - code [ref=e267]: npx serve dist
+                - cell "빌드 산출물 로컬 서빙" [ref=e268]
+                - cell "dev 서버가 아닌 실제 정적 파일로 검증" [ref=e269]
+              - row "npx lighthouse <url> --only-categories=performance 성능 audit lab 값 — 기기/네트워크 조건 고정해야 비교 가능" [ref=e270]:
+                - cell "npx lighthouse <url> --only-categories=performance" [ref=e271]:
+                  - code [ref=e272]: npx lighthouse <url> --only-categories=performance
+                - cell "성능 audit" [ref=e273]
+                - cell "lab 값 — 기기/네트워크 조건 고정해야 비교 가능" [ref=e274]
+              - row "npx source-map-explorer 'dist/**/*.js' 번들 구성 시각화 build 시 sourcemap 켜야 함" [ref=e275]:
+                - cell "npx source-map-explorer 'dist/**/*.js'" [ref=e276]:
+                  - code [ref=e277]: npx source-map-explorer 'dist/**/*.js'
+                - cell "번들 구성 시각화" [ref=e278]
+                - cell "build 시 sourcemap 켜야 함" [ref=e279]
+              - row "curl -sI <url> 캐시·압축 헤더 확인 -I는 HEAD 요청 — 일부 서버는 GET과 헤더가 다름" [ref=e280]:
+                - cell "curl -sI <url>" [ref=e281]:
+                  - code [ref=e282]: curl -sI <url>
+                - cell "캐시·압축 헤더 확인" [ref=e283]
+                - cell "-I는 HEAD 요청 — 일부 서버는 GET과 헤더가 다름" [ref=e284]
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - generic [ref=e287]: FE-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e288]
+          - table [ref=e289]:
+            - rowgroup [ref=e290]:
+              - row "선택 언제 쓰나 주의" [ref=e291]:
+                - columnheader "선택" [ref=e292]
+                - columnheader "언제 쓰나" [ref=e293]
+                - columnheader "주의" [ref=e294]
+              - row "CSR 로그인 뒤 내부 도구, SEO 무관, 인터랙션 중심 초기 빈 화면 + 큰 JS 번들" [ref=e295]:
+                - cell "CSR" [ref=e296]
+                - cell "로그인 뒤 내부 도구, SEO 무관, 인터랙션 중심" [ref=e297]
+                - cell "초기 빈 화면 + 큰 JS 번들" [ref=e298]
+              - row "SSR 초기 표시·SEO 중요 + 사용자별 데이터 서버 비용, cache 전략, hydration 안정성" [ref=e299]:
+                - cell "SSR" [ref=e300]
+                - cell "초기 표시·SEO 중요 + 사용자별 데이터" [ref=e301]
+                - cell "서버 비용, cache 전략, hydration 안정성" [ref=e302]
+              - row "SSG 콘텐츠 거의 고정, CDN 빠른 제공이 핵심 데이터 변경 주기 → 재생성(ISR) 전략 필요" [ref=e303]:
+                - cell "SSG" [ref=e304]
+                - cell "콘텐츠 거의 고정, CDN 빠른 제공이 핵심" [ref=e305]
+                - cell "데이터 변경 주기 → 재생성(ISR) 전략 필요" [ref=e306]
+              - row "memoization 측정으로 렌더 비용/props 안정성 확인 뒤에만 측정 전 남발 = 복잡도만 증가, 병목이 네트워크면 무효" [ref=e307]:
+                - cell "memoization" [ref=e308]
+                - cell "측정으로 렌더 비용/props 안정성 확인 뒤에만" [ref=e309]
+                - cell "측정 전 남발 = 복잡도만 증가, 병목이 네트워크면 무효" [ref=e310]
+              - row "URL state 공유·뒤로가기·새로고침 복원 필요한 필터/검색 입력 중 값과 확정 query는 분리" [ref=e311]:
+                - cell "URL state" [ref=e312]
+                - cell "공유·뒤로가기·새로고침 복원 필요한 필터/검색" [ref=e313]
+                - cell "입력 중 값과 확정 query는 분리" [ref=e314]
+              - row "client state 모달·탭·입력 중 값처럼 UI 즉시성 상태 공유 필요하면 URL로, 아니면 컴포넌트 로컬" [ref=e315]:
+                - cell "client state" [ref=e316]
+                - cell "모달·탭·입력 중 값처럼 UI 즉시성 상태" [ref=e317]
+                - cell "공유 필요하면 URL로, 아니면 컴포넌트 로컬" [ref=e318]
+              - row "server state 서버가 소유한 캐시 가능 비동기 데이터 UI state로 복사하지 말 것 — freshness/invalidate가 핵심" [ref=e319]:
+                - cell "server state" [ref=e320]
+                - cell "서버가 소유한 캐시 가능 비동기 데이터" [ref=e321]
+                - cell "UI state로 복사하지 말 것 — freshness/invalidate가 핵심" [ref=e322]
+        - generic [ref=e323]:
+          - generic [ref=e324]:
+            - generic [ref=e325]: FE-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e326]
+          - table [ref=e327]:
+            - rowgroup [ref=e328]:
+              - row "신호 왜 위험 즉시 확인" [ref=e329]:
+                - columnheader "신호" [ref=e330]
+                - columnheader "왜 위험" [ref=e331]
+                - columnheader "즉시 확인" [ref=e332]
+              - row "측정 전 memo /useMemo /useCallback 남발 병목이 네트워크·이미지면 효과 0, 복잡도만 증가 React Profiler로 렌더 원인, Network waterfall 먼저" [ref=e333]:
+                - cell "측정 전 memo /useMemo /useCallback 남발" [ref=e334]:
+                  - text: 측정 전
+                  - code [ref=e335]: memo
+                  - text: /
+                  - code [ref=e336]: useMemo
+                  - text: /
+                  - code [ref=e337]: useCallback
+                  - text: 남발
+                - cell "병목이 네트워크·이미지면 효과 0, 복잡도만 증가" [ref=e338]
+                - cell "React Profiler로 렌더 원인, Network waterfall 먼저" [ref=e339]
+              - row "API 응답을 컴포넌트 state로 복사 server/client 상태 혼합 → stale·동기화 버그 새로고침·탭 전환 후 값이 어긋나는지" [ref=e340]:
+                - cell "API 응답을 컴포넌트 state로 복사" [ref=e341]
+                - cell "server/client 상태 혼합 → stale·동기화 버그" [ref=e342]
+                - cell "새로고침·탭 전환 후 값이 어긋나는지" [ref=e343]
+              - row "hydration mismatch 서버 HTML과 client 첫 렌더 불일치 → 화면 튐 날짜·locale·random·localStorage 접근을 effect로 미룸" [ref=e344]:
+                - cell "hydration mismatch" [ref=e345]
+                - cell "서버 HTML과 client 첫 렌더 불일치 → 화면 튐" [ref=e346]
+                - cell "날짜·locale·random·localStorage 접근을 effect로 미룸" [ref=e347]:
+                  - text: 날짜·locale·random·
+                  - code [ref=e348]: localStorage
+                  - text: 접근을 effect로 미룸
+              - row "div 에 onClick만 붙인 가짜 버튼 키보드 도달 불가, accessible name 없음 Tab 도달 여부, semantic button /a 로 교체" [ref=e349]:
+                - cell "div 에 onClick만 붙인 가짜 버튼" [ref=e350]:
+                  - code [ref=e351]: div
+                  - text: 에 onClick만 붙인 가짜 버튼
+                - cell "키보드 도달 불가, accessible name 없음" [ref=e352]
+                - cell "Tab 도달 여부, semantic button /a 로 교체" [ref=e353]:
+                  - text: Tab 도달 여부, semantic
+                  - code [ref=e354]: button
+                  - text: /
+                  - code [ref=e355]: a
+                  - text: 로 교체
+              - row "loading/empty/error/permission 상태 누락 운영 데이터에서 UI가 쉽게 깨짐 상태별 스냅샷·story, 실패 경로 2개 이상" [ref=e356]:
+                - cell "loading/empty/error/permission 상태 누락" [ref=e357]
+                - cell "운영 데이터에서 UI가 쉽게 깨짐" [ref=e358]
+                - cell "상태별 스냅샷·story, 실패 경로 2개 이상" [ref=e359]
+              - row "dangerouslySetInnerHTML / innerHTML 사용자 입력이 escape 없이 DOM 실행 → XSS sanitize, 입력 출처, CSP 확인" [ref=e360]:
+                - cell "dangerouslySetInnerHTML / innerHTML" [ref=e361]:
+                  - code [ref=e362]: dangerouslySetInnerHTML
+                  - text: /
+                  - code [ref=e363]: innerHTML
+                - cell "사용자 입력이 escape 없이 DOM 실행 → XSS" [ref=e364]
+                - cell "sanitize, 입력 출처, CSP 확인" [ref=e365]
+        - generic [ref=e366]:
+          - generic [ref=e367]:
+            - generic [ref=e368]: FE-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e369]
+          - generic [ref=e370]:
+            - generic [ref=e371]: BROKEN SCREEN TRIAGE
+            - text: 코드부터 고치지 말고 route/role/flag → Console → Network → API/cache → hydration 순서로 증거를 고정한다. 원인 확정 전 복구는 flag off · rollback · CDN purge 중 사용자 영향이 가장 작은 것.
+          - table [ref=e372]:
+            - rowgroup [ref=e373]:
+              - row "순서 질문 증거" [ref=e374]:
+                - columnheader "순서" [ref=e375]
+                - columnheader "질문" [ref=e376]
+                - columnheader "증거" [ref=e377]
+              - row "1 어떤 route·role·browser·viewport·flag에서만 재현? 재현 조건, session, feature flag 상태" [ref=e378]:
+                - cell "1" [ref=e379]
+                - cell "어떤 route·role·browser·viewport·flag에서만 재현?" [ref=e380]
+                - cell "재현 조건, session, feature flag 상태" [ref=e381]
+              - row "2 Console error가 먼저인가? DevTools Console stack trace, 첫 에러 시각" [ref=e382]:
+                - cell "2" [ref=e383]
+                - cell "Console error가 먼저인가?" [ref=e384]
+                - cell "DevTools Console stack trace, 첫 에러 시각" [ref=e385]
+              - row "3 Network 실패가 있는가? status code, response body, deploy SHA" [ref=e386]:
+                - cell "3" [ref=e387]
+                - cell "Network 실패가 있는가?" [ref=e388]
+                - cell "status code, response body, deploy SHA" [ref=e389]
+              - row "4 API contract 변경 또는 cache stale인가? response schema, etag/cache-control" [ref=e390]:
+                - cell "4" [ref=e391]
+                - cell "API contract 변경 또는 cache stale인가?" [ref=e392]
+                - cell "response schema, etag/cache-control" [ref=e393]
+              - row "5 hydration·date/locale/random·browser-only API 차이? SSR log, client stack, hydration warning" [ref=e394]:
+                - cell "5" [ref=e395]
+                - cell "hydration·date/locale/random·browser-only API 차이?" [ref=e396]
+                - cell "SSR log, client stack, hydration warning" [ref=e397]
+          - generic [ref=e398]:
+            - generic [ref=e399]: 복구/중단
+            - paragraph [ref=e400]: 영향 범위와 데이터 변경 여부부터 확인. 데이터를 바꾸지 않는 flag off를 우선, 배포 회귀면 rollback, 정적 자산 stale이면 CDN purge. 원인 미확정 상태로 hotfix 배포 금지.
+        - generic [ref=e402]:
+          - generic [ref=e403]: SOURCE
+          - heading "Backend" [level=2] [ref=e404]
+        - generic [ref=e405]:
+          - generic [ref=e406]:
+            - generic [ref=e407]: BE-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e408]
+          - heading "요청 찌르기 (curl / HTTPie)" [level=3] [ref=e409]
+          - code [ref=e411]: "# 헤더까지 보기 — status, 응답 헤더 확인 (가장 많이 씀) curl -i https://api.example.com/orders/42 # 상태코드만 뽑기 curl -s -o /dev/null -w '%{http_code}\\n' https://api.example.com/health # POST + JSON + 멱등키 (재시도 안전) curl -X POST \\ -H 'Content-Type: application/json' \\ -H 'Idempotency-Key: 8f14e45f-ceea-467a-9c3d-1b2c3d4e5f60' \\ -d '{\"amount\":1000,\"currency\":\"KRW\"}' \\ https://api.example.com/payments # Bearer 토큰 인증 curl -H 'Authorization: Bearer <token>' https://api.example.com/me # 타임/트레이스 프로파일 (DNS→connect→TTFB→total) curl -s -o /dev/null \\ -w 'dns:%{time_namelookup} conn:%{time_connect} ttfb:%{time_starttransfer} total:%{time_total}\\n' \\ https://api.example.com/orders"
+          - code [ref=e413]: "# HTTPie — 키=값이면 자동 JSON, 사람이 읽기 좋게 출력 http POST api.example.com/payments amount=1000 currency=KRW \\ Idempotency-Key:8f14e45f-ceea-467a Authorization:'Bearer <token>' # 헤더만 보기 http --headers GET api.example.com/orders/42"
+          - heading "응답 파싱 (jq)" [level=3] [ref=e414]
+          - code [ref=e416]: "# 특정 필드 curl -s api.example.com/orders/42 | jq '.status' # 배열에서 골라 뽑기 curl -s api.example.com/orders | jq '.data[] | {id, status}' # 조건 필터 (실패 건만) curl -s api.example.com/orders | jq '.data[] | select(.status==\"FAILED\")' # 개수 세기 curl -s api.example.com/orders | jq '.data | length'"
+          - heading "부하 테스트" [level=3] [ref=e417]
+          - code [ref=e419]: "# hey — 10초 동안 동시 50 (p50/p95/p99 히스토그램) hey -z 10s -c 50 https://api.example.com/orders # hey — 총 1000요청, POST + body hey -n 1000 -c 50 -m POST -T 'application/json' \\ -d '{\"amount\":1000}' https://api.example.com/payments # ApacheBench — 총 1000요청, 동시 50 ab -n 1000 -c 50 https://api.example.com/orders"
+          - heading "JWT 디코드 (payload 까보기)" [level=3] [ref=e420]
+          - code [ref=e422]: "# 2번째 파트(payload)만 base64 디코드 → exp, sub, role 확인 echo <jwt> | cut -d. -f2 | base64 -d | jq # padding 에러 나면 base64 대신 (macOS) echo <jwt> | cut -d. -f2 | base64 -D 2>/dev/null | jq"
+          - heading "로그 추적" [level=3] [ref=e423]
+          - code [ref=e425]: "# requestId로 한 요청의 전 구간 따라가기 grep 'req-8f14e45f' app.log # 5xx만 실시간 tail -f app.log | grep -E '\"status\":5[0-9]{2}' # errorCode별 집계 top grep -oE '\"errorCode\":\"[^\"]+\"' app.log | sort | uniq -c | sort -rn | head"
+          - table [ref=e426]:
+            - rowgroup [ref=e427]:
+              - row "명령 용도 주의" [ref=e428]:
+                - columnheader "명령" [ref=e429]
+                - columnheader "용도" [ref=e430]
+                - columnheader "주의" [ref=e431]
+              - row "curl -i <url> status·헤더 확인, 첫 진단 -s 로 progress 끄기" [ref=e432]:
+                - cell "curl -i <url>" [ref=e433]:
+                  - code [ref=e434]: curl -i <url>
+                - cell "status·헤더 확인, 첫 진단" [ref=e435]
+                - cell "-s 로 progress 끄기" [ref=e436]:
+                  - code [ref=e437]: "-s"
+                  - text: 로 progress 끄기
+              - 'row "curl -sS -f <url> 스크립트용: 4xx/5xx면 exit≠0 -f 는 body 안 보여줌" [ref=e438]':
+                - cell "curl -sS -f <url>" [ref=e439]:
+                  - code [ref=e440]: curl -sS -f <url>
+                - 'cell "스크립트용: 4xx/5xx면 exit≠0" [ref=e441]'
+                - cell "-f 는 body 안 보여줌" [ref=e442]:
+                  - code [ref=e443]: "-f"
+                  - text: 는 body 안 보여줌
+              - row "curl -L <url> redirect 따라가기 POST가 GET으로 바뀔 수 있음" [ref=e444]:
+                - cell "curl -L <url>" [ref=e445]:
+                  - code [ref=e446]: curl -L <url>
+                - cell "redirect 따라가기" [ref=e447]
+                - cell "POST가 GET으로 바뀔 수 있음" [ref=e448]
+              - row "jq -r '.token' 따옴표 없는 raw 값 추출 파이프 대입 시 필수" [ref=e449]:
+                - cell "jq -r '.token'" [ref=e450]:
+                  - code [ref=e451]: jq -r '.token'
+                - cell "따옴표 없는 raw 값 추출" [ref=e452]
+                - cell "파이프 대입 시 필수" [ref=e453]
+              - row "hey -z 10s -c 50 p95/p99 지연 측정 prod 대상 금지" [ref=e454]:
+                - cell "hey -z 10s -c 50" [ref=e455]:
+                  - code [ref=e456]: hey -z 10s -c 50
+                - cell "p95/p99 지연 측정" [ref=e457]
+                - cell "prod 대상 금지" [ref=e458]
+              - row "ab -n 1000 -c 50 간단 처리량 측정 keep-alive는 -k" [ref=e459]:
+                - cell "ab -n 1000 -c 50" [ref=e460]:
+                  - code [ref=e461]: ab -n 1000 -c 50
+                - cell "간단 처리량 측정" [ref=e462]
+                - cell "keep-alive는 -k" [ref=e463]:
+                  - text: keep-alive는
+                  - code [ref=e464]: "-k"
+          - generic [ref=e465]:
+            - generic [ref=e466]: 주의
+            - paragraph [ref=e467]:
+              - text: 부하 명령(
+              - code [ref=e468]: hey
+              - text: ","
+              - code [ref=e469]: ab
+              - text: )은 staging/local에만. prod에 걸면 self-DoS. JWT 디코드는 서명 검증이 아니라 payload 열람일 뿐이니 신뢰 판단에 쓰지 말 것.
+        - generic [ref=e470]:
+          - generic [ref=e471]:
+            - generic [ref=e472]: BE-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e473]
+          - table [ref=e474]:
+            - rowgroup [ref=e475]:
+              - row "선택 언제 쓰나 주의" [ref=e476]:
+                - columnheader "선택" [ref=e477]
+                - columnheader "언제 쓰나" [ref=e478]
+                - columnheader "주의" [ref=e479]
+              - row "Session 즉시 폐기·서버 제어가 중요할 때 scale-out 시 공용 session store 필요" [ref=e480]:
+                - cell "Session" [ref=e481]
+                - cell "즉시 폐기·서버 제어가 중요할 때" [ref=e482]
+                - cell "scale-out 시 공용 session store 필요" [ref=e483]
+              - row "JWT stateless·분산 검증이 중요할 때 즉시 폐기 어려움 → 짧은 만료 + refresh" [ref=e484]:
+                - cell "JWT" [ref=e485]
+                - cell "stateless·분산 검증이 중요할 때" [ref=e486]
+                - cell "즉시 폐기 어려움 → 짧은 만료 + refresh" [ref=e487]
+              - row "RBAC 역할이 명확하고 조직이 단순할 때 예외 늘면 role explosion" [ref=e488]:
+                - cell "RBAC" [ref=e489]
+                - cell "역할이 명확하고 조직이 단순할 때" [ref=e490]
+                - cell "예외 늘면 role explosion" [ref=e491]
+              - row "ABAC 소유자·조직·상태 등 속성 기반 판단 필요 정책 테스트·설명가능성 확보" [ref=e492]:
+                - cell "ABAC" [ref=e493]
+                - cell "소유자·조직·상태 등 속성 기반 판단 필요" [ref=e494]
+                - cell "정책 테스트·설명가능성 확보" [ref=e495]
+              - row "Optimistic lock 충돌이 드물고 재시도 UX가 가능할 때 version 충돌 시 재시도 흐름 필요" [ref=e496]:
+                - cell "Optimistic lock" [ref=e497]
+                - cell "충돌이 드물고 재시도 UX가 가능할 때" [ref=e498]
+                - cell "version 충돌 시 재시도 흐름 필요" [ref=e499]
+              - row "Pessimistic lock 충돌 비용이 크고 직렬 처리가 필요할 때 lock wait·deadlock 관리" [ref=e500]:
+                - cell "Pessimistic lock" [ref=e501]
+                - cell "충돌 비용이 크고 직렬 처리가 필요할 때" [ref=e502]
+                - cell "lock wait·deadlock 관리" [ref=e503]
+              - row "Sync 호출 결과가 즉시 필요하고 빠를 때 외부 장애가 요청 pool로 전파" [ref=e504]:
+                - cell "Sync 호출" [ref=e505]
+                - cell "결과가 즉시 필요하고 빠를 때" [ref=e506]
+                - cell "외부 장애가 요청 pool로 전파" [ref=e507]
+              - row "Queue(async) 부하 평탄화·재시도·장애 격리가 우선일 때 중복 소비·순서 별도 설계" [ref=e508]:
+                - cell "Queue(async)" [ref=e509]
+                - cell "부하 평탄화·재시도·장애 격리가 우선일 때" [ref=e510]
+                - cell "중복 소비·순서 별도 설계" [ref=e511]
+          - generic [ref=e512]:
+            - generic [ref=e513]: 쿠키 옵션
+            - paragraph [ref=e514]:
+              - text: 인증 쿠키는
+              - code [ref=e515]: HttpOnly
+              - text: (JS 접근 차단) +
+              - code [ref=e516]: Secure
+              - text: (HTTPS 전용) +
+              - code [ref=e517]: SameSite
+              - text: (CSRF 완화) 세 개 세트로.
+              - code [ref=e518]: SameSite=Lax
+              - text: 가 기본 권장, 크로스사이트 전송이 꼭 필요하면
+              - code [ref=e519]: SameSite=None; Secure
+              - text: .
+        - generic [ref=e520]:
+          - generic [ref=e521]:
+            - generic [ref=e522]: BE-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e523]
+          - table [ref=e524]:
+            - rowgroup [ref=e525]:
+              - row "신호 왜 위험 즉시 확인" [ref=e526]:
+                - columnheader "신호" [ref=e527]
+                - columnheader "왜 위험" [ref=e528]
+                - columnheader "즉시 확인" [ref=e529]
+              - row "프론트 validation 있으니 server validation 생략 클라이언트는 신뢰 경계 밖 — API 직접 호출로 우회 server 측 형식·범위·상태전이 검증 존재 여부" [ref=e530]:
+                - cell "프론트 validation 있으니 server validation 생략" [ref=e531]
+                - cell "클라이언트는 신뢰 경계 밖 — API 직접 호출로 우회" [ref=e532]
+                - cell "server 측 형식·범위·상태전이 검증 존재 여부" [ref=e533]
+              - row "권한 검사를 controller 일부 경로에만 다른 진입점으로 우회 경로 생김 service/data layer 기준 authorization + resource ownership" [ref=e534]:
+                - cell "권한 검사를 controller 일부 경로에만" [ref=e535]
+                - cell "다른 진입점으로 우회 경로 생김" [ref=e536]
+                - cell "service/data layer 기준 authorization + resource ownership" [ref=e537]
+              - row "POST 재시도로 중복 생성/결제 timeout·새로고침·모바일 재시도는 정상 조건 idempotency key + unique constraint + 재시도 응답 정책" [ref=e538]:
+                - cell "POST 재시도로 중복 생성/결제" [ref=e539]
+                - cell "timeout·새로고침·모바일 재시도는 정상 조건" [ref=e540]
+                - cell "idempotency key + unique constraint + 재시도 응답 정책" [ref=e541]
+              - row "transaction 안에서 외부 API 호출 lock 시간이 외부 장애 시간만큼 늘어남 외부호출을 경계 밖으로 / outbox·사후 보상" [ref=e542]:
+                - cell "transaction 안에서 외부 API 호출" [ref=e543]
+                - cell "lock 시간이 외부 장애 시간만큼 늘어남" [ref=e544]
+                - cell "외부호출을 경계 밖으로 / outbox·사후 보상" [ref=e545]
+              - row "에러를 전부 500으로 뭉갬 클라이언트가 재시도/수정/권한요청을 구분 못함 status + machine-readable code + retryable 여부" [ref=e546]:
+                - cell "에러를 전부 500으로 뭉갬" [ref=e547]
+                - cell "클라이언트가 재시도/수정/권한요청을 구분 못함" [ref=e548]
+                - cell "status + machine-readable code + retryable 여부" [ref=e549]
+              - row "로그에 requestId/actor 없음 장애 때 한 요청을 추적 불가 requestId·actor·target·result 로깅(PII·secret 제외)" [ref=e550]:
+                - cell "로그에 requestId/actor 없음" [ref=e551]
+                - cell "장애 때 한 요청을 추적 불가" [ref=e552]
+                - cell "requestId·actor·target·result 로깅(PII·secret 제외)" [ref=e553]
+        - generic [ref=e554]:
+          - generic [ref=e555]:
+            - generic [ref=e556]: BE-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e557]
+          - generic [ref=e558]:
+            - generic [ref=e559]: API INCIDENT TRIAGE
+            - text: 1. 어떤 route·status·errorCode·requestId가 늘었나 (증거 확보)
+            - text: 2. 상류 timeout인가 slow query인가 (upstream span vs DB metric)
+            - text: 3. 이 요청이 재시도 안전한가 (idempotency 있으면 재시도 OK)
+            - text: 4. 사용자 영향 범위는 (특정 tenant/actor/전체)
+          - table [ref=e560]:
+            - rowgroup [ref=e561]:
+              - row "순서 질문 증거" [ref=e562]:
+                - columnheader "순서" [ref=e563]
+                - columnheader "질문" [ref=e564]
+                - columnheader "증거" [ref=e565]
+              - row "1 어떤 route·status·errorCode·requestId가 증가했나? gateway/app log, dashboard, grep errorCode" [ref=e566]:
+                - cell "1" [ref=e567]
+                - cell "어떤 route·status·errorCode·requestId가 증가했나?" [ref=e568]
+                - cell "gateway/app log, dashboard, grep errorCode" [ref=e569]:
+                  - text: gateway/app log, dashboard,
+                  - code [ref=e570]: grep errorCode
+              - row "2 상류(외부 API) timeout인가, 내부 slow query인가? trace span, upstream status vs DB slow query log" [ref=e571]:
+                - cell "2" [ref=e572]
+                - cell "상류(외부 API) timeout인가, 내부 slow query인가?" [ref=e573]
+                - cell "trace span, upstream status vs DB slow query log" [ref=e574]
+              - row "3 이 요청은 재시도해도 안전한가? 메서드(GET/PUT), idempotency key 유무" [ref=e575]:
+                - cell "3" [ref=e576]
+                - cell "이 요청은 재시도해도 안전한가?" [ref=e577]
+                - cell "메서드(GET/PUT), idempotency key 유무" [ref=e578]
+              - row "4 사용자 영향 범위는? (특정 tenant/전체) actor·tenant 분포, 성공/실패 비율" [ref=e579]:
+                - cell "4" [ref=e580]
+                - cell "사용자 영향 범위는? (특정 tenant/전체)" [ref=e581]
+                - cell "actor·tenant 분포, 성공/실패 비율" [ref=e582]
+          - generic [ref=e583]:
+            - generic [ref=e584]: 복구/중단 기준
+            - paragraph [ref=e585]: 중복 생성·결제가 진행 중이면 쓰기 경로를 먼저 중단(flag off)하고 affected row를 식별한다. 단일 release 회귀면 rollback, 상류 장애면 traffic shedding·retry 축소로 격리. data migration이 얽힌 변경은 rollback 전에 정합성부터 확인.
+        - generic [ref=e587]:
+          - generic [ref=e588]: SOURCE
+          - heading "Database" [level=2] [ref=e589]
+        - generic [ref=e590]:
+          - generic [ref=e591]:
+            - generic [ref=e592]: DB-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e593]
+          - paragraph [ref=e594]: 실행계획 → 인덱스 → 락 → 통계 순으로 본다. 아래 스니펫은 대부분 복붙 후 테이블/컬럼명만 바꾸면 된다.
+          - heading "실행계획 (EXPLAIN)" [level=3] [ref=e595]
+          - code [ref=e597]: "# 실제 실행 + 버퍼까지 (진짜 느린 원인 찾을 때 이거) EXPLAIN (ANALYZE, BUFFERS) SELECT ... FROM orders WHERE user_id = 42; # 계획만 (쿼리 실제 실행 안 함, 안전) EXPLAIN SELECT ... FROM orders WHERE user_id = 42; # 포맷 옵션 EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT ...; # MySQL: EXPLAIN ANALYZE SELECT ...; / EXPLAIN FORMAT=JSON SELECT ...; # MySQL 8: EXPLAIN ANALYZE 는 실제 실행됨 (Postgres와 동일 주의)"
+          - generic [ref=e598]:
+            - generic [ref=e599]: 주의
+            - paragraph [ref=e600]:
+              - code [ref=e601]: ANALYZE
+              - text: 는 쿼리를 실제로 실행한다. UPDATE/DELETE/INSERT에 붙이면 데이터가 바뀐다. 쓰기 쿼리는
+              - code [ref=e602]: BEGIN; EXPLAIN (ANALYZE) ...; ROLLBACK;
+              - text: 로 감싼다.
+          - heading "인덱스 확인·생성" [level=3] [ref=e603]
+          - code [ref=e605]: "# 테이블의 인덱스/컬럼/제약 한눈에 (psql) \\d orders \\d+ orders # 인덱스 목록만 SELECT * FROM pg_indexes WHERE tablename = 'orders'; # 인덱스 정의 + 크기 SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'orders'; SELECT pg_size_pretty(pg_relation_size('idx_orders_user_id')); # 락 없이 인덱스 생성 (운영 테이블은 반드시 CONCURRENTLY) CREATE INDEX CONCURRENTLY idx_orders_user_id ON orders (user_id); # 복합 인덱스 (컬럼 순서 = 좌측 우선 규칙) CREATE INDEX idx_orders_user_created ON orders (user_id, created_at DESC); # 부분 인덱스 (조건 걸린 행만 색인 → 작고 빠름) CREATE INDEX idx_orders_active ON orders (user_id) WHERE status = 'ACTIVE'; # 안 쓰이는 인덱스 찾기 (idx_scan = 0) SELECT relname, indexrelname, idx_scan FROM pg_stat_user_indexes ORDER BY idx_scan ASC;"
+          - generic [ref=e606]:
+            - generic [ref=e607]: 주의
+            - paragraph [ref=e608]:
+              - code [ref=e609]: CREATE INDEX CONCURRENTLY
+              - text: 는 transaction block 안에서 못 쓴다. 실패하면 INVALID 인덱스가 남으니
+              - code [ref=e610]: DROP INDEX
+              - text: 후 재시도. MySQL은
+              - code [ref=e611]: ALGORITHM=INPLACE, LOCK=NONE
+              - text: .
+          - heading "블로킹 락 / 활성 쿼리" [level=3] [ref=e612]
+          - code [ref=e614]: "# 지금 잡혀 있는 락 (누가 무엇을) SELECT * FROM pg_locks WHERE NOT granted; # 무엇이 무엇을 막는지 (blocking → blocked) — 가장 실전적 SELECT blocked.pid AS blocked_pid, blocking.pid AS blocking_pid, blocked.query AS blocked_query, blocking.query AS blocking_query FROM pg_stat_activity blocked JOIN pg_stat_activity blocking ON blocking.pid = ANY(pg_blocking_pids(blocked.pid)) WHERE blocked.wait_event_type = 'Lock'; # 오래 도는 쿼리 (5초 이상) SELECT pid, now() - query_start AS runtime, state, query FROM pg_stat_activity WHERE state != 'idle' AND now() - query_start > interval '5 seconds' ORDER BY runtime DESC; # 문제 세션 죽이기 (cancel = 쿼리만, terminate = 연결까지) SELECT pg_cancel_backend(<pid>); SELECT pg_terminate_backend(<pid>);"
+          - generic [ref=e615]:
+            - generic [ref=e616]: 주의
+            - paragraph [ref=e617]:
+              - code [ref=e618]: pg_terminate_backend
+              - text: 는 연결을 끊는다. 트랜잭션 중이면 rollback된다. 운영에서 남의 세션 죽이기 전에 무슨 쿼리인지 반드시 확인.
+          - heading "느린 쿼리 통계 (pg_stat_statements)" [level=3] [ref=e619]
+          - code [ref=e621]: "# 확장 켜기 (한 번, 재시작 필요할 수 있음) CREATE EXTENSION IF NOT EXISTS pg_stat_statements; # 총 소요시간 상위 쿼리 (범인 후보) SELECT query, calls, total_exec_time, mean_exec_time, rows FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 20; # 평균 느린 쿼리 SELECT query, calls, mean_exec_time FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 20; # 통계 리셋 SELECT pg_stat_statements_reset(); # MySQL: SELECT * FROM sys.statement_analysis ORDER BY total_latency DESC; # performance_schema.events_statements_summary_by_digest"
+          - heading "통계·정리 (VACUUM / ANALYZE)" [level=3] [ref=e622]
+          - code [ref=e624]: "# 통계 갱신 (실행계획이 이상하면 제일 먼저) VACUUM (ANALYZE) orders; ANALYZE orders; -- 통계만, 락 가벼움 # dead tuple / 마지막 vacuum 시점 확인 SELECT relname, n_dead_tup, last_autovacuum, last_analyze FROM pg_stat_user_tables ORDER BY n_dead_tup DESC; # 테이블/인덱스 크기 SELECT pg_size_pretty(pg_total_relation_size('orders'));"
+          - generic [ref=e625]:
+            - generic [ref=e626]: 위험
+            - paragraph [ref=e627]:
+              - code [ref=e628]: VACUUM FULL
+              - text: 은 테이블을 ACCESS EXCLUSIVE 락으로 완전히 잠그고 재작성한다. 대형 테이블에 운영 중 실행 금지. 공간 회수는
+              - code [ref=e629]: pg_repack
+              - text: 고려.
+          - heading "안전한 마이그레이션 패턴 (NOT NULL 컬럼 추가)" [level=3] [ref=e630]
+          - code [ref=e632]: "# 1) nullable로 먼저 추가 (즉시, 락 짧음) ALTER TABLE orders ADD COLUMN region text; # 2) 배치로 backfill (한 번에 UPDATE 금지 — 락+WAL 폭증) UPDATE orders SET region = 'KR' WHERE id BETWEEN 1 AND 10000 AND region IS NULL; -- id 범위 올려가며 반복 / 사이에 sleep # 3) 기본값·제약은 backfill 끝난 뒤 ALTER TABLE orders ALTER COLUMN region SET DEFAULT 'KR'; # 4) NOT NULL 은 CHECK로 먼저 검증 후 승격 (풀스캔 락 회피) ALTER TABLE orders ADD CONSTRAINT region_nn CHECK (region IS NOT NULL) NOT VALID; ALTER TABLE orders VALIDATE CONSTRAINT region_nn; -- 락 가벼움 ALTER TABLE orders ALTER COLUMN region SET NOT NULL;"
+          - generic [ref=e633]:
+            - generic [ref=e634]: 주의
+            - paragraph [ref=e635]:
+              - text: 대형 테이블
+              - code [ref=e636]: ALTER TABLE
+              - text: 은 ACCESS EXCLUSIVE 락을 잡는다. 배포 시
+              - code [ref=e637]: SET lock_timeout = '3s';
+              - text: 를 먼저 걸어 락 대기가 서비스를 막지 않게 한다.
+          - heading "psql 자주 쓰는 것" [level=3] [ref=e638]
+          - table [ref=e639]:
+            - rowgroup [ref=e640]:
+              - row "명령 용도 주의" [ref=e641]:
+                - columnheader "명령" [ref=e642]
+                - columnheader "용도" [ref=e643]
+                - columnheader "주의" [ref=e644]
+              - row "\\dt 테이블 목록 \\dt+ 는 크기까지" [ref=e645]:
+                - cell "\\dt" [ref=e646]:
+                  - code [ref=e647]: \dt
+                - cell "테이블 목록" [ref=e648]
+                - cell "\\dt+ 는 크기까지" [ref=e649]:
+                  - code [ref=e650]: \dt+
+                  - text: 는 크기까지
+              - row "\\d+ orders 컬럼·인덱스·제약·크기 전체 디버깅 첫 명령" [ref=e651]:
+                - cell "\\d+ orders" [ref=e652]:
+                  - code [ref=e653]: \d+ orders
+                - cell "컬럼·인덱스·제약·크기 전체" [ref=e654]
+                - cell "디버깅 첫 명령" [ref=e655]
+              - row "\\di 인덱스 목록 —" [ref=e656]:
+                - cell "\\di" [ref=e657]:
+                  - code [ref=e658]: \di
+                - cell "인덱스 목록" [ref=e659]
+                - cell "—" [ref=e660]
+              - row "\\timing 쿼리 실행시간 표시 on/off 체감 측정용" [ref=e661]:
+                - cell "\\timing" [ref=e662]:
+                  - code [ref=e663]: \timing
+                - cell "쿼리 실행시간 표시 on/off" [ref=e664]
+                - cell "체감 측정용" [ref=e665]
+              - row "\\x 세로 출력 (넓은 행) EXPLAIN 볼 때 편함" [ref=e666]:
+                - cell "\\x" [ref=e667]:
+                  - code [ref=e668]: \x
+                - cell "세로 출력 (넓은 행)" [ref=e669]
+                - cell "EXPLAIN 볼 때 편함" [ref=e670]
+              - row "\\l DB 목록 —" [ref=e671]:
+                - cell "\\l" [ref=e672]:
+                  - code [ref=e673]: \l
+                - cell "DB 목록" [ref=e674]
+                - cell "—" [ref=e675]
+              - row "\\du role/권한 목록 —" [ref=e676]:
+                - cell "\\du" [ref=e677]:
+                  - code [ref=e678]: \du
+                - cell "role/권한 목록" [ref=e679]
+                - cell "—" [ref=e680]
+              - row "\\e 에디터로 쿼리 편집 긴 쿼리에" [ref=e681]:
+                - cell "\\e" [ref=e682]:
+                  - code [ref=e683]: \e
+                - cell "에디터로 쿼리 편집" [ref=e684]
+                - cell "긴 쿼리에" [ref=e685]
+        - generic [ref=e686]:
+          - generic [ref=e687]:
+            - generic [ref=e688]: DB-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e689]
+          - table [ref=e690]:
+            - rowgroup [ref=e691]:
+              - row "선택 언제 쓰나 주의" [ref=e692]:
+                - columnheader "선택" [ref=e693]
+                - columnheader "언제 쓰나" [ref=e694]
+                - columnheader "주의" [ref=e695]
+              - row "B-tree 인덱스 등호·범위·정렬·LIKE 'x%' 대부분의 기본 LIKE '%x' 선행 와일드카드엔 안 먹음" [ref=e696]:
+                - cell "B-tree 인덱스" [ref=e697]
+                - cell "등호·범위·정렬·LIKE 'x%' 대부분의 기본" [ref=e698]:
+                  - text: 등호·범위·정렬·
+                  - code [ref=e699]: LIKE 'x%'
+                  - text: 대부분의 기본
+                - cell "LIKE '%x' 선행 와일드카드엔 안 먹음" [ref=e700]:
+                  - code [ref=e701]: LIKE '%x'
+                  - text: 선행 와일드카드엔 안 먹음
+              - 'row "Partial 인덱스 일부 행만 자주 조회 (예: status=''ACTIVE'') WHERE 조건이 쿼리와 일치해야 사용됨" [ref=e702]':
+                - cell "Partial 인덱스" [ref=e703]
+                - 'cell "일부 행만 자주 조회 (예: status=''ACTIVE'')" [ref=e704]'
+                - cell "WHERE 조건이 쿼리와 일치해야 사용됨" [ref=e705]
+              - row "Composite 인덱스 여러 컬럼 AND 조건이 함께 자주 옴 좌측 우선 — 컬럼 순서가 곧 사용 범위" [ref=e706]:
+                - cell "Composite 인덱스" [ref=e707]
+                - cell "여러 컬럼 AND 조건이 함께 자주 옴" [ref=e708]
+                - cell "좌측 우선 — 컬럼 순서가 곧 사용 범위" [ref=e709]
+              - row "Covering 인덱스 인덱스만으로 SELECT 컬럼 다 충당 (INCLUDE ) Index Only Scan 노림, 인덱스 커짐" [ref=e710]:
+                - cell "Covering 인덱스" [ref=e711]
+                - cell "인덱스만으로 SELECT 컬럼 다 충당 (INCLUDE )" [ref=e712]:
+                  - text: 인덱스만으로 SELECT 컬럼 다 충당 (
+                  - code [ref=e713]: INCLUDE
+                  - text: )
+                - cell "Index Only Scan 노림, 인덱스 커짐" [ref=e714]
+              - row "Normalization 쓰기 정합성이 중요한 OLTP, 중복 제거 조인 늘어 읽기 비용 증가" [ref=e715]:
+                - cell "Normalization" [ref=e716]
+                - cell "쓰기 정합성이 중요한 OLTP, 중복 제거" [ref=e717]
+                - cell "조인 늘어 읽기 비용 증가" [ref=e718]
+              - row "Denormalization 읽기 폭증·리포트, 조인 비용이 병목 중복 갱신 로직·정합성 책임이 앱으로 옴" [ref=e719]:
+                - cell "Denormalization" [ref=e720]
+                - cell "읽기 폭증·리포트, 조인 비용이 병목" [ref=e721]
+                - cell "중복 갱신 로직·정합성 책임이 앱으로 옴" [ref=e722]
+              - row "OLTP 튜닝 짧고 잦은 트랜잭션 → 인덱스·락 최소화 인덱스 과다는 쓰기 느리게 함" [ref=e723]:
+                - cell "OLTP 튜닝" [ref=e724]
+                - cell "짧고 잦은 트랜잭션 → 인덱스·락 최소화" [ref=e725]
+                - cell "인덱스 과다는 쓰기 느리게 함" [ref=e726]
+              - row "분석 쿼리 대량 집계 → 풀스캔·병렬·partition이 오히려 유리 OLTP 인덱스 전략과 반대일 수 있음" [ref=e727]:
+                - cell "분석 쿼리" [ref=e728]
+                - cell "대량 집계 → 풀스캔·병렬·partition이 오히려 유리" [ref=e729]
+                - cell "OLTP 인덱스 전략과 반대일 수 있음" [ref=e730]
+          - heading "Transaction isolation level" [level=3] [ref=e731]
+          - generic [ref=e732]:
+            - generic [ref=e733]:
+              - generic [ref=e734]:
+                - generic [ref=e735]: Read Committed
+                - text: 기본값(PG/Oracle)
+              - generic [ref=e736]: 커밋된 것만 읽음. non-repeatable read 허용. 대부분의 앱 기본으로 충분.
+            - generic [ref=e737]:
+              - generic [ref=e738]:
+                - generic [ref=e739]: Repeatable Read
+                - text: MySQL 기본
+              - generic [ref=e740]: 트랜잭션 내 같은 읽기 보장. PG에선 phantom도 막음. 재시도(serialization error) 필요할 수 있음.
+            - generic [ref=e741]:
+              - generic [ref=e742]:
+                - generic [ref=e743]: Serializable
+                - text: 가장 엄격
+              - generic [ref=e744]: 순차 실행처럼 보장. 정합성 최상, 대신 conflict 시 rollback 잦음 → 재시도 로직 필수.
+        - generic [ref=e745]:
+          - generic [ref=e746]:
+            - generic [ref=e747]: DB-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e748]
+          - table [ref=e749]:
+            - rowgroup [ref=e750]:
+              - row "신호 왜 위험 즉시 확인" [ref=e751]:
+                - columnheader "신호" [ref=e752]
+                - columnheader "왜 위험" [ref=e753]
+                - columnheader "즉시 확인" [ref=e754]
+              - row "N+1 쿼리 목록 1 + 항목당 1 → 수백 쿼리, 지연 폭증 ORM 로그의 반복 SELECT, JOIN /eager fetch/IN 배치로 전환" [ref=e755]:
+                - cell "N+1 쿼리" [ref=e756]
+                - cell "목록 1 + 항목당 1 → 수백 쿼리, 지연 폭증" [ref=e757]
+                - cell "ORM 로그의 반복 SELECT, JOIN /eager fetch/IN 배치로 전환" [ref=e758]:
+                  - text: ORM 로그의 반복 SELECT,
+                  - code [ref=e759]: JOIN
+                  - text: /eager fetch/
+                  - code [ref=e760]: IN
+                  - text: 배치로 전환
+              - row "함수로 감싼 컬럼 WHERE lower(email)=... 인덱스 미사용 → 풀스캔 EXPLAIN에 Seq Scan, expression index ON t(lower(email)) 필요" [ref=e761]:
+                - cell "함수로 감싼 컬럼 WHERE lower(email)=..." [ref=e762]:
+                  - text: 함수로 감싼 컬럼
+                  - code [ref=e763]: WHERE lower(email)=...
+                - cell "인덱스 미사용 → 풀스캔" [ref=e764]
+                - cell "EXPLAIN에 Seq Scan, expression index ON t(lower(email)) 필요" [ref=e765]:
+                  - text: EXPLAIN에 Seq Scan, expression index
+                  - code [ref=e766]: ON t(lower(email))
+                  - text: 필요
+              - row "대형 테이블 DDL ALTER/CREATE INDEX 가 ACCESS EXCLUSIVE 락 → 서비스 정지 CONCURRENTLY /NOT VALID 여부, lock_timeout 설정" [ref=e767]:
+                - cell "대형 테이블 DDL" [ref=e768]
+                - cell "ALTER/CREATE INDEX 가 ACCESS EXCLUSIVE 락 → 서비스 정지" [ref=e769]:
+                  - code [ref=e770]: ALTER/CREATE INDEX
+                  - text: 가 ACCESS EXCLUSIVE 락 → 서비스 정지
+                - cell "CONCURRENTLY /NOT VALID 여부, lock_timeout 설정" [ref=e771]:
+                  - code [ref=e772]: CONCURRENTLY
+                  - text: /
+                  - code [ref=e773]: NOT VALID
+                  - text: 여부,
+                  - code [ref=e774]: lock_timeout
+                  - text: 설정
+              - row "무제한 SELECT LIMIT /WHERE 없는 조회 → 메모리·전송 폭발 pagination(keyset), 페이지 크기 상한 존재?" [ref=e775]:
+                - cell "무제한 SELECT" [ref=e776]
+                - cell "LIMIT /WHERE 없는 조회 → 메모리·전송 폭발" [ref=e777]:
+                  - code [ref=e778]: LIMIT
+                  - text: /
+                  - code [ref=e779]: WHERE
+                  - text: 없는 조회 → 메모리·전송 폭발
+                - cell "pagination(keyset), 페이지 크기 상한 존재?" [ref=e780]
+              - row "마이그레이션 rollback 부재 실패 시 되돌릴 수 없어 배포가 막힘 down 스크립트, 배포 전 트랜잭션 감싸기 여부" [ref=e781]:
+                - cell "마이그레이션 rollback 부재" [ref=e782]
+                - cell "실패 시 되돌릴 수 없어 배포가 막힘" [ref=e783]
+                - cell "down 스크립트, 배포 전 트랜잭션 감싸기 여부" [ref=e784]
+              - row "암묵적 형변환 id = '42' text↔int 캐스팅 → 인덱스 무력화 파라미터 타입 일치, EXPLAIN에 cast 흔적" [ref=e785]:
+                - cell "암묵적 형변환 id = '42'" [ref=e786]:
+                  - text: 암묵적 형변환
+                  - code [ref=e787]: id = '42'
+                - cell "text↔int 캐스팅 → 인덱스 무력화" [ref=e788]
+                - cell "파라미터 타입 일치, EXPLAIN에 cast 흔적" [ref=e789]
+              - row "낮은 선택도 인덱스 status 처럼 값 몇 개뿐 → 인덱스 무시됨 partial/composite로 재설계, 카디널리티 확인" [ref=e790]:
+                - cell "낮은 선택도 인덱스" [ref=e791]
+                - cell "status 처럼 값 몇 개뿐 → 인덱스 무시됨" [ref=e792]:
+                  - code [ref=e793]: status
+                  - text: 처럼 값 몇 개뿐 → 인덱스 무시됨
+                - cell "partial/composite로 재설계, 카디널리티 확인" [ref=e794]
+              - row "SELECT * 대량 컬럼 불필요 컬럼·TOAST 로드로 I/O 낭비, covering 불가 필요한 컬럼만 명시" [ref=e795]:
+                - cell "SELECT * 대량 컬럼" [ref=e796]
+                - cell "불필요 컬럼·TOAST 로드로 I/O 낭비, covering 불가" [ref=e797]
+                - cell "필요한 컬럼만 명시" [ref=e798]
+              - row "긴 트랜잭션 락 오래 잡고 VACUUM 방해(dead tuple 누적) pg_stat_activity 의 idle in transaction 확인" [ref=e799]:
+                - cell "긴 트랜잭션" [ref=e800]
+                - cell "락 오래 잡고 VACUUM 방해(dead tuple 누적)" [ref=e801]
+                - cell "pg_stat_activity 의 idle in transaction 확인" [ref=e802]:
+                  - code [ref=e803]: pg_stat_activity
+                  - text: 의 idle in transaction 확인
+        - generic [ref=e804]:
+          - generic [ref=e805]:
+            - generic [ref=e806]: DB-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e807]
+          - generic [ref=e808]:
+            - generic [ref=e809]: SLOW QUERY FIRST LOOK
+            - text: 1. EXPLAIN (ANALYZE, BUFFERS) 로 실제 실행계획을 뜬다.
+            - text: 2. 인덱스 사용 여부 — Seq Scan인가 Index Scan인가. 예상 인덱스가 왜 안 먹나.
+            - text: 3. row 수 / 버퍼 — estimated vs actual rows 괴리(통계 낡음?), read 버퍼량.
+            - text: 4. lock 대기 — 느린 게 아니라 막힌 것일 수 있다.
+            - code [ref=e810]: pg_blocking_pids
+            - text: 확인.
+            - text: 5. 그다음 쿼리 → 인덱스 → 스키마 순으로 고친다. 스키마 변경이 가장 무겁고 마지막.
+          - table [ref=e811]:
+            - rowgroup [ref=e812]:
+              - row "순서 질문 증거" [ref=e813]:
+                - columnheader "순서" [ref=e814]
+                - columnheader "질문" [ref=e815]
+                - columnheader "증거" [ref=e816]
+              - row "1 실제로 무엇이 느린가 EXPLAIN (ANALYZE, BUFFERS) 출력, 가장 비싼 노드" [ref=e817]:
+                - cell "1" [ref=e818]
+                - cell "실제로 무엇이 느린가" [ref=e819]
+                - cell "EXPLAIN (ANALYZE, BUFFERS) 출력, 가장 비싼 노드" [ref=e820]:
+                  - code [ref=e821]: EXPLAIN (ANALYZE, BUFFERS)
+                  - text: 출력, 가장 비싼 노드
+              - row "2 인덱스가 쓰였나 Index Scan / Seq Scan / Bitmap 여부, \\d orders 인덱스 목록" [ref=e822]:
+                - cell "2" [ref=e823]
+                - cell "인덱스가 쓰였나" [ref=e824]
+                - cell "Index Scan / Seq Scan / Bitmap 여부, \\d orders 인덱스 목록" [ref=e825]:
+                  - text: Index Scan / Seq Scan / Bitmap 여부,
+                  - code [ref=e826]: \d orders
+                  - text: 인덱스 목록
+              - row "3 추정과 실제가 맞나 estimated vs actual rows, last_analyze 시점" [ref=e827]:
+                - cell "3" [ref=e828]
+                - cell "추정과 실제가 맞나" [ref=e829]
+                - cell "estimated vs actual rows, last_analyze 시점" [ref=e830]:
+                  - text: estimated vs actual rows,
+                  - code [ref=e831]: last_analyze
+                  - text: 시점
+              - row "4 느린 게 아니라 막힌 건 아닌가 pg_stat_activity wait_event, pg_blocking_pids" [ref=e832]:
+                - cell "4" [ref=e833]
+                - cell "느린 게 아니라 막힌 건 아닌가" [ref=e834]
+                - cell "pg_stat_activity wait_event, pg_blocking_pids" [ref=e835]:
+                  - code [ref=e836]: pg_stat_activity
+                  - text: wait_event,
+                  - code [ref=e837]: pg_blocking_pids
+              - row "5 반복적으로 비싼가 pg_stat_statements total/mean_exec_time 순위" [ref=e838]:
+                - cell "5" [ref=e839]
+                - cell "반복적으로 비싼가" [ref=e840]
+                - cell "pg_stat_statements total/mean_exec_time 순위" [ref=e841]:
+                  - code [ref=e842]: pg_stat_statements
+                  - text: total/mean_exec_time 순위
+          - generic [ref=e843]:
+            - generic [ref=e844]: 복구·중단 기준
+            - paragraph [ref=e845]:
+              - text: 인덱스 추가는
+              - code [ref=e846]: CONCURRENTLY
+              - text: 로 무중단. 원인이 특정 세션의 blocking이면
+              - code [ref=e847]: pg_cancel_backend
+              - text: 로 완화. DDL이 락으로 서비스를 막고 있으면 즉시 취소하고 배치·CONCURRENTLY로 재설계 — 운영 중 대형 테이블 락은 롤백이 최우선.
+        - generic [ref=e849]:
+          - generic [ref=e850]: SOURCE
+          - heading "Network" [level=2] [ref=e851]
+        - generic [ref=e852]:
+          - generic [ref=e853]:
+            - generic [ref=e854]: NW-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e855]
+          - heading "DNS 해석" [level=3] [ref=e856]
+          - code [ref=e858]: "dig +short example.com # A record만 간결하게 dig example.com A # A record + TTL + 권위 응답 dig example.com CNAME # CNAME chain 확인 dig +short example.com @1.1.1.1 # 특정 resolver로 질의 (내부/외부 비교) dig +trace example.com # root부터 authoritative까지 추적 nslookup example.com # 빠른 확인 (레거시, 출력은 dig가 정확)"
+          - heading "연결·HTTP" [level=3] [ref=e859]
+          - code [ref=e861]: "nc -vz example.com 443 # TCP 도달성만 빠르게 (succeeded/refused/timeout) curl -v https://example.com # DNS→connect→TLS→HTTP 전 흐름 한 번에 curl -vkI https://example.com/ # 헤더만 (-k: 인증서 무시, -I: HEAD) curl -w 'dns:%{time_namelookup} conn:%{time_connect} tls:%{time_appconnect} total:%{time_total}\\n' -o /dev/null -s https://example.com # 단계별 소요 시간 분해 (병목 위치 특정)"
+          - heading "리슨 소켓·경로" [level=3] [ref=e862]
+          - code [ref=e864]: "ss -tlnp # 서버에서 listening TCP 소켓 (bind address:port) ss -tnp state established # 현재 맺힌 연결 traceroute example.com # hop별 경로 추정 (방화벽/ICMP로 불완전) mtr example.com # traceroute + ping 연속 (packet loss/hop 관찰)"
+          - heading "TLS·패킷" [level=3] [ref=e865]
+          - code [ref=e867]: "openssl s_client -connect example.com:443 -servername example.com # SNI 지정 handshake, chain/SAN/만료 확인 openssl s_client -connect example.com:443 -servername example.com 2>&1 | openssl x509 -noout -dates # 인증서 만료일만 추출 sudo tcpdump -ni any port 443 # 443 패킷 실시간 (인터페이스 any, 이름 해석 끔)"
+          - table [ref=e868]:
+            - rowgroup [ref=e869]:
+              - row "명령 용도 주의" [ref=e870]:
+                - columnheader "명령" [ref=e871]
+                - columnheader "용도" [ref=e872]
+                - columnheader "주의" [ref=e873]
+              - row "dig +short example.com A record 간결 확인 캐시된 값일 수 있음, TTL은 안 보임" [ref=e874]:
+                - cell "dig +short example.com" [ref=e875]:
+                  - code [ref=e876]: dig +short example.com
+                - cell "A record 간결 확인" [ref=e877]
+                - cell "캐시된 값일 수 있음, TTL은 안 보임" [ref=e878]
+              - row "nc -vz host 443 TCP 도달성 HTTP 이전 계층만, 앱 정상 여부 아님" [ref=e879]:
+                - cell "nc -vz host 443" [ref=e880]:
+                  - code [ref=e881]: nc -vz host 443
+                - cell "TCP 도달성" [ref=e882]
+                - cell "HTTP 이전 계층만, 앱 정상 여부 아님" [ref=e883]
+              - row "curl -v https://host 전 계층 흐름 어느 단계에서 멈추는지 로그를 읽어라" [ref=e884]:
+                - cell "curl -v https://host" [ref=e885]:
+                  - code [ref=e886]: curl -v https://host
+                - cell "전 계층 흐름" [ref=e887]
+                - cell "어느 단계에서 멈추는지 로그를 읽어라" [ref=e888]
+              - row "ss -tlnp listen 소켓 root 아니면 프로세스명 안 보일 수 있음" [ref=e889]:
+                - cell "ss -tlnp" [ref=e890]:
+                  - code [ref=e891]: ss -tlnp
+                - cell "listen 소켓" [ref=e892]
+                - cell "root 아니면 프로세스명 안 보일 수 있음" [ref=e893]
+              - row "openssl s_client -connect host:443 -servername host TLS handshake -servername 빼면 SNI 미전송으로 다른 인증서" [ref=e894]:
+                - cell "openssl s_client -connect host:443 -servername host" [ref=e895]:
+                  - code [ref=e896]: openssl s_client -connect host:443 -servername host
+                - cell "TLS handshake" [ref=e897]
+                - cell "-servername 빼면 SNI 미전송으로 다른 인증서" [ref=e898]:
+                  - code [ref=e899]: "-servername"
+                  - text: 빼면 SNI 미전송으로 다른 인증서
+          - generic [ref=e900]:
+            - generic [ref=e901]: 주의
+            - paragraph [ref=e902]:
+              - code [ref=e903]: tcpdump
+              - text: 는
+              - code [ref=e904]: sudo
+              - text: 필요, 트래픽에 PII/토큰이 캡처될 수 있으니 파일 저장·공유 주의.
+              - code [ref=e905]: traceroute
+              - text: /
+              - code [ref=e906]: mtr
+              - text: 는 방화벽·ICMP rate limit로 hop이
+              - code [ref=e907]: "*"
+              - text: 로 비어도 정상일 수 있어 경로 단정 금지.
+        - generic [ref=e908]:
+          - generic [ref=e909]:
+            - generic [ref=e910]: NW-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e911]
+          - table [ref=e912]:
+            - rowgroup [ref=e913]:
+              - row "선택 언제 쓰나 주의" [ref=e914]:
+                - columnheader "선택" [ref=e915]
+                - columnheader "언제 쓰나" [ref=e916]
+                - columnheader "주의" [ref=e917]
+              - row "TCP 순서·신뢰성 필요 (HTTP, DB, gRPC) handshake·재전송 지연, head-of-line blocking" [ref=e918]:
+                - cell "TCP" [ref=e919]
+                - cell "순서·신뢰성 필요 (HTTP, DB, gRPC)" [ref=e920]
+                - cell "handshake·재전송 지연, head-of-line blocking" [ref=e921]
+              - row "UDP 저지연·손실 허용 (DNS, QUIC, 실시간) 재전송·순서 보장 없음, 앱이 책임" [ref=e922]:
+                - cell "UDP" [ref=e923]
+                - cell "저지연·손실 허용 (DNS, QUIC, 실시간)" [ref=e924]
+                - cell "재전송·순서 보장 없음, 앱이 책임" [ref=e925]
+              - row "A / AAAA 이름 → IPv4 / IPv6 AAAA만 있고 IPv6 경로 없으면 timeout" [ref=e926]:
+                - cell "A / AAAA" [ref=e927]
+                - cell "이름 → IPv4 / IPv6" [ref=e928]
+                - cell "AAAA만 있고 IPv6 경로 없으면 timeout" [ref=e929]
+              - row "CNAME 이름 → 다른 이름 (별칭) chain이 길면 지연, zone apex엔 못 씀" [ref=e930]:
+                - cell "CNAME" [ref=e931]
+                - cell "이름 → 다른 이름 (별칭)" [ref=e932]
+                - cell "chain이 길면 지연, zone apex엔 못 씀" [ref=e933]
+              - row "TLS 1.2 vs 1.3 1.3 우선 (RTT 적고 안전) 구형 클라이언트/미들박스는 1.2 fallback" [ref=e934]:
+                - cell "TLS 1.2 vs 1.3" [ref=e935]
+                - cell "1.3 우선 (RTT 적고 안전)" [ref=e936]
+                - cell "구형 클라이언트/미들박스는 1.2 fallback" [ref=e937]
+              - row "SNI 한 IP에 여러 인증서일 때 hostname 전달 IP 직접 접속·SNI 누락 시 잘못된 인증서" [ref=e938]:
+                - cell "SNI" [ref=e939]
+                - cell "한 IP에 여러 인증서일 때 hostname 전달" [ref=e940]
+                - cell "IP 직접 접속·SNI 누락 시 잘못된 인증서" [ref=e941]
+              - row "timeout SYN에 응답 없음 → drop/방화벽/route 서버 도달 자체를 의심" [ref=e942]:
+                - cell "timeout" [ref=e943]
+                - cell "SYN에 응답 없음 → drop/방화벽/route" [ref=e944]
+                - cell "서버 도달 자체를 의심" [ref=e945]
+              - row "connection refused RST 응답 → 호스트는 있는데 포트 안 들음 앱 미기동, 잘못된 포트, localhost bind" [ref=e946]:
+                - cell "connection refused" [ref=e947]
+                - cell "RST 응답 → 호스트는 있는데 포트 안 들음" [ref=e948]
+                - cell "앱 미기동, 잘못된 포트, localhost bind" [ref=e949]
+              - row "no route to host 경로 없음 → route table/subnet 방화벽 drop과 구분, L3 문제" [ref=e950]:
+                - cell "no route to host" [ref=e951]
+                - cell "경로 없음 → route table/subnet" [ref=e952]
+                - cell "방화벽 drop과 구분, L3 문제" [ref=e953]
+        - generic [ref=e954]:
+          - generic [ref=e955]:
+            - generic [ref=e956]: NW-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e957]
+          - table [ref=e958]:
+            - rowgroup [ref=e959]:
+              - row "신호 왜 위험 즉시 확인" [ref=e960]:
+                - columnheader "신호" [ref=e961]
+                - columnheader "왜 위험" [ref=e962]
+                - columnheader "즉시 확인" [ref=e963]
+              - row "ping 성공만으로 정상 판단 ICMP 성공과 TCP/TLS/HTTP 성공은 별개 nc -vz host port , curl -v , 서버 access log" [ref=e964]:
+                - cell "ping 성공만으로 정상 판단" [ref=e965]
+                - cell "ICMP 성공과 TCP/TLS/HTTP 성공은 별개" [ref=e966]
+                - cell "nc -vz host port , curl -v , 서버 access log" [ref=e967]:
+                  - code [ref=e968]: nc -vz host port
+                  - text: ","
+                  - code [ref=e969]: curl -v
+                  - text: ", 서버 access log"
+              - row "return path/방화벽 미확인 outbound만 열고 응답 경로·inbound 규칙을 안 봄 양쪽 firewall, route table, stateless 장비 양방향 rule" [ref=e970]:
+                - cell "return path/방화벽 미확인" [ref=e971]
+                - cell "outbound만 열고 응답 경로·inbound 규칙을 안 봄" [ref=e972]
+                - cell "양쪽 firewall, route table, stateless 장비 양방향 rule" [ref=e973]
+              - row "DNS 캐시/TTL 간과 변경했는데 캐시된 옛 record로 접속 dig host @resolver 로 내부·외부 비교, TTL 확인" [ref=e974]:
+                - cell "DNS 캐시/TTL 간과" [ref=e975]
+                - cell "변경했는데 캐시된 옛 record로 접속" [ref=e976]
+                - cell "dig host @resolver 로 내부·외부 비교, TTL 확인" [ref=e977]:
+                  - code [ref=e978]: dig host @resolver
+                  - text: 로 내부·외부 비교, TTL 확인
+              - row "TLS SNI/체인 누락 SNI 미전송·중간 인증서 누락으로 handshake 실패 openssl s_client -connect host:443 -servername host" [ref=e979]:
+                - cell "TLS SNI/체인 누락" [ref=e980]
+                - cell "SNI 미전송·중간 인증서 누락으로 handshake 실패" [ref=e981]
+                - cell "openssl s_client -connect host:443 -servername host" [ref=e982]:
+                  - code [ref=e983]: openssl s_client -connect host:443 -servername host
+              - row "출발지·목적지·포트 미특정 \"열었다\"만으로는 검증 불가, 장애 시간 증가 source/dest/port/direction 4개를 명령에 박아 재현" [ref=e984]:
+                - cell "출발지·목적지·포트 미특정" [ref=e985]
+                - cell "\"열었다\"만으로는 검증 불가, 장애 시간 증가" [ref=e986]
+                - cell "source/dest/port/direction 4개를 명령에 박아 재현" [ref=e987]
+              - row "localhost bind 0.0.0.0 대신 127.0.0.1 bind로 외부 연결 거부 ss -tlnp 로 bind address 확인" [ref=e988]:
+                - cell "localhost bind" [ref=e989]
+                - cell "0.0.0.0 대신 127.0.0.1 bind로 외부 연결 거부" [ref=e990]
+                - cell "ss -tlnp 로 bind address 확인" [ref=e991]:
+                  - code [ref=e992]: ss -tlnp
+                  - text: 로 bind address 확인
+        - generic [ref=e993]:
+          - generic [ref=e994]:
+            - generic [ref=e995]: NW-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e996]
+          - generic [ref=e997]:
+            - generic [ref=e998]: L3-L7 TRIAGE
+            - text: 1. DNS —
+            - code [ref=e999]: dig +short host @resolver
+            - text: 로 이름 해석 확인 (내부/외부 비교)
+            - text: 2. TCP —
+            - code [ref=e1000]: nc -vz host port
+            - text: 로 도달성 확인
+            - text: 3. TLS —
+            - code [ref=e1001]: openssl s_client -connect host:443 -servername host
+            - text: 로 chain/SAN 확인
+            - text: 4. HTTP —
+            - code [ref=e1002]: curl -v https://host/path
+            - text: 로 status/redirect/header 확인
+            - text: 5. 서버 —
+            - code [ref=e1003]: ss -tlnp
+            - text: 로 bind, access log/target health 대조
+          - table [ref=e1004]:
+            - rowgroup [ref=e1005]:
+              - row "순서 질문 증거" [ref=e1006]:
+                - columnheader "순서" [ref=e1007]
+                - columnheader "질문" [ref=e1008]
+                - columnheader "증거" [ref=e1009]
+              - row "DNS 기대 IP로 해석되나, resolver별로 같나 dig record + TTL, 내부/외부 일치" [ref=e1010]:
+                - cell "DNS" [ref=e1011]
+                - cell "기대 IP로 해석되나, resolver별로 같나" [ref=e1012]
+                - cell "dig record + TTL, 내부/외부 일치" [ref=e1013]:
+                  - code [ref=e1014]: dig
+                  - text: record + TTL, 내부/외부 일치
+              - row "TCP 포트까지 패킷이 닿나 nc -vz succeeded (아니면 refused/timeout 구분)" [ref=e1015]:
+                - cell "TCP" [ref=e1016]
+                - cell "포트까지 패킷이 닿나" [ref=e1017]
+                - cell "nc -vz succeeded (아니면 refused/timeout 구분)" [ref=e1018]:
+                  - code [ref=e1019]: nc -vz
+                  - text: succeeded (아니면 refused/timeout 구분)
+              - row "TLS 인증서 신뢰·hostname 일치하나 openssl chain 검증, SAN에 host 포함, 미만료" [ref=e1020]:
+                - cell "TLS" [ref=e1021]
+                - cell "인증서 신뢰·hostname 일치하나" [ref=e1022]
+                - cell "openssl chain 검증, SAN에 host 포함, 미만료" [ref=e1023]:
+                  - code [ref=e1024]: openssl
+                  - text: chain 검증, SAN에 host 포함, 미만료
+              - row "HTTP 앱이 응답하나, 어느 계층 오류인가 curl -v status code, request id, upstream log" [ref=e1025]:
+                - cell "HTTP" [ref=e1026]
+                - cell "앱이 응답하나, 어느 계층 오류인가" [ref=e1027]
+                - cell "curl -v status code, request id, upstream log" [ref=e1028]:
+                  - code [ref=e1029]: curl -v
+                  - text: status code, request id, upstream log
+          - generic [ref=e1030]:
+            - generic [ref=e1031]: 중단 기준
+            - paragraph [ref=e1032]: 출발지·목적지·포트·방향을 특정하기 전엔 "네트워크 정상"으로 판단 금지. 한 계층에서 증거가 확정되면 다음 계층으로 내려가고, 상위 계층 수정 전 하위 계층 증거를 먼저 확보한다.
+        - generic [ref=e1034]:
+          - generic [ref=e1035]: SOURCE
+          - heading "DevOps" [level=2] [ref=e1036]
+        - generic [ref=e1037]:
+          - generic [ref=e1038]:
+            - generic [ref=e1039]: DO-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e1040]
+          - heading "kubectl — 상태 확인" [level=3] [ref=e1041]
+          - code [ref=e1043]: "kubectl get pods -o wide # 노드/IP까지 한눈에 kubectl get pods -w # 상태 변화 실시간 watch kubectl logs -f <pod> # 로그 follow kubectl logs <pod> --previous # 크래시 직전 컨테이너 로그 kubectl describe pod <pod> # 이벤트/스케줄링 실패 원인 kubectl get events --sort-by=.lastTimestamp # 최근 이벤트 시간순 kubectl top pod # 실시간 CPU/mem (metrics-server 필요)"
+          - heading "배포 상태·롤아웃" [level=3] [ref=e1044]
+          - code [ref=e1046]: "kubectl rollout status deploy/<x> # 롤아웃 완료까지 block kubectl rollout history deploy/<x> # revision 목록 kubectl rollout undo deploy/<x> # 직전 revision으로 롤백 kubectl rollout undo deploy/<x> --to-revision=<n> # 특정 revision kubectl rollout pause deploy/<x> # 카나리 중 진행 정지 kubectl rollout restart deploy/<x> # 이미지 태그 그대로 재기동"
+          - heading "실행 중인 artifact 특정 (digest / commit)" [level=3] [ref=e1047]
+          - code [ref=e1049]: "git rev-parse --short HEAD # 현재 commit kubectl get pod <pod> -o jsonpath='{..imageID}' # 실행 중 image digest kubectl get deploy <x> -o jsonpath='{..image}' # 배포된 image 태그 kubectl get cm <name> -o yaml # 적용된 config 내용"
+          - generic [ref=e1050]:
+            - generic [ref=e1051]: 주의
+            - paragraph [ref=e1052]:
+              - text: 태그(
+              - code [ref=e1053]: :latest
+              - text: ","
+              - code [ref=e1054]: :v1.2
+              - text: )는 재푸시되면 내용이 바뀔 수 있다. 무엇이 돌고 있는지 확정하려면 image digest(
+              - code [ref=e1055]: "@sha256:..."
+              - text: )를 봐라. digest 없이 "롤백했다"는 증거가 없다.
+          - heading "배포 검증 (health / 버전)" [level=3] [ref=e1056]
+          - code [ref=e1058]: "curl -f https://<host>/healthz # 실패 시 non-zero exit (게이트용) curl -fsS https://<host>/version # 배포 버전이 기대값인지 curl -s -o /dev/null -w '%{http_code}\\n' https://<host>/ # 상태코드만"
+          - heading "helm" [level=3] [ref=e1059]
+          - code [ref=e1061]: "helm upgrade --install <release> <chart> -f values.yaml # 없으면 설치, 있으면 갱신 helm diff upgrade <release> <chart> -f values.yaml # 적용 전 diff (plugin) helm history <release> # revision 이력 helm rollback <release> <revision> # 특정 revision 복구"
+          - generic [ref=e1062]:
+            - generic [ref=e1063]: 주의
+            - paragraph [ref=e1064]:
+              - text: helm rollback /
+              - code [ref=e1065]: kubectl rollout undo
+              - text: 는 앱 코드만 되돌린다. DB migration, message schema, 외부 side effect가 함께 나갔다면 롤백은 안전하지 않다 —
+              - link "ch4" [ref=e1066] [cursor=pointer]:
+                - /url: "#cheatdevops-ch4"
+              - text: 로.
+          - table [ref=e1067]:
+            - rowgroup [ref=e1068]:
+              - row "명령 용도 주의" [ref=e1069]:
+                - columnheader "명령" [ref=e1070]
+                - columnheader "용도" [ref=e1071]
+                - columnheader "주의" [ref=e1072]
+              - row "kubectl exec -it <pod> -- sh 컨테이너 진입 운영 pod 상태 오염 주의" [ref=e1073]:
+                - cell "kubectl exec -it <pod> -- sh" [ref=e1074]:
+                  - code [ref=e1075]: kubectl exec -it <pod> -- sh
+                - cell "컨테이너 진입" [ref=e1076]
+                - cell "운영 pod 상태 오염 주의" [ref=e1077]
+              - row "kubectl get rs ReplicaSet(=revision)별 pod 구/신 버전 공존 확인" [ref=e1078]:
+                - cell "kubectl get rs" [ref=e1079]:
+                  - code [ref=e1080]: kubectl get rs
+                - cell "ReplicaSet(=revision)별 pod" [ref=e1081]
+                - cell "구/신 버전 공존 확인" [ref=e1082]
+              - row "kubectl scale deploy/<x> --replicas=0 긴급 트래픽 차단 완전 중단 — drain 아님" [ref=e1083]:
+                - cell "kubectl scale deploy/<x> --replicas=0" [ref=e1084]:
+                  - code [ref=e1085]: kubectl scale deploy/<x> --replicas=0
+                - cell "긴급 트래픽 차단" [ref=e1086]
+                - cell "완전 중단 — drain 아님" [ref=e1087]
+              - row "kubectl diff -f <file> apply 전 서버 상태와 diff 적용 전 반드시 확인" [ref=e1088]:
+                - cell "kubectl diff -f <file>" [ref=e1089]:
+                  - code [ref=e1090]: kubectl diff -f <file>
+                - cell "apply 전 서버 상태와 diff" [ref=e1091]
+                - cell "적용 전 반드시 확인" [ref=e1092]
+              - row "kubectl get pod <pod> -o yaml 전체 spec 덤프 secret env 노출 주의" [ref=e1093]:
+                - cell "kubectl get pod <pod> -o yaml" [ref=e1094]:
+                  - code [ref=e1095]: kubectl get pod <pod> -o yaml
+                - cell "전체 spec 덤프" [ref=e1096]
+                - cell "secret env 노출 주의" [ref=e1097]
+        - generic [ref=e1098]:
+          - generic [ref=e1099]:
+            - generic [ref=e1100]: DO-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e1101]
+          - table [ref=e1102]:
+            - rowgroup [ref=e1103]:
+              - row "선택 언제 쓰나 주의" [ref=e1104]:
+                - columnheader "선택" [ref=e1105]
+                - columnheader "언제 쓰나" [ref=e1106]
+                - columnheader "주의" [ref=e1107]
+              - row "Rolling 자원 여유 없고 구/신 공존이 안전할 때 (기본값) 중간 상태에서 호환 깨지면 장애" [ref=e1108]:
+                - cell "Rolling" [ref=e1109]
+                - cell "자원 여유 없고 구/신 공존이 안전할 때 (기본값)" [ref=e1110]
+                - cell "중간 상태에서 호환 깨지면 장애" [ref=e1111]
+              - row "Blue-green 즉시 전환·즉시 롤백이 중요하고 자원 2배 감당 DB·queue consumer는 단순 전환 불가" [ref=e1112]:
+                - cell "Blue-green" [ref=e1113]
+                - cell "즉시 전환·즉시 롤백이 중요하고 자원 2배 감당" [ref=e1114]
+                - cell "DB·queue consumer는 단순 전환 불가" [ref=e1115]
+              - row "Canary 영향 반경을 작게 시작해 지표로 확대 중단 기준·관찰 창 없으면 그냥 \"조금 배포\"" [ref=e1116]:
+                - cell "Canary" [ref=e1117]
+                - cell "영향 반경을 작게 시작해 지표로 확대" [ref=e1118]
+                - cell "중단 기준·관찰 창 없으면 그냥 \"조금 배포\"" [ref=e1119]
+              - row "Rollback 직전 버전이 확실히 정상이고 데이터 변경 없음 DB/schema 동반 시 roll-forward 검토" [ref=e1120]:
+                - cell "Rollback" [ref=e1121]
+                - cell "직전 버전이 확실히 정상이고 데이터 변경 없음" [ref=e1122]
+                - cell "DB/schema 동반 시 roll-forward 검토" [ref=e1123]
+              - row "Roll-forward 롤백이 data loss·호환 깨짐을 유발할 때 수정 배포까지 시간 필요 — 그동안 완화책" [ref=e1124]:
+                - cell "Roll-forward" [ref=e1125]
+                - cell "롤백이 data loss·호환 깨짐을 유발할 때" [ref=e1126]
+                - cell "수정 배포까지 시간 필요 — 그동안 완화책" [ref=e1127]
+              - row "Feature flag off 문제 기능만 즉시 끄고 배포는 유지 flag 없으면 불가 — redeploy가 유일" [ref=e1128]:
+                - cell "Feature flag off" [ref=e1129]
+                - cell "문제 기능만 즉시 끄고 배포는 유지" [ref=e1130]
+                - cell "flag 없으면 불가 — redeploy가 유일" [ref=e1131]
+              - row "Redeploy flag로 못 끄는 코드 경로 문제 롤아웃 시간 + 재검증 필요" [ref=e1132]:
+                - cell "Redeploy" [ref=e1133]
+                - cell "flag로 못 끄는 코드 경로 문제" [ref=e1134]
+                - cell "롤아웃 시간 + 재검증 필요" [ref=e1135]
+              - row "Config 변경 동작만 바꾸면 되고 코드는 그대로 config drift·미기록 시 재현 불가" [ref=e1136]:
+                - cell "Config 변경" [ref=e1137]
+                - cell "동작만 바꾸면 되고 코드는 그대로" [ref=e1138]
+                - cell "config drift·미기록 시 재현 불가" [ref=e1139]
+              - row "Code 변경 로직 자체를 고쳐야 할 때 새 artifact = 새 digest = 재검증" [ref=e1140]:
+                - cell "Code 변경" [ref=e1141]
+                - cell "로직 자체를 고쳐야 할 때" [ref=e1142]
+                - cell "새 artifact = 새 digest = 재검증" [ref=e1143]
+        - generic [ref=e1144]:
+          - generic [ref=e1145]:
+            - generic [ref=e1146]: DO-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e1147]
+          - table [ref=e1148]:
+            - rowgroup [ref=e1149]:
+              - row "신호 왜 위험 즉시 확인" [ref=e1150]:
+                - columnheader "신호" [ref=e1151]
+                - columnheader "왜 위험" [ref=e1152]
+                - columnheader "즉시 확인" [ref=e1153]
+              - 'row "어떤 artifact가 배포됐는지 모름 (digest 미확인) 무엇이 돌고 있는지 추적 불가 → 롤백 대상도 불명 kubectl get pod -o jsonpath=''{..imageID}'' 로 digest, commit SHA 연결" [ref=e1154]':
+                - cell "어떤 artifact가 배포됐는지 모름 (digest 미확인)" [ref=e1155]
+                - cell "무엇이 돌고 있는지 추적 불가 → 롤백 대상도 불명" [ref=e1156]
+                - 'cell "kubectl get pod -o jsonpath=''{..imageID}'' 로 digest, commit SHA 연결" [ref=e1157]':
+                  - code [ref=e1158]: "kubectl get pod -o jsonpath='{..imageID}'"
+                  - text: 로 digest, commit SHA 연결
+              - row "rollback을 실행만 하고 검증 안 함 \"되돌렸다\" 착각 — 태그 캐시/파드 미교체로 구 버전이 그대로 rollout status + curl /version + digest 재확인" [ref=e1159]:
+                - cell "rollback을 실행만 하고 검증 안 함" [ref=e1160]
+                - cell "\"되돌렸다\" 착각 — 태그 캐시/파드 미교체로 구 버전이 그대로" [ref=e1161]
+                - cell "rollout status + curl /version + digest 재확인" [ref=e1162]:
+                  - code [ref=e1163]: rollout status
+                  - text: +
+                  - code [ref=e1164]: curl /version
+                  - text: + digest 재확인
+              - row "health check 없이 배포 성공 판정 파드 Running이어도 앱은 죽어있을 수 있음 readiness probe, curl -f /healthz exit code" [ref=e1165]:
+                - cell "health check 없이 배포 성공 판정" [ref=e1166]
+                - cell "파드 Running이어도 앱은 죽어있을 수 있음" [ref=e1167]
+                - cell "readiness probe, curl -f /healthz exit code" [ref=e1168]:
+                  - text: readiness probe,
+                  - code [ref=e1169]: curl -f /healthz
+                  - text: exit code
+              - row "config drift (수동 변경 누적) 선언 상태와 실제가 달라 재현·복구 깨짐 kubectl diff -f / helm diff 로 실제 vs 선언 비교" [ref=e1170]:
+                - cell "config drift (수동 변경 누적)" [ref=e1171]
+                - cell "선언 상태와 실제가 달라 재현·복구 깨짐" [ref=e1172]
+                - cell "kubectl diff -f / helm diff 로 실제 vs 선언 비교" [ref=e1173]:
+                  - code [ref=e1174]: kubectl diff -f
+                  - text: /
+                  - code [ref=e1175]: helm diff
+                  - text: 로 실제 vs 선언 비교
+              - row "secret이 로그·image·env에 노출 폐기·재발급이 공급망 전체 이슈로 확대 CI 로그 masking, image layer, get pod -o yaml env 점검" [ref=e1176]:
+                - cell "secret이 로그·image·env에 노출" [ref=e1177]
+                - cell "폐기·재발급이 공급망 전체 이슈로 확대" [ref=e1178]
+                - cell "CI 로그 masking, image layer, get pod -o yaml env 점검" [ref=e1179]:
+                  - text: CI 로그 masking, image layer,
+                  - code [ref=e1180]: get pod -o yaml
+                  - text: env 점검
+              - row "DB migration이 배포와 함께 나감 롤백 시 데이터 shape 깨짐 — 단순 되돌리기 불가 expand/contract 여부, 구/신 앱 동시 동작 가능한지" [ref=e1181]:
+                - cell "DB migration이 배포와 함께 나감" [ref=e1182]
+                - cell "롤백 시 데이터 shape 깨짐 — 단순 되돌리기 불가" [ref=e1183]
+                - cell "expand/contract 여부, 구/신 앱 동시 동작 가능한지" [ref=e1184]
+        - generic [ref=e1185]:
+          - generic [ref=e1186]:
+            - generic [ref=e1187]: DO-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e1188]
+          - generic [ref=e1189]:
+            - generic [ref=e1190]: DEPLOYMENT FAILURE TRIAGE
+            - text: 재시도·롤백 누르기 전에 먼저 무엇이 돌고 있고, 무엇이 함께 바뀌었는지 증거를 고정한다.
+            - text: 1. 실행 중 image digest · config version 확인
+            - text: 2. health check / 상태코드 확인
+            - text: 3. error rate · latency 확인
+            - text: 4. 데이터 변경(DB migration·schema) 동반 여부 확인
+            - text: 5. rollback 후보 결정 — 단, 데이터 변경 동반이면 rollback 보류
+          - table [ref=e1191]:
+            - rowgroup [ref=e1192]:
+              - row "순서 질문 증거" [ref=e1193]:
+                - columnheader "순서" [ref=e1194]
+                - columnheader "질문" [ref=e1195]
+                - columnheader "증거" [ref=e1196]
+              - 'row "1 지금 운영에 돌고 있는 image digest와 config version은? kubectl get pod -o jsonpath=''{..imageID}'' , cm/secret version, commit SHA" [ref=e1197]':
+                - cell "1" [ref=e1198]
+                - cell "지금 운영에 돌고 있는 image digest와 config version은?" [ref=e1199]
+                - 'cell "kubectl get pod -o jsonpath=''{..imageID}'' , cm/secret version, commit SHA" [ref=e1200]':
+                  - code [ref=e1201]: "kubectl get pod -o jsonpath='{..imageID}'"
+                  - text: ", cm/secret version, commit SHA"
+              - row "2 앱이 실제로 살아있나? health가 통과하나? curl -f /healthz exit code, readiness probe, describe pod 이벤트" [ref=e1202]:
+                - cell "2" [ref=e1203]
+                - cell "앱이 실제로 살아있나? health가 통과하나?" [ref=e1204]
+                - cell "curl -f /healthz exit code, readiness probe, describe pod 이벤트" [ref=e1205]:
+                  - code [ref=e1206]: curl -f /healthz
+                  - text: exit code, readiness probe,
+                  - code [ref=e1207]: describe pod
+                  - text: 이벤트
+              - row "3 사용자 영향은 어디에? error rate / latency 어디서 오르나? dashboard, 상태코드 분포, 특정 route/tenant" [ref=e1208]:
+                - cell "3" [ref=e1209]
+                - cell "사용자 영향은 어디에? error rate / latency 어디서 오르나?" [ref=e1210]
+                - cell "dashboard, 상태코드 분포, 특정 route/tenant" [ref=e1211]
+              - row "4 이번 배포에 DB migration·schema·flag가 함께 나갔나? migration log, rollout history , flag audit" [ref=e1212]:
+                - cell "4" [ref=e1213]
+                - cell "이번 배포에 DB migration·schema·flag가 함께 나갔나?" [ref=e1214]
+                - cell "migration log, rollout history , flag audit" [ref=e1215]:
+                  - text: migration log,
+                  - code [ref=e1216]: rollout history
+                  - text: ", flag audit"
+              - row "5 rollback / pause / flag off 중 무엇을 먼저? runbook, on-call 승인 기록" [ref=e1217]:
+                - cell "5" [ref=e1218]
+                - cell "rollback / pause / flag off 중 무엇을 먼저?" [ref=e1219]
+                - cell "runbook, on-call 승인 기록" [ref=e1220]
+          - generic [ref=e1221]:
+            - generic [ref=e1222]: 복구·중단 기준
+            - paragraph [ref=e1223]:
+              - text: 데이터 변경(DB migration·schema)이 동반된 배포는 rollback 보류 — 구 버전이 새 schema를 못 읽으면 롤백이 2차 장애가 된다. 이 경우 roll-forward(수정 배포) 또는
+              - code [ref=e1224]: kubectl rollout pause
+              - text: 로 확산부터 멈추고 호환성을 확인한 뒤 결정한다.
+        - generic [ref=e1226]:
+          - generic [ref=e1227]: SOURCE
+          - heading "Linux" [level=2] [ref=e1228]
+        - generic [ref=e1229]:
+          - generic [ref=e1230]:
+            - generic [ref=e1231]: LX-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e1232]
+          - heading "프로세스" [level=3] [ref=e1233]
+          - code [ref=e1235]: "# 메모리 많이 먹는 순으로 상위 프로세스 ps aux --sort=-%mem | head # CPU 많이 먹는 순 ps aux --sort=-%cpu | head # 실시간 모니터 (htop 있으면 더 편함) top htop # 특정 프로세스 찾기 pgrep -a node ps aux | grep '[n]ode' # 정상 종료 요청 (SIGTERM) → 안 죽으면 강제 종료 kill -TERM <pid> kill -9 <pid> # 이름으로 종료 pkill -TERM -f 'my-service'"
+          - heading "로그" [level=3] [ref=e1236]
+          - code [ref=e1238]: "# systemd 서비스 로그 실시간 journalctl -u <svc> -f # 최근 시간 범위만 journalctl -u <svc> --since '10 min ago' journalctl --since '2026-07-01 09:00' --until '2026-07-01 10:00' # 부팅 이후 / 이전 부팅 journalctl -b journalctl -b -1 # 파일 로그 실시간 추적 (rotation엔 -F) tail -f app.log tail -F app.log # 여러 로그에서 에러 재귀 검색 grep -rn 'err' /var/log grep -rni 'error\\|panic\\|fatal' /var/log/myapp/"
+          - heading "디스크" [level=3] [ref=e1239]
+          - code [ref=e1241]: "# 파일시스템 사용량 df -h df -i # inode 고갈은 별개로 확인 # 현재 디렉터리에서 큰 것부터 du -sh * | sort -h du -xhd1 /var | sort -h # 삭제됐지만 프로세스가 열고 있어 공간 점유 중인 파일 lsof +L1"
+          - generic [ref=e1242]:
+            - generic [ref=e1243]: 주의
+            - paragraph [ref=e1244]:
+              - code [ref=e1245]: rm -rf
+              - text: 와
+              - code [ref=e1246]: kill -9
+              - text: 는 되돌릴 수 없다. 삭제 전
+              - code [ref=e1247]: pwd
+              - text: 와 대상 경로 확장 결과를 먼저 출력하고, 종료는
+              - code [ref=e1248]: kill -TERM
+              - text: 으로 시작한다.
+              - code [ref=e1249]: kill -9
+              - text: 는 flush/cleanup을 건너뛴다.
+          - heading "포트·소켓" [level=3] [ref=e1250]
+          - code [ref=e1252]: "# 특정 포트를 누가 쓰는지 lsof -i :8080 # LISTEN 중인 TCP 소켓과 프로세스 ss -tlnp # 모든 연결 상태 ss -tunap"
+          - heading "서비스·검색" [level=3] [ref=e1253]
+          - table [ref=e1254]:
+            - rowgroup [ref=e1255]:
+              - row "명령 용도 주의" [ref=e1256]:
+                - columnheader "명령" [ref=e1257]
+                - columnheader "용도" [ref=e1258]
+                - columnheader "주의" [ref=e1259]
+              - row "systemctl status <svc> 서비스 상태·최근 로그·PID 확인 Active/exit code/restart 횟수 함께 본다" [ref=e1260]:
+                - cell "systemctl status <svc>" [ref=e1261]:
+                  - code [ref=e1262]: systemctl status <svc>
+                - cell "서비스 상태·최근 로그·PID 확인" [ref=e1263]
+                - cell "Active/exit code/restart 횟수 함께 본다" [ref=e1264]
+              - row "systemctl restart <svc> 서비스 재시작 재시작 전 영향 범위·rollback 확인" [ref=e1265]:
+                - cell "systemctl restart <svc>" [ref=e1266]:
+                  - code [ref=e1267]: systemctl restart <svc>
+                - cell "서비스 재시작" [ref=e1268]
+                - cell "재시작 전 영향 범위·rollback 확인" [ref=e1269]
+              - row "find / -name '*.log' -mtime -1 최근 1일 내 수정된 로그 찾기 / 전체는 느림, 경로 좁히기" [ref=e1270]:
+                - cell "find / -name '*.log' -mtime -1" [ref=e1271]:
+                  - code [ref=e1272]: find / -name '*.log' -mtime -1
+                - cell "최근 1일 내 수정된 로그 찾기" [ref=e1273]
+                - cell "/ 전체는 느림, 경로 좁히기" [ref=e1274]:
+                  - code [ref=e1275]: /
+                  - text: 전체는 느림, 경로 좁히기
+              - row "free -h 메모리·swap 사용량 available와 free는 다르다" [ref=e1276]:
+                - cell "free -h" [ref=e1277]:
+                  - code [ref=e1278]: free -h
+                - cell "메모리·swap 사용량" [ref=e1279]
+                - cell "available와 free는 다르다" [ref=e1280]
+              - row "uptime load average 확인 코어 수 대비로 해석" [ref=e1281]:
+                - cell "uptime" [ref=e1282]:
+                  - code [ref=e1283]: uptime
+                - cell "load average 확인" [ref=e1284]
+                - cell "코어 수 대비로 해석" [ref=e1285]
+        - generic [ref=e1286]:
+          - generic [ref=e1287]:
+            - generic [ref=e1288]: LX-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e1289]
+          - table [ref=e1290]:
+            - rowgroup [ref=e1291]:
+              - row "선택 언제 쓰나 주의" [ref=e1292]:
+                - columnheader "선택" [ref=e1293]
+                - columnheader "언제 쓰나" [ref=e1294]
+                - columnheader "주의" [ref=e1295]
+              - row "SIGTERM (kill -15 ) 기본. 프로세스에 정리할 시간을 줌 graceful shutdown 로그를 먼저 확인" [ref=e1296]:
+                - cell "SIGTERM (kill -15 )" [ref=e1297]:
+                  - code [ref=e1298]: SIGTERM
+                  - text: (
+                  - code [ref=e1299]: kill -15
+                  - text: )
+                - cell "기본. 프로세스에 정리할 시간을 줌" [ref=e1300]
+                - cell "graceful shutdown 로그를 먼저 확인" [ref=e1301]
+              - row "SIGKILL (kill -9 ) SIGTERM 실패 시 마지막 수단 cleanup hook·flush 없이 즉사, 상태 손상 가능" [ref=e1302]:
+                - cell "SIGKILL (kill -9 )" [ref=e1303]:
+                  - code [ref=e1304]: SIGKILL
+                  - text: (
+                  - code [ref=e1305]: kill -9
+                  - text: )
+                - cell "SIGTERM 실패 시 마지막 수단" [ref=e1306]
+                - cell "cleanup hook·flush 없이 즉사, 상태 손상 가능" [ref=e1307]
+              - row "hard link 같은 inode에 이름 여러 개, 원본 지워도 데이터 유지 파일시스템 경계·디렉터리 불가" [ref=e1308]:
+                - cell "hard link" [ref=e1309]
+                - cell "같은 inode에 이름 여러 개, 원본 지워도 데이터 유지" [ref=e1310]
+                - cell "파일시스템 경계·디렉터리 불가" [ref=e1311]
+              - row "soft link (ln -s ) 경로를 가리키는 참조, 파일시스템 넘나듦 원본 지우면 dangling link" [ref=e1312]:
+                - cell "soft link (ln -s )" [ref=e1313]:
+                  - text: soft link (
+                  - code [ref=e1314]: ln -s
+                  - text: )
+                - cell "경로를 가리키는 참조, 파일시스템 넘나듦" [ref=e1315]
+                - cell "원본 지우면 dangling link" [ref=e1316]
+              - row "> 파일 새로 덮어쓰기 기존 내용 즉시 날아감" [ref=e1317]:
+                - cell ">" [ref=e1318]:
+                  - code [ref=e1319]: ">"
+                - cell "파일 새로 덮어쓰기" [ref=e1320]
+                - cell "기존 내용 즉시 날아감" [ref=e1321]
+              - row ">> 파일 끝에 이어붙이기 로그 누적엔 이쪽" [ref=e1322]:
+                - cell ">>" [ref=e1323]:
+                  - code [ref=e1324]: ">>"
+                - cell "파일 끝에 이어붙이기" [ref=e1325]
+                - cell "로그 누적엔 이쪽" [ref=e1326]
+              - row "systemd 상시 데몬, 의존성·재시작·로그 관리 필요할 때 unit 파일과 journal에 통합" [ref=e1327]:
+                - cell "systemd" [ref=e1328]
+                - cell "상시 데몬, 의존성·재시작·로그 관리 필요할 때" [ref=e1329]
+                - cell "unit 파일과 journal에 통합" [ref=e1330]
+              - row "cron 정해진 시각에 주기 실행 환경변수·PATH가 셸과 다름" [ref=e1331]:
+                - cell "cron" [ref=e1332]
+                - cell "정해진 시각에 주기 실행" [ref=e1333]
+                - cell "환경변수·PATH가 셸과 다름" [ref=e1334]
+        - generic [ref=e1335]:
+          - generic [ref=e1336]:
+            - generic [ref=e1337]: LX-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e1338]
+          - table [ref=e1339]:
+            - rowgroup [ref=e1340]:
+              - row "신호 왜 위험 즉시 확인" [ref=e1341]:
+                - columnheader "신호" [ref=e1342]
+                - columnheader "왜 위험" [ref=e1343]
+                - columnheader "즉시 확인" [ref=e1344]
+              - row "디스크 100%인데 df 상 용량이 남아 보임 삭제됐지만 프로세스가 연 파일이 공간을 점유 lsof +L1 → 해당 프로세스 restart" [ref=e1345]:
+                - cell "디스크 100%인데 df 상 용량이 남아 보임" [ref=e1346]:
+                  - text: 디스크 100%인데
+                  - code [ref=e1347]: df
+                  - text: 상 용량이 남아 보임
+                - cell "삭제됐지만 프로세스가 연 파일이 공간을 점유" [ref=e1348]
+                - cell "lsof +L1 → 해당 프로세스 restart" [ref=e1349]:
+                  - code [ref=e1350]: lsof +L1
+                  - text: → 해당 프로세스 restart
+              - 'row "좀비(defunct)·고아 프로세스 누적 부모가 wait() 로 회수(reaping)하지 않음. 컨테이너에선 PID 1이 init로서 reaping 책임 ps aux | grep defunct , 컨테이너면 init(예: tini) 여부" [ref=e1351]':
+                - cell "좀비(defunct)·고아 프로세스 누적" [ref=e1352]
+                - cell "부모가 wait() 로 회수(reaping)하지 않음. 컨테이너에선 PID 1이 init로서 reaping 책임" [ref=e1353]:
+                  - text: 부모가
+                  - code [ref=e1354]: wait()
+                  - text: 로 회수(reaping)하지 않음. 컨테이너에선 PID 1이 init로서 reaping 책임
+                - 'cell "ps aux | grep defunct , 컨테이너면 init(예: tini) 여부" [ref=e1355]':
+                  - code [ref=e1356]: ps aux | grep defunct
+                  - text: ", 컨테이너면 init(예: tini) 여부"
+              - row "프로세스가 갑자기 죽고 로그에 흔적 없음 OOM killer가 메모리 부족으로 강제 종료 dmesg | grep -i 'oom\\|killed' , journalctl -k" [ref=e1357]:
+                - cell "프로세스가 갑자기 죽고 로그에 흔적 없음" [ref=e1358]
+                - cell "OOM killer가 메모리 부족으로 강제 종료" [ref=e1359]
+                - cell "dmesg | grep -i 'oom\\|killed' , journalctl -k" [ref=e1360]:
+                  - code [ref=e1361]: dmesg | grep -i 'oom\|killed'
+                  - text: ","
+                  - code [ref=e1362]: journalctl -k
+              - row "chmod 777 남용 누구나 쓰기·실행 가능, 권한 문제를 덮기만 함 id , stat , namei -l <path> 로 실제 원인" [ref=e1363]:
+                - cell "chmod 777 남용" [ref=e1364]:
+                  - code [ref=e1365]: chmod 777
+                  - text: 남용
+                - cell "누구나 쓰기·실행 가능, 권한 문제를 덮기만 함" [ref=e1366]
+                - cell "id , stat , namei -l <path> 로 실제 원인" [ref=e1367]:
+                  - code [ref=e1368]: id
+                  - text: ","
+                  - code [ref=e1369]: stat
+                  - text: ","
+                  - code [ref=e1370]: namei -l <path>
+                  - text: 로 실제 원인
+              - row "로그 로테이션 부재 단일 로그 파일이 디스크를 서서히 채움 ls -lh 로 크기, logrotate 설정 확인" [ref=e1371]:
+                - cell "로그 로테이션 부재" [ref=e1372]
+                - cell "단일 로그 파일이 디스크를 서서히 채움" [ref=e1373]
+                - cell "ls -lh 로 크기, logrotate 설정 확인" [ref=e1374]:
+                  - code [ref=e1375]: ls -lh
+                  - text: 로 크기,
+                  - code [ref=e1376]: logrotate
+                  - text: 설정 확인
+              - row "보는 로그 파일과 앱이 쓰는 파일이 다름 rotation으로 inode가 바뀜 tail -F , journalctl --since" [ref=e1377]:
+                - cell "보는 로그 파일과 앱이 쓰는 파일이 다름" [ref=e1378]
+                - cell "rotation으로 inode가 바뀜" [ref=e1379]
+                - cell "tail -F , journalctl --since" [ref=e1380]:
+                  - code [ref=e1381]: tail -F
+                  - text: ","
+                  - code [ref=e1382]: journalctl --since
+        - generic [ref=e1383]:
+          - generic [ref=e1384]:
+            - generic [ref=e1385]: LX-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e1386]
+          - generic [ref=e1387]:
+            - generic [ref=e1388]: DISK FULL TRIAGE
+            - text: "1."
+            - code [ref=e1389]: df -h
+            - text: ·
+            - code [ref=e1390]: df -i
+            - text: 로 block/inode 중 무엇이 찼는지 구분
+            - text: "2."
+            - code [ref=e1391]: du -xhd1 /path | sort -h
+            - text: 로 큰 디렉터리 추적
+            - text: "3."
+            - code [ref=e1392]: lsof +L1
+            - text: 로 삭제됐지만 열린 파일 확인 (핵심 함정)
+            - text: 4. 로그·코어덤프(
+            - code [ref=e1393]: /var/log
+            - text: ","
+            - code [ref=e1394]: core.*
+            - text: ) 크기 확인
+            - text: 5. 백업·owner·서비스 영향 확인 후 안전 삭제
+          - table [ref=e1395]:
+            - rowgroup [ref=e1396]:
+              - row "순서 질문 증거" [ref=e1397]:
+                - columnheader "순서" [ref=e1398]
+                - columnheader "질문" [ref=e1399]
+                - columnheader "증거" [ref=e1400]
+              - row "1 block이 찼나 inode가 찼나? df -h , df -i 의 Use%" [ref=e1401]:
+                - cell "1" [ref=e1402]
+                - cell "block이 찼나 inode가 찼나?" [ref=e1403]
+                - cell "df -h , df -i 의 Use%" [ref=e1404]:
+                  - code [ref=e1405]: df -h
+                  - text: ","
+                  - code [ref=e1406]: df -i
+                  - text: 의 Use%
+              - row "2 어느 디렉터리가 큰가? du -xhd1 /path | sort -h" [ref=e1407]:
+                - cell "2" [ref=e1408]
+                - cell "어느 디렉터리가 큰가?" [ref=e1409]
+                - cell "du -xhd1 /path | sort -h" [ref=e1410]:
+                  - code [ref=e1411]: du -xhd1 /path | sort -h
+              - row "3 지웠는데 공간이 안 돌아오나? lsof +L1 의 열린 삭제 파일" [ref=e1412]:
+                - cell "3" [ref=e1413]
+                - cell "지웠는데 공간이 안 돌아오나?" [ref=e1414]
+                - cell "lsof +L1 의 열린 삭제 파일" [ref=e1415]:
+                  - code [ref=e1416]: lsof +L1
+                  - text: 의 열린 삭제 파일
+              - row "4 로그·덤프가 원인인가? 큰 .log , core.* 파일" [ref=e1417]:
+                - cell "4" [ref=e1418]
+                - cell "로그·덤프가 원인인가?" [ref=e1419]
+                - cell "큰 .log , core.* 파일" [ref=e1420]:
+                  - text: 큰
+                  - code [ref=e1421]: .log
+                  - text: ","
+                  - code [ref=e1422]: core.*
+                  - text: 파일
+          - generic [ref=e1423]:
+            - generic [ref=e1424]: 복구·중단
+            - paragraph [ref=e1425]: 3번에서 열린 삭제 파일이 잡히면 파일을 더 지우지 말고 해당 프로세스를 restart해 fd를 놓게 한다. 대상 경로를 눈으로 확인하지 못하면 삭제를 중단한다.
+        - generic [ref=e1427]:
+          - generic [ref=e1428]: SOURCE
+          - heading "Docker" [level=2] [ref=e1429]
+        - generic [ref=e1430]:
+          - generic [ref=e1431]:
+            - generic [ref=e1432]: DK-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e1433]
+          - heading "컨테이너 상태 · 로그" [level=3] [ref=e1434]
+          - code [ref=e1436]: "docker ps # 실행 중인 컨테이너 docker ps -a # 종료된 것 포함 전체 + EXIT CODE docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}' docker logs -f <c> # 로그 실시간 추적 (가장 자주 씀) docker logs --tail 100 <c> # 마지막 100줄만 docker logs --since 10m <c> # 최근 10분치만 docker stats # CPU/MEM/NET 실시간 (Ctrl+C로 종료) docker stats --no-stream # 한 번만 찍고 종료"
+          - heading "내부 진입 · 검사" [level=3] [ref=e1437]
+          - code [ref=e1439]: "docker exec -it <c> sh # 컨테이너 내부 shell (alpine) docker exec -it <c> bash # bash 있는 이미지 docker exec <c> env # 주입된 env 덤프 docker inspect <c> # 전체 설정(mount/env/network) JSON docker inspect --format '{{.State.ExitCode}}' <c> docker inspect --format '{{json .Mounts}}' <c> docker inspect --format '{{.Id}}' <img> # 이미지 digest 고정 확인 docker port <c> # 포트 매핑 확인"
+          - heading "이미지 · 빌드" [level=3] [ref=e1440]
+          - code [ref=e1442]: "docker build -t app:tag . # 태그 박아서 빌드 (latest 금지) docker build --no-cache -t app:tag . # 캐시 무시하고 처음부터 docker build --target builder -t x . # multi-stage 특정 stage만 docker history app:tag # layer별 크기 · 명령 추적 docker images # 로컬 이미지 목록 docker run --rm -it --entrypoint sh app:tag # 시작 못하는 이미지 진입"
+          - heading "Compose" [level=3] [ref=e1443]
+          - code [ref=e1445]: "docker compose up -d # 백그라운드로 전체 기동 docker compose up -d --build # 이미지 재빌드 후 기동 docker compose logs -f # 전체 서비스 로그 추적 docker compose logs -f <svc> # 특정 서비스만 docker compose ps # 서비스 상태 docker compose config # .env 병합된 최종 설정 확인 docker compose down # 컨테이너+네트워크 정리 docker compose down -v # 볼륨까지 삭제 (데이터 날아감) docker compose exec <svc> sh # 서비스 내부 진입"
+          - table [ref=e1446]:
+            - rowgroup [ref=e1447]:
+              - row "명령 용도 주의" [ref=e1448]:
+                - columnheader "명령" [ref=e1449]
+                - columnheader "용도" [ref=e1450]
+                - columnheader "주의" [ref=e1451]
+              - row "docker ps -a 종료 컨테이너 EXIT CODE 확인 STATUS 컬럼이 원인 첫 단서" [ref=e1452]:
+                - cell "docker ps -a" [ref=e1453]:
+                  - code [ref=e1454]: docker ps -a
+                - cell "종료 컨테이너 EXIT CODE 확인" [ref=e1455]
+                - cell "STATUS 컬럼이 원인 첫 단서" [ref=e1456]
+              - row "docker logs -f <c> 앱 로그 실시간 앱이 stdout/stderr로 찍어야 보임" [ref=e1457]:
+                - cell "docker logs -f <c>" [ref=e1458]:
+                  - code [ref=e1459]: docker logs -f <c>
+                - cell "앱 로그 실시간" [ref=e1460]
+                - cell "앱이 stdout/stderr로 찍어야 보임" [ref=e1461]
+              - row "docker exec -it <c> sh 실행 중 컨테이너 진입 distroless엔 shell 없음" [ref=e1462]:
+                - cell "docker exec -it <c> sh" [ref=e1463]:
+                  - code [ref=e1464]: docker exec -it <c> sh
+                - cell "실행 중 컨테이너 진입" [ref=e1465]
+                - cell "distroless엔 shell 없음" [ref=e1466]
+              - row "docker cp <c>:/path ./ 컨테이너 파일 밖으로 복사 디버깅용, 영속 수단 아님" [ref=e1467]:
+                - cell "docker cp <c>:/path ./" [ref=e1468]:
+                  - code [ref=e1469]: docker cp <c>:/path ./
+                - cell "컨테이너 파일 밖으로 복사" [ref=e1470]
+                - cell "디버깅용, 영속 수단 아님" [ref=e1471]
+              - row "docker rm -f <c> 강제 삭제 volume 안 붙었으면 데이터 소실" [ref=e1472]:
+                - cell "docker rm -f <c>" [ref=e1473]:
+                  - code [ref=e1474]: docker rm -f <c>
+                - cell "강제 삭제" [ref=e1475]
+                - cell "volume 안 붙었으면 데이터 소실" [ref=e1476]
+          - generic [ref=e1477]:
+            - generic [ref=e1478]: 주의
+            - paragraph [ref=e1479]:
+              - code [ref=e1480]: docker system prune -af
+              - text: 는 중지된 컨테이너·미사용 이미지·네트워크·빌드 캐시를 전부 지웁니다.
+              - code [ref=e1481]: "--volumes"
+              - text: 를 붙이면 미사용 named volume(=DB 데이터)까지 삭제됩니다. 운영 근처에서 함부로 실행 금지.
+        - generic [ref=e1482]:
+          - generic [ref=e1483]:
+            - generic [ref=e1484]: DK-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e1485]
+          - table [ref=e1486]:
+            - rowgroup [ref=e1487]:
+              - row "선택 언제 쓰나 주의" [ref=e1488]:
+                - columnheader "선택" [ref=e1489]
+                - columnheader "언제 쓰나" [ref=e1490]
+                - columnheader "주의" [ref=e1491]
+              - row "bind mount 로컬 개발, 소스 변경 즉시 반영 host 권한·성능 영향, 운영엔 부적합" [ref=e1492]:
+                - cell "bind mount" [ref=e1493]
+                - cell "로컬 개발, 소스 변경 즉시 반영" [ref=e1494]
+                - cell "host 권한·성능 영향, 운영엔 부적합" [ref=e1495]
+              - row "named volume DB·업로드 등 컨테이너 교체 뒤에도 보존 삭제 전 소유자·백업 확인, down -v 조심" [ref=e1496]:
+                - cell "named volume" [ref=e1497]
+                - cell "DB·업로드 등 컨테이너 교체 뒤에도 보존" [ref=e1498]
+                - cell "삭제 전 소유자·백업 확인, down -v 조심" [ref=e1499]:
+                  - text: 삭제 전 소유자·백업 확인,
+                  - code [ref=e1500]: down -v
+                  - text: 조심
+              - row "CMD 기본 실행 인자, 오버라이드 가능하게 docker run 뒤 인자로 통째 교체됨" [ref=e1501]:
+                - cell "CMD" [ref=e1502]
+                - cell "기본 실행 인자, 오버라이드 가능하게" [ref=e1503]
+                - cell "docker run 뒤 인자로 통째 교체됨" [ref=e1504]:
+                  - code [ref=e1505]: docker run
+                  - text: 뒤 인자로 통째 교체됨
+              - row "ENTRYPOINT 컨테이너를 실행파일처럼 고정 인자 교체엔 --entrypoint 필요" [ref=e1506]:
+                - cell "ENTRYPOINT" [ref=e1507]
+                - cell "컨테이너를 실행파일처럼 고정" [ref=e1508]
+                - cell "인자 교체엔 --entrypoint 필요" [ref=e1509]:
+                  - text: 인자 교체엔
+                  - code [ref=e1510]: "--entrypoint"
+                  - text: 필요
+              - row "multi-stage build 빌드 도구와 런타임 산출물 분리 빌드 stage의 secret/cache가 최종에 안 남게" [ref=e1511]:
+                - cell "multi-stage build" [ref=e1512]
+                - cell "빌드 도구와 런타임 산출물 분리" [ref=e1513]
+                - cell "빌드 stage의 secret/cache가 최종에 안 남게" [ref=e1514]
+              - row "alpine 작고 shell 있음, 일반 서비스 musl libc 호환·DNS 이슈 간혹" [ref=e1515]:
+                - cell "alpine" [ref=e1516]
+                - cell "작고 shell 있음, 일반 서비스" [ref=e1517]
+                - cell "musl libc 호환·DNS 이슈 간혹" [ref=e1518]
+              - row "distroless 최소 공격면, 운영 배포 shell·패키지매니저 없음, 디버깅 불편" [ref=e1519]:
+                - cell "distroless" [ref=e1520]
+                - cell "최소 공격면, 운영 배포" [ref=e1521]
+                - cell "shell·패키지매니저 없음, 디버깅 불편" [ref=e1522]
+              - row "restart policy unless-stopped =재부팅 후 자동, on-failure =비정상만 always 는 수동 중지도 되살림" [ref=e1523]:
+                - cell "restart policy" [ref=e1524]
+                - cell "unless-stopped =재부팅 후 자동, on-failure =비정상만" [ref=e1525]:
+                  - code [ref=e1526]: unless-stopped
+                  - text: =재부팅 후 자동,
+                  - code [ref=e1527]: on-failure
+                  - text: =비정상만
+                - cell "always 는 수동 중지도 되살림" [ref=e1528]:
+                  - code [ref=e1529]: always
+                  - text: 는 수동 중지도 되살림
+        - generic [ref=e1530]:
+          - generic [ref=e1531]:
+            - generic [ref=e1532]: DK-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e1533]
+          - table [ref=e1534]:
+            - rowgroup [ref=e1535]:
+              - row "신호 왜 위험 즉시 확인" [ref=e1536]:
+                - columnheader "신호" [ref=e1537]
+                - columnheader "왜 위험" [ref=e1538]
+                - columnheader "즉시 확인" [ref=e1539]
+              - 'row "latest 태그로 배포 rollback·감사 불가, 재배포 때 다른 이미지 immutable tag, docker inspect --format ''{{.Id}}'' digest 고정" [ref=e1540]':
+                - cell "latest 태그로 배포" [ref=e1541]:
+                  - code [ref=e1542]: latest
+                  - text: 태그로 배포
+                - cell "rollback·감사 불가, 재배포 때 다른 이미지" [ref=e1543]
+                - 'cell "immutable tag, docker inspect --format ''{{.Id}}'' digest 고정" [ref=e1544]':
+                  - text: immutable tag,
+                  - code [ref=e1545]: "docker inspect --format '{{.Id}}'"
+                  - text: digest 고정
+              - row "layer 캐시 무효화 COPY . . 를 앞에 두면 소스 한 줄 바뀔 때마다 의존성 재설치 의존성 파일 먼저 COPY ·install, 소스는 뒤" [ref=e1546]:
+                - cell "layer 캐시 무효화" [ref=e1547]
+                - cell "COPY . . 를 앞에 두면 소스 한 줄 바뀔 때마다 의존성 재설치" [ref=e1548]:
+                  - code [ref=e1549]: COPY . .
+                  - text: 를 앞에 두면 소스 한 줄 바뀔 때마다 의존성 재설치
+                - cell "의존성 파일 먼저 COPY ·install, 소스는 뒤" [ref=e1550]:
+                  - text: 의존성 파일 먼저
+                  - code [ref=e1551]: COPY
+                  - text: ·install, 소스는 뒤
+              - row "컨테이너 내부에 상태 저장 재생성 시 layer 휘발, 데이터 유실 volume/bind mount 붙었는지 inspect .Mounts" [ref=e1552]:
+                - cell "컨테이너 내부에 상태 저장" [ref=e1553]
+                - cell "재생성 시 layer 휘발, 데이터 유실" [ref=e1554]
+                - cell "volume/bind mount 붙었는지 inspect .Mounts" [ref=e1555]:
+                  - text: volume/bind mount 붙었는지
+                  - code [ref=e1556]: inspect .Mounts
+              - row "이미지 과대 배포·scan 느리고 CVE 많음 docker history 로 큰 layer, multi-stage·.dockerignore" [ref=e1557]:
+                - cell "이미지 과대" [ref=e1558]
+                - cell "배포·scan 느리고 CVE 많음" [ref=e1559]
+                - cell "docker history 로 큰 layer, multi-stage·.dockerignore" [ref=e1560]:
+                  - code [ref=e1561]: docker history
+                  - text: 로 큰 layer, multi-stage·
+                  - code [ref=e1562]: .dockerignore
+              - row "healthcheck 부재 준비 안 된 앱에 traffic 유입 HEALTHCHECK , readiness endpoint, dependency 상태" [ref=e1563]:
+                - cell "healthcheck 부재" [ref=e1564]
+                - cell "준비 안 된 앱에 traffic 유입" [ref=e1565]
+                - cell "HEALTHCHECK , readiness endpoint, dependency 상태" [ref=e1566]:
+                  - code [ref=e1567]: HEALTHCHECK
+                  - text: ", readiness endpoint, dependency 상태"
+              - row "Compose에서 localhost 로 타 서비스 호출 컨테이너 간 통신 실패 service name을 DNS로 사용" [ref=e1568]:
+                - cell "Compose에서 localhost 로 타 서비스 호출" [ref=e1569]:
+                  - text: Compose에서
+                  - code [ref=e1570]: localhost
+                  - text: 로 타 서비스 호출
+                - cell "컨테이너 간 통신 실패" [ref=e1571]
+                - cell "service name을 DNS로 사용" [ref=e1572]
+              - row "prune 로 볼륨 삭제 DB 데이터 영구 소실 --volumes 플래그 여부, 실행 전 volume ls" [ref=e1573]:
+                - cell "prune 로 볼륨 삭제" [ref=e1574]:
+                  - code [ref=e1575]: prune
+                  - text: 로 볼륨 삭제
+                - cell "DB 데이터 영구 소실" [ref=e1576]
+                - cell "--volumes 플래그 여부, 실행 전 volume ls" [ref=e1577]:
+                  - code [ref=e1578]: "--volumes"
+                  - text: 플래그 여부, 실행 전
+                  - code [ref=e1579]: volume ls
+        - generic [ref=e1580]:
+          - generic [ref=e1581]:
+            - generic [ref=e1582]: DK-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e1583]
+          - generic [ref=e1584]:
+            - generic [ref=e1585]: CONTAINER WON'T START
+            - text: "1."
+            - code [ref=e1586]: docker ps -a
+            - text: → STATUS/EXIT CODE 확인 (0=정상종료, 137=OOM/kill, 1=앱오류)
+            - text: "2."
+            - code [ref=e1587]: docker logs --tail 100 <c>
+            - text: → 첫 에러 로그
+            - text: "3."
+            - code [ref=e1588]: docker inspect <c>
+            - text: → mount / env / entrypoint 확인
+            - text: "4."
+            - code [ref=e1589]: "docker inspect --format '{{json .State.Health}}' <c>"
+            - text: → 헬스체크 실패 여부
+            - text: "5."
+            - code [ref=e1590]: "docker inspect --format '{{.Id}}' <img>"
+            - text: → 실행 이미지 digest가 의도한 것인지
+            - text: "6."
+            - code [ref=e1591]: docker run --rm -it --entrypoint sh <img>
+            - text: → 이미지 자체 진입해 파일·bind 검증
+          - table [ref=e1592]:
+            - rowgroup [ref=e1593]:
+              - row "순서 질문 증거" [ref=e1594]:
+                - columnheader "순서" [ref=e1595]
+                - columnheader "질문" [ref=e1596]
+                - columnheader "증거" [ref=e1597]
+              - row "1 어떻게 죽었나 ps -a EXIT CODE + STATUS" [ref=e1598]:
+                - cell "1" [ref=e1599]
+                - cell "어떻게 죽었나" [ref=e1600]
+                - cell "ps -a EXIT CODE + STATUS" [ref=e1601]:
+                  - code [ref=e1602]: ps -a
+                  - text: EXIT CODE + STATUS
+              - row "2 앱이 뭘 남겼나 logs 첫 에러 라인" [ref=e1603]:
+                - cell "2" [ref=e1604]
+                - cell "앱이 뭘 남겼나" [ref=e1605]
+                - cell "logs 첫 에러 라인" [ref=e1606]:
+                  - code [ref=e1607]: logs
+                  - text: 첫 에러 라인
+              - row "3 설정이 맞나 inspect env·mount·entrypoint" [ref=e1608]:
+                - cell "3" [ref=e1609]
+                - cell "설정이 맞나" [ref=e1610]
+                - cell "inspect env·mount·entrypoint" [ref=e1611]:
+                  - code [ref=e1612]: inspect
+                  - text: env·mount·entrypoint
+              - row "4 준비됐다고 보고했나 healthcheck State.Health" [ref=e1613]:
+                - cell "4" [ref=e1614]
+                - cell "준비됐다고 보고했나" [ref=e1615]
+                - cell "healthcheck State.Health" [ref=e1616]
+              - row "5 맞는 이미지인가 image digest(.Id )" [ref=e1617]:
+                - cell "5" [ref=e1618]
+                - cell "맞는 이미지인가" [ref=e1619]
+                - cell "image digest(.Id )" [ref=e1620]:
+                  - text: image digest(
+                  - code [ref=e1621]: .Id
+                  - text: )
+          - generic [ref=e1622]:
+            - generic [ref=e1623]: 복구/중단
+            - paragraph [ref=e1624]:
+              - text: EXIT 137이면 메모리 한계(
+              - code [ref=e1625]: "--memory"
+              - text: )나 외부 OOM kill부터 본다. logs·inspect로 원인을 짚기 전엔 재빌드 반복 금지 — 이미지가 아니라 env·mount·network 설정 문제인 경우가 많다.
+        - generic [ref=e1627]:
+          - generic [ref=e1628]: SOURCE
+          - heading "Interview" [level=2] [ref=e1629]
+        - generic [ref=e1630]:
+          - generic [ref=e1631]:
+            - generic [ref=e1632]: IV-CS-01
+            - heading "즉답 구조 템플릿" [level=2] [ref=e1633]
+          - paragraph [ref=e1634]: 질문을 받으면 키워드부터 쏟지 말고 아래 구조를 머릿속에 세운다. 결론 먼저, 근거는 조건과 함께.
+          - generic [ref=e1635]:
+            - generic [ref=e1636]: 30초 답변 — 정의 · 차이 · 가벼운 확인
+            - text: "1. 결론 한 문장: \"핵심은 X입니다.\""
+            - text: "2. 근거 한 문장: \"왜냐하면 Y이기 때문입니다.\""
+            - text: "3. 경계 한 문장: \"다만 Z 조건에서는 달라집니다.\""
+            - text: 예) "REST와 GraphQL의 핵심 차이는 데이터를 서버가 정하느냐 클라이언트가 정하느냐입니다. 그래서 화면마다 필요한 필드가 크게 다르면 GraphQL이 유리합니다. 다만 캐싱과 러닝커브 비용은 감수해야 합니다."
+          - generic [ref=e1637]:
+            - generic [ref=e1638]: 90초 답변 — 개념 · 기준 · trade-off · 예시
+            - text: 1. 개념 정의 + 왜 필요한가
+            - text: 2. 선택 기준 2~3개 (트래픽, 일관성, 운영 비용 등)
+            - text: "3. trade-off: 무엇을 얻고 무엇을 포기하나"
+            - text: 4. 실무 예시 한 줄 (직접/개념 경계 명시)
+            - text: 예) "Redis 캐시는 반복 조회 비용을 줄이려고 씁니다. 판단 기준은 읽기 빈도, 데이터 신선도 요구, 캐시 무효화 비용입니다. 속도는 얻지만 정합성 경계를 직접 관리해야 하는 게 비용입니다. 제가 맡았던 조회 API에서는 TTL과 write-through로 처리했습니다."
+          - generic [ref=e1639]:
+            - generic [ref=e1640]: STAR — 행동 질문 (협업 · 갈등 · 실패 · 리더십)
+            - text: "Situation: 언제, 어떤 맥락에서 (한 문장)"
+            - text: "Task: 내가 맡은 과제와 제약"
+            - text: "Action: 내가 한 결정과 행동 (여기가 핵심, 가장 길게)"
+            - text: "Result: 결과 지표 + 배운 점 / 바꾼 행동"
+            - text: 예) "배포 후 장애가 반복됐고(S), 저는 원인 파악과 재발 방지를 맡았습니다(T). 로그를 추적해 특정 쿼리 타임아웃을 찾고, 배포 전 부하 체크를 파이프라인에 넣었습니다(A). 이후 같은 유형 장애가 사라졌고, 배포 전 검증 습관이 팀에 남았습니다(R)."
+          - generic [ref=e1641]:
+            - generic [ref=e1642]: Trade-off 답변 프레임
+            - text: "\"A는 X 때문에 좋고, B는 Y 때문에 좋습니다. 그래서 우리 상황에선 Z 기준이 더 중요하니 [선택]입니다.\""
+            - text: 예) "MSA는 팀 독립 배포 때문에 좋고, 모놀리식은 운영 단순함 때문에 좋습니다. 그래서 팀이 작고 도메인 경계가 아직 흐린 지금은 배포 속도보다 단순함이 중요해서 모놀리식으로 시작하겠습니다."
+          - table [ref=e1643]:
+            - rowgroup [ref=e1644]:
+              - row "프레임 구조 언제" [ref=e1645]:
+                - columnheader "프레임" [ref=e1646]
+                - columnheader "구조" [ref=e1647]
+                - columnheader "언제" [ref=e1648]
+              - row "30초 결론 · 근거 · 경계 정의, 차이, 가벼운 확인" [ref=e1649]:
+                - cell "30초" [ref=e1650]
+                - cell "결론 · 근거 · 경계" [ref=e1651]
+                - cell "정의, 차이, 가벼운 확인" [ref=e1652]
+              - row "90초 개념 · 기준 · trade-off · 예시 기술 이해도 + 실무 감각" [ref=e1653]:
+                - cell "90초" [ref=e1654]
+                - cell "개념 · 기준 · trade-off · 예시" [ref=e1655]
+                - cell "기술 이해도 + 실무 감각" [ref=e1656]
+              - row "3분 문제 · 대안 · 실패 모드 · 검증 프로젝트 · 설계 · 장애" [ref=e1657]:
+                - cell "3분" [ref=e1658]
+                - cell "문제 · 대안 · 실패 모드 · 검증" [ref=e1659]
+                - cell "프로젝트 · 설계 · 장애" [ref=e1660]
+              - row "STAR Situation · Task · Action · Result 협업 · 갈등 · 실패 · 리더십" [ref=e1661]:
+                - cell "STAR" [ref=e1662]
+                - cell "Situation · Task · Action · Result" [ref=e1663]
+                - cell "협업 · 갈등 · 실패 · 리더십" [ref=e1664]
+              - row "Trade-off A는 X, B는 Y, 우리는 Z Redis · MSA · JWT · SSR · NoSQL 선택" [ref=e1665]:
+                - cell "Trade-off" [ref=e1666]
+                - cell "A는 X, B는 Y, 우리는 Z" [ref=e1667]
+                - cell "Redis · MSA · JWT · SSR · NoSQL 선택" [ref=e1668]
+        - generic [ref=e1669]:
+          - generic [ref=e1670]:
+            - generic [ref=e1671]: IV-CS-02
+            - heading "질문 유형별 접근" [level=2] [ref=e1672]
+          - paragraph [ref=e1673]: 질문 유형을 먼저 분류하면 무엇을 첫 문장으로 말할지 정해진다.
+          - table [ref=e1674]:
+            - rowgroup [ref=e1675]:
+              - row "질문 유형 먼저 말할 것 예시 시작 문장" [ref=e1676]:
+                - columnheader "질문 유형" [ref=e1677]
+                - columnheader "먼저 말할 것" [ref=e1678]
+                - columnheader "예시 시작 문장" [ref=e1679]
+              - row "경험형 문제와 내 역할부터. 스택 나열 금지. \"제가 맡은 문제는 ~였고, 제 역할은 ~였습니다.\"" [ref=e1680]:
+                - cell "경험형" [ref=e1681]
+                - cell "문제와 내 역할부터. 스택 나열 금지." [ref=e1682]
+                - cell "\"제가 맡은 문제는 ~였고, 제 역할은 ~였습니다.\"" [ref=e1683]
+              - row "설계형 요구사항·제약을 먼저 되묻고 좁힌다. \"트래픽 규모와 일관성 요구를 먼저 확인하고 싶습니다.\"" [ref=e1684]:
+                - cell "설계형" [ref=e1685]
+                - cell "요구사항·제약을 먼저 되묻고 좁힌다." [ref=e1686]
+                - cell "\"트래픽 규모와 일관성 요구를 먼저 확인하고 싶습니다.\"" [ref=e1687]
+              - row "트레이드오프형 양쪽 장점 → 우리 상황 기준 → 선택. \"A는 ~ 때문에, B는 ~ 때문에 좋습니다. 우리 상황에선 ~\"" [ref=e1688]:
+                - cell "트레이드오프형" [ref=e1689]
+                - cell "양쪽 장점 → 우리 상황 기준 → 선택." [ref=e1690]
+                - cell "\"A는 ~ 때문에, B는 ~ 때문에 좋습니다. 우리 상황에선 ~\"" [ref=e1691]
+              - row "디버깅형 증상 → 가설 → 좁히는 순서. 재현부터. \"먼저 재현하고, 범위를 로그로 좁히겠습니다.\"" [ref=e1692]:
+                - cell "디버깅형" [ref=e1693]
+                - cell "증상 → 가설 → 좁히는 순서. 재현부터." [ref=e1694]
+                - cell "\"먼저 재현하고, 범위를 로그로 좁히겠습니다.\"" [ref=e1695]
+              - row "모르는 질문 아는 경계 명시 → 원리 추론 → 확인 방법. \"직접 경험은 없지만 원리로 추론하면 ~\"" [ref=e1696]:
+                - cell "모르는 질문" [ref=e1697]
+                - cell "아는 경계 명시 → 원리 추론 → 확인 방법." [ref=e1698]
+                - cell "\"직접 경험은 없지만 원리로 추론하면 ~\"" [ref=e1699]
+              - row "압박 질문 방어 대신 전제·기준·증거로 재구성. \"그 지적의 전제를 먼저 정리하면 ~\"" [ref=e1700]:
+                - cell "압박 질문" [ref=e1701]
+                - cell "방어 대신 전제·기준·증거로 재구성." [ref=e1702]
+                - cell "\"그 지적의 전제를 먼저 정리하면 ~\"" [ref=e1703]
+        - generic [ref=e1704]:
+          - generic [ref=e1705]:
+            - generic [ref=e1706]: IV-CS-03
+            - heading "감점 신호 · 즉시 확인" [level=2] [ref=e1707]
+          - paragraph [ref=e1708]: 전문성은 말의 양이 아니라 경계·기준·증거에서 드러난다. 아래는 면접관이 즉시 감점하는 신호.
+          - table [ref=e1709]:
+            - rowgroup [ref=e1710]:
+              - row "감점 신호 왜 위험한가 즉시 확인 / 보정" [ref=e1711]:
+                - columnheader "감점 신호" [ref=e1712]
+                - columnheader "왜 위험한가" [ref=e1713]
+                - columnheader "즉시 확인 / 보정" [ref=e1714]
+              - row "결론 없이 장황 판단 구조가 안 보이고 시간만 쓴다. 첫 문장을 결론으로. \"핵심은 X입니다\"로 시작." [ref=e1715]:
+                - cell "결론 없이 장황" [ref=e1716]
+                - cell "판단 구조가 안 보이고 시간만 쓴다." [ref=e1717]
+                - cell "첫 문장을 결론으로. \"핵심은 X입니다\"로 시작." [ref=e1718]
+              - row "직접 경험과 이론을 같은 톤으로 꼬리질문에서 신뢰가 무너진다. \"직접 해본 부분\"과 \"설계한다면\"을 분리해 말함." [ref=e1719]:
+                - cell "직접 경험과 이론을 같은 톤으로" [ref=e1720]
+                - cell "꼬리질문에서 신뢰가 무너진다." [ref=e1721]
+                - cell "\"직접 해본 부분\"과 \"설계한다면\"을 분리해 말함." [ref=e1722]
+              - row "기술명만 나열 키워드는 있고 적용 판단이 없다. 정의 → 선택 기준 → trade-off로 재구성." [ref=e1723]:
+                - cell "기술명만 나열" [ref=e1724]
+                - cell "키워드는 있고 적용 판단이 없다." [ref=e1725]
+                - cell "정의 → 선택 기준 → trade-off로 재구성." [ref=e1726]
+              - row "trade-off 없이 정답 단정 \"항상/무조건\"은 조건을 무시한 답. 규모·latency·consistency·비용 조건을 붙임." [ref=e1727]:
+                - cell "trade-off 없이 정답 단정" [ref=e1728]
+                - cell "\"항상/무조건\"은 조건을 무시한 답." [ref=e1729]
+                - cell "규모·latency·consistency·비용 조건을 붙임." [ref=e1730]
+              - row "모른다는 걸 숨김 추측을 사실처럼 말하면 바로 들킨다. 모르는 범위 인정 + 확인 방법 제시로 닫음." [ref=e1731]:
+                - cell "모른다는 걸 숨김" [ref=e1732]
+                - cell "추측을 사실처럼 말하면 바로 들킨다." [ref=e1733]
+                - cell "모르는 범위 인정 + 확인 방법 제시로 닫음." [ref=e1734]
+              - row "성과가 팀 단위 표현뿐 본인 기여와 의사결정이 흐려진다. 내 역할·내가 바꾼 선택·결과 지표를 분리." [ref=e1735]:
+                - cell "성과가 팀 단위 표현뿐" [ref=e1736]
+                - cell "본인 기여와 의사결정이 흐려진다." [ref=e1737]
+                - cell "내 역할·내가 바꾼 선택·결과 지표를 분리." [ref=e1738]
+              - row "실패에 재발 방지가 없음 학습 능력 대신 변명으로 들린다. 관측·테스트·리뷰 기준을 어떻게 바꿨는지 말함." [ref=e1739]:
+                - cell "실패에 재발 방지가 없음" [ref=e1740]
+                - cell "학습 능력 대신 변명으로 들린다." [ref=e1741]
+                - cell "관측·테스트·리뷰 기준을 어떻게 바꿨는지 말함." [ref=e1742]
+        - generic [ref=e1743]:
+          - generic [ref=e1744]:
+            - generic [ref=e1745]: IV-CS-04
+            - heading "모르는 질문 1카드" [level=2] [ref=e1746]
+          - generic [ref=e1747]:
+            - generic [ref=e1748]: STUCK ANSWER TRIAGE
+            - text: 모르는 질문에서 조급하게 키워드를 쏟지 않는다. 아래 순서로 회복한다.
+            - text: 1. 질문 재정의 — "운영 기준인지, 개념 비교 기준인지 먼저 나누겠습니다."
+            - text: 2. 아는 경계 명시 — "직접 운영 경험은 없지만, 원리는 이렇게 이해합니다."
+            - text: 3. 원리로 추론 — "일관성·latency·복구 비용 중 무엇이 중요하냐에 따라 갈립니다."
+            - text: 4. 검증 방법 제안 — "그래서 작은 부하 테스트와 rollback 리허설로 확인하겠습니다."
+            - text: 5. 솔직히 모른다 + 학습 계획 — "이 부분은 확실치 않아 끝나고 문서로 확인하겠습니다."
+          - table [ref=e1749]:
+            - rowgroup [ref=e1750]:
+              - row "순서 질문 말할 증거 / 예시" [ref=e1751]:
+                - columnheader "순서" [ref=e1752]
+                - columnheader "질문" [ref=e1753]
+                - columnheader "말할 증거 / 예시" [ref=e1754]
+              - row "1 이 질문이 진짜 묻는 건 뭔가? \"운영 트래픽 기준인지 개념 비교인지 나누겠습니다.\"" [ref=e1755]:
+                - cell "1" [ref=e1756]
+                - cell "이 질문이 진짜 묻는 건 뭔가?" [ref=e1757]
+                - cell "\"운영 트래픽 기준인지 개념 비교인지 나누겠습니다.\"" [ref=e1758]
+              - row "2 내가 확실히 아는 경계는? \"직접 해본 건 API 계약과 장애 재현입니다.\"" [ref=e1759]:
+                - cell "2" [ref=e1760]
+                - cell "내가 확실히 아는 경계는?" [ref=e1761]
+                - cell "\"직접 해본 건 API 계약과 장애 재현입니다.\"" [ref=e1762]
+              - row "3 원리로 어디까지 추론되나? \"CAP상 일관성을 택하면 가용성을 일부 포기합니다.\"" [ref=e1763]:
+                - cell "3" [ref=e1764]
+                - cell "원리로 어디까지 추론되나?" [ref=e1765]
+                - cell "\"CAP상 일관성을 택하면 가용성을 일부 포기합니다.\"" [ref=e1766]
+              - row "4 어떻게 검증할 수 있나? \"작은 부하 테스트로 병목 지점부터 확인합니다.\"" [ref=e1767]:
+                - cell "4" [ref=e1768]
+                - cell "어떻게 검증할 수 있나?" [ref=e1769]
+                - cell "\"작은 부하 테스트로 병목 지점부터 확인합니다.\"" [ref=e1770]
+              - row "5 모르는 건 어떻게 닫나? \"확실치 않으니 확인 후 정확히 답 드리겠습니다.\"" [ref=e1771]:
+                - cell "5" [ref=e1772]
+                - cell "모르는 건 어떻게 닫나?" [ref=e1773]
+                - cell "\"확실치 않으니 확인 후 정확히 답 드리겠습니다.\"" [ref=e1774]
+          - generic [ref=e1775]:
+            - generic [ref=e1776]: 중단 기준
+            - paragraph [ref=e1777]: 추측을 사실처럼 이어 붙이는 순간 멈춘다. 모르면 "여기까지는 알고, 그다음은 확인이 필요합니다"로 경계를 긋는 게 지어내는 답보다 항상 낫다.
+        - generic [ref=e1779]:
+          - generic [ref=e1780]: SOURCE
+          - heading "Tools·Shortcuts·Commands" [level=2] [ref=e1781]
+        - generic [ref=e1782]:
+          - generic [ref=e1783]:
+            - generic [ref=e1784]: TL-CS-01
+            - heading "핵심 명령·스니펫" [level=2] [ref=e1785]
+          - heading "Git — 상태 · 이력 보기" [level=3] [ref=e1786]
+          - code [ref=e1788]: "# 변경 파일 짧게 (가장 많이 씀) git status --short # 그래프로 전체 브랜치 흐름 git log --oneline --graph --all # 특정 파일 변경 이력 (이름 변경 추적 포함) git log --follow -- path/to/file # 스테이지된 것 vs 작업 중인 것 분리 확인 git diff # 아직 add 안 한 변경 git diff --staged # add 한 변경"
+          - heading "Git — 히스토리 고치기" [level=3] [ref=e1789]
+          - code [ref=e1791]: "# 최근 3개 커밋 정리 (squash/reword/drop) git rebase -i HEAD~3 # 방금 커밋 취소하되 변경은 스테이지에 남김 git reset --soft HEAD~1 # 마지막 커밋 메시지/내용 수정 git commit --amend # 다른 브랜치의 특정 커밋만 가져오기 git cherry-pick <sha>"
+          - heading "Git — 잠깐 치워두기 · 복구" [level=3] [ref=e1792]
+          - code [ref=e1794]: "# 작업 중인 변경 임시 저장 → 되돌리기 git stash git stash pop # 유실 복구의 핵심 — 모든 HEAD 이동 기록 git reflog git reset --hard HEAD@{2} # reflog에서 찾은 지점으로 복구"
+          - heading "Git — 버그 커밋 이분 탐색 (bisect)" [level=3] [ref=e1795]
+          - code [ref=e1797]: "# 언제 깨졌는지 자동 이분 탐색 git bisect start git bisect bad # 현재(깨진) 상태 git bisect good <sha> # 정상이던 과거 커밋 # git이 중간 커밋 체크아웃 → 테스트 후 good/bad 반복 git bisect reset # 끝나면 원위치"
+          - heading "Terminal — 검색 · 파싱 · 파이프" [level=3] [ref=e1798]
+          - code [ref=e1800]: "# 재귀 검색 + 줄번호 (파일명·API path 추적) grep -rn 'keyword' src/ # JSON 필드 뽑기 curl -s api.example.com/orders | jq '.data[] | {id, status}' # 검색 결과를 다음 명령으로 넘기기 grep -rl 'TODO' src/ | xargs wc -l # 예전에 친 명령 다시 찾기 history | grep rebase"
+          - heading "HTTP — API 찌르기" [level=3] [ref=e1801]
+          - code [ref=e1803]: "# 헤더까지 보기 — status·응답 헤더 확인 (첫 진단) curl -i https://api.example.com/health # POST + JSON curl -X POST -H 'Content-Type: application/json' \\ -d '{\"amount\":1000}' https://api.example.com/payments # 연결 전 구간 프로파일 (2>&1로 stderr 합치기) curl -v https://api.example.com/orders 2>&1 | head -20"
+          - heading "Node · 패키지" [level=3] [ref=e1804]
+          - code [ref=e1806]: "# 설치 없이 일회성 실행 pnpm dlx create-next-app my-app npx tsc --noEmit # 프로젝트가 제공하는 스크립트 목록 확인 npm run"
+          - table [ref=e1807]:
+            - rowgroup [ref=e1808]:
+              - row "명령 용도 주의" [ref=e1809]:
+                - columnheader "명령" [ref=e1810]
+                - columnheader "용도" [ref=e1811]
+                - columnheader "주의" [ref=e1812]
+              - row "git status --short 변경 파일 빠른 확인, 첫 진단 습관화 1순위" [ref=e1813]:
+                - cell "git status --short" [ref=e1814]:
+                  - code [ref=e1815]: git status --short
+                - cell "변경 파일 빠른 확인, 첫 진단" [ref=e1816]
+                - cell "습관화 1순위" [ref=e1817]
+              - row "git reset --soft HEAD~1 커밋만 취소, 변경 보존 --hard 와 혼동 금지" [ref=e1818]:
+                - cell "git reset --soft HEAD~1" [ref=e1819]:
+                  - code [ref=e1820]: git reset --soft HEAD~1
+                - cell "커밋만 취소, 변경 보존" [ref=e1821]
+                - cell "--hard 와 혼동 금지" [ref=e1822]:
+                  - code [ref=e1823]: "--hard"
+                  - text: 와 혼동 금지
+              - row "git reflog 유실 커밋·브랜치 복구 진입점 대부분의 \"날아갔다\"는 여기서 복구" [ref=e1824]:
+                - cell "git reflog" [ref=e1825]:
+                  - code [ref=e1826]: git reflog
+                - cell "유실 커밋·브랜치 복구 진입점" [ref=e1827]
+                - cell "대부분의 \"날아갔다\"는 여기서 복구" [ref=e1828]
+              - row "git stash / pop 브랜치 안 만들고 잠깐 치우기 여러 개 쌓이면 stash list" [ref=e1829]:
+                - cell "git stash / pop" [ref=e1830]:
+                  - code [ref=e1831]: git stash
+                  - text: /
+                  - code [ref=e1832]: pop
+                - cell "브랜치 안 만들고 잠깐 치우기" [ref=e1833]
+                - cell "여러 개 쌓이면 stash list" [ref=e1834]:
+                  - text: 여러 개 쌓이면
+                  - code [ref=e1835]: stash list
+              - row "grep -rn 재귀 검색 + 줄번호 큰 저장소는 rg 가 빠름" [ref=e1836]:
+                - cell "grep -rn" [ref=e1837]:
+                  - code [ref=e1838]: grep -rn
+                - cell "재귀 검색 + 줄번호" [ref=e1839]
+                - cell "큰 저장소는 rg 가 빠름" [ref=e1840]:
+                  - text: 큰 저장소는
+                  - code [ref=e1841]: rg
+                  - text: 가 빠름
+              - row "curl -i <url> status·헤더 확인 -s 로 progress 끄기" [ref=e1842]:
+                - cell "curl -i <url>" [ref=e1843]:
+                  - code [ref=e1844]: curl -i <url>
+                - cell "status·헤더 확인" [ref=e1845]
+                - cell "-s 로 progress 끄기" [ref=e1846]:
+                  - code [ref=e1847]: "-s"
+                  - text: 로 progress 끄기
+              - row "pnpm dlx / npx 전역 설치 없이 CLI 실행 버전 고정 필요하면 명시" [ref=e1848]:
+                - cell "pnpm dlx / npx" [ref=e1849]:
+                  - code [ref=e1850]: pnpm dlx
+                  - text: /
+                  - code [ref=e1851]: npx
+                - cell "전역 설치 없이 CLI 실행" [ref=e1852]
+                - cell "버전 고정 필요하면 명시" [ref=e1853]
+          - generic [ref=e1854]:
+            - generic [ref=e1855]: 주의
+            - paragraph [ref=e1856]:
+              - code [ref=e1857]: git reset --hard
+              - text: 는 작업 중 변경을 복구 없이 날린다. 실행 전
+              - code [ref=e1858]: git stash
+              - text: 나 커밋으로 대피시켜라. rebase로 이미 push한 커밋을 고친 뒤
+              - code [ref=e1859]: git push --force
+              - text: 하면 팀의 히스토리가 깨진다 — 공유 브랜치엔
+              - code [ref=e1860]: "--force-with-lease"
+              - text: 를 쓰고, main엔 아예 하지 마라.
+        - generic [ref=e1861]:
+          - generic [ref=e1862]:
+            - generic [ref=e1863]: TL-CS-02
+            - heading "판단 한 줄" [level=2] [ref=e1864]
+          - table [ref=e1865]:
+            - rowgroup [ref=e1866]:
+              - row "선택 언제 쓰나 주의" [ref=e1867]:
+                - columnheader "선택" [ref=e1868]
+                - columnheader "언제 쓰나" [ref=e1869]
+                - columnheader "주의" [ref=e1870]
+              - row "rebase 내 로컬 브랜치 히스토리를 선형으로 정리할 때 이미 push·공유된 커밋엔 금지 (히스토리 재작성)" [ref=e1871]:
+                - cell "rebase" [ref=e1872]
+                - cell "내 로컬 브랜치 히스토리를 선형으로 정리할 때" [ref=e1873]
+                - cell "이미 push·공유된 커밋엔 금지 (히스토리 재작성)" [ref=e1874]
+              - row "merge 공유 브랜치 통합, 실제 병합 시점을 남기고 싶을 때 graph가 복잡해짐, 하지만 안전" [ref=e1875]:
+                - cell "merge" [ref=e1876]
+                - cell "공유 브랜치 통합, 실제 병합 시점을 남기고 싶을 때" [ref=e1877]
+                - cell "graph가 복잡해짐, 하지만 안전" [ref=e1878]
+              - row "reset --soft 커밋만 취소, 변경은 스테이지에 그대로 커밋 다시 묶을 때" [ref=e1879]:
+                - cell "reset --soft" [ref=e1880]:
+                  - code [ref=e1881]: reset --soft
+                - cell "커밋만 취소, 변경은 스테이지에 그대로" [ref=e1882]
+                - cell "커밋 다시 묶을 때" [ref=e1883]
+              - row "reset --mixed 커밋·스테이지 취소, 작업 변경은 보존 (기본값) add부터 다시" [ref=e1884]:
+                - cell "reset --mixed" [ref=e1885]:
+                  - code [ref=e1886]: reset --mixed
+                - cell "커밋·스테이지 취소, 작업 변경은 보존 (기본값)" [ref=e1887]
+                - cell "add부터 다시" [ref=e1888]
+              - row "reset --hard 커밋·스테이지·작업 변경 전부 폐기 복구 어려움 — reflog 외엔 없음" [ref=e1889]:
+                - cell "reset --hard" [ref=e1890]:
+                  - code [ref=e1891]: reset --hard
+                - cell "커밋·스테이지·작업 변경 전부 폐기" [ref=e1892]
+                - cell "복구 어려움 — reflog 외엔 없음" [ref=e1893]
+              - row "stash 잠깐(분~시간) 치웠다 곧 되돌릴 때 오래 두면 잊음 → 브랜치가 나음" [ref=e1894]:
+                - cell "stash" [ref=e1895]
+                - cell "잠깐(분~시간) 치웠다 곧 되돌릴 때" [ref=e1896]
+                - cell "오래 두면 잊음 → 브랜치가 나음" [ref=e1897]
+              - row "branch 수명이 길거나 남과 공유할 작업일 때 이름으로 맥락이 남음" [ref=e1898]:
+                - cell "branch" [ref=e1899]
+                - cell "수명이 길거나 남과 공유할 작업일 때" [ref=e1900]
+                - cell "이름으로 맥락이 남음" [ref=e1901]
+              - row "npm 표준·호환성 우선, CI 단순함 디스크·설치속도 불리" [ref=e1902]:
+                - cell "npm" [ref=e1903]
+                - cell "표준·호환성 우선, CI 단순함" [ref=e1904]
+                - cell "디스크·설치속도 불리" [ref=e1905]
+              - row "pnpm 모노레포·디스크 절약·빠른 설치 lockfile·hoisting 동작 팀과 합의" [ref=e1906]:
+                - cell "pnpm" [ref=e1907]
+                - cell "모노레포·디스크 절약·빠른 설치" [ref=e1908]
+                - cell "lockfile·hoisting 동작 팀과 합의" [ref=e1909]
+        - generic [ref=e1910]:
+          - generic [ref=e1911]:
+            - generic [ref=e1912]: TL-CS-03
+            - heading "자주 터지는 것 · 즉시 확인" [level=2] [ref=e1913]
+          - table [ref=e1914]:
+            - rowgroup [ref=e1915]:
+              - row "신호 왜 위험 즉시 확인" [ref=e1916]:
+                - columnheader "신호" [ref=e1917]
+                - columnheader "왜 위험" [ref=e1918]
+                - columnheader "즉시 확인" [ref=e1919]
+              - 'row "git reset --hard 로 작업이 사라짐 스테이지·작업 변경이 되돌릴 수 없이 폐기됨 git reflog 로 직전 HEAD 찾아 reset --hard HEAD@{n}" [ref=e1920]':
+                - cell "git reset --hard 로 작업이 사라짐" [ref=e1921]:
+                  - code [ref=e1922]: git reset --hard
+                  - text: 로 작업이 사라짐
+                - cell "스테이지·작업 변경이 되돌릴 수 없이 폐기됨" [ref=e1923]
+                - 'cell "git reflog 로 직전 HEAD 찾아 reset --hard HEAD@{n}" [ref=e1924]':
+                  - code [ref=e1926]: git reflog
+                  - text: 로 직전 HEAD 찾아
+                  - code [ref=e1927]: "reset --hard HEAD@{n}"
+              - row "rebase 후 push --force 로 팀 히스토리가 깨짐 남이 받은 커밋이 사라져 pull 충돌·유실 공유 브랜치는 --force-with-lease , main은 금지. 이미 깼으면 동료 reflog로 복원" [ref=e1928]:
+                - cell "rebase 후 push --force 로 팀 히스토리가 깨짐" [ref=e1929]:
+                  - text: rebase 후
+                  - code [ref=e1930]: push --force
+                  - text: 로 팀 히스토리가 깨짐
+                - cell "남이 받은 커밋이 사라져 pull 충돌·유실" [ref=e1931]
+                - cell "공유 브랜치는 --force-with-lease , main은 금지. 이미 깼으면 동료 reflog로 복원" [ref=e1932]:
+                  - text: 공유 브랜치는
+                  - code [ref=e1933]: "--force-with-lease"
+                  - text: ", main은 금지. 이미 깼으면 동료 reflog로 복원"
+              - row ".gitignore 누락으로 secret이 커밋됨 토큰 유출 — 히스토리에 남아 삭제해도 추적됨 즉시 토큰 재발급, history 정리(filter-repo), .gitignore 추가" [ref=e1934]:
+                - cell ".gitignore 누락으로 secret이 커밋됨" [ref=e1935]
+                - cell "토큰 유출 — 히스토리에 남아 삭제해도 추적됨" [ref=e1936]
+                - cell "즉시 토큰 재발급, history 정리(filter-repo), .gitignore 추가" [ref=e1937]
+              - row "detached HEAD 상태에서 커밋함 브랜치에 안 붙은 커밋 → 체크아웃 옮기면 유실 git switch -c fix-branch 로 지금 커밋을 브랜치로 고정" [ref=e1938]:
+                - cell "detached HEAD 상태에서 커밋함" [ref=e1939]
+                - cell "브랜치에 안 붙은 커밋 → 체크아웃 옮기면 유실" [ref=e1940]
+                - cell "git switch -c fix-branch 로 지금 커밋을 브랜치로 고정" [ref=e1941]:
+                  - code [ref=e1942]: git switch -c fix-branch
+                  - text: 로 지금 커밋을 브랜치로 고정
+              - row "내 로컬만 빌드/실행 실패 런타임·env·lockfile 차이로 재현 안 됨 버전 확인 → clean install → 팀/CI와 diff (ch4 triage)" [ref=e1943]:
+                - cell "내 로컬만 빌드/실행 실패" [ref=e1944]
+                - cell "런타임·env·lockfile 차이로 재현 안 됨" [ref=e1945]
+                - cell "버전 확인 → clean install → 팀/CI와 diff (ch4 triage)" [ref=e1946]
+        - generic [ref=e1947]:
+          - generic [ref=e1948]:
+            - generic [ref=e1949]: TL-CS-04
+            - heading "장애 증거 1카드" [level=2] [ref=e1950]
+          - heading "IDE·브라우저 단축키 (mac / win)" [level=3] [ref=e1951]
+          - table [ref=e1952]:
+            - rowgroup [ref=e1953]:
+              - row "목적 macOS Windows/Linux 도구·용도" [ref=e1954]:
+                - columnheader "목적" [ref=e1955]
+                - columnheader "macOS" [ref=e1956]
+                - columnheader "Windows/Linux" [ref=e1957]
+                - columnheader "도구·용도" [ref=e1958]
+              - row "파일 빠른 열기 Cmd+P Ctrl+P VS Code — 파일명 일부로 이동" [ref=e1959]:
+                - cell "파일 빠른 열기" [ref=e1960]
+                - cell "Cmd+P" [ref=e1961]:
+                  - code [ref=e1962]: Cmd+P
+                - cell "Ctrl+P" [ref=e1963]:
+                  - code [ref=e1964]: Ctrl+P
+                - cell "VS Code — 파일명 일부로 이동" [ref=e1965]
+              - row "명령 팔레트 Cmd+Shift+P Ctrl+Shift+P VS Code — 모든 command 실행" [ref=e1966]:
+                - cell "명령 팔레트" [ref=e1967]
+                - cell "Cmd+Shift+P" [ref=e1968]:
+                  - code [ref=e1969]: Cmd+Shift+P
+                - cell "Ctrl+Shift+P" [ref=e1970]:
+                  - code [ref=e1971]: Ctrl+Shift+P
+                - cell "VS Code — 모든 command 실행" [ref=e1972]
+              - row "전체 검색 Cmd+Shift+F Ctrl+Shift+F VS Code — 문자열·API path 추적" [ref=e1973]:
+                - cell "전체 검색" [ref=e1974]
+                - cell "Cmd+Shift+F" [ref=e1975]:
+                  - code [ref=e1976]: Cmd+Shift+F
+                - cell "Ctrl+Shift+F" [ref=e1977]:
+                  - code [ref=e1978]: Ctrl+Shift+F
+                - cell "VS Code — 문자열·API path 추적" [ref=e1979]
+              - row "심볼 이동 Cmd+Shift+O Ctrl+Shift+O VS Code — 큰 파일 내 함수 점프" [ref=e1980]:
+                - cell "심볼 이동" [ref=e1981]
+                - cell "Cmd+Shift+O" [ref=e1982]:
+                  - code [ref=e1983]: Cmd+Shift+O
+                - cell "Ctrl+Shift+O" [ref=e1984]:
+                  - code [ref=e1985]: Ctrl+Shift+O
+                - cell "VS Code — 큰 파일 내 함수 점프" [ref=e1986]
+              - row "정의로 이동 F12 F12 VS Code — 타입·함수 정의" [ref=e1987]:
+                - cell "정의로 이동" [ref=e1988]
+                - cell "F12" [ref=e1989]:
+                  - code [ref=e1990]: F12
+                - cell "F12" [ref=e1991]:
+                  - code [ref=e1992]: F12
+                - cell "VS Code — 타입·함수 정의" [ref=e1993]
+              - row "멀티 커서 Cmd+D / Option+Click Ctrl+D / Alt+Click VS Code — 같은 토큰 반복 수정" [ref=e1994]:
+                - cell "멀티 커서" [ref=e1995]
+                - cell "Cmd+D / Option+Click" [ref=e1996]:
+                  - code [ref=e1997]: Cmd+D
+                  - text: /
+                  - code [ref=e1998]: Option+Click
+                - cell "Ctrl+D / Alt+Click" [ref=e1999]:
+                  - code [ref=e2000]: Ctrl+D
+                  - text: /
+                  - code [ref=e2001]: Alt+Click
+                - cell "VS Code — 같은 토큰 반복 수정" [ref=e2002]
+              - row "DevTools 열기 Cmd+Option+I Ctrl+Shift+I 브라우저 — Network·Console" [ref=e2003]:
+                - cell "DevTools 열기" [ref=e2004]
+                - cell "Cmd+Option+I" [ref=e2005]:
+                  - code [ref=e2006]: Cmd+Option+I
+                - cell "Ctrl+Shift+I" [ref=e2007]:
+                  - code [ref=e2008]: Ctrl+Shift+I
+                - cell "브라우저 — Network·Console" [ref=e2009]
+              - row "요청 다시 보내기 Cmd+Enter Ctrl+Enter Postman — 저장한 API 재현" [ref=e2010]:
+                - cell "요청 다시 보내기" [ref=e2011]
+                - cell "Cmd+Enter" [ref=e2012]:
+                  - code [ref=e2013]: Cmd+Enter
+                - cell "Ctrl+Enter" [ref=e2014]:
+                  - code [ref=e2015]: Ctrl+Enter
+                - cell "Postman — 저장한 API 재현" [ref=e2016]
+          - generic [ref=e2017]:
+            - generic [ref=e2018]: TOOLING INCIDENT TRIAGE
+            - text: "\"내 로컬만 깨짐\"은 아래 순서로 좁히면 대부분 분리된다."
+            - text: 1. runtime version — 나와 팀/CI의 런타임 버전이 같은가
+            - text: 2. env diff — 환경변수·credential 누락 또는 값 차이
+            - text: 3. port/process — 충돌 포트·좀비 프로세스가 잡고 있는가
+            - text: 4. clean install — lockfile 기준 재설치로 의존성 오염 제거
+            - text: 5. container — 그래도 재현 안 되면 컨테이너 기준으로 통제
+          - table [ref=e2019]:
+            - rowgroup [ref=e2020]:
+              - row "순서 질문 증거" [ref=e2021]:
+                - columnheader "순서" [ref=e2022]
+                - columnheader "질문" [ref=e2023]
+                - columnheader "증거" [ref=e2024]
+              - row "1 런타임 버전이 팀/CI와 같은가? node -v , java -version , lockfile" [ref=e2025]:
+                - cell "1" [ref=e2026]
+                - cell "런타임 버전이 팀/CI와 같은가?" [ref=e2027]
+                - cell "node -v , java -version , lockfile" [ref=e2028]:
+                  - code [ref=e2029]: node -v
+                  - text: ","
+                  - code [ref=e2030]: java -version
+                  - text: ", lockfile"
+              - row "2 env·credential 누락/차이인가? .env template diff, secret 이름·만료" [ref=e2031]:
+                - cell "2" [ref=e2032]
+                - cell "env·credential 누락/차이인가?" [ref=e2033]
+                - cell ".env template diff, secret 이름·만료" [ref=e2034]:
+                  - code [ref=e2035]: .env
+                  - text: template diff, secret 이름·만료
+              - row "3 포트·프로세스 충돌인가? lsof -i :3000 , ps aux | grep node" [ref=e2036]:
+                - cell "3" [ref=e2037]
+                - cell "포트·프로세스 충돌인가?" [ref=e2038]
+                - cell "lsof -i :3000 , ps aux | grep node" [ref=e2039]:
+                  - code [ref=e2040]: lsof -i :3000
+                  - text: ","
+                  - code [ref=e2041]: ps aux | grep node
+              - row "4 의존성·캐시 오염인가? rm -rf node_modules + npm ci , lockfile diff" [ref=e2042]:
+                - cell "4" [ref=e2043]
+                - cell "의존성·캐시 오염인가?" [ref=e2044]
+                - cell "rm -rf node_modules + npm ci , lockfile diff" [ref=e2045]:
+                  - code [ref=e2046]: rm -rf node_modules
+                  - text: +
+                  - code [ref=e2047]: npm ci
+                  - text: ", lockfile diff"
+              - row "5 컨테이너 기준으론 재현되나? docker compose up , image digest" [ref=e2048]:
+                - cell "5" [ref=e2049]
+                - cell "컨테이너 기준으론 재현되나?" [ref=e2050]
+                - cell "docker compose up , image digest" [ref=e2051]:
+                  - code [ref=e2052]: docker compose up
+                  - text: ", image digest"
+          - generic [ref=e2053]:
+            - generic [ref=e2054]: 복구/중단 기준
+            - paragraph [ref=e2055]:
+              - text: 작업 유실이 의심되면 다른 명령을 치기 전에
+              - generic [ref=e2056]:
+                - code [ref=e2057]: git reflog
+                - text: 부터
+              - text: — HEAD 이동 기록이 남아 있는 동안이 복구 골든타임이다. secret이 커밋·push됐다면 history 정리보다 토큰 재발급이 먼저다. 히스토리 재작성(rebase/force)은 공유 브랜치에서 중단하고 merge로 우회한다.
+      - region "실무 예시" [ref=e2058]:
+        - generic [ref=e2059]:
+          - generic [ref=e2060]: PRACTICE
+          - heading "실무 예시" [level=2] [ref=e2061]
+        - paragraph [ref=e2062]: 리뷰 전 빠른 점검표로 변경 위험을 훑는다.
+        - generic [ref=e2063]:
+          - generic "현장 조건" [ref=e2064]:
+            - heading "현장 조건" [level=3] [ref=e2065]
+            - list [ref=e2066]:
+              - listitem [ref=e2067]: 가이드는 재현 가능해야 하며 개인 기억에 의존하면 안 된다.
+              - listitem [ref=e2068]: secret, 환경 차이, rollback 조건을 절차 안에 넣는다.
+          - generic "실행 절차" [ref=e2069]:
+            - heading "실행 절차" [level=3] [ref=e2070]
+            - list [ref=e2071]:
+              - listitem [ref=e2072]: 변경 범위에 맞는 Frontend, Backend, DB, Network, DevOps 치트시트를 고른다.
+              - listitem [ref=e2073]: Review Gate와 Failure Playbook 항목을 PR 체크리스트로 옮긴다.
+              - listitem [ref=e2074]: 차단 기준에 걸리는 항목은 수정 또는 명시적 리스크로 남긴다.
+          - generic "검증 증거" [ref=e2075]:
+            - heading "검증 증거" [level=3] [ref=e2076]
+            - list [ref=e2077]:
+              - listitem [ref=e2078]: 체크리스트
+              - listitem [ref=e2079]: 명령 로그
+              - listitem [ref=e2080]: 환경 변수 표
+              - listitem [ref=e2081]: 복구 절차
+              - listitem [ref=e2082]: 검증 결과
+          - generic "실패 신호" [ref=e2083]:
+            - heading "실패 신호" [level=3] [ref=e2084]
+            - list [ref=e2085]:
+              - listitem [ref=e2086]: 한 번은 됐지만 다른 PC나 CI에서 재현되지 않는다.
+              - listitem [ref=e2087]: 위험 명령의 대상 환경을 구분하지 않는다.
+        - generic [ref=e2088]:
+          - generic [ref=e2089]: 완료 기준
+          - paragraph [ref=e2090]: 치트시트가 암기장이 아니라 리뷰 품질과 장애 예방 도구가 된다.
+        - generic [ref=e2091]:
+          - text: 리뷰 질문
+          - list [ref=e2092]:
+            - listitem [ref=e2093]: 다른 사람이 같은 절차로 성공할 수 있는가?
+            - listitem [ref=e2094]: 실수했을 때 되돌리는 방법이 문서에 있는가?
+  - navigation "문서 이동":
+    - generic [ref=e2095]:
+      - 'button "이전 항목: 08 AI 제품 UX·신뢰 설계" [ref=e2096] [cursor=pointer]':
+        - img [ref=e2097]
+        - generic [ref=e2099]:
+          - generic [ref=e2100]: 이전
+          - generic [ref=e2101]: 08 AI 제품 UX·신뢰 설계
+      - button "맨 위로 이동" [disabled] [ref=e2102]:
+        - img [ref=e2103]
+        - generic [ref=e2105]: Top
+      - 'button "다음 항목: 01 실무 준비·작업 루프" [ref=e2106] [cursor=pointer]':
+        - generic [ref=e2107]:
+          - generic [ref=e2108]: 다음
+          - generic [ref=e2109]: 01 실무 준비·작업 루프
+        - img [ref=e2110]
