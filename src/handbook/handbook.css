@@ -632,6 +632,240 @@
   background: var(--panel);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.handbook-main .handbook-learning-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 18px;
+  margin: 34px 0 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.handbook-main .handbook-learning-search,
+.handbook-main .handbook-study-cards {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 18px;
+}
+
+.handbook-main .learning-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.handbook-main .learning-kicker,
+.handbook-main .learning-count,
+.handbook-main .learning-progress,
+.handbook-main .learning-result-code,
+.handbook-main .study-card-meta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+}
+
+.handbook-main .learning-kicker,
+.handbook-main .learning-result-code,
+.handbook-main .study-card-meta span {
+  color: var(--green-deep);
+  font-weight: 800;
+}
+
+.handbook-main .learning-panel-head h2 {
+  margin-top: 4px;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.handbook-main .learning-count,
+.handbook-main .learning-progress {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.handbook-main .learning-reset-button,
+.handbook-main .study-card-actions button,
+.handbook-main .learning-filter-button,
+.handbook-main .learning-card-collapse-toggle {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.handbook-main .learning-reset-button:hover,
+.handbook-main .study-card-actions button:hover,
+.handbook-main .learning-filter-button:hover,
+.handbook-main .learning-card-collapse-toggle:hover,
+.handbook-main .learning-reset-button:focus-visible,
+.handbook-main .study-card-actions button:focus-visible,
+.handbook-main .learning-filter-button:focus-visible,
+.handbook-main .learning-card-collapse-toggle:focus-visible {
+  border-color: var(--green);
+  background: var(--green-tint);
+  color: var(--green-deep);
+  outline: none;
+}
+
+.handbook-main .learning-filter-button[aria-pressed="true"],
+.handbook-main .study-card-actions button[aria-pressed="true"] {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.handbook-main .learning-search-input {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0 12px;
+  color: var(--green-deep);
+}
+
+.handbook-main .learning-search-input:focus-within {
+  border-color: var(--green);
+  outline: 2px solid var(--green-tint);
+}
+
+.handbook-main .learning-search-input input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.handbook-main .learning-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.handbook-main .learning-search-results,
+.handbook-main .study-card-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.handbook-main .learning-search-result,
+.handbook-main .study-card {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 13px 14px;
+}
+
+.handbook-main .learning-search-result {
+  display: grid;
+  gap: 5px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.handbook-main .learning-search-result:hover,
+.handbook-main .learning-search-result:focus-visible {
+  border-color: var(--green);
+  background: var(--green-tint);
+  outline: none;
+}
+
+.handbook-main .learning-search-result strong,
+.handbook-main .study-card h3 {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.handbook-main .learning-search-result span:last-child,
+.handbook-main .study-card-answer,
+.handbook-main .learning-empty {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.handbook-main .study-card[data-mastered="true"] {
+  border-color: var(--green);
+  background: var(--green-tint);
+}
+
+.handbook-main .study-card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.handbook-main .study-card-meta a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.handbook-main .study-card-meta a:hover,
+.handbook-main .study-card-meta a:focus-visible {
+  color: var(--green-deep);
+  text-decoration: underline;
+  outline: none;
+}
+
+.handbook-main .study-card h3 {
+  margin: 0;
+}
+
+.handbook-main .study-card-answer {
+  margin: 10px 0 0;
+}
+
+.handbook-main .study-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.handbook-main .learning-card-collapse-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  min-height: 28px;
+  border-color: rgba(231, 234, 241, 0.24);
+  background: rgba(255, 255, 255, 0.1);
+  color: #e7eaf1;
+  font-family: var(--sans);
+}
+
 .handbook-main .handbook-practical-example .ch-head {
   padding-bottom: 10px;
   margin-bottom: 20px;
@@ -766,6 +1000,8 @@
 
   .handbook-main {
     padding: 0 16px 128px;
+    font-size: 15px;
+    line-height: 1.72;
   }
 
   .handbook-toc .nav-brand,
@@ -822,7 +1058,7 @@
   }
 
   .handbook-main section {
-    padding-top: 48px;
+    padding-top: 56px;
   }
 
   .handbook-main .ch-head {
@@ -858,6 +1094,38 @@
     margin-top: 48px;
     padding: 24px 16px 18px;
     border-radius: 0;
+  }
+
+  .handbook-main .handbook-learning-panels {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 22px 0 4px;
+    padding-bottom: 22px;
+  }
+
+  .handbook-main .handbook-learning-search,
+  .handbook-main .handbook-study-cards {
+    padding: 15px;
+  }
+
+  .handbook-main .learning-panel-head {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .handbook-main .learning-panel-head h2 {
+    font-size: 17px;
+  }
+
+  .handbook-main .learning-filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .handbook-main .learning-filter-button {
+    flex: 0 0 auto;
   }
 
   .handbook-main .practical-example-grid {
@@ -913,11 +1181,28 @@
   .handbook-main .serial-card,
   .handbook-main .snippet-card {
     padding: 16px;
+    padding-bottom: 52px;
     margin: 18px 0;
     font-size: 12.5px;
     line-height: 1.8;
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .handbook-main .learning-collapsible-card.is-collapsed {
+    max-height: 260px;
+    overflow: hidden;
+  }
+
+  .handbook-main .learning-collapsible-card.is-collapsed::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 86px;
+    background: linear-gradient(rgba(31, 36, 48, 0), var(--ink) 66%);
+    pointer-events: none;
   }
 
   .handbook-main .snippet-card-copy {
@@ -939,6 +1224,60 @@
     padding: 11px 14px;
     min-width: 0;
     overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 700px) {
+  .handbook-main table.mobile-card-table {
+    display: block;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    font-size: 13.5px;
+  }
+
+  .handbook-main table.mobile-card-table tbody,
+  .handbook-main table.mobile-card-table tr,
+  .handbook-main table.mobile-card-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .handbook-main table.mobile-card-table tr:first-child {
+    display: none;
+  }
+
+  .handbook-main table.mobile-card-table tr {
+    margin: 12px 0;
+    border: 1px solid var(--line);
+    background: var(--panel);
+  }
+
+  .handbook-main table.mobile-card-table td {
+    min-width: 0;
+    padding: 11px 12px;
+    border-bottom: 1px dashed var(--line);
+    overflow-wrap: anywhere;
+  }
+
+  .handbook-main table.mobile-card-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .handbook-main table.mobile-card-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--green-deep);
+  }
+
+  .handbook-main .snippet-card {
+    overflow-x: visible;
+    white-space: pre-wrap;
   }
 }
 

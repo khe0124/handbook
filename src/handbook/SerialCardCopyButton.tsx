@@ -10,9 +10,11 @@ function getCopyText(card: HTMLElement) {
 
   const clone = card.cloneNode(true) as HTMLElement;
 
-  clone.querySelectorAll(".serial-card-copy-mount, .snippet-card-copy-mount").forEach((node) => {
-    node.remove();
-  });
+  clone
+    .querySelectorAll(".serial-card-copy-mount, .snippet-card-copy-mount, .learning-card-collapse-toggle")
+    .forEach((node) => {
+      node.remove();
+    });
 
   return clone.textContent?.replace(/\u00a0/g, " ").trim() ?? "";
 }

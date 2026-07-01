@@ -96,7 +96,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 70);
+  assert.equal(HANDBOOK_ITEMS.length, 73);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(engineeringGroup?.items.length, 15);
   assert.equal(llmGroup?.items.length, 12);
@@ -166,8 +166,11 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("01 디자인 실행·시스템 품질"));
   assert.ok(labels.includes("02 시각디자인 기초·조형 원리"));
   assert.ok(labels.includes("03 색채·타이포그래피·브랜드 시각 언어"));
-  assert.ok(labels.includes("04 사진학·이미지 리터러시"));
-  assert.ok(labels.includes("05 AI 제품 UX·신뢰 설계"));
+  assert.ok(labels.includes("04 아이콘·일러스트레이션 시스템"));
+  assert.ok(labels.includes("05 데이터 시각화"));
+  assert.ok(labels.includes("06 모션·애니메이션 원리"));
+  assert.ok(labels.includes("07 사진학·이미지 리터러시"));
+  assert.ok(labels.includes("08 AI 제품 UX·신뢰 설계"));
   assert.ok(labels.includes("00 실무 치트시트 모음"));
   assert.ok(labels.includes("01 실무 준비·작업 루프"));
   assert.ok(labels.includes("02 빌드·설정·릴리스 운영"));
@@ -640,25 +643,45 @@ test("AX, design, and practical tool menus group consistent handbook bundles", a
     },
     {
       file: "practice-visual-design-foundations-handbook.html",
-      sources: ["시각디자인 기초·조형 원리"],
-      evidence: ["VISUAL DESIGN FOUNDATION MAP", "GESTALT PRINCIPLES", "COMPOSITION CRITIQUE CHECKLIST", "VISUAL HIERARCHY AUDIT"],
+      sources: ["게슈탈트 원리", "여백·네거티브 스페이스", "그리드·레이아웃 조형", "Composition critique"],
+      evidence: ["VISUAL HIERARCHY AUDIT", "스케일·비율·비례"],
     },
     {
       file: "practice-color-typography-brand-handbook.html",
-      sources: ["색채·타이포그래피·브랜드 시각 언어"],
-      evidence: ["COLOR TYPOGRAPHY BRAND SYSTEM", "COLOR PALETTE DECISION TABLE", "TYPOGRAPHY SCALE CHECKLIST", "BRAND VISUAL LANGUAGE AUDIT"],
+      sources: ["색 공간과 모델", "배색 이론", "색 접근성", "타이포그래피 심화", "본문 조판"],
+      evidence: ["BRAND VISUAL LANGUAGE AUDIT", "TYPE SCALE 정의 체크리스트"],
+    },
+    {
+      file: "practice-iconography-illustration-handbook.html",
+      sources: ["아이콘 조형 원칙", "의미·메타포·일관성", "일러스트 스타일 시스템"],
+      evidence: ["ILLUSTRATION BRIEF 템플릿", "ICON / ILLUSTRATION REVIEW CHECKLIST"],
+    },
+    {
+      file: "practice-data-visualization-handbook.html",
+      sources: ["의도별 차트 선택", "시각 인코딩 원리", "오해 유발 안티패턴"],
+      evidence: ["DATA VIZ REVIEW CHECKLIST", "Cleveland"],
+    },
+    {
+      file: "practice-motion-animation-handbook.html",
+      sources: ["모션의 목적", "안무", "의미 있는 전환", "접근성 · 모션 안전"],
+      evidence: ["MOTION REVIEW CHECKLIST", "prefers-reduced-motion"],
     },
     {
       file: "practice-photography-image-literacy-handbook.html",
-      sources: ["사진학·이미지 리터러시"],
-      evidence: ["PHOTOGRAPHY IMAGE LITERACY MAP", "EXPOSURE TRIANGLE", "IMAGE QUALITY REVIEW RUBRIC", "AI STOCK IMAGE RISK CHECKLIST"],
+      sources: ["Exposure triangle", "렌즈·원근·심도", "빛과 조명", "이미지 파이프라인", "AI·스톡 이미지 점검"],
+      evidence: ["PHOTO BRIEF TEMPLATE", "srcset"],
+    },
+    {
+      file: "design-ai-product-ux-handbook.html",
+      sources: ["불확실성 표시", "출처·근거 UI", "생성 UX 패턴", "Human handoff", "신뢰·기대 설정"],
+      evidence: ["CITATION UX CONTRACT", "handoff"],
     },
   ];
   const practiceBundles = [
     {
       file: "practice-cheat-sheets-handbook.html",
       sources: ["Frontend", "Backend", "Database", "Network", "DevOps", "Linux", "Docker", "Interview", "Tools·Shortcuts·Commands"],
-      evidence: ["Red Flags", "Review Gate", "Failure Playbook", "Cmd\\+P", "curl -i", "docker logs"],
+      evidence: ["핵심 명령·스니펫", "장애 증거 1카드", "TRIAGE", "Cmd\\+P", "curl -i", "docker logs -f"],
     },
     {
       file: "practice-workflow-setup-handbook.html",
@@ -704,20 +727,28 @@ test("AX, design, and practical tool menus group consistent handbook bundles", a
 
 test("design practice includes specialist visual design, typography, and photography foundations", async () => {
   assert.deepEqual(
-    DESIGN_PRACTICE_HANDBOOKS.slice(0, 5).map((item) => item.label),
+    DESIGN_PRACTICE_HANDBOOKS.map((item) => item.label),
     [
       "00 디자인 기반·사용자 흐름",
       "01 디자인 실행·시스템 품질",
       "02 시각디자인 기초·조형 원리",
       "03 색채·타이포그래피·브랜드 시각 언어",
-      "04 사진학·이미지 리터러시",
+      "04 아이콘·일러스트레이션 시스템",
+      "05 데이터 시각화",
+      "06 모션·애니메이션 원리",
+      "07 사진학·이미지 리터러시",
+      "08 AI 제품 UX·신뢰 설계",
     ],
   );
 
   const sourceMarkers = [
-    ["src/handbook/documents/practice-visual-design-foundations.ts", ["Point, line, plane", "Gestalt", "visual hierarchy", "grid systems", "composition critique"]],
-    ["src/handbook/documents/practice-color-typography-brand.ts", ["Hue, saturation, value", "typography fundamentals", "font pairing", "brand visual language", "accessibility contrast"]],
-    ["src/handbook/documents/practice-photography-image-literacy.ts", ["Exposure triangle", "focal length", "depth of field", "light direction", "AI image"]],
+    ["src/handbook/documents/practice-visual-design-foundations.ts", ["게슈탈트", "여백", "그리드", "visual hierarchy", "스케일·비율·비례"]],
+    ["src/handbook/documents/practice-color-typography-brand.ts", ["OKLCH", "배색", "타이포그래피 심화", "본문 조판", "APCA"]],
+    ["src/handbook/documents/practice-iconography-illustration.ts", ["keyline", "currentColor", "픽토그램", "ILLUSTRATION BRIEF"]],
+    ["src/handbook/documents/practice-data-visualization.ts", ["Cleveland", "pre-attentive", "sequential", "diverging", "dual-axis"]],
+    ["src/handbook/documents/practice-motion-animation.ts", ["cubic-bezier", "easing", "stagger", "prefers-reduced-motion", "compositing"]],
+    ["src/handbook/documents/practice-photography-image-literacy.ts", ["Exposure triangle", "focal length", "depth of field", "srcset", "AI"]],
+    ["src/handbook/documents/design-ai-product-ux.ts", ["CITATION UX CONTRACT", "handoff", "grounding|근거", "confidence|불확실"]],
   ];
 
   for (const [sourcePath, markers] of sourceMarkers) {
@@ -1512,7 +1543,7 @@ test("every handbook item has a rendered practical example", async () => {
   }
 });
 
-test("cheat sheets include professional review gates and failure playbooks", async () => {
+test("cheat sheets provide copy-ready commands, gotchas, and triage cards", async () => {
   const cheatSheets = [
     "frontend-cheat-sheet.html",
     "backend-cheat-sheet.html",
@@ -1531,13 +1562,15 @@ test("cheat sheets include professional review gates and failure playbooks", asy
 
   for (const [index, source] of sources.entries()) {
     const file = cheatSheets[index];
-    assert.match(source, /Red Flags/, `${file} should expose red-flag guidance`);
-    assert.match(source, /Review Gate/, `${file} should expose review gate guidance`);
-    assert.match(source, /Failure Playbook/, `${file} should expose a failure playbook`);
-    assert.match(source, /차단 기준|부족한 답변 기준/, `${file} should define a blocking quality bar`);
+    assert.match(source, /· 즉시 확인/, `${file} should expose gotchas guidance`);
+    assert.match(source, /1카드/, `${file} should expose a triage card`);
   }
 
   const combined = sources.join("\n");
+  assert.ok(
+    (combined.match(/<pre class="snippet-card">/g) ?? []).length >= 20,
+    "cheat sheets should provide plenty of copy-ready command blocks",
+  );
   assert.match(combined, /BROKEN SCREEN TRIAGE/);
   assert.match(combined, /API INCIDENT TRIAGE/);
   assert.match(combined, /SLOW QUERY FIRST LOOK/);
@@ -1737,6 +1770,33 @@ test("handbook layout includes mobile responsive reading refinements", async () 
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.snippet-card\s*\{[\s\S]*padding: 16px/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.ch-head\s*\{[\s\S]*flex-direction: column/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.handbook-main h1\s*\{[\s\S]*font-size: 27px/s);
+});
+
+test("handbook page exposes mobile learning tools for recall and section search", async () => {
+  const [pageSource, copyButtonSource, cssSource] = await Promise.all([
+    readFile("src/handbook/HandbookPage.tsx", "utf8"),
+    readFile("src/handbook/SerialCardCopyButton.tsx", "utf8"),
+    readFile("src/handbook/handbook.css", "utf8"),
+  ]);
+
+  assert.match(pageSource, /studyCardStoragePrefix = "dev-handbook:study-card:"/);
+  assert.match(pageSource, /function LearningSearchPanel/);
+  assert.match(pageSource, /function StudyCardsPanel/);
+  assert.match(pageSource, /learningFilters[\s\S]*개념[\s\S]*실무 체크리스트|learningFilters[\s\S]*체크리스트/s);
+  assert.match(pageSource, /면접 답변/);
+  assert.match(pageSource, /실패 신호/);
+  assert.match(pageSource, /산출물/);
+  assert.match(pageSource, /href=\{`#\$\{section\.id\}`\}/);
+  assert.match(pageSource, /className="handbook-learning-panels"/);
+  assert.match(pageSource, /classList\.add\("mobile-card-table"\)/);
+  assert.match(pageSource, /cell\.dataset\.label = header/);
+  assert.match(pageSource, /learning-card-collapse-toggle/);
+  assert.match(copyButtonSource, /learning-card-collapse-toggle/);
+  assert.match(cssSource, /\.handbook-main \.handbook-learning-panels/);
+  assert.match(cssSource, /\.handbook-main \.study-card/);
+  assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*table\.mobile-card-table/s);
+  assert.match(cssSource, /td::before\s*\{[\s\S]*content: attr\(data-label\)/s);
+  assert.match(cssSource, /\.learning-collapsible-card\.is-collapsed/);
 });
 
 test("devops handbook includes practical senior-level operating guidance", async () => {
@@ -2182,8 +2242,39 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.doesNotMatch(source, /FORMAT : 개념 → 체크리스트/);
 
   const requestPathDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-request-path-handbook.html")];
+  const roadmapDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-roadmap-handbook.html")];
   const observabilityDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-observability-slo-handbook.html")];
   const cloudDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-cloud-scenarios-handbook.html")];
+
+  assert.match(roadmapDoc, /로드맵으로 읽는 순서[\s\S]*1주차 · 요청 경로[\s\S]*4주차 · 관측과 복구/);
+  assert.match(roadmapDoc, /대상 독자와 학습 계약[\s\S]*미들급 개발자[\s\S]*학습 산출물/);
+  assert.match(roadmapDoc, /60분 강연 흐름[\s\S]*0-5분[\s\S]*52-60분/);
+  assert.match(roadmapDoc, /계층별 실패 모드[\s\S]*DNS\/TLS[\s\S]*Load Balancer[\s\S]*Recovery path/);
+  assert.match(roadmapDoc, /AWS\/Azure 증거 비교[\s\S]*Route 53[\s\S]*Azure DNS[\s\S]*PrivateLink[\s\S]*Private Endpoint/);
+  assert.match(roadmapDoc, /운영 의사결정 트리[\s\S]*사용자가 실제로 영향을 받는가[\s\S]*원인 확정 전 완화가 가능한가[\s\S]*복구가 검증됐는가/);
+  assert.match(roadmapDoc, /운영 준비도 점수표[\s\S]*0점[\s\S]*4점/);
+  assert.match(roadmapDoc, /강연 데모 스크립트[\s\S]*데모 1[\s\S]*5xx fast burn triage[\s\S]*restore drill 채점/);
+  assert.match(roadmapDoc, /실습 채점 루브릭[\s\S]*초급[\s\S]*상급[\s\S]*리뷰어/);
+  assert.match(roadmapDoc, /전문가 리뷰 질문[\s\S]*SRE 리뷰[\s\S]*Cloud network 리뷰[\s\S]*DB\/DR 리뷰/);
+  assert.match(roadmapDoc, /공식 근거 맵[\s\S]*Google SRE Workbook · Alerting on SLOs[\s\S]*Kubernetes Docs · Liveness, Readiness, and Startup Probes[\s\S]*AWS Docs · Flow log records/);
+  assert.match(roadmapDoc, /AWS Docs · Restoring a DB instance to a specified time[\s\S]*Microsoft Learn · Restore a database from a backup/);
+  assert.match(roadmapDoc, /정확도 한계와 공개 시 주의 문구[\s\S]*SLO 임계값[\s\S]*Flow log 판독[\s\S]*DR\/RPO\/RTO/);
+  assert.match(roadmapDoc, /벤더별 세부 함정[\s\S]*Route 53 \/ Azure DNS[\s\S]*PrivateLink \/ Private Endpoint[\s\S]*RDS \/ Azure SQL/);
+  assert.match(roadmapDoc, /재현 실습 패킷[\s\S]*학습자 제출물[\s\S]*증거 연결 40%[\s\S]*sandbox 계정/);
+  assert.match(roadmapDoc, /출판 전 검수 기준[\s\S]*개념 정확성[\s\S]*전문 리뷰/);
+  assert.match(roadmapDoc, /운영 산출물 템플릿[\s\S]*Readiness packet[\s\S]*Incident packet/);
+  assert.match(roadmapDoc, /service: checkout-api/);
+  assert.match(roadmapDoc, /incident: INC-2026-0715-checkout-fast-burn/);
+  assert.match(roadmapDoc, /launch_gate: blocked if owner, rollback, restore, alert route, or SLO is missing/);
+  assert.match(roadmapDoc, /runbook_diff:[\s\S]*add metric gate for checkout_success burn/);
+  assert.match(roadmapDoc, /배포 직후 5xx 증가 triage/);
+  assert.match(roadmapDoc, /DNS\/TLS edge 장애 판독/);
+  assert.match(roadmapDoc, /Private subnet egress 장애 판독/);
+  assert.match(roadmapDoc, /SLO burn과 incident 역할 판독/);
+  assert.match(roadmapDoc, /Restore drill RPO\/RTO 판독/);
+  assert.match(roadmapDoc, /강연\/출판용 실전 케이스[\s\S]*Case 1 · 배포 후 checkout 5xx fast burn[\s\S]*Case 2 · Private subnet egress와 NAT 비용 급증[\s\S]*Case 3 · Restore drill RPO\/RTO 실패/);
+  assert.match(roadmapDoc, /대표 오판[\s\S]*종료 조건/);
+  assert.match(roadmapDoc, /30초 답변[\s\S]*90초 답변[\s\S]*나쁜 답변/);
 
   assert.match(requestPathDoc, /앱과 DB 경계[\s\S]*connection pool[\s\S]*slow query[\s\S]*lock wait/);
   assert.doesNotMatch(requestPathDoc, /앱과 DB 경계[\s\S]{0,700}authoritative answer/);
