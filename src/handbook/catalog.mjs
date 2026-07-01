@@ -90,14 +90,15 @@ export const ENGINEERING_HANDBOOKS = [
   { id: "engineering-frontend-core", label: "04 프론트엔드 핵심", kind: "개발 핸드북", file: "engineering-frontend-core-handbook.html" },
   { id: "engineering-frontend-interaction", label: "05 프론트엔드 인터랙션·3D", kind: "개발 핸드북", file: "engineering-frontend-interaction-handbook.html" },
   { id: "engineering-frontend-performance", label: "06 프론트엔드 성능·진단", kind: "개발 핸드북", file: "engineering-frontend-performance-handbook.html" },
-  { id: "engineering-frontend-quality", label: "07 프론트엔드 품질·릴리스", kind: "개발 핸드북", file: "engineering-frontend-quality-handbook.html" },
-  { id: "engineering-backend-core", label: "08 백엔드 핵심", kind: "개발 핸드북", file: "engineering-backend-core-handbook.html" },
-  { id: "engineering-backend-auth-security", label: "09 백엔드 인증·보안", kind: "개발 핸드북", file: "engineering-backend-auth-security-handbook.html" },
-  { id: "engineering-backend-architecture", label: "10 백엔드 아키텍처", kind: "개발 핸드북", file: "engineering-backend-architecture-handbook.html" },
-  { id: "engineering-data", label: "11 데이터 계층·저장소", kind: "개발 핸드북", file: "engineering-data-handbook.html" },
-  { id: "engineering-runtime-quality", label: "12 런타임 품질·장애대응", kind: "개발 핸드북", file: "engineering-runtime-quality-handbook.html" },
-  { id: "engineering-platform-tools", label: "13 플랫폼 도구·운영 기본기", kind: "개발 핸드북", file: "engineering-platform-tools-handbook.html" },
-  { id: "engineering-java-spring", label: "14 Java·Spring·JPA 사례", kind: "개발 핸드북", file: "engineering-java-spring-handbook.html" },
+  { id: "engineering-frontend-seo-analytics", label: "07 SEO·AEO·GEO·애널리틱스", kind: "개발 핸드북", file: "engineering-frontend-seo-analytics-handbook.html" },
+  { id: "engineering-frontend-quality", label: "08 프론트엔드 품질·릴리스", kind: "개발 핸드북", file: "engineering-frontend-quality-handbook.html" },
+  { id: "engineering-backend-core", label: "09 백엔드 핵심", kind: "개발 핸드북", file: "engineering-backend-core-handbook.html" },
+  { id: "engineering-backend-auth-security", label: "10 백엔드 인증·보안", kind: "개발 핸드북", file: "engineering-backend-auth-security-handbook.html" },
+  { id: "engineering-backend-architecture", label: "11 백엔드 아키텍처", kind: "개발 핸드북", file: "engineering-backend-architecture-handbook.html" },
+  { id: "engineering-data", label: "12 데이터 계층·저장소", kind: "개발 핸드북", file: "engineering-data-handbook.html" },
+  { id: "engineering-runtime-quality", label: "13 런타임 품질·장애대응", kind: "개발 핸드북", file: "engineering-runtime-quality-handbook.html" },
+  { id: "engineering-platform-tools", label: "14 플랫폼 도구·운영 기본기", kind: "개발 핸드북", file: "engineering-platform-tools-handbook.html" },
+  { id: "engineering-java-spring", label: "15 Java·Spring·JPA 사례", kind: "개발 핸드북", file: "engineering-java-spring-handbook.html" },
 ];
 
 export const LLM_HANDBOOKS = [

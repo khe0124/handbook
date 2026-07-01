@@ -98,9 +98,9 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 81);
+  assert.equal(HANDBOOK_ITEMS.length, 82);
   assert.equal(careerGroup?.items.length, 10);
-  assert.equal(engineeringGroup?.items.length, 15);
+  assert.equal(engineeringGroup?.items.length, 16);
   assert.equal(engineeringContextGroup?.items.length, 8);
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 6);
@@ -156,14 +156,15 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("04 프론트엔드 핵심"));
   assert.ok(labels.includes("05 프론트엔드 인터랙션·3D"));
   assert.ok(labels.includes("06 프론트엔드 성능·진단"));
-  assert.ok(labels.includes("07 프론트엔드 품질·릴리스"));
-  assert.ok(labels.includes("08 백엔드 핵심"));
-  assert.ok(labels.includes("09 백엔드 인증·보안"));
-  assert.ok(labels.includes("10 백엔드 아키텍처"));
-  assert.ok(labels.includes("11 데이터 계층·저장소"));
-  assert.ok(labels.includes("12 런타임 품질·장애대응"));
-  assert.ok(labels.includes("13 플랫폼 도구·운영 기본기"));
-  assert.ok(labels.includes("14 Java·Spring·JPA 사례"));
+  assert.ok(labels.includes("07 SEO·AEO·GEO·애널리틱스"));
+  assert.ok(labels.includes("08 프론트엔드 품질·릴리스"));
+  assert.ok(labels.includes("09 백엔드 핵심"));
+  assert.ok(labels.includes("10 백엔드 인증·보안"));
+  assert.ok(labels.includes("11 백엔드 아키텍처"));
+  assert.ok(labels.includes("12 데이터 계층·저장소"));
+  assert.ok(labels.includes("13 런타임 품질·장애대응"));
+  assert.ok(labels.includes("14 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("15 Java·Spring·JPA 사례"));
   assert.ok(labels.includes("00 LLM 로드맵·AI Native 개발자 모델"));
   assert.ok(labels.includes("01 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("02 LLM 기초·모델 동작 원리"));
@@ -440,6 +441,11 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["RENDERING OPTIMIZATION HANDBOOK", "PERFORMANCE METRICS HANDBOOK", "DEVTOOLS HANDBOOK", "RENDER BOTTLENECK TRACE", "PERFORMANCE BUDGET POLICY", "PERFORMANCE REGRESSION PACKET"],
     },
     {
+      file: "engineering-frontend-seo-analytics-handbook.html",
+      sources: ["문서 개요", "SEO의 기술 기반", "AEO·GEO·LLM 최적화", "애널리틱스 측정 설계"],
+      evidence: ["DISCOVERY AND MEASUREMENT MODEL", "TECHNICAL SEO RELEASE PACKET", "EVENT SPEC TEMPLATE", "SEO", "AEO", "GEO"],
+    },
+    {
       file: "engineering-frontend-quality-handbook.html",
       sources: ["보안 대응", "테스트 전략", "배포"],
       evidence: ["FRONTEND SECURITY HANDBOOK", "FRONTEND TESTING HANDBOOK", "FRONTEND DEPLOYMENT HANDBOOK"],
@@ -496,7 +502,7 @@ test("engineering handbook menu splits backend core and architecture into separa
     },
   ];
 
-  assert.equal(engineeringGroup?.items.length, 15);
+  assert.equal(engineeringGroup?.items.length, 16);
   assert.deepEqual(
     engineeringGroup?.items.map((item) => item.file),
     bundles.map((bundle) => bundle.file),
@@ -1731,9 +1737,9 @@ test("app uses the Dev Handbook title with fixed top navigation", async () => {
   assert.match(appCssSource, /\.home-title-button/);
   assert.match(appCssSource, /\.home-title-button:focus-visible/);
   assert.doesNotMatch(appCssSource.match(/\.app-shell\s*\{[^}]*\}/s)?.[0] ?? "", /padding-top:/);
-  assert.match(handbookCssSource, /\.handbook-shell\s*\{[^}]*padding-top: 105px/s);
-  assert.match(handbookCssSource, /\.handbook-toc\s*\{[^}]*top: 105px/s);
-  assert.match(handbookCssSource, /\.handbook-toc\s*\{[^}]*height: calc\(100vh - 105px\)/s);
+  assert.match(handbookCssSource, /\.handbook-shell\s*\{[^}]*padding-top: 72px/s);
+  assert.match(handbookCssSource, /\.handbook-toc\s*\{[^}]*top: 72px/s);
+  assert.match(handbookCssSource, /\.handbook-toc\s*\{[^}]*height: calc\(100vh - 72px\)/s);
   assert.match(handbookCssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-shell\s*\{[\s\S]*padding-top: 0/s);
 });
 
@@ -2484,6 +2490,16 @@ test("engineering context handbooks teach product-organization engineering liter
   assert.match(source, /on-call/i);
   assert.match(source, /postmortem/i);
   assert.match(source, /error budget/i);
+  assert.match(source, /실무 상황 예시/);
+  assert.match(source, /가상 운영 수치/);
+  assert.match(source, /1,800 RPS/);
+  assert.match(source, /350 PR/);
+  assert.match(source, /self-service 완료율은 72%/);
+  assert.match(source, /flaky test rate를 1\.5%/);
+  assert.match(source, /p95 1\.8s/);
+  assert.match(source, /18M rows/);
+  assert.match(source, /hydration mismatch/);
+  assert.match(source, /43\.2분/);
 });
 
 test("snippet cards expose lucide-powered copy buttons", async () => {

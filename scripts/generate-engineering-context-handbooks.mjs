@@ -146,17 +146,182 @@ const docs = [
   },
 ];
 
-const css = `:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:760px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:-.02em}h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}tr:last-child td{border-bottom:none}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0;font-size:14.5px;line-height:1.75}.semantic-card.process-card{background:var(--green-tint)}.semantic-card.answer-card{border-left-color:var(--green-deep)}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}`;
+const caseStudies = {
+  "context-scale-systems": [
+    {
+      title: "캠페인 결제 피크",
+      situation:
+        "가상 운영 수치다. 평시 checkout API는 120 RPS지만, 10분짜리 쿠폰 캠페인에서 외부 요청이 1,800 RPS까지 오른다. 요청 1개는 내부 API 6개와 SQL 12개로 fan-out되고, 결제사 응답 지연으로 1% 실패가 발생한다.",
+      numbers:
+        "외부 1,800 RPS × 내부 호출 6개 = 내부 호출 10,800 RPS. 클라이언트와 서버 retry가 겹치면 실패 구간의 내부 부하는 약 2.4배까지 튈 수 있다.",
+      lesson:
+        "규모 문제는 평균 트래픽보다 fan-out, retry, timeout, backpressure가 함께 만드는 압력으로 읽어야 한다. 이 상황의 핵심 질문은 서버를 몇 대 늘릴지가 아니라 실패가 어디까지 전파되는지다.",
+    },
+    {
+      title: "대형 릴리즈 묶음",
+      situation:
+        "한 주 릴리즈 후보에 350 PR, 42개 feature flag, 18개 팀 변경이 섞여 있다. 전체 회귀 테스트는 1시간 40분이 걸리고, smoke test는 12분 안에 끝난다.",
+      numbers:
+        "릴리즈 차단 기준을 모든 테스트 통과로만 두면 대기 시간이 커진다. 결제, 로그인, 송금 같은 핵심 경로는 smoke test 100% 통과를 blocker로 두고, 낮은 위험 변경은 영향 범위 기반 test selection으로 검증한다.",
+      lesson:
+        "큰 조직의 릴리즈는 완벽한 확신이 아니라 위험 등급화다. PR 개수보다 중요한 것은 어떤 변경이 어떤 사용자 경로를 깨뜨릴 수 있는지 추적하는 능력이다.",
+    },
+  ],
+  "context-platform-productivity": [
+    {
+      title: "팀별 배포 스크립트 정리",
+      situation:
+        "가상 운영 수치다. 18개 제품팀이 각자 배포 스크립트와 모니터링 템플릿을 관리한다. 새 서비스 생성 후 첫 배포까지 평균 2일이 걸리고, 플랫폼 팀 지원 티켓은 주 45건이다.",
+      numbers:
+        "Golden path 템플릿을 도입한 뒤 신규 서비스 첫 배포 시간이 30분으로 줄고, self-service 완료율은 72%가 된다. 지원 티켓은 주 45건에서 18건으로 줄지만, 예외 승인 요청은 월 9건 남는다.",
+      lesson:
+        "플랫폼 효과는 도구 기능 수가 아니라 대기 시간과 반복 문의 감소로 본다. 예외 요청이 남는 것은 실패가 아니라 escape hatch와 거버넌스가 필요하다는 신호다.",
+    },
+    {
+      title: "권한 발급 self-service",
+      situation:
+        "운영 DB 읽기 권한을 받으려면 Slack 요청, 팀장 승인, DBA 수동 처리까지 평균 2일이 걸린다. 긴급 장애 때는 승인 우회가 반복된다.",
+      numbers:
+        "권한 포털은 목적, 만료일, 승인자, 감사 로그를 필수로 받고 20분 안에 임시 권한을 발급한다. 30일 초과 권한은 자동 회수 대상으로 잡고, 월 1회 owner review를 요구한다.",
+      lesson:
+        "개발자 생산성은 무조건 빠르게 만드는 것이 아니다. 속도와 통제를 함께 설계해야 플랫폼이 보안 우회로가 아니라 안전한 기본 경로가 된다.",
+    },
+  ],
+  "context-quality-release": [
+    {
+      title: "Flaky test가 릴리즈를 막는 경우",
+      situation:
+        "가상 운영 수치다. 매주 release candidate에는 280개 변경이 들어간다. e2e 회귀 테스트는 90분, smoke test는 12분이고, flaky test rate가 8%라서 실패가 실제 회귀인지 노이즈인지 매번 확인해야 한다.",
+      numbers:
+        "flaky test 격리, 고정 clock, network fixture를 적용해 flaky test rate를 1.5%로 낮춘다. 릴리즈 차단은 핵심 경로 smoke test와 위험 변경 test selection으로 제한한다.",
+      lesson:
+        "테스트가 많아도 신뢰할 수 없으면 출시 가능성이 낮아진다. 품질 엔지니어링의 핵심은 테스트 개수가 아니라 실패 신호의 품질이다.",
+    },
+    {
+      title: "Android 결제 버튼 비활성화 버그",
+      situation:
+        "출시 후 Android 13 일부 단말에서 checkout 버튼이 비활성화된다. 전체 결제 시도의 3%가 영향을 받고, 서버 오류율은 정상이라 백엔드 알림은 울리지 않는다.",
+      numbers:
+        "flag off는 2분 안에 가능하지만 신규 쿠폰 기능도 함께 꺼진다. hotfix는 수정 30분, 빌드 검증 40분, 스토어 배포 지연이 2~8시간이다.",
+      lesson:
+        "핫픽스 판단은 수정 속도보다 사용자 영향과 검증 가능성으로 한다. 서버 지표만 보면 놓치는 클라이언트 funnel drop도 출시 후 관측에 들어가야 한다.",
+    },
+  ],
+  "context-performance-metrics": [
+    {
+      title: "검색 API 평균 latency의 함정",
+      situation:
+        "가상 운영 수치다. 검색 API 평균 latency는 240ms라 좋아 보인다. 하지만 실제 분포는 p50 180ms, p95 1.8s, p99 4.2s이고, 느린 요청은 특정 필터 조합과 DB lock에 몰려 있다.",
+      numbers:
+        "복합 인덱스 추가 후 p95는 420ms로 내려가지만 쓰기 비용이 8% 증가한다. 캐시를 추가하면 p50은 120ms가 되지만 색인 최신성이 최대 30초 늦어진다.",
+      lesson:
+        "성능 개선은 숫자 하나로 끝나지 않는다. p95를 낮추는 대신 쓰기 비용과 freshness 비용이 생기므로, 사용자 경험과 제품 요구를 함께 판단해야 한다.",
+    },
+    {
+      title: "모바일 웹 번들 절감",
+      situation:
+        "대시보드 초기 JavaScript가 1.2MB이고, 중급 Android 기기에서 LCP 3.4초가 나온다. chart 라이브러리 420KB가 첫 화면에 필요하지 않은데 vendor chunk에 포함되어 있다.",
+      numbers:
+        "route 단위 dynamic import와 이미지 preload 정리 후 초기 JS는 620KB, LCP는 2.1초로 내려간다. 하지만 INP는 280ms long task 때문에 거의 변하지 않는다.",
+      lesson:
+        "번들 크기 개선은 로딩에는 직접 효과가 있지만 입력 반응성까지 자동으로 고치지는 않는다. LCP와 INP는 서로 다른 병목을 말한다.",
+    },
+  ],
+  "context-library-oss": [
+    {
+      title: "사내 날짜 유틸 교체",
+      situation:
+        "가상 운영 수치다. 42개 저장소가 사내 date/format 유틸을 사용하고, 공개 API는 28개 함수다. 새 라이브러리는 번들 크기가 60% 작지만 timezone, invalid date, locale fallback에서 7개 동작 차이가 발견된다.",
+      numbers:
+        "compat layer를 6주 유지하고, codemod로 import 1,140곳을 자동 수정한다. 42개 저장소 중 31개는 자동 전환되고, 11개는 edge case 검토가 필요하다.",
+      lesson:
+        "라이브러리 교체의 난이도는 성능 차이보다 기존 동작 계약에 있다. edge case 목록과 migration guide가 없으면 작은 유틸도 조직 전체 변경이 된다.",
+    },
+    {
+      title: "패키지 minor release 사고",
+      situation:
+        "내부 npm 패키지를 12개 서비스와 4개 외부 파트너가 쓴다. maintainer는 옵션 기본값을 바꾸면서 minor version으로 배포했고, 외부 파트너의 validation 로직이 깨진다.",
+      numbers:
+        "배포 2시간 뒤 rollback하고 patch release를 낸다. 이후 semver 정책에 behavior change는 major, deprecation warning은 최소 2 minor 동안 유지한다는 규칙을 추가한다.",
+      lesson:
+        "라이브러리 API는 타입 모양만이 아니라 동작의 기대까지 포함한다. 공개 패키지에서 작은 기본값 변경도 breaking change가 될 수 있다.",
+    },
+  ],
+  "context-migration-compatibility": [
+    {
+      title: "결제 API v1에서 v2로 이동",
+      situation:
+        "가상 운영 수치다. 결제 API v1 consumer는 68개이고, 모바일 앱은 4개 버전이 시장에 남아 있다. v2는 idempotency key와 상세 실패 코드를 추가하지만 v1 응답을 바로 없앨 수 없다.",
+      numbers:
+        "6주 dual support 기간을 둔다. v1 사용량은 100%에서 3주차 12%, 6주차 0.3%로 줄고, 마지막 0.3%는 오래된 앱 버전이라 강제 업데이트 정책과 연결한다.",
+      lesson:
+        "마이그레이션은 새 API 설계보다 남은 사용자를 처리하는 일이 더 어렵다. usage inventory, deadline, fallback이 없으면 제거 단계가 끝나지 않는다.",
+    },
+    {
+      title: "18M rows DB 컬럼 전환",
+      situation:
+        "주문 테이블 18M rows에 새 정규화 컬럼을 추가한다. 기존 컬럼을 바로 제거하면 구버전 서버와 배치 작업이 깨진다.",
+      numbers:
+        "nullable column 추가, dual write, 2,000 rows/sec backfill, 검증 쿼리, read path 전환, contract 순서로 진행한다. backfill은 약 2시간 30분이 걸리며 lock과 replica lag를 대시보드로 본다.",
+      lesson:
+        "DB 마이그레이션의 핵심은 SQL 한 줄이 아니라 배포 순서다. expand-contract를 지키면 롤백 가능한 지점을 유지하면서 데이터 구조를 바꿀 수 있다.",
+    },
+  ],
+  "context-frontend-runtime-ecosystem": [
+    {
+      title: "대시보드 bundle analysis",
+      situation:
+        "가상 운영 수치다. 관리자 대시보드 초기 JS는 980KB이고, vendor chunk에는 chart 라이브러리 420KB가 들어 있다. 첫 화면은 표와 필터만 필요하고 차트 탭은 사용자 18%만 연다.",
+      numbers:
+        "차트 탭을 dynamic import로 분리하면 초기 JS는 560KB가 된다. 중급 Android에서 LCP는 2.9초에서 1.9초로 줄지만, 차트 탭 첫 진입에는 chunk 다운로드 450ms가 추가된다.",
+      lesson:
+        "code splitting은 비용을 없애는 것이 아니라 필요한 시점으로 옮긴다. 첫 화면이 중요한지, 후속 탭 전환이 중요한지 제품 흐름으로 판단해야 한다.",
+    },
+    {
+      title: "SSR hydration mismatch",
+      situation:
+        "SSR 페이지의 주문 시간이 서버에서는 UTC 기준, 클라이언트에서는 사용자 timezone 기준으로 렌더된다. 전체 세션의 0.7%에서 hydration mismatch 경고와 버튼 이벤트 지연이 발생한다.",
+      numbers:
+        "서버와 클라이언트가 같은 formatter와 timezone 입력을 쓰도록 바꾸고, client-only 값은 hydration 이후 렌더한다. mismatch rate는 0.7%에서 0.02%로 내려간다.",
+      lesson:
+        "SSR 문제는 React 문법 문제가 아니라 서버 산출물과 클라이언트 첫 렌더의 계약 문제다. 날짜, 랜덤값, 브라우저 API는 mismatch의 흔한 원인이다.",
+    },
+  ],
+  "context-operational-ownership": [
+    {
+      title: "로그인 장애 30분",
+      situation:
+        "가상 운영 수치다. 로그인 5xx가 0.2%에서 7.5%로 오르고, auth API p95 latency가 250ms에서 3.2s로 상승한다. 알림은 울렸지만 처음 8분 동안 owner가 모호해 대응 채널이 늦게 열린다.",
+      numbers:
+        "온콜은 10분 안에 feature flag로 신규 risk scoring을 우회하고, 18분에 error rate를 1% 아래로 낮춘다. 고객 영향은 로그인 실패 약 14,000건, 문의 320건으로 기록한다.",
+      lesson:
+        "장애 대응에서 첫 질문은 원인 추측이 아니라 영향, owner, 완화책이다. runbook과 escalation 기준이 없으면 기술적으로 쉬운 완화도 늦어진다.",
+    },
+    {
+      title: "Checkout SLO와 error budget",
+      situation:
+        "checkout 성공률 SLO를 월 99.9%로 둔다. 한 달 error budget은 약 43.2분이다. 신규 실험 배포 뒤 burn rate가 8x로 올라가고 결제 실패율이 평소보다 4배 높다.",
+      numbers:
+        "운영 규칙은 burn rate 4x 이상이면 실험 rollout을 멈추고, 8x 이상이면 안정화 작업이 기능 배포보다 우선한다. 2시간 내 복구하지 못하면 월 예산의 상당 부분을 소모한다.",
+      lesson:
+        "SLO는 보고서 숫자가 아니라 의사결정 언어다. 기능 출시와 안정성 사이에서 무엇을 멈출지 정하는 기준이 되어야 한다.",
+    },
+  ],
+};
+
+const css = `:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:-.01em}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:760px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:-.02em}h3{font-size:18px;font-weight:700;margin:36px 0 12px;letter-spacing:-.01em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}tr:last-child td{border-bottom:none}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}.serial-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:2;overflow-x:auto}.serial-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;margin:22px 0;font-size:14.5px;line-height:1.75}.semantic-card.process-card{background:var(--green-tint)}.semantic-card.answer-card{border-left-color:var(--green-deep)}.case-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:24px}.case-card{border:1px solid var(--line);background:var(--panel);padding:22px}.case-card h3{margin:0 0 12px}.case-row{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}.case-row strong{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--green);display:block;margin-bottom:4px}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}`;
 
 function escapeHtml(value) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
 function renderNav(doc) {
+  const hasCaseStudies = caseStudies[doc.id]?.length;
   return `<div class="nav-brand">${doc.navBrand}</div>
   <div class="nav-title">${doc.navTitle}</div>
   <a href="#index"><span class="code">INDEX</span>학습 위치</a>
   ${doc.sections.map(([code, title]) => `<a href="#${code.toLowerCase()}"><span class="code">${code}</span>${title}</a>`).join("\n  ")}
+  ${hasCaseStudies ? '<a href="#case"><span class="code">CASE</span>실무 상황 예시</a>' : ""}
   <a href="#review"><span class="code">REVIEW</span>학습 확인 질문</a>`;
 }
 
@@ -165,6 +330,28 @@ function renderTable(rows) {
 <tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
 ${rows.map((row) => `<tr><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[1])}</td><td>${escapeHtml(row[2])}</td></tr>`).join("\n")}
 </table>`;
+}
+
+function renderCases(doc) {
+  const cases = caseStudies[doc.id] ?? [];
+  if (!cases.length) return "";
+
+  return `<section id="case">
+<div class="ch-head"><span class="ch-code">CASE</span><h2>실무 상황 예시</h2></div>
+<p class="lede">아래 수치는 이해를 위한 가상 운영 수치입니다. 목적은 특정 회사 사례를 베끼는 것이 아니라, 기술 글에 자주 등장하는 상황·숫자·판단 기준을 읽는 감각을 만드는 것입니다.</p>
+<div class="case-grid">
+${cases
+  .map(
+    (item) => `<article class="case-card">
+<h3>${escapeHtml(item.title)}</h3>
+<div class="case-row"><strong>SITUATION</strong><p>${escapeHtml(item.situation)}</p></div>
+<div class="case-row"><strong>NUMBERS</strong><p>${escapeHtml(item.numbers)}</p></div>
+<div class="case-row"><strong>LESSON</strong><p>${escapeHtml(item.lesson)}</p></div>
+</article>`,
+  )
+  .join("\n")}
+</div>
+</section>`;
 }
 
 function renderMain(doc) {
@@ -195,6 +382,8 @@ ${renderTable(rows)}
 </section>
 
 ${sectionHtml}
+
+${renderCases(doc)}
 
 <section id="review">
 <div class="ch-head"><span class="ch-code">REVIEW</span><h2>학습 확인 질문</h2></div>

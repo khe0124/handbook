@@ -3,15 +3,15 @@
   grid-template-columns: 264px minmax(0, 1fr);
   max-width: 1280px;
   margin: 0 auto;
-  padding-top: 105px;
+  padding-top: 72px;
   background: var(--paper);
   overflow-x: clip;
 }
 
 .handbook-toc {
   position: sticky;
-  top: 105px;
-  height: calc(100vh - 105px);
+  top: 72px;
+  height: calc(100vh - 72px);
   overflow-y: auto;
   border-right: 1px solid var(--line);
   padding: 32px 20px 48px;
