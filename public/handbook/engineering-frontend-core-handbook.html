@@ -128,8 +128,8 @@
 <tr><td><b>Compound</b></td><td>Tabs, Dialog, Menu처럼 내부 부품이 협력할 때</td><td>암묵적 규칙이 많아지면 사용법이 어려움</td></tr>
 <tr><td><b>Headless</b></td><td>동작과 UI 스타일을 분리해야 할 때</td><td>접근성 책임이 호출자에게 넘어가지 않게 주의</td></tr>
 </table>
-<div class="serial-card">
-<span class="sc-label">COMPOSITION OVER CONFIGURATION</span>
+<div class="semantic-card process-card">
+<span class="sc-label">COMPOSITION OVER CONFIGURATION</span><br>
 <span class="dim">좋은 방향</span><br>
 &lt;Card&gt;<br>
 &nbsp;&nbsp;&lt;CardHeader&gt;프로젝트&lt;/CardHeader&gt;<br>
@@ -211,8 +211,8 @@
 <tr><td>서버</td><td>최종 진실과 보안</td><td>권한, 중복, 비즈니스 규칙, 데이터 무결성</td></tr>
 </table>
 <p>클라이언트 검증은 사용자 경험을 위한 것이고, 서버 검증은 시스템 무결성을 위한 것입니다. 클라이언트에서 막았다고 서버가 믿으면 안 됩니다. 반대로 서버만 믿고 클라이언트 피드백을 없애면 사용자는 실패 이유를 너무 늦게 알게 됩니다.</p>
-<div class="serial-card">
-<span class="sc-label">FORM STATE MODEL</span>
+<div class="semantic-card decision-card">
+<span class="sc-label">FORM STATE MODEL</span><br>
 value <span class="dim">입력값</span><br>
 touched <span class="dim">사용자가 지나간 필드인가</span><br>
 dirty <span class="dim">초기값과 달라졌는가</span><br>
@@ -268,8 +268,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>시각 회귀</td><td>디자인 깨짐</td><td>공통 컴포넌트와 핵심 화면 screenshot diff</td></tr>
 </table>
 <p>테스트는 구현 세부가 아니라 계약을 잡아야 합니다. "이 hook이 두 번 호출된다"보다 "사용자가 저장하면 성공 메시지와 새 데이터가 보인다"가 더 오래 갑니다.</p>
-<div class="serial-card">
-<span class="sc-label">TEST DECISION PACKET</span>
+<div class="semantic-card evidence-card">
+<span class="sc-label">TEST DECISION PACKET</span><br>
 1. 비즈니스 규칙은 단위 테스트로 빠르게 고정한다.<br>
 2. 사용자 플로우는 통합 테스트에서 네트워크 성공·실패를 모두 검증한다.<br>
 3. 결제, 권한, 데이터 손실 가능성이 있는 흐름은 E2E로 행복 경로와 실패 경로를 둔다.<br>
@@ -350,8 +350,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>릴리즈</td><td>문제가 나면 어떤 단위로 되돌릴 수 있는가?</td><td>feature flag, 로그·알림, 롤백 기준</td><td>배포 후 확인할 지표가 없음</td></tr>
 </table>
 
-<div class="serial-card">
-<span class="sc-label">PR REVIEW PACKET</span>
+<div class="semantic-card evidence-card">
+<span class="sc-label">PR REVIEW PACKET</span><br>
 1. 사용자 시나리오: 이 변경이 해결하는 작업과 실패했을 때의 사용자 상태를 적는다.<br>
 2. 계약: API, 상태, URL, 접근성 이름, 이벤트 로깅의 변경점을 표로 남긴다.<br>
 3. 증거: 스크린샷보다 테스트, 성능 캡처, 키보드 검증 결과를 우선 첨부한다.<br>
@@ -407,7 +407,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="browser-ch2">
 <div class="ch-head"><span class="ch-code">BR-02</span><h2>이벤트 루프와 태스크 큐</h2></div>
 <p class="lede">이벤트 루프는 JS 실행, Promise callback, timer, 사용자 입력, 렌더링을 순서대로 조율합니다.</p>
-<div class="serial-card"><span class="sc-label">EVENT LOOP ORDER</span>task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 다음 task 선택</div>
+<div class="semantic-card answer-card"><span class="sc-label">EVENT LOOP ORDER</span><br>task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 다음 task 선택</div>
 <table>
 <tr><th>도구</th><th>특징</th><th>사용 기준</th></tr>
 <tr><td><code>Promise.then</code></td><td>microtask. 렌더링 전에 몰아서 실행</td><td>짧은 후속 처리</td></tr>
@@ -458,7 +458,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td><code>defer</code></td><td>HTML 파싱을 막지 않고 script 실행</td><td>DOM 준비 이후 실행됨</td></tr>
 <tr><td>lazy image</td><td>아래쪽 이미지를 늦게 로드</td><td>hero image에는 쓰지 않음</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">LOADING WATERFALL REVIEW</span>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.<br>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다.<br>3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.<br>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</div>
+<div class="semantic-card process-card"><span class="sc-label">LOADING WATERFALL REVIEW</span><br>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.<br>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다.<br>3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.<br>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</div>
 <table>
 <tr><th>캐시 대상</th><th>권장 방향</th><th>실패 신호</th></tr>
 <tr><td>해시가 붙은 JS/CSS asset</td><td>길게 cache, immutable</td><td>새 배포마다 같은 URL을 덮어써 사용자가 낡은 코드 실행</td></tr>
@@ -583,7 +583,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>Tabs</td><td><code>role="tablist/tab/tabpanel"</code>, <code>aria-selected</code>, <code>aria-controls</code>, keyboard arrow 처리</td><td>일반 링크 목록을 tabs로 꾸미지 않음</td></tr>
 <tr><td>Disclosure</td><td>button + <code>aria-expanded</code> + 연결된 panel</td><td>상태가 시각적으로만 드러나지 않게 함</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다.<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다.<br>3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다.<br>4. focus가 화면 밖, 숨김 요소, disabled처럼 보이는 요소에 머물지 않는지 본다.</div>
+<div class="semantic-card process-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span><br>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다.<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다.<br>3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다.<br>4. focus가 화면 밖, 숨김 요소, disabled처럼 보이는 요소에 머물지 않는지 본다.</div>
 <div class="callout warn"><span class="co-label">FOCUS RING</span><p>outline을 지우는 것은 접근성 회귀입니다. 디자인에 맞춰 focus style을 새로 정의할 수는 있지만, 키보드 사용자가 현재 위치를 알 수 있어야 합니다.</p></div>
 </section>
 
@@ -610,7 +610,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="a11y-ch5">
 <div class="ch-head"><span class="ch-code">A11Y-05</span><h2>폼·오류·상태 전달</h2></div>
 <p class="lede">폼 접근성은 label, 설명, 오류, 필수 여부, 제출 상태를 사용자가 이해할 수 있게 연결하는 일입니다.</p>
-<div class="serial-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span>label과 input은 htmlFor/id로 연결<br>오류 문구는 aria-describedby로 연결<br>오류 상태는 aria-invalid로 표시<br>제출 실패 후 첫 오류 필드로 focus 이동<br>필수값은 시각 표시와 텍스트 설명을 함께 제공</div>
+<div class="semantic-card process-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span><br>label과 input은 htmlFor/id로 연결<br>오류 문구는 aria-describedby로 연결<br>오류 상태는 aria-invalid로 표시<br>제출 실패 후 첫 오류 필드로 focus 이동<br>필수값은 시각 표시와 텍스트 설명을 함께 제공</div>
 <table>
 <tr><th>상황</th><th>구현 기준</th><th>놓치기 쉬운 점</th></tr>
 <tr><td>필수 입력</td><td>label 또는 설명에 필수 여부를 텍스트로 제공</td><td>별표만 표시하면 의미가 전달되지 않음</td></tr>
@@ -673,7 +673,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>테스트</td><td>keyboard-only 플로우, 오류 상태, zoom 200%, reduced motion 확인</td><td>체크리스트와 실패 재현 링크</td></tr>
 <tr><td>릴리즈</td><td>새 공통 컴포넌트가 기존 화면의 focus 순서를 깨지 않는지 확인</td><td>시각 회귀와 접근성 회귀 결과</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?<br>2. 보이는 label과 보조기술의 이름이 같은 의미인가?<br>3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가?<br>4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?<br>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</div>
+<div class="semantic-card process-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span><br>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?<br>2. 보이는 label과 보조기술의 이름이 같은 의미인가?<br>3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가?<br>4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?<br>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</div>
 </section>
 </main>
 </div>

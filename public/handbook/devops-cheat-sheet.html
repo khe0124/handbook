@@ -12,6 +12,8 @@
   <a href="#ch6"><span class="code">DO-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">DO-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">DO-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">DO-CS-09</span>배포 실행 카드</a>
+  <a href="#ch10"><span class="code">DO-CS-10</span>운영 판정표</a>
 </nav>
 <main>
   <header class="hero">
@@ -111,6 +113,29 @@
       <tr><td>3</td><td>DB migration, queue schema, feature flag가 함께 변경됐는가?</td><td>migration log, consumer lag, flag audit</td></tr>
       <tr><td>4</td><td>rollback이 data loss나 compatibility break를 만들지 않는가?</td><td>schema 호환성, background job 상태, side effect</td></tr>
       <tr><td>5</td><td>rollback, canary pause, traffic drain, flag off 중 무엇을 먼저 실행할 것인가?</td><td>runbook과 on-call 승인 기록</td></tr>
+    </table>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">DO-CS-09</span><h2>배포 실행 카드</h2></div>
+    <p class="lede">DevOps 치트시트는 배포를 빠르게 하는 문서가 아니라, 배포를 멈춰야 할 순간을 빠르게 찾는 문서입니다.</p>
+    <table>
+      <tr><th>시점</th><th>바로 확인</th><th>정상 신호</th><th>멈출 기준</th></tr>
+      <tr><td>배포 전</td><td>commit SHA, image digest, config version, migration 목록</td><td>운영에 올라갈 artifact가 하나로 특정됨</td><td>환경별 재빌드 또는 digest 미기록</td></tr>
+      <tr><td>Canary 시작</td><td>error rate, p95 latency, saturation, business event</td><td>중단 기준과 관찰 창이 정해져 있음</td><td>지표 없이 일부 트래픽만 보내는 상태</td></tr>
+      <tr><td>DB 동반 배포</td><td>expand/contract, backfill, old/new app 호환</td><td>구버전과 신버전이 같은 schema에서 동작 가능</td><td>rollback 시 데이터 shape가 깨짐</td></tr>
+      <tr><td>Secret rotation</td><td>dual-read, consumer rollout, revoke 시점, audit</td><td>구/신 secret 공존 기간과 폐기 기준이 있음</td><td>한 번에 교체해 일부 consumer가 즉시 실패</td></tr>
+      <tr><td>배포 후</td><td>release dashboard, logs, trace, support signal</td><td>사용자 영향과 최근 변경 연결 가능</td><td>성공 로그만 보고 관찰 종료</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">DO-CS-10</span><h2>운영 판정표</h2></div>
+    <table>
+      <tr><th>신호</th><th>위험 판정</th><th>즉시 행동</th><th>남길 기록</th></tr>
+      <tr><td>error rate 상승</td><td>canary 또는 특정 route에서 기준 초과</td><td>canary pause, flag off, rollback 후보 확인</td><td>release id, route, error code, first seen</td></tr>
+      <tr><td>latency 상승</td><td>p95/p99와 saturation이 함께 증가</td><td>traffic drain, autoscale, dependency timeout 확인</td><td>dashboard link, trace sample</td></tr>
+      <tr><td>IaC plan</td><td>replacement/deletion/security broadening 포함</td><td>apply 중단, owner 리뷰, blast radius 확인</td><td>plan diff와 승인자</td></tr>
+      <tr><td>rollback 요청</td><td>DB, queue, external side effect 동반</td><td>단순 앱 rollback 전에 호환성 확인</td><td>되돌릴 것과 되돌릴 수 없는 것 분리</td></tr>
+      <tr><td>alert noise</td><td>owner/action 없는 반복 알람</td><td>severity, owner, runbook, silence 기준 정리</td><td>알람 개선 PR 또는 runbook 링크</td></tr>
     </table>
   </section>
 </main>

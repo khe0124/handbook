@@ -28,6 +28,13 @@
 <tr><td>브라우저 cache</td><td>사용자별로 cache 상태가 다름</td><td>재현 어려운 배포 이슈</td></tr>
 <tr><td>API 계약</td><td>프론트/백엔드가 동시에 바뀌지 않을 수 있음</td><td>호환성 없는 배포 순서</td></tr>
 </table>
+<table>
+<tr><th>FRONTEND DEPLOYMENT HEALTH GATE</th><th>배포 전 확인</th><th>배포 후 확인</th></tr>
+<tr><td>preview deployment</td><td>production build 산출물로 preview URL을 만들고 핵심 route smoke를 실행한다</td><td>preview와 production의 env/config 차이가 릴리스 노트에 남아 있는지 본다</td></tr>
+<tr><td>artifact integrity</td><td>release id, commit SHA, asset hash, sourcemap upload가 서로 매핑된다</td><td>오류 이벤트가 minified stack이 아니라 원본 파일/line으로 복원된다</td></tr>
+<tr><td>cache policy</td><td>index.html은 재검증, hashed asset은 immutable, 이전 asset 보존 기간을 확인한다</td><td>chunk load error와 stale index 비율을 release별로 본다</td></tr>
+<tr><td>quality signal</td><td>test, build, bundle budget, a11y smoke, visual regression gate를 통과한다</td><td>error rate, Web Vitals regression, API failure, user report를 release health window 동안 본다</td></tr>
+</table>
 <div class="callout"><span class="co-label">RULE</span><p>assets는 길게 캐시하고, entry HTML은 짧게 캐시합니다. 해시가 있는 JS/CSS는 immutable하게 둘 수 있지만, index.html은 최신 asset 목록을 받아야 하므로 재검증되어야 합니다.</p></div>
 </section>
 
@@ -88,6 +95,14 @@
 <tr><td>feature flag</td><td>코드는 배포하되 노출은 점진적으로 제어</td></tr>
 <tr><td>canary</td><td>일부 사용자/트래픽에 먼저 노출</td></tr>
 </table>
+<table>
+<tr><th>ROLLBACK FORWARD FIX DECISION</th><th>선택 기준</th><th>실행</th></tr>
+<tr><td>feature flag kill switch</td><td>새 기능만 문제이고 기존 경로가 안전하다</td><td>flag off, affected route smoke, 사용자 공지 여부 판단</td></tr>
+<tr><td>rollback</td><td>chunk load error, auth break, blank screen, 결제/제출 불가처럼 핵심 경로가 깨졌다</td><td>이전 index와 asset pointer 복구, CDN purge 범위 제한, release health window 재시작</td></tr>
+<tr><td>forward fix</td><td>영향이 작고 원인이 명확하며 rollback이 더 큰 API/cache 불일치를 만든다</td><td>작은 patch, hotfix test, canary, error rate 비교</td></tr>
+<tr><td>CDN purge</td><td>잘못된 index.html 또는 runtime config가 캐시됐다</td><td>hashed asset 전체 삭제가 아니라 entry/config만 목표로 purge한다</td></tr>
+<tr><td>service worker update</td><td>오프라인 캐시나 SW가 오래된 asset을 붙잡는다</td><td>업데이트 알림, skipWaiting 전략, 무한 새로고침 방지 조건을 확인한다</td></tr>
+</table>
 <div class="callout risk"><span class="co-label">OLD INDEX PROBLEM</span><p>사용자가 오래 열린 탭에서 옛 index가 참조하는 chunk를 요청할 수 있습니다. 배포 직후 이전 assets를 바로 삭제하면 chunk load error가 발생합니다. 이전 assets 보존 기간을 둡니다.</p></div>
 </section>
 
@@ -98,6 +113,15 @@
 <div class="g-row"><div class="g-term"><b>Cache</b><span>headers</span></div><div class="g-def">index.html과 hashed assets의 cache policy가 다른지 확인합니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Monitoring</b><span>release</span></div><div class="g-def">배포 후 error rate, Web Vitals, API 실패율을 release별로 봅니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Rollback</b><span>plan</span></div><div class="g-def">이전 dist와 asset을 되돌릴 수 있어야 합니다.</div></div>
+</div>
+<div class="serial-card">
+<span class="sc-label">AI NATIVE FRONTEND QUALITY LOOP</span>
+1. AI에게 변경 diff를 기준으로 risk label 후보를 만들게 한다<br>
+2. RISK BASED TEST MATRIX에 맞춰 필요한 테스트와 누락된 fixture를 제안하게 한다<br>
+3. 실패한 Playwright trace viewer, screenshot, console log를 요약하게 한다<br>
+4. security review note와 release notes 초안을 만들되 사람이 위험 판단을 확정한다<br>
+5. release health window의 error spike, Web Vitals regression, chunk load error를 요약한다<br>
+6. rollback, feature flag kill switch, forward fix 중 하나의 판단 근거를 남긴다
 </div>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p>배포 관련 변경은 cache header, sourcemap 공개 여부, release id 주입, 이전 assets 보존, rollback 절차, service worker 업데이트 정책을 체크합니다. 한 항목이라도 바뀌면 배포 리허설 또는 staging 검증을 거칩니다.</p></div>
 </section>

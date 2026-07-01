@@ -12,6 +12,8 @@
   <a href="#ch6"><span class="code">DK-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">DK-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">DK-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">DK-CS-09</span>컨테이너 진단 카드</a>
+  <a href="#ch10"><span class="code">DK-CS-10</span>출력 판정표</a>
 </nav>
 <main>
   <header class="hero">
@@ -104,6 +106,29 @@
     <div class="ch-head"><span class="ch-code">DK-CS-08</span><h2>Failure Playbook</h2></div>
     <div class="serial-card"><span class="sc-label">CONTAINER WON'T START</span>1. <code>docker ps -a</code>로 exit code 확인<br>2. <code>docker logs name</code>로 앱 오류 확인<br>3. <code>docker inspect name</code>로 env/mount/network 확인<br>4. <code>docker run --rm -it --entrypoint sh image</code>로 이미지 내부 확인<br>5. port mapping과 app bind address 확인<br>6. volume 권한과 working directory 확인</div>
     <div class="callout warn"><span class="co-label">운영 원칙</span><p>컨테이너는 VM이 아니라 제한된 프로세스입니다. 상태는 이미지가 아니라 volume, external storage, env, network, orchestration 설정에 분산되어 있으므로 한 곳만 보고 원인을 단정하지 않습니다.</p></div>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">DK-CS-09</span><h2>컨테이너 진단 카드</h2></div>
+    <p class="lede">Docker 치트시트는 build와 runtime을 섞지 않는 데 씁니다. 이미지는 실행 파일이고, 실제 장애 원인은 env, volume, network, healthcheck에 있는 경우가 많습니다.</p>
+    <table>
+      <tr><th>상황</th><th>명령</th><th>정상 신호</th><th>다음 행동</th></tr>
+      <tr><td>컨테이너 종료</td><td><code>docker ps -a</code>, <code>docker logs name</code></td><td>exit code와 첫 오류 로그가 확인됨</td><td>entrypoint, env, app config 순서로 확인</td></tr>
+      <tr><td>포트 접근 실패</td><td><code>docker port name</code>, <code>docker inspect name</code></td><td>host port와 container port, bind address가 설명됨</td><td>앱이 0.0.0.0에 listen하는지 확인</td></tr>
+      <tr><td>환경변수 의심</td><td><code>docker exec name env</code></td><td>필수 env 존재, secret은 로그에 노출되지 않음</td><td>build arg와 runtime env 혼동 제거</td></tr>
+      <tr><td>Volume 문제</td><td><code>docker inspect name</code>, <code>docker volume ls</code></td><td>mount source/target과 권한이 확인됨</td><td>삭제 전 volume owner와 백업 필요 여부 확인</td></tr>
+      <tr><td>이미지 비대</td><td><code>docker history image</code>, <code>docker system df</code></td><td>큰 layer와 build cache 원인이 보임</td><td>.dockerignore, multi-stage, dependency layer 재검토</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">DK-CS-10</span><h2>출력 판정표</h2></div>
+    <table>
+      <tr><th>출력</th><th>위험 신호</th><th>해석</th><th>중단 기준</th></tr>
+      <tr><td><code>docker logs</code></td><td>permission denied, missing env, cannot bind</td><td>이미지보다 runtime 설정 문제 가능</td><td>이미지 재빌드 반복 전 inspect/env 확인</td></tr>
+      <tr><td><code>docker inspect</code></td><td>Env에 secret 평문, HostConfig mount 오해</td><td>보안/상태 저장 위험</td><td>공유 로그에 inspect 원문 첨부 금지</td></tr>
+      <tr><td><code>docker compose config</code></td><td>예상과 다른 env interpolation 또는 port</td><td>.env와 compose 병합 결과 문제</td><td>병합 결과 확인 없이 compose 변경 merge 금지</td></tr>
+      <tr><td>healthcheck</td><td>startup 지연과 liveness 실패를 같은 기준으로 처리</td><td>초기 부팅 중 불필요 재시작 가능</td><td>readiness/liveness 구분 없으면 운영 배포 보류</td></tr>
+      <tr><td>image scan</td><td>base image CVE와 digest 미고정</td><td>재빌드 때 다른 이미지가 들어올 수 있음</td><td>운영 배포 전 digest와 scan 결과 필요</td></tr>
+    </table>
   </section>
 </main>
 </body>

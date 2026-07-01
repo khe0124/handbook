@@ -40,6 +40,15 @@
 <tr><td>Integration</td><td>라우터, 데이터 fetching, provider 조합</td><td>상세 페이지 로딩/실패/성공 상태</td></tr>
 <tr><td>E2E</td><td>핵심 사용자 여정</td><td>로그인 후 생성, 수정, 권한 차단</td></tr>
 </table>
+<table>
+<tr><th>RISK BASED TEST MATRIX</th><th>필수 테스트 조합</th><th>놓치기 쉬운 실패</th></tr>
+<tr><td>권한·인증 변경</td><td>component state + E2E negative path + session expiry case</td><td>로그인 성공만 확인하고 403/401, role downgrade, stale session을 놓침</td></tr>
+<tr><td>폼·제출 변경</td><td>validation unit + component interaction + E2E submit + duplicate click case</td><td>disabled/loading, optimistic UI rollback, 서버 에러 메시지 매핑 누락</td></tr>
+<tr><td>API schema 변경</td><td>MSW fixture update + contract test + runtime error monitoring</td><td>mock은 통과하지만 실제 API nullable/enum 변경으로 contract drift 발생</td></tr>
+<tr><td>라우팅·권한 guard</td><td>router integration + deep link + refresh + back navigation E2E</td><td>직접 URL 진입, 오래된 tab, redirect loop를 놓침</td></tr>
+<tr><td>디자인 시스템 변경</td><td>component + visual regression + a11y smoke + responsive screenshot</td><td>공통 CSS 변경이 긴 텍스트, 모바일, keyboard focus를 깨뜨림</td></tr>
+<tr><td>성능 민감 화면</td><td>interaction test + profiler/trace evidence + bundle diff + Web Vitals watch</td><td>기능은 맞지만 INP/LCP, JS chunk, render fan-out이 악화됨</td></tr>
+</table>
 </section>
 
 <section id="ch3">
@@ -75,6 +84,14 @@
 <tr><td>인증</td><td><code>storageState</code> 재사용은 빠르지만 권한/세션 격리 위험을 고려</td></tr>
 <tr><td>CI artifact</td><td>실패 시 trace, video, screenshot을 남겨 재현 비용을 줄임</td></tr>
 </table>
+<table>
+<tr><th>FLAKY TEST TRIAGE</th><th>증상</th><th>처리</th></tr>
+<tr><td>대기 문제</td><td>로컬은 통과하지만 CI에서 timeout, <code>waitForTimeout</code> 의존</td><td>trace viewer로 실제 상태 전환을 보고 web-first assertion으로 바꾼다</td></tr>
+<tr><td>데이터 오염</td><td>테스트 순서나 병렬 실행 여부에 따라 실패</td><td>테스트별 독립 계정/tenant/data seed를 만들고 cleanup 또는 unique key를 둔다</td></tr>
+<tr><td>네트워크 의존</td><td>외부 API, analytics, feature flag 응답에 따라 흔들림</td><td>핵심 경계는 MSW/route mock으로 통제하고 소수 smoke만 real backend로 둔다</td></tr>
+<tr><td>시간·locale</td><td>날짜, timezone, animation, debounce 때문에 결과가 바뀜</td><td>clock, locale, reduced motion, deterministic fixture를 고정한다</td></tr>
+<tr><td>권한 상태</td><td><code>storageState</code> 재사용 후 세션 만료·role 변경을 놓침</td><td>권한별 state를 분리하고 refresh/expired session 시나리오를 별도 테스트한다</td></tr>
+</table>
 <div class="callout warn"><span class="co-label">FLAKY TEST</span><p>flaky 테스트는 신뢰를 갉아먹습니다. 임의 sleep 대신 명확한 상태를 기다리고, 테스트 데이터는 격리하며, 외부 서비스 의존은 통제합니다.</p></div>
 </section>
 
@@ -88,6 +105,13 @@
 <tr><td>fixture</td><td>반복 데이터</td><td>현실적인 edge case 포함</td></tr>
 <tr><td>real backend</td><td>소수의 smoke/E2E</td><td>데이터 격리와 속도 문제</td></tr>
 </table>
+<table>
+<tr><th>MOCK CONTRACT DRIFT CONTROL</th><th>방어선</th><th>증거</th></tr>
+<tr><td>schema source</td><td>OpenAPI, Zod schema, GraphQL schema 중 하나를 mock fixture의 기준으로 둔다</td><td>fixture generation 또는 schema validation 결과</td></tr>
+<tr><td>enum/nullable</td><td>새 enum, nullable 변경, field 제거가 consumer를 깨는지 검증한다</td><td>contract drift test와 runtime fallback case</td></tr>
+<tr><td>error shape</td><td>성공 응답뿐 아니라 400/401/403/409/500 error contract를 mock한다</td><td>권한·validation·conflict UI 테스트</td></tr>
+<tr><td>latency/failure</td><td>loading, timeout, retry, offline, stale cache를 fixture로 만든다</td><td>spinner, disabled, retry button, toast, rollback UI 검증</td></tr>
+</table>
 </section>
 
 <section id="ch6">
@@ -99,6 +123,13 @@
 <tr><td>핵심 폼</td><td>오류/로딩/비활성 상태 깨짐 방지</td></tr>
 <tr><td>반응형 레이아웃</td><td>모바일에서 겹침/잘림 방지</td></tr>
 <tr><td>차트/테이블</td><td>데이터 길이 변화에 취약</td></tr>
+</table>
+<table>
+<tr><th>VISUAL A11Y RELEASE GATE</th><th>확인 대상</th><th>통과 기준</th></tr>
+<tr><td>keyboard path</td><td>주요 생성/수정/검색/제출 플로우</td><td>Tab, Shift+Tab, Enter, Space, Esc만으로 완료하고 focus trap이 깨지지 않는다</td></tr>
+<tr><td>responsive screenshot</td><td>모바일, 태블릿, 데스크톱 주요 viewport</td><td>텍스트 잘림, 버튼 겹침, table overflow, fixed nav occlusion이 없다</td></tr>
+<tr><td>state coverage</td><td>loading, empty, error, disabled, long text, permission denied</td><td>상태별 화면이 시각 회귀 baseline에 포함된다</td></tr>
+<tr><td>semantic access</td><td>role, label, heading, live region, error message</td><td>자동 a11y 검사와 수동 keyboard walkthrough가 모두 통과한다</td></tr>
 </table>
 <div class="glossary"><div class="g-row"><div class="g-term"><b>Test Contract</b><span>user behavior</span></div><div class="g-def">테스트가 보호하는 사용자 관찰 가능 동작입니다.</div></div><div class="g-row"><div class="g-term"><b>Fixture</b><span>test data</span></div><div class="g-def">테스트에서 반복 사용하는 현실적인 예제 데이터입니다.</div></div></div>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p>새 기능 PR은 어떤 계층의 테스트가 필요한지 명시합니다. 순수 로직은 unit, 사용자 상호작용은 component, 핵심 업무 흐름은 E2E, 공통 UI 변경은 visual regression 후보로 분류합니다.</p></div>

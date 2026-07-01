@@ -12,6 +12,8 @@
   <a href="#ch6"><span class="code">IV-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">IV-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">IV-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">IV-CS-09</span>답변 카드 템플릿</a>
+  <a href="#ch10"><span class="code">IV-CS-10</span>증거 점검표</a>
 </nav>
 <main>
   <header class="hero">
@@ -111,6 +113,30 @@
       <tr><td>3</td><td>첫 원리로 판단 기준을 세웁니다.</td><td>“일관성, latency, 복구 비용 중 무엇이 중요한지에 따라 달라집니다.”</td></tr>
       <tr><td>4</td><td>trade-off와 실패 모드를 붙입니다.</td><td>“이 방식은 단순하지만 traffic spike에서 병목이 될 수 있습니다.”</td></tr>
       <tr><td>5</td><td>검증 방법으로 마무리합니다.</td><td>“그래서 먼저 작은 부하 테스트와 rollback 리허설로 확인하겠습니다.”</td></tr>
+    </table>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">IV-CS-09</span><h2>답변 카드 템플릿</h2></div>
+    <p class="lede">면접 치트시트는 말하기 직전 답변 구조를 복구하는 데 씁니다. 아래 카드 하나를 채우면 30초 답변과 90초 답변을 동시에 만들 수 있습니다.</p>
+    <table>
+      <tr><th>항목</th><th>채울 내용</th><th>예시 문장</th></tr>
+      <tr><td>결론</td><td>질문에 대한 한 문장 판단</td><td>“이 문제의 핵심은 캐시보다 정합성 경계입니다.”</td></tr>
+      <tr><td>기준</td><td>왜 그렇게 판단했는지 2~3개 기준</td><td>“트래픽, 데이터 손실 비용, rollback 가능성을 봤습니다.”</td></tr>
+      <tr><td>경험 경계</td><td>직접 경험/일부 참여/개념 지식 분리</td><td>“제가 직접 맡은 부분은 API 계약과 장애 재현이었습니다.”</td></tr>
+      <tr><td>대안</td><td>버린 선택지와 이유</td><td>“단순 캐시는 빠르지만 invalidation 비용이 커서 제외했습니다.”</td></tr>
+      <tr><td>증거</td><td>PR, 지표, 로그, 장애기록, 테스트</td><td>“전후 p95와 에러율을 배포 대시보드로 확인했습니다.”</td></tr>
+      <tr><td>남은 한계</td><td>아직 모르는 것과 확인 계획</td><td>“장기 부하는 별도 soak test로 확인해야 합니다.”</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">IV-CS-10</span><h2>증거 점검표</h2></div>
+    <table>
+      <tr><th>답변 주제</th><th>강한 증거</th><th>약한 표현</th><th>보정</th></tr>
+      <tr><td>성능 개선</td><td>before/after p75/p95, trace, profiler, 병목 분리</td><td>“빨라졌습니다”</td><td>어떤 병목을 얼마만큼 줄였는지 말함</td></tr>
+      <tr><td>장애 대응</td><td>timeline, 영향 범위, mitigations, 재발 방지 PR</td><td>“잘 해결했습니다”</td><td>탐지, 판단, 복구, 후속 조치를 분리</td></tr>
+      <tr><td>협업</td><td>의견 충돌, 선택 기준, 합의 기록, 결과</td><td>“소통했습니다”</td><td>어떤 기준으로 결정을 수렴했는지 말함</td></tr>
+      <tr><td>설계</td><td>요구사항, 대안, trade-off, 실패 모드, 검증 계획</td><td>기술 스택 나열</td><td>왜 그 구조가 제약에 맞았는지 말함</td></tr>
+      <tr><td>모르는 질문</td><td>아는 범위, 모르는 범위, 확인 절차</td><td>추측을 단정</td><td>불확실성을 숨기지 않고 검증 계획으로 닫음</td></tr>
     </table>
   </section>
 </main>

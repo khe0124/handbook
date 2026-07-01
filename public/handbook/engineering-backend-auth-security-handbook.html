@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auth &amp; Security Handbook — 인증·보안 기술 핸드북</title>
+<title>백엔드 인증·보안</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -78,42 +78,55 @@ td .mono,td code{font-family:var(--mono);font-size:12.5px}
 .g-def{padding:13px 18px;font-size:14px;line-height:1.65}
 @media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
 footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
-</style>
+.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);color:var(--ink);padding:18px 22px;margin:22px 0;font-family:var(--sans);font-size:14.5px;line-height:1.75}.semantic-card.process-card{border-left-color:var(--green);background:var(--green-tint)}.semantic-card.decision-card{border-left-color:var(--amber);background:var(--amber-tint)}.semantic-card.evidence-card{border-left-color:var(--ink);background:#ECEEF3}.semantic-card.answer-card{border-left-color:var(--green-deep);background:var(--panel)}.semantic-card .sc-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green-deep);display:block;margin-bottom:6px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.85;overflow-x:auto;white-space:pre}.snippet-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}</style>
 </head>
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-brand">AUTH &amp; SECURITY</div>
-  <div class="nav-title">인증·보안 핸드북</div>
-  <a href="#auth-ch1"><span class="code">SEC-01</span>보안 지도와 신뢰 경계</a>
-  <a href="#auth-ch2"><span class="code">SEC-02</span>인증 vs 인가</a>
-  <a href="#auth-ch3"><span class="code">SEC-03</span>세션·쿠키·CSRF·CORS</a>
-  <a href="#auth-ch4"><span class="code">SEC-04</span>JWT와 토큰 생명주기</a>
-  <a href="#auth-ch5"><span class="code">SEC-05</span>OAuth2·OIDC</a>
-  <a href="#auth-ch6"><span class="code">SEC-06</span>비밀번호·MFA·계정 복구</a>
-  <a href="#auth-ch7"><span class="code">SEC-07</span>RBAC·ABAC·ReBAC</a>
-  <a href="#auth-ch8"><span class="code">SEC-08</span>Tenant Isolation</a>
-  <a href="#auth-ch9"><span class="code">SEC-09</span>OWASP 서버 취약점</a>
-  <a href="#auth-ch10"><span class="code">SEC-10</span>Secret·Key·Audit</a>
-  <a href="#auth-ch11"><span class="code">SEC-11</span>Security Review Rubric</a>
-  <a href="#auth-ch12"><span class="code">SEC-12</span>Security Tabletop Drills</a>
-  <a href="#auth-ch13"><span class="code">SEC-13</span>SECURITY INCIDENT PACKET</a>
+<div class="nav-brand">ENGINEERING · BACKEND SECURITY</div>
+  <div class="nav-title">백엔드 인증·보안 · 세션 토큰 권한</div>
+  <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#doc-auth"><span class="code">DOC</span>인증과 보안</a>
+  <a href="#doc-auth"><span class="code">SRC</span>인증과 보안</a>
+<a href="#auth-auth-ch1"><span class="code">SEC-01</span>보안 지도와 신뢰 경계</a>
+  <a href="#auth-auth-ch2"><span class="code">SEC-02</span>인증 vs 인가</a>
+  <a href="#auth-auth-ch3"><span class="code">SEC-03</span>세션·쿠키·CSRF·CORS</a>
+  <a href="#auth-auth-ch4"><span class="code">SEC-04</span>JWT와 토큰 생명주기</a>
+  <a href="#auth-auth-ch5"><span class="code">SEC-05</span>OAuth2·OIDC</a>
+  <a href="#auth-auth-ch6"><span class="code">SEC-06</span>비밀번호·MFA·계정 복구</a>
+  <a href="#auth-auth-ch7"><span class="code">SEC-07</span>RBAC·ABAC·ReBAC</a>
+  <a href="#auth-auth-ch8"><span class="code">SEC-08</span>Tenant Isolation</a>
+  <a href="#auth-auth-ch9"><span class="code">SEC-09</span>OWASP 서버 취약점</a>
+  <a href="#auth-auth-ch10"><span class="code">SEC-10</span>Secret·Key·Audit</a>
+  <a href="#auth-auth-ch11"><span class="code">SEC-11</span>Security Review Rubric</a>
+  <a href="#auth-auth-ch12"><span class="code">SEC-12</span>Security Tabletop Drills</a>
+  <a href="#auth-auth-ch13"><span class="code">SEC-13</span>SECURITY INCIDENT PACKET</a>
+  <a href="#backend-security-review-packet"><span class="code">PACKET</span>보안 리뷰 패킷</a>
 </nav>
 <main>
-
 <header class="hero">
   <div class="hero-serial">
-    <span>DOC : BACKEND-AUTH-SECURITY-SOURCE</span>
-    <span>SCOPE : AUTHN/AUTHZ · TENANT · INCIDENT</span>
+    <span>DOC : ENGINEERING-BACKEND-AUTH-SECURITY</span>
+    <span>SCOPE : AUTHENTICATION · AUTHORIZATION · OWASP · THREAT MODEL · INCIDENT</span>
     <span>LANG : KO</span>
   </div>
-  <h1>인증과 보안<br>핸드북</h1>
-  <p class="hero-sub">백엔드 인증·보안은 로그인 화면 구현이 아니라 <strong>신뢰 경계, 신원 증명, 세션 생명주기, 권한 판정, 테넌트 격리, 감사 증거, 사고 대응 준비</strong>를 하나의 운영 체계로 묶는 일입니다. 이 문서는 면접 답변과 실무 리뷰 모두에서 바로 쓸 수 있도록 비교표, 체크리스트, negative test, runbook 중심으로 정리합니다.</p>
-  <div class="hero-meta">SOURCE : 인증과 보안 · BACKEND AUTH SECURITY MAP<br>AUDIENCE : backend engineering interview · service security review · incident readiness</div>
+  <h1>백엔드 인증·보안</h1>
+  <p class="hero-sub">인증과 보안 문서를 세션, 토큰, OAuth/OIDC, 권한, 테넌트 격리, 위협 모델, 운영 대응 중심으로 독립 분리했습니다.</p>
+  <div class="hero-meta">CURATED HANDBOOK PATH · SOURCES : 1 DOCUMENTS · UPDATED 2026-06</div>
 </header>
 
+<section id="bundle-index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
+<p class="lede">백엔드 보안은 로그인 기능을 붙이는 일이 아니라 신뢰 경계, identity proof, session lifecycle, authorization decision, tenant isolation, audit evidence, incident response를 설계하는 일입니다. 이 문서는 세션/JWT/OAuth/OIDC와 RBAC/ABAC/ReBAC, CSRF/CORS/cookie, OWASP 취약점, secret 관리, 보안 리뷰와 사고 대응을 하나의 운영 흐름으로 읽습니다.</p>
+<ul><li>인증과 보안</li></ul>
+</section>
+
+<section id="doc-auth">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>인증과 보안</h2></div>
+</section>
+
 <!-- ============ AUTH CH 1 ============ -->
-<section id="auth-ch1">
+<section id="auth-auth-ch1">
 <div class="ch-head"><span class="ch-code">SEC-01</span><h2>보안 지도와 신뢰 경계</h2></div>
 <p class="lede">보안 설계의 시작은 "로그인 기능"이 아니라 <strong>무엇을 누구에게서 보호하는가</strong>를 그리는 일입니다. 좋은 백엔드 보안 문서는 자산, 행위자, 진입점, 신뢰 경계, 실패 시 영향, 탐지 증거를 한 장에서 설명할 수 있어야 합니다.</p>
 <h3><span class="h3-tag">1.1</span>BACKEND AUTH SECURITY MAP</h3>
@@ -141,7 +154,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 2 ============ -->
-<section id="auth-ch2">
+<section id="auth-auth-ch2">
 <div class="ch-head"><span class="ch-code">SEC-02</span><h2>인증 vs 인가</h2></div>
 <p class="lede">인증(authentication, authN)은 "요청 주체가 누구인지"를 세우는 절차이고, 인가(authorization, authZ)는 "그 주체가 특정 자원에 특정 행동을 해도 되는지"를 매 요청 판정하는 절차입니다. 로그인 성공은 권한 판정의 시작이지 끝이 아닙니다.</p>
 <table>
@@ -167,7 +180,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 3 ============ -->
-<section id="auth-ch3">
+<section id="auth-auth-ch3">
 <div class="ch-head"><span class="ch-code">SEC-03</span><h2>세션·쿠키·CSRF·CORS</h2></div>
 <p class="lede">브라우저 기반 인증의 핵심은 쿠키가 자동 첨부된다는 사실입니다. 이 자동성은 사용자 경험에는 좋지만 CSRF 위험을 만들고, CORS 설정과 섞이면 "어떤 origin이 credential 요청을 보낼 수 있는가"라는 운영 정책이 됩니다.</p>
 <h3><span class="h3-tag">3.1</span>COOKIE SESSION CORS MATRIX</h3>
@@ -195,7 +208,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 4 ============ -->
-<section id="auth-ch4">
+<section id="auth-auth-ch4">
 <div class="ch-head"><span class="ch-code">SEC-04</span><h2>JWT와 토큰 생명주기</h2></div>
 <p class="lede">JWT는 서명된 claim 묶음입니다. payload는 Base64URL 인코딩이지 암호화가 아니며, stateless 검증은 확장성에는 유리하지만 만료 전 회수와 권한 변경 반영을 어렵게 만듭니다.</p>
 <h3><span class="h3-tag">4.1</span>TOKEN LIFECYCLE RUNBOOK</h3>
@@ -232,7 +245,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 5 ============ -->
-<section id="auth-ch5">
+<section id="auth-auth-ch5">
 <div class="ch-head"><span class="ch-code">SEC-05</span><h2>OAuth2·OIDC</h2></div>
 <p class="lede">OAuth2는 인가 위임 프로토콜이고, OIDC는 OAuth2 위에 인증 계층을 얹은 표준입니다. "소셜 로그인"을 안전하게 설명하려면 access token과 ID token을 구분해야 합니다.</p>
 <table>
@@ -258,7 +271,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 6 ============ -->
-<section id="auth-ch6">
+<section id="auth-auth-ch6">
 <div class="ch-head"><span class="ch-code">SEC-06</span><h2>비밀번호·MFA·계정 복구</h2></div>
 <p class="lede">비밀번호 보안은 저장 방식만의 문제가 아닙니다. 등록, 로그인, 실패 제한, MFA, 복구, 비밀번호 변경 이후 세션 폐기까지 계정 생명주기 전체가 공격 표면입니다.</p>
 <table>
@@ -284,7 +297,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 7 ============ -->
-<section id="auth-ch7">
+<section id="auth-auth-ch7">
 <div class="ch-head"><span class="ch-code">SEC-07</span><h2>RBAC·ABAC·ReBAC</h2></div>
 <p class="lede">인가는 권한 문자열을 확인하는 작업이 아니라 정책 결정입니다. 실무에서는 RBAC로 큰 권한 묶음을 관리하고, ABAC와 ReBAC로 소유권, 조직, 관계, 환경 조건을 보완합니다.</p>
 <h3><span class="h3-tag">7.1</span>AUTHORIZATION DECISION TABLE</h3>
@@ -310,7 +323,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </section>
 
 <!-- ============ AUTH CH 8 ============ -->
-<section id="auth-ch8">
+<section id="auth-auth-ch8">
 <div class="ch-head"><span class="ch-code">SEC-08</span><h2>Tenant Isolation</h2></div>
 <p class="lede">멀티테넌트 보안의 목표는 단순합니다. 한 테넌트의 사용자가 다른 테넌트의 데이터를 읽거나, 바꾸거나, 존재 여부를 추론할 수 없어야 합니다. 이것은 필터 옵션이 아니라 시스템 불변식입니다.</p>
 <h3><span class="h3-tag">8.1</span>TENANT ISOLATION MODEL</h3>
@@ -341,7 +354,7 @@ WHERE tenant_id = :current_tenant_id
 </section>
 
 <!-- ============ AUTH CH 9 ============ -->
-<section id="auth-ch9">
+<section id="auth-auth-ch9">
 <div class="ch-head"><span class="ch-code">SEC-09</span><h2>OWASP 서버 취약점</h2></div>
 <p class="lede">OWASP 항목은 외울 목록이 아니라 리뷰 질문 묶음입니다. 백엔드 인증·보안 문맥에서는 접근 제어, 입력 신뢰, 암호화 실패, 설정 오류, 관측 부재가 반복적으로 사고를 만듭니다.</p>
 <table>
@@ -368,7 +381,7 @@ WHERE tenant_id = :current_tenant_id
 </section>
 
 <!-- ============ AUTH CH 10 ============ -->
-<section id="auth-ch10">
+<section id="auth-auth-ch10">
 <div class="ch-head"><span class="ch-code">SEC-10</span><h2>Secret·Key·Audit</h2></div>
 <p class="lede">secret과 key는 인증 시스템의 루트 신뢰입니다. 감사 로그는 사고 이후 "무슨 일이 있었는지"를 증명하는 자료입니다. 둘 다 코드 뒤에 붙이는 운영 잡무가 아니라 보안 설계의 핵심입니다.</p>
 <table>
@@ -400,7 +413,7 @@ WHERE tenant_id = :current_tenant_id
 </section>
 
 <!-- ============ AUTH CH 11 ============ -->
-<section id="auth-ch11">
+<section id="auth-auth-ch11">
 <div class="ch-head"><span class="ch-code">SEC-11</span><h2>Security Review Rubric</h2></div>
 <p class="lede">보안 리뷰는 "문제 없어 보임"이 아니라 정해진 질문에 증거로 답하는 과정입니다. PR, 설계 문서, 면접 과제 리뷰에 아래 표를 그대로 붙여도 됩니다.</p>
 <h3><span class="h3-tag">11.1</span>SECURITY REVIEW RUBRIC</h3>
@@ -424,7 +437,7 @@ WHERE tenant_id = :current_tenant_id
 </section>
 
 <!-- ============ AUTH CH 12 ============ -->
-<section id="auth-ch12">
+<section id="auth-auth-ch12">
 <div class="ch-head"><span class="ch-code">SEC-12</span><h2>Security Tabletop Drills</h2></div>
 <p class="lede">SECURITY TABLETOP DRILLS는 취약점 이름 암기가 아니라 사고 대응 근육을 만드는 연습입니다. 제한 시간 안에 재현, 영향 범위, 임시 통제, 영구 수정, 고객/법무/지원 handoff까지 말할 수 있어야 합니다.</p>
 <h3><span class="h3-tag">12.1</span>SECURITY TABLETOP DRILLS</h3>
@@ -447,7 +460,7 @@ WHERE tenant_id = :current_tenant_id
 </section>
 
 <!-- ============ AUTH CH 13 ============ -->
-<section id="auth-ch13">
+<section id="auth-auth-ch13">
 <div class="ch-head"><span class="ch-code">SEC-13</span><h2>SECURITY INCIDENT PACKET</h2></div>
 <p class="lede">SECURITY INCIDENT PACKET은 사고가 의심될 때 흩어진 정보를 한곳에 모으는 최소 문서입니다. 목적은 멋진 보고서가 아니라, 대응자가 같은 사실 위에서 빠르게 판단하게 하는 것입니다.</p>
 <h3><span class="h3-tag">13.1</span>SECURITY INCIDENT PACKET</h3>
@@ -476,12 +489,18 @@ permanent_fix: Require tenant_id predicate in export lookup and add IDOR regress
 </div>
 </section>
 
-<footer>
-AUTH &amp; SECURITY HANDBOOK · SOURCE : 인증과 보안 · 2026-07<br>
-SCOPE : TRUST BOUNDARY · IDENTITY PROOF · SESSION LIFECYCLE · AUTHORIZATION · TENANT ISOLATION · AUDIT · INCIDENT READINESS<br>
-PRINCIPLE : every external input crosses a trust boundary · generated bundles may include this source as 인증과 보안
-</footer>
-
+<section id="backend-security-review-packet">
+<div class="ch-head"><span class="ch-code">PACKET</span><h2>BACKEND SECURITY REVIEW PACKET</h2></div>
+<p class="lede">보안 문서를 읽은 뒤 실제 PR과 설계 리뷰에 붙일 증거 묶음입니다. 인증·권한·데이터 경계 변경은 단순 기능 변경처럼 리뷰하지 않습니다.</p>
+<table>
+<tr><th>변경 유형</th><th>필수 증거</th><th>거절 기준</th></tr>
+<tr><td>로그인·세션</td><td>cookie option, session fixation 방어, logout/revoke 테스트</td><td>성공 로그인만 있고 만료·폐기·탈취 시나리오 없음</td></tr>
+<tr><td>JWT·refresh</td><td>token ttl, refresh rotation, replay detection, reuse response</td><td>refresh token을 장기 bearer token처럼 취급</td></tr>
+<tr><td>권한</td><td>RBAC/ABAC decision table, 401/403 negative test</td><td>프론트 route guard만 있고 서버 인가 없음</td></tr>
+<tr><td>테넌트 격리</td><td>tenant id source, query scope, cross-tenant negative fixture</td><td>client가 보낸 tenant id를 신뢰</td></tr>
+<tr><td>입력·외부 호출</td><td>validation schema, SSRF allowlist, SQL parameterization evidence</td><td>문자열 필터만으로 injection을 막는다고 설명</td></tr>
+</table>
+</section>
 </main>
 </div>
 </body>

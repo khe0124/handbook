@@ -12,6 +12,8 @@
   <a href="#ch6"><span class="code">LX-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">LX-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">LX-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">LX-CS-09</span>운영 명령 카드</a>
+  <a href="#ch10"><span class="code">LX-CS-10</span>안전 판정표</a>
 </nav>
 <main>
   <header class="hero">
@@ -104,6 +106,29 @@
     <div class="ch-head"><span class="ch-code">LX-CS-08</span><h2>Failure Playbook</h2></div>
     <div class="serial-card"><span class="sc-label">DISK FULL TRIAGE</span>1. <code>df -h</code>와 <code>df -i</code>로 block/inode 확인<br>2. <code>du -xhd1 /path | sort -h</code>로 큰 디렉터리 확인<br>3. <code>lsof +L1</code>로 삭제됐지만 열린 파일 확인<br>4. 로그면 logrotate와 retention 확인<br>5. 삭제 전 백업/owner/서비스 영향 확인<br>6. 정리 후 재발 방지 알림과 보존 정책 추가</div>
     <div class="callout warn"><span class="co-label">운영 원칙</span><p>서버 명령은 빠르지만 되돌리기 어렵습니다. destructive command는 항상 현재 경로, 대상 확장 결과, 백업 가능성, 서비스 영향 범위를 확인한 뒤 실행합니다.</p></div>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">LX-CS-09</span><h2>운영 명령 카드</h2></div>
+    <p class="lede">Linux 명령은 결과를 얻는 속도보다 실수로 증거를 지우지 않는 것이 중요합니다. 삭제·재시작·권한 변경 전에는 항상 현재 위치와 대상 범위를 출력합니다.</p>
+    <table>
+      <tr><th>상황</th><th>명령</th><th>정상 신호</th><th>다음 행동</th></tr>
+      <tr><td>디스크 full</td><td><code>df -h</code>, <code>df -i</code>, <code>du -xhd1 /path | sort -h</code></td><td>block과 inode 중 병목이 구분됨</td><td>큰 파일, 작은 파일 폭증, 열린 삭제 파일을 분리</td></tr>
+      <tr><td>로그 조사</td><td><code>journalctl -u service --since "30 min ago"</code></td><td>배포 시각과 오류 최초 발생 시각이 맞춰짐</td><td>request id 또는 error fingerprint로 좁힘</td></tr>
+      <tr><td>포트 충돌</td><td><code>lsof -i :PORT</code>, <code>ss -tlnp</code></td><td>프로세스와 bind address가 확인됨</td><td>localhost/0.0.0.0/container port를 구분</td></tr>
+      <tr><td>권한 오류</td><td><code>id</code>, <code>stat path</code>, <code>namei -l path</code></td><td>파일과 상위 디렉터리 권한이 함께 보임</td><td>sudo로 덮기 전 owner/group/umask 원인 수정</td></tr>
+      <tr><td>프로세스 종료</td><td><code>kill PID</code> 후 로그 확인</td><td>graceful shutdown 로그와 health 회복 확인</td><td>실패할 때만 <code>kill -9</code> 검토</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">LX-CS-10</span><h2>안전 판정표</h2></div>
+    <table>
+      <tr><th>작업</th><th>실행 전 확인</th><th>위험 신호</th><th>중단 기준</th></tr>
+      <tr><td>삭제</td><td><code>pwd</code>, 대상 경로 출력, 백업/복구 가능성</td><td>변수, wildcard, 빈 문자열 확장</td><td>대상 목록을 눈으로 확인하지 못하면 중단</td></tr>
+      <tr><td>권한 변경</td><td>현재 owner/group, 재귀 범위, 서비스 사용자</td><td><code>chmod -R 777</code>, 광범위 chown</td><td>최소 권한 설명 없으면 중단</td></tr>
+      <tr><td>서비스 재시작</td><td>현재 health, 연결 drain, 재시작 후 확인 명령</td><td>상태 확인 없이 재시작 반복</td><td>사용자 영향과 rollback이 불명확하면 중단</td></tr>
+      <tr><td>로그 압축/전달</td><td>시간 범위, 민감 정보, request id</td><td>secret/token 포함 가능</td><td>마스킹 기준 없이 공유 금지</td></tr>
+      <tr><td>디스크 정리</td><td>원인 디렉터리, 열린 파일, retention 정책</td><td>삭제 후 용량 미회복</td><td><code>lsof +L1</code> 확인 전 반복 삭제 금지</td></tr>
+    </table>
   </section>
 </main>
 </body>

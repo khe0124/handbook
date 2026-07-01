@@ -114,6 +114,7 @@ const LENSES: Record<string, PracticalExampleLens> = {
 const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   home: "home",
   "career-strategy-foundation": "interview",
+  "career-personal-history": "personal",
   "career-frontend-interview": "interview",
   "career-backend-interview": "interview",
   "career-core-deep-dive": "interview",
@@ -153,6 +154,7 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "engineering-frontend-performance": "frontend",
   "engineering-frontend-quality": "frontend",
   "engineering-backend-core": "backend",
+  "engineering-backend-auth-security": "backend",
   "engineering-backend-architecture": "backend",
   "engineering-data": "backend",
   "engineering-runtime-quality": "backend",
@@ -291,6 +293,7 @@ export const getPracticalExampleLens = (itemId: string): PracticalExampleLens =>
 export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   home: example("새 프로젝트를 맡았을 때 핸드북을 읽는 순서를 정한다.", ["홈의 로드맵에서 현재 약한 영역을 표시한다.", "이번 스프린트 작업과 연결되는 메뉴 2개를 고른다.", "작업 전 수용 기준과 검증 명령을 노트로 남긴다."], "학습이 독서로 끝나지 않고 실제 작업의 체크리스트가 된다."),
   "career-strategy-foundation": example("지원 회사와 직무에 맞춰 면접 답변의 기본 전략을 잡는다.", ["기술면접 개요의 답변 프레임으로 30초/90초 답변 구조를 만든다.", "회사·직무별 전략에서 지원 조직의 평가 기준을 표시한다.", "개인화 개요로 대표 프로젝트와 경험 경계 문장을 연결한다."], "범용 답변이 아니라 지원 직무의 문제와 본인 증거가 연결된 면접 전략이 된다."),
+  "career-personal-history": example("개인 이력을 포지션별 면접 답변 카드로 정리한다.", ["대표 프로젝트 맵에서 포지션별 1순위 증거를 고른다.", "직접 구현, 일부 참여, 학습 확장 범위를 경험 경계 문장으로 분리한다.", "30초 결론과 압박 꼬리질문 대응을 같은 증거에서 출발하게 만든다."], "면접 답변이 추상 자기소개가 아니라 실제 프로젝트 증거와 역할 경계에서 출발한다."),
   "career-frontend-interview": example("프론트엔드 포지션 면접을 브라우저, React, JS/TS, 개인 경험으로 묶어 준비한다.", ["프론트엔드 질문을 렌더링, 상태, 성능, 접근성, 보안 기준으로 분류한다.", "JavaScript·TypeScript 질문은 런타임 모델과 타입 모델을 분리해 답변한다.", "프론트엔드 개발자 대응 문서에서 프로젝트 증거와 답변을 연결한다."], "프론트엔드 답변이 API 암기보다 제품 품질과 실행 원리 중심으로 정리된다."),
   "career-backend-interview": example("백엔드·Java·Spring 질문을 신뢰 가능한 전환 답변으로 준비한다.", ["API, DB, 트랜잭션, 인증 질문을 백엔드·DB 면접 문서에서 정리한다.", "Java·Spring·JPA 질문은 런타임, 프레임워크, 영속성 경계로 나눈다.", "백엔드 전환 대응 문서로 직접 경험과 설계 지식의 경계를 표시한다."], "백엔드 질문에서 과장하지 않고 동작 원리와 학습·검증 계획을 함께 말한다."),
   "career-core-deep-dive": example("CS·DB·보안 심화 질문을 핵심 개념과 실패 모드 중심으로 압축한다.", ["CS 기본기 질문은 자료구조, 동시성, 복잡도를 실무 사례와 연결한다.", "DB 심화 질문은 실행계획, 락, 격리 수준, 마이그레이션 위험으로 나눈다.", "보안 심화 질문은 공격 경로, 방어선, 로그 증거로 답변한다."], "심화 질문에서 정의 암기가 아니라 실제 장애와 제품 보호 기준을 설명한다."),
@@ -329,7 +332,8 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
   "engineering-frontend-interaction": example("제품 상세 화면에 인터랙션과 3D 뷰어를 설계한다.", ["상태 피드백, hover/focus/pending/error를 먼저 정의한다.", "모션 token, reduced motion, rapid toggle, scroll 충돌을 검증한다.", "WebGL fallback, asset budget, canvas nonblank, keyboard 대체 경로를 PR 증거로 남긴다."], "인터랙션과 3D가 장식이 아니라 사용자 판단을 돕는 검증 가능한 제품 기능이 된다."),
   "engineering-frontend-performance": example("느린 목록 화면의 성능 병목을 측정한다.", ["Network waterfall, Performance trace, React Profiler를 순서대로 확인한다.", "번들 크기, long task, re-render, layout shift를 분리해 기록한다.", "DevTools 캡처와 변경 전후 지표를 PR에 첨부한다."], "최적화가 감이 아니라 측정 근거와 사용자 체감 지표로 설명된다."),
   "engineering-frontend-quality": example("릴리즈 전 프론트엔드 품질 게이트를 만든다.", ["XSS/CSRF/token 저장 위험을 점검한다.", "핵심 사용자 여정의 컴포넌트·E2E 테스트를 연결한다.", "CDN cache, sourcemap, 환경변수, rollback 경로를 확인한다."], "보안, 테스트, 배포가 각각 따로 놀지 않고 릴리스 기준으로 묶인다."),
-  "engineering-backend-core": example("권한이 필요한 신규 API를 구현 가능한 계약으로 설계한다.", ["API contract와 error response를 먼저 정의한다.", "인증, 인가, validation, audit log 책임을 분리한다.", "실패 모드와 negative test를 함께 남긴다."], "백엔드 기능이 보안 경계와 운영 추적성을 갖춘 API 계약으로 정리된다."),
+  "engineering-backend-core": example("주문 생성 API를 구현 가능한 백엔드 계약으로 설계한다.", ["API contract와 error response를 먼저 정의한다.", "validation, transaction boundary, idempotency key, retry policy를 분리한다.", "성공 경로뿐 아니라 중복 요청, 부분 실패, rollback 조건을 테스트로 남긴다."], "백엔드 기능이 요청 생명주기와 운영 증거를 갖춘 API 계약으로 정리된다."),
+  "engineering-backend-auth-security": example("권한이 필요한 신규 API의 인증·인가 경계를 설계한다.", ["session/JWT 수명, cookie/CORS/CSRF 조건, token rotation 정책을 정리한다.", "RBAC/ABAC decision table과 tenant isolation negative test를 작성한다.", "audit log, rate limit, incident packet에 남길 필드를 확정한다."], "로그인 기능이 아니라 신뢰 경계, 권한 판단, 침해 대응까지 포함한 보안 설계로 정리된다."),
   "engineering-backend-architecture": example("기존 모놀리스 일부를 분리할지 판단한다.", ["변경 빈도, 데이터 소유권, 장애 전파, 팀 경계를 표로 정리한다.", "strangler fig 또는 모듈화 중 더 작은 선택지를 먼저 검토한다.", "분리 후 생길 네트워크·트랜잭션 비용을 ADR에 남긴다."], "유행이 아니라 비용과 경계를 근거로 아키텍처 결정을 내린다."),
   "engineering-data": example("주문 조회 성능과 캐시 전략을 함께 개선한다.", ["PostgreSQL 실행 계획과 인덱스 후보를 확인한다.", "Redis cache key, TTL, invalidation 조건을 정한다.", "정합성 위험과 변경 전후 latency를 검증 로그로 남긴다."], "DB와 캐시를 별도 팁이 아니라 데이터 계층의 trade-off로 다룬다."),
   "engineering-runtime-quality": example("비동기 처리 장애를 재현하고 관측한다.", ["메시지 발행, consumer 처리, retry, DLQ 흐름을 추적한다.", "회귀 테스트로 중복 처리와 실패 복구를 고정한다.", "로그, metric, trace로 지연과 실패율을 연결한다."], "런타임 장애가 감으로 복구되지 않고 테스트와 관측성으로 재발 방지된다."),

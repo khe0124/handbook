@@ -17,6 +17,7 @@
   <a href="#ch7"><span class="code">TOOL-CS-07</span>Red Flags</a>
   <a href="#ch8"><span class="code">TOOL-CS-08</span>Review Gate</a>
   <a href="#ch9"><span class="code">TOOL-CS-09</span>Failure Playbook</a>
+  <a href="#ch10"><span class="code">TOOL-CS-10</span>출력 판정·증거 패킷</a>
 </nav>
 <main>
   <header class="hero">
@@ -172,6 +173,20 @@
       <tr><td>5</td><td>캐시나 의존성 오염인가?</td><td>clean install, lockfile diff, Docker image rebuild</td></tr>
       <tr><td>6</td><td>복구 뒤 재발 방지 문서가 남았는가?</td><td>원인, 확인 명령, 수정 커밋, runbook 업데이트</td></tr>
     </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">TOOL-CS-10</span><h2>출력 판정·증거 패킷</h2></div>
+    <p class="lede">명령어 결과는 캡처만 남기면 다시 해석해야 합니다. 관찰, 해석, 다음 행동을 같이 남겨야 실무 증거가 됩니다.</p>
+    <table>
+      <tr><th>명령</th><th>볼 출력</th><th>위험 신호</th><th>기록할 것</th></tr>
+      <tr><td><code>git status --short</code></td><td>수정, 삭제, untracked 파일</td><td>의도하지 않은 생성 파일이나 삭제 파일</td><td>작업 전/후 변경 파일 목록</td></tr>
+      <tr><td><code>git diff</code></td><td>행 단위 변경, 설정/lockfile 변화</td><td>관련 없는 파일, secret, generated diff 대량 포함</td><td>리뷰 대상 diff와 제외할 변경</td></tr>
+      <tr><td><code>curl -v</code></td><td>DNS, connect, TLS, status, header, body</td><td>redirect loop, TLS mismatch, 5xx, unexpected cache</td><td>URL, status, request id, timestamp, response sample</td></tr>
+      <tr><td><code>psql</code></td><td>row count, plan, lock, migration history</td><td>조건 없는 update/delete, 예상보다 큰 affected rows</td><td>SELECT dry-run, transaction 여부, rollback 방법</td></tr>
+      <tr><td><code>docker logs</code></td><td>first error, exit reason, healthcheck 실패</td><td>secret 출력, 반복 restart, missing env</td><td>container name, image digest, first failing log line</td></tr>
+      <tr><td><code>journalctl</code></td><td>unit, exit code, restart, timestamp</td><td>같은 오류 반복, 배포 시각 이후 급증</td><td>host, service, since 범위, error fingerprint</td></tr>
+    </table>
+    <div class="semantic-card evidence-card"><span class="sc-label">증거 패킷 템플릿</span><br>Problem: 어떤 작업/화면/API가 실패했는가<br>Scope: 나만/팀/CI/운영, route, host, tenant, release<br>Command: 실행한 명령과 대상 환경<br>Observed: status, error, row count, log line, trace id<br>Interpretation: 어떤 계층 문제로 좁혔는가<br>Next: 수정, rollback, 재시도, 추가 확인 중 무엇을 할 것인가</div>
   </section>
 </main>
 </body>

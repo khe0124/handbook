@@ -32,13 +32,14 @@ export const PERSONAL_HANDBOOKS = [
 
 export const CAREER_HANDBOOKS = [
   { id: "career-strategy-foundation", label: "00 면접 전략·커리어 포지셔닝", kind: "면접·커리어", file: "career-strategy-foundation-handbook.html" },
-  { id: "career-frontend-interview", label: "01 프론트엔드·JS/TS 면접", kind: "면접·커리어", file: "career-frontend-interview-handbook.html" },
-  { id: "career-backend-interview", label: "02 백엔드·Java/Spring 면접", kind: "면접·커리어", file: "career-backend-interview-handbook.html" },
-  { id: "career-core-deep-dive", label: "03 CS·DB·보안 심화 면접", kind: "면접·커리어", file: "career-core-deep-dive-handbook.html" },
-  { id: "career-infra-distributed-cloud", label: "04 인프라·분산·클라우드 면접", kind: "면접·커리어", file: "career-infra-distributed-cloud-handbook.html" },
-  { id: "career-system-project", label: "05 시스템 설계·프로젝트 심층", kind: "면접·커리어", file: "career-system-project-handbook.html" },
-  { id: "career-culture-collaboration", label: "06 컬처·협업·코드리뷰", kind: "면접·커리어", file: "career-culture-collaboration-handbook.html" },
-  { id: "career-coding-test", label: "07 코딩테스트 패턴", kind: "면접·커리어", file: "career-coding-test-handbook.html" },
+  { id: "career-personal-history", label: "01 개인 이력 정리", kind: "면접·커리어", file: "career-personal-history-handbook.html" },
+  { id: "career-frontend-interview", label: "02 프론트엔드·JS/TS 면접", kind: "면접·커리어", file: "career-frontend-interview-handbook.html" },
+  { id: "career-backend-interview", label: "03 백엔드·Java/Spring 면접", kind: "면접·커리어", file: "career-backend-interview-handbook.html" },
+  { id: "career-core-deep-dive", label: "04 CS·DB·보안 심화 면접", kind: "면접·커리어", file: "career-core-deep-dive-handbook.html" },
+  { id: "career-infra-distributed-cloud", label: "05 인프라·분산·클라우드 면접", kind: "면접·커리어", file: "career-infra-distributed-cloud-handbook.html" },
+  { id: "career-system-project", label: "06 시스템 설계·프로젝트 심층", kind: "면접·커리어", file: "career-system-project-handbook.html" },
+  { id: "career-culture-collaboration", label: "07 컬처·협업·코드리뷰", kind: "면접·커리어", file: "career-culture-collaboration-handbook.html" },
+  { id: "career-coding-test", label: "08 코딩테스트 패턴", kind: "면접·커리어", file: "career-coding-test-handbook.html" },
 ];
 
 export const DEV_EXAMPLES = [
@@ -90,11 +91,12 @@ export const ENGINEERING_HANDBOOKS = [
   { id: "engineering-frontend-performance", label: "06 프론트엔드 성능·진단", kind: "개발 핸드북", file: "engineering-frontend-performance-handbook.html" },
   { id: "engineering-frontend-quality", label: "07 프론트엔드 품질·릴리스", kind: "개발 핸드북", file: "engineering-frontend-quality-handbook.html" },
   { id: "engineering-backend-core", label: "08 백엔드 핵심", kind: "개발 핸드북", file: "engineering-backend-core-handbook.html" },
-  { id: "engineering-backend-architecture", label: "09 백엔드 아키텍처", kind: "개발 핸드북", file: "engineering-backend-architecture-handbook.html" },
-  { id: "engineering-data", label: "10 데이터 계층·저장소", kind: "개발 핸드북", file: "engineering-data-handbook.html" },
-  { id: "engineering-runtime-quality", label: "11 런타임 품질·장애대응", kind: "개발 핸드북", file: "engineering-runtime-quality-handbook.html" },
-  { id: "engineering-platform-tools", label: "12 플랫폼 도구·운영 기본기", kind: "개발 핸드북", file: "engineering-platform-tools-handbook.html" },
-  { id: "engineering-java-spring", label: "13 Java·Spring·JPA 사례", kind: "개발 핸드북", file: "engineering-java-spring-handbook.html" },
+  { id: "engineering-backend-auth-security", label: "09 백엔드 인증·보안", kind: "개발 핸드북", file: "engineering-backend-auth-security-handbook.html" },
+  { id: "engineering-backend-architecture", label: "10 백엔드 아키텍처", kind: "개발 핸드북", file: "engineering-backend-architecture-handbook.html" },
+  { id: "engineering-data", label: "11 데이터 계층·저장소", kind: "개발 핸드북", file: "engineering-data-handbook.html" },
+  { id: "engineering-runtime-quality", label: "12 런타임 품질·장애대응", kind: "개발 핸드북", file: "engineering-runtime-quality-handbook.html" },
+  { id: "engineering-platform-tools", label: "13 플랫폼 도구·운영 기본기", kind: "개발 핸드북", file: "engineering-platform-tools-handbook.html" },
+  { id: "engineering-java-spring", label: "14 Java·Spring·JPA 사례", kind: "개발 핸드북", file: "engineering-java-spring-handbook.html" },
 ];
 
 export const LLM_HANDBOOKS = [
@@ -231,24 +233,24 @@ export const PRACTICE_HANDBOOKS = [
 
 export const HANDBOOK_GROUPS = [
   { key: "home", label: "홈", items: HOME_HANDBOOKS },
-  { key: "career", label: "면접·커리어", items: CAREER_HANDBOOKS },
   { key: "engineering", label: "개발 핸드북", items: ENGINEERING_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
   { key: "ax", label: "AX 실무", items: AX_PRACTICE_HANDBOOKS },
   { key: "design", label: "디자인 실무", items: DESIGN_PRACTICE_HANDBOOKS },
   { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
+  { key: "career", label: "면접·커리어", items: CAREER_HANDBOOKS },
 ];
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
-  ...CAREER_HANDBOOKS,
   ...ENGINEERING_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...OPERATIONS_HANDBOOKS,
   ...AX_PRACTICE_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,
   ...PRACTICE_HANDBOOKS,
+  ...CAREER_HANDBOOKS,
 ];
 
 export const DEFAULT_HANDBOOK_ID = "home";

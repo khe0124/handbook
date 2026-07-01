@@ -164,6 +164,36 @@ const BUNDLES = [
       { prefix: "perf", label: "성능과 지표", file: "frontend-performance-metrics-handbook.html" },
       { prefix: "devtools", label: "DevTools 사용법", file: "frontend-devtools-handbook.html" },
     ],
+    afterSourcesNav: `  <a href="#performance-glossary"><span class="code">GLOSSARY</span>성능 용어 사전</a>`,
+    afterSourcesHtml: `<section id="performance-glossary">
+<div class="ch-head"><span class="ch-code">GLOSSARY</span><h2>성능 용어 사전</h2></div>
+<p class="lede">성능 문서에서 자주 나오는 약어와 도구 이름을 한 줄로 다시 확인합니다. 정확한 진단은 각 지표가 측정하는 사용자 경험을 먼저 구분하는 데서 시작합니다.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>Core Web Vitals</b><span>user metrics</span></div><div class="g-def">Google이 중요하게 보는 사용자 경험 지표 묶음으로, 현재는 LCP, INP, CLS를 중심으로 봅니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LCP</b><span>Largest Contentful Paint</span></div><div class="g-def">사용자가 볼 만한 가장 큰 콘텐츠가 화면에 그려질 때까지의 시간입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>INP</b><span>Interaction to Next Paint</span></div><div class="g-def">클릭, 탭, 입력 같은 상호작용 뒤 다음 화면 반응이 보이기까지의 지연을 나타냅니다.</div></div>
+<div class="g-row"><div class="g-term"><b>CLS</b><span>Cumulative Layout Shift</span></div><div class="g-def">사용자 의도와 무관하게 화면 요소가 얼마나 흔들리고 밀렸는지 나타내는 안정성 지표입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>TTFB</b><span>Time to First Byte</span></div><div class="g-def">브라우저가 요청한 뒤 서버 응답의 첫 바이트를 받기까지 걸린 시간입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>FCP</b><span>First Contentful Paint</span></div><div class="g-def">텍스트, 이미지, SVG 같은 첫 콘텐츠가 화면에 처음 그려진 시점입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>TBT</b><span>Total Blocking Time</span></div><div class="g-def">Lighthouse가 긴 JavaScript 작업 때문에 main thread가 입력을 처리하지 못한 시간을 합산한 lab 지표입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Long task</b><span>main thread</span></div><div class="g-def">50ms를 넘는 main thread 작업으로, 입력 반응과 렌더링을 밀어낼 수 있습니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Hydration</b><span>SSR</span></div><div class="g-def">서버가 보낸 HTML에 클라이언트 JavaScript를 연결해 상호작용 가능하게 만드는 과정입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Render blocking</b><span>critical path</span></div><div class="g-def">CSS나 동기 script처럼 브라우저가 화면을 그리기 전에 기다려야 하는 리소스입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Waterfall</b><span>Network</span></div><div class="g-def">HTML, CSS, JS, 이미지, API 요청이 어떤 순서와 지연으로 이어지는지 보여주는 네트워크 타임라인입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Field data</b><span>RUM</span></div><div class="g-def">실제 사용자 환경에서 수집한 성능 데이터로, 기기와 네트워크 편차가 반영됩니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Lab data</b><span>synthetic</span></div><div class="g-def">정해진 장비와 네트워크 조건에서 재현성 있게 측정한 성능 데이터입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>RUM</b><span>Real User Monitoring</span></div><div class="g-def">실제 사용자 브라우저에서 성능과 오류를 수집해 운영 지표로 보는 방식입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>p75</b><span>percentile</span></div><div class="g-def">사용자 측정값을 빠른 순서로 세웠을 때 75% 지점의 값으로, Web Vitals 판정에 자주 씁니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Commit duration</b><span>React Profiler</span></div><div class="g-def">React가 계산한 변경을 실제 DOM에 반영하는 commit 단계에 걸린 시간입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Layout thrash</b><span>rendering</span></div><div class="g-def">DOM 읽기와 쓰기가 섞여 브라우저가 layout 계산을 반복하게 되는 성능 문제입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Virtualization</b><span>large list</span></div><div class="g-def">큰 목록에서 화면에 보이는 항목만 렌더링해 DOM 수와 렌더링 비용을 줄이는 기법입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Code splitting</b><span>bundle</span></div><div class="g-def">초기 화면에 필요 없는 JavaScript를 나중에 받도록 번들을 나누는 방식입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Tree shaking</b><span>bundle</span></div><div class="g-def">사용하지 않는 export를 빌드 결과에서 제거해 전송과 실행 비용을 줄이는 최적화입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Preload</b><span>resource hint</span></div><div class="g-def">브라우저에게 곧 필요한 핵심 리소스를 더 빨리 받으라고 알려주는 힌트입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Lazy loading</b><span>defer</span></div><div class="g-def">처음부터 필요하지 않은 이미지나 코드를 실제로 필요할 때 늦게 불러오는 방식입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>Memoization</b><span>cache</span></div><div class="g-def">같은 입력의 계산 결과나 컴포넌트 렌더 결과를 재사용해 반복 비용을 줄이는 기법입니다.</div></div>
+</div>
+</section>`,
   },
   {
     id: "engineering-frontend-quality",
@@ -173,6 +203,43 @@ const BUNDLES = [
     title: "프론트엔드 품질과 릴리스",
     subtitle: "프론트엔드 보안, 테스트 전략, 배포 문서를 운영 품질 기준으로 통합했습니다.",
     scope: "SECURITY · TESTING · DEPLOYMENT",
+    indexDescription:
+      "프론트엔드 품질·릴리스는 보안, 테스트, 배포를 따로 점검하는 목록이 아니라 변경을 안전하게 사용자에게 내보내는 운영 루프입니다. 변경 위험을 분류하고, 그 위험에 맞는 테스트와 보안 리뷰를 선택하고, preview와 CI에서 확인한 뒤, release health window 동안 오류·Web Vitals·API 실패율을 관찰하고 rollback 또는 forward fix를 결정합니다.",
+    afterIndexNav: `  <a href="#frontend-release-quality-model"><span class="code">MODEL</span>릴리스 품질 모델</a>
+  <a href="#frontend-quality-output"><span class="code">OUTPUT</span>품질 산출물</a>`,
+    afterIndexHtml: `<section id="frontend-release-quality-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>FRONTEND RELEASE QUALITY OPERATING MODEL</h2></div>
+<p class="lede">프론트엔드 품질은 테스트 개수나 배포 성공 로그가 아니라 사용자의 브라우저에서 새 버전이 안전하게 작동한다는 증거입니다. 이 모델은 변경이 들어온 순간부터 release health window가 끝날 때까지의 판단 순서를 고정합니다.</p>
+<div class="semantic-card model">
+<span class="sc-label">FRONTEND RELEASE QUALITY OPERATING MODEL</span>
+change risk classification → security review gate → risk based test matrix<br>
+→ preview deployment → CI quality gate → release notes<br>
+→ canary or staged rollout → release health window<br>
+→ Web Vitals regression / error spike / API failure review<br>
+→ rollback, feature flag kill switch, or forward fix decision
+</div>
+<table>
+<tr><th>단계</th><th>품질 질문</th><th>통과 증거</th></tr>
+<tr><td>change risk classification</td><td>이 변경이 보안, 데이터, 권한, 라우팅, 성능, 공통 UI 중 무엇을 건드리는가</td><td>PR risk label, 영향 route, owner, rollback path</td></tr>
+<tr><td>테스트 선택</td><td>unit/component/E2E/visual/a11y/contract 중 무엇이 이 위험을 막는가</td><td>RISK BASED TEST MATRIX와 실행 결과</td></tr>
+<tr><td>보안 게이트</td><td>토큰, HTML, redirect, third-party script, CSP, dependency가 바뀌었는가</td><td>security review note, sanitizer regression, CSP report</td></tr>
+<tr><td>배포 검증</td><td>preview에서 실제 빌드 산출물, cache header, route fallback, release id가 맞는가</td><td>preview smoke, artifact hash, sourcemap upload record</td></tr>
+<tr><td>릴리스 관찰</td><td>새 버전이 사용자 오류, Web Vitals, API 실패율을 악화시키는가</td><td>release health window dashboard와 rollback/forward fix decision</td></tr>
+</table>
+</section>
+
+<section id="frontend-quality-output">
+<div class="ch-head"><span class="ch-code">OUTPUT</span><h2>FRONTEND QUALITY OUTPUTS</h2></div>
+<p class="lede">이 문서를 읽은 뒤 남겨야 하는 것은 지식 요약이 아니라 릴리스 때 재사용할 수 있는 증거 패킷입니다.</p>
+<table>
+<tr><th>산출물</th><th>포함 내용</th><th>왜 필요한가</th></tr>
+<tr><td>release notes</td><td>변경 범위, 위험 분류, flag, migration/API dependency, rollback path</td><td>배포 후 판단 기준을 팀이 공유한다</td></tr>
+<tr><td>security review note</td><td>HTML/token/CSP/redirect/dependency 변경 여부와 통과 근거</td><td>보안 변경을 일반 UI 변경처럼 흘려보내지 않는다</td></tr>
+<tr><td>test evidence packet</td><td>unit, component, E2E, visual, a11y, contract 실행 결과</td><td>위험에 맞는 테스트를 선택했는지 증명한다</td></tr>
+<tr><td>release health record</td><td>error rate, chunk load error, Web Vitals regression, API failure, user report</td><td>배포 성공을 CI가 아니라 실제 사용자 지표로 닫는다</td></tr>
+<tr><td>incident packet</td><td>증상, 영향 route, release id, mitigation, owner, follow-up test</td><td>같은 릴리스 사고가 반복되지 않게 한다</td></tr>
+</table>
+</section>`,
     sources: [
       { prefix: "fesec", label: "보안 대응", file: "frontend-security-handbook.html" },
       { prefix: "fetest", label: "테스트 전략", file: "frontend-testing-strategy-handbook.html" },
@@ -183,24 +250,24 @@ const BUNDLES = [
     id: "engineering-backend-core",
     file: "engineering-backend-core-handbook.html",
     navBrand: "ENGINEERING · BACKEND CORE",
-    navTitle: "백엔드 핵심 · API 보안 운영",
+    navTitle: "백엔드 핵심 · API DB 런타임",
     title: "백엔드 핵심",
-    subtitle: "백엔드 개요와 인증·보안을 제품 서버 구현·운영 흐름으로 통합했습니다.",
-    scope: "BACKEND · API · AUTH SECURITY · OPERATIONS",
-    indexDescription: "백엔드는 기초 체력(HTTP·DNS·쿠키·CORS·Linux·Git) → 요청 생명주기 → API 계약 → Java/Spring 실행 모델 → DB 스키마·트랜잭션·마이그레이션 → JPA → 동시성·멱등성 → 인증·인가·보안 → 캐시·비동기 → 테스트·부하 검증 → 배포·클라우드·운영 → 관측가능성·장애 대응 → 아키텍처 경계 → 포트폴리오·24주 커리큘럼 순서로 읽습니다. 이 통합 문서는 기술명을 나열하지 않고, 제품 서버를 설계·리뷰·운영할 때 필요한 판단 기준과 증거물을 먼저 세웁니다.",
+    subtitle: "백엔드 개요를 요청 생명주기, API 계약, 트랜잭션, JPA, 동시성, 운영 증거 중심으로 정리했습니다.",
+    scope: "BACKEND · API · TRANSACTION · RUNTIME · OPERATIONS",
+    indexDescription: "백엔드 핵심은 로그인과 보안까지 한 문서에 밀어 넣는 목록이 아니라 요청이 계약, 상태, 실패, 증거를 남기며 통과하는 경로를 설명하는 능력입니다. 이 문서는 요청 생명주기, API 계약, validation, transaction boundary, JPA persistence boundary, concurrency, idempotency, cache, async, testing, deployment readiness, observability를 중심으로 읽고, 인증·보안은 별도 `백엔드 인증·보안` 문서에서 깊게 다룹니다.",
     afterIndexNav: `  <a href="#backend-roadmap-overview"><span class="code">ROADMAP</span>백엔드 로드맵 개요</a>
   <a href="#backend-request-ops-map"><span class="code">MAP</span>요청에서 운영까지</a>
   <a href="#backend-study-outputs"><span class="code">OUTPUT</span>학습 산출물</a>`,
     afterIndexHtml: `<section id="backend-roadmap-overview">
 <div class="ch-head"><span class="ch-code">ROADMAP</span><h2>BACKEND ROADMAP OVERVIEW</h2></div>
-<p class="lede">백엔드 핵심은 기능 구현 목록이 아니라 요청이 계약, 상태, 실패, 증거를 남기며 통과하는 경로를 설명하는 능력입니다. 아래 순서로 읽으면 API, DB, 보안, 테스트, 운영, 아키텍처가 따로 놀지 않습니다.</p>
-<div class="serial-card">
+<p class="lede">백엔드 핵심은 기능 구현 목록이 아니라 요청이 계약, 상태, 실패, 증거를 남기며 통과하는 경로를 설명하는 능력입니다. 아래 순서로 읽으면 API, DB, 트랜잭션, 테스트, 운영, 아키텍처가 따로 놀지 않습니다.</p>
+<div class="semantic-card model">
 <span class="sc-label">BACKEND ROADMAP OVERVIEW</span>
 request lifecycle → API contract → Java/Spring runtime<br>
 → transaction/data model → ORM/JPA boundary<br>
-→ concurrency/idempotency → auth/security<br>
-→ cache/async → testing → deployment/observability<br>
-→ architecture boundary → portfolio/interview evidence
+→ concurrency/idempotency → cache/async<br>
+→ testing → deployment/observability<br>
+→ architecture boundary → operability evidence
 </div>
 <table>
 <thead><tr><th>축</th><th>핵심 질문</th><th>증거 산출물</th></tr></thead>
@@ -217,9 +284,9 @@ request lifecycle → API contract → Java/Spring runtime<br>
 <section id="backend-request-ops-map">
 <div class="ch-head"><span class="ch-code">MAP</span><h2>REQUEST TO OPERATIONS MAP</h2></div>
 <p class="lede">좋은 백엔드 설명은 controller에서 끝나지 않습니다. 요청 하나가 저장소, 외부 의존성, 큐, 로그와 지표까지 어떻게 이어지는지 따라가야 합니다.</p>
-<div class="serial-card">
+<div class="semantic-card flow">
 <span class="sc-label">REQUEST TO OPERATIONS MAP</span>
-client → controller → validation → authN/authZ<br>
+client → controller → validation → request context<br>
 → application service → transaction boundary<br>
 → domain invariant → repository / external client<br>
 → commit / rollback → outbox / cache invalidation<br>
@@ -233,8 +300,8 @@ client → controller → validation → authN/authZ<br>
 
 <section id="backend-study-outputs">
 <div class="ch-head"><span class="ch-code">OUTPUT</span><h2>BACKEND STUDY OUTPUTS</h2></div>
-<p class="lede">학습 완료 기준은 읽은 분량이 아니라 제출 가능한 산출물입니다. 아래 묶음이 있으면 포트폴리오와 면접 답변이 같은 증거를 공유합니다.</p>
-<div class="serial-card">
+<p class="lede">학습 완료 기준은 읽은 분량이 아니라 제출 가능한 산출물입니다. 아래 묶음은 백엔드 코어에서 직접 검증할 수 있는 설계 판단과 동작 증거만 남깁니다.</p>
+<div class="semantic-card evidence">
 <span class="sc-label">BACKEND STUDY OUTPUTS</span>
 API docs · ERD · migration notes · transaction boundary note<br>
 EXPLAIN ANALYZE before/after · idempotency and retry policy<br>
@@ -242,15 +309,39 @@ unit/integration/contract/regression test report<br>
 Docker/CI evidence · dashboard metric list · incident runbook · ADR<br>
 foundation checklist · Spring proxy failure cases · schema design notes<br>
 backup/restore drill · load test baseline · cloud deployment minimum<br>
-24-week curriculum · portfolio README rubric<br>
-language/framework choice · IaC/Kubernetes boundary · project example mapping<br>
-mid-level expectation matrix · ownership evidence packet
+API trust boundary · request context handoff · operability checklist<br>
+quality floor · backend core evidence packet
 </div>
 </section>`,
     sources: [
       { prefix: "backend", label: "백엔드 개요", file: "backend-engineering-handbook.html" },
-      { prefix: "auth", label: "인증과 보안", file: "auth-security-handbook.html" },
     ],
+  },
+  {
+    id: "engineering-backend-auth-security",
+    file: "engineering-backend-auth-security-handbook.html",
+    navBrand: "ENGINEERING · BACKEND SECURITY",
+    navTitle: "백엔드 인증·보안 · 세션 토큰 권한",
+    title: "백엔드 인증·보안",
+    subtitle: "인증과 보안 문서를 세션, 토큰, OAuth/OIDC, 권한, 테넌트 격리, 위협 모델, 운영 대응 중심으로 독립 분리했습니다.",
+    scope: "AUTHENTICATION · AUTHORIZATION · OWASP · THREAT MODEL · INCIDENT",
+    indexDescription:
+      "백엔드 보안은 로그인 기능을 붙이는 일이 아니라 신뢰 경계, identity proof, session lifecycle, authorization decision, tenant isolation, audit evidence, incident response를 설계하는 일입니다. 이 문서는 세션/JWT/OAuth/OIDC와 RBAC/ABAC/ReBAC, CSRF/CORS/cookie, OWASP 취약점, secret 관리, 보안 리뷰와 사고 대응을 하나의 운영 흐름으로 읽습니다.",
+    stripNestedChrome: true,
+    sources: [{ prefix: "auth", label: "인증과 보안", file: "auth-security-handbook.html" }],
+    afterSourcesNav: `  <a href="#backend-security-review-packet"><span class="code">PACKET</span>보안 리뷰 패킷</a>`,
+    afterSourcesHtml: `<section id="backend-security-review-packet">
+<div class="ch-head"><span class="ch-code">PACKET</span><h2>BACKEND SECURITY REVIEW PACKET</h2></div>
+<p class="lede">보안 문서를 읽은 뒤 실제 PR과 설계 리뷰에 붙일 증거 묶음입니다. 인증·권한·데이터 경계 변경은 단순 기능 변경처럼 리뷰하지 않습니다.</p>
+<table>
+<tr><th>변경 유형</th><th>필수 증거</th><th>거절 기준</th></tr>
+<tr><td>로그인·세션</td><td>cookie option, session fixation 방어, logout/revoke 테스트</td><td>성공 로그인만 있고 만료·폐기·탈취 시나리오 없음</td></tr>
+<tr><td>JWT·refresh</td><td>token ttl, refresh rotation, replay detection, reuse response</td><td>refresh token을 장기 bearer token처럼 취급</td></tr>
+<tr><td>권한</td><td>RBAC/ABAC decision table, 401/403 negative test</td><td>프론트 route guard만 있고 서버 인가 없음</td></tr>
+<tr><td>테넌트 격리</td><td>tenant id source, query scope, cross-tenant negative fixture</td><td>client가 보낸 tenant id를 신뢰</td></tr>
+<tr><td>입력·외부 호출</td><td>validation schema, SSRF allowlist, SQL parameterization evidence</td><td>문자열 필터만으로 injection을 막는다고 설명</td></tr>
+</table>
+</section>`,
   },
   {
     id: "engineering-backend-architecture",
@@ -466,6 +557,99 @@ local reproduce → build/test → image build<br>
     title: "디자인 기반과 사용자 흐름",
     subtitle: "디자인 개요, UX 사고와 문제 정의, 정보구조와 내비게이션, 사용자 흐름과 태스크 설계를 통합했습니다.",
     scope: "DESIGN · UX · IA · USER FLOW",
+    compactNav: true,
+    stripNestedChrome: true,
+    indexDescription: "이 문서는 원문을 단순히 이어 읽는 자료가 아니라, 새 기능이나 화면 개선을 시작할 때 문제 정의, 정보구조, 사용자 흐름, 상태·예외, 검증 기준을 하나의 산출물로 닫기 위한 실무 워크북입니다.",
+    afterIndexNav: `  <a href="#design-foundation-routes"><span class="code">ROUTES</span>상황별 실행 루트</a>
+  <a href="#design-foundation-canvas"><span class="code">CANVAS</span>Problem-to-Flow Canvas</a>
+  <a href="#design-foundation-case"><span class="code">CASE</span>관통 사례</a>
+  <a href="#design-foundation-handoff"><span class="code">HANDOFF</span>개발 핸드오프</a>
+  <a href="#design-foundation-decision-gate"><span class="code">GATE</span>검증·결정 기준</a>`,
+    afterIndexHtml: `<section id="design-foundation-routes">
+<div class="ch-head"><span class="ch-code">ROUTES</span><h2>상황별 실행 루트</h2></div>
+<p class="lede">디자인 기반 문서는 처음부터 끝까지 읽는 것보다 현재 작업의 위험에 맞춰 들어가는 편이 실용적입니다. 아래 루트는 문제 정의, IA, flow, 검증 중 어디에서 멈춰야 하는지 정하는 기준입니다.</p>
+<table>
+<tr><th>상황</th><th>먼저 볼 섹션</th><th>완료 산출물</th><th>멈춤 기준</th></tr>
+<tr><td>신규 기능을 시작함</td><td>UX-01 → UX-03 → IA-07 → FLOW-02</td><td>문제 문장, 성공 지표, 핵심 객체, happy/edge path</td><td>문제와 솔루션을 분리해서 말할 수 없다면 UI 작업을 시작하지 않는다.</td></tr>
+<tr><td>기존 화면이 복잡함</td><td>DES-03 → IA-02 → IA-04 → FLOW-05</td><td>정보 우선순위, 메뉴/필터 구조, 반복 업무 체크리스트</td><td>사용자가 다음 행동을 고르는 근거가 화면에 없다면 구조를 다시 잡는다.</td></tr>
+<tr><td>권한·상태가 얽힘</td><td>IA-08 → FLOW-03 → FLOW-07 → FLOW-08</td><td>권한 매트릭스, 상태 표, 전이 규칙, 서비스 블루프린트</td><td>권한 없음, 처리 중, 부분 실패, 재시도 상태가 없으면 설계를 보류한다.</td></tr>
+<tr><td>검색·필터가 실패함</td><td>UX-04 → IA-04 → IA-06 → FLOW-04</td><td>검색어/동의어, 활성 필터, empty state, reset/retry 동선</td><td>0건 결과에서 다음 행동이 보이지 않으면 출시하지 않는다.</td></tr>
+<tr><td>비동기 작업을 다룸</td><td>FLOW-06 → FLOW-07 → FLOW-08 → HANDOFF</td><td>job 상태, polling/notification, partial success, 실패 재처리</td><td>사용자에게 완료처럼 보이지만 시스템은 처리 중인 상태가 있으면 문구와 상태를 분리한다.</td></tr>
+<tr><td>디자인 리뷰를 준비함</td><td>DES-07 → CANVAS → GATE</td><td>결정 근거, 버린 대안, 위험, 검증 계획</td><td>한 가지 시안만 있고 선택하지 않은 대안이 없으면 리뷰 준비가 덜 된 상태다.</td></tr>
+</table>
+</section>
+
+<section id="design-foundation-canvas">
+<div class="ch-head"><span class="ch-code">CANVAS</span><h2>Problem-to-Flow Canvas</h2></div>
+<p class="lede">이 캔버스는 이 문서의 최종 산출물입니다. 한 기능을 설계할 때 아래 항목을 채우면 문제 정의, IA, 사용자 흐름, 상태·예외, 검증 기준이 한 장으로 닫힙니다.</p>
+<table>
+<tr><th>영역</th><th>작성 질문</th><th>산출물</th><th>품질 기준</th></tr>
+<tr><td>Problem</td><td>누가, 어떤 상황에서, 무엇 때문에 실패하는가</td><td>문제 문장 1개, 비목표 2개</td><td>솔루션 이름 없이 사용자 손실을 설명한다.</td></tr>
+<tr><td>Evidence</td><td>문제가 실제라는 증거는 무엇인가</td><td>리서치, 로그, 문의, 운영 신호</td><td>빈도, 영향, 현재 우회 방법 중 2개 이상이 있다.</td></tr>
+<tr><td>Roles</td><td>사용자, 관리자, 승인자, 감사자의 목표가 어떻게 다른가</td><td>역할별 목표·권한 표</td><td>같은 화면에서 다른 권한을 가진 사용자가 구분된다.</td></tr>
+<tr><td>Objects</td><td>사용자가 다루는 핵심 객체와 상태는 무엇인가</td><td>객체 모델, 상태 taxonomy</td><td>목록, 상세, 필터, 알림의 용어가 일치한다.</td></tr>
+<tr><td>IA</td><td>정보는 어디에 놓이고 어떤 순서로 발견되는가</td><td>메뉴, 필터, 검색, 상세 구조</td><td>중요 판단 정보가 상세 진입 전에 보인다.</td></tr>
+<tr><td>Flow</td><td>목표 달성까지 어떤 단계와 분기가 있는가</td><td>happy path, edge path, exit point</td><td>취소, 중단, 실패, 재방문 동선이 있다.</td></tr>
+<tr><td>State</td><td>loading, empty, error, permission, partial success를 어떻게 보여주는가</td><td>상태 매트릭스</td><td>권한 없음과 데이터 없음이 같은 빈 화면으로 보이지 않는다.</td></tr>
+<tr><td>Validation</td><td>출시 전후 무엇이 좋아졌는지 어떻게 판단하는가</td><td>성공 지표, 실패 신호, 중단 기준</td><td>측정값이 나왔을 때 유지/수정/중단 결정을 내릴 수 있다.</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">PROBLEM-TO-FLOW CANVAS TEMPLATE</span>
+Problem: [역할]은 [상황]에서 [장애물] 때문에 [측정 가능한 손실]을 겪는다<br>
+Evidence: 빈도 / 영향 / 현재 우회 방법 / 고객·운영 신호<br>
+Roles: 사용자 / 관리자 / 승인자 / 감사자별 목표와 권한<br>
+Objects: 핵심 객체, 속성, 상태, 가능한 action<br>
+IA: 메뉴, 검색, 필터, 목록, 상세에서 드러나야 할 정보<br>
+Flow: happy path, edge path, exit point, recovery path<br>
+State: loading, empty, error, permission, partial success, async job<br>
+Validation: 성공 지표, 실패 신호, 출시 후 판정 시점, rollback 또는 수정 기준
+</div>
+</section>
+
+<section id="design-foundation-case">
+<div class="ch-head"><span class="ch-code">CASE</span><h2>관통 사례: 대량 권한 변경</h2></div>
+<p class="lede">아래 사례는 이 문서의 개념을 하나의 기능에 끝까지 적용한 예시입니다. 포인트는 버튼 배치가 아니라 문제, 객체, 권한, 상태, 실패 복구, 검증 기준을 한 흐름으로 닫는 것입니다.</p>
+<table>
+<tr><th>단계</th><th>설계 판단</th><th>구체 산출물</th><th>실패 신호</th></tr>
+<tr><td>문제 정의</td><td>운영자가 여러 사용자 권한을 반복 변경하지만 실패 사유를 추적하지 못해 엑셀로 재관리한다.</td><td>Problem: 운영자는 대량 권한 변경 후 실패 대상과 원인을 분리하지 못해 재작업 시간이 증가한다.</td><td>“권한 변경 화면을 예쁘게 만든다”처럼 솔루션 중심으로 시작한다.</td></tr>
+<tr><td>역할</td><td>요청자, 승인자, 운영자, 감사자의 목표가 다르다.</td><td>역할별 가능한 action: 요청, 승인, 실행, 조회, 감사 로그 다운로드</td><td>모든 사용자에게 같은 버튼과 같은 실패 메시지를 보여준다.</td></tr>
+<tr><td>객체·상태</td><td>권한 변경 요청은 draft, submitted, approved, running, partial_failed, completed, cancelled 상태를 가진다.</td><td>상태 taxonomy와 상태별 가능한 전이 표</td><td>제출 완료와 변경 완료를 같은 완료로 표현한다.</td></tr>
+<tr><td>IA</td><td>목록에서는 요청 상태, 실패 수, 마지막 실행자, 다음 action이 먼저 보여야 한다.</td><td>목록 컬럼 우선순위, 필터: 상태/실패 사유/요청자/기간</td><td>실패 사유가 상세 안에만 있어 운영자가 일괄 처리할 수 없다.</td></tr>
+<tr><td>Flow</td><td>업로드, 검증, 미리보기, 승인, 실행, 결과 확인, 실패 재시도를 분리한다.</td><td>happy path + 부분 실패 path + 권한 만료 path + 중복 제출 path</td><td>저장 버튼 뒤 토스트만 있고 결과 확인 화면이 없다.</td></tr>
+<tr><td>상태·회복</td><td>100명 중 92명 성공, 8명 실패처럼 결과를 분리하고 실패 사유별 재시도를 제공한다.</td><td>partial success summary, retry by reason, CSV export, audit log link</td><td>부분 실패를 전체 실패 또는 전체 성공처럼 표현한다.</td></tr>
+<tr><td>검증</td><td>성공 기준은 클릭 수가 아니라 재작업 시간과 실패 재처리율이다.</td><td>재처리 시간, 실패 사유 식별률, 운영 문의 감소, 재시도 성공률</td><td>출시 후 좋아졌는지 판단할 수 있는 이벤트와 로그가 없다.</td></tr>
+</table>
+</section>
+
+<section id="design-foundation-handoff">
+<div class="ch-head"><span class="ch-code">HANDOFF</span><h2>개발 핸드오프 패킷</h2></div>
+<p class="lede">디자인 산출물이 개발로 넘어갈 때 화면만 전달되면 상태와 예외가 누락됩니다. 아래 패킷은 프론트엔드, 백엔드, QA가 같은 계약을 보게 만드는 최소 단위입니다.</p>
+<table>
+<tr><th>패킷</th><th>포함할 내용</th><th>프론트엔드 계약</th><th>백엔드·운영 계약</th></tr>
+<tr><td>Role & permission matrix</td><td>역할별 보기/생성/수정/승인/삭제/내보내기 권한</td><td>버튼 노출, disabled 이유, 권한 요청 동선</td><td>403 error code, audit log, 권한 변경 이력</td></tr>
+<tr><td>State matrix</td><td>객체 상태, 가능한 action, 다음 상태</td><td>badge, stepper, CTA, 상태별 빈 화면</td><td>enum, transition rule, validation, idempotency</td></tr>
+<tr><td>Error contract</td><td>validation, permission, conflict, timeout, partial failure</td><td>field error, toast, retry, draft 보존</td><td>error code, recoverable 여부, retry 가능성</td></tr>
+<tr><td>Async job contract</td><td>job id, queued/running/succeeded/partial_failed/failed</td><td>polling, progress, 결과 요약, 다시 방문 경로</td><td>job status API, webhook/notification, 보존 기간</td></tr>
+<tr><td>Analytics & decision log</td><td>성공 이벤트, 실패 이벤트, 중단 기준, 버린 대안</td><td>event name, property, funnel step</td><td>로그 집계, 운영 대시보드, 후속 판단 회의</td></tr>
+</table>
+</section>
+
+<section id="design-foundation-decision-gate">
+<div class="ch-head"><span class="ch-code">GATE</span><h2>검증·결정 기준</h2></div>
+<p class="lede">리서치와 지표는 보기 좋은 첨부물이 아니라 의사결정을 바꾸는 기준이어야 합니다. 아래 기준 중 하나라도 비어 있으면 “검증 예정”이 아니라 “결정 기준 미정”으로 표시합니다.</p>
+<table>
+<tr><th>검증 항목</th><th>결정 질문</th><th>좋은 신호</th><th>중단·수정 신호</th></tr>
+<tr><td>문제 검증</td><td>이 문제가 충분히 자주, 크게 발생하는가</td><td>빈도, 손실, 우회 방법이 확인됨</td><td>요청자는 크지만 실제 사용자 손실이 설명되지 않음</td></tr>
+<tr><td>이해 가능성</td><td>사용자가 현재 상태와 다음 action을 설명할 수 있는가</td><td>사용성 테스트에서 상태와 다음 행동을 말함</td><td>CTA는 찾지만 왜 눌러야 하는지 설명하지 못함</td></tr>
+<tr><td>업무 효율</td><td>반복 작업 시간이나 재작업이 줄었는가</td><td>완료 시간, 실패 재처리 시간, 문의 수 감소</td><td>클릭 수는 줄었지만 오류와 문의가 증가함</td></tr>
+<tr><td>시스템 적합성</td><td>API, 권한, 상태, 로그가 디자인 상태를 뒷받침하는가</td><td>상태 enum과 화면 상태명이 일치함</td><td>디자인은 가능한 action을 보여주지만 API가 지원하지 않음</td></tr>
+<tr><td>운영 가능성</td><td>예외 처리를 운영팀이 지속할 수 있는가</td><td>실패 사유 분류와 escalation rule이 있음</td><td>예외 처리가 수동 문의와 엑셀 관리로 돌아감</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">REVIEW BLOCKER</span>
+<p>문제 문장, 역할·권한, 상태 매트릭스, 실패 복구, 출시 후 판정 기준 중 2개 이상이 비어 있으면 시각 디자인 리뷰가 아니라 구조 리뷰로 되돌립니다.</p>
+</div>
+</section>`,
     sources: [
       { prefix: "design", label: "디자인 개요", file: "design-handbook.html" },
       { prefix: "designux", label: "UX 사고와 문제 정의", file: "design-ux-thinking-handbook.html" },
@@ -503,6 +687,36 @@ local reproduce → build/test → image build<br>
     title: "실무 치트시트 모음",
     subtitle: "Frontend, Backend, Database, Network, DevOps, Linux, Docker, Interview, Tools·Shortcuts·Commands 치트시트를 통합했습니다.",
     scope: "CHEAT SHEETS · REVIEW GATES · FAILURE PLAYBOOKS",
+    indexDescription:
+      "이 문서는 암기용 요약이 아니라 작업 중 5분 안에 확인할 실행 기준입니다. 기존 치트시트의 약점은 좋은 원칙은 있지만 상황별 명령, 출력 판정, 다음 행동이 부족하다는 점이었습니다. 따라서 각 항목은 증상 → 바로 확인할 증거 → 정상/위험 신호 → 다음 행동 순서로 보강합니다.",
+    afterIndexNav: `  <a href="#cheat-audit"><span class="code">AUDIT</span>문제점 분석과 보강 계획</a>
+  <a href="#cheat-routes"><span class="code">ROUTES</span>상황별 사용 루트</a>`,
+    afterIndexHtml: `<section id="cheat-audit">
+<div class="ch-head"><span class="ch-code">AUDIT</span><h2>문제점 분석과 보강 계획</h2></div>
+<p class="lede">실무 치트시트는 많이 설명하는 문서가 아니라, 작업자가 지금 무엇을 확인하고 어떤 결과면 멈춰야 하는지 알려주는 도구여야 합니다. 아래 기준으로 기존 항목을 보강합니다.</p>
+<table>
+<tr><th>문제점</th><th>현재 증상</th><th>보강 방향</th></tr>
+<tr><td>템플릿 반복</td><td>개요, 개념, Red Flags가 분야별로 같은 모양이라 실제 작업 흐름이 약함</td><td>분야별로 자주 맞닥뜨리는 상황 카드를 앞쪽에 추가</td></tr>
+<tr><td>출력 판정 부족</td><td>명령어는 있지만 결과가 정상인지 위험인지 판단하기 어려움</td><td>명령, 정상 신호, 위험 신호, 다음 행동을 한 줄로 연결</td></tr>
+<tr><td>복붙성 부족</td><td>원칙은 있으나 바로 실행할 curl, SQL, docker, log query 예시가 적음</td><td>실무에서 안전하게 바꿔 쓸 수 있는 최소 명령 템플릿 제공</td></tr>
+<tr><td>리뷰 게이트 약함</td><td>차단 기준이 추상적이라 PR에서 체크박스로 쓰기 어려움</td><td>필수 증거와 중단 조건을 구체화</td></tr>
+<tr><td>장애 플레이북 짧음</td><td>triage 순서만 있고 증거 보관, 커뮤니케이션, 복구 판단이 약함</td><td>10분 안에 수집할 증거와 rollback/flag/off 기준을 명시</td></tr>
+</table>
+</section>
+
+<section id="cheat-routes">
+<div class="ch-head"><span class="ch-code">ROUTES</span><h2>상황별 사용 루트</h2></div>
+<p class="lede">전체를 처음부터 읽지 않습니다. 지금 겪는 상황에 맞는 문서 2~3개만 연결해 빠르게 증거를 모읍니다.</p>
+<table>
+<tr><th>상황</th><th>먼저 볼 치트시트</th><th>10분 안에 남길 증거</th><th>멈출 기준</th></tr>
+<tr><td>화면이 느림</td><td>Frontend → Tools → DevOps</td><td>Network waterfall, Performance trace, release SHA, before/after 수치</td><td>병목 계층을 못 나누면 코드 변경 중단</td></tr>
+<tr><td>API 오류 증가</td><td>Backend → Database → Tools</td><td>route, status, errorCode, requestId, slow query 또는 upstream timeout</td><td>재시도 가능 여부와 사용자 영향이 불명확하면 배포 중단</td></tr>
+<tr><td>DB 변경 리뷰</td><td>Database → Backend → DevOps</td><td>DDL lock 위험, EXPLAIN, backfill plan, rollback/verification SQL</td><td>큰 테이블 변경에 단계화 계획이 없으면 merge 중단</td></tr>
+<tr><td>연결 장애</td><td>Network → Linux → Tools</td><td>dig, nc, curl -v, server listen, firewall/route diff</td><td>출발지·목적지·포트가 특정되지 않으면 정상 판단 금지</td></tr>
+<tr><td>배포 후 장애</td><td>DevOps → Docker → Backend 또는 Frontend</td><td>image digest, config version, health check, error rate, rollback 후보</td><td>데이터 변경 동반 여부를 모르면 rollback 실행 보류</td></tr>
+<tr><td>로컬만 깨짐</td><td>Tools → Linux → Docker</td><td>runtime version, env diff, port/process, clean install, container logs</td><td>팀/CI 재현 여부를 확인하기 전 원인 단정 금지</td></tr>
+</table>
+</section>`,
     sources: [
       { prefix: "cheatfe", label: "Frontend", file: "frontend-cheat-sheet.html" },
       { prefix: "cheatbe", label: "Backend", file: "backend-cheat-sheet.html" },
@@ -666,6 +880,12 @@ function prefixAnchors(html, prefix) {
 
 function removeDomainSpecificCareerTerms(html) {
   return html
+    .replace(/Greenery LCA 플랫폼/g, "B2B 산업 데이터 플랫폼")
+    .replace(/LCA B2B 플랫폼/g, "B2B 산업 데이터 플랫폼")
+    .replace(/LCA 플랫폼/g, "B2B 산업 데이터 플랫폼")
+    .replace(/LCA 권한관리/g, "B2B 플랫폼 권한관리")
+    .replace(/탄소배출권 거래/g, "거래형 자산 거래")
+    .replace(/탄소 플랫폼/g, "B2B 플랫폼")
     .replace(/탄소·에너지\/투자 서비스/g, "에너지/투자 서비스")
     .replace(/탄소·에너지 서비스/g, "에너지 서비스")
     .replace(/탄소·에너지/g, "에너지")
@@ -820,6 +1040,60 @@ function sourceDivider(source, isCareer) {
 </section>`;
 }
 
+const SNIPPET_CARD_LABELS = [
+  "API ERROR CONTRACT",
+  "OFFSET / LIMIT — 쉽지만 한계 있음",
+  "Java — RedisTemplate로 락 시도",
+  "RateLimiter.java — INCR + EXPIRE",
+  "filter · map · collect",
+  "Member.java — 가장 기본형 엔티티",
+  "N:1 — 주인 쪽",
+  "보안 헤더 + RATE LIMIT",
+  "/etc/nginx/conf.d/app.conf — REVERSE PROXY",
+];
+
+const ENGINEERING_CARD_STYLES =
+  ".semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);color:var(--ink);padding:18px 22px;margin:22px 0;font-family:var(--sans);font-size:14.5px;line-height:1.75}.semantic-card.process-card{border-left-color:var(--green);background:var(--green-tint)}.semantic-card.decision-card{border-left-color:var(--amber);background:var(--amber-tint)}.semantic-card.evidence-card{border-left-color:var(--ink);background:#ECEEF3}.semantic-card.answer-card{border-left-color:var(--green-deep);background:var(--panel)}.semantic-card .sc-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green-deep);display:block;margin-bottom:6px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.85;overflow-x:auto;white-space:pre}.snippet-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}";
+
+function semanticCardClass(block) {
+  if (/ANSWER|답변|FRAME|ROUTINE|LOOP|CHECKLIST|PLAYBOOK/i.test(block)) {
+    return "semantic-card answer-card";
+  }
+
+  if (/EVIDENCE|PACKET|REGRESSION|PROFILER|TRACE|BENCHMARK|LATENCY/i.test(block)) {
+    return "semantic-card evidence-card";
+  }
+
+  if (/DECISION|CONTRACT|BOUNDARY|MATRIX|MODEL|POLICY/i.test(block)) {
+    return "semantic-card decision-card";
+  }
+
+  return "semantic-card process-card";
+}
+
+function transformEngineeringCards(html) {
+  const transformed = html.replace(/<div class="serial-card">([\s\S]*?)<\/div>/g, (match, inner) => {
+    const isSnippet = SNIPPET_CARD_LABELS.some((label) => inner.includes(label));
+
+    if (isSnippet) {
+      return `<pre class="snippet-card">${inner}</pre>`;
+    }
+
+    const body = inner.replace(
+      /<span class="sc-label">([^<]+)<\/span>(?!<br>)/,
+      `<span class="sc-label">$1</span><br>`,
+    );
+
+    return `<div class="${semanticCardClass(inner)}">${body}</div>`;
+  });
+
+  if (transformed.includes(".semantic-card") && transformed.includes(".snippet-card")) {
+    return transformed;
+  }
+
+  return transformed.replace("</style>", `${ENGINEERING_CARD_STYLES}</style>`);
+}
+
 for (const bundle of BUNDLES) {
   const firstHtml = await readFile(path.join(handbookDir, bundle.sources[0].file), "utf8");
   const { beforeNav, afterMainEnd } = extractShell(firstHtml);
@@ -859,6 +1133,12 @@ for (const bundle of BUNDLES) {
     mainParts.push(sourceDivider(source, isCareer));
     mainParts.push(main);
   }
+  if (bundle.afterSourcesNav) {
+    navParts.push(bundle.afterSourcesNav);
+  }
+  if (bundle.afterSourcesHtml) {
+    mainParts.push(bundle.afterSourcesHtml.trim());
+  }
 
   const output = `${setDocumentTitle(beforeNav, bundle.title)}<nav aria-label="목차">
 ${navParts.join("\n")}
@@ -867,5 +1147,8 @@ ${navParts.join("\n")}
 ${mainParts.join("\n\n")}
 </main>${afterMainEnd}`;
 
-  await writeFile(path.join(handbookDir, bundle.file), output);
+  await writeFile(
+    path.join(handbookDir, bundle.file),
+    bundle.id.startsWith("engineering-") ? transformEngineeringCards(output) : output,
+  );
 }

@@ -12,6 +12,8 @@
   <a href="#ch6"><span class="code">NW-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">NW-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">NW-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">NW-CS-09</span>연결 진단 카드</a>
+  <a href="#ch10"><span class="code">NW-CS-10</span>출력 판정표</a>
 </nav>
 <main>
   <header class="hero">
@@ -104,6 +106,29 @@
     <div class="ch-head"><span class="ch-code">NW-CS-08</span><h2>Failure Playbook</h2></div>
     <div class="serial-card"><span class="sc-label">L3-L7 TRIAGE</span>1. <code>dig host</code>로 이름 해석 확인<br>2. <code>nc -zv host port</code>로 TCP 도달성 확인<br>3. <code>curl -vk https://host</code>로 TLS/HTTP 확인<br>4. 서버에서 <code>ss -tlnp</code>로 listen 확인<br>5. LB/proxy/access log와 target health 비교<br>6. route table, firewall, return path를 양쪽에서 대조</div>
     <div class="callout warn"><span class="co-label">운영 원칙</span><p>네트워크 장애는 "열었다"가 아니라 어떤 출발지에서 어떤 목적지의 어떤 포트를 어떤 방향으로 검증했는지로 기록합니다. 증거 없는 네트워크 정상 판단은 장애 시간을 늘립니다.</p></div>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">NW-CS-09</span><h2>연결 진단 카드</h2></div>
+    <p class="lede">네트워크 치트시트는 계층을 건너뛰지 않는 데 씁니다. 항상 source, destination, port, protocol, time을 기록합니다.</p>
+    <table>
+      <tr><th>증상</th><th>명령</th><th>정상 신호</th><th>다음 행동</th></tr>
+      <tr><td>DNS 의심</td><td><code>dig host +short</code>, <code>dig host @resolver</code></td><td>기대 record와 TTL이 resolver별로 일치</td><td>내부/외부 resolver, CNAME chain, split horizon 확인</td></tr>
+      <tr><td>TCP 연결 실패</td><td><code>nc -vz host 443</code></td><td>succeeded 또는 open</td><td>route, firewall, security group, server listen 순서로 확인</td></tr>
+      <tr><td>TLS 실패</td><td><code>openssl s_client -servername host -connect host:443</code></td><td>chain 검증 가능, SAN에 hostname 포함</td><td>인증서 chain, SNI, 만료, LB listener 확인</td></tr>
+      <tr><td>HTTP 오류</td><td><code>curl -vkI https://host/path</code></td><td>status, redirect, header, request id 확인 가능</td><td>proxy/LB/access log와 upstream app log 대조</td></tr>
+      <tr><td>서버 bind 의심</td><td><code>ss -tlnp</code></td><td>앱이 기대 address:port에서 listen</td><td>localhost bind, container port, host firewall 확인</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">NW-CS-10</span><h2>출력 판정표</h2></div>
+    <table>
+      <tr><th>증거</th><th>위험 신호</th><th>해석</th><th>중단 기준</th></tr>
+      <tr><td><code>dig</code></td><td>내부와 외부 resolver 결과가 다름</td><td>split-horizon, 캐시, 잘못된 record 가능</td><td>DNS 정상이라고 단정 금지</td></tr>
+      <tr><td><code>nc</code></td><td>timeout</td><td>route 또는 firewall drop 가능성이 큼</td><td>서버 앱 로그만 보고 원인 단정 금지</td></tr>
+      <tr><td><code>curl -v</code></td><td>connected 후 TLS에서 실패</td><td>네트워크 도달은 됐고 인증서/SNI 문제로 이동</td><td>HTTP handler 수정 전 TLS 증거 확인</td></tr>
+      <tr><td>LB target health</td><td>일부 AZ/target만 unhealthy</td><td>네트워크 전체 장애보다 특정 target/app 상태 의심</td><td>전체 방화벽 변경 전에 target별 로그 비교</td></tr>
+      <tr><td>Firewall diff</td><td>source/destination/port/direction 중 하나가 비어 있음</td><td>검증 불가능한 정책 변경</td><td>승인 또는 배포 중단</td></tr>
+    </table>
   </section>
 </main>
 </body>

@@ -240,6 +240,14 @@ export default function App() {
     setMobileMenuOpen(false);
   };
 
+  const handleSelectHandbookId = (itemId: string) => {
+    const item = items.find((candidate) => candidate.id === itemId);
+
+    if (item) {
+      handleSelectItem(item);
+    }
+  };
+
   const handleSelectHome = () => {
     handleSelectItem(homeItem);
   };
@@ -300,7 +308,11 @@ export default function App() {
         </nav>
       </header>
 
-      <HandbookPage item={activeItem} onReady={restoreSavedPosition} />
+      <HandbookPage
+        item={activeItem}
+        onReady={restoreSavedPosition}
+        onSelectHandbook={handleSelectHandbookId}
+      />
 
       {mobileMenuOpen ? (
         <button

@@ -16,6 +16,8 @@
   <a href="#ch6"><span class="code">FE-CS-06</span>Red Flags</a>
   <a href="#ch7"><span class="code">FE-CS-07</span>Review Gate</a>
   <a href="#ch8"><span class="code">FE-CS-08</span>Failure Playbook</a>
+  <a href="#ch9"><span class="code">FE-CS-09</span>실전 실행 카드</a>
+  <a href="#ch10"><span class="code">FE-CS-10</span>출력 판정표</a>
 </nav>
 <main>
   <header class="hero">
@@ -120,6 +122,29 @@
       <tr><td>3</td><td>API contract 변경 또는 cache stale이 있는가?</td><td>response schema, ETag/cache-control, deploy SHA</td></tr>
       <tr><td>4</td><td>hydration, date/locale/random, browser-only API 차이인가?</td><td>SSR log, client stack trace, hydration warning</td></tr>
       <tr><td>5</td><td>flag off, rollback, CDN purge 중 어떤 복구가 가장 안전한가?</td><td>사용자 영향 범위와 데이터 변경 여부</td></tr>
+    </table>
+  </section>
+  <section id="ch9">
+    <div class="ch-head"><span class="ch-code">FE-CS-09</span><h2>실전 실행 카드</h2></div>
+    <p class="lede">프론트엔드 치트시트는 화면을 고치기 전에 증거를 고정하는 용도로 씁니다. 아래 카드는 PR 리뷰나 장애 triage에서 그대로 복사해 체크합니다.</p>
+    <table>
+      <tr><th>상황</th><th>바로 확인</th><th>정상 신호</th><th>다음 행동</th></tr>
+      <tr><td>첫 화면 느림</td><td>Network waterfall, LCP element, Coverage, bundle size</td><td>HTML, CSS, LCP image, initial JS의 시작 시각과 크기를 설명 가능</td><td>TTFB, render-blocking CSS, 이미지 우선순위, initial JS 중 하나만 실험</td></tr>
+      <tr><td>입력 지연</td><td>Performance trace, React Profiler commit, INP 후보 interaction</td><td>handler, render, layout, paint 비용이 분리됨</td><td>state fan-out 축소, virtualization, worker, transition 중 최소 변경 선택</td></tr>
+      <tr><td>화면 깨짐</td><td>Console stack, Network response body, route/role/flag, deploy SHA</td><td>재현 조건과 실패 응답이 같은 패킷에 있음</td><td>API contract, cache, hydration, feature flag 순서로 원인 좁힘</td></tr>
+      <tr><td>폼 실패</td><td>필드 오류, 서버 validation code, 중복 submit, focus 이동</td><td>사용자가 어떤 값을 고칠지 알 수 있음</td><td>error contract와 UI 상태를 맞추고 pending/disabled/retry를 점검</td></tr>
+      <tr><td>접근성 의심</td><td>Keyboard only, accessible name, focus visible, aria-describedby</td><td>마우스 없이 핵심 흐름 완료 가능</td><td>공통 컴포넌트 API에 label, description, focus restore를 강제</td></tr>
+    </table>
+  </section>
+  <section id="ch10">
+    <div class="ch-head"><span class="ch-code">FE-CS-10</span><h2>출력 판정표</h2></div>
+    <table>
+      <tr><th>도구/증거</th><th>위험 신호</th><th>해석</th><th>중단 기준</th></tr>
+      <tr><td>Network waterfall</td><td>LCP 이미지가 JS 뒤에 늦게 시작됨</td><td>리소스 우선순위 또는 lazy/preload 설정 문제</td><td>전후 waterfall 없이 이미지 최적화 완료 처리 금지</td></tr>
+      <tr><td>React Profiler</td><td>입력 1회에 큰 parent와 목록 전체가 commit됨</td><td>상태 소유권이나 props identity 문제</td><td>memo 추가 전 render 원인 기록 필요</td></tr>
+      <tr><td>Console</td><td>hydration mismatch, uncontrolled/controlled 전환</td><td>서버/클라이언트 초기 상태 또는 폼 상태 모델 불일치</td><td>suppress 경고로 숨기고 배포 금지</td></tr>
+      <tr><td>Lighthouse</td><td>점수만 개선되고 LCP/INP/CLS 핵심 route 수치가 없음</td><td>점수 추격으로 실제 UX 개선 증거 부족</td><td>field 또는 동일 조건 lab 비교 없으면 성능 PR 보류</td></tr>
+      <tr><td>E2E/수동 테스트</td><td>happy path만 있고 error/empty/permission/offline 없음</td><td>운영 데이터 상태에서 쉽게 깨짐</td><td>핵심 화면은 최소 실패 상태 2개 이상 검증</td></tr>
     </table>
   </section>
 </main>

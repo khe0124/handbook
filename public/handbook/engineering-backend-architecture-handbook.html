@@ -76,7 +76,7 @@ td .mono,td code{font-family:var(--mono);font-size:12.5px}
 .g-def{padding:13px 18px;font-size:14px;line-height:1.65}
 @media(max-width:700px){.g-row{grid-template-columns:1fr}.g-term{border-bottom:1px dashed var(--line)}}
 footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}
-</style>
+.semantic-card{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);color:var(--ink);padding:18px 22px;margin:22px 0;font-family:var(--sans);font-size:14.5px;line-height:1.75}.semantic-card.process-card{border-left-color:var(--green);background:var(--green-tint)}.semantic-card.decision-card{border-left-color:var(--amber);background:var(--amber-tint)}.semantic-card.evidence-card{border-left-color:var(--ink);background:#ECEEF3}.semantic-card.answer-card{border-left-color:var(--green-deep);background:var(--panel)}.semantic-card .sc-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green-deep);display:block;margin-bottom:6px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.85;overflow-x:auto;white-space:pre}.snippet-card .sc-label{color:#8696BD;font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}</style>
 </head>
 <body>
 <div class="shell">
@@ -120,8 +120,8 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="architecture-decision-map">
 <div class="ch-head"><span class="ch-code">MAP</span><h2>ARCHITECTURE DECISION MAP</h2></div>
 <p class="lede">좋은 아키텍처 문서는 다이어그램이 아니라 결정을 설명합니다. 무엇을 같은 모듈에 둘지, 어떤 데이터가 어느 경계에 속하는지, 실패를 어디서 끊을지, 나중에 어떤 지표가 나오면 분리할지까지 남겨야 합니다.</p>
-<div class="serial-card">
-<span class="sc-label">ARCHITECTURE DECISION MAP</span>
+<div class="semantic-card decision-card">
+<span class="sc-label">ARCHITECTURE DECISION MAP</span><br>
 domain language → bounded context → module boundary<br>
 → data ownership → transaction boundary → integration style<br>
 → failure isolation → observability → migration path → ADR
@@ -145,8 +145,8 @@ domain language → bounded context → module boundary<br>
 <tr><td>CQRS/Event-driven</td><td>읽기 모델 분리, 감사 이벤트, 비동기 확장이 핵심일 때</td><td>event schema, replay, eventual consistency 비용</td></tr>
 </tbody>
 </table>
-<div class="serial-card">
-<span class="sc-label">SERVICE BOUNDARY CHECKLIST</span>
+<div class="semantic-card answer-card">
+<span class="sc-label">SERVICE BOUNDARY CHECKLIST</span><br>
 □ 이 경계가 소유하는 데이터와 외부에 공개하는 read model이 분리되는가<br>
 □ sync API가 필요한 요청 경로와 async event로 충분한 후처리가 나뉘는가<br>
 □ anti-corruption layer로 외부 모델이 내부 domain model을 오염시키지 않는가<br>
@@ -175,8 +175,8 @@ domain language → bounded context → module boundary<br>
 <div class="ch-head"><span class="ch-code">ARCH-01</span><h2>좋은 아키텍처란</h2></div>
 <p class="lede">좋은 아키텍처의 정의는 "빠르다"도 "확장된다"도 아니다. <em>변경 비용이 낮은 구조</em>다 — 요구가 바뀌었을 때 고쳐야 할 코드의 범위가 작고, 그 영향이 예측 가능한 것. 거의 모든 설계 원칙은 이 한 문장의 따름정리다.</p>
 <p>두 가지 축이 변경 비용을 지배한다. <strong>결합도(coupling)</strong>는 한 모듈이 바뀔 때 함께 바뀌어야 하는 다른 모듈의 양이다 — 낮을수록 좋다. <strong>응집도(cohesion)</strong>는 한 모듈 안의 요소들이 같은 목적을 향하는 정도다 — 높을수록 좋다. 결합도가 높으면 작은 변경이 멀리까지 번지고, 응집도가 낮으면 하나의 변경이 여러 모듈에 흩어진다. 둘 다 "함께 바뀌는 것을 한곳에, 따로 바뀌는 것을 떨어뜨려라"는 같은 원칙의 두 얼굴이다.</p>
-<div class="serial-card">
-<span class="sc-label">COUPLING &times; COHESION — 변경의 전파 범위</span>
+<div class="semantic-card process-card">
+<span class="sc-label">COUPLING &times; COHESION — 변경의 전파 범위</span><br>
 <span class="dim">[ 모듈 A ]</span> <span class="seg">───strong───</span> <span class="dim">[ 모듈 B ]</span>  <span class="dim">← A 변경 시 B도 변경 (전파)</span><br>
 <span class="dim">[ 모듈 A ]</span> <span class="seg2">- - weak - -</span> <span class="dim">[ 모듈 B ]</span>  <span class="dim">← A 변경이 B에 안 닿음 (격리)</span><br>
 <br>
@@ -207,8 +207,8 @@ domain language → bounded context → module boundary<br>
 <tr><td><b>domain</b></td><td>비즈니스 규칙·엔티티·불변식. 프레임워크에 무지해야 함</td></tr>
 <tr><td><b>infrastructure</b></td><td>DB·메시지큐·외부 API 등 기술 세부. <code>@Repository</code> 구현</td></tr>
 </table>
-<div class="serial-card">
-<span class="sc-label">LAYERED — 의존성은 위에서 아래로 한 방향</span>
+<div class="semantic-card process-card">
+<span class="sc-label">LAYERED — 의존성은 위에서 아래로 한 방향</span><br>
 <span class="seg">presentation</span> <span class="dim">──depends on──▶</span> <span class="seg2">application</span><br>
 <span class="seg2">application</span> &nbsp; <span class="dim">──depends on──▶</span> <span class="seg">domain</span><br>
 <span class="seg">domain</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="dim">──depends on──▶</span> <span class="dim">infrastructure  ✗ 누수!</span><br>
@@ -226,8 +226,8 @@ domain language → bounded context → module boundary<br>
 <div class="ch-head"><span class="ch-code">ARCH-03</span><h2>헥사고날·클린 아키텍처</h2></div>
 <p class="lede">계층형의 누수 문제를 정면으로 푸는 구조. 핵심 발상 하나 — <em>도메인을 안쪽에 두고, DB·웹·메시지큐 같은 외부를 바깥에 두되, 의존성이 항상 바깥에서 안쪽으로만 향하게</em> 한다. 헥사고날(포트 &amp; 어댑터)과 클린 아키텍처는 같은 아이디어의 두 표현이다.</p>
 <p>도구는 <strong>의존성 역전 원칙(DIP)</strong>이다. 도메인이 "DB에 저장한다"는 능력을 필요로 할 때, 도메인은 인터페이스(<code>port</code>)를 <em>자기 쪽에</em> 정의하고, infrastructure가 그 인터페이스를 <em>구현(adapter)</em>한다. 그러면 컴파일 의존성은 infrastructure → domain 방향이 되어, 런타임 호출 방향(domain이 저장을 호출)과 반대가 된다. 화살표가 뒤집혔기 때문에 "역전"이다. 도메인은 자신을 누가 구현하는지 모른 채 정책만 표현한다.</p>
-<div class="serial-card">
-<span class="sc-label">PORTS &amp; ADAPTERS — 의존성은 항상 안쪽을 향한다</span>
+<div class="semantic-card decision-card">
+<span class="sc-label">PORTS &amp; ADAPTERS — 의존성은 항상 안쪽을 향한다</span><br>
 <span class="dim">[web adapter]</span> <span class="seg">──▶</span> <span class="seg2">( inbound port )</span> <span class="seg">──▶</span> <span class="seg2">[ DOMAIN ]</span><br>
 <span class="dim">                                              │ 정책·규칙</span><br>
 <span class="seg2">[ DOMAIN ]</span> <span class="seg">──▶</span> <span class="seg2">( outbound port )</span> <span class="seg">◀──</span> <span class="dim">[db adapter]</span><br>
@@ -255,8 +255,8 @@ domain language → bounded context → module boundary<br>
 <tr><td><b>리포지토리(Repository)</b></td><td>애그리거트의 영속성 추상화. 컬렉션처럼 다루는 인터페이스</td></tr>
 </table>
 <p>가장 자주 오해되는 것이 <strong>애그리거트</strong>다. 애그리거트는 "트랜잭션 일관성의 경계"다 — 한 번의 트랜잭션에서 불변식이 깨지지 않아야 하는 객체들의 묶음. 예컨대 <code>Order</code>와 그 <code>OrderLine</code>들은 "주문 총액 = 라인 합계"라는 불변식을 공유하므로 한 애그리거트다. 외부는 <code>OrderLine</code>을 직접 만지지 못하고 루트인 <code>Order</code>를 통해서만 바꾼다. 애그리거트는 <em>작게</em> 유지하는 것이 핵심 — 너무 크면 동시성 충돌과 로딩 비용이 커진다.</p>
-<div class="serial-card">
-<span class="sc-label">STRATEGIC vs TACTICAL — 두 층위</span>
+<div class="semantic-card process-card">
+<span class="sc-label">STRATEGIC vs TACTICAL — 두 층위</span><br>
 <span class="seg">[ STRATEGIC ]</span> <span class="dim">시스템을 어떻게 나누는가</span><br>
 &nbsp;&nbsp;Bounded Context &nbsp;<span class="dim">·</span>&nbsp; Ubiquitous Language &nbsp;<span class="dim">·</span>&nbsp; Context Map<br>
 <span class="dim">        │ 경계 안에서만</span><br>
@@ -283,8 +283,8 @@ domain language → bounded context → module boundary<br>
 <tr><td>확장</td><td>전체를 함께</td><td>병목 서비스만 선택적으로</td></tr>
 </table>
 <p>분산이 도입하는 비용은 셋이다. <strong>네트워크</strong>: 함수 호출이 네트워크 호출이 되면 지연·실패가 일상이 된다(타임아웃·재시도가 필수 — → ARCH-08). <strong>데이터 일관성</strong>: 서비스마다 DB가 분리되면 하나의 트랜잭션으로 묶을 수 없어, 결과적 일관성과 보상 트랜잭션(saga)으로 풀어야 한다. <strong>운영 복잡도</strong>: 분산 추적, 서비스 디스커버리, 버전 호환성, CI/CD 파이프라인이 서비스 수만큼 곱해진다.</p>
-<div class="serial-card">
-<span class="sc-label">DECISION — MSA로 가야 하는 신호</span>
+<div class="semantic-card decision-card">
+<span class="sc-label">DECISION — MSA로 가야 하는 신호</span><br>
 <span class="dim">기본값:</span> <span class="seg2">Modular Monolith</span> <span class="dim">(경계는 패키지/모듈로, 한 프로세스)</span><br>
 <span class="dim">─────────────────────────────────────────────</span><br>
 <span class="seg">MSA 정당화 조건 (대부분 충족해야)</span><br>
@@ -335,8 +335,8 @@ domain language → bounded context → module boundary<br>
 <div class="ch-head"><span class="ch-code">ARCH-07</span><h2>CQRS와 이벤트 소싱</h2></div>
 <p class="lede">두 패턴은 자주 함께 언급되지만 별개다. <strong>CQRS</strong>는 읽기 모델과 쓰기 모델을 분리하는 것, <strong>이벤트 소싱</strong>은 상태 대신 상태 변화(이벤트)를 저장하는 것. 둘 다 강력하지만, 둘 다 <em>대부분의 경우 과하다</em>.</p>
 <p><strong>CQRS</strong>(Command Query Responsibility Segregation)의 동기는 단순하다 — 쓰기는 정규화된 도메인 모델로 일관성을 지키고 싶고, 읽기는 화면에 맞춰 비정규화된 형태로 빠르게 가져오고 싶다. 하나의 모델로 둘 다 만족시키려면 타협이 생긴다. 그래서 명령(상태를 바꾸는 것)과 조회(상태를 읽는 것)를 다른 모델로 분리한다. 가벼운 버전은 같은 DB에서 읽기 전용 쿼리 모델만 따로 두는 것이고, 무거운 버전은 읽기 전용 DB를 별도로 운영하며 이벤트로 동기화한다.</p>
-<div class="serial-card">
-<span class="sc-label">CQRS — 명령과 조회의 분리</span>
+<div class="semantic-card decision-card">
+<span class="sc-label">CQRS — 명령과 조회의 분리</span><br>
 <span class="seg">Command</span> <span class="dim">(쓰기)</span> ──▶ <span class="seg2">[ Write Model ]</span> ──▶ <span class="dim">정규화 DB · 일관성</span><br>
 <span class="dim">                              │ 이벤트/동기화</span><br>
 <span class="seg">Query</span> <span class="dim">(읽기)</span> &nbsp;&nbsp;◀── <span class="seg2">[ Read Model ]</span> &nbsp;◀── <span class="dim">비정규화 뷰 · 빠른 조회</span><br>
@@ -363,8 +363,8 @@ domain language → bounded context → module boundary<br>
 <tr><td><b>서킷 브레이커</b></td><td>죽은 서비스에 계속 호출. 빠르게 실패해 회복 시간을 줌</td></tr>
 <tr><td><b>격벽(Bulkhead)</b></td><td>한 의존성의 포화가 전체 자원풀을 잠식하는 것</td></tr>
 </table>
-<div class="serial-card">
-<span class="sc-label">CIRCUIT BREAKER — 세 상태</span>
+<div class="semantic-card process-card">
+<span class="sc-label">CIRCUIT BREAKER — 세 상태</span><br>
 <span class="seg2">CLOSED</span> <span class="dim">(정상 통과)</span> ──실패율 임계 초과──▶ <span class="seg">OPEN</span> <span class="dim">(즉시 차단·빠른 실패)</span><br>
 <span class="dim">   ▲                                              │ 일정 시간 후</span><br>
 <span class="dim">   └──성공── </span> <span class="seg2">HALF-OPEN</span> <span class="dim">(시험 호출 몇 개만 통과) ◀──┘</span><br>

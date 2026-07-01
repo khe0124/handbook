@@ -18,6 +18,7 @@ type HandbookItem = {
 type HandbookPageProps = {
   item: HandbookItem;
   onReady?: (itemId: string) => void;
+  onSelectHandbook?: (itemId: string) => void;
 };
 
 function shouldAttachInlineCodeCopy(itemId: string, code: HTMLElement) {
@@ -29,12 +30,25 @@ function shouldAttachInlineCodeCopy(itemId: string, code: HTMLElement) {
     text.length <= 90 &&
     !code.closest("pre") &&
     !code.closest(".serial-card") &&
+    !code.closest(".snippet-card") &&
     !code.nextElementSibling?.classList.contains("inline-code-copy-mount")
   );
 }
 
 function getSerialCardText(card: HTMLElement) {
   return card.textContent?.replace(/\u00a0/g, " ").trim() ?? "";
+}
+
+function attachSnippetCopyButton(card: HTMLElement, roots: Root[], mounts: HTMLElement[]) {
+  const mount = window.document.createElement("div");
+  mount.className = "snippet-card-copy-mount";
+  card.append(mount);
+
+  const root = createRoot(mount);
+  root.render(<SerialCardCopyButton card={card} />);
+
+  roots.push(root);
+  mounts.push(mount);
 }
 
 function shouldUpgradeChecklistCard(card: HTMLElement) {
@@ -89,7 +103,7 @@ function getChecklistItems(card: HTMLElement): ChecklistItem[] {
     }));
 }
 
-export function HandbookPage({ item, onReady }: HandbookPageProps) {
+export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPageProps) {
   const [document, setDocument] = useState<HandbookDocumentContent | null>(null);
   const [failed, setFailed] = useState(false);
   const [isTocOpen, setIsTocOpen] = useState(false);
@@ -132,6 +146,10 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
     const mounts: HTMLElement[] = [];
     const restoredCards: Array<{ card: HTMLElement; html: string }> = [];
 
+    main.querySelectorAll<HTMLElement>("pre.snippet-card").forEach((card) => {
+      attachSnippetCopyButton(card, roots, mounts);
+    });
+
     main.querySelectorAll<HTMLElement>(".serial-card").forEach((card) => {
       if (shouldUpgradeChecklistCard(card)) {
         const html = card.innerHTML;
@@ -155,7 +173,7 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
       }
 
       const mount = window.document.createElement("div");
-      mount.className = "serial-card-copy-mount";
+      mount.className = "snippet-card-copy-mount serial-card-copy-mount";
       card.append(mount);
 
       const root = createRoot(mount);
@@ -194,6 +212,29 @@ export function HandbookPage({ item, onReady }: HandbookPageProps) {
 
     onReady?.(item.id);
   }, [document, item.id, onReady]);
+
+  useEffect(() => {
+    const main = mainRef.current;
+
+    if (!document || !main || !onSelectHandbook) return;
+
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest<HTMLAnchorElement>("a[data-handbook-id]");
+      const itemId = link?.dataset.handbookId;
+
+      if (!itemId) return;
+
+      event.preventDefault();
+      onSelectHandbook(itemId);
+    };
+
+    main.addEventListener("click", handleClick);
+
+    return () => {
+      main.removeEventListener("click", handleClick);
+    };
+  }, [document, onSelectHandbook]);
 
   useEffect(() => {
     if (!isTocOpen) return;

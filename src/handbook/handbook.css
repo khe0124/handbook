@@ -346,6 +346,53 @@
   color: var(--ink-soft);
 }
 
+.handbook-main .shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.handbook-main .shortcut-link {
+  min-height: 146px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--green);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 18px 20px;
+  text-decoration: none;
+}
+
+.handbook-main .shortcut-link:hover,
+.handbook-main .shortcut-link:focus-visible {
+  background: var(--green-tint);
+  border-color: var(--green);
+  outline: none;
+}
+
+.handbook-main .shortcut-kicker {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--green-deep);
+  font-weight: 700;
+}
+
+.handbook-main .shortcut-link strong {
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.handbook-main .shortcut-link span:last-child {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
 .handbook-main .serial-card {
   position: relative;
   font-family: var(--mono);
@@ -359,7 +406,62 @@
   overflow-x: auto;
 }
 
-.handbook-main .serial-card-copy {
+.handbook-main .snippet-card {
+  position: relative;
+  display: block;
+  font-family: var(--mono);
+  background: var(--ink);
+  color: #e7eaf1;
+  border-radius: 0;
+  padding: 22px 26px;
+  margin: 24px 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.handbook-main .snippet-card code {
+  display: block;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+}
+
+.handbook-main .semantic-card {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--green);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 18px 22px;
+  margin: 22px 0;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+.handbook-main .semantic-card.process-card {
+  border-left-color: var(--green);
+  background: var(--green-tint);
+}
+
+.handbook-main .semantic-card.decision-card {
+  border-left-color: var(--amber);
+  background: var(--amber-tint);
+}
+
+.handbook-main .semantic-card.evidence-card {
+  border-left-color: var(--ink);
+  background: #eceef3;
+}
+
+.handbook-main .semantic-card.answer-card {
+  border-left-color: var(--green-deep);
+  background: var(--panel);
+}
+
+.handbook-main .snippet-card-copy {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -380,22 +482,40 @@
   cursor: pointer;
 }
 
-.handbook-main .serial-card-copy:hover {
+.handbook-main .snippet-card-copy:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(231, 234, 241, 0.4);
 }
 
-.handbook-main .serial-card-copy:focus-visible {
+.handbook-main .snippet-card-copy:focus-visible {
   outline: 2px solid #9db6e8;
   outline-offset: 2px;
 }
 
-.handbook-main .serial-card .sc-label {
+.handbook-main .serial-card .sc-label,
+.handbook-main .snippet-card .sc-label {
   color: #8696bd;
   font-size: 10.5px;
   letter-spacing: 0.14em;
   display: block;
   margin-bottom: 8px;
+}
+
+.handbook-main .semantic-card .sc-label {
+  color: var(--green-deep);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.handbook-main .semantic-card.decision-card .sc-label {
+  color: var(--amber);
+}
+
+.handbook-main .semantic-card.evidence-card .sc-label {
+  color: var(--ink);
 }
 
 .handbook-main .serial-card-checklist {
@@ -433,15 +553,21 @@
   text-decoration-thickness: 1px;
 }
 
-.handbook-main .serial-card .seg {
+.handbook-main .serial-card .seg,
+.handbook-main .snippet-card .seg,
+.handbook-main .semantic-card .seg {
   color: #facc6b;
 }
 
-.handbook-main .serial-card .seg2 {
+.handbook-main .serial-card .seg2,
+.handbook-main .snippet-card .seg2,
+.handbook-main .semantic-card .seg2 {
   color: #9db6e8;
 }
 
-.handbook-main .serial-card .dim {
+.handbook-main .serial-card .dim,
+.handbook-main .snippet-card .dim,
+.handbook-main .semantic-card .dim {
   color: #9aa3b8;
 }
 
@@ -764,7 +890,18 @@
     display: none;
   }
 
-  .handbook-main .serial-card {
+  .handbook-main .shortcut-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .handbook-main .shortcut-link {
+    min-height: 0;
+    padding: 15px 16px;
+  }
+
+  .handbook-main .serial-card,
+  .handbook-main .snippet-card {
     padding: 16px;
     margin: 18px 0;
     font-size: 12.5px;
@@ -773,7 +910,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .handbook-main .serial-card-copy {
+  .handbook-main .snippet-card-copy {
     top: 10px;
     right: 10px;
     height: 28px;

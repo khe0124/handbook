@@ -22,7 +22,7 @@ import {
 } from "../src/handbook/catalog.mjs";
 import { extractHandbookDocument, generateHandbookDocuments } from "./handbook-html.mjs";
 
-const GENERATED_HTML_LITERAL_PATTERN = /(?:navHtml|mainHtml):\s*(`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*")/g;
+const GENERATED_HTML_LITERAL_PATTERN = /"?(?:navHtml|mainHtml)"?:\s*(`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*")/g;
 
 function parseGeneratedHtmlLiteral(literal) {
   if (literal.startsWith('"')) {
@@ -78,7 +78,7 @@ test("extractHandbookDocument throws a clear error when required regions are mis
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["home", "career", "engineering", "llm", "operations", "ax", "design", "practice"],
+    ["home", "engineering", "llm", "operations", "ax", "design", "practice", "career"],
   );
 
   const labels = [
@@ -93,9 +93,9 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 56);
-  assert.equal(careerGroup?.items.length, 8);
-  assert.equal(engineeringGroup?.items.length, 14);
+  assert.equal(HANDBOOK_ITEMS.length, 58);
+  assert.equal(careerGroup?.items.length, 9);
+  assert.equal(engineeringGroup?.items.length, 15);
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
   assert.equal(axGroup?.items.length, 3);
@@ -110,13 +110,14 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("디자인 실무"));
   assert.ok(labels.includes("실무 도구"));
   assert.ok(labels.includes("00 면접 전략·커리어 포지셔닝"));
-  assert.ok(labels.includes("01 프론트엔드·JS/TS 면접"));
-  assert.ok(labels.includes("02 백엔드·Java/Spring 면접"));
-  assert.ok(labels.includes("03 CS·DB·보안 심화 면접"));
-  assert.ok(labels.includes("04 인프라·분산·클라우드 면접"));
-  assert.ok(labels.includes("05 시스템 설계·프로젝트 심층"));
-  assert.ok(labels.includes("06 컬처·협업·코드리뷰"));
-  assert.ok(labels.includes("07 코딩테스트 패턴"));
+  assert.ok(labels.includes("01 개인 이력 정리"));
+  assert.ok(labels.includes("02 프론트엔드·JS/TS 면접"));
+  assert.ok(labels.includes("03 백엔드·Java/Spring 면접"));
+  assert.ok(labels.includes("04 CS·DB·보안 심화 면접"));
+  assert.ok(labels.includes("05 인프라·분산·클라우드 면접"));
+  assert.ok(labels.includes("06 시스템 설계·프로젝트 심층"));
+  assert.ok(labels.includes("07 컬처·협업·코드리뷰"));
+  assert.ok(labels.includes("08 코딩테스트 패턴"));
   assert.ok(labels.includes("00 CS 기초와 알고리즘 사고"));
   assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
@@ -126,11 +127,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("06 프론트엔드 성능·진단"));
   assert.ok(labels.includes("07 프론트엔드 품질·릴리스"));
   assert.ok(labels.includes("08 백엔드 핵심"));
-  assert.ok(labels.includes("09 백엔드 아키텍처"));
-  assert.ok(labels.includes("10 데이터 계층·저장소"));
-  assert.ok(labels.includes("11 런타임 품질·장애대응"));
-  assert.ok(labels.includes("12 플랫폼 도구·운영 기본기"));
-  assert.ok(labels.includes("13 Java·Spring·JPA 사례"));
+  assert.ok(labels.includes("09 백엔드 인증·보안"));
+  assert.ok(labels.includes("10 백엔드 아키텍처"));
+  assert.ok(labels.includes("11 데이터 계층·저장소"));
+  assert.ok(labels.includes("12 런타임 품질·장애대응"));
+  assert.ok(labels.includes("13 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("14 Java·Spring·JPA 사례"));
   assert.ok(labels.includes("00 LLM 로드맵·AI Native 개발자 모델"));
   assert.ok(labels.includes("01 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("02 LLM 기초·모델 동작 원리"));
@@ -218,13 +220,30 @@ test("llm menu covers multimodal, customization, security, governance, output si
   }
 });
 
-test("career menu consolidates interview and personalized career documents into eight items", async () => {
+test("home shortcut links point to catalog items", async () => {
+  const homeHtml = await readFile(path.join("public", "handbook", "home-handbook.html"), "utf8");
+  const shortcutIds = [...homeHtml.matchAll(/data-handbook-id="([^"]+)"/g)].map((match) => match[1]);
+  const catalogIds = new Set(HANDBOOK_ITEMS.map((item) => item.id));
+
+  assert.ok(shortcutIds.length >= HANDBOOK_GROUPS.length - 1);
+
+  for (const shortcutId of shortcutIds) {
+    assert.ok(catalogIds.has(shortcutId), `Unknown home shortcut id: ${shortcutId}`);
+  }
+});
+
+test("career menu consolidates interview and personalized career documents into nine items", async () => {
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const bundles = [
     {
       file: "career-strategy-foundation-handbook.html",
       sources: ["기술면접 개요", "회사·직무별 면접 전략", "개인화 개요"],
       evidence: ["BASE ANSWER FRAME", "핵심 질문 30선", "ANSWER FRAME"],
+    },
+    {
+      file: "career-personal-history-handbook.html",
+      sources: ["개인 이력 정리"],
+      evidence: ["PERSONAL POSITIONING MAP", "REPRESENTATIVE PROJECT MAP", "CAREER TIMELINE", "POPLE", "GREENERY", "HEMS", "LCA", "TaaS", "INTERVIEW EVIDENCE MAP", "POSITION PRIORITY MATRIX", "EXPERIENCE BOUNDARY SENTENCES", "ANSWER CARDS"],
     },
     {
       file: "career-frontend-interview-handbook.html",
@@ -263,7 +282,7 @@ test("career menu consolidates interview and personalized career documents into 
     },
   ];
 
-  assert.equal(careerGroup?.items.length, 8);
+  assert.equal(careerGroup?.items.length, 9);
   assert.deepEqual(
     careerGroup?.items.map((item) => item.file),
     bundles.map((bundle) => bundle.file),
@@ -377,8 +396,18 @@ test("engineering handbook menu splits backend core and architecture into separa
     },
     {
       file: "engineering-backend-core-handbook.html",
-      sources: ["백엔드 개요", "인증과 보안"],
-      evidence: ["BACKEND ENGINEERING HANDBOOK", "AUTH &amp; SECURITY HANDBOOK"],
+      sources: ["백엔드 개요"],
+      evidence: ["BACKEND ENGINEERING HANDBOOK", "BACKEND ROADMAP OVERVIEW", "REQUEST TO OPERATIONS MAP", "API ERROR CONTRACT"],
+    },
+    {
+      file: "engineering-backend-auth-security-handbook.html",
+      sources: ["인증과 보안"],
+      evidence: [
+        "BACKEND AUTH SECURITY MAP",
+        "COOKIE SESSION CORS MATRIX",
+        "TOKEN LIFECYCLE RUNBOOK",
+        "SECURITY INCIDENT PACKET",
+      ],
     },
     {
       file: "engineering-backend-architecture-handbook.html",
@@ -417,7 +446,7 @@ test("engineering handbook menu splits backend core and architecture into separa
     },
   ];
 
-  assert.equal(engineeringGroup?.items.length, 14);
+  assert.equal(engineeringGroup?.items.length, 15);
   assert.deepEqual(
     engineeringGroup?.items.map((item) => item.file),
     bundles.map((bundle) => bundle.file),
@@ -434,6 +463,31 @@ test("engineering handbook menu splits backend core and architecture into separa
       assert.match(source, new RegExp(marker), `${bundle.file} should preserve ${marker}`);
     }
   }
+});
+
+test("backend auth security is a dedicated engineering handbook instead of being nested in backend core", async () => {
+  const core = await readFile("public/handbook/engineering-backend-core-handbook.html", "utf8");
+  const security = await readFile("public/handbook/engineering-backend-auth-security-handbook.html", "utf8");
+
+  assert.doesNotMatch(core, /id="doc-auth"/);
+  assert.doesNotMatch(core, /id="auth-ch1"/);
+  assert.match(core, /백엔드 핵심/);
+  assert.match(core, /API ERROR CONTRACT/);
+  assert.match(core, /TRANSACTION BOUNDARY/);
+
+  assert.match(security, /백엔드 인증·보안/);
+  assert.match(security, /id="doc-auth"/);
+  assert.match(security, /BACKEND AUTH SECURITY MAP/);
+  assert.match(security, /COOKIE SESSION CORS MATRIX/);
+  assert.match(security, /TOKEN LIFECYCLE RUNBOOK/);
+  assert.match(security, /SECURITY INCIDENT PACKET/);
+
+  assert.equal(security.match(/<header class="hero">/g)?.length ?? 0, 1);
+  assert.doesNotMatch(security, /<footer>/);
+  assert.ok(
+    security.indexOf("BACKEND SECURITY REVIEW PACKET") > security.indexOf("SECURITY INCIDENT PACKET"),
+    "security review packet should read as a generated follow-up section after the source content",
+  );
 });
 
 test("LLM handbook group covers AI Native developer concepts from fundamentals to portfolio evidence", async () => {
@@ -619,13 +673,14 @@ test("public handbook directory contains no carbon domain documents outside the 
   const operationsSourceFiles = new Set([...NETWORK_HANDBOOKS, ...DEVOPS_HANDBOOKS].map((item) => item.file));
   const practiceSourceFiles = new Set([...AX_HANDBOOKS, ...DESIGN_HANDBOOKS, ...CHEAT_SHEETS, ...PRACTICAL_GUIDES].map((item) => item.file));
   const personalSourceFiles = new Set(PERSONAL_HANDBOOKS.map((item) => item.file));
+  const allowedCareerEvidenceFiles = new Set(["career-personal-history-handbook.html"]);
   const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file) && !careerSourceFiles.has(file) && !engineeringSourceFiles.has(file) && !operationsSourceFiles.has(file) && !practiceSourceFiles.has(file));
 
   assert.deepEqual(extraFiles, []);
 
   for (const file of publicFiles) {
     assert.doesNotMatch(file, /carbon|lca|vcm/i);
-    if (personalSourceFiles.has(file)) {
+    if (personalSourceFiles.has(file) || allowedCareerEvidenceFiles.has(file)) {
       continue;
     }
 
@@ -686,7 +741,10 @@ test("README describes the handbook project instead of the Vite template", async
 });
 
 test("each public handbook nav links all main sections", async () => {
-  const compactNavFiles = new Set(["practice-design-systems-handbook.html"]);
+  const compactNavFiles = new Set([
+    "practice-design-foundation-handbook.html",
+    "practice-design-systems-handbook.html",
+  ]);
 
   for (const item of HANDBOOK_ITEMS) {
     const html = await readFile(path.join("public", "handbook", item.file), "utf8");
@@ -778,6 +836,10 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
 
   assert.match(catalogSource, /DEFAULT_HANDBOOK_ID = "home"/);
   assert.match(homeSource, /전체 로드맵/);
+  assert.match(homeSource, /AI Native 개발자 역량 지도/);
+  assert.match(homeSource, /기능 하나를 끝까지 책임지는 작동 모델/);
+  assert.match(homeSource, /요구사항/);
+  assert.match(homeSource, /커리어 증거/);
   assert.match(homeSource, /학습 순서/);
   assert.match(homeSource, /메뉴별 목적/);
   assert.match(homeSource, /핸드북 사용법/);
@@ -1476,7 +1538,7 @@ test("app exposes an accessible fixed bottom document navigation bar", async () 
   assert.match(appSource, /pagehide/);
   assert.match(appSource, /pendingScrollRestoreIdRef/);
   assert.match(appSource, /restoreSavedPosition/);
-  assert.match(appSource, /<HandbookPage item=\{activeItem\} onReady=\{restoreSavedPosition\} \/>/);
+  assert.match(appSource, /<HandbookPage[\s\S]*item=\{activeItem\}[\s\S]*onReady=\{restoreSavedPosition\}[\s\S]*\/>/);
   assert.match(appSource, /className="mobile-menu-toggle"/);
   assert.match(appSource, /aria-controls="mobile-handbook-menu"/);
   assert.match(appSource, /aria-label=\{mobileMenuOpen \? "전체 메뉴 닫기" : "전체 메뉴 열기"\}/);
@@ -1518,7 +1580,7 @@ test("handbook page notifies the app after document content renders for scroll r
   const pageSource = await readFile("src/handbook/HandbookPage.tsx", "utf8");
 
   assert.match(pageSource, /onReady\?: \(itemId: string\) => void/);
-  assert.match(pageSource, /export function HandbookPage\(\{ item, onReady \}/);
+  assert.match(pageSource, /export function HandbookPage\(\{ item, onReady(?:, onSelectHandbook)? \}/);
   assert.match(pageSource, /onReady\?\.\(item\.id\)/);
   assert.match(pageSource, /\[document, item\.id, onReady\]/);
 });
@@ -1604,7 +1666,7 @@ test("handbook layout includes mobile responsive reading refinements", async () 
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*display: block/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main table\s*\{[\s\S]*overflow-x: auto/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.flow\s*\{[\s\S]*flex-direction: column/s);
-  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.serial-card\s*\{[\s\S]*padding: 16px/s);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.snippet-card\s*\{[\s\S]*padding: 16px/s);
   assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-main \.ch-head\s*\{[\s\S]*flex-direction: column/s);
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.handbook-main h1\s*\{[\s\S]*font-size: 27px/s);
 });
@@ -1735,6 +1797,7 @@ test("backend handbook includes practical senior-level backend guidance with exp
     readFile("public/handbook/docker-deploy-handbook.html", "utf8"),
     readFile("public/handbook/observability-handbook.html", "utf8"),
     readFile("public/handbook/engineering-backend-core-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-auth-security-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
 
@@ -1750,9 +1813,9 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /Migration safety lab/);
   assert.match(source, /DB Incident Drill Cards/);
   assert.match(source, /DB INCIDENT REVIEW PACKET/);
-  assert.match(source, /refresh token rotation/);
+  assert.match(source, /refresh token rotation|refresh rotation/);
   assert.match(source, /session fixation/);
-  assert.match(source, /Security Threat Modeling/);
+  assert.match(source, /Security Threat Modeling|BACKEND AUTH SECURITY MAP/);
   assert.match(source, /Tenant Isolation/);
   assert.match(source, /Security Review Rubric/);
   assert.match(source, /Security Tabletop Drills/);
@@ -1774,8 +1837,7 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /USE/);
   assert.match(source, /high-cardinality/);
   assert.match(source, /SLO burn rate/);
-  assert.match(source, /REQUEST PATH/);
-  assert.match(source, /BACKEND REQUEST MODEL/);
+  assert.match(source, /REQUEST TO OPERATIONS MAP/);
   assert.match(source, /BACKEND REVIEW CHECKLIST/);
   assert.match(source, /BACKEND DESIGN QUESTION FLOW/);
   assert.match(source, /DESIGN DECISION MATRIX/);
@@ -1783,19 +1845,19 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /BACKEND DESIGN REVIEW RUBRIC/);
   assert.match(source, /API CONTRACT MINI/);
   assert.match(source, /BACKEND TEST PLAN/);
-  assert.match(source, /OPERATIONS READINESS CHECKLIST/);
-  assert.match(source, /BACKEND ROADMAP 2026/);
+  assert.match(source, /BACKEND OPERABILITY CHECKLIST/);
+  assert.match(source, /BACKEND ROADMAP OVERVIEW/);
   assert.match(source, /BACKEND READINESS GATE/);
   assert.match(source, /ORDER API CONTRACT EXAMPLE/);
   assert.match(source, /API ERROR CONTRACT/);
   assert.match(source, /API COMPATIBILITY RULES/);
-  assert.match(source, /TRANSACTION BOUNDARY DECISION TABLE/);
+  assert.match(source, /TRANSACTION BOUNDARY/);
   assert.match(source, /EXPLAIN ANALYZE CHECKLIST/);
   assert.match(source, /MIGRATION SAFETY RULES/);
   assert.match(source, /JPA FETCH PLAN CHECKLIST/);
-  assert.match(source, /AUTHN AUTHZ DECISION MATRIX/);
-  assert.match(source, /OBJECT AUTHORIZATION CHECKLIST/);
-  assert.match(source, /SECURITY REVIEW MINI RUBRIC/);
+  assert.match(source, /AUTHORIZATION DECISION TABLE/);
+  assert.match(source, /Broken Access Control/);
+  assert.match(source, /SECURITY REVIEW MINI RUBRIC|SECURITY REVIEW RUBRIC/);
   assert.match(source, /CACHE DECISION TABLE/);
   assert.match(source, /CACHE INVALIDATION PLAYBOOK/);
   assert.match(source, /ASYNC DECISION TABLE/);
@@ -1809,9 +1871,8 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /INCIDENT FIRST 15 MINUTES/);
   assert.match(source, /ARCHITECTURE CHOICE MATRIX/);
   assert.match(source, /MODULAR MONOLITH FIRST/);
-  assert.match(source, /BACKEND PORTFOLIO PROJECT LADDER/);
-  assert.match(source, /BACKEND EVIDENCE PACKET/);
-  assert.match(source, /INTERVIEW ANSWER RUBRIC/);
+  assert.match(source, /BACKEND CORE EVIDENCE PACKET/);
+  assert.match(source, /BACKEND CORE OUTPUT BOUNDARY/);
   assert.match(source, /BACKEND ROADMAP OVERVIEW/);
   assert.match(source, /REQUEST TO OPERATIONS MAP/);
   assert.match(source, /BACKEND STUDY OUTPUTS/);
@@ -1828,17 +1889,16 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /ATOMIC STOCK DECREASE/);
   assert.match(source, /SLOW REQUEST TRIAGE/);
   assert.match(source, /connection acquisition time/);
-  assert.match(source, /면접 답변 심화 프레임/);
+  assert.match(source, /학습 산출물 포인터/);
   assert.match(source, /LOCK TRIAGE QUESTION/);
   assert.match(source, /EXPLAIN ANALYZE CHECKLIST/);
   assert.match(source, /EXPAND-CONTRACT/);
   assert.match(source, /idle in transaction/);
   assert.match(source, /BACKEND FOUNDATION CHECKLIST/);
-  assert.match(source, /COOKIE SESSION CORS MATRIX/);
+  assert.match(source, /REQUEST CONTEXT HANDOFF/);
   assert.match(source, /LINUX PROCESS PORT LOG TRIAGE/);
   assert.match(source, /GIT PR OPERATING LOOP/);
   assert.match(source, /SPRING BEAN LIFECYCLE/);
-  assert.match(source, /SPRING SECURITY FILTER CHAIN/);
   assert.match(source, /TRANSACTION PROXY FAILURE CASES/);
   assert.match(source, /SPRING EXCEPTION CONTRACT FLOW/);
   assert.match(source, /SCHEMA DESIGN DECISION TABLE/);
@@ -1850,24 +1910,58 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /TEST DATA STRATEGY/);
   assert.match(source, /CI CD GATE CHECKLIST/);
   assert.match(source, /CLOUD DEPLOYMENT MINIMUM/);
-  assert.match(source, /BACKEND 24 WEEK CURRICULUM/);
-  assert.match(source, /PORTFOLIO README RUBRIC/);
-  assert.match(source, /PROJECT SEQUENCE SIX PACK/);
   assert.match(source, /LANGUAGE FRAMEWORK CHOICE GUIDE/);
   assert.match(source, /IAC KUBERNETES LEARNING BOUNDARY/);
-  assert.match(source, /PROJECT EXAMPLE MAPPING/);
-  assert.match(source, /MID-LEVEL BACKEND EXPECTATION MATRIX/);
-  assert.match(source, /MID-LEVEL OWNERSHIP EVIDENCE/);
-  assert.match(source, /코드리뷰에서 authZ, transaction, migration, observability 위험을 먼저 본다/);
-  assert.match(source, /장애 회고에서 재발 방지 owner와 due date를 남긴다/);
-  assert.match(source, /BACKEND ROADMAP 2026[\s\S]*HTTP·DNS·TLS[\s\S]*언어·프레임워크[\s\S]*DB 스키마/);
-  assert.match(source, /language\/framework choice/);
-  assert.match(source, /IaC\/Kubernetes boundary/);
-  assert.match(source, /project example mapping/);
+  assert.match(source, /QUALITY FLOOR/);
+  assert.match(source, /커리어 문서로 넘길 것/);
+  assert.match(source, /BACKEND ROADMAP OVERVIEW[\s\S]*request lifecycle[\s\S]*API contract[\s\S]*transaction/);
   assert.doesNotMatch(source, /BE-10의 IDOR/);
   assert.doesNotMatch(source, /DB\(BE-03·04\)/);
   assert.doesNotMatch(source, /동시성\(BE-05\)/);
   assert.doesNotMatch(source, /"이 요청에 정확히 무슨 일이<\/td>/);
+});
+
+test("backend core handbook addresses reviewed depth gaps with concrete upgrade sections", async () => {
+  const source = await readFile("public/handbook/engineering-backend-core-handbook.html", "utf8");
+
+  assert.match(source, /BACKEND CORE SECURITY HANDOFF/);
+  assert.match(source, /ISOLATION LEVEL ENGINE NOTES/);
+  assert.match(source, /PostgreSQL[\s\S]*MySQL\/InnoDB/);
+  assert.match(source, /JPA ENTITY RELATIONSHIP FAILURE MODES/);
+  assert.match(source, /owning side/);
+  assert.match(source, /SPRING TRANSACTION CODE PATH/);
+  assert.match(source, /self-invocation/);
+  assert.match(source, /REDIS OPERATIONS FAILURE MODES/);
+  assert.match(source, /fencing token/);
+  assert.match(source, /MESSAGING BROKER SEMANTICS/);
+  assert.match(source, /visibility timeout/);
+  assert.match(source, /SPRING TEST SLICE MATRIX/);
+  assert.match(source, /@DataJpaTest/);
+  assert.match(source, /JVM RUNTIME OPERATIONS PLAYBOOK/);
+  assert.match(source, /thread dump/);
+  assert.match(source, /BACKEND CORE OUTPUT BOUNDARY/);
+});
+
+test("frontend quality handbook defines release-grade quality gates", async () => {
+  const source = await readFile("public/handbook/engineering-frontend-quality-handbook.html", "utf8");
+
+  assert.match(source, /FRONTEND RELEASE QUALITY OPERATING MODEL/);
+  assert.match(source, /change risk classification/i);
+  assert.match(source, /release health window/i);
+  assert.match(source, /FRONTEND SECURITY RELEASE GATE/);
+  assert.match(source, /sanitizer regression/i);
+  assert.match(source, /RISK BASED TEST MATRIX/);
+  assert.match(source, /contract drift/i);
+  assert.match(source, /FLAKY TEST TRIAGE/);
+  assert.match(source, /trace viewer/i);
+  assert.match(source, /VISUAL A11Y RELEASE GATE/);
+  assert.match(source, /keyboard path/i);
+  assert.match(source, /FRONTEND DEPLOYMENT HEALTH GATE/);
+  assert.match(source, /Web Vitals regression/i);
+  assert.match(source, /ROLLBACK FORWARD FIX DECISION/);
+  assert.match(source, /feature flag kill switch/i);
+  assert.match(source, /AI NATIVE FRONTEND QUALITY LOOP/);
+  assert.match(source, /release notes/i);
 });
 
 test("backend source handbook follows roadmap order without duplicate BE chapter codes", async () => {
@@ -2178,7 +2272,7 @@ test("design practice navigation follows the intended learning order", async () 
   assert.doesNotMatch(systems.match(/<nav aria-label="목차">[\s\S]*?<\/nav>/)?.[0] ?? "", /designforms-ch1/);
 });
 
-test("serial cards expose lucide-powered copy buttons", async () => {
+test("snippet cards expose lucide-powered copy buttons", async () => {
   const [packageSource, pageSource, buttonSource, cssSource] = await Promise.all([
     readFile("package.json", "utf8"),
     readFile("src/handbook/HandbookPage.tsx", "utf8"),
@@ -2188,15 +2282,66 @@ test("serial cards expose lucide-powered copy buttons", async () => {
 
   assert.match(packageSource, /"lucide-react"/);
   assert.match(pageSource, /createRoot/);
-  assert.match(pageSource, /\.serial-card/);
+  assert.match(pageSource, /pre\.snippet-card/);
   assert.match(pageSource, /SerialCardCopyButton/);
   assert.match(buttonSource, /from "lucide-react"/);
   assert.match(buttonSource, /Copy/);
   assert.match(buttonSource, /Check/);
   assert.match(buttonSource, /navigator\.clipboard\.writeText/);
-  assert.match(buttonSource, /aria-label=\{copied \? "복사됨" : "명령어 복사"\}/);
-  assert.match(cssSource, /\.serial-card-copy/);
+  assert.match(buttonSource, /aria-label=\{copied \? "복사됨" : "스니펫 복사"\}/);
+  assert.match(cssSource, /\.snippet-card-copy/);
   assert.match(cssSource, /position: absolute/);
+});
+
+test("engineering handbook separates code snippets from semantic explanation cards", async () => {
+  const engineeringFiles = HANDBOOK_GROUPS.find((group) => group.key === "engineering")?.items.map((item) => item.file) ?? [];
+  const sources = await Promise.all(
+    engineeringFiles.map(async (file) => ({
+      file,
+      source: await readFile(path.join("public", "handbook", file), "utf8"),
+    })),
+  );
+  const allEngineeringHtml = sources.map(({ source }) => source).join("\n");
+
+  for (const { file, source } of sources) {
+    assert.doesNotMatch(source, /class="serial-card"/, `${file} should not use serial-card for engineering content`);
+    assert.doesNotMatch(source, /<pre><code>/, `${file} should render code blocks as pre.snippet-card`);
+  }
+
+  assert.match(allEngineeringHtml, /class="snippet-card"/);
+  assert.match(allEngineeringHtml, /class="semantic-card /);
+  assert.match(allEngineeringHtml, /<pre class="snippet-card">/);
+});
+
+test("engineering code-like examples are rendered as pre snippet cards", async () => {
+  const requiredSnippetLabels = [
+    ["engineering-backend-core-handbook.html", "API ERROR CONTRACT"],
+    ["engineering-backend-auth-security-handbook.html", "Set-Cookie"],
+    ["engineering-backend-auth-security-handbook.html", "SECURITY INCIDENT PACKET"],
+    ["engineering-data-handbook.html", "OFFSET / LIMIT — 쉽지만 한계 있음"],
+    ["engineering-data-handbook.html", "Java — RedisTemplate로 락 시도"],
+    ["engineering-data-handbook.html", "RateLimiter.java — INCR + EXPIRE"],
+    ["engineering-java-spring-handbook.html", "filter · map · collect"],
+    ["engineering-java-spring-handbook.html", "Member.java — 가장 기본형 엔티티"],
+    ["engineering-java-spring-handbook.html", "N:1 — 주인 쪽"],
+    ["engineering-platform-tools-handbook.html", "보안 헤더 + RATE LIMIT"],
+    ["engineering-platform-tools-handbook.html", "/etc/nginx/conf.d/app.conf — REVERSE PROXY"],
+  ];
+
+  for (const [file, label] of requiredSnippetLabels) {
+    const source = await readFile(path.join("public", "handbook", file), "utf8");
+    const snippetBlocks = source.match(/<pre class="snippet-card">[\s\S]*?<\/pre>/g) ?? [];
+    const semanticBlocks = source.match(/<div class="semantic-card [^"]+">[\s\S]*?<\/div>/g) ?? [];
+
+    assert.ok(
+      snippetBlocks.some((block) => block.includes(label)),
+      `${file} should render ${label} as a pre snippet card`,
+    );
+    assert.ok(
+      !semanticBlocks.some((block) => block.includes(`<span class="sc-label">`) && block.includes(label)),
+      `${file} should not render ${label} as a semantic explanation card`,
+    );
+  }
 });
 
 test("checklist serial cards are upgraded into persistent checkbox controls", async () => {

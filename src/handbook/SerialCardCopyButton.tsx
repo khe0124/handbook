@@ -10,7 +10,7 @@ function getCopyText(card: HTMLElement) {
 
   const clone = card.cloneNode(true) as HTMLElement;
 
-  clone.querySelectorAll(".serial-card-copy-mount").forEach((node) => {
+  clone.querySelectorAll(".serial-card-copy-mount, .snippet-card-copy-mount").forEach((node) => {
     node.remove();
   });
 
@@ -52,10 +52,10 @@ export function SerialCardCopyButton({ card }: SerialCardCopyButtonProps) {
   return (
     <button
       type="button"
-      className="serial-card-copy"
+      className="snippet-card-copy"
       onClick={handleCopy}
-      aria-label={copied ? "복사됨" : "명령어 복사"}
-      title={copied ? "복사됨" : "명령어 복사"}
+      aria-label={copied ? "복사됨" : "스니펫 복사"}
+      title={copied ? "복사됨" : "스니펫 복사"}
     >
       <Icon size={14} aria-hidden />
       <span>{copied ? "Copied" : "Copy"}</span>
