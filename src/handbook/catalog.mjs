@@ -223,6 +223,9 @@ export const AX_PRACTICE_HANDBOOKS = [
 export const DESIGN_PRACTICE_HANDBOOKS = [
   { id: "practice-design-foundation", label: "00 디자인 기반·사용자 흐름", kind: "디자인 실무", file: "practice-design-foundation-handbook.html" },
   { id: "practice-design-systems", label: "01 디자인 실행·시스템 품질", kind: "디자인 실무", file: "practice-design-systems-handbook.html" },
+  { id: "practice-visual-design-foundations", label: "02 시각디자인 기초·조형 원리", kind: "디자인 실무", file: "practice-visual-design-foundations-handbook.html" },
+  { id: "practice-color-typography-brand", label: "03 색채·타이포그래피·브랜드 시각 언어", kind: "디자인 실무", file: "practice-color-typography-brand-handbook.html" },
+  { id: "practice-photography-image-literacy", label: "04 사진학·이미지 리터러시", kind: "디자인 실무", file: "practice-photography-image-literacy-handbook.html" },
 ];
 
 export const PRACTICE_HANDBOOKS = [

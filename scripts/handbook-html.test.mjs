@@ -10,6 +10,7 @@ import {
   CAREER_HANDBOOKS,
   CHEAT_SHEETS,
   DESIGN_HANDBOOKS,
+  DESIGN_PRACTICE_HANDBOOKS,
   DEVOPS_HANDBOOKS,
   FRONTEND_HANDBOOKS,
   HANDBOOK_GROUPS,
@@ -93,13 +94,13 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 58);
+  assert.equal(HANDBOOK_ITEMS.length, 61);
   assert.equal(careerGroup?.items.length, 9);
   assert.equal(engineeringGroup?.items.length, 15);
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 13);
   assert.equal(axGroup?.items.length, 3);
-  assert.equal(designGroup?.items.length, 2);
+  assert.ok((designGroup?.items.length ?? 0) >= 5);
   assert.equal(practiceGroup?.items.length, 3);
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("면접·커리어"));
@@ -152,6 +153,9 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("02 AX 확장·거버넌스"));
   assert.ok(labels.includes("00 디자인 기반·사용자 흐름"));
   assert.ok(labels.includes("01 디자인 실행·시스템 품질"));
+  assert.ok(labels.includes("02 시각디자인 기초·조형 원리"));
+  assert.ok(labels.includes("03 색채·타이포그래피·브랜드 시각 언어"));
+  assert.ok(labels.includes("04 사진학·이미지 리터러시"));
   assert.ok(labels.includes("00 실무 치트시트 모음"));
   assert.ok(labels.includes("01 실무 준비·작업 루프"));
   assert.ok(labels.includes("02 빌드·설정·릴리스 운영"));
@@ -616,6 +620,21 @@ test("AX, design, and practical tool menus group consistent handbook bundles", a
       sources: ["UI 레이아웃과 시각 위계", "인터랙션 디자인 패턴", "폼과 입력 경험", "컴포넌트 패턴", "디자인 시스템과 토큰", "AX 인터랙션·마이크로인터랙션", "접근성과 인클루시브 디자인", "프로토타입과 사용성 테스트", "디자인 핸드오프와 QA"],
       evidence: ["시각 위계", "Design Token", "핸드오프", "human-in-the-loop", "prefers-reduced-motion"],
     },
+    {
+      file: "practice-visual-design-foundations-handbook.html",
+      sources: ["시각디자인 기초·조형 원리"],
+      evidence: ["VISUAL DESIGN FOUNDATION MAP", "GESTALT PRINCIPLES", "COMPOSITION CRITIQUE CHECKLIST", "VISUAL HIERARCHY AUDIT"],
+    },
+    {
+      file: "practice-color-typography-brand-handbook.html",
+      sources: ["색채·타이포그래피·브랜드 시각 언어"],
+      evidence: ["COLOR TYPOGRAPHY BRAND SYSTEM", "COLOR PALETTE DECISION TABLE", "TYPOGRAPHY SCALE CHECKLIST", "BRAND VISUAL LANGUAGE AUDIT"],
+    },
+    {
+      file: "practice-photography-image-literacy-handbook.html",
+      sources: ["사진학·이미지 리터러시"],
+      evidence: ["PHOTOGRAPHY IMAGE LITERACY MAP", "EXPOSURE TRIANGLE", "IMAGE QUALITY REVIEW RUBRIC", "AI STOCK IMAGE RISK CHECKLIST"],
+    },
   ];
   const practiceBundles = [
     {
@@ -637,14 +656,14 @@ test("AX, design, and practical tool menus group consistent handbook bundles", a
   const bundles = [...axBundles, ...designBundles, ...practiceBundles];
 
   assert.equal(axGroup?.items.length, 3);
-  assert.equal(designGroup?.items.length, 2);
+  assert.ok((designGroup?.items.length ?? 0) >= 5);
   assert.equal(practiceGroup?.items.length, 3);
   assert.deepEqual(
     axGroup?.items.map((item) => item.file),
     axBundles.map((bundle) => bundle.file),
   );
   assert.deepEqual(
-    designGroup?.items.map((item) => item.file),
+    designGroup?.items.slice(0, designBundles.length).map((item) => item.file),
     designBundles.map((bundle) => bundle.file),
   );
   assert.deepEqual(
@@ -661,6 +680,33 @@ test("AX, design, and practical tool menus group consistent handbook bundles", a
 
     for (const marker of bundle.evidence) {
       assert.match(source, new RegExp(marker, "i"), `${bundle.file} should preserve ${marker}`);
+    }
+  }
+});
+
+test("design practice includes specialist visual design, typography, and photography foundations", async () => {
+  assert.deepEqual(
+    DESIGN_PRACTICE_HANDBOOKS.slice(0, 5).map((item) => item.label),
+    [
+      "00 디자인 기반·사용자 흐름",
+      "01 디자인 실행·시스템 품질",
+      "02 시각디자인 기초·조형 원리",
+      "03 색채·타이포그래피·브랜드 시각 언어",
+      "04 사진학·이미지 리터러시",
+    ],
+  );
+
+  const sourceMarkers = [
+    ["src/handbook/documents/practice-visual-design-foundations.ts", ["Point, line, plane", "Gestalt", "visual hierarchy", "grid systems", "composition critique"]],
+    ["src/handbook/documents/practice-color-typography-brand.ts", ["Hue, saturation, value", "typography fundamentals", "font pairing", "brand visual language", "accessibility contrast"]],
+    ["src/handbook/documents/practice-photography-image-literacy.ts", ["Exposure triangle", "focal length", "depth of field", "light direction", "AI image"]],
+  ];
+
+  for (const [sourcePath, markers] of sourceMarkers) {
+    const source = await readFile(sourcePath, "utf8");
+
+    for (const marker of markers) {
+      assert.match(source, new RegExp(marker, "i"), `${sourcePath} should include ${marker}`);
     }
   }
 });
