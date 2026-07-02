@@ -13,6 +13,8 @@
   <a href="#ch2"><span class="code">MAP</span>역량 스택</a>
   <a href="#ch3"><span class="code">FAIL</span>실패 모드</a>
   <a href="#ch4"><span class="code">PATH</span>학습 순서</a>
+  <a href="#build-roadmap"><span class="code">BUILD</span>4주 실습 산출물</a>
+  <a href="#api-control-surface"><span class="code">API</span>Messages·Tool·Eval 루프</a>
   <a href="#ch5"><span class="code">PORT</span>증거 기준</a>
   <a href="#ai-native-dod"><span class="code">DONE</span>AI Native DoD</a>
   <a href="#depth"><span class="code">DEPTH</span>실무 전환</a>
@@ -98,6 +100,126 @@ version · owner · task boundary · allowed inputs · invariants · refusal sha
 <tr><td>RAG 답변</td><td>근거 사용 능력, no-answer 준수, citation 품질</td><td>검색 근거 밖 주장을 자주 생성</td></tr>
 <tr><td>도구 호출</td><td>function calling 정확도, argument 안정성</td><td>권한 밖 tool을 반복 제안</td></tr>
 <tr><td>평가자</td><td>rubric 준수, 판정 일관성, human label 상관</td><td>표현이 그럴듯한 오답에 관대함</td></tr>
+</table>
+</section>
+
+<section id="build-roadmap">
+<div class="ch-head"><span class="ch-code">BUILD</span><h2>4-WEEK BUILD ROADMAP</h2></div>
+<p class="lede">이 로드맵은 읽는 순서가 아니라 매주 남길 산출물 순서입니다. 각 주차는 다음 주차의 실패를 줄이는 증거를 만들고, 마지막에는 출시 가능한 Document Intelligence RAG capstone으로 합쳐야 합니다.</p>
+<table>
+<tr><th>주차</th><th>산출물</th><th>통과 기준</th></tr>
+<tr><td>1</td><td>prompt contract, structured output schema, schema validation log</td><td>모든 응답이 schema 검증을 통과하거나 명시적 repair/refusal 경로로 빠진다.</td></tr>
+<tr><td>2</td><td>RAG ingest pipeline, retrieval trace, citation renderer</td><td>질문별 top-k, score, selected context, no-answer 근거가 남는다.</td></tr>
+<tr><td>3</td><td>golden dataset, judge rubric, eval gate</td><td>프롬프트·검색 변경은 품질 지표와 회귀 실패를 통과해야 merge된다.</td></tr>
+<tr><td>4</td><td>tool approval flow, prompt-injection fixture, cost/latency dashboard</td><td>쓰기 도구는 승인 전 실행되지 않고, 비용·지연·보안 실패가 runbook으로 연결된다.</td></tr>
+</table>
+<h3>MARKER: artifact-ready — Weekly build evidence map</h3>
+<pre class="snippet-card"><code>week_1_prompt_contract:
+  deliverable: prompt contract + structured output schema + validator
+  evidence: schema_success_rate, refusal_examples, repair_loop_log
+  pass: "schema failure is visible and handled"
+
+week_2_rag_trace:
+  deliverable: document ingestion + retrieval trace + citation UI
+  evidence: recall@5, citation_precision, no_answer_cases
+  pass: "answer can be traced to allowed source chunks"
+
+week_3_eval_gate:
+  deliverable: golden dataset + judge rubric + eval gate
+  evidence: prompt_regression_report, failing_case_snapshot
+  pass: "quality regression blocks release"
+
+week_4_security_ops:
+  deliverable: tool approval + prompt injection tests + cost latency trace
+  evidence: blocked_tool_calls, red_team_results, p95_latency, cost_per_success
+  pass: "capstone is launchable, operable, and interview-defensible"</code></pre>
+</section>
+
+<section id="api-control-surface">
+<div class="ch-head"><span class="ch-code">API</span><h2>Messages API, Tool Use, Eval Control Surface</h2></div>
+<p class="lede">실무 LLM 앱의 중심 코드는 프롬프트 한 줄이 아니라 입력 계약, 도구 schema, tool_use 처리, tool_result 재전송, structured output schema 검증, eval gate 기록을 묶는 제어면입니다.</p>
+<h3>MARKER: artifact-ready — Messages tool loop skeleton</h3>
+<pre class="snippet-card"><code>const response = await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 1200,
+  system: [
+    "Answer only from approved policy passages.",
+    "Return JSON that matches the structured output schema.",
+    "If evidence is missing, return refusal_reason."
+  ].join(" "),
+  messages: [{ role: "user", content: userQuestion }],
+  tools: [{
+    name: "lookup_policy",
+    description: "Find approved policy passages by query.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string" },
+        top_k: { type: "integer", minimum: 1, maximum: 8 }
+      },
+      required: ["query"]
+    }
+  }]
+});
+
+const toolResults = [];
+for (const block of response.content) {
+  if (block.type === "tool_use" && block.name === "lookup_policy") {
+    const passages = await lookupPolicy(block.input.query, block.input.top_k);
+    toolResults.push({
+      type: "tool_result",
+      tool_use_id: block.id,
+      content: JSON.stringify(passages)
+    });
+  }
+}
+
+const finalResponse = await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 1200,
+  messages: [
+    { role: "user", content: userQuestion },
+    { role: "assistant", content: response.content },
+    { role: "user", content: toolResults }
+  ]
+});
+
+validateAgainstSchema(finalResponse, answerSchema);
+recordEvalGate({
+  prompt_version: "policy-answer@2026-07-02",
+  dataset: "policy-golden-v3",
+  schema_valid: true,
+  groundedness_min: 0.9,
+  release_gate: "pass"
+});</code></pre>
+<pre class="snippet-card"><code>{
+  "name": "structured output schema",
+  "type": "object",
+  "required": ["answer", "citations", "confidence", "refusal_reason"],
+  "properties": {
+    "answer": { "type": "string" },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id", "chunk_id"],
+        "properties": {
+          "document_id": { "type": "string" },
+          "chunk_id": { "type": "string" }
+        }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "refusal_reason": { "type": ["string", "null"] }
+  }
+}</code></pre>
+<table>
+<tr><th>루프</th><th>개발자가 검증할 것</th><th>증거</th></tr>
+<tr><td>messages.create</td><td>system, user input, model, token budget이 버전으로 남는가</td><td>prompt_version, model_version, request_id</td></tr>
+<tr><td>input_schema</td><td>도구 인자가 타입·범위·필수값으로 제한되는가</td><td>schema validation failure log</td></tr>
+<tr><td>tool_use</td><td>모델 제안이 allowlist와 권한 검사를 통과하는가</td><td>blocked_tool_call, approval_id</td></tr>
+<tr><td>tool_result</td><td>앱이 실행한 결과만 모델에 다시 들어가는가</td><td>tool_use_id, source document ids</td></tr>
+<tr><td>eval gate</td><td>schema, groundedness, citation precision이 release 기준을 넘는가</td><td>regression report, failing examples</td></tr>
 </table>
 </section>
 

@@ -141,6 +141,24 @@
           <tr><td>네트워크</td><td>service endpoints, ingress events, target health, connection draining</td><td>selector mismatch와 readiness 누락을 찾는다.</td></tr>
           <tr><td>리소스</td><td>CPU throttling, memory working set, ephemeral storage, file descriptor</td><td>limit만 올리기 전에 원인 지표를 확인한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-runtime-orchestration-handbook.html
+  playbook: RUNTIME ORCHESTRATION PLAYBOOK
+  hypothesis: "Pod / Task health 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "kubectl get pods, describe pod, logs --previous, rollout status"
+  normal_signal: "CrashLoop, OOMKilled, probe failure를 분리한다."
+  abnormal_signal: "rolling update 중 일부 요청 502"
+  mitigation_then_permanent_fix:
+    mitigation: "readiness, drain, terminationGracePeriod, target deregistration delay를 본다."
+    permanent_fix: "다음 배포에서 자동으로 깨지는지 확인한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

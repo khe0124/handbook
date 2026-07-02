@@ -145,6 +145,24 @@
           <tr><td>TLS 확인</td><td>curl -v https://app.example.com/health, openssl s_client -servername app.example.com -connect app.example.com:443</td><td>SNI, certificate chain, expiry, ALPN, handshake error를 본다.</td></tr>
           <tr><td>경로 확인</td><td>LB target health, WAF log, app access log, trace waterfall, DB pool metric</td><td>502는 upstream 연결, 504는 timeout, 503은 capacity/health 후보로 나눈다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-request-path-handbook.html
+  playbook: REQUEST PATH TRIAGE PLAYBOOK
+  hypothesis: "DNS 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "dig +trace app.example.com, dig app.example.com @8.8.8.8"
+  normal_signal: "권한 서버 응답과 public resolver cache 차이를 구분한다."
+  abnormal_signal: "특정 지역 로그인 504, app log 일부 누락"
+  mitigation_then_permanent_fix:
+    mitigation: "DNS/edge/LB/app 중 어디까지 요청이 도달했는지 먼저 확인한다."
+    permanent_fix: "다음 장애에서 같은 탐색을 반복하지 않게 한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>DNS fail</td><td>NXDOMAIN, wrong CNAME, resolver cache, split-horizon mismatch</td><td>app log가 비어 있으면 DNS/edge에서 요청이 멈췄을 가능성이 높다.</td></tr>

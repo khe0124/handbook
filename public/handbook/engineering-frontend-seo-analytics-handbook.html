@@ -110,6 +110,12 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>Edge</td><td>지역별 콘텐츠, A/B landing, 빠른 personalization</td><td>canonical/hreflang 혼선</td><td>variant 정책, cache key, analytics attribution</td></tr>
 </table>
 <div class="semantic-card evidence-card"><span class="sc-label">TECHNICAL SEO RELEASE PACKET</span><br>rendered HTML snapshot<br>sitemap.xml and robots.txt diff<br>canonical and hreflang audit<br>status code and redirect map<br>Core Web Vitals route budget<br>structured data validation result<br>Search Console coverage check after release</div>
+<table>
+<tr><th>Web Vital</th><th>릴리스 예산</th><th>오진 방지</th></tr>
+<tr><td>LCP</td><td>LCP p75 &lt;= 2.5s</td><td>검색 landing page의 hero image, font, server TTFB를 route별로 분리한다.</td></tr>
+<tr><td>INP</td><td>INP p75 &lt;= 200ms</td><td>전체 평균이 아니라 CTA, pricing toggle, search input 같은 상호작용별 long task를 본다.</td></tr>
+<tr><td>CLS</td><td>CLS p75 &lt;= 0.1</td><td>cookie banner, ad slot, lazy image가 첫 화면을 밀어내는지 실제 RUM으로 확인한다.</td></tr>
+</table>
 </section>
 
 <section id="structured-data">
@@ -124,6 +130,23 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>FAQPage</td><td>명확한 질문-답변 섹션</td><td>화면에 보이는 질문과 JSON-LD가 일치</td></tr>
 <tr><td>BreadcrumbList</td><td>계층형 내비게이션</td><td>URL, 이름, 순서가 실제 경로와 일치</td></tr>
 </table>
+<pre class="snippet-card"><code><span class="sc-label">JSON-LD · FAQPage 실제 마크업</span>
+&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "이 제품은 어떤 팀에 적합한가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "반복 운영 업무와 승인 흐름을 가진 B2B 팀에 적합합니다. 공개 페이지의 답변 문장과 JSON-LD text는 항상 일치해야 합니다."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</code></pre>
 <div class="callout warn"><span class="co-label">Structured Data Anti-pattern</span><p>검색 결과를 더 크게 보이게 하려고 화면에 없는 FAQ나 과장된 review/rating을 넣으면 정책 위반과 신뢰 하락으로 이어집니다. 구조화 데이터는 화면의 의미를 명시하는 것이지 없는 정보를 만드는 장치가 아닙니다.</p></div>
 </section>
 
@@ -138,6 +161,11 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>번역 품질</td><td>기계 번역, 현지화, 원어 콘텐츠</td><td>AI 요약과 검색 노출에서 어색한 번역은 신뢰를 낮춤</td></tr>
 <tr><td>지표 분리</td><td>locale, region, currency, campaign segment</td><td>전체 평균만 보면 지역별 문제를 놓침</td></tr>
 </table>
+<pre class="snippet-card"><code><span class="sc-label">canonical + hreflang 예시</span>
+&lt;link rel="canonical" href="https://example.com/ko/pricing" /&gt;
+&lt;link rel="alternate" hreflang="ko" href="https://example.com/ko/pricing" /&gt;
+&lt;link rel="alternate" hreflang="en" href="https://example.com/en/pricing" /&gt;
+&lt;link rel="alternate" hreflang="x-default" href="https://example.com/pricing" /&gt;</code></pre>
 </section>
 
 <section id="analytics-measurement">
@@ -152,6 +180,14 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>Server logs</td><td>bot crawl, status code, redirect, API 오류</td><td>클라이언트 이벤트와 시간축을 맞춰야 함</td></tr>
 </table>
 <div class="semantic-card process-card"><span class="sc-label">MEASUREMENT PLAN</span><br>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가<br>2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다<br>3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다<br>4. 동의, 보존 기간, PII 제외 정책을 확인한다<br>5. QA 환경에서 DebugView, network payload, dashboard 반영을 검증한다<br>6. 릴리스 후 데이터 누락, 중복, 급증을 health window에서 확인한다</div>
+<pre class="snippet-card"><code><span class="sc-label">GA4 event payload · pricing CTA</span>
+gtag("event", "pricing_plan_selected", {
+  plan_id: "pro",
+  billing_cycle: "annual",
+  source_route: "/pricing",
+  experiment_variant: "b",
+  event_schema_version: "2026-07-02"
+});</code></pre>
 </section>
 
 <section id="event-taxonomy">

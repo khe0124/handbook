@@ -88,6 +88,23 @@ CONTROL PATH: prompt registry → eval runner → eval_gate → canary_rollout �
 <tr><td>fallback_routing</td><td>primary 장애 시 latency_first 모델로 전환</td><td>품질 차이와 risk tier 표시</td></tr>
 <tr><td>degradation</td><td>RAG 검색만 제공, 초안 저장 보류</td><td>사용자에게 상태를 명확히 표시</td></tr>
 </table>
+<pre class="snippet-card"><code>async function model_gateway_call(request) {
+  const circuit_breaker = await getCircuitBreakerState(request.primaryProvider);
+  const route = circuit_breaker.open
+    ? fallback_routing(request, { reason: "provider_unhealthy" })
+    : request.primaryRoute;
+
+  return callModelProvider({
+    route,
+    timeout_ms: request.interactive ? 20000 : 180000,
+    retry_budget: request.risk_tier === "high" ? 0 : 1,
+    trace: {
+      request_id: request.request_id,
+      prompt_version: request.prompt_version,
+      model_route: route.name
+    }
+  });
+}</code></pre>
 </section>
 
 <section id="ch4">

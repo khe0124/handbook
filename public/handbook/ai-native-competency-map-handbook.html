@@ -15,6 +15,7 @@
   <a href="#ch3"><span class="code">MAP-03</span>수준 진단</a>
   <a href="#ch4"><span class="code">MAP-04</span>증거 Ledger</a>
   <a href="#ch5"><span class="code">MAP-05</span>보강 루프</a>
+  <a href="#sample"><span class="code">SAMPLE</span>제출 예시</a>
 </nav>
 <main>
 <header class="hero">
@@ -151,6 +152,44 @@
 <span class="co-label">완료 기준</span>
 <p>이 문서를 끝냈다는 뜻은 표를 읽었다는 뜻이 아니라, 현재 자신의 L1-L4 위치, 총점, 다음 실습 랩, 제출할 산출물을 정했다는 뜻입니다. 중급 개발자 기준으로는 4주 안에 최소 28점과 L3 증거 2개를 목표로 둡니다.</p>
 </div>
+</section>
+
+<section id="sample">
+<div class="ch-head"><span class="ch-code">SAMPLE</span><h2>진단 제출 예시와 리뷰 기준</h2></div>
+<p class="lede">아래처럼 현재 수준, 증거 공백, 다음 랩을 한 장으로 제출해야 진단이 실제 훈련 계획으로 바뀝니다. 점수만 적으면 자기평가이고, 증거와 다음 실험이 붙으면 코칭 가능한 산출물입니다.</p>
+<pre class="snippet-card"><code>training_sample_output:
+  learner: mid_level_frontend_to_ai_native
+  current_score:
+    total: 27
+    lowest_core_axis: evaluation_harness_L2
+    capped_level: L2_plus
+  evidence_ready:
+    - prompt_contract_v1.md
+    - rag_retrieval_eval_report.md
+    - agent_episode_log.md
+  evidence_gap:
+    - security_fixture_has_no_regression_gate
+    - operations_dashboard_missing_cost_per_successful_answer
+  next_training_queue:
+    - ai-native-security-red-team-handbook: tenant_and_indirect_injection
+    - ai-native-evaluation-harness-handbook: baseline_candidate_gate
+  pass_criteria:
+    - all_10_axes_scored_with_artifact_links
+    - evaluation_security_operations_each_have_at_least_one_reproducible_fixture
+    - next_2_labs_have_owner_due_date_and_expected_output
+  failure_diagnosis:
+    symptom: "평균 점수는 높지만 보안과 운영 증거가 비어 있음"
+    root_cause: "성공 데모 중심으로 학습했고 실패 fixture를 만들지 않음"
+    correction: "보안 fixture 5개와 LLM incident packet을 먼저 추가"
+  reviewer_note:
+    decision: conditional_pass
+    comment: "L3 후보이나 security regression과 operations SLI가 없으므로 포트폴리오 제출 전 보강 필요"</code></pre>
+<table>
+<tr><th>리뷰 항목</th><th>좋은 제출</th><th>반려 신호</th></tr>
+<tr><td>수준 판정</td><td>최저 축으로 등급을 제한한다</td><td>평균 점수만 보고 L3라고 주장한다</td></tr>
+<tr><td>증거 연결</td><td>각 점수에 파일, 지표, 실패 사례가 붙어 있다</td><td>“해봤다”, “이해했다” 같은 설명만 있다</td></tr>
+<tr><td>다음 행동</td><td>다음 랩과 통과 기준이 정해져 있다</td><td>막연히 더 공부한다고 적는다</td></tr>
+</table>
 </section>
 </main>
 </div>

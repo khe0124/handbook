@@ -245,36 +245,14 @@ EOF
 <!-- ============ CH 4 ============ -->
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">SETUP-04</span><h2>3단계 — MCP 서버 연결</h2></div>
-<p class="lede">MCP(Model Context Protocol) 서버는 Claude에게 파일시스템·GitHub·브라우저·DB·Obsidian 같은 외부 능력을 붙여줍니다. <code>~/.claude/settings.json</code>의 <code>mcpServers</code>에 등록합니다.</p>
+<p class="lede">MCP(Model Context Protocol) 서버는 Claude에게 파일시스템·GitHub·브라우저·DB·Obsidian 같은 외부 능력을 붙여줍니다. Claude Code에서는 <code>claude mcp add</code>로 등록합니다. 서버 정의는 스코프에 따라 <code>~/.claude.json</code>(user·local) 또는 프로젝트 루트 <code>.mcp.json</code>(project)에 기록됩니다. <strong><code>settings.json</code>은 MCP 서버의 활성화·승인 정책을 다루지만 서버 정의는 담지 않습니다</strong>. 요약하면 settings.json은 MCP 서버의 활성화·승인 정책을 위한 파일이고, 서버 정의는 담지 않습니다.</p>
 <div class="serial-card">
-<span class="sc-label">~/.claude/settings.json — MCP 서버 등록</span>
-cat &gt; ~/.claude/settings.json &lt;&lt; 'EOF'<br>
-{<br>
-&nbsp;&nbsp;<span class="seg2">"mcpServers"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">"filesystem"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/haeun/projects"]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;},<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">"github"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@modelcontextprotocol/server-github"],<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }<br>
-&nbsp;&nbsp;&nbsp;&nbsp;},<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">"playwright"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@playwright/mcp@latest"]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;},<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">"postgres"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/postgres"]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;},<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">"obsidian"</span>: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"command": "npx",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"args": ["-y", "mcp-obsidian", "/Users/haeun/vault"]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;}<br>
-}<br>
-EOF
+<span class="sc-label">claude mcp add — user scope 예시</span>
+claude mcp add filesystem -s user -- npx -y @modelcontextprotocol/server-filesystem /Users/haeun/projects<br>
+claude mcp add obsidian -s user -- npx -y mcp-obsidian /Users/haeun/vault<br>
+claude mcp add postgres -s user -- npx -y @modelcontextprotocol/server-postgres postgresql://localhost/postgres<br>
+claude mcp add playwright -s user -- npx -y @playwright/mcp@latest<br>
+claude mcp add github -s user -e GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_TOKEN} -- npx -y @modelcontextprotocol/server-github
 </div>
 <div class="callout warn">
 <span class="co-label">haeun을 본인 사용자명으로</span>
@@ -614,7 +592,7 @@ cmux new-workspace <span class="dim"># split 두 개 띄워 양쪽에서 claude 
 <div class="g-row"><div class="g-term"><b>cmux helper</b><span>ccw / ccs</span></div><div class="g-def"><code>ccw "task"</code> 새 워크스페이스에서 claude / <code>ccs "task"</code> 오른쪽 split에서 claude</div></div>
 <div class="g-row"><div class="g-term"><b>cmux 동작 확인</b><span>identify</span></div><div class="g-def"><code>cmux --version</code> · <code>cmux identify --json</code> · <code>cmux list-workspaces --json</code></div></div>
 <div class="g-row"><div class="g-term"><b>Ghostty config 위치</b><span>cmux가 읽음</span></div><div class="g-def"><code>~/.config/ghostty/config</code> — 폰트·테마·키바인딩. cmux가 이 파일을 읽음</div></div>
-<div class="g-row"><div class="g-term"><b>Claude 글로벌 메모리</b><span>~/.claude</span></div><div class="g-def"><code>~/.claude/CLAUDE.md</code>(모든 프로젝트 공통 컨텍스트) · <code>~/.claude/settings.json</code>(MCP 서버)</div></div>
+<div class="g-row"><div class="g-term"><b>Claude 글로벌 메모리</b><span>~/.claude</span></div><div class="g-def"><code>~/.claude/CLAUDE.md</code>(모든 프로젝트 공통 컨텍스트) · <code>~/.claude/settings.json</code>(승인·권한 설정, MCP 서버 정의 아님)</div></div>
 <div class="g-row"><div class="g-term"><b>MCP 연결 확인</b><span>claude mcp list</span></div><div class="g-def"><code>claude mcp list</code> — filesystem·github·playwright·postgres·obsidian 상태</div></div>
 <div class="g-row"><div class="g-term"><b>cmux 수동 설치</b><span>.dmg 예외</span></div><div class="g-def"><code>open https://cmux.com</code> — chezmoi·Brewfile로 관리 안 됨, 새 PC마다 수동</div></div>
 </div>

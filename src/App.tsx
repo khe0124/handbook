@@ -5,7 +5,9 @@ import {
   HANDBOOK_GROUPS,
   HANDBOOK_ITEMS,
 } from "./handbook/catalog.mjs";
+import { GlobalSearch } from "./handbook/GlobalSearch";
 import { HandbookPage } from "./handbook/HandbookPage";
+import { markVisited } from "./handbook/studyStorage.mjs";
 import "./App.css";
 
 type HandbookItem = {
@@ -116,6 +118,7 @@ export default function App() {
   ]);
   const activeIdRef = useRef(activeId);
   const pendingScrollRestoreIdRef = useRef(activeId);
+  const pendingSectionIdRef = useRef<string | null>(null);
 
   const activeItem = useMemo(
     () => items.find((item) => item.id === activeId) ?? items[0],
@@ -136,6 +139,7 @@ export default function App() {
   useEffect(() => {
     activeIdRef.current = activeItem.id;
     saveActiveId(activeItem.id);
+    markVisited(activeItem.id);
   }, [activeItem.id]);
 
   useEffect(() => {
@@ -217,6 +221,19 @@ export default function App() {
   };
 
   const restoreSavedPosition = useCallback((itemId: string) => {
+    const pendingSectionId = pendingSectionIdRef.current;
+
+    if (pendingSectionId) {
+      // StrictMode 이중 effect의 두 번째 onReady가 저장 위치 복원으로
+      // 앵커 이동을 덮지 않도록, 소비하면서 이 문서의 위치 복원도 끈다.
+      pendingSectionIdRef.current = null;
+      pendingScrollRestoreIdRef.current = "";
+      window.requestAnimationFrame(() => {
+        window.document.getElementById(pendingSectionId)?.scrollIntoView({ behavior: "auto" });
+      });
+      return;
+    }
+
     if (pendingScrollRestoreIdRef.current !== itemId) {
       return;
     }
@@ -252,6 +269,16 @@ export default function App() {
     handleSelectItem(homeItem);
   };
 
+  const handleSelectSearchResult = (docId: string, sectionId: string) => {
+    if (docId === activeItem.id) {
+      window.document.getElementById(sectionId)?.scrollIntoView({ behavior: "auto" });
+      return;
+    }
+
+    pendingSectionIdRef.current = sectionId;
+    handleSelectHandbookId(docId);
+  };
+
   const handleToggleMobileGroup = (groupKey: string) => {
     setOpenMobileGroupKeys((currentKeys) =>
       currentKeys.includes(groupKey)
@@ -279,6 +306,7 @@ export default function App() {
             {activeItem.kind} · {activeItem.label}
           </p>
         </div>
+        <GlobalSearch onSelectSection={handleSelectSearchResult} />
         <nav aria-label="문서 분류" className="menubar">
           {groups.map((group) => {
             const groupActive = group.items.some((item) => item.id === activeItem.id);

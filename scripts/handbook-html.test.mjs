@@ -6,9 +6,11 @@ import test from "node:test";
 
 import {
   AI_NATIVE_TRAINING_HANDBOOKS,
+  ARCHIVE_HANDBOOKS,
   AX_HANDBOOKS,
   BACKEND_HANDBOOKS,
   CAREER_HANDBOOKS,
+  CATALOG_DOCUMENTS,
   CHEAT_SHEETS,
   DESIGN_HANDBOOKS,
   DESIGN_PRACTICE_HANDBOOKS,
@@ -22,6 +24,7 @@ import {
   NETWORK_HANDBOOKS,
   PERSONAL_HANDBOOKS,
   PRACTICAL_GUIDES,
+  SOURCE_HANDBOOKS,
 } from "../src/handbook/catalog.mjs";
 import { extractHandbookDocument, generateHandbookDocuments } from "./handbook-html.mjs";
 
@@ -76,6 +79,156 @@ test("extractHandbookDocument throws a clear error when required regions are mis
     () => extractHandbookDocument("<html><body><main>Only content</main></body></html>"),
     /Expected handbook HTML to include nav and main regions/,
   );
+});
+
+test("audited accuracy fixes remain encoded in handbook sources", async () => {
+  const workflow = await readFile("src/handbook/documents/practice-workflow-setup.ts", "utf8");
+  const buildRelease = await readFile("src/handbook/documents/practice-build-release.ts", "utf8");
+  const operationsGenerator = await readFile("scripts/generate-operations-handbooks.mjs", "utf8");
+
+  assert.match(workflow, /settings\.json은 MCP 서버의 활성화·승인/);
+  assert.match(workflow, /서버 정의는 담지 않습니다/);
+  assert.doesNotMatch(
+    workflow,
+    /~\/\.claude\/settings\.json<\/code>\(MCP 서버\)/,
+    "Claude Code MCP server definitions should not be documented as living in settings.json",
+  );
+
+  assert.match(buildRelease, /시스템 프로퍼티 &gt; OS 환경변수/);
+  assert.doesNotMatch(
+    buildRelease,
+    /커맨드라인 인자 &gt; 환경변수 &gt; application-\{profile\}/,
+    "Spring Boot precedence cheat sheet must not put OS environment variables above system properties",
+  );
+
+  assert.match(operationsGenerator, /DestinationCidrBlock: 10\.0\.0\.0\/16\\nGatewayId: local/);
+  assert.doesNotMatch(
+    operationsGenerator,
+    /abnormalOutput: "DestinationCidrBlock: 0\.0\.0\.0\/0\\nGatewayId: local/,
+    "AWS local routes are for VPC CIDR routes, not 0.0.0.0/0 default routes",
+  );
+});
+
+test("frontend SEO analytics handbook includes executable markup and measurement thresholds", async () => {
+  const seo = await readFile("public/handbook/engineering-frontend-seo-analytics-handbook.html", "utf8");
+
+  assert.match(seo, /application\/ld\+json/);
+  assert.match(seo, /FAQPage/);
+  assert.match(seo, /rel="canonical"/);
+  assert.match(seo, /rel="alternate"/);
+  assert.match(seo, /hreflang="ko"/);
+  assert.match(seo, /gtag\("event", "pricing_plan_selected"/);
+  assert.match(seo, /LCP p75 &lt;= 2\.5s/);
+  assert.match(seo, /INP p75 &lt;= 200ms/);
+  assert.match(seo, /CLS p75 &lt;= 0\.1/);
+});
+
+test("public handbook content does not retain audited obsolete examples", async () => {
+  const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
+
+  for (const file of publicFiles) {
+    const source = await readFile(path.join("public/handbook", file), "utf8");
+    assert.doesNotMatch(
+      source,
+      /~\/\.claude\/settings\.json[^<]*(?:MCP 서버|mcpServers)|mcpServers[^<]*settings\.json/,
+      `${file} should not document Claude Code MCP server definitions in settings.json`,
+    );
+  }
+
+  const operationsPlan = await readFile("docs/superpowers/plans/2026-06-29-operations-handbook-deep-practice-overhaul.md", "utf8");
+  assert.doesNotMatch(
+    operationsPlan,
+    /abnormalOutput: "DestinationCidrBlock: 0\.0\.0\.0\/0\\nGatewayId: local/,
+  );
+});
+
+test("LLM roadmap is an executable learning roadmap, not only an index", async () => {
+  const roadmap = await readFile("public/handbook/llm-roadmap-handbook.html", "utf8");
+
+  assert.match(roadmap, /4-WEEK BUILD ROADMAP/);
+  assert.match(roadmap, /week_1_prompt_contract/);
+  assert.match(roadmap, /messages\.create/);
+  assert.match(roadmap, /input_schema/);
+  assert.match(roadmap, /tool_use/);
+  assert.match(roadmap, /tool_result/);
+  assert.match(roadmap, /structured output schema/);
+  assert.match(roadmap, /eval gate/);
+});
+
+test("core LLM handbooks include concrete API control surfaces", async () => {
+  const requiredDocs = [
+    ["public/handbook/llm-prompting-handbook.html", ["messages.create", "structured output schema", "schema_failure_rate", "input_schema"]],
+    ["public/handbook/llm-rag-handbook.html", ["messages.create", "retrieval_trace", "tool_use", "tool_result"]],
+    ["public/handbook/llm-agents-tool-use-handbook.html", ["messages.create", "input_schema", "tool_use", "tool_result"]],
+    ["public/handbook/llm-evaluation-handbook.html", ["messages.create", "eval gate", "golden_dataset", "schema_valid"]],
+  ];
+
+  for (const [file, markers] of requiredDocs) {
+    const source = await readFile(file, "utf8");
+
+    for (const marker of markers) {
+      assert.match(source, new RegExp(marker), `${file} should include ${marker}`);
+    }
+  }
+});
+
+test("remaining LLM handbooks include A-grade operational artifacts", async () => {
+  const requiredDocs = [
+    ["public/handbook/llm-fundamentals-handbook.html", ["countTokens", "token_budget_guard", "cost_per_successful_answer"]],
+    ["public/handbook/llm-ai-native-work-standards-handbook.html", ["context_package", "verification_packet", "residual_risk_register"]],
+    ["public/handbook/llm-app-architecture-operations-handbook.html", ["model_gateway_call", "circuit_breaker", "fallback_routing"]],
+    ["public/handbook/llm-multimodal-realtime-handbook.html", ["realtime_session_config", "audio_turn_state", "multimodal_eval_case"]],
+    ["public/handbook/llm-model-customization-handbook.html", ["routeModel", "prompt_cache_key", "distillation_eval_gate"]],
+    ["public/handbook/llm-security-governance-handbook.html", ["prompt_injection_fixture", "policy_decision", "forbidden_context_exposure"]],
+    ["public/handbook/llm-portfolio-projects-handbook.html", ["portfolio_evidence_pack", "demo_trace_id", "interview_defense_script"]],
+  ];
+
+  for (const [file, markers] of requiredDocs) {
+    const source = await readFile(file, "utf8");
+
+    for (const marker of markers) {
+      assert.match(source, new RegExp(marker), `${file} should include ${marker}`);
+    }
+  }
+});
+
+test("operations handbooks include command evidence packets and abnormal interpretation", async () => {
+  const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
+  assert.ok(operationsGroup, "operations group should exist");
+
+  for (const item of operationsGroup.items) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+
+    assert.match(source, /ops_command_evidence_packet/, `${item.file} should include an operations evidence packet`);
+    assert.match(source, /normal_signal/, `${item.file} should include a normal signal`);
+    assert.match(source, /abnormal_signal/, `${item.file} should include an abnormal signal`);
+    assert.match(source, /mitigation_then_permanent_fix/, `${item.file} should include mitigation and permanent fix guidance`);
+  }
+});
+
+test("AI Native training handbooks include sample outputs and pass-fail review packets", async () => {
+  for (const item of AI_NATIVE_TRAINING_HANDBOOKS) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+
+    assert.match(source, /training_sample_output/, `${item.file} should include a filled sample output packet`);
+    assert.match(source, /pass_criteria/, `${item.file} should define pass criteria`);
+    assert.match(source, /failure_diagnosis/, `${item.file} should include failure diagnosis`);
+    assert.match(source, /reviewer_note/, `${item.file} should include reviewer notes`);
+  }
+});
+
+test("engineering context handbooks include metric anchor packets", async () => {
+  const contextGroup = HANDBOOK_GROUPS.find((group) => group.key === "engineering-context");
+  assert.ok(contextGroup, "engineering-context group should exist");
+
+  for (const item of contextGroup.items) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+
+    assert.match(source, /context_metric_anchor_packet/, `${item.file} should include a metric anchor packet`);
+    assert.match(source, /baseline_metric/, `${item.file} should define a baseline metric`);
+    assert.match(source, /decision_threshold/, `${item.file} should define a decision threshold`);
+    assert.match(source, /before_after_evidence/, `${item.file} should include before/after evidence`);
+  }
 });
 
 test("catalog exposes only the selected non-carbon handbook groups", () => {
@@ -250,7 +403,7 @@ test("llm menu covers multimodal, customization, security, governance, output si
   const requiredSourceMarkers = [
     ["src/handbook/documents/llm-multimodal-realtime.ts", ["MULTIMODAL REQUEST ENVELOPE", "vision extraction", "audio turn-taking", "realtime session", "multimodal eval"]],
     ["src/handbook/documents/llm-model-customization.ts", ["CUSTOMIZATION DECISION MATRIX", "prompt vs RAG vs fine-tuning", "distillation", "routing policy", "reasoning effort"]],
-    ["src/handbook/documents/llm-security-governance.ts", ["OWASP LLM TOP 10 COVERAGE", "Insecure Output Handling", "Supply Chain Vulnerabilities", "Model Theft"]],
+    ["src/handbook/documents/llm-security-governance.ts", ["OWASP LLM TOP 10 COVERAGE", "Improper Output Handling", "Supply Chain", "Unbounded Consumption", "System Prompt Leakage"]],
     ["src/handbook/documents/llm-app-architecture-operations.ts", ["DATA RESIDENCY", "provider due diligence", "routing policy", "reasoning_budget"]],
     ["src/handbook/documents/llm-prompting.ts", ["OUTPUT SINK SECURITY", "HTML/Markdown", "SQL", "shell command"]],
     ["src/handbook/documents/llm-evaluation.ts", ["ONLINE FEEDBACK LOOP", "human-labeled holdout", "thumbs feedback", "production drift"]],
@@ -400,6 +553,20 @@ test("career bundles include interview readiness gates and evidence-driven drill
   assert.doesNotMatch(source, /열심히 했습니다/);
   assert.doesNotMatch(source, /공부했습니다/);
   assert.doesNotMatch(source, /잘 모릅니다만 열심히/);
+});
+
+test("career bundles include before-after answer packets with concrete outputs", async () => {
+  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+
+  for (const file of careerFiles) {
+    const source = await readFile(path.join("public", "handbook", file), "utf8");
+
+    assert.match(source, /career_output_packet/, `${file} should include a reusable career output packet`);
+    assert.match(source, /before_answer/, `${file} should show the weak answer to avoid`);
+    assert.match(source, /after_answer/, `${file} should show the improved answer shape`);
+    assert.match(source, /evidence_to_attach/, `${file} should require artifacts attached to claims`);
+    assert.match(source, /interview_use/, `${file} should explain how to use the packet in interviews`);
+  }
 });
 
 test("engineering handbook menu splits backend core and architecture into separate items", async () => {
@@ -816,6 +983,31 @@ test("public handbook directory contains no carbon domain documents outside the 
       /탄소|CBAM|K-ETS|carbon-accounting|vcm-registry|lca-handbook|\bcarbon\b|\bVCM\b|\bLCA\b/i,
       `${file} should not contain removed carbon-domain examples`,
     );
+  }
+});
+
+test("catalog documents classify every public handbook file with an explicit status", async () => {
+  const publicFiles = (await readdir("public/handbook")).filter(
+    (file) => file.endsWith(".html") && file !== "index.html",
+  );
+  const validStatuses = new Set(["official", "source", "archive"]);
+  const filesByStatus = new Map();
+
+  for (const document of CATALOG_DOCUMENTS) {
+    assert.ok(validStatuses.has(document.status), `${document.file} has unknown status: ${document.status}`);
+    assert.ok(!filesByStatus.has(document.file), `${document.file} is classified twice`);
+    filesByStatus.set(document.file, document.status);
+  }
+
+  for (const file of publicFiles) {
+    assert.ok(filesByStatus.has(file), `${file} is missing a status classification`);
+  }
+
+  const officialFiles = CATALOG_DOCUMENTS.filter((document) => document.status === "official");
+  assert.equal(officialFiles.length, HANDBOOK_ITEMS.length);
+
+  for (const item of [...SOURCE_HANDBOOKS, ...ARCHIVE_HANDBOOKS]) {
+    assert.ok(item.statusNote, `${item.file} should explain why it is not official`);
   }
 });
 
@@ -1714,7 +1906,8 @@ test("handbook page notifies the app after document content renders for scroll r
   assert.match(pageSource, /onReady\?: \(itemId: string\) => void/);
   assert.match(pageSource, /export function HandbookPage\(\{ item, onReady(?:, onSelectHandbook)? \}/);
   assert.match(pageSource, /onReady\?\.\(item\.id\)/);
-  assert.match(pageSource, /\[document, item\.id, onReady\]/);
+  assert.match(pageSource, /loadedItemId !== item\.id/);
+  assert.match(pageSource, /\[document, item\.id, loadedItemId, onReady\]/);
 });
 
 test("app uses the Dev Handbook title with fixed top navigation", async () => {
@@ -1810,7 +2003,8 @@ test("handbook page exposes mobile learning tools for recall and section search"
     readFile("src/handbook/handbook.css", "utf8"),
   ]);
 
-  assert.match(pageSource, /studyCardStoragePrefix = "dev-handbook:study-card:"/);
+  assert.match(pageSource, /from "\.\/srs\.mjs"/);
+  assert.match(pageSource, /from "\.\/studyStorage\.mjs"/);
   assert.match(pageSource, /function LearningSearchPanel/);
   assert.match(pageSource, /function StudyCardsPanel/);
   assert.match(pageSource, /learningFilters[\s\S]*개념[\s\S]*실무 체크리스트|learningFilters[\s\S]*체크리스트/s);

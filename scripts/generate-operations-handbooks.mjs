@@ -1408,8 +1408,8 @@ const practiceLabsByFile = {
       command: "aws ec2 describe-route-tables --filters Name=association.subnet-id,Values=subnet-private-a",
       purpose: "0.0.0.0/0가 NAT로 향하는지, 더 구체적인 prefix가 잘못 잡히지 않았는지 확인한다.",
       normalOutput: "DestinationCidrBlock: 0.0.0.0/0\nNatGatewayId: nat-12345\nState: active",
-      abnormalOutput: "DestinationCidrBlock: 0.0.0.0/0\nGatewayId: local\nState: active",
-      interpretation: "private subnet의 egress next hop이 NAT가 아니어서 외부 API 호출이 실패한다.",
+      abnormalOutput: "DestinationCidrBlock: 10.0.0.0/16\nGatewayId: local\nState: active\n# 0.0.0.0/0 라우트 없음",
+      interpretation: "비정상에는 VPC CIDR을 향하는 local 라우트만 있고 0.0.0.0/0 default route가 없다. egress next hop이 정의되지 않아 외부 API 호출이 실패한다. local 라우트는 VPC CIDR 대상이며 0.0.0.0/0에는 붙지 않는다.",
       mitigation: "임시로 올바른 NAT route를 연결하고 결제 API allowlist 영향도 확인한다.",
       permanentFix: "subnet별 route table review와 egress dependency map을 release checklist에 추가한다.",
       verification: "flow log ACCEPT, NAT bytes 증가, 결제 API synthetic check 성공.",
@@ -1776,6 +1776,32 @@ ${renderRows(terms)}
 const renderAnswerShape = (items) =>
   items.map((item, index) => `          ${index + 1}. ${escapeHtml(item)}<br>`).join("\n");
 
+const renderOperationsEvidencePacket = ({ doc, playbook }) => {
+  const primaryEvidence = playbook.evidenceRows[0] ?? defaultEvidenceRows[0];
+  const primaryCommand = playbook.commandRows[0] ?? ["확인", "dashboard, log, trace, runbook", "사용자 영향과 최근 변경을 먼저 고정한다."];
+  const firstIncident = playbook.incidentRows[0] ?? ["T+00", "증상과 영향 범위를 기록", "원인 추측 전에 사용자 영향을 고정한다."];
+  const lastIncident = playbook.incidentRows.at(-1) ?? ["T+60", "runbook diff 작성", "재발 방지 조치로 닫는다."];
+
+  return `        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: ${escapeHtml(doc.file)}
+  playbook: ${escapeHtml(playbook.marker)}
+  hypothesis: "${escapeHtml(primaryEvidence[0])} 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "${escapeHtml(primaryCommand[1])}"
+  normal_signal: "${escapeHtml(primaryCommand[2])}"
+  abnormal_signal: "${escapeHtml(firstIncident[1])}"
+  mitigation_then_permanent_fix:
+    mitigation: "${escapeHtml(firstIncident[2])}"
+    permanent_fix: "${escapeHtml(lastIncident[2])}"
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>`;
+};
+
 const hasFinalConsonant = (value) => {
   const last = [...value.trim()].pop();
   if (!last) return false;
@@ -1939,6 +1965,7 @@ ${detail.readinessPacketTemplate || detail.incidentPacketTemplate ? `        <h3
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
 ${renderRows(playbook.commandRows)}
         </table>
+${renderOperationsEvidencePacket({ doc, playbook })}
 ${deepDiveRows.length > 0 ? `        <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
 ${renderRows(deepDiveRows)}

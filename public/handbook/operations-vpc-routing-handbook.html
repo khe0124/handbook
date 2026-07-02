@@ -141,6 +141,24 @@
           <tr><td>정책</td><td>security group outbound/inbound, NACL ephemeral port, firewall rule</td><td>SG는 stateful, NACL은 stateless라는 차이를 반영한다.</td></tr>
           <tr><td>패킷 증거</td><td>flow log ACCEPT/REJECT, NAT bytes, DNS query log</td><td>막힌 위치가 route인지 policy인지 DNS인지 분리한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-vpc-routing-handbook.html
+  playbook: VPC ROUTING EVIDENCE PLAYBOOK
+  hypothesis: "CIDR / Subnet 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "route table destination/target, longest prefix match, propagated route 확인"
+  normal_signal: "0.0.0.0/0와 더 구체적인 prefix의 우선순위를 본다."
+  abnormal_signal: "private subnet batch가 외부 결제 API timeout"
+  mitigation_then_permanent_fix:
+    mitigation: "route, SG, NACL, DNS, NAT saturation을 순서대로 확인한다."
+    permanent_fix: "다음 외부 연동 전에 경로와 비용을 사전 리뷰한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>Route miss</td><td>destination route 없음, 잘못된 NAT/IGW/TGW target, 더 구체적인 route 우선</td><td>패킷이 어느 next hop으로 가는지부터 확인한다.</td></tr>
@@ -164,9 +182,10 @@
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>DestinationCidrBlock: 0.0.0.0/0
 NatGatewayId: nat-12345
-State: active</code></pre></td><td><pre><code>DestinationCidrBlock: 0.0.0.0/0
+State: active</code></pre></td><td><pre><code>DestinationCidrBlock: 10.0.0.0/16
 GatewayId: local
-State: active</code></pre></td><td>private subnet의 egress next hop이 NAT가 아니어서 외부 API 호출이 실패한다.</td></tr>
+State: active
+# 0.0.0.0/0 라우트 없음</code></pre></td><td>비정상에는 VPC CIDR을 향하는 local 라우트만 있고 0.0.0.0/0 default route가 없다. egress next hop이 정의되지 않아 외부 API 호출이 실패한다. local 라우트는 VPC CIDR 대상이며 0.0.0.0/0에는 붙지 않는다.</td></tr>
           </table>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>

@@ -145,6 +145,24 @@
           <tr><td>Azure 경로</td><td>Azure DNS, Front Door health, Application Gateway probe, AKS/App Service, Azure SQL metrics</td><td>Front Door와 App Gateway의 책임 경계를 본다.</td></tr>
           <tr><td>비용/egress</td><td>NAT Gateway bytes, data transfer, log ingestion, managed service autoscale</td><td>비용 급증도 최근 변경과 같은 timeline에 놓는다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-cloud-scenarios-handbook.html
+  playbook: AWS AZURE OPERATIONS PLAYBOOK
+  hypothesis: "Edge / Ingress 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics"
+  normal_signal: "CloudFront 403과 ALB 5xx를 분리한다."
+  abnormal_signal: "edge 403 증가 또는 NAT 비용 4배 증가"
+  mitigation_then_permanent_fix:
+    mitigation: "WAF rule, origin policy, egress route, retry storm을 본다."
+    permanent_fix: "서비스명 암기가 아니라 책임 경계로 정리한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>CloudFront / Front Door 403</td><td>WAF rule, origin policy, signed URL/cookie, geo rule</td><td>edge 차단과 origin 차단을 분리한다.</td></tr>

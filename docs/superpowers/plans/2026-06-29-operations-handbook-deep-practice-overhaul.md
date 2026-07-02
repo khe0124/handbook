@@ -241,7 +241,7 @@ Extend `practiceLabsByFile`:
       command: "aws ec2 describe-route-tables --filters Name=association.subnet-id,Values=subnet-private-a",
       purpose: "0.0.0.0/0가 NAT로 향하는지, 더 구체적인 prefix가 잘못 잡히지 않았는지 확인한다.",
       normalOutput: "DestinationCidrBlock: 0.0.0.0/0\nNatGatewayId: nat-12345\nState: active",
-      abnormalOutput: "DestinationCidrBlock: 0.0.0.0/0\nGatewayId: local\nState: active",
+      abnormalOutput: "DestinationCidrBlock: 10.0.0.0/16\nGatewayId: local\nState: active\n# 0.0.0.0/0 라우트 없음",
       interpretation: "private subnet의 egress next hop이 NAT가 아니어서 외부 API 호출이 실패한다.",
       mitigation: "임시로 올바른 NAT route를 연결하고 결제 API allowlist 영향도 확인한다.",
       permanentFix: "subnet별 route table review와 egress dependency map을 release checklist에 추가한다.",

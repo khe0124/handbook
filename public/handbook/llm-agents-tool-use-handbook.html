@@ -83,6 +83,39 @@ user goal → planner proposes steps → app validates allowed actions<br>
 <tr><td>rollback</td><td>실패 시 되돌릴 방법</td><td>부분 실행 상태</td></tr>
 <tr><td>audit-log-chain</td><td>actor, tool, args hash, result hash 기록</td><td>사후 추적 불가</td></tr>
 </table>
+<pre class="snippet-card"><code>const turn = await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 1000,
+  system: "Plan one approved step at a time. Never execute write tools without approval_id.",
+  messages: [{ role: "user", content: goal }],
+  tools: [{
+    name: "send_email_draft",
+    description: "Create a draft email preview. It does not send externally.",
+    input_schema: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        recipient_id: { type: "string" },
+        template: { type: "string", enum: ["renewal", "follow_up"] },
+        approval_id: { type: ["string", "null"] }
+      },
+      required: ["recipient_id", "template", "approval_id"]
+    }
+  }]
+});
+
+for (const block of turn.content) {
+  if (block.type !== "tool_use") continue;
+  assertAllowedTool(block.name, actor);
+  assertValidArgs(block.input);
+  const preview = await createDraftPreview(block.input);
+  const tool_result = {
+    type: "tool_result",
+    tool_use_id: block.id,
+    content: JSON.stringify({ preview, requires_approval: true })
+  };
+  await appendAgentAudit({ actor_id: actor.id, tool_use: block, tool_result });
+}</code></pre>
 </section>
 
 <section id="ch4">

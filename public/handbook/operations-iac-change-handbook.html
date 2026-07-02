@@ -141,6 +141,24 @@
           <tr><td>상태</td><td>state lock, workspace, drift detection, import 대상 확인</td><td>state 조작은 변경 티켓과 백업이 필요하다.</td></tr>
           <tr><td>검증</td><td>cloud resource readback, route/listener/SG/IAM 실제 상태 확인</td><td>plan 결과와 실제 리소스를 대조한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-iac-change-handbook.html
+  playbook: IAC CHANGE REVIEW PLAYBOOK
+  hypothesis: "Plan diff 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "terraform plan -out, terraform show, provider/module version diff"
+  normal_signal: "리소스 교체와 권한 확대를 먼저 표시한다."
+  abnormal_signal: "plan에서 LB replace 또는 SG open 변경"
+  mitigation_then_permanent_fix:
+    mitigation: "downtime, DNS, target group, 보안 영향 범위를 먼저 계산한다."
+    permanent_fix: "운영 hotfix가 반복되면 프로세스 문제다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

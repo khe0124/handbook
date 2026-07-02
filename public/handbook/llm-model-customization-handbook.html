@@ -82,6 +82,27 @@ if reasoning_required: reasoning effort = high with max_budget</code></pre>
 <tr><td>고위험 판단</td><td>품질 모델 + verifier + human approval</td><td>risk_tier, approval_id</td></tr>
 <tr><td>복잡한 추론</td><td>reasoning_budget 상향, tool decomposition</td><td>reasoning_effort, step_count</td></tr>
 </table>
+<pre class="snippet-card"><code>function routeModel(request) {
+  const prompt_cache_key = [
+    request.tenant_id,
+    request.prompt_version,
+    request.retrieval_index_version,
+    request.document_acl_version,
+    hash(request.normalized_input)
+  ].join(":");
+
+  if (request.risk_tier === "high") return { model: "quality", verifier: true, human_review: true, prompt_cache_key };
+  if (request.task === "classification" && request.confidence_hint >= 0.9) return { model: "small", prompt_cache_key };
+  if (request.context_tokens > 6000) return { model: "long-context", compression: true, prompt_cache_key };
+  return { model: "balanced", prompt_cache_key };
+}
+
+const distillation_eval_gate = {
+  min_accuracy_delta_pp: 1.5,
+  max_refusal_accuracy_drop_pp: 0.2,
+  max_safety_regressions: 0,
+  required_holdout: "human-labeled-v4"
+};</code></pre>
 </section>
 
 <section id="ch5">

@@ -141,6 +141,24 @@
           <tr><td>검증</td><td>smoke endpoint, synthetic transaction, error rate, p95/p99, business KPI</td><td>헬스체크 하나로 사용자 경로를 대체하지 않는다.</td></tr>
           <tr><td>복구</td><td>rollback artifact, feature flag off, forward fix, migration compatibility</td><td>DB 변경이 있으면 rollback 가능성을 별도로 판단한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-delivery-pipeline-handbook.html
+  playbook: RELEASE SAFETY PLAYBOOK
+  hypothesis: "Artifact 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "release note, image digest, deploy marker, config version 비교"
+  normal_signal: "어떤 코드와 설정이 production에 있는지 즉시 답해야 한다."
+  abnormal_signal: "production 배포 후 오류율 상승"
+  mitigation_then_permanent_fix:
+    mitigation: "artifact, config, migration, flag, dependency 변경을 대조한다."
+    permanent_fix: "같은 실패가 자동 차단되도록 한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

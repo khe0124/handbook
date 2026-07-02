@@ -106,6 +106,24 @@ data_to_collect:
 security_review_needed:
 portfolio_evidence:
 follow_up_test:</code></pre>
+<h3>MARKER: artifact-ready — operations command evidence packet</h3>
+<pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-ai-llm-operations-handbook.html
+  playbook: AI LLM OPERATIONS RUNBOOK
+  hypothesis: "LLM 품질 하락이 prompt, retrieval index, provider, policy 중 어디에서 시작됐는가"
+  command_or_probe: "dashboard: schema_success, groundedness, citation_precision, tool_blocked, cost_per_successful_answer, fallback_rate"
+  normal_signal: "quality SLI가 release baseline 안에 있고 fallback_rate와 cost가 budget 안에 있다"
+  abnormal_signal: "새 prompt/index/model route 이후 schema failure 또는 wrong citation이 동시에 증가한다"
+  mitigation_then_permanent_fix:
+    mitigation: "flag off, prompt rollback, provider fallback, index rollback 중 blast radius가 가장 작은 조치를 실행한다"
+    permanent_fix: "golden dataset fixture, citation precision gate, cost budget alert, runbook diff를 추가한다"
+  evidence_to_attach:
+    - trace_id
+    - prompt_version
+    - model_route
+    - retrieval_index_version
+    - judge_result
+    - dashboard_snapshot</code></pre>
 <table>
 <tr><th>실무 체크리스트</th><th>확인</th></tr>
 <tr><td>recent release</td><td>prompt, model, retrieval index, parser, policy 중 최근 변경을 확인한다</td></tr>

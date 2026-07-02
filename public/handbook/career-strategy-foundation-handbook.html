@@ -15,6 +15,7 @@
   <a href="#career-answer-rubric"><span class="code">RUBRIC</span>답변 품질</a>
   <a href="#career-pressure-loop"><span class="code">LOOP</span>압박 대응</a>
   <a href="#career-evidence-packet"><span class="code">EVIDENCE</span>증거 패킷</a>
+  <a href="#career-output-packet"><span class="code">OUTPUT</span>답변 산출물</a>
   <a href="#career-final-drill"><span class="code">DRILL</span>최종 점검</a>
   <a href="#doc-interview"><span class="code">DOC</span>기술면접 개요</a>
   <a href="#doc-company"><span class="code">DOC</span>회사·직무별 면접 전략</a>
@@ -124,6 +125,27 @@
 <tr><td>핵심 산출물</td><td>직무 JD 표시본, 프로젝트별 기여 범위, 대표 PR·ADR·지표·장애기록·QA ticket, 회사 유형별 역질문</td><td>주장 뒤에 바로 붙일 수 있는 근거로 정리한다.</td></tr>
 <tr><td>공통 증거</td><td>PR·ADR·지표·장애기록·QA ticket</td><td>기술 판단, 협업 합의, 결과 확인을 한 번에 보여준다.</td></tr>
 <tr><td>답변 카드</td><td>질문, 30초 결론, 90초 확장, 압박 꼬리질문, 위험 표현, 대체 문장</td><td>면접 전날 같은 질문을 다시 말하며 품질을 점검한다.</td></tr>
+</table>
+</section>
+
+<section id="career-output-packet">
+<div class="ch-head"><span class="ch-code">OUTPUT</span><h2>CAREER OUTPUT PACKET</h2></div>
+<p class="lede">A급 답변은 좋은 의도보다 개선 전후가 분명합니다. 아래 packet을 답변 카드마다 하나씩 채워, 약한 표현을 실제 산출물과 검증 가능한 문장으로 바꿉니다.</p>
+<pre class="snippet-card"><code>career_output_packet:
+  document: career-strategy-foundation
+  target_gate: "면접 전략·포지셔닝 답변 게이트"
+  before_answer: "도구명, 역할명, 감상 중심으로 말해 기여 범위와 결과가 흐릿한 답변"
+  after_answer: "질문 재정의 → 본인 결정 범위 → 판단 기준 → 버린 대안 → 전후 증거 → 남은 리스크 순서의 답변"
+  evidence_to_attach:
+    - 직무 JD 표시본
+    - 프로젝트별 기여 범위
+    - PR/ADR/metric/incident record/QA ticket
+    - reviewer_follow_up_answer
+  interview_use: "30초 결론은 after_answer의 첫 두 줄로 말하고, 90초 확장은 evidence_to_attach와 pressure response로 확장한다"</code></pre>
+<table>
+<tr><th>Before</th><th>After</th><th>검증 질문</th></tr>
+<tr><td>“지원 직무와 회사 유형에 맞춰 경험 경계를 분명히 말하고, 약한 영역을 검증 계획으로 전환한다.”를 감상처럼 길게 설명한다.</td><td>지원 직무에서 가장 강한 증거 3개와 아직 약한 영역 2개를 분리해 말한다.</td><td>본인 결정, 수치, 산출물, 실패 조건이 한 문장 안에 보이는가?</td></tr>
+<tr><td>“팀에서 처리했습니다”처럼 소유권이 흐릿하다.</td><td>회사 문제를 먼저 재정의하고, 관련 프로젝트 증거 하나와 부족한 영역의 검증 계획 하나로 답변을 좁힌다.</td><td>직접 경험과 설계 지식의 경계가 분리되어 있는가?</td></tr>
 </table>
 </section>
 

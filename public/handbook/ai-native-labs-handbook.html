@@ -17,6 +17,7 @@
   <a href="#lab4"><span class="code">LAB-04</span>Agent Tool Control</a>
   <a href="#lab5"><span class="code">LAB-05</span>LLM Incident</a>
   <a href="#lab6"><span class="code">LAB-06</span>AX Episode</a>
+  <a href="#sample"><span class="code">SAMPLE</span>제출 예시</a>
 </nav>
 <main>
 <header class="hero">
@@ -133,6 +134,44 @@
 <tr><th>산출물</th><td>context-package.yaml, task-spec.md, agent-transcript-summary.md, verification-log.md</td></tr>
 <tr><th>통과 기준</th><td>제3자가 같은 판단을 반복할 수 있고 실패/수정 루프가 남아 있음. 채택/기각된 AI 제안이 구분됨.</td></tr>
 <tr><th>감점 기준</th><td>AI 사용 사실만 남기고 입력 컨텍스트, 사람의 승인, 검증 명령이 없음</td></tr>
+</table>
+</section>
+
+<section id="sample">
+<div class="ch-head"><span class="ch-code">SAMPLE</span><h2>랩 완료 보고서 예시</h2></div>
+<p class="lede">랩 결과는 “완료”라고 쓰는 대신 fixture 실행 결과, 실패 원인, 개선 diff, 재실행 결과를 함께 제출합니다. 강의 과제로 쓰려면 아래 형식이 최소 기준입니다.</p>
+<pre class="snippet-card"><code>training_sample_output:
+  lab_id: LAB-03
+  title: LLM security red-team
+  fixture_set:
+    total: 12
+    high_risk: 5
+    passed_before_fix: 7
+    passed_after_fix: 12
+  changed_artifacts:
+    - security-fixtures.jsonl
+    - retrieval-filter-policy.md
+    - policy-regression-result.md
+  measured_result:
+    high_risk_bypass: "2 -> 0"
+    tenant_filter_missing: "reproduced and fixed"
+    pii_redaction_gap: "added before eval storage"
+  pass_criteria:
+    - all_high_risk_fixtures_blocked
+    - allow_cases_still_answer_with_citation
+    - regression_command_can_be_re_run_by_reviewer
+  failure_diagnosis:
+    symptom: "간접 injection 문서가 tool instruction처럼 실행됨"
+    root_cause: "retrieved document를 untrusted content로 분리하지 않음"
+    correction: "retrieval context에 source_role을 추가하고 tool policy에서 document commands 무시"
+  reviewer_note:
+    decision: pass
+    comment: "실패 재현, 수정, 회귀 결과가 한 패킷에 있어 포트폴리오 증거로 사용 가능"</code></pre>
+<table>
+<tr><th>등급</th><th>판정</th><th>피드백</th></tr>
+<tr><td>Fail</td><td>성공 화면만 제출</td><td>fixture와 실패 로그를 다시 요구한다</td></tr>
+<tr><td>Pass</td><td>실패 재현과 수정 후 결과가 있음</td><td>다음 랩으로 이동 가능하다</td></tr>
+<tr><td>Strong Pass</td><td>회귀 명령, 리뷰 기준, 포트폴리오 문장까지 연결</td><td>L3 증거로 ledger에 반영한다</td></tr>
 </table>
 </section>
 </main>

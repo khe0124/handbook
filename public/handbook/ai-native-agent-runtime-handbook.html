@@ -15,6 +15,7 @@
   <a href="#ch4"><span class="code">AGENT-04</span>Idempotency</a>
   <a href="#ch5"><span class="code">AGENT-05</span>Audit/Replay</a>
   <a href="#ch6"><span class="code">AGENT-06</span>Trust Boundary</a>
+  <a href="#sample"><span class="code">SAMPLE</span>Runtime Review</a>
 </nav>
 <main>
 <header class="hero">
@@ -108,6 +109,48 @@
 <tr><td>network scope</td><td>외부 네트워크 접근이 필요한가</td></tr>
 <tr><td>data retention</td><td>도구 제공자가 입력을 저장하는가</td></tr>
 <tr><td>human override</td><td>실패 시 사람이 중단/되돌릴 수 있는가</td></tr>
+</table>
+</section>
+
+<section id="sample">
+<div class="ch-head"><span class="ch-code">SAMPLE</span><h2>Agent runtime 리뷰 예시</h2></div>
+<p class="lede">Agent runtime 산출물은 “도구를 호출했다”가 아니라, 위험한 호출을 승인·재시도·감사·재생할 수 있음을 보여줘야 합니다.</p>
+<pre class="snippet-card"><code>training_sample_output:
+  episode_id: agent_runtime_invoice_2026_07_02
+  goal: "미납 고객에게 청구서 초안을 생성하고 승인 후 발송"
+  tool_calls:
+    - name: search_customer_account
+      risk: read_only
+      approval_id: null
+      result_hash: sha256:18aa...
+    - name: create_invoice_draft
+      risk: local_write
+      idempotency_key: invoice:c_392:2026_06
+      result_hash: sha256:91bf...
+    - name: send_invoice_email
+      risk: external_write
+      approval_id: appr_203
+      result_hash: sha256:aa27...
+  replay:
+    trace_file: replay-trace.json
+    deterministic_until: "external provider email id"
+    human_override: "kill_switch_invoice_email"
+  pass_criteria:
+    - every_external_write_has_approval_id
+    - retry_policy_distinguishes_read_timeout_write_timeout_and_validation_error
+    - replay_trace_contains_prompt_context_tool_input_and_verification_hashes
+  failure_diagnosis:
+    symptom: "timeout 후 이메일이 두 번 발송될 수 있음"
+    root_cause: "external write에 idempotency key와 provider delivery lookup이 없음"
+    correction: "send_invoice_email adapter에 idempotency_key와 delivery_status_check 추가"
+  reviewer_note:
+    decision: revise_then_pass
+    comment: "승인 ledger는 충분하나 외부 발송 도구의 중복 방지 증거가 보강되어야 함"</code></pre>
+<table>
+<tr><th>검토 지점</th><th>통과 기준</th><th>반려 신호</th></tr>
+<tr><td>Approval</td><td>위험도별 승인 정책과 approval_id가 남는다</td><td>모든 tool call을 같은 권한으로 실행한다</td></tr>
+<tr><td>Idempotency</td><td>외부 쓰기는 중복 부작용을 막는다</td><td>timeout을 무조건 retry한다</td></tr>
+<tr><td>Replay</td><td>입력, 출력, 해시, 검증 명령으로 재현 가능하다</td><td>최종 결과만 로그에 남긴다</td></tr>
 </table>
 </section>
 </main>

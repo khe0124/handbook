@@ -288,3 +288,47 @@ export const HANDBOOK_ITEMS = [
 ];
 
 export const DEFAULT_HANDBOOK_ID = "home";
+
+// ---------------------------------------------------------------------------
+// 문서 상태 카탈로그 (2026-07-02 개선 계획, docs/handbook-improvement-plan-2026-07-02.md)
+// official: 공식 메뉴(HANDBOOK_GROUPS)에 노출되는 학습·숙지 대상.
+// source: 공식 통합 문서에 병합된 원천. 메뉴 비노출, 통합 문서가 대체함.
+// archive: 현재 학습 경로에서 제외. operations 축으로 통합 예정.
+// ---------------------------------------------------------------------------
+
+const markStatus = (items, status, statusNote) =>
+  items.map((item) => (statusNote ? { ...item, status, statusNote } : { ...item, status }));
+
+export const SOURCE_HANDBOOKS = [
+  ...markStatus(INTERVIEW_HANDBOOKS, "source", "career-* 번들로 병합"),
+  ...markStatus(PERSONAL_HANDBOOKS, "source", "career-* 번들로 병합"),
+  ...markStatus(BACKEND_HANDBOOKS, "source", "engineering-* 백엔드 번들로 병합"),
+  ...markStatus(FRONTEND_HANDBOOKS, "source", "engineering-frontend-* 번들로 병합"),
+  ...markStatus(AX_HANDBOOKS, "source", "practice-ax-* 번들로 병합"),
+  ...markStatus(DESIGN_HANDBOOKS, "source", "practice-design-* 번들로 병합"),
+  ...markStatus(CHEAT_SHEETS, "source", "practice-cheat-sheets로 병합"),
+  ...markStatus(PRACTICAL_GUIDES, "source", "practice-workflow-setup·practice-build-release로 병합"),
+];
+
+export const ARCHIVE_HANDBOOKS = [
+  ...markStatus(NETWORK_HANDBOOKS, "archive", "operations 축으로 통합 예정"),
+  ...markStatus(DEVOPS_HANDBOOKS, "archive", "operations 축으로 통합 예정"),
+];
+
+function buildCatalogDocuments() {
+  const byFile = new Map();
+
+  for (const item of markStatus(HANDBOOK_ITEMS, "official")) {
+    byFile.set(item.file, item);
+  }
+
+  for (const item of [...SOURCE_HANDBOOKS, ...ARCHIVE_HANDBOOKS]) {
+    if (!byFile.has(item.file)) {
+      byFile.set(item.file, item);
+    }
+  }
+
+  return Array.from(byFile.values());
+}
+
+export const CATALOG_DOCUMENTS = buildCatalogDocuments();

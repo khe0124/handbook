@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 7780",
     "generate:handbook": "node scripts/handbook-html.mjs",
-    "test": "node --test scripts/handbook-html.test.mjs",
+    "test": "node --test scripts/*.test.mjs",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

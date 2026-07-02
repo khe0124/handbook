@@ -62,6 +62,21 @@ scope: ingest, retrieval, answer API, eval harness
 non_goals: billing UI, auth provider, vector DB 교체
 invariants: tenant ACL, schema validation, Korean answer style, latency budget
 required_evidence: eval dataset, security fixture, cost latency trace, reviewer finding</code></pre>
+<pre class="snippet-card"><code>context_package:
+  task_id: doc-intel-capstone-01
+  goal: "정책 질문에 citation과 no-answer를 적용한다"
+  invariants: ["tenant ACL", "schema validation", "latency p95 <= 4500ms"]
+  evidence_request: ["eval report", "security fixture", "trace id"]
+
+verification_packet:
+  tests: ["npm test", "eval:policy-golden-v3"]
+  manual_review: "reviewer approved 5 high-risk examples"
+  rejected_outputs: ["unsupported refund claim"]
+
+residual_risk_register:
+  risk: "ambiguous refund question still needs clarification"
+  owner: "doc-intel"
+  monitor: ["clarification_rate", "no_answer_precision"]</code></pre>
 </section>
 
 <section id="ch3">

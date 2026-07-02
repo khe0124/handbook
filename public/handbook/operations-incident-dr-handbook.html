@@ -141,6 +141,24 @@
           <tr><td>복구 선택</td><td>rollback 가능성, data loss risk, feature flag, traffic shift, restore point</td><td>코드 rollback과 데이터 restore를 혼동하지 않는다.</td></tr>
           <tr><td>종료</td><td>SLI recovery, synthetic check, business KPI, customer update</td><td>지표 회복 뒤에도 누락 고객 영향이 없는지 확인한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-incident-dr-handbook.html
+  playbook: INCIDENT RESPONSE DRILL PLAYBOOK
+  hypothesis: "Incident command 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "impact, SLI, recent deploy, dependency status, support trend"
+  normal_signal: "Sev와 커뮤니케이션 채널을 먼저 정한다."
+  abnormal_signal: "결제 성공률 급락"
+  mitigation_then_permanent_fix:
+    mitigation: "artifact, flag, dependency, payment ledger, queue lag를 본다."
+    permanent_fix: "비난이 아니라 시스템 변경으로 닫는다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>Commander</td><td>우선순위와 의사결정 담당</td><td>명령권이 분산되면 완화가 늦어진다.</td></tr>

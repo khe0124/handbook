@@ -107,7 +107,7 @@
 <tr><td>Euclidean distance</td><td>공간상 거리</td><td>차원과 scale에 민감</td></tr>
 <tr><td>ANN index</td><td>근사 최근접 검색</td><td>recall/latency/storage tradeoff</td></tr>
 </table>
-<div class="semantic-card concept-card"><span class="sc-label">VECTOR SIMILARITY BASICS</span><br>normalize vectors → choose metric → build index<br>→ evaluate recall@k and latency → inspect false positives<br>→ add filters, reranker, and drift monitoring</div>
+<div class="semantic-card process-card"><span class="sc-label">VECTOR SIMILARITY BASICS</span><br>normalize vectors → choose metric → build index<br>→ evaluate recall@k and latency → inspect false positives<br>→ add filters, reranker, and drift monitoring</div>
 <div class="callout warn"><span class="co-label">유사도는 정답이 아니다</span><p>가까운 벡터가 항상 좋은 결과라는 보장은 없습니다. 평가셋, negative examples, 도메인별 false positive 비용을 정하고 recall@k, precision@k, nDCG 같은 검색 품질 지표를 함께 봅니다.</p></div>
 </section>
 

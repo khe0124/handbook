@@ -141,6 +141,24 @@
           <tr><td>배포 리뷰</td><td>release note, rollback command, migration compatibility, metric gate</td><td>rollback이 불가능하면 사전 승인과 forward fix가 필요하다.</td></tr>
           <tr><td>답변 준비</td><td>incident packet, postmortem, dashboard screenshot, runbook diff</td><td>면접 답변은 증거 단위로 말한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-checklist-interview-handbook.html
+  playbook: OPERATIONS HANDOFF REVIEW PLAYBOOK
+  hypothesis: "Handoff 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "service catalog, dashboard, alert, runbook, DR plan, access review"
+  normal_signal: "문서와 실제 운영 화면이 일치해야 한다."
+  abnormal_signal: "새 팀이 첫 장애에서 owner와 runbook을 찾지 못함"
+  mitigation_then_permanent_fix:
+    mitigation: "운영 인수가 문서 전달로 끝났는지 확인한다."
+    permanent_fix: "운영 인수 실패를 프로세스에서 차단한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

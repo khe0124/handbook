@@ -111,7 +111,7 @@ dev set for prompt iteration · regression set for release gate · holdout human
 
 <section id="ch6">
 <div class="ch-head"><span class="ch-code">EVAL-06</span><h2>PROMPT REGRESSION · prompt-regression-gate</h2></div>
-<p class="lede">프롬프트 변경은 코드 변경입니다. 변경 전후 점수, 실패 케이스, 비용, 지연을 비교하고 임계값을 넘으면 릴리스를 막아야 합니다.</p>
+<p class="lede">프롬프트 변경은 코드 변경입니다. 변경 전후 점수, 실패 케이스, 비용, 지연을 비교하고 임계값을 넘으면 eval gate가 릴리스를 막아야 합니다.</p>
 <table>
 <tr><th>Gate</th><th>예시 기준</th><th>실패 시 조치</th></tr>
 <tr><td>retrieval recall@5</td><td>기준선보다 2%p 이상 하락 금지</td><td>chunk/rewrite/rerank 원인 분리</td></tr>
@@ -124,6 +124,42 @@ dev set for prompt iteration · regression set for release gate · holdout human
 <span class="sc-label">failure triage</span>
 prompt failure · retrieval failure · model failure · data freshness failure · permission policy failure · judge failure
 </div>
+<pre class="snippet-card"><code>const golden_dataset = await loadGoldenDataset("policy-golden-v3.jsonl");
+const results = [];
+
+for (const item of golden_dataset) {
+  const response = await client.messages.create({
+    model: process.env.CLAUDE_MODEL,
+    max_tokens: 900,
+    system: "Answer with citations and JSON only. Refuse when evidence is missing.",
+    messages: [{ role: "user", content: item.question }]
+  });
+
+  const parsed = parseJson(response);
+  results.push({
+    id: item.id,
+    prompt_version: "policy-answer@2026-07-02",
+    schema_valid: validateSchema(parsed).ok,
+    expected_evidence: item.expected_evidence,
+    actual_citations: parsed.citations,
+    groundedness: scoreGroundedness(parsed, item.expected_evidence),
+    latency_ms: response.usage?.latency_ms,
+    cost_usd: estimateCost(response.usage)
+  });
+}
+
+const gate = computeEvalGate(results, {
+  min_groundedness: 0.9,
+  min_schema_valid_rate: 0.99,
+  max_p95_latency_ms: 4500
+});
+
+recordReleaseDecision({
+  eval_gate: gate.pass ? "pass" : "block",
+  golden_dataset: "policy-golden-v3",
+  schema_valid: gate.metrics.schema_valid_rate,
+  failing_examples: gate.failures.slice(0, 5)
+});</code></pre>
 </section>
 
 <section id="ch7">

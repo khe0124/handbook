@@ -115,6 +115,53 @@ model proposes tool call → app validates schema and permission<br>
 → tool executes with least privilege → result is marked untrusted<br>
 → model summarizes with citation → audit log records actor/action/result
 </div>
+<pre class="snippet-card"><code>const answerSchema = {
+  name: "structured output schema",
+  type: "object",
+  additionalProperties: false,
+  required: ["summary", "risks", "citations", "refusal_reason"],
+  properties: {
+    summary: { type: "string", maxLength: 600 },
+    risks: {
+      type: "array",
+      items: {
+        type: "object",
+        required: ["level", "reason", "evidence"],
+        properties: {
+          level: { type: "string", enum: ["low", "medium", "high"] },
+          reason: { type: "string" },
+          evidence: { type: ["string", "null"] }
+        }
+      }
+    },
+    citations: { type: "array", items: { type: "string" } },
+    refusal_reason: { type: ["string", "null"] }
+  }
+};
+
+const response = await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 900,
+  system: "Extract only supported risks and return JSON for the structured output schema.",
+  messages: [{ role: "user", content: documentText }],
+  tools: [{
+    name: "lookup_evidence",
+    description: "Find approved source passages for a risk claim.",
+    input_schema: {
+      type: "object",
+      properties: { claim: { type: "string" } },
+      required: ["claim"]
+    }
+  }]
+});
+
+const validation = validateAgainstSchema(response, answerSchema);
+recordPromptMetrics({
+  prompt_version: "doc-analysis@2026-07-02",
+  schema_valid: validation.ok,
+  schema_failure_rate: validation.rollingFailureRate,
+  repair_attempted: validation.repaired
+});</code></pre>
 </section>
 
 <section id="ch5">

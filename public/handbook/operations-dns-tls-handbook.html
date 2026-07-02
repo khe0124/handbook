@@ -141,6 +141,24 @@
           <tr><td>인증서</td><td>openssl s_client -servername app.example.com -connect app.example.com:443 -showcerts</td><td>SNI와 chain 누락을 확인한다.</td></tr>
           <tr><td>사용자 경로</td><td>curl -v --resolve app.example.com:443:IP https://app.example.com/health</td><td>DNS 변경 전후 edge와 origin을 분리 테스트한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-dns-tls-handbook.html
+  playbook: DNS TLS CHANGE PLAYBOOK
+  hypothesis: "DNS record 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "dig +trace app.example.com, dig NS example.com, dig CAA example.com"
+  normal_signal: "권한 서버와 resolver cache를 분리한다."
+  abnormal_signal: "일부 고객만 인증서 오류 또는 구버전 IP 접속"
+  mitigation_then_permanent_fix:
+    mitigation: "resolver, TTL, chain, CDN binding을 먼저 본다."
+    permanent_fix: "갱신 실패가 장애가 되기 전에 알림이 와야 한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

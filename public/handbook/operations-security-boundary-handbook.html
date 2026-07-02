@@ -141,6 +141,24 @@
           <tr><td>권한 점검</td><td>IAM policy diff, last-used, access review, break-glass ticket</td><td>필요 권한과 사용된 권한의 차이를 본다.</td></tr>
           <tr><td>비밀 점검</td><td>secret manager version, rotation date, deploy consumer, log redaction</td><td>secret이 repo/image/log/frontend bundle에 남지 않아야 한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-security-boundary-handbook.html
+  playbook: SECURITY BOUNDARY OPERATIONS PLAYBOOK
+  hypothesis: "Public ingress 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "DNS record, LB listener, WAF rule, security group ingress 목록화"
+  normal_signal: "인터넷에서 접근 가능한 표면을 실제로 열거한다."
+  abnormal_signal: "비정상 admin export 또는 외부 스캔 급증"
+  mitigation_then_permanent_fix:
+    mitigation: "actor, source IP, action, resource, WAF/auth log를 묶는다."
+    permanent_fix: "보안 조치가 운영 절차로 남아야 한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

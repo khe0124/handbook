@@ -16,6 +16,7 @@
   <a href="#episode"><span class="code">KIT-05</span>Episode Log</a>
   <a href="#release"><span class="code">KIT-06</span>Release/Incident</a>
   <a href="#portfolio"><span class="code">KIT-07</span>Evidence Pack</a>
+  <a href="#sample"><span class="code">SAMPLE</span>작성 예시</a>
 </nav>
 <main>
 <header class="hero">
@@ -113,6 +114,43 @@ Interview story:</code></pre>
 <span class="co-label">나쁜 예</span>
 <p>"AI를 활용해 생산성을 높였습니다"는 증거가 아닙니다. 어떤 fixture를 통과했고 어떤 지표를 개선했는지까지 남겨야 합니다.</p>
 </div>
+</section>
+
+<section id="sample">
+<div class="ch-head"><span class="ch-code">SAMPLE</span><h2>템플릿 작성 예시</h2></div>
+<p class="lede">빈 템플릿은 출발점일 뿐입니다. 실제 제출물은 결정, 근거, 검증, 남은 위험이 채워져야 합니다.</p>
+<pre class="snippet-card"><code>training_sample_output:
+  template_bundle: ai_native_release_packet
+  context_package:
+    task_goal: "환불 정책 RAG 답변의 citation 오류를 줄인다"
+    forbidden_actions: ["policy document rewrite without owner approval"]
+    verification_commands: ["npm test -- rag-eval", "npm run build"]
+  eval_dataset:
+    rows: 42
+    required_tags: ["factual", "permission", "edge_case"]
+    holdout_owner: "support_ops"
+  security_fixture:
+    high_risk_cases: ["indirect_injection_policy_doc", "cross_tenant_refund_terms"]
+  episode_log:
+    human_approvals: ["changed chunking strategy", "blocked unsupported model fallback"]
+    rejected_suggestions: ["answer without citation when retrieval empty"]
+  pass_criteria:
+    - every_template_field_has_a_specific_value_or_explicit_na_reason
+    - verification_commands_and_evidence_files_are_linked
+    - residual_risk_is_not_empty_for_ai_output_changes
+  failure_diagnosis:
+    symptom: "템플릿은 채웠지만 reviewer가 재실행할 수 없음"
+    root_cause: "검증 명령과 데이터셋 버전이 빠져 있음"
+    correction: "dataset hash, runner command, baseline/candidate ids 추가"
+  reviewer_note:
+    decision: revise
+    comment: "맥락은 충분하나 holdout 데이터 소유자와 rollback 조건을 더 명확히 써야 함"</code></pre>
+<table>
+<tr><th>필드</th><th>통과하는 작성</th><th>반려되는 작성</th></tr>
+<tr><td>Context</td><td>범위, 금지 행동, 검증 명령이 구체적이다</td><td>“AI 기능 개선”처럼 넓게 쓴다</td></tr>
+<tr><td>Eval</td><td>데이터셋 버전과 기준선을 남긴다</td><td>샘플 답변만 붙인다</td></tr>
+<tr><td>Risk</td><td>남은 위험과 승인자를 적는다</td><td>문제 없음으로 닫는다</td></tr>
+</table>
 </section>
 </main>
 </div>

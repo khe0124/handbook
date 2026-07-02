@@ -163,6 +163,20 @@ reviewer_finding: reviews/security-and-eval-findings.md
 rejected_ai_output: rejected/schema-free-answer.md
 eval_report: reports/rag-eval-regression.md
 cost_latency_trace: traces/request-cost-latency.csv</code></pre>
+<pre class="snippet-card"><code>portfolio_evidence_pack:
+  demo_trace_id: trace_doc_intel_4821
+  api_contract: docs/api-contract.md
+  rag_trace: traces/rag-trace-refund-question.json
+  eval_report: reports/policy-golden-v3.md
+  security_fixture: fixtures/prompt-injection-and-tenant-isolation.jsonl
+  cost_latency_trace: traces/cost-latency-p95.csv
+  rejected_outputs: rejected/unsupported-claims.md
+
+interview_defense_script:
+  claim: "이 프로젝트는 챗 UI가 아니라 검증 가능한 RAG 시스템입니다."
+  evidence: "demo_trace_id로 prompt_version, retrieved chunks, citations, schema_valid, cost를 추적합니다."
+  tradeoff: "pgvector를 선택해 ACL과 백업을 Postgres 운영 체계에 묶었고, 대규모 ANN 튜닝은 후속 과제로 남겼습니다."
+  failure_story: "wrong citation 실패를 golden dataset에 추가하고 eval gate로 회귀를 막았습니다."</code></pre>
 <div class="serial-card">
 <span class="sc-label">portfolio interview signal</span>
 “AI로 빨리 만들었다”가 아니라 “AI 출력 중 무엇을 거절했고, 어떤 eval과 reviewer finding으로 최종 결과를 채택했는지”를 설명할 수 있어야 합니다.

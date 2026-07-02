@@ -1,11 +1,17 @@
 import { createRoot, type Root } from "react-dom/client";
-import { CheckCircle2, Eye, Menu, RotateCcw, Search, X } from "lucide-react";
+import { Eye, Menu, RotateCcw, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChecklistCard, type ChecklistItem } from "./ChecklistCard";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
 import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
+import { getPersonalNotes } from "./personalNotes.mjs";
 import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
+import { getQuestionBankCards } from "./questionBank.mjs";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
+import { gradeReview, isDue, isSettled } from "./srs.mjs";
+import { StudyDashboardPanel } from "./StudyDashboardPanel";
+import { StudyQueuePanel } from "./StudyQueuePanel";
+import { clearReviewsForItem, getTodayIso, loadReview, saveReview } from "./studyStorage.mjs";
 import type { HandbookDocumentContent } from "./types";
 import "./handbook.css";
 
@@ -40,6 +46,47 @@ type StudyCard = {
   answer: string;
 };
 
+type BankCard = {
+  id: string;
+  docId: string;
+  sectionId: string | null;
+  question: string;
+  answer: string;
+  type: "recall" | "judgment" | "critique";
+  tier: "must" | "good";
+};
+
+type CardReview = {
+  lastReviewedAt: string;
+  intervalDays: number;
+  ease: number;
+  lapses: number;
+};
+
+type SrsGrade = "again" | "hard" | "good";
+
+const bankCardTypeLabels: Record<BankCard["type"], string> = {
+  recall: "회상",
+  judgment: "판단",
+  critique: "크리틱",
+};
+
+const srsGradeButtons: Array<{ grade: SrsGrade; label: string }> = [
+  { grade: "again", label: "모름" },
+  { grade: "hard", label: "애매함" },
+  { grade: "good", label: "알았음" },
+];
+
+function toStudyCard(card: BankCard): StudyCard {
+  return {
+    id: card.id,
+    sectionId: card.sectionId ?? "",
+    label: `${card.tier === "must" ? "MUST" : "GOOD"} · ${bankCardTypeLabels[card.type]}`,
+    question: card.question,
+    answer: card.answer,
+  };
+}
+
 const learningFilters: Array<{ id: LearningFilter; label: string }> = [
   { id: "all", label: "전체" },
   { id: "concept", label: "개념" },
@@ -49,39 +96,14 @@ const learningFilters: Array<{ id: LearningFilter; label: string }> = [
   { id: "artifact", label: "산출물" },
 ];
 
-const studyCardStoragePrefix = "dev-handbook:study-card:";
+function loadCardReviews(itemId: string, cards: StudyCard[]) {
+  const reviews = new Map<string, CardReview | null>();
 
-function getStudyCardStorageKey(itemId: string, cardId: string) {
-  return `${studyCardStoragePrefix}${itemId}:${cardId}`;
-}
-
-function getStoredMasteredCardIds(itemId: string, cards: StudyCard[]) {
-  if (typeof window === "undefined") return new Set<string>();
-
-  return new Set(
-    cards
-      .filter((card) => {
-        try {
-          return window.localStorage.getItem(getStudyCardStorageKey(itemId, card.id)) === "mastered";
-        } catch {
-          return false;
-        }
-      })
-      .map((card) => card.id),
-  );
-}
-
-function setStoredMasteredCard(itemId: string, cardId: string, isMastered: boolean) {
-  try {
-    const key = getStudyCardStorageKey(itemId, cardId);
-    if (isMastered) {
-      window.localStorage.setItem(key, "mastered");
-    } else {
-      window.localStorage.removeItem(key);
-    }
-  } catch {
-    // Learning state should not block reading when storage is unavailable.
+  for (const card of cards) {
+    reviews.set(card.id, loadReview(itemId, card.id) as CardReview | null);
   }
+
+  return reviews;
 }
 
 function getPlainText(element: Element | null) {
@@ -269,16 +291,27 @@ function LearningSearchPanel({ sections }: { sections: LearningSection[] }) {
   );
 }
 
-function StudyCardsPanel({ itemId, cards }: { itemId: string; cards: StudyCard[] }) {
+function getCardDueLabel(review: CardReview | null, todayIso: string) {
+  if (!review) return "새 카드";
+  if (isDue(review, todayIso)) return "오늘 복습";
+  return `${review.intervalDays}일 간격`;
+}
+
+function StudyCardsPanel({ itemId, cards, isCurated }: { itemId: string; cards: StudyCard[]; isCurated: boolean }) {
+  const todayIso = getTodayIso();
   const [openCardIds, setOpenCardIds] = useState<Set<string>>(() => new Set());
-  const [masteredCardIds, setMasteredCardIds] = useState<Set<string>>(() => getStoredMasteredCardIds(itemId, cards));
+  const [reviews, setReviews] = useState<Map<string, CardReview | null>>(() => loadCardReviews(itemId, cards));
 
   useEffect(() => {
     setOpenCardIds(new Set());
-    setMasteredCardIds(getStoredMasteredCardIds(itemId, cards));
+    setReviews(loadCardReviews(itemId, cards));
   }, [cards, itemId]);
 
-  const masteredCount = cards.filter((card) => masteredCardIds.has(card.id)).length;
+  const settledCount = cards.filter((card) => isSettled(reviews.get(card.id) ?? null)).length;
+  const dueCount = cards.filter((card) => {
+    const review = reviews.get(card.id) ?? null;
+    return review && isDue(review, todayIso);
+  }).length;
 
   const toggleAnswer = (cardId: string) => {
     setOpenCardIds((currentIds) => {
@@ -289,22 +322,24 @@ function StudyCardsPanel({ itemId, cards }: { itemId: string; cards: StudyCard[]
     });
   };
 
-  const toggleMastered = (cardId: string) => {
-    setMasteredCardIds((currentIds) => {
+  const handleGrade = (cardId: string, grade: SrsGrade) => {
+    const nextReview = gradeReview(reviews.get(cardId) ?? null, grade, todayIso) as CardReview;
+
+    saveReview(itemId, cardId, nextReview);
+    setReviews((currentReviews) => new Map(currentReviews).set(cardId, nextReview));
+    setOpenCardIds((currentIds) => {
       const nextIds = new Set(currentIds);
-      const isMastered = !nextIds.has(cardId);
-
-      if (isMastered) nextIds.add(cardId);
-      else nextIds.delete(cardId);
-
-      setStoredMasteredCard(itemId, cardId, isMastered);
+      nextIds.delete(cardId);
       return nextIds;
     });
   };
 
-  const resetMasteredCards = () => {
-    cards.forEach((card) => setStoredMasteredCard(itemId, card.id, false));
-    setMasteredCardIds(new Set());
+  const resetReviews = () => {
+    clearReviewsForItem(
+      itemId,
+      cards.map((card) => card.id),
+    );
+    setReviews(loadCardReviews(itemId, cards));
   };
 
   if (!cards.length) return null;
@@ -313,27 +348,30 @@ function StudyCardsPanel({ itemId, cards }: { itemId: string; cards: StudyCard[]
     <section className="handbook-study-cards" aria-labelledby="handbook-study-cards-title">
       <div className="learning-panel-head">
         <div>
-          <span className="learning-kicker">RECALL CARDS</span>
+          <span className="learning-kicker">{isCurated ? "CURATED CARDS" : "RECALL CARDS"}</span>
           <h2 id="handbook-study-cards-title">암기 카드</h2>
         </div>
-        <button type="button" className="learning-reset-button" onClick={resetMasteredCards}>
+        <button type="button" className="learning-reset-button" onClick={resetReviews}>
           <RotateCcw size={14} aria-hidden />
           초기화
         </button>
       </div>
       <p className="learning-progress">
-        {cards.length}개 중 {masteredCount}개 외움
+        정착 {settledCount} / 전체 {cards.length}
+        {dueCount ? ` · 오늘 복습 ${dueCount}개` : ""}
       </p>
       <div className="study-card-list">
         {cards.map((card) => {
           const isOpen = openCardIds.has(card.id);
-          const isMastered = masteredCardIds.has(card.id);
+          const review = reviews.get(card.id) ?? null;
 
           return (
-            <article key={card.id} className="study-card" data-mastered={isMastered ? "true" : undefined}>
+            <article key={card.id} className="study-card" data-mastered={isSettled(review) ? "true" : undefined}>
               <div className="study-card-meta">
-                <span>{card.label}</span>
-                <a href={`#${card.sectionId}`}>원문 보기</a>
+                <span>
+                  {card.label} · {getCardDueLabel(review, todayIso)}
+                </span>
+                {card.sectionId ? <a href={`#${card.sectionId}`}>원문 보기</a> : null}
               </div>
               <h3>{card.question}</h3>
               {isOpen ? <p className="study-card-answer">{card.answer}</p> : null}
@@ -342,10 +380,13 @@ function StudyCardsPanel({ itemId, cards }: { itemId: string; cards: StudyCard[]
                   <Eye size={14} aria-hidden />
                   {isOpen ? "답 숨기기" : "답 보기"}
                 </button>
-                <button type="button" onClick={() => toggleMastered(card.id)} aria-pressed={isMastered}>
-                  <CheckCircle2 size={14} aria-hidden />
-                  {isMastered ? "다시 보기" : "외웠음"}
-                </button>
+                {isOpen
+                  ? srsGradeButtons.map(({ grade, label }) => (
+                      <button key={grade} type="button" data-grade={grade} onClick={() => handleGrade(card.id, grade)}>
+                        {label}
+                      </button>
+                    ))
+                  : null}
               </div>
             </article>
           );
@@ -409,6 +450,7 @@ function getChecklistItems(card: HTMLElement): ChecklistItem[] {
 
 export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPageProps) {
   const [document, setDocument] = useState<HandbookDocumentContent | null>(null);
+  const [loadedItemId, setLoadedItemId] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
   const [isTocOpen, setIsTocOpen] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -418,6 +460,12 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
     () => (document ? createLearningModel(document.mainHtml) : null),
     [document],
   );
+  const curatedCards = useMemo(
+    () => (getQuestionBankCards(item.id) as BankCard[]).map(toStudyCard),
+    [item.id],
+  );
+  const personalNotes = useMemo(() => getPersonalNotes(item.id), [item.id]);
+  const isHome = item.id === "home";
 
   useEffect(() => {
     let cancelled = false;
@@ -434,7 +482,10 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
 
     loader()
       .then((module) => {
-        if (!cancelled) setDocument(module.default);
+        if (!cancelled) {
+          setDocument(module.default);
+          setLoadedItemId(item.id);
+        }
       })
       .catch(() => {
         if (!cancelled) setFailed(true);
@@ -554,10 +605,12 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   }, [document, item.id]);
 
   useEffect(() => {
-    if (!document) return;
+    // 문서 전환 직후 이전 문서가 남아 있는 커밋에서 조기 호출되면
+    // 앵커 이동 대상이 아직 DOM에 없다. 로드가 현재 항목과 일치할 때만 알린다.
+    if (!document || loadedItemId !== item.id) return;
 
     onReady?.(item.id);
-  }, [document, item.id, onReady]);
+  }, [document, item.id, loadedItemId, onReady]);
 
   useEffect(() => {
     const main = mainRef.current;
@@ -648,13 +701,54 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         className="handbook-main"
       >
         {learningModel?.heroHtml ? <div dangerouslySetInnerHTML={{ __html: learningModel.heroHtml }} /> : null}
+        {isHome ? (
+          <div className="handbook-learning-panels" aria-label="학습 현황">
+            <StudyQueuePanel />
+            <StudyDashboardPanel />
+          </div>
+        ) : null}
         {learningModel ? (
           <div className="handbook-learning-panels" aria-label="학습 도구">
             <LearningSearchPanel sections={learningModel.sections} />
-            <StudyCardsPanel itemId={item.id} cards={learningModel.studyCards} />
+            <StudyCardsPanel
+              itemId={item.id}
+              cards={curatedCards.length ? curatedCards : learningModel.studyCards}
+              isCurated={curatedCards.length > 0}
+            />
           </div>
         ) : null}
         <div dangerouslySetInnerHTML={{ __html: learningModel?.bodyHtml ?? document.mainHtml }} />
+        {personalNotes.length ? (
+          <section className="personal-notes" aria-labelledby="personal-notes-title">
+            <div className="ch-head">
+              <span className="ch-code">MY CASE</span>
+              <h2 id="personal-notes-title">내 사례</h2>
+            </div>
+            <div className="personal-note-list">
+              {personalNotes.map((note) => (
+                <article key={note.id} className="personal-note">
+                  <div className="personal-note-meta">
+                    <span>{note.date}</span>
+                    {note.sectionId ? <a href={`#${note.sectionId}`}>관련 섹션</a> : null}
+                  </div>
+                  <h3>{note.situation}</h3>
+                  <dl>
+                    <dt>판단</dt>
+                    <dd>{note.judgment}</dd>
+                    <dt>결과</dt>
+                    <dd>{note.result}</dd>
+                    {note.interviewLine ? (
+                      <>
+                        <dt>면접 답변</dt>
+                        <dd>{note.interviewLine}</dd>
+                      </>
+                    ) : null}
+                  </dl>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
         {practicalExample ? (
           <section className="handbook-practical-example" aria-labelledby="practical-example-title">
             <div className="ch-head">

@@ -145,6 +145,24 @@
           <tr><td>메트릭</td><td>RED/USE dashboard, p95/p99, saturation, high-cardinality label review</td><td>label 폭증은 비용과 성능 장애가 된다.</td></tr>
           <tr><td>SLO</td><td>5m/1h fast burn, 30m/6h slow burn, error budget remaining</td><td>빠른 장애와 느린 품질 저하의 대응을 분리한다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-observability-slo-handbook.html
+  playbook: SLO OBSERVABILITY DESIGN PLAYBOOK
+  hypothesis: "SLI 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "timestamp, level, service, env, version, trace_id, user/tenant scope"
+  normal_signal: "PII와 secret은 redaction하고 검색 가능한 필드를 남긴다."
+  abnormal_signal: "p99만 증가하고 error rate는 정상"
+  mitigation_then_permanent_fix:
+    mitigation: "trace waterfall, downstream latency, queue saturation, deploy marker를 본다."
+    permanent_fix: "알림 수보다 행동 품질을 개선한다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>Good SLI</td><td>checkout_success_rate, payment_authorized_latency_p95, report_freshness</td><td>사용자 여정의 성공/지연/신선도와 연결된다.</td></tr>

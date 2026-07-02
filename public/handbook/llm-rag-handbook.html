@@ -116,6 +116,53 @@ document ingest → parse → clean → chunk → embed → store vector + metad
 <span class="sc-label">retrieval trace</span>
 question · rewritten_query · top-k chunk ids · scores · reranker score · selected context · citation ids · no-answer reason
 </div>
+<pre class="snippet-card"><code>const retrieval_trace = await retrievePolicyContext({
+  actor_id: actor.id,
+  tenant_id: actor.tenant_id,
+  question,
+  top_k: 12,
+  filters: { document_acl_version: actor.acl_version }
+});
+
+const firstTurn = await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 900,
+  system: "Answer only with retrieved chunks. Request lookup_policy when evidence is missing.",
+  messages: [{ role: "user", content: question }],
+  tools: [{
+    name: "lookup_policy",
+    description: "Retrieve tenant-scoped policy chunks.",
+    input_schema: {
+      type: "object",
+      properties: {
+        query: { type: "string" },
+        top_k: { type: "integer", minimum: 1, maximum: 12 }
+      },
+      required: ["query"]
+    }
+  }]
+});
+
+const content = [];
+for (const block of firstTurn.content) {
+  if (block.type === "tool_use" && block.name === "lookup_policy") {
+    content.push({
+      type: "tool_result",
+      tool_use_id: block.id,
+      content: JSON.stringify(retrieval_trace.selected_chunks)
+    });
+  }
+}
+
+await client.messages.create({
+  model: process.env.CLAUDE_MODEL,
+  max_tokens: 900,
+  messages: [
+    { role: "user", content: question },
+    { role: "assistant", content: firstTurn.content },
+    { role: "user", content }
+  ]
+});</code></pre>
 </section>
 
 <section id="ch5">

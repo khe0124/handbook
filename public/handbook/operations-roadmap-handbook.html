@@ -320,6 +320,24 @@ runbook_diff:
           <tr><td>운영 인수</td><td>서비스별 owner matrix와 runbook 링크를 대조</td><td>문서가 있어도 owner와 권한이 없으면 운영 준비가 아니다.</td></tr>
           <tr><td>리허설</td><td>rollback drill, restore drill, traffic shift drill 기록 확인</td><td>마지막 성공 시간이 오래됐으면 실제 복구 가능성을 신뢰하지 않는다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-roadmap-handbook.html
+  playbook: OPERATIONS READINESS PLAYBOOK
+  hypothesis: "서비스 카탈로그 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "dashboard, alert, recent deploy, support ticket trend를 한 화면에서 확인"
+  normal_signal: "사용자 영향과 최근 변경을 먼저 고정한다."
+  abnormal_signal: "알림, SLI 값, 영향 서비스, 최근 배포를 기록"
+  mitigation_then_permanent_fix:
+    mitigation: "원인 추측 전에 사용자 영향과 변경 후보를 고정한다."
+    permanent_fix: "회고가 시스템 변경으로 닫히지 않으면 반복된다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>SLO / Burn-rate evidence</td><td>fast burn, slow burn, error budget policy, release freeze</td><td>장애와 단순 오류를 사용자 영향 기준으로 구분한다.</td></tr>

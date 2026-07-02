@@ -1302,3 +1302,217 @@
     font-size: 10.5px;
   }
 }
+
+/* 학습 루프: 복습 큐 · 진도 대시보드 · 내 사례 */
+
+.handbook-main .study-queue,
+.handbook-main .study-dashboard,
+.handbook-main .personal-notes {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 18px;
+}
+
+.handbook-main .study-queue-card {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 13px 14px;
+}
+
+.handbook-main .study-queue-card h3 {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.handbook-main .study-queue-done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--green-deep);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.handbook-main .study-card-actions button[data-grade="again"]:hover,
+.handbook-main .study-card-actions button[data-grade="again"]:focus-visible {
+  border-color: var(--red);
+  background: var(--red-tint);
+  color: var(--red);
+}
+
+.handbook-main .study-card-actions button[data-grade="hard"]:hover,
+.handbook-main .study-card-actions button[data-grade="hard"]:focus-visible {
+  border-color: var(--amber);
+  background: var(--amber-tint);
+  color: var(--amber);
+}
+
+.handbook-main .study-queue-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.handbook-main .study-queue-tools button {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 9px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.handbook-main .study-queue-tools button:hover,
+.handbook-main .study-queue-tools button:focus-visible {
+  border-color: var(--green);
+  color: var(--green-deep);
+  outline: none;
+}
+
+.handbook-main .study-queue-import-message {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.handbook-main .study-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.handbook-main .study-dashboard-stat {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 12px 13px;
+}
+
+.handbook-main .study-dashboard-stat strong {
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.handbook-main .study-dashboard-stat-total {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.handbook-main .study-dashboard-stat span:last-child {
+  color: var(--ink-soft);
+  font-size: 11.5px;
+}
+
+.handbook-main .study-dashboard-groups {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.handbook-main .study-dashboard-group-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.handbook-main .study-dashboard-group-count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+
+.handbook-main .study-dashboard-bar {
+  height: 5px;
+  margin-top: 4px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.handbook-main .study-dashboard-bar-fill {
+  height: 100%;
+  background: var(--green);
+}
+
+.handbook-main .personal-notes {
+  margin-top: 34px;
+}
+
+.handbook-main .personal-note-list {
+  display: grid;
+  gap: 10px;
+}
+
+.handbook-main .personal-note {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 13px 14px;
+}
+
+.handbook-main .personal-note-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--green-deep);
+  font-weight: 800;
+}
+
+.handbook-main .personal-note-meta a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.handbook-main .personal-note h3 {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+.handbook-main .personal-note dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  margin: 10px 0 0;
+}
+
+.handbook-main .personal-note dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  font-weight: 800;
+  padding-top: 2px;
+}
+
+.handbook-main .personal-note dd {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .handbook-main .study-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}

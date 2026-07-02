@@ -106,6 +106,27 @@ created -> listening -> transcribing -> thinking -> speaking
 <tr><td>interrupted</td><td>출력과 미승인 tool action 취소</td><td>cancelled_generation_id</td></tr>
 <tr><td>reconnecting</td><td>중복 실행 방지와 transcript 복구</td><td>resume_token, replay_range</td></tr>
 </table>
+<pre class="snippet-card"><code>const realtime_session_config = {
+  session_id: "rt_4821",
+  input_audio_format: "pcm16",
+  turn_detection: { type: "server_vad", silence_duration_ms: 650 },
+  tool_policy: "draft_only_until_approval",
+  retention: "delete_raw_audio_after_24h"
+};
+
+const audio_turn_state = {
+  generation_id: "gen_82",
+  transcript_state: "partial",
+  barge_in_allowed: true,
+  pending_tool_state: "cancel_before_approval",
+  idempotency_key: "rt_4821:turn_12"
+};
+
+const multimodal_eval_case = {
+  id: "voice_refund_interrupt_03",
+  expected: "cancel previous generation when user interrupts",
+  evidence: ["cancelled_generation_id", "final_transcript", "tool_not_executed"]
+};</code></pre>
 </section>
 
 <section id="ch6">

@@ -860,6 +860,8 @@ spring:<br>
 <div class="flow">
 <span class="step hl">커맨드라인 인자</span>
 <span class="arr">&gt;</span>
+<span class="step">Java 시스템 프로퍼티</span>
+<span class="arr">&gt;</span>
 <span class="step">OS 환경변수</span>
 <span class="arr">&gt;</span>
 <span class="step">application-{profile}</span>
@@ -870,8 +872,8 @@ spring:<br>
 <table>
 <tr><th>우선순위</th><th>출처</th><th>예시</th></tr>
 <tr><td>높음 (이김)</td><td>커맨드라인 인자</td><td><code>--server.port=9090</code></td></tr>
-<tr><td>↑</td><td>OS 환경변수</td><td><code>SERVER_PORT=9090</code></td></tr>
 <tr><td>↑</td><td>Java 시스템 프로퍼티</td><td><code>-Dserver.port=9090</code></td></tr>
+<tr><td>↑</td><td>OS 환경변수</td><td><code>SERVER_PORT=9090</code></td></tr>
 <tr><td>↓</td><td>application-{profile}.yml</td><td>프로파일별 오버라이드</td></tr>
 <tr><td>낮음 (짐)</td><td>application.yml (공통)</td><td>기본값 묶음</td></tr>
 </table>
@@ -994,7 +996,7 @@ SPRING_PROFILES_ACTIVE=<span class="seg">local</span>
 <div class="g-row"><div class="g-term"><b>활성 프로파일</b><span>active profile</span></div><div class="g-def"><code>SPRING_PROFILES_ACTIVE=prod</code> 또는 <code>--spring.profiles.active=prod</code>. 실행 환경에서 주입</div></div>
 <div class="g-row"><div class="g-term"><b>relaxed binding</b><span>env → property</span></div><div class="g-def"><code>SPRING_DATASOURCE_URL</code> → <code>spring.datasource.url</code>. 점·대시→언더스코어, 대문자</div></div>
 <div class="g-row"><div class="g-term"><b>placeholder</b><span>${...}</span></div><div class="g-def"><code>${DB_URL}</code> 환경변수 참조. <code>${DB_URL:기본값}</code> 콜론 뒤 fallback. 시크릿엔 기본값 금지</div></div>
-<div class="g-row"><div class="g-term"><b>우선순위</b><span>precedence</span></div><div class="g-def">커맨드라인 인자 &gt; 환경변수 &gt; application-{profile} &gt; application. 바깥·구체적인 게 이김</div></div>
+<div class="g-row"><div class="g-term"><b>우선순위</b><span>precedence</span></div><div class="g-def">커맨드라인 인자 &gt; 시스템 프로퍼티 &gt; OS 환경변수 &gt; application-{profile} &gt; application. 바깥·구체적인 게 이김</div></div>
 <div class="g-row"><div class="g-term"><b>@Value</b><span>단일 값</span></div><div class="g-def"><code>@Value("${app.x:기본값}")</code>. 값 하나 급할 때만. 타입 안전 약함</div></div>
 <div class="g-row"><div class="g-term"><b>@ConfigurationProperties</b><span>묶음 바인딩</span></div><div class="g-def"><code>prefix</code>로 record/class에 타입 안전 바인딩. 묶인 설정의 기본 선택. 검증 가능</div></div>
 <div class="g-row"><div class="g-term"><b>시크릿 분리</b><span>secrets</span></div><div class="g-def">코드·git 절대 금지. 환경변수/secret manager로 주입. 로컬은 <code>.env</code>+<code>.gitignore</code></div></div>

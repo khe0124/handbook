@@ -141,6 +141,24 @@
           <tr><td>포트</td><td>nc -vz host port, curl -v internal-api, tcpdump host peer-ip</td><td>터널이 아니라 실제 업무 포트를 검증한다.</td></tr>
           <tr><td>증거 공유</td><td>timestamp, src/dst, port, packet capture, firewall decision</td><td>고객사와 같은 시간대 증거를 맞춘다.</td></tr>
         </table>
+        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
+        <pre class="snippet-card"><code>ops_command_evidence_packet:
+  document: operations-private-connectivity-handbook.html
+  playbook: PRIVATE CONNECTIVITY DEBUG PLAYBOOK
+  hypothesis: "Tunnel 계층이 사용자 영향과 연결되어 있는가"
+  command_or_probe: "VPN tunnel status, IKE log, Phase 1/2 proposal 비교"
+  normal_signal: "encryption, DH group, PFS, lifetime mismatch를 찾는다."
+  abnormal_signal: "터널은 UP이나 ERP API timeout"
+  mitigation_then_permanent_fix:
+    mitigation: "route, firewall, return path, DNS, app port를 순서대로 본다."
+    permanent_fix: "다음 연동 때 합의 누락을 줄인다."
+  evidence_to_attach:
+    - timestamp
+    - environment
+    - owner
+    - trace_or_request_id
+    - dashboard_snapshot
+    - runbook_diff</code></pre>
 
       </section>
 

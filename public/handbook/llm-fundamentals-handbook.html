@@ -133,6 +133,29 @@ answer must cite source chunks · no source means no-answer · uncertainty must 
 <span class="sc-label">FND-MODEL-02</span>
 task difficulty · latency SLO · cost ceiling · context length · structured output reliability · tool accuracy · safety policy · eval score
 </div>
+<h3>MARKER: artifact-ready — token_budget_guard</h3>
+<pre class="snippet-card"><code>async function token_budget_guard({ client, model, messages, maxOutputTokens }) {
+  const tokenEstimate = await countTokens({ client, model, messages });
+  const budget = {
+    context_window: 8000,
+    reserved_output: maxOutputTokens,
+    max_input: 8000 - maxOutputTokens - 400
+  };
+
+  if (tokenEstimate.input_tokens > budget.max_input) {
+    return {
+      decision: "compress_or_retrieve",
+      input_tokens: tokenEstimate.input_tokens,
+      over_by: tokenEstimate.input_tokens - budget.max_input
+    };
+  }
+
+  return {
+    decision: "send",
+    input_tokens: tokenEstimate.input_tokens,
+    cost_per_successful_answer: estimateCost(tokenEstimate, maxOutputTokens)
+  };
+}</code></pre>
 </section>
 <section id="depth">
 <div class="ch-head"><span class="ch-code">DEPTH</span><h2>기초 개념을 설계로 옮기는 법</h2></div>
