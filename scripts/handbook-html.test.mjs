@@ -1936,6 +1936,35 @@ test("app uses the Dev Handbook title with fixed top navigation", async () => {
   assert.match(handbookCssSource, /@media \(max-width: 900px\)[\s\S]*\.handbook-shell\s*\{[\s\S]*padding-top: 0/s);
 });
 
+test("mobile top header can collapse so reading content is not covered", async () => {
+  const [appSource, appCssSource] = await Promise.all([
+    readFile("src/App.tsx", "utf8"),
+    readFile("src/App.css", "utf8"),
+  ]);
+
+  assert.match(appSource, /const \[mobileTopbarOpen, setMobileTopbarOpen\] = useState\(false\)/);
+  assert.match(appSource, /className=\{`app-shell \$\{mobileTopbarOpen \? "mobile-topbar-open" : "mobile-topbar-collapsed"\}`\}/);
+  assert.match(appSource, /className=\{`app-header \$\{mobileTopbarOpen \? "app-header-open" : "app-header-collapsed"\}`\}/);
+  assert.match(appSource, /className="mobile-topbar-toggle"/);
+  assert.match(appSource, /className="app-header-brand"[\s\S]*className="mobile-topbar-toggle"[\s\S]*className="app-header-title"/);
+  assert.match(appSource, /aria-controls="mobile-topbar-content"/);
+  assert.match(appSource, /aria-expanded=\{mobileTopbarOpen\}/);
+  assert.match(appSource, /aria-label=\{mobileTopbarOpen \? "상단 메뉴 접기" : "상단 메뉴 펼치기"\}/);
+  assert.match(appSource, /id="mobile-topbar-content"/);
+  assert.match(appSource, /data-mobile-collapsed=\{!mobileTopbarOpen\}/);
+  assert.doesNotMatch(appSource, /aria-hidden=\{!mobileTopbarOpen\}/);
+  assert.match(appSource, /mobileTopbarOpen \? <X size=\{18\} aria-hidden \/> : <Menu size=\{18\} aria-hidden \/>/);
+
+  assert.match(appCssSource, /\.mobile-topbar-toggle\s*\{[\s\S]*display: none/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-shell\.mobile-topbar-collapsed\s*\{[\s\S]*padding-top: 50px/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-shell\.mobile-topbar-open\s*\{[\s\S]*padding-top: 128px/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.mobile-topbar-toggle\s*\{[\s\S]*display: flex/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.mobile-topbar-toggle\s*\{[\s\S]*order: 0/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header-title\s*\{[\s\S]*order: 1/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header-collapsed \.mobile-topbar-content\s*\{[\s\S]*display: none/s);
+  assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header-open \.mobile-topbar-content\s*\{[\s\S]*display: contents/s);
+});
+
 test("root document exposes the Dev Handbook Open Graph image", async () => {
   const [source, image] = await Promise.all([
     readFile("index.html", "utf8"),

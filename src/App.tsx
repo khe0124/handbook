@@ -113,6 +113,7 @@ export default function App() {
   const [activeId, setActiveId] = useState(getStoredActiveId);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileTopbarOpen, setMobileTopbarOpen] = useState(false);
   const [openMobileGroupKeys, setOpenMobileGroupKeys] = useState<string[]>([
     getGroupKeyForItemId(getStoredActiveId()),
   ]);
@@ -288,52 +289,67 @@ export default function App() {
   };
 
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <div>
-          <h1>
-            <button
-              type="button"
-              className="home-title-button"
-              onClick={handleSelectHome}
-              aria-label="홈으로 이동"
-              title="홈으로 이동"
-            >
-              Dev Handbook
-            </button>
-          </h1>
-          <p>
-            {activeItem.kind} · {activeItem.label}
-          </p>
+    <div className={`app-shell ${mobileTopbarOpen ? "mobile-topbar-open" : "mobile-topbar-collapsed"}`}>
+      <header className={`app-header ${mobileTopbarOpen ? "app-header-open" : "app-header-collapsed"}`}>
+        <div className="app-header-brand">
+          <button
+            type="button"
+            className="mobile-topbar-toggle"
+            onClick={() => setMobileTopbarOpen((isOpen) => !isOpen)}
+            aria-expanded={mobileTopbarOpen}
+            aria-controls="mobile-topbar-content"
+            aria-label={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
+            title={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
+          >
+            {mobileTopbarOpen ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
+          </button>
+          <div className="app-header-title">
+            <h1>
+              <button
+                type="button"
+                className="home-title-button"
+                onClick={handleSelectHome}
+                aria-label="홈으로 이동"
+                title="홈으로 이동"
+              >
+                Dev Handbook
+              </button>
+            </h1>
+            <p>
+              {activeItem.kind} · {activeItem.label}
+            </p>
+          </div>
         </div>
-        <GlobalSearch onSelectSection={handleSelectSearchResult} />
-        <nav aria-label="문서 분류" className="menubar">
-          {groups.map((group) => {
-            const groupActive = group.items.some((item) => item.id === activeItem.id);
+        <div id="mobile-topbar-content" className="mobile-topbar-content" data-mobile-collapsed={!mobileTopbarOpen}>
+          <GlobalSearch onSelectSection={handleSelectSearchResult} />
+          <nav aria-label="문서 분류" className="menubar">
+            {groups.map((group) => {
+              const groupActive = group.items.some((item) => item.id === activeItem.id);
 
-            return (
-              <div className="menu" key={group.key}>
-                <button
-                  type="button"
-                  className="menu-trigger"
-                  aria-haspopup="true"
-                  data-active={groupActive ? "true" : undefined}
-                >
-                  {group.label} <span className="caret" aria-hidden>▾</span>
-                </button>
-                <div className="menu-panel" role="menu">
-                  <DocumentMenuItems
-                    items={group.items}
-                    activeId={activeItem.id}
-                    className="menu-item"
-                    role="menuitem"
-                    onSelect={handleSelectItem}
-                  />
+              return (
+                <div className="menu" key={group.key}>
+                  <button
+                    type="button"
+                    className="menu-trigger"
+                    aria-haspopup="true"
+                    data-active={groupActive ? "true" : undefined}
+                  >
+                    {group.label} <span className="caret" aria-hidden>▾</span>
+                  </button>
+                  <div className="menu-panel" role="menu">
+                    <DocumentMenuItems
+                      items={group.items}
+                      activeId={activeItem.id}
+                      className="menu-item"
+                      role="menuitem"
+                      onSelect={handleSelectItem}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </nav>
+              );
+            })}
+          </nav>
+        </div>
       </header>
 
       <HandbookPage
