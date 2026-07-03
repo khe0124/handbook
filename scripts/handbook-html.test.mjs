@@ -192,17 +192,18 @@ test("remaining LLM handbooks include A-grade operational artifacts", async () =
   }
 });
 
-test("operations handbooks include command evidence packets and abnormal interpretation", async () => {
+test("operations handbooks include command interpretation and practice labs", async () => {
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
   assert.ok(operationsGroup, "operations group should exist");
 
-  for (const item of operationsGroup.items) {
+  for (const item of operationsGroup.items.filter((entry) => entry.id !== "operations-ai-llm-operations")) {
     const source = await readFile(path.join("public", "handbook", item.file), "utf8");
 
-    assert.match(source, /ops_command_evidence_packet/, `${item.file} should include an operations evidence packet`);
-    assert.match(source, /normal_signal/, `${item.file} should include a normal signal`);
-    assert.match(source, /abnormal_signal/, `${item.file} should include an abnormal signal`);
-    assert.match(source, /mitigation_then_permanent_fix/, `${item.file} should include mitigation and permanent fix guidance`);
+    assert.match(source, /실무 플레이북/, `${item.file} should include a practical playbook`);
+    assert.match(source, /확인 단계[\s\S]*명령·확인 위치[\s\S]*해석 기준/, `${item.file} should include command interpretation rows`);
+    assert.match(source, /PRACTICE LAB/, `${item.file} should include practice labs`);
+    assert.match(source, /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/, `${item.file} should include normal and abnormal interpretation`);
+    assert.match(source, /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/, `${item.file} should include mitigation and permanent fix guidance`);
   }
 });
 
@@ -251,12 +252,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 82);
+  assert.equal(HANDBOOK_ITEMS.length, 84);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(engineeringGroup?.items.length, 16);
   assert.equal(engineeringContextGroup?.items.length, 8);
   assert.equal(llmGroup?.items.length, 12);
-  assert.equal(aiNativeGroup?.items.length, 6);
+  assert.equal(aiNativeGroup?.items.length, 8);
   assert.equal(HANDBOOK_GROUPS.find((group) => group.key === "operations")?.items.length, 14);
   assert.equal(axGroup?.items.length, 3);
   assert.ok((designGroup?.items.length ?? 0) >= 6);
@@ -330,12 +331,14 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("09 멀티모달·파일·음성·Realtime"));
   assert.ok(labels.includes("10 Fine-tuning·Customization·Model Routing"));
   assert.ok(labels.includes("11 포트폴리오 프로젝트"));
-  assert.ok(labels.includes("00 역량 매트릭스·진단"));
-  assert.ok(labels.includes("01 실습 랩"));
-  assert.ok(labels.includes("02 템플릿 키트"));
-  assert.ok(labels.includes("03 평가 하네스"));
-  assert.ok(labels.includes("04 보안 레드팀 Fixture"));
-  assert.ok(labels.includes("05 Agent Runtime 구현"));
+  assert.ok(labels.includes("00 AI Agent·Loop 업무 흐름"));
+  assert.ok(labels.includes("01 실제 업무과정"));
+  assert.ok(labels.includes("02 요구사항 정의·문제 분해"));
+  assert.ok(labels.includes("03 기획·사용자 시나리오 설계"));
+  assert.ok(labels.includes("04 UX/UI 디자인 검토와 화면 설계"));
+  assert.ok(labels.includes("05 프론트엔드 구현 루프"));
+  assert.ok(labels.includes("06 백엔드·DB·API 설계 루프"));
+  assert.ok(labels.includes("07 테스트·리뷰·릴리스 자동화"));
   assert.ok(labels.includes("00 인프라·운영 로드맵"));
   assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
   assert.ok(labels.includes("00 AX 기반·조직 적용"));
@@ -506,7 +509,7 @@ test("career menu consolidates interview, personalized career, and AI Native por
 });
 
 test("career bundles read as curated publications instead of raw merged drafts", async () => {
-  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
 
   for (const file of careerFiles) {
     const source = await readFile(path.join("public", "handbook", file), "utf8");
@@ -525,8 +528,8 @@ test("career bundles read as curated publications instead of raw merged drafts",
   }
 });
 
-test("career bundles include interview readiness gates and evidence-driven drills", async () => {
-  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+test("career bundles include interview readiness gates and topic evidence", async () => {
+  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
   const documents = await Promise.all(
     careerFiles.map(async (file) => [file, await readFile(path.join("public", "handbook", file), "utf8")]),
   );
@@ -534,13 +537,10 @@ test("career bundles include interview readiness gates and evidence-driven drill
 
   for (const [file, doc] of documents) {
     assert.match(doc, /CAREER READINESS GATE/, `${file} should define concrete readiness outcomes`);
-    assert.match(doc, /ANSWER QUALITY RUBRIC/, `${file} should include a self-scoring answer rubric`);
-    assert.match(doc, /PRESSURE RESPONSE LOOP/, `${file} should include a pressure recovery loop`);
     assert.match(doc, /EVIDENCE PACKET/, `${file} should turn reading into interview evidence`);
-    assert.match(doc, /DANGEROUS PHRASES/, `${file} should warn about weak interview phrasing`);
-    assert.match(doc, /FINAL 10 MINUTE DRILL/, `${file} should include a final interview drill`);
-    assert.match(doc, /30초 결론[\s\S]*90초 확장[\s\S]*압박 꼬리질문/, `${file} should connect short answers, expanded answers, and follow-ups`);
-    assert.match(doc, /PR·ADR·지표·장애기록·QA ticket|PR, ADR, metric, incident record, QA ticket/, `${file} should require concrete evidence artifacts`);
+    assert.match(doc, /반드시 답할 질문/, `${file} should keep topic-specific interview questions`);
+    assert.match(doc, /대표 압박 질문/, `${file} should keep a topic pressure question`);
+    assert.match(doc, /직접 경험, 판단 기준, 실패 조건, 확인 증거/, `${file} should require evidence-backed boundaries`);
   }
 
   assert.match(source, /프론트엔드·JS\/TS 답변 게이트/);
@@ -555,17 +555,16 @@ test("career bundles include interview readiness gates and evidence-driven drill
   assert.doesNotMatch(source, /잘 모릅니다만 열심히/);
 });
 
-test("career bundles include before-after answer packets with concrete outputs", async () => {
-  const careerFiles = CAREER_HANDBOOKS.map((item) => item.file);
+test("career bundles avoid repeated generic answer packet boilerplate", async () => {
+  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
 
   for (const file of careerFiles) {
     const source = await readFile(path.join("public", "handbook", file), "utf8");
 
-    assert.match(source, /career_output_packet/, `${file} should include a reusable career output packet`);
-    assert.match(source, /before_answer/, `${file} should show the weak answer to avoid`);
-    assert.match(source, /after_answer/, `${file} should show the improved answer shape`);
-    assert.match(source, /evidence_to_attach/, `${file} should require artifacts attached to claims`);
-    assert.match(source, /interview_use/, `${file} should explain how to use the packet in interviews`);
+    assert.doesNotMatch(source, /career_output_packet/, `${file} should not repeat generic career output packet boilerplate`);
+    assert.doesNotMatch(source, /before_answer/, `${file} should not repeat weak-answer boilerplate`);
+    assert.doesNotMatch(source, /after_answer/, `${file} should not repeat improved-answer boilerplate`);
+    assert.match(source, /핵심 산출물|JD 키워드|증거/, `${file} should retain concrete topic evidence`);
   }
 });
 
@@ -2431,11 +2430,11 @@ test("operations handbook follows a service operations lifecycle roadmap", async
     assert.match(doc, /class="hero-sub"/, `${item.file} should use the standard hero subtitle`);
     assert.match(doc, /<div class="ch-head">/, `${item.file} should use standard chapter headers`);
     assert.match(doc, /<footer>/, `${item.file} should include the standard document footer`);
-    assert.match(doc, /개념 모델/, `${item.file} should include a concept model`);
     assert.match(doc, /실무 체크리스트/, `${item.file} should include an operational checklist`);
     assert.match(doc, /장애\/운영 시나리오/, `${item.file} should include an operations scenario`);
     assert.match(doc, /자주 틀리는 판단/, `${item.file} should include common failure signals`);
-    assert.match(doc, /면접 답변 템플릿/, `${item.file} should include an interview answer template`);
+    assert.doesNotMatch(doc, /<span class="ch-code">MODEL<\/span>/, `${item.file} should not repeat section bodies in a generated concept model`);
+    assert.doesNotMatch(doc, /<span class="ch-code">Q&A<\/span>/, `${item.file} should not repeat generic interview answer templates`);
     const termSections = doc.match(/<section\b[^>]*>[\s\S]*?(?:<span class="ch-code">TERM<\/span>|<h2>[^<]*TERM[^<]*<\/h2>)[\s\S]*?<\/section>/g) ?? [];
     assert.ok(termSections.length >= 1, `${item.file} should include a TERM glossary section`);
     assert.ok(
@@ -2483,7 +2482,7 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.match(source, /SLO OBSERVABILITY DESIGN PLAYBOOK/);
   assert.match(source, /INCIDENT RESPONSE DRILL PLAYBOOK/);
   assert.match(source, /AWS AZURE OPERATIONS PLAYBOOK/);
-  assert.match(source, /OPERATIONS ANSWER FRAME/);
+  assert.doesNotMatch(source, /OPERATIONS ANSWER FRAME/);
   assert.match(source, /심화 장애 패턴/);
   assert.match(source, /Good SLI/);
   assert.match(source, /CloudFront \/ Front Door 403/);
@@ -2528,7 +2527,8 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.match(roadmapDoc, /Restore drill RPO\/RTO 판독/);
   assert.match(roadmapDoc, /강연\/출판용 실전 케이스[\s\S]*Case 1 · 배포 후 checkout 5xx fast burn[\s\S]*Case 2 · Private subnet egress와 NAT 비용 급증[\s\S]*Case 3 · Restore drill RPO\/RTO 실패/);
   assert.match(roadmapDoc, /대표 오판[\s\S]*종료 조건/);
-  assert.match(roadmapDoc, /30초 답변[\s\S]*90초 답변[\s\S]*나쁜 답변/);
+  assert.match(roadmapDoc, /실무 플레이북[\s\S]*확인 단계[\s\S]*명령·확인 위치[\s\S]*해석 기준/);
+  assert.doesNotMatch(roadmapDoc, /30초 답변[\s\S]*90초 답변[\s\S]*나쁜 답변/);
 
   assert.match(requestPathDoc, /앱과 DB 경계[\s\S]*connection pool[\s\S]*slow query[\s\S]*lock wait/);
   assert.doesNotMatch(requestPathDoc, /앱과 DB 경계[\s\S]{0,700}authoritative answer/);
@@ -2692,7 +2692,7 @@ test("engineering context handbooks teach product-organization engineering liter
   );
   const source = docs.join("\n");
 
-  assert.match(source, /고급 엔지니어링 사례가 자연스럽게 읽히도록 만드는 기반 개념서/);
+  assert.match(source, /기술명을 외우기보다 이 주제에서 반복되는 압력, 책임 경계, 측정 기준/);
   assert.match(source, /사용자 규모/);
   assert.match(source, /변경 규모/);
   assert.match(source, /조직 규모/);

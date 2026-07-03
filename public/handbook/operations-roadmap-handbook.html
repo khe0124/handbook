@@ -15,14 +15,12 @@
   <a href="#ch2"><span class="code">OP-01</span>4주 학습 순서</a>
   <a href="#ch3"><span class="code">OP-02</span>계층별 실패 모드</a>
   <a href="#ch4"><span class="code">OP-03</span>운영 산출물과 답변 구조</a>
-  <a href="#ch5"><span class="code">MODEL</span>개념 모델</a>
-  <a href="#ch6"><span class="code">CHECK</span>실무 체크리스트</a>
-  <a href="#ch7"><span class="code">PLAYBOOK</span>실무 플레이북</a>
-  <a href="#ch8"><span class="code">PRACTICE</span>출력 판독 훈련</a>
-  <a href="#ch9"><span class="code">TERM</span>용어사전</a>
-  <a href="#ch10"><span class="code">CASE</span>장애/운영 시나리오</a>
-  <a href="#ch11"><span class="code">RISK</span>자주 틀리는 판단</a>
-  <a href="#ch12"><span class="code">Q&A</span>면접 답변 템플릿</a>
+  <a href="#ch5"><span class="code">CHECK</span>실무 체크리스트</a>
+  <a href="#ch6"><span class="code">PLAYBOOK</span>실무 플레이북</a>
+  <a href="#ch7"><span class="code">PRACTICE</span>출력 판독 훈련</a>
+  <a href="#ch8"><span class="code">TERM</span>용어사전</a>
+  <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
+  <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
 </nav>
 <main>
 <header class="hero">
@@ -229,18 +227,6 @@
       </section>
 
       <section id="ch5">
-        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
-        <p class="lede">인프라·운영 로드맵은 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
-        <table>
-          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
-          <tr><td>OP-00 · 운영 전체 지도</td><td>인프라·운영은 네트워크, 배포, 모니터링을 따로 외우는 영역이 아니다. 운영자는 request path, change path, control plane, data plane, recovery path를 한 장으로 연결해야 한다. 사용자의 요청은 DNS → CDN/WAF → Load Balancer → Runtime → Data store를 지나고, 변경은 CI/CD → artifact → config → runtime → metric gate → rollback 또는 incident response로 검증된다.</td><td>request path map, deploy marker, service catalog, dependency map, SLO, rollback/restore owner</td></tr>
-          <tr><td>OP-01 · 4주 학습 순서</td><td>학습 순서는 서비스 장애를 좁히는 순서와 같아야 한다. 1주차에는 브라우저에서 DB까지 요청 경로를 그리고, 2주차에는 VPC, subnet, route table, NAT, ingress, egress, private endpoint를 붙인다. 3주차에는 CI/CD, artifact, runtime, health check, IaC 변경을 배포 경로로 묶고, 4주차에는 Observability, SLO, Incident Response, Rollback, Restore, DR drill로 운영 루프를 닫는다.</td><td>request path diagram, VPC route table readback, deploy pipeline stage, SLO dashboard, rollback/restore drill record</td></tr>
-          <tr><td>OP-02 · 계층별 실패 모드</td><td>운영 실력은 장애 때 어떤 계층을 먼저 의심하고 어떤 증거로 배제하는지에서 드러난다. DNS/TLS, CDN/WAF, Load Balancer, runtime, DB, network policy, deploy pipeline, observability, incident process마다 대표 실패 모드와 첫 확인 증거가 다르다.</td><td>DNS answer, TLS chain, WAF log, target health, trace waterfall, DB wait event, flow log, deploy marker, burn-rate alert</td></tr>
-          <tr><td>OP-03 · 운영 산출물과 답변 구조</td><td>운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. owner, escalation, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 비용 owner, access owner, 마지막 drill 날짜가 있어야 다음 사람이 같은 판단을 반복할 수 있다. 면접에서도 도구 이름보다 경로, 경계, 실패 모드, 증거, 완화, 후속 개선 순서로 말해야 한다.</td><td>owner matrix, service catalog, SLO, dashboard, alert, runbook, rollback command, restore drill date, incident packet</td></tr>
-        </table>
-      </section>
-
-      <section id="ch6">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
         <p class="lede">인프라·운영 로드맵 체크리스트는 운영 전체 지도, 4주 학습 순서, 계층별 실패 모드, 운영 산출물과 답변 구조의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
         <ul>
@@ -258,7 +244,7 @@
         </table>
       </section>
 
-      <section id="ch7">
+      <section id="ch6">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
         <p class="lede">인프라·운영 로드맵 플레이북은 <strong>OPERATIONS READINESS PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
@@ -320,24 +306,6 @@ runbook_diff:
           <tr><td>운영 인수</td><td>서비스별 owner matrix와 runbook 링크를 대조</td><td>문서가 있어도 owner와 권한이 없으면 운영 준비가 아니다.</td></tr>
           <tr><td>리허설</td><td>rollback drill, restore drill, traffic shift drill 기록 확인</td><td>마지막 성공 시간이 오래됐으면 실제 복구 가능성을 신뢰하지 않는다.</td></tr>
         </table>
-        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
-        <pre class="snippet-card"><code>ops_command_evidence_packet:
-  document: operations-roadmap-handbook.html
-  playbook: OPERATIONS READINESS PLAYBOOK
-  hypothesis: "서비스 카탈로그 계층이 사용자 영향과 연결되어 있는가"
-  command_or_probe: "dashboard, alert, recent deploy, support ticket trend를 한 화면에서 확인"
-  normal_signal: "사용자 영향과 최근 변경을 먼저 고정한다."
-  abnormal_signal: "알림, SLI 값, 영향 서비스, 최근 배포를 기록"
-  mitigation_then_permanent_fix:
-    mitigation: "원인 추측 전에 사용자 영향과 변경 후보를 고정한다."
-    permanent_fix: "회고가 시스템 변경으로 닫히지 않으면 반복된다."
-  evidence_to_attach:
-    - timestamp
-    - environment
-    - owner
-    - trace_or_request_id
-    - dashboard_snapshot
-    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>SLO / Burn-rate evidence</td><td>fast burn, slow burn, error budget policy, release freeze</td><td>장애와 단순 오류를 사용자 영향 기준으로 구분한다.</td></tr>
@@ -347,7 +315,7 @@ runbook_diff:
         </table>
       </section>
 
-      <section id="ch8">
+      <section id="ch7">
         <div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독 훈련</h2></div>
         <p class="lede">인프라·운영 로드맵은 개념을 아는 것보다 실제 출력에서 정상과 비정상을 구분하는 훈련이 중요하다. 아래 lab은 명령, 출력, 판단, 완화, 영구 수정을 한 번에 연결한다.</p>
         <div class="practice-lab">
@@ -523,7 +491,7 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
         </div>
       </section>
 
-      <section id="ch9">
+      <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">인프라·운영 로드맵에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
         <table>
@@ -536,7 +504,7 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
         </table>
       </section>
 
-      <section id="ch10">
+      <section id="ch9">
         <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
         <p class="lede">신규 서비스를 런칭하기 전 운영 준비도 리뷰를 진행한다. 요청 경로는 DNS, CDN/WAF, Load Balancer, Runtime, DB로 그리고, 변경 경로는 CI/CD, artifact, config, environment, metric gate로 확인한다. 복구 경로는 rollback, feature flag off, traffic shift, restore, failback으로 분리한다. 빠진 항목은 런칭 후 장애가 아니라 런칭 전 차단 이슈로 다룬다.</p>
         <div class="callout">
@@ -602,7 +570,7 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
         </div>
       </section>
 
-      <section id="ch11">
+      <section id="ch10">
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">인프라·운영 로드맵에서 자주 틀리는 판단은 운영 전체 지도와 운영 산출물과 답변 구조의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         <ul>
@@ -613,23 +581,6 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
           <li>백업은 있지만 restore drill과 failback 절차가 없다.</li>
           <li>NAT/egress 비용 급증을 운영 incident가 아니라 비용 이슈로만 본다.</li>
         </ul>
-      </section>
-
-      <section id="ch12">
-        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
-        <p class="lede">인프라·운영은 요청 경로, 변경 경로, 복구 경로를 함께 보는 영역이라고 답합니다. 사용자의 요청은 DNS부터 DB까지 계층별로 흐르고, 코드 변경은 artifact와 환경 설정, 런타임, 관측, 장애 대응 절차를 거쳐 안전해집니다. 저는 각 단계의 실패 모드와 검증 증거를 연결하고, 원인 확정 전에도 사용자 영향 완화책을 선택하는 방식으로 운영 준비도를 판단하겠습니다.</p>
-        <div class="serial-card">
-          <span class="sc-label">OPERATIONS ANSWER FRAME</span>
-          1. 요청 경로와 변경 경로를 한 장으로 설명한다.<br>
-          2. 사용자 영향 SLI와 최근 변경을 같은 시간축에 둔다.<br>
-          3. rollback, DR, 비용, 권한 owner까지 운영 인수 산출물로 닫는다.<br>
-        </div>
-        <table>
-          <tr><th>답변 유형</th><th>예시</th></tr>
-          <tr><td>30초 답변</td><td>인프라·운영은 요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해 보는 일입니다. DNS부터 DB까지 어디서 요청이 멈췄는지 증거로 좁히고, 배포 변경은 artifact와 metric gate로 추적하며, 장애 때는 원인 확정 전에도 rollback이나 feature off로 사용자 영향을 줄입니다.</td></tr>
-          <tr><td>90초 답변</td><td>저는 먼저 사용자 영향 SLI와 최근 변경을 같은 timeline에 둡니다. 그 다음 DNS/TLS, CDN/WAF, Load Balancer, runtime, DB, network policy 순서로 요청이 도달한 지점을 확인하고, 배포 관련이면 commit SHA, image digest, config diff, migration version을 봅니다. 완화는 rollback, traffic shift, feature flag off, restore 중 폭발 반경이 가장 작은 선택지를 고르고, 복구 후에는 incident packet, runbook diff, SLO/alert 개선으로 닫습니다.</td></tr>
-          <tr><td>나쁜 답변</td><td>AWS에서 ALB, ECS, RDS, CloudWatch를 써봤습니다. 장애가 나면 로그를 보고 서버를 재시작합니다.</td></tr>
-        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

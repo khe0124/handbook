@@ -15,14 +15,12 @@
   <a href="#ch2"><span class="code">REQ-01</span>DNS와 TLS</a>
   <a href="#ch3"><span class="code">REQ-02</span>Load Balancer와 health check</a>
   <a href="#ch4"><span class="code">REQ-03</span>앱과 DB 경계</a>
-  <a href="#ch5"><span class="code">MODEL</span>개념 모델</a>
-  <a href="#ch6"><span class="code">CHECK</span>실무 체크리스트</a>
-  <a href="#ch7"><span class="code">PLAYBOOK</span>실무 플레이북</a>
-  <a href="#ch8"><span class="code">PRACTICE</span>출력 판독 훈련</a>
-  <a href="#ch9"><span class="code">TERM</span>용어사전</a>
-  <a href="#ch10"><span class="code">CASE</span>장애/운영 시나리오</a>
-  <a href="#ch11"><span class="code">RISK</span>자주 틀리는 판단</a>
-  <a href="#ch12"><span class="code">Q&A</span>면접 답변 템플릿</a>
+  <a href="#ch5"><span class="code">CHECK</span>실무 체크리스트</a>
+  <a href="#ch6"><span class="code">PLAYBOOK</span>실무 플레이북</a>
+  <a href="#ch7"><span class="code">PRACTICE</span>출력 판독 훈련</a>
+  <a href="#ch8"><span class="code">TERM</span>용어사전</a>
+  <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
+  <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
 </nav>
 <main>
 <header class="hero">
@@ -96,18 +94,6 @@
       </section>
 
       <section id="ch5">
-        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
-        <p class="lede">서비스 요청 경로는 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
-        <table>
-          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
-          <tr><td>REQ-00 · 기준 경로</td><td>대표 경로는 DNS → CDN/WAF → Load Balancer → App → DB다. 장애가 나면 사용자의 증상, DNS 해석, TLS handshake, CDN cache, WAF 차단, Load Balancer target health, 애플리케이션 로그, DB connection pool을 같은 시간축에 올린다.</td><td>DNS answer, TLS handshake, CDN/WAF request id, LB target health, app access log, DB pool metric</td></tr>
-          <tr><td>REQ-01 · DNS와 TLS</td><td>DNS가 잘못되면 애플리케이션 로그가 비어 있을 수 있다. TLS 인증서 만료, SNI 불일치, intermediate chain 누락은 네트워크 연결은 되지만 HTTPS에서 실패하는 전형적인 원인이다. curl -v, openssl s_client, dig 결과를 함께 남긴다.</td><td>authoritative answer, resolver 차이, TTL, CNAME/ALIAS chain, SNI, SAN, expiry, intermediate chain</td></tr>
-          <tr><td>REQ-02 · Load Balancer와 health check</td><td>Load Balancer는 단순 분산 장치가 아니라 장애 격리 장치다. health check path가 실제 의존성을 너무 깊게 보거나 너무 얕게 보면 정상 pod가 빠지거나 죽은 앱이 살아 있는 것처럼 보인다. 502는 upstream 연결 실패, 504는 timeout으로 우선 분리한다.</td><td>target health, health check status, 502/503/504, deregistration delay, idle timeout, app readiness</td></tr>
-          <tr><td>REQ-03 · 앱과 DB 경계</td><td>App → DB 구간은 connection pool, timeout, transaction lock, migration, secret rotation이 얽힌다. 프론트 증상만 보고 API 문제로 단정하지 말고, traceId로 request log, slow query, DB wait event를 이어 본다.</td><td>connection pool pending, DB wait event, lock wait, slow query, request timeout, secret rotation event</td></tr>
-        </table>
-      </section>
-
-      <section id="ch6">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
         <p class="lede">서비스 요청 경로 체크리스트는 기준 경로, DNS와 TLS, Load Balancer와 health check, 앱과 DB 경계의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
         <ul>
@@ -124,7 +110,7 @@
         </table>
       </section>
 
-      <section id="ch7">
+      <section id="ch6">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
         <p class="lede">서비스 요청 경로 플레이북은 <strong>REQUEST PATH TRIAGE PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
@@ -145,24 +131,6 @@
           <tr><td>TLS 확인</td><td>curl -v https://app.example.com/health, openssl s_client -servername app.example.com -connect app.example.com:443</td><td>SNI, certificate chain, expiry, ALPN, handshake error를 본다.</td></tr>
           <tr><td>경로 확인</td><td>LB target health, WAF log, app access log, trace waterfall, DB pool metric</td><td>502는 upstream 연결, 504는 timeout, 503은 capacity/health 후보로 나눈다.</td></tr>
         </table>
-        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
-        <pre class="snippet-card"><code>ops_command_evidence_packet:
-  document: operations-request-path-handbook.html
-  playbook: REQUEST PATH TRIAGE PLAYBOOK
-  hypothesis: "DNS 계층이 사용자 영향과 연결되어 있는가"
-  command_or_probe: "dig +trace app.example.com, dig app.example.com @8.8.8.8"
-  normal_signal: "권한 서버 응답과 public resolver cache 차이를 구분한다."
-  abnormal_signal: "특정 지역 로그인 504, app log 일부 누락"
-  mitigation_then_permanent_fix:
-    mitigation: "DNS/edge/LB/app 중 어디까지 요청이 도달했는지 먼저 확인한다."
-    permanent_fix: "다음 장애에서 같은 탐색을 반복하지 않게 한다."
-  evidence_to_attach:
-    - timestamp
-    - environment
-    - owner
-    - trace_or_request_id
-    - dashboard_snapshot
-    - runbook_diff</code></pre>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>DNS fail</td><td>NXDOMAIN, wrong CNAME, resolver cache, split-horizon mismatch</td><td>app log가 비어 있으면 DNS/edge에서 요청이 멈췄을 가능성이 높다.</td></tr>
@@ -172,7 +140,7 @@
         </table>
       </section>
 
-      <section id="ch8">
+      <section id="ch7">
         <div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독 훈련</h2></div>
         <p class="lede">서비스 요청 경로는 개념을 아는 것보다 실제 출력에서 정상과 비정상을 구분하는 훈련이 중요하다. 아래 lab은 명령, 출력, 판단, 완화, 영구 수정을 한 번에 연결한다.</p>
         <div class="practice-lab">
@@ -217,7 +185,7 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
         </div>
       </section>
 
-      <section id="ch9">
+      <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">서비스 요청 경로에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
         <table>
@@ -230,7 +198,7 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
         </table>
       </section>
 
-      <section id="ch10">
+      <section id="ch9">
         <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
         <p class="lede">특정 시간대에 로그인 API가 간헐적으로 504를 반환한다. 먼저 DNS와 TLS가 정상인지 배제하고, CDN/WAF 차단 로그와 Load Balancer target health를 본다. 그 다음 App의 request latency와 DB connection pool 대기를 확인해 timeout이 어디에서 시작됐는지 좁힌다.</p>
         <div class="callout">
@@ -250,7 +218,7 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
 
       </section>
 
-      <section id="ch11">
+      <section id="ch10">
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">서비스 요청 경로에서 자주 틀리는 판단은 기준 경로와 앱과 DB 경계의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         <ul>
@@ -259,18 +227,6 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
           <li>TLS 인증서 문제를 네트워크 장애로 오해한다.</li>
           <li>DB lock wait와 API timeout을 별개 사건으로 본다.</li>
         </ul>
-      </section>
-
-      <section id="ch12">
-        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
-        <p class="lede">요청 장애는 DNS → CDN/WAF → Load Balancer → App → DB 순서로 좁힌다고 답합니다. 각 hop마다 볼 증거가 다르기 때문에 dig, curl -v, LB target health, 애플리케이션 로그, DB slow query를 같은 시간축에 놓고 판단합니다.</p>
-        <div class="serial-card">
-          <span class="sc-label">OPERATIONS ANSWER FRAME</span>
-          1. DNS부터 DB까지 hop별 증거를 순서대로 본다.<br>
-          2. 502/503/504/TLS error를 같은 장애로 묶지 않는다.<br>
-          3. traceId로 edge, app, DB 시간을 연결해 원인 후보를 줄인다.<br>
-        </div>
-
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

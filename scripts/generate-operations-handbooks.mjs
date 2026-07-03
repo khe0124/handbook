@@ -1828,14 +1828,12 @@ const render = (doc) => {
   const navItems = [
     { code: "INDEX", title: "문서 구조" },
     ...docSections.map(({ code, title }) => ({ code, title })),
-    { code: "MODEL", title: "개념 모델" },
     { code: "CHECK", title: "실무 체크리스트" },
     { code: "PLAYBOOK", title: "실무 플레이북" },
     { code: "PRACTICE", title: "출력 판독 훈련" },
     { code: "TERM", title: "용어사전" },
     { code: "CASE", title: "장애/운영 시나리오" },
     { code: "RISK", title: "자주 틀리는 판단" },
-    { code: "Q&A", title: "면접 답변 템플릿" },
   ];
   const nav = navItems
     .map(({ code, title }, index) => `  <a href="#ch${index === 0 ? "index" : index}"><span class="code">${code}</span>${escapeHtml(title)}</a>`)
@@ -1924,15 +1922,6 @@ ${renderRows(section.examples)}
   const detailStart = docSections.length + 1;
   const detailSections = `
       <section id="ch${detailStart}">
-        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
-        <p class="lede">${escapeHtml(doc.title)}${subjectParticle(doc.title)} 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
-        <table>
-          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
-${docSections.map((section) => `          <tr><td>${section.code} · ${escapeHtml(section.title)}</td><td>${escapeHtml(section.body)}</td><td>${escapeHtml(section.evidence)}</td></tr>`).join("\n")}
-        </table>
-      </section>
-
-      <section id="ch${detailStart + 1}">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
         <p class="lede">${escapeHtml(doc.title)} 체크리스트는 ${escapeHtml(sectionTitles)}의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
         ${renderList(detail.checklist)}
@@ -1944,7 +1933,7 @@ ${docSections.map((section) => `          <tr><td>${section.code} · ${escapeHtm
         </table>
       </section>
 
-      <section id="ch${detailStart + 2}">
+      <section id="ch${detailStart + 1}">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
         <p class="lede">${escapeHtml(doc.title)} 플레이북은 <strong>${escapeHtml(playbook.marker)}</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
@@ -1965,26 +1954,25 @@ ${detail.readinessPacketTemplate || detail.incidentPacketTemplate ? `        <h3
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
 ${renderRows(playbook.commandRows)}
         </table>
-${renderOperationsEvidencePacket({ doc, playbook })}
 ${deepDiveRows.length > 0 ? `        <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
 ${renderRows(deepDiveRows)}
         </table>` : ""}
       </section>
 
-      <section id="ch${detailStart + 3}">
+      <section id="ch${detailStart + 2}">
         <div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독 훈련</h2></div>
         <p class="lede">${escapeHtml(doc.title)}${subjectParticle(doc.title)} 개념을 아는 것보다 실제 출력에서 정상과 비정상을 구분하는 훈련이 중요하다. 아래 lab은 명령, 출력, 판단, 완화, 영구 수정을 한 번에 연결한다.</p>
 ${renderPracticeLabs(practiceLabs)}
       </section>
 
-      <section id="ch${detailStart + 4}">
+      <section id="ch${detailStart + 3}">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">${escapeHtml(doc.title)}에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
 ${renderTerms(terms)}
       </section>
 
-      <section id="ch${detailStart + 5}">
+      <section id="ch${detailStart + 4}">
         <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
         <p class="lede">${escapeHtml(detail.scenario)}</p>
         <div class="callout">
@@ -2003,23 +1991,10 @@ ${detail.caseStudies?.length ? `        <h3>강연/출판용 실전 케이스</h
 ${renderCaseStudies(detail.caseStudies)}` : ""}
       </section>
 
-      <section id="ch${detailStart + 6}">
+      <section id="ch${detailStart + 5}">
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">${escapeHtml(doc.title)}에서 자주 틀리는 판단은 ${escapeHtml(docSections[0].title)}와 ${escapeHtml(docSections.at(-1).title)}의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         ${renderList(detail.pitfalls)}
-      </section>
-
-      <section id="ch${detailStart + 7}">
-        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
-        <p class="lede">${escapeHtml(detail.interview)}</p>
-        <div class="serial-card">
-          <span class="sc-label">OPERATIONS ANSWER FRAME</span>
-${renderAnswerShape(playbook.answerShape)}
-        </div>
-${detail.answerCards?.length ? `        <table>
-          <tr><th>답변 유형</th><th>예시</th></tr>
-${renderRows(detail.answerCards)}
-        </table>` : ""}
       </section>`;
 
   return `<!DOCTYPE html>

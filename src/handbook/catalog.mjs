@@ -117,12 +117,14 @@ export const LLM_HANDBOOKS = [
 ];
 
 export const AI_NATIVE_TRAINING_HANDBOOKS = [
-  { id: "ai-native-competency-map", label: "00 역량 매트릭스·진단", kind: "AI Native 훈련", file: "ai-native-competency-map-handbook.html" },
-  { id: "ai-native-labs", label: "01 실습 랩", kind: "AI Native 훈련", file: "ai-native-labs-handbook.html" },
-  { id: "ai-native-toolkit", label: "02 템플릿 키트", kind: "AI Native 훈련", file: "ai-native-toolkit-handbook.html" },
-  { id: "ai-native-evaluation-harness", label: "03 평가 하네스", kind: "AI Native 훈련", file: "ai-native-evaluation-harness-handbook.html" },
-  { id: "ai-native-security-red-team", label: "04 보안 레드팀 Fixture", kind: "AI Native 훈련", file: "ai-native-security-red-team-handbook.html" },
-  { id: "ai-native-agent-runtime", label: "05 Agent Runtime 구현", kind: "AI Native 훈련", file: "ai-native-agent-runtime-handbook.html" },
+  { id: "ai-native-workday-timeline", label: "00 AI Agent·Loop 업무 흐름", kind: "AI Native 훈련", file: "ai-native-workday-timeline-handbook.html" },
+  { id: "ai-native-real-workflow", label: "01 실제 업무과정", kind: "AI Native 훈련", file: "ai-native-real-workflow-handbook.html" },
+  { id: "ai-native-competency-map", label: "02 요구사항 정의·문제 분해", kind: "AI Native 훈련", file: "ai-native-competency-map-handbook.html" },
+  { id: "ai-native-labs", label: "03 기획·사용자 시나리오 설계", kind: "AI Native 훈련", file: "ai-native-labs-handbook.html" },
+  { id: "ai-native-toolkit", label: "04 UX/UI 디자인 검토와 화면 설계", kind: "AI Native 훈련", file: "ai-native-toolkit-handbook.html" },
+  { id: "ai-native-evaluation-harness", label: "05 프론트엔드 구현 루프", kind: "AI Native 훈련", file: "ai-native-evaluation-harness-handbook.html" },
+  { id: "ai-native-security-red-team", label: "06 백엔드·DB·API 설계 루프", kind: "AI Native 훈련", file: "ai-native-security-red-team-handbook.html" },
+  { id: "ai-native-agent-runtime", label: "07 테스트·리뷰·릴리스 자동화", kind: "AI Native 훈련", file: "ai-native-agent-runtime-handbook.html" },
 ];
 
 export const ENGINEERING_CONTEXT_HANDBOOKS = [

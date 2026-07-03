@@ -15,14 +15,12 @@
   <a href="#ch2"><span class="code">SEC-01</span>WAF와 방화벽</a>
   <a href="#ch3"><span class="code">SEC-02</span>IAM과 secret</a>
   <a href="#ch4"><span class="code">SEC-03</span>검증 질문</a>
-  <a href="#ch5"><span class="code">MODEL</span>개념 모델</a>
-  <a href="#ch6"><span class="code">CHECK</span>실무 체크리스트</a>
-  <a href="#ch7"><span class="code">PLAYBOOK</span>실무 플레이북</a>
-  <a href="#ch8"><span class="code">PRACTICE</span>출력 판독 훈련</a>
-  <a href="#ch9"><span class="code">TERM</span>용어사전</a>
-  <a href="#ch10"><span class="code">CASE</span>장애/운영 시나리오</a>
-  <a href="#ch11"><span class="code">RISK</span>자주 틀리는 판단</a>
-  <a href="#ch12"><span class="code">Q&A</span>면접 답변 템플릿</a>
+  <a href="#ch5"><span class="code">CHECK</span>실무 체크리스트</a>
+  <a href="#ch6"><span class="code">PLAYBOOK</span>실무 플레이북</a>
+  <a href="#ch7"><span class="code">PRACTICE</span>출력 판독 훈련</a>
+  <a href="#ch8"><span class="code">TERM</span>용어사전</a>
+  <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
+  <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
 </nav>
 <main>
 <header class="hero">
@@ -92,18 +90,6 @@
       </section>
 
       <section id="ch5">
-        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
-        <p class="lede">보안 경계는 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
-        <table>
-          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
-          <tr><td>SEC-00 · 공개면 줄이기</td><td>인터넷에 공개되는 것은 DNS record, CDN, WAF, Load Balancer 정도로 제한한다. App, DB, cache, queue는 private subnet에 두고 관리 접근은 VPN, bastion, SSO, short-lived credential로 제한한다.</td><td>public DNS record, CDN/WAF distribution, LB listener, security group ingress, admin access path</td></tr>
-          <tr><td>SEC-01 · WAF와 방화벽</td><td>WAF는 L7의 악성 요청 패턴을 줄이고, security group은 stateful L4 허용 목록을 만든다. NACL은 stateless subnet 경계라 응답 포트까지 고려해야 한다. 차단 로그가 남지 않는 규칙은 운영 중 원인 분석을 어렵게 만든다.</td><td>WAF rule hit, SG stateful rule, NACL stateless rule, firewall deny log, false positive rate</td></tr>
-          <tr><td>SEC-02 · IAM과 secret</td><td>IAM은 사람, 서비스, pipeline, workload identity를 분리한다. secret은 repo, image, log, frontend bundle에 들어가면 안 된다. rotation 절차에는 revoke, 재발급, 배포, 영향 범위 확인이 포함된다.</td><td>principal, role assumption, policy diff, secret version, rotation date, last-used</td></tr>
-          <tr><td>SEC-03 · 검증 질문</td><td>위협 모델링은 public ingress, 인증 우회, 권한 상승, secret 노출, egress 악용, 로그 공백을 먼저 본다. 이 서비스의 public ingress는 어디인가? egress는 어떤 도메인과 포트까지 허용되는가? 관리자 권한은 누가 승인하고 얼마나 유지되는가? 침해 시 어떤 로그로 행위를 추적할 수 있는가?</td><td>public ingress list, auth boundary, admin action log, egress allowlist, audit coverage</td></tr>
-        </table>
-      </section>
-
-      <section id="ch6">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
         <p class="lede">보안 경계 체크리스트는 공개면 줄이기, WAF와 방화벽, IAM과 secret, 검증 질문의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
         <ul>
@@ -120,7 +106,7 @@
         </table>
       </section>
 
-      <section id="ch7">
+      <section id="ch6">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
         <p class="lede">보안 경계 플레이북은 <strong>SECURITY BOUNDARY OPERATIONS PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
@@ -141,28 +127,10 @@
           <tr><td>권한 점검</td><td>IAM policy diff, last-used, access review, break-glass ticket</td><td>필요 권한과 사용된 권한의 차이를 본다.</td></tr>
           <tr><td>비밀 점검</td><td>secret manager version, rotation date, deploy consumer, log redaction</td><td>secret이 repo/image/log/frontend bundle에 남지 않아야 한다.</td></tr>
         </table>
-        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
-        <pre class="snippet-card"><code>ops_command_evidence_packet:
-  document: operations-security-boundary-handbook.html
-  playbook: SECURITY BOUNDARY OPERATIONS PLAYBOOK
-  hypothesis: "Public ingress 계층이 사용자 영향과 연결되어 있는가"
-  command_or_probe: "DNS record, LB listener, WAF rule, security group ingress 목록화"
-  normal_signal: "인터넷에서 접근 가능한 표면을 실제로 열거한다."
-  abnormal_signal: "비정상 admin export 또는 외부 스캔 급증"
-  mitigation_then_permanent_fix:
-    mitigation: "actor, source IP, action, resource, WAF/auth log를 묶는다."
-    permanent_fix: "보안 조치가 운영 절차로 남아야 한다."
-  evidence_to_attach:
-    - timestamp
-    - environment
-    - owner
-    - trace_or_request_id
-    - dashboard_snapshot
-    - runbook_diff</code></pre>
 
       </section>
 
-      <section id="ch8">
+      <section id="ch7">
         <div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독 훈련</h2></div>
         <p class="lede">보안 경계는 개념을 아는 것보다 실제 출력에서 정상과 비정상을 구분하는 훈련이 중요하다. 아래 lab은 명령, 출력, 판단, 완화, 영구 수정을 한 번에 연결한다.</p>
         <div class="practice-lab">
@@ -195,7 +163,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
         </div>
       </section>
 
-      <section id="ch9">
+      <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">보안 경계에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
         <table>
@@ -208,7 +176,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
         </table>
       </section>
 
-      <section id="ch10">
+      <section id="ch9">
         <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
         <p class="lede">외부 공개 API를 신규 오픈한다. WAF rule과 rate limit을 먼저 적용하고, Load Balancer 뒤의 App은 private subnet에 둔다. IAM은 배포 권한과 운영 조회 권한을 분리하고, 인증 실패·차단·권한 거부 로그가 관측 시스템으로 들어오는지 확인한다.</p>
         <div class="callout">
@@ -228,7 +196,7 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
 
       </section>
 
-      <section id="ch11">
+      <section id="ch10">
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">보안 경계에서 자주 틀리는 판단은 공개면 줄이기와 검증 질문의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         <ul>
@@ -237,18 +205,6 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
           <li>secret rotation을 배포 절차와 연결하지 않는다.</li>
           <li>차단 로그가 없어 false positive와 공격을 구분하지 못한다.</li>
         </ul>
-      </section>
-
-      <section id="ch12">
-        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
-        <p class="lede">보안 경계는 공개면 최소화, 네트워크 통제, IAM 최소 권한, secret 관리, 감사 로그로 나눠 답합니다. WAF와 방화벽은 역할이 다르고, 침해를 완전히 막는 것보다 탐지와 피해 제한까지 설계하는 것이 중요합니다.</p>
-        <div class="serial-card">
-          <span class="sc-label">OPERATIONS ANSWER FRAME</span>
-          1. 공개면, 권한, 비밀, 감사 로그로 나눠 설명한다.<br>
-          2. WAF와 SG/NACL/IAM은 서로 대체하지 않는 통제라고 말한다.<br>
-          3. 침해를 막는 것뿐 아니라 탐지와 피해 제한까지 설계한다.<br>
-        </div>
-
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

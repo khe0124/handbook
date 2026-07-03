@@ -15,14 +15,12 @@
   <a href="#ch2"><span class="code">RUN-01</span>오케스트레이션 객체</a>
   <a href="#ch3"><span class="code">RUN-02</span>health check</a>
   <a href="#ch4"><span class="code">RUN-03</span>배포 안정성</a>
-  <a href="#ch5"><span class="code">MODEL</span>개념 모델</a>
-  <a href="#ch6"><span class="code">CHECK</span>실무 체크리스트</a>
-  <a href="#ch7"><span class="code">PLAYBOOK</span>실무 플레이북</a>
-  <a href="#ch8"><span class="code">PRACTICE</span>출력 판독 훈련</a>
-  <a href="#ch9"><span class="code">TERM</span>용어사전</a>
-  <a href="#ch10"><span class="code">CASE</span>장애/운영 시나리오</a>
-  <a href="#ch11"><span class="code">RISK</span>자주 틀리는 판단</a>
-  <a href="#ch12"><span class="code">Q&A</span>면접 답변 템플릿</a>
+  <a href="#ch5"><span class="code">CHECK</span>실무 체크리스트</a>
+  <a href="#ch6"><span class="code">PLAYBOOK</span>실무 플레이북</a>
+  <a href="#ch7"><span class="code">PRACTICE</span>출력 판독 훈련</a>
+  <a href="#ch8"><span class="code">TERM</span>용어사전</a>
+  <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
+  <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
 </nav>
 <main>
 <header class="hero">
@@ -92,18 +90,6 @@
       </section>
 
       <section id="ch5">
-        <div class="ch-head"><span class="ch-code">MODEL</span><h2>개념 모델</h2></div>
-        <p class="lede">컨테이너·오케스트레이션·Health Check는 단일 지식 항목이 아니라 운영 판단의 일부다. 아래 표처럼 개념을 책임, 확인 지표, 실패 신호로 나누면 면접 답변과 실제 장애 대응이 모두 선명해진다.</p>
-        <table>
-          <tr><th>구성 요소</th><th>운영 책임</th><th>확인할 증거</th></tr>
-          <tr><td>RUN-00 · 컨테이너 런타임</td><td>컨테이너는 프로세스, filesystem, network namespace, cgroup 제한을 묶은 실행 단위다. CPU, memory, file descriptor, ephemeral storage 제한을 모르고 운영하면 OOM, throttling, log 폭증을 놓친다.</td><td>CPU throttling, memory working set, OOMKilled, file descriptor, ephemeral storage, restart reason</td></tr>
-          <tr><td>RUN-01 · 오케스트레이션 객체</td><td>Kubernetes 기준으로 Deployment는 desired state, ReplicaSet은 replica 유지, Pod는 실행 단위, Service는 안정된 discovery, Ingress는 외부 HTTP 진입점이다. label과 selector가 어긋나면 정상 pod도 traffic을 받지 못한다.</td><td>Deployment, ReplicaSet, Pod, Service, selector, endpoint, Ingress rule, target group</td></tr>
-          <tr><td>RUN-02 · health check</td><td>readiness는 트래픽을 받아도 되는지, liveness는 재시작이 필요한지, startup probe는 느린 부팅을 보호하는지 판단한다. health check가 DB까지 강하게 묶이면 DB 지연 때 전체 pod가 빠질 수 있다.</td><td>readiness status, liveness restart, startup probe, probe path dependency, failure threshold</td></tr>
-          <tr><td>RUN-03 · 배포 안정성</td><td>rolling update는 maxUnavailable, maxSurge, pod disruption budget, connection draining, graceful shutdown이 함께 맞아야 무중단에 가까워진다. HPA는 CPU만이 아니라 queue lag, request rate 같은 업무 지표도 후보가 된다.</td><td>maxUnavailable, maxSurge, PDB, terminationGracePeriod, preStop, target deregistration delay</td></tr>
-        </table>
-      </section>
-
-      <section id="ch6">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check 체크리스트는 컨테이너 런타임, 오케스트레이션 객체, health check, 배포 안정성의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
         <ul>
@@ -120,7 +106,7 @@
         </table>
       </section>
 
-      <section id="ch7">
+      <section id="ch6">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check 플레이북은 <strong>RUNTIME ORCHESTRATION PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
@@ -141,28 +127,10 @@
           <tr><td>네트워크</td><td>service endpoints, ingress events, target health, connection draining</td><td>selector mismatch와 readiness 누락을 찾는다.</td></tr>
           <tr><td>리소스</td><td>CPU throttling, memory working set, ephemeral storage, file descriptor</td><td>limit만 올리기 전에 원인 지표를 확인한다.</td></tr>
         </table>
-        <h3>MARKER: artifact-ready — operations command evidence packet</h3>
-        <pre class="snippet-card"><code>ops_command_evidence_packet:
-  document: operations-runtime-orchestration-handbook.html
-  playbook: RUNTIME ORCHESTRATION PLAYBOOK
-  hypothesis: "Pod / Task health 계층이 사용자 영향과 연결되어 있는가"
-  command_or_probe: "kubectl get pods, describe pod, logs --previous, rollout status"
-  normal_signal: "CrashLoop, OOMKilled, probe failure를 분리한다."
-  abnormal_signal: "rolling update 중 일부 요청 502"
-  mitigation_then_permanent_fix:
-    mitigation: "readiness, drain, terminationGracePeriod, target deregistration delay를 본다."
-    permanent_fix: "다음 배포에서 자동으로 깨지는지 확인한다."
-  evidence_to_attach:
-    - timestamp
-    - environment
-    - owner
-    - trace_or_request_id
-    - dashboard_snapshot
-    - runbook_diff</code></pre>
 
       </section>
 
-      <section id="ch8">
+      <section id="ch7">
         <div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독 훈련</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check는 개념을 아는 것보다 실제 출력에서 정상과 비정상을 구분하는 훈련이 중요하다. 아래 lab은 명령, 출력, 판단, 완화, 영구 수정을 한 번에 연결한다.</p>
         <div class="practice-lab">
@@ -210,7 +178,7 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
         </div>
       </section>
 
-      <section id="ch9">
+      <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
         <table>
@@ -223,7 +191,7 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
         </table>
       </section>
 
-      <section id="ch10">
+      <section id="ch9">
         <div class="ch-head"><span class="ch-code">CASE</span><h2>장애/운영 시나리오</h2></div>
         <p class="lede">배포 중 일부 요청이 502로 실패한다. 새 pod가 readiness 통과 전에 트래픽을 받는지, 종료 pod가 connection draining 없이 내려가는지, graceful shutdown 시간보다 terminationGracePeriod가 짧은지 확인한다.</p>
         <div class="callout">
@@ -243,7 +211,7 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
 
       </section>
 
-      <section id="ch11">
+      <section id="ch10">
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check에서 자주 틀리는 판단은 컨테이너 런타임와 배포 안정성의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         <ul>
@@ -252,18 +220,6 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
           <li>resource limit만 두고 request를 비워 scheduling을 불안정하게 만든다.</li>
           <li>HPA를 CPU 하나로만 판단한다.</li>
         </ul>
-      </section>
-
-      <section id="ch12">
-        <div class="ch-head"><span class="ch-code">Q&A</span><h2>면접 답변 템플릿</h2></div>
-        <p class="lede">컨테이너 운영은 image 실행이 아니라 desired state, health check, resource isolation, traffic routing, graceful shutdown을 맞추는 일이라고 답합니다. readiness와 liveness를 구분하는 것이 무중단 배포의 기본입니다.</p>
-        <div class="serial-card">
-          <span class="sc-label">OPERATIONS ANSWER FRAME</span>
-          1. 오케스트레이션은 desired state, health, routing, capacity의 조합이다.<br>
-          2. readiness와 liveness를 분리해 무중단 배포를 설명한다.<br>
-          3. rolling update는 drain과 graceful shutdown까지 맞아야 한다.<br>
-        </div>
-
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>
