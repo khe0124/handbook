@@ -14,6 +14,7 @@
   <a href="#use"><span class="code">USE</span>실제 사용법</a>
   <a href="#contract"><span class="code">FE-02</span>구현 계약</a>
   <a href="#verify"><span class="code">FE-03</span>검증</a>
+  <a href="#eval-gate"><span class="code">GATE</span>Eval gate</a>
   <a href="#sample"><span class="code">SAMPLE</span>제출 예시</a>
 </nav>
 <main>
@@ -134,6 +135,40 @@ tests:
 <tr><td>반응형 검증</td><td>좁은 화면에서 텍스트와 버튼이 겹치지 않는가</td></tr>
 <tr><td>회귀 검증</td><td>기존 주문 상세와 환불 목록 화면이 깨지지 않는가</td></tr>
 </table>
+</section>
+
+<section id="eval-gate">
+<div class="ch-head"><span class="ch-code">GATE</span><h2>프론트 구현 Eval gate</h2></div>
+<p class="lede">AI가 만든 UI 초안은 눈으로 보기 전에 fixture로 먼저 거른다. 승인/반려 기능처럼 운영 리스크가 큰 화면은 happy path, 중복 제출, 권한 없음, 이미 처리됨, 모바일 좁은 폭, 키보드 조작을 최소 eval gate로 둔다.</p>
+<table>
+<tr><th>Fixture</th><th>통과 기준</th><th>반려 조건</th></tr>
+<tr><td>already_processed</td><td>409 오류가 전용 메시지로 보이고 버튼이 다시 활성화되지 않음</td><td>unknown error toast 하나로 처리</td></tr>
+<tr><td>forbidden</td><td>승인/반려 버튼은 read-only 상태와 이유로 대체</td><td>프론트에서 버튼만 숨기고 API 권한 테스트가 없음</td></tr>
+<tr><td>double_submit</td><td>submitting 중 approve/reject 모두 disabled, idempotency key 유지</td><td>빠른 더블클릭으로 두 요청이 나감</td></tr>
+<tr><td>keyboard_modal</td><td>focus trap, Escape, confirm/cancel 순서가 키보드로 동작</td><td>마우스로만 닫히거나 focus가 배경으로 빠짐</td></tr>
+<tr><td>mobile_360</td><td>drawer가 full-screen panel로 바뀌고 버튼 텍스트가 겹치지 않음</td><td>고정 폭 때문에 금액/사유/버튼이 겹침</td></tr>
+</table>
+<pre class="snippet-card"><code>frontend_eval_gate:
+  command_examples:
+    - "npm test -- RefundDecisionForm"
+    - "npm run test:e2e -- refund-decision.spec.ts"
+    - "npm run build"
+  fixtures:
+    already_processed:
+      api_status: 409
+      expected_ui: "이미 처리된 환불 요청입니다"
+    double_submit:
+      action: "approve button clicked twice within 300ms"
+      expected_network_calls: 1
+    mobile_360:
+      viewport: "360x740"
+      expected_layout: "full-screen decision panel, no clipped button text"
+  rejected_submission:
+    symptom: "AI 초안은 시각적으로 맞지만 fixture 3개가 unknown error로 합쳐짐"
+    reviewer_comment: "상태 계약을 검증하지 않았으므로 반려"
+  ci_gate:
+    pass: "unit + a11y smoke + e2e critical fixtures pass"
+    fail: "권한/중복/이미 처리됨 fixture 중 하나라도 실패하면 merge 금지"</code></pre>
 </section>
 
 <section id="sample">

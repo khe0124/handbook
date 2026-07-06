@@ -19,6 +19,7 @@
   <a href="#grid-systems"><span class="code">GRID</span>그리드·레이아웃 조형</a>
   <a href="#visual-hierarchy-audit"><span class="code">AUDIT</span>Visual hierarchy audit</a>
   <a href="#composition-critique"><span class="code">CRIT</span>Composition critique</a>
+  <a href="#critique-packet"><span class="code">PACKET</span>Critique 제출 패킷</a>
   <a href="#glossary"><span class="code">GLOSSARY</span>조형 용어집</a>
 </nav>
 <main>
@@ -189,6 +190,39 @@
 </table>
 <div class="callout"><span class="co-label">실전 비평 — 운영 분석 대시보드 카드 (Before / After)</span><p><strong>Before.</strong> 매출 요약 카드에 총요청수·이번달 매출·전일대비·상세보기 버튼·차트가 모두 같은 크기와 굵기로 들어갔다. 카드마다 divider 세 줄이 그어져 있고, 각 지표 라벨과 값의 간격이 지표 사이 간격과 같다. 실눈 테스트를 하면 아무것도 튀지 않는다 — 운영자가 가장 먼저 봐야 할 "이번달 매출과 전일대비 등락"이 나머지 메타 정보에 묻힌다. divider가 시각적으로 가장 강해서 데이터보다 격자가 먼저 읽힌다.</p><p><strong>진단.</strong> (1) 위계 부재 — 1순위 지표(매출·등락률)에 대비가 없다. (2) proximity 위반 — 라벨-값 간격 = 지표-지표 간격이라 그룹이 안 생긴다. (3) 선 남발 — divider가 간격으로 대체 가능한데 전경을 차지한다. (4) 초점 분산 — 상세보기 버튼 색과 등락률 색이 경쟁한다.</p><p><strong>After.</strong> 매출액을 type scale 2단계 키우고 등락률은 색+부호로만 강조(빨강/파랑). 나머지 지표(총요청수·평균 응답시간)는 caption 크기 회색으로 탈강조. divider 전부 제거하고 그룹 내 간격 4px·그룹 간 간격 16px로 proximity 복원(8pt scale). 상세보기 버튼만 채도 있는 색, 등락률은 무채조 대비 안에서 부호로 처리해 색 경쟁 제거. 결과: 실눈 테스트에서 매출과 등락률이 먼저 튀고, 나머지는 필요할 때 읽히는 배경으로 물러난다. 정보량은 그대로인데 읽는 순서가 생겼다.</p></div>
 <div class="callout gm"><span class="co-label">보조 노트</span><p>이 사례에서 바꾼 것 중 색은 하나(거래 버튼)뿐이다. 나머지는 전부 크기·굵기·간격·선 제거, 즉 조형 수단이다. 좋은 위계는 색을 마지막에 아주 조금만 쓴다. 색부터 꺼내는 시안은 대개 조형으로 풀어야 할 문제를 색으로 덮은 것이다.</p></div>
+</section>
+
+<section id="critique-packet">
+<div class="ch-head"><span class="ch-code">PACKET</span><h2>Visual critique submission packet</h2></div>
+<p class="lede">시각디자인 기초를 A급으로 체화했다는 증거는 용어 암기가 아니라, 실제 화면을 조형 언어로 진단하고 수정 전후를 방어하는 제출물이다. 아래 패킷을 채우면 취향 평가를 리뷰 가능한 판단으로 바꿀 수 있다.</p>
+<table>
+<tr><th>항목</th><th>좋은 제출</th><th>반려되는 제출</th></tr>
+<tr><td>진단</td><td>proximity, contrast, weight, focal point 같은 원리로 문제를 특정</td><td>"깔끔하지 않다", "요즘 느낌이 아니다"처럼 감상으로 끝남</td></tr>
+<tr><td>수정 방향</td><td>간격, 정렬, 크기, 굵기처럼 약한 재료부터 조정</td><td>색, 그림자, 카드 테두리를 먼저 추가해 문제를 덮음</td></tr>
+<tr><td>검증</td><td>squint test, grayscale, 모바일 접힘, 3초 우선순위 확인</td><td>before/after 이미지만 있고 왜 좋아졌는지 설명하지 못함</td></tr>
+<tr><td>handoff</td><td>spacing token, type role, component state로 개발자가 재현 가능</td><td>디자이너의 눈대중 수치를 구현자가 추측해야 함</td></tr>
+</table>
+<pre class="snippet-card"><code>visual_critique_packet:
+  screen: "refund request dashboard summary"
+  priority:
+    first_read: "이번달 환불 금액과 전일 대비 변화"
+    second_read: "처리 대기 건수와 SLA 초과"
+  diagnosis:
+    - "모든 카드 숫자가 같은 굵기라 focal point가 없음"
+    - "라벨-값 간격과 카드 간 간격이 같아 proximity가 깨짐"
+    - "divider가 데이터보다 강하게 보여 figure-ground가 뒤집힘"
+  changes:
+    - "주요 금액만 type scale +2"
+    - "보조 지표는 caption role과 neutral text로 탈강조"
+    - "divider 제거, group gap 4px / section gap 16px 적용"
+  rejected_change:
+    suggestion: "주요 카드에 파란 그림자 추가"
+    reason: "위계 문제가 아니라 초점 분산 문제이며 elevation 예산을 낭비함"
+  pass_criteria:
+    - "3초 squint test에서 1순위 정보가 먼저 보임"
+    - "grayscale에서도 위계가 유지됨"
+    - "spacing/type token으로 구현 가능"
+  reviewer_note: "취향이 아니라 조형 원리와 구현 가능한 수치로 수정안을 방어함"</code></pre>
 </section>
 
 <section id="glossary">

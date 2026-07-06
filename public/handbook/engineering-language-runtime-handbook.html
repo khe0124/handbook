@@ -23,6 +23,7 @@
   <a href="#memory"><span class="code">LR-05</span>GC JIT MEMORY MODEL</a>
   <a href="#concurrency"><span class="code">LR-06</span>동시성 의미론</a>
   <a href="#serialization"><span class="code">LR-07</span>SERIALIZATION CONTRACT</a>
+  <a href="#runtime-evidence"><span class="code">LR-08</span>Runtime evidence packet</a>
 </nav>
 <main>
 <header class="hero">
@@ -142,6 +143,40 @@
 <div class="g-row"><div class="g-term"><b>JIT</b><span>runtime compile</span></div><div class="g-def">실행 중 hot path를 더 빠른 코드로 컴파일하는 방식입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Happens-before</b><span>visibility</span></div><div class="g-def">한 스레드의 쓰기가 다른 스레드의 읽기에 보인다고 말할 수 있는 순서 관계입니다.</div></div>
 </div>
+</section>
+
+<section id="runtime-evidence">
+<div class="ch-head"><span class="ch-code">LR-08</span><h2>Runtime evidence packet</h2></div>
+<p class="lede">언어·런타임 지식은 "Java는 안정적이다", "Node는 비동기다" 같은 인상으로 끝나면 A급이 아니다. 같은 기능을 어떤 런타임 비용으로 실행했고, 그 비용이 p95/p99, GC pause, event loop delay, serialization error로 어떻게 드러났는지 제출해야 한다.</p>
+<table>
+<tr><th>검증 축</th><th>측정할 신호</th><th>반려되는 제출</th></tr>
+<tr><td>GC/JIT</td><td>allocation rate, young/old GC count, pause p95/p99, warmup 전후 latency</td><td>평균 응답 시간만 있고 배포 직후 warmup과 tail latency가 없다</td></tr>
+<tr><td>동시성</td><td>event loop delay, thread pool queue, lock wait, cancellation propagation</td><td>async/await를 썼다는 설명만 있고 timeout 이후 하위 작업이 멈추는지 모른다</td></tr>
+<tr><td>타입·스키마</td><td>compile-time error, runtime validation error, schema compatibility test</td><td>TypeScript 타입만 믿고 JSON 경계의 null/정밀도/enum drift를 검증하지 않는다</td></tr>
+<tr><td>직렬화</td><td>payload size, encode/decode latency, backward compatibility fixture</td><td>DTO를 만들었지만 구버전 consumer가 새 필드를 받는지 확인하지 않는다</td></tr>
+</table>
+<pre class="snippet-card"><code>runtime_evidence_packet:
+  scenario: "refund decision API after deploy"
+  runtime: "Java 21 / Spring Boot"
+  baseline_metric:
+    p95_latency_ms: 180
+    p99_latency_ms: 420
+    gc_pause_p99_ms: 32
+    allocation_rate_mb_s: 74
+  experiment:
+    change: "DTO mapping에서 중간 List 복사를 제거하고 streaming response는 유지하지 않음"
+    command_examples:
+      - "jcmd &lt;pid&gt; GC.heap_info"
+      - "jfr print --events jdk.GarbageCollection recording.jfr"
+      - "wrk -t4 -c64 -d60s http://localhost:8080/refunds/123"
+  after_metric:
+    p95_latency_ms: 150
+    p99_latency_ms: 310
+    gc_pause_p99_ms: 24
+    allocation_rate_mb_s: 46
+  rejected_interpretation: "평균 latency가 줄었으니 성공"
+  reviewer_note: "tail latency, allocation, GC pause가 같은 방향으로 좋아졌고 기능 계약이 유지되어 pass"</code></pre>
+<div class="callout warn"><span class="co-label">반려 예시</span><p>"Go는 빠르고 Java는 무겁다", "Node는 싱글스레드라 느리다"처럼 언어 이름으로 결론을 내면 반려한다. A급 답변은 요청 형태, 데이터 크기, I/O 비율, warmup, GC, 스케줄러, 직렬화 경계를 숫자로 분리한다.</p></div>
 </section>
 <footer>ENGINEERING LANGUAGE RUNTIME HANDBOOK · V1 · 2026-06</footer>
 </main>
