@@ -180,7 +180,15 @@ change risk classification → security review gate → risk based test matrix<b
 </table>
 <div class="semantic-card answer-card"><span class="sc-label">CSP 예시 골격</span><br>Content-Security-Policy:<br>default-src 'self';<br>script-src 'self' 'nonce-{REQUEST_NONCE}';<br>style-src 'self' 'nonce-{REQUEST_NONCE}';<br>img-src 'self' data: https:;<br>connect-src 'self' https://api.example.com https://errors.example.com;<br>object-src 'none';<br>base-uri 'self';<br>frame-ancestors 'none'</div>
 <p><code>unsafe-inline</code>은 XSS 방어력을 크게 낮추므로 nonce나 hash 기반으로 inline 실행을 제한합니다. nonce는 요청마다 새로 생성해야 하며, SPA가 호출하는 API, analytics, error monitoring 도메인은 <code>connect-src</code>에 명시합니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">CSP 적용 순서</span><br>Report-Only로 먼저 배포<br>위반 로그 수집<br>필요 출처 allowlist 정리<br>inline script 제거 또는 nonce 적용<br>enforce 모드로 전환</div>
+<div class="semantic-card process-card"><span class="sc-label">CSP 적용 순서</span>
+<p>보안 헤더 이름을 나열하는 대신 어떤 출처를 허용하고, 어떤 실행 경로를 막고, 배포 후 위반 로그를 어떻게 읽을지 확인하는 카드입니다. 원본 흐름은 <strong>Report-Only로 먼저 배포 위반 로그 수집 필요 출처 allowlist 정리 inline script 제거 또는 nonce 적용 enforce 모드로 전환</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 보호하려는 위험이 XSS, 데이터 노출, 권한 오남용 중 무엇인지 정하고 현재 정책을 확인합니다. 이 카드에서는 <em>Report-Only로 먼저 배포</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 report-only, 위반 로그, allowlist, nonce/hash, enforce 전환처럼 차단 강도를 단계적으로 올립니다. 핵심 흐름은 <em>위반 로그 수집 → 필요 출처 allowlist 정리 → inline script 제거 또는 nonce 적용</em>입니다.</li>
+<li><strong>판정</strong>: 브라우저 위반 로그, 네트워크 응답 헤더, QA 시나리오, 모니터링 알림으로 정책이 실제 적용됐는지 남깁니다. 마지막에는 <em>enforce 모드로 전환</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 바로 enforce하면 정상 기능을 막을 수 있으므로 관측 기간과 예외 검토 없이 정책을 강제하지 않습니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 보안 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 </section>
 
 <section id="fesec-ch6">
@@ -260,7 +268,15 @@ change risk classification → security review gate → risk based test matrix<b
 <section id="fetest-ch3">
 <div class="ch-head"><span class="ch-code">FTEST-03</span><h2>컴포넌트 테스트</h2></div>
 <p class="lede">Testing Library의 관점은 "사용자가 찾는 방식으로 찾는다"입니다. role, label, text를 우선합니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">COMPONENT TEST 원칙</span><br>getByRole로 상호작용 요소 찾기<br>userEvent로 실제 입력에 가깝게 조작<br>비동기 UI는 findBy/waitFor 사용<br>내부 state나 private 함수는 직접 검증하지 않음<br>접근 가능한 이름을 테스트가 자연스럽게 요구하게 만들기</div>
+<div class="semantic-card process-card"><span class="sc-label">COMPONENT TEST 원칙</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>getByRole로 상호작용 요소 찾기 userEvent로 실제 입력에 가깝게 조작 비동기 UI는 findBy/waitFor 사용 내부 state나 private 함수는 직접 검증하지 않음 접근 가능한 이름을 테스트가 자연스럽게 요구하게 만들기</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>getByRole로 상호작용 요소 찾기</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>userEvent로 실제 입력에 가깝게 조작 → 비동기 UI는 findBy/waitFor 사용 → 내부 state나 private 함수는 직접 검증하지 않음</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>접근 가능한 이름을 테스트가 자연스럽게 요구하게 만들기</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>Testing Library 규칙</th><th>이유</th></tr>
 <tr><td><code>getByRole({ name })</code> 우선</td><td>사용자와 보조기술이 인식하는 이름을 검증</td></tr>
@@ -383,7 +399,15 @@ change risk classification → security review gate → risk based test matrix<b
 <tr><td>secret</td><td>프론트 번들에 절대 포함하지 않음</td></tr>
 <tr><td>mode</td><td>development/staging/production 설정 분리</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">BUILD OUTPUT</span><br>npm run build<br><span class="dim">→</span> dist/index.html<br><span class="dim">→</span> dist/assets/index-[hash].js<br><span class="dim">→</span> dist/assets/index-[hash].css<br><span class="dim">→</span> static assets</div>
+<div class="semantic-card process-card"><span class="sc-label">BUILD OUTPUT</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>npm run build → dist/index.html → dist/assets/index-[hash].js → dist/assets/index-[hash].css → static assets</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>npm run build</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>dist/index.html → dist/assets/index-[hash].js → dist/assets/index-[hash].css</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>static assets</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 </section>
 
 <section id="fedeploy-ch3">

@@ -35,7 +35,15 @@
 <section id="spine">
 <div class="ch-head"><span class="ch-code">SYS-01</span><h2>COMPUTER SYSTEMS SPINE</h2></div>
 <p class="lede">애플리케이션 요청은 CPU 명령, 메모리 접근, 커널 syscall, 파일/소켓 I/O, 스케줄링 대기, 네트워크 왕복으로 분해됩니다. 시스템을 이해한다는 것은 이 비용의 위치를 구분하는 능력입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">COMPUTER SYSTEMS SPINE</span><br>request → user code → CPU/cache → heap/stack/virtual memory<br>→ syscall boundary → file/socket descriptor → kernel buffer<br>→ scheduler → NIC/disk → response</div>
+<div class="semantic-card process-card"><span class="sc-label">COMPUTER SYSTEMS SPINE</span>
+<p>구성요소 이름을 외우는 대신 요청 하나가 CPU, 메모리, 커널, I/O, 런타임 경계를 어떻게 지나가는지 추적하는 카드입니다. 원본 흐름은 <strong>request → user code → CPU/cache → heap/stack/virtual memory → syscall boundary → file/socket descriptor → kernel buffer → scheduler → NIC/disk → response</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자 코드에서 어떤 자원 경계로 넘어가는지 정하고, 관측할 계층을 하나씩 나눕니다. 이 카드에서는 <em>request</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 cache miss, allocation, syscall, scheduler, socket, GC/JIT처럼 병목 증거가 남는 위치를 확인합니다. 핵심 흐름은 <em>user code → CPU/cache → heap/stack/virtual memory → syscall boundary → file/socket descriptor → kernel buffer → scheduler → NIC/disk</em>입니다.</li>
+<li><strong>판정</strong>: trace, profiler, syscall log, allocation/GC 지표, latency percentile을 붙여 원인 후보를 좁힙니다. 마지막에는 <em>response</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 느리다는 인상만으로 고치지 말고 계층별 증거를 붙인 뒤 가장 작은 실험을 선택합니다.</li>
+</ol>
+<p>따라서 이 카드는 시스템·런타임 추적 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>층</th><th>주요 병목</th><th>관측 도구</th><th>대표 증상</th></tr>
 <tr><td>CPU</td><td>연산, branch, serialization</td><td><code>top</code>, profiler, flame graph</td><td>코어 포화, latency 증가</td></tr>
@@ -55,7 +63,15 @@
 <tr><td>Cache line</td><td>CPU가 메모리를 줄 단위로 가져옴</td><td>연속 배열, false sharing 주의</td></tr>
 <tr><td>Branch prediction</td><td>분기 방향 예측</td><td>데이터 분포가 random이면 비용 증가</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">CPU CACHE LOCALITY</span><br>bad: linked nodes → pointer chase → cache miss per node<br>good: packed array → sequential scan → prefetch friendly<br>risk: multiple threads update nearby counters → false sharing</div>
+<div class="semantic-card process-card"><span class="sc-label">CPU CACHE LOCALITY</span>
+<p>구성요소 이름을 외우는 대신 요청 하나가 CPU, 메모리, 커널, I/O, 런타임 경계를 어떻게 지나가는지 추적하는 카드입니다. 원본 흐름은 <strong>bad: linked nodes → pointer chase → cache miss per node good: packed array → sequential scan → prefetch friendly risk: multiple threads update nearby counters → false sharing</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자 코드에서 어떤 자원 경계로 넘어가는지 정하고, 관측할 계층을 하나씩 나눕니다. 이 카드에서는 <em>bad: linked nodes</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 cache miss, allocation, syscall, scheduler, socket, GC/JIT처럼 병목 증거가 남는 위치를 확인합니다. 핵심 흐름은 <em>pointer chase → cache miss per node → good: packed array → sequential scan → prefetch friendly</em>입니다.</li>
+<li><strong>판정</strong>: trace, profiler, syscall log, allocation/GC 지표, latency percentile을 붙여 원인 후보를 좁힙니다. 마지막에는 <em>risk: multiple threads update nearby counters → false sharing</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 느리다는 인상만으로 고치지 말고 계층별 증거를 붙인 뒤 가장 작은 실험을 선택합니다.</li>
+</ol>
+<p>따라서 이 카드는 시스템·런타임 추적 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">실무 감각</span><p>Hash map이 이론상 <code>O(1)</code>이어도 큰 메모리와 랜덤 접근을 만들면 캐시 미스로 느려질 수 있습니다. 반대로 작은 배열 선형 탐색은 <code>O(n)</code>이어도 n이 작고 연속 메모리라 더 빠를 수 있습니다.</p></div>
 </section>
 
@@ -88,14 +104,30 @@
 <tr><td>Scheduler</td><td>CPU 시간을 나눠줌</td><td>run queue, priority, cgroup quota 영향</td></tr>
 <tr><td>Lock contention</td><td>공유 자원 대기</td><td>CPU가 남아도 latency가 증가</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">PROCESS THREAD SCHEDULING</span><br>runnable threads > available cores → run queue grows<br>blocked threads wait on I/O/lock → throughput flat, latency rises<br>CPU quota throttling → app appears slow even with low host CPU</div>
+<div class="semantic-card process-card"><span class="sc-label">PROCESS THREAD SCHEDULING</span>
+<p>구성요소 이름을 외우는 대신 요청 하나가 CPU, 메모리, 커널, I/O, 런타임 경계를 어떻게 지나가는지 추적하는 카드입니다. 원본 흐름은 <strong>runnable threads &gt; available cores → run queue grows blocked threads wait on I/O/lock → throughput flat, latency rises CPU quota throttling → app appears slow even with low host C...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자 코드에서 어떤 자원 경계로 넘어가는지 정하고, 관측할 계층을 하나씩 나눕니다. 이 카드에서는 <em>runnable threads &gt; available cores → run queue grows</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 cache miss, allocation, syscall, scheduler, socket, GC/JIT처럼 병목 증거가 남는 위치를 확인합니다. 핵심 흐름은 <em>blocked threads wait on I/O/lock → throughput flat, latency rises</em>입니다.</li>
+<li><strong>판정</strong>: trace, profiler, syscall log, allocation/GC 지표, latency percentile을 붙여 원인 후보를 좁힙니다. 마지막에는 <em>CPU quota throttling → app appears slow even with low host CPU</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 느리다는 인상만으로 고치지 말고 계층별 증거를 붙인 뒤 가장 작은 실험을 선택합니다.</li>
+</ol>
+<p>따라서 이 카드는 시스템·런타임 추적 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout"><span class="co-label">스레드 풀 기준</span><p>CPU-bound 작업은 코어 수 근처, I/O-bound 작업은 대기 시간이 길수록 더 많은 스레드가 필요할 수 있습니다. 하지만 무작정 늘리면 stack memory와 context switch가 늘고 하류 DB/API를 압박합니다. 스레드 풀 크기는 하류 커넥션 풀, timeout, queue limit과 함께 정합니다.</p></div>
 </section>
 
 <section id="syscall">
 <div class="ch-head"><span class="ch-code">SYS-05</span><h2>FILE SOCKET SYSCALL TRACE</h2></div>
 <p class="lede">파일과 소켓은 애플리케이션에서 객체처럼 보이지만 커널에서는 file descriptor입니다. 읽기, 쓰기, 연결, accept는 user mode에서 kernel mode로 넘어가는 syscall입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">FILE SOCKET SYSCALL TRACE</span><br>open/read/write/close for files<br>socket/bind/listen/accept/read/write/close for servers<br>connect/send/recv/close for clients<br>epoll_wait/kqueue for readiness based I/O</div>
+<div class="semantic-card process-card"><span class="sc-label">FILE SOCKET SYSCALL TRACE</span>
+<p>구성요소 이름을 외우는 대신 요청 하나가 CPU, 메모리, 커널, I/O, 런타임 경계를 어떻게 지나가는지 추적하는 카드입니다. 원본 흐름은 <strong>open/read/write/close for files socket/bind/listen/accept/read/write/close for servers connect/send/recv/close for clients epoll_wait/kqueue for readiness based I/O</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자 코드에서 어떤 자원 경계로 넘어가는지 정하고, 관측할 계층을 하나씩 나눕니다. 이 카드에서는 <em>open/read/write/close for files</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 cache miss, allocation, syscall, scheduler, socket, GC/JIT처럼 병목 증거가 남는 위치를 확인합니다. 핵심 흐름은 <em>socket/bind/listen/accept/read/write/close for servers → connect/send/recv/close for clients</em>입니다.</li>
+<li><strong>판정</strong>: trace, profiler, syscall log, allocation/GC 지표, latency percentile을 붙여 원인 후보를 좁힙니다. 마지막에는 <em>epoll_wait/kqueue for readiness based I/O</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 느리다는 인상만으로 고치지 말고 계층별 증거를 붙인 뒤 가장 작은 실험을 선택합니다.</li>
+</ol>
+<p>따라서 이 카드는 시스템·런타임 추적 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>syscall</th><th>하는 일</th><th>문제 신호</th></tr>
 <tr><td><code>open</code></td><td>파일을 fd로 연결</td><td>권한 오류, fd 누수</td></tr>

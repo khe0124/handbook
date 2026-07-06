@@ -35,7 +35,15 @@
 <section id="spine">
 <div class="ch-head"><span class="ch-code">AM-01</span><h2>APPLIED MEASUREMENT SPINE</h2></div>
 <p class="lede">좋은 측정은 먼저 질문을 좁힙니다. "빨라졌나"보다 "어떤 사용자군의 p95 latency가 얼마나 줄었고, 오차와 회귀 위험은 얼마인가"가 더 나은 질문입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">APPLIED MEASUREMENT SPINE</span><br>decision question → metric definition → sampling plan → baseline<br>→ experiment/control → confidence interval → error analysis<br>→ regression guard → decision record</div>
+<div class="semantic-card process-card"><span class="sc-label">APPLIED MEASUREMENT SPINE</span>
+<p>측정 용어를 외우는 대신 의사결정 질문에서 표본, 기준선, 오차, 회귀 방지, 판정 기록까지 이어가는 카드입니다. 원본 흐름은 <strong>decision question → metric definition → sampling plan → baseline → experiment/control → confidence interval → error analysis → regression guard → decision record</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어떤 결정을 내리려고 측정하는지 질문을 좁히고, 성공 지표와 보호 지표를 분리합니다. 이 카드에서는 <em>decision question</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 표본 추출, baseline, 실험군·대조군, 오차 분석, 회귀 기준을 순서대로 확인합니다. 핵심 흐름은 <em>metric definition → sampling plan → baseline → experiment/control → confidence interval → error analysis</em>입니다.</li>
+<li><strong>판정</strong>: metric definition, sampling frame, baseline, confidence interval, error analysis, decision record를 남깁니다. 마지막에는 <em>regression guard → decision record</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 평균 하나만 보면 꼬리 지연과 편향을 놓치므로 percentile, 표본 대표성, 재현 조건을 같이 기록합니다.</li>
+</ol>
+<p>따라서 이 카드는 측정과 검증 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>개념</th><th>핵심 질문</th><th>산출물</th></tr>
 <tr><td>확률</td><td>불확실한 사건을 어떻게 수량화하는가</td><td>분포, 기대값, 분산</td></tr>
@@ -49,7 +57,15 @@
 <section id="sampling">
 <div class="ch-head"><span class="ch-code">AM-02</span><h2>PROBABILITY SAMPLING DRILL</h2></div>
 <p class="lede">확률은 장기 빈도 또는 믿음의 정도를 다루는 언어입니다. 엔지니어링에서는 "이 관찰이 우연인지", "이 표본이 전체를 대표하는지", "위험이 얼마나 자주 발생하는지"를 묻는 데 쓰입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">PROBABILITY SAMPLING DRILL</span><br>population: 알고 싶은 전체<br>sampling frame: 실제로 뽑을 수 있는 목록<br>sample: 관측한 일부<br>statistic: sample에서 계산한 값<br>parameter: population의 진짜 값</div>
+<div class="semantic-card process-card"><span class="sc-label">PROBABILITY SAMPLING DRILL</span>
+<p>측정 용어를 외우는 대신 의사결정 질문에서 표본, 기준선, 오차, 회귀 방지, 판정 기록까지 이어가는 카드입니다. 원본 흐름은 <strong>population: 알고 싶은 전체 sampling frame: 실제로 뽑을 수 있는 목록 sample: 관측한 일부 statistic: sample에서 계산한 값 parameter: population의 진짜 값</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어떤 결정을 내리려고 측정하는지 질문을 좁히고, 성공 지표와 보호 지표를 분리합니다. 이 카드에서는 <em>population: 알고 싶은 전체</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 표본 추출, baseline, 실험군·대조군, 오차 분석, 회귀 기준을 순서대로 확인합니다. 핵심 흐름은 <em>sampling frame: 실제로 뽑을 수 있는 목록 → sample: 관측한 일부 → statistic: sample에서 계산한 값</em>입니다.</li>
+<li><strong>판정</strong>: metric definition, sampling frame, baseline, confidence interval, error analysis, decision record를 남깁니다. 마지막에는 <em>parameter: population의 진짜 값</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 평균 하나만 보면 꼬리 지연과 편향을 놓치므로 percentile, 표본 대표성, 재현 조건을 같이 기록합니다.</li>
+</ol>
+<p>따라서 이 카드는 측정과 검증 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>분포/개념</th><th>사용 감각</th><th>실무 예</th></tr>
 <tr><td>Bernoulli</td><td>성공/실패 하나</td><td>전환 여부, 에러 여부</td></tr>
@@ -107,7 +123,15 @@
 <tr><td>Euclidean distance</td><td>공간상 거리</td><td>차원과 scale에 민감</td></tr>
 <tr><td>ANN index</td><td>근사 최근접 검색</td><td>recall/latency/storage tradeoff</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">VECTOR SIMILARITY BASICS</span><br>normalize vectors → choose metric → build index<br>→ evaluate recall@k and latency → inspect false positives<br>→ add filters, reranker, and drift monitoring</div>
+<div class="semantic-card process-card"><span class="sc-label">VECTOR SIMILARITY BASICS</span>
+<p>측정 용어를 외우는 대신 의사결정 질문에서 표본, 기준선, 오차, 회귀 방지, 판정 기록까지 이어가는 카드입니다. 원본 흐름은 <strong>normalize vectors → choose metric → build index → evaluate recall@k and latency → inspect false positives → add filters, reranker, and drift monitoring</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어떤 결정을 내리려고 측정하는지 질문을 좁히고, 성공 지표와 보호 지표를 분리합니다. 이 카드에서는 <em>normalize vectors</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 표본 추출, baseline, 실험군·대조군, 오차 분석, 회귀 기준을 순서대로 확인합니다. 핵심 흐름은 <em>choose metric → build index → evaluate recall@k and latency → inspect false positives</em>입니다.</li>
+<li><strong>판정</strong>: metric definition, sampling frame, baseline, confidence interval, error analysis, decision record를 남깁니다. 마지막에는 <em>add filters, reranker, and drift monitoring</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 평균 하나만 보면 꼬리 지연과 편향을 놓치므로 percentile, 표본 대표성, 재현 조건을 같이 기록합니다.</li>
+</ol>
+<p>따라서 이 카드는 측정과 검증 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">유사도는 정답이 아니다</span><p>가까운 벡터가 항상 좋은 결과라는 보장은 없습니다. 평가셋, negative examples, 도메인별 false positive 비용을 정하고 recall@k, precision@k, nDCG 같은 검색 품질 지표를 함께 봅니다.</p></div>
 </section>
 

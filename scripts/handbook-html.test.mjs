@@ -109,6 +109,16 @@ test("audited accuracy fixes remain encoded in handbook sources", async () => {
   );
 });
 
+test("home handbook starts with weekday routine tables", async () => {
+  const home = await readFile("src/handbook/documents/home.ts", "utf8");
+
+  assert.match(home, /HOME-01<\/span><h2>평일 루틴/);
+  assert.match(home, /기본 퇴근 버전/);
+  assert.match(home, /야근 버전/);
+  assert.match(home, /INPUT 25분/);
+  assert.match(home, /MINI WORKOUT 12분/);
+});
+
 test("frontend SEO analytics handbook includes executable markup and measurement thresholds", async () => {
   const seo = await readFile("public/handbook/engineering-frontend-seo-analytics-handbook.html", "utf8");
 
@@ -2764,6 +2774,25 @@ test("engineering handbook separates code snippets from semantic explanation car
   assert.match(allEngineeringHtml, /class="snippet-card"/);
   assert.match(allEngineeringHtml, /class="semantic-card /);
   assert.match(allEngineeringHtml, /<pre class="snippet-card">/);
+});
+
+test("process semantic cards include explanatory context instead of bare word lists", async () => {
+  const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
+
+  for (const file of publicFiles) {
+    const source = await readFile(path.join("public", "handbook", file), "utf8");
+    const processCards = source.match(/<div class="semantic-card process-card">[\s\S]*?<\/div>/g) ?? [];
+
+    for (const [index, card] of processCards.entries()) {
+      const text = card.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+      assert.match(card, /<p>/, `${file} process-card #${index + 1} should include an explanatory paragraph`);
+      assert.ok(
+        text.length >= 180,
+        `${file} process-card #${index + 1} should contain enough explanatory context, not only keywords`,
+      );
+    }
+  }
 });
 
 test("engineering code-like examples are rendered as pre snippet cards", async () => {

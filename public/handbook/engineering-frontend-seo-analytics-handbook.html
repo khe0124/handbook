@@ -179,7 +179,15 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>Product analytics</td><td>activation, retention, feature adoption, cohort</td><td>PII 수집과 사용자 식별 정책 검토 필요</td></tr>
 <tr><td>Server logs</td><td>bot crawl, status code, redirect, API 오류</td><td>클라이언트 이벤트와 시간축을 맞춰야 함</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">MEASUREMENT PLAN</span><br>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가<br>2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다<br>3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다<br>4. 동의, 보존 기간, PII 제외 정책을 확인한다<br>5. QA 환경에서 DebugView, network payload, dashboard 반영을 검증한다<br>6. 릴리스 후 데이터 누락, 중복, 급증을 health window에서 확인한다</div>
+<div class="semantic-card process-card"><span class="sc-label">MEASUREMENT PLAN</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가 2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다 3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다 4. 동의, 보존 기간, PII 제외 정책을 확인한다 5. QA 환경에서 DebugView,...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다 → 3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다 → 4. 동의, 보존 기간, PII 제외 정책을 확인한다 → 5. QA 환경에서 DebugView, network payload, dashboard 반영을 검증한다</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>6. 릴리스 후 데이터 누락, 중복, 급증을 health window에서 확인한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <pre class="snippet-card"><code><span class="sc-label">GA4 event payload · pricing CTA</span>
 gtag("event", "pricing_plan_selected", {
   plan_id: "pro",

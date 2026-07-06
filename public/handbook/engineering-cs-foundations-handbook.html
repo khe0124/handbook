@@ -35,7 +35,15 @@
 <section id="spine">
 <div class="ch-head"><span class="ch-code">CS-01</span><h2>CS FOUNDATION SPINE</h2></div>
 <p class="lede">알고리즘 선택은 "가장 빠른 알고리즘"을 찾는 일이 아닙니다. 실제 입력 분포, 메모리 한계, 캐시 지역성, 구현 위험, 운영 관측성을 함께 보며 충분히 좋은 선택을 고정하는 일입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">CS FOUNDATION SPINE</span><br>problem contract → input scale → operation mix → data structure invariant<br>→ asymptotic bound → constant factor → memory layout<br>→ correctness sketch → benchmark evidence → failure playbook</div>
+<div class="semantic-card process-card"><span class="sc-label">CS FOUNDATION SPINE</span>
+<p>알고리즘 키워드를 외우는 대신 문제 계약, 입력 크기, 연산 분포, 불변식, 비용 모델, 실패 방어선을 한 번에 연결하는 카드입니다. 원본 흐름은 <strong>problem contract → input scale → operation mix → data structure invariant → asymptotic bound → constant factor → memory layout → correctness sketch → benchmark evidence → failure...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 기능이 보장해야 하는 계약과 입력 규모를 숫자로 적고, 어떤 연산이 반복되는지 분리합니다. 이 카드에서는 <em>problem contract</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 자료구조 불변식, 시간·공간 복잡도, 상수 비용, 메모리 배치, correctness sketch를 순서대로 확인합니다. 핵심 흐름은 <em>input scale → operation mix → data structure invariant → asymptotic bound → constant factor → memory layout → correctness sketch → benchmark evidence</em>입니다.</li>
+<li><strong>판정</strong>: 벤치마크 결과, 반례 테스트, 입력 상한, failure playbook을 남겨 선택한 알고리즘을 리뷰에서 방어합니다. 마지막에는 <em>failure playbook</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: Big-O만으로 결론 내리지 말고 실제 입력 분포와 cache, allocation, 원격 호출 같은 숨은 비용을 같이 봅니다.</li>
+</ol>
+<p>따라서 이 카드는 CS 판단 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>질문</th><th>확인할 것</th><th>산출물</th></tr>
 <tr><td>입력은 얼마나 커지는가</td><td>현재 p50/p99 크기, 1년 성장률, 최악 요청 크기</td><td>크기 표와 제한값 (예: "태그 룰은 현재 120개, 연 2배 성장, 상한 5,000")</td></tr>
@@ -210,7 +218,15 @@ class LruCache&lt;K, V&gt; extends LinkedHashMap&lt;K, V&gt; {
 <section id="proof">
 <div class="ch-head"><span class="ch-code">CS-04</span><h2>INVARIANT PROOF DRILL</h2></div>
 <p class="lede">증명은 형식 논문이 아니라 "왜 이 코드가 깨지지 않는지"를 짧게 설명하는 훈련입니다. 실무에서는 불변식, 초기화, 보존, 종료를 PR 설명에 넣을 수 있으면 충분합니다. 아래 binary search는 이 네 단계가 코드 주석으로 그대로 들어간 예입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">INVARIANT PROOF DRILL</span><br>1. invariant: 루프/상태 전이 전후로 항상 참인 문장을 쓴다<br>2. initialization: 시작 전에 invariant가 참임을 보인다<br>3. preservation: 한 단계 실행 후에도 참임을 보인다<br>4. termination: 끝났을 때 invariant가 원하는 결과를 의미함을 보인다<br>5. counterexample: 깨지는 입력을 하나 만들어 테스트로 고정한다</div>
+<div class="semantic-card process-card"><span class="sc-label">INVARIANT PROOF DRILL</span>
+<p>알고리즘 키워드를 외우는 대신 문제 계약, 입력 크기, 연산 분포, 불변식, 비용 모델, 실패 방어선을 한 번에 연결하는 카드입니다. 원본 흐름은 <strong>1. invariant: 루프/상태 전이 전후로 항상 참인 문장을 쓴다 2. initialization: 시작 전에 invariant가 참임을 보인다 3. preservation: 한 단계 실행 후에도 참임을 보인다 4. termination: 끝났을 때 invariant가 원하는 결과를 의미함을 보인다 5. count...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 기능이 보장해야 하는 계약과 입력 규모를 숫자로 적고, 어떤 연산이 반복되는지 분리합니다. 이 카드에서는 <em>1. invariant: 루프/상태 전이 전후로 항상 참인 문장을 쓴다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 자료구조 불변식, 시간·공간 복잡도, 상수 비용, 메모리 배치, correctness sketch를 순서대로 확인합니다. 핵심 흐름은 <em>2. initialization: 시작 전에 invariant가 참임을 보인다 → 3. preservation: 한 단계 실행 후에도 참임을 보인다 → 4. termination: 끝났을 때 invariant가 원하는 결과를 의미함을 보인다</em>입니다.</li>
+<li><strong>판정</strong>: 벤치마크 결과, 반례 테스트, 입력 상한, failure playbook을 남겨 선택한 알고리즘을 리뷰에서 방어합니다. 마지막에는 <em>5. counterexample: 깨지는 입력을 하나 만들어 테스트로 고정한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: Big-O만으로 결론 내리지 말고 실제 입력 분포와 cache, allocation, 원격 호출 같은 숨은 비용을 같이 봅니다.</li>
+</ol>
+<p>따라서 이 카드는 CS 판단 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <h3><span class="h3-tag">CODE</span>binary search — 반열림 <code>[lo, hi)</code> 불변식</h3>
 <pre class="snippet-card"><span class="sc-label">TS · lowerBound — 불변식이 주석으로 증명되는 코드</span>
 // lowerBound: target 이상인 값이 처음 나오는 인덱스 (없으면 arr.length).

@@ -257,17 +257,15 @@ local reproduce → build/test → image build<br>
 <div class="ch-head"><span class="ch-code">OPS-02</span><h2>이미지와 레이어</h2></div>
 <p class="lede">세 단어를 정확히 구분하세요 — <em>이미지</em>는 불변 스냅샷(설계도), <em>레이어</em>는 그 이미지를 쌓아 올린 캐시 단위, <em>컨테이너</em>는 이미지를 실행한 인스턴스입니다. 클래스와 인스턴스의 관계를 떠올리면 정확합니다.</p>
 <p>이미지는 <strong>읽기 전용 레이어의 스택</strong>입니다. Dockerfile의 명령 하나(<code>RUN</code>, <code>COPY</code> 등)가 대체로 레이어 하나를 만들고, 각 레이어는 직전 상태에서 <em>바뀐 파일만</em> 담습니다. 컨테이너를 실행하면 이 읽기 전용 스택 위에 얇은 <strong>쓰기 가능 레이어</strong>가 한 장 얹히고, 실행 중 생기는 변경은 전부 거기로 갑니다. 컨테이너를 지우면 그 레이어도 사라집니다 — 그래서 상태는 컨테이너 안에 두면 안 됩니다(→ OPS-07).</p>
-<div class="semantic-card process-card">
-<span class="sc-label">LAYER STACK — 위로 갈수록 자주 바뀜</span><br>
-<span class="dim">┌─────────────────────────────┐</span><br>
-<span class="dim">│</span> <span class="seg">RW 레이어</span> (컨테이너 실행 중 변경)  <span class="dim">│ ← 컨테이너마다 1장</span><br>
-<span class="dim">├─────────────────────────────┤</span><br>
-<span class="dim">│</span> <span class="seg2">COPY . .</span>  (앱 소스)            <span class="dim">│ ← 매 빌드 바뀜</span><br>
-<span class="dim">│</span> <span class="seg2">RUN npm ci</span> (의존성)           <span class="dim">│ ← 가끔 바뀜</span><br>
-<span class="dim">│</span> <span class="seg2">COPY package.json</span>            <span class="dim">│ ← 드물게 바뀜</span><br>
-<span class="dim">│</span> <span class="seg2">FROM node:22-slim</span> (베이스)    <span class="dim">│ ← 거의 안 바뀜</span><br>
-<span class="dim">└─────────────────────────────┘  ↑ 읽기 전용, 공유·캐시됨</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">LAYER STACK — 위로 갈수록 자주 바뀜</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>┌─────────────────────────────┐ │ RW 레이어 (컨테이너 실행 중 변경) │ ← 컨테이너마다 1장 ├─────────────────────────────┤ │ COPY . . (앱 소스) │ ← 매 빌드 바뀜 │ RUN npm ci (의존성) │ ← 가끔 바뀜 │ COPY package.jso...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>┌─────────────────────────────┐</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>│ RW 레이어 (컨테이너 실행 중 변경) │ ← 컨테이너마다 1장 → ├─────────────────────────────┤ → │ COPY . . (앱 소스) │ ← 매 빌드 바뀜 → │ RUN npm ci (의존성) │ ← 가끔 바뀜 → │ COPY package.json │ ← 드물게 바뀜 → │ FROM node:22-slim (베이스) │ ← 거의 안 바뀜</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>└─────────────────────────────┘ ↑ 읽기 전용, 공유·캐시됨</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>레이어가 캐시 단위라는 점이 빌드 속도의 전부를 결정합니다. Docker는 빌드 시 각 레이어를 위에서부터 검사해 <em>입력이 그대로면 캐시를 재사용</em>합니다. 그러나 한 레이어가 깨지면 그 <strong>아래(이후) 레이어는 전부 다시 빌드</strong>됩니다. 그래서 "자주 바뀌는 것을 아래쪽(나중)에" 두는 순서가 중요합니다(→ OPS-03). 여러 이미지가 같은 베이스 레이어를 쓰면 디스크에서 그 레이어를 <em>한 번만</em> 저장합니다 — content-addressable(해시 기반) 저장 덕입니다.</p>
 <div class="callout">
 <span class="co-label">멘탈 모델</span>
@@ -289,20 +287,15 @@ local reproduce → build/test → image build<br>
 <tr><td><code>ENTRYPOINT</code></td><td>고정 실행 진입점. <code>CMD</code>는 그 인자로 들어감 — 둘을 조합</td></tr>
 </table>
 <p>가장 큰 레버는 <strong>레이어 캐시를 살리는 명령 순서</strong>입니다. 의존성 설치(<code>npm ci</code>)는 소스 코드가 바뀌어도 <code>package.json</code>이 그대로면 다시 할 필요가 없습니다. 그래서 <em>의존성 매니페스트만 먼저 COPY → 설치 → 그다음 전체 소스 COPY</em> 순으로 짭니다. 이러면 코드 한 줄 고친 재빌드에서 의존성 설치 레이어가 캐시로 건너뛰어집니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">DOCKERFILE — Node 앱 (캐시·보안 고려)</span><br>
-<span class="seg">FROM</span> node:22-slim<br>
-<span class="seg">WORKDIR</span> /app<br>
-<span class="dim"># 1) 의존성 매니페스트만 먼저 — 코드보다 드물게 바뀜</span><br>
-<span class="seg">COPY</span> package.json package-lock.json ./<br>
-<span class="seg">RUN</span> npm ci --omit=dev<br>
-<span class="dim"># 2) 그다음 소스 — 자주 바뀌므로 캐시 경계를 여기 둔다</span><br>
-<span class="seg">COPY</span> . .<br>
-<span class="dim"># 3) 비root 유저로 강등 (slim 이미지는 node 유저 내장)</span><br>
-<span class="seg">USER</span> node<br>
-<span class="seg">EXPOSE</span> 3000<br>
-<span class="seg">CMD</span> [<span class="seg2">"node"</span>, <span class="seg2">"server.js"</span>]
-</div>
+<div class="semantic-card process-card"><span class="sc-label">DOCKERFILE — Node 앱 (캐시·보안 고려)</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>FROM node:22-slim WORKDIR /app # 1) 의존성 매니페스트만 먼저 — 코드보다 드물게 바뀜 COPY package.json package-lock.json ./ RUN npm ci --omit=dev # 2) 그다음 소스 — 자주 바뀌므로 캐시 경계를 여기 둔다 COPY . . # 3) 비root...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>FROM node:22-slim</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>WORKDIR /app → # 1) 의존성 매니페스트만 먼저 — 코드보다 드물게 바뀜 → COPY package.json package-lock.json ./ → RUN npm ci --omit=dev → # 2) 그다음 소스 — 자주 바뀌므로 캐시 경계를 여기 둔다 → COPY . . → # 3) 비root 유저로 강등 (slim 이미지는 node 유저 내장) → USER node → E...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>CMD [ &quot;node&quot; , &quot;server.js&quot; ]</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>두 가지를 더 챙깁니다. 첫째, <code>.dockerignore</code>로 <code>node_modules</code>·<code>.git</code>·로컬 빌드 산출물을 빌드 컨텍스트에서 제외하세요 — 안 그러면 거대한 컨텍스트를 daemon으로 통째로 전송하고, 로컬 <code>node_modules</code>가 이미지로 섞여 들어가 깨집니다. 둘째, <code>USER</code>로 <strong>비root</strong>로 떨어뜨리세요. 기본 root로 도는 컨테이너는 탈출 시 공격면이 커집니다.</p>
 <div class="callout warn">
 <span class="co-label">CMD vs ENTRYPOINT — 자주 틀리는 곳</span>
@@ -315,24 +308,15 @@ local reproduce → build/test → image build<br>
 <div class="ch-head"><span class="ch-code">OPS-04</span><h2>멀티스테이지 빌드와 이미지 최적화</h2></div>
 <p class="lede">빌드에 필요한 것과 실행에 필요한 것은 다릅니다. 컴파일러·devDependencies·빌드 캐시는 <em>실행 시점엔 쓰레기</em>입니다. 멀티스테이지 빌드는 이 둘을 분리해 최종 이미지에서 빌드 도구를 통째로 들어냅니다.</p>
 <p>핵심 문법은 하나입니다 — Dockerfile 안에 <code>FROM</code>을 여러 번 써서 단계(stage)를 나누고, <code>COPY --from=&lt;stage&gt;</code>로 <em>앞 단계의 결과물만</em> 다음 단계로 가져옵니다. 빌드 단계는 무거운 SDK를 다 깔아 빌드하고, 런타임 단계는 가벼운 베이스에 산출물만 얹습니다. 빌드 단계는 최종 이미지에 포함되지 않습니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">MULTI-STAGE — 빌드 / 런타임 분리</span><br>
-<span class="dim"># --- 1단계: 빌드 (무거운 SDK 포함) ---</span><br>
-<span class="seg">FROM</span> node:22 <span class="seg2">AS</span> build<br>
-<span class="seg">WORKDIR</span> /app<br>
-<span class="seg">COPY</span> package.json package-lock.json ./<br>
-<span class="seg">RUN</span> npm ci<br>
-<span class="seg">COPY</span> . .<br>
-<span class="seg">RUN</span> npm run build <span class="dim"># → /app/dist 생성</span><br>
-<br>
-<span class="dim"># --- 2단계: 런타임 (가벼운 베이스, 산출물만) ---</span><br>
-<span class="seg">FROM</span> node:22-slim<br>
-<span class="seg">WORKDIR</span> /app<br>
-<span class="seg">COPY</span> --from=build <span class="seg2">/app/dist</span> ./dist<br>
-<span class="seg">COPY</span> --from=build <span class="seg2">/app/node_modules</span> ./node_modules<br>
-<span class="seg">USER</span> node<br>
-<span class="seg">CMD</span> [<span class="seg2">"node"</span>, <span class="seg2">"dist/server.js"</span>]
-</div>
+<div class="semantic-card process-card"><span class="sc-label">MULTI-STAGE — 빌드 / 런타임 분리</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong># --- 1단계: 빌드 (무거운 SDK 포함) --- FROM node:22 AS build WORKDIR /app COPY package.json package-lock.json ./ RUN npm ci COPY . . RUN npm run build # → /app/dist 생성 # --- 2단계: 런타임 (가벼운...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em># --- 1단계: 빌드 (무거운 SDK 포함) ---</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>FROM node:22 AS build → WORKDIR /app → COPY package.json package-lock.json ./ → RUN npm ci → COPY . . → RUN npm run build # → /app/dist 생성 → # --- 2단계: 런타임 (가벼운 베이스, 산출물만) --- → FROM node:22-slim → COPY --from=build /ap...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>CMD [ &quot;node&quot; , &quot;dist/server.js&quot; ]</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>베이스 이미지 선택이 크기와 공격면을 함께 줄입니다. <code>node:22</code>(full, ~1GB)보다 <code>node:22-slim</code>(~200MB)이, 더 극단적으로는 <code>distroless</code>(셸·패키지매니저조차 없는 최소 런타임)나 Alpine 계열이 있습니다. 작을수록 <em>다운로드·기동이 빠르고, 깔린 패키지가 적으니 CVE 노출도 줄어듭니다</em>.</p>
 <table>
 <tr><th>베이스</th><th>크기 감</th><th>트레이드오프</th></tr>
@@ -360,23 +344,15 @@ local reproduce → build/test → image build<br>
 <tr><td>실행/정리</td><td><code>-d</code>(백그라운드) <code>--rm</code>(종료 시 삭제) <code>--name</code>(이름 부여)</td></tr>
 </table>
 <p>로컬에서 DB·API·캐시 여러 서비스를 동시에 띄워야 하면 <code>docker run</code>을 손으로 여러 번 치는 대신 <strong>Docker Compose</strong>를 씁니다 — <code>compose.yaml</code>에 서비스·네트워크·볼륨을 선언하고 <code>docker compose up</code> 한 번으로 전부 띄웁니다. Compose가 자동으로 네트워크를 만들어, 서비스끼리 <em>서비스 이름을 호스트명처럼</em> 부를 수 있습니다(예: 앱에서 DB 호스트를 <code>db</code>로).</p>
-<div class="semantic-card process-card">
-<span class="sc-label">compose.yaml — 앱 + Postgres</span><br>
-<span class="seg2">services:</span><br>
-&nbsp;&nbsp;<span class="seg">app:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
-&nbsp;&nbsp;&nbsp;&nbsp;ports: [<span class="seg2">"3000:3000"</span>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATABASE_URL: postgres://app:pw@<span class="seg">db</span>:5432/app<br>
-&nbsp;&nbsp;&nbsp;&nbsp;depends_on: [db]<br>
-&nbsp;&nbsp;<span class="seg">db:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
-&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: pw<br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes: [<span class="seg2">"pgdata:/var/lib/postgresql/data"</span>] <span class="dim"># 상태 보존</span><br>
-<span class="seg2">volumes:</span><br>
-&nbsp;&nbsp;pgdata:
-</div>
+<div class="semantic-card process-card"><span class="sc-label">compose.yaml — 앱 + Postgres</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>services: app: build: . ports: [ &quot;3000:3000&quot; ] environment: DATABASE_URL: postgres://app:pw@ db :5432/app depends_on: [db] db: image: postgres:16 environment: POSTGRES_PASSWORD: p...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>services:</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>app: → build: . → ports: [ &quot;3000:3000&quot; ] → environment: → DATABASE_URL: postgres://app:pw@ db :5432/app → depends_on: [db] → db: → image: postgres:16 → POSTGRES_PASSWORD: pw → volumes: [ &quot;pgdata:/var/lib/postgresql/data...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>pgdata:</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">신호와 graceful shutdown</span>
 <p>오케스트레이터(또는 <code>docker stop</code>)는 컨테이너에 <code>SIGTERM</code>을 보내고, 유예 시간(기본 10초) 안에 안 죽으면 <code>SIGKILL</code>로 강제 종료합니다. 앱이 PID 1로 돌면서 신호를 직접 처리해야 진행 중 요청을 마저 끝내고 연결을 정리합니다. <code>CMD</code>를 셸 형식으로 쓰면 신호가 <code>sh</code>에서 막혀 앱까지 안 갑니다(→ OPS-03). exec 배열 형식을 쓰고, 필요하면 <code>--init</code>으로 가벼운 init을 PID 1에 두세요.</p>
@@ -557,15 +533,15 @@ NOTE : 명령·문법은 실재 Docker 기준 · COMPANION : LINUX/SHELL · BACK
 <section id="linux-ch1">
 <div class="ch-head"><span class="ch-code">LX-01</span><h2>셸의 사고 모델</h2></div>
 <p class="lede">Unix 철학 한 줄: <em>"한 가지를 잘하는 작은 프로그램을, 텍스트 스트림으로 잇는다."</em> 명령어를 외우기 전에 이 구조를 잡으면, 처음 보는 명령도 같은 문법으로 읽힙니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">ANATOMY OF A COMMAND</span><br>
-<span class="seg">command</span> <span class="seg2">-옵션 --긴옵션</span> <span class="dim">인자(파일·경로)</span><br>
-<span class="dim">예:</span> ls <span class="seg2">-la</span> <span class="dim">~/projects</span><br>
-<br>
-<span class="sc-label">THREE STREAMS</span>
-stdin(0) ──▶ [ <span class="seg">프로그램</span> ] ──▶ stdout(1)<br>
-<span class="dim">                  └──▶ stderr(2)  ← 에러는 별도 채널</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">ANATOMY OF A COMMAND</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>command -옵션 --긴옵션 인자(파일·경로) 예: ls -la ~/projects THREE STREAMS stdin(0) ──▶ [ 프로그램 ] ──▶ stdout(1) └──▶ stderr(2) ← 에러는 별도 채널</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>command -옵션 --긴옵션 인자(파일·경로)</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>예: ls -la ~/projects → THREE STREAMS → stdin(0) → [ 프로그램 ] → stdout(1)</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>└──▶ stderr(2) ← 에러는 별도 채널</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>모든 프로세스엔 세 개의 표준 스트림이 있습니다 — 입력(<code>stdin</code>), 정상 출력(<code>stdout</code>), 에러 출력(<code>stderr</code>). 이게 분리돼 있어서 <em>정상 결과는 파일로 저장하면서 에러는 화면에 띄우는</em> 식의 조합이 가능합니다(→ LX-08). 그리고 모든 명령은 끝나면 <strong>종료코드(exit code)</strong>를 남깁니다 — <code>0</code>은 성공, 그 외는 실패. <code>echo $?</code>로 직전 명령의 종료코드를 보고, <code>&amp;&amp;</code>/<code>||</code>로 성공·실패에 따라 다음을 잇습니다.</p>
 <table>
 <tr><th>도움 받기</th><th>의미</th></tr>
@@ -656,16 +632,15 @@ stdin(0) ──▶ [ <span class="seg">프로그램</span> ] ──▶ stdout(1)
 <section id="linux-ch6">
 <div class="ch-head"><span class="ch-code">LX-06</span><h2>권한·소유권</h2></div>
 <p class="lede">Unix 권한은 외울 게 아니라 <em>모델</em>입니다 — 누구(소유자/그룹/기타)가 무엇(읽기/쓰기/실행)을 할 수 있는가. <code>ls -l</code>의 맨 앞 10글자가 그 지도입니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">ls -l 의 권한 비트</span><br>
-<span class="seg">-</span><span class="seg2">rwx</span><span class="dim">r-x</span>r-- &nbsp; 1 haeun staff &nbsp;...<br>
-│ └user└group└others<br>
-<span class="dim">type</span> &nbsp; <span class="seg2">소유자=읽기·쓰기·실행</span> <span class="dim">그룹=읽기·실행</span> 기타=읽기<br>
-<br>
-<span class="sc-label">숫자(8진수) 표기</span>
-r=4 &nbsp; w=2 &nbsp; x=1 &nbsp;→ &nbsp; rwx=7 &nbsp; r-x=5 &nbsp; rw-=6<br>
-<span class="dim">예:</span> chmod <span class="seg">755</span> = rwxr-xr-x &nbsp;|&nbsp; chmod <span class="seg">644</span> = rw-r--r--
-</div>
+<div class="semantic-card process-card"><span class="sc-label">ls -l 의 권한 비트</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>- rwx r-x r-- 1 haeun staff ... │ └user└group└others type 소유자=읽기·쓰기·실행 그룹=읽기·실행 기타=읽기 숫자(8진수) 표기 r=4 w=2 x=1 → rwx=7 r-x=5 rw-=6 예: chmod 755 = rwxr-xr-x | chmod 644 = rw-r--r--</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>rwx r-x r-- 1 haeun staff ...</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>│ └user└group└others → type 소유자=읽기·쓰기·실행 그룹=읽기·실행 기타=읽기 → 숫자(8진수) 표기 → r=4 w=2 x=1 → rwx=7 r-x=5 rw-=6</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>예: chmod 755 = rwxr-xr-x | chmod 644 = rw-r--r--</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>명령</th><th>의미 / 형태</th></tr>
 <tr><td><code>chmod 755 file</code></td><td>권한을 8진수로 설정 (스크립트 실행 권한엔 보통 <code>+x</code>)</td></tr>
@@ -723,11 +698,15 @@ r=4 &nbsp; w=2 &nbsp; x=1 &nbsp;→ &nbsp; rwx=7 &nbsp; r-x=5 &nbsp; rw-=6<br>
 <tr><td><code>sed 's/old/new/g'</code></td><td>스트림 치환 (find&amp;replace). 파일 직접 수정은 <code>-i</code></td></tr>
 <tr><td><code>awk '{print $2}'</code></td><td>열 단위 가공 — 공백 구분 2번째 열 출력 등. 가벼운 표 처리</td></tr>
 </table>
-<div class="semantic-card process-card">
-<span class="sc-label">WORKED EXAMPLE — 접속로그에서 상위 IP 5개</span><br>
-cat access.log <span class="dim">|</span> awk <span class="seg2">'{print $1}'</span> <span class="dim">|</span> sort <span class="dim">|</span> uniq -c <span class="dim">|</span> sort -rn <span class="dim">|</span> head -5<br>
-<span class="dim">└ IP 추출 → 정렬 → 개수 세기 → 많은 순 정렬 → 상위 5 — 작은 도구 5개의 조립</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">WORKED EXAMPLE — 접속로그에서 상위 IP 5개</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>cat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -5 └ IP 추출 → 정렬 → 개수 세기 → 많은 순 정렬 → 상위 5 — 작은 도구 5개의 조립</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>cat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -5</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>└ IP 추출 → 정렬 → 개수 세기 → 많은 순 정렬</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>상위 5 — 작은 도구 5개의 조립</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">macOS 주의 — sed -i</span>
 <p>macOS(BSD)의 <code>sed -i</code>는 백업 확장자 인자를 <em>요구</em>합니다 — <code>sed -i '' 's/a/b/' file</code>(빈 따옴표 필수). GNU(Linux)는 <code>sed -i 's/a/b/' file</code>. 스크립트 이식할 때 단골 함정이라, 헷갈리면 <code>brew install gnu-sed</code>로 <code>gsed</code>를 쓰는 방법도 있습니다.</p>
@@ -883,12 +862,15 @@ NOTE : BSD vs GNU 차이 있는 항목은 본문 표기 · COMPANION : BACKEND E
 <section id="vi-ch1">
 <div class="ch-head"><span class="ch-code">VI-01</span><h2>사고 모델 — 모드와 문법</h2></div>
 <p class="lede">vi를 어렵게 만드는 건 단축키 개수가 아니라 두 가지 개념이다 — (1) <strong>모드</strong>, (2) <strong>"동사(연산자) + 명사(모션/객체)" 문법</strong>. 이 둘을 잡으면 나머지는 조합이다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">THE GRAMMAR — 명령은 문장이다</span><br>
-[ <span class="seg2">횟수</span> ] <span class="seg">연산자</span> [ <span class="seg2">횟수</span> ] <span class="seg2">모션/객체</span><br>
-<span class="dim">예:</span> <span class="seg">d</span><span class="seg2">w</span> = 단어 삭제 &nbsp;|&nbsp; <span class="seg2">2</span><span class="seg">d</span><span class="seg2">w</span> = 두 단어 삭제 &nbsp;|&nbsp; <span class="seg">c</span><span class="seg2">i"</span> = 따옴표 안 바꾸기<br>
-<span class="dim">└ 연산자 d·c·y 한 줌 × 모션·객체 한 줌 = 수백 개 명령이 곱셈으로 생성된다</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">THE GRAMMAR — 명령은 문장이다</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>[ 횟수 ] 연산자 [ 횟수 ] 모션/객체 예: d w = 단어 삭제 | 2 d w = 두 단어 삭제 | c i&quot; = 따옴표 안 바꾸기 └ 연산자 d·c·y 한 줌 × 모션·객체 한 줌 = 수백 개 명령이 곱셈으로 생성된다</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>[ 횟수 ] 연산자 [ 횟수 ] 모션/객체</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>예: d w = 단어 삭제 | 2 d w = 두 단어 삭제 | c i&quot; = 따옴표 안 바꾸기</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>└ 연산자 d·c·y 한 줌 × 모션·객체 한 줌 = 수백 개 명령이 곱셈으로 생성된다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>핵심 통찰: <strong>vi의 명령은 영어 문장처럼 읽힌다.</strong> <code>d</code>(delete) + <code>w</code>(word) = "단어를 지워라". <code>c</code>(change) + <code>i"</code>(inner quotes) = "따옴표 안을 바꿔라". 그래서 새 명령을 외우는 게 아니라 <em>아는 동사와 명사를 새로 조합</em>한다. <code>y</code>(복사)를 배우는 순간 <code>yw</code>·<code>yi(</code>·<code>y$</code>를 따로 안 배워도 쓸 수 있는 이유다.</p>
 <div class="callout">
 <span class="co-label">CORE INSIGHT</span>
@@ -975,12 +957,15 @@ NOTE : BSD vs GNU 차이 있는 항목은 본문 표기 · COMPANION : BACKEND E
 <tr><td><code>it</code> / <code>at</code></td><td>HTML/XML 태그 안 / 태그 포함</td></tr>
 <tr><td><code>ip</code> / <code>ap</code></td><td>문단 / 문단+빈 줄</td></tr>
 </table>
-<div class="semantic-card process-card">
-<span class="sc-label">연산자 × 텍스트 객체 — 실전 조합</span><br>
-<span class="seg">c</span><span class="seg2">i"</span>  따옴표 안 내용 바꾸기 &nbsp; <span class="dim">"old"  →  커서 아무 데나 → "▮"</span><br>
-<span class="seg">d</span><span class="seg2">i(</span>  괄호 안 통째로 삭제 &nbsp;&nbsp;&nbsp; <span class="dim">foo(  a, b  )  →  foo()</span><br>
-<span class="seg">y</span><span class="seg2">ip</span>  문단 복사 &nbsp;&nbsp; <span class="seg">d</span><span class="seg2">it</span>  태그 안 비우기 &nbsp;&nbsp; <span class="seg">c</span><span class="seg2">aw</span>  단어+공백 교체
-</div>
+<div class="semantic-card process-card"><span class="sc-label">연산자 × 텍스트 객체 — 실전 조합</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>c i&quot; 따옴표 안 내용 바꾸기 &quot;old&quot; → 커서 아무 데나 → &quot;▮&quot; d i( 괄호 안 통째로 삭제 foo( a, b ) → foo() y ip 문단 복사 d it 태그 안 비우기 c aw 단어+공백 교체</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>c i&quot; 따옴표 안 내용 바꾸기 &quot;old&quot;</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>커서 아무 데나 → &quot;▮&quot; → d i( 괄호 안 통째로 삭제 foo( a, b ) → foo()</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>y ip 문단 복사 d it 태그 안 비우기 c aw 단어+공백 교체</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout">
 <span class="co-label">왜 강력한가</span>
 <p><code>ci"</code> 하나로 끝나는 작업을 떠올려 보라 — 따옴표 안 어디에 커서가 있든, 시작/끝으로 이동할 필요 없이 내용이 통째로 비워지고 입력 모드로 들어간다. 함수 인자 바꾸기 <code>ci(</code>, JSX 태그 내용 바꾸기 <code>cit</code>, 변수명 바꾸기 <code>ciw</code> — 코드 편집의 대부분이 이 패턴 몇 개로 수렴한다. <em>"안(i)이냐 경계 포함(a)이냐"</em>만 구분하면 된다.</p>
@@ -1109,29 +1094,15 @@ COMPANION : LINUX / SHELL COMMANDS HANDBOOK · BACKEND ENGINEERING HANDBOOK
 <section id="docker-ch1">
 <div class="ch-head"><span class="ch-code">DOCKER-01</span><h2>Spring Boot Dockerfile</h2></div>
 <p class="lede">언제·왜: jar 하나를 이미지로 굽는 가장 표준적인 방법. <em>멀티스테이지</em>로 빌드 도구(Gradle·JDK)는 빌드 스테이지에만 두고, 런타임 이미지엔 JRE와 jar만 남깁니다. 이미지가 수백 MB 작아지고 공격 표면도 줄어듭니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">Dockerfile — 멀티스테이지 (build → runtime)</span><br>
-<span class="seg"># ---- build stage ----</span><br>
-<span class="seg2">FROM</span> gradle:8.7-jdk21 <span class="seg2">AS</span> build<br>
-<span class="seg2">WORKDIR</span> /app<br>
-<span class="dim"># 의존성 먼저 복사 → 레이어 캐시 (DOCKER-02 참조)</span><br>
-<span class="seg2">COPY</span> build.gradle settings.gradle ./<br>
-<span class="seg2">COPY</span> gradle ./gradle<br>
-<span class="seg2">RUN</span> gradle dependencies --no-daemon || true<br>
-<span class="seg2">COPY</span> src ./src<br>
-<span class="seg2">RUN</span> gradle bootJar --no-daemon<br>
-<br>
-<span class="seg"># ---- runtime stage ----</span><br>
-<span class="seg2">FROM</span> eclipse-temurin:21-jre<br>
-<span class="seg2">WORKDIR</span> /app<br>
-<span class="dim"># 비root 사용자 생성 후 전환</span><br>
-<span class="seg2">RUN</span> useradd --system --no-create-home spring<br>
-<span class="seg2">USER</span> spring<br>
-<span class="dim"># build 스테이지에서 jar만 가져옴</span><br>
-<span class="seg2">COPY</span> --from=build /app/build/libs/*.jar app.jar<br>
-<span class="seg2">EXPOSE</span> 8080<br>
-<span class="seg2">ENTRYPOINT</span> [<span class="seg">"java"</span>, <span class="seg">"-jar"</span>, <span class="seg">"/app/app.jar"</span>]
-</div>
+<div class="semantic-card process-card"><span class="sc-label">Dockerfile — 멀티스테이지 (build → runtime)</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong># ---- build stage ---- FROM gradle:8.7-jdk21 AS build WORKDIR /app # 의존성 먼저 복사 → 레이어 캐시 (DOCKER-02 참조) COPY build.gradle settings.gradle ./ COPY gradle ./gradle RUN gradle depend...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em># ---- build stage ----</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>FROM gradle:8.7-jdk21 AS build → WORKDIR /app → # 의존성 먼저 복사 → 레이어 캐시 (DOCKER-02 참조) → COPY build.gradle settings.gradle ./ → COPY gradle ./gradle → RUN gradle dependencies --no-daemon || true → COPY src ./src → RUN grad...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>ENTRYPOINT [ &quot;java&quot; , &quot;-jar&quot; , &quot;/app/app.jar&quot; ]</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>키워드</th><th>이 Dockerfile에서의 역할</th></tr>
 <tr><td><code>FROM ... AS build</code></td><td>빌드 전용 스테이지에 이름 부여. 런타임에서 <code>--from=build</code>로 참조</td></tr>
@@ -1149,26 +1120,25 @@ COMPANION : LINUX / SHELL COMMANDS HANDBOOK · BACKEND ENGINEERING HANDBOOK
 <section id="docker-ch2">
 <div class="ch-head"><span class="ch-code">DOCKER-02</span><h2>.dockerignore와 이미지 최적화</h2></div>
 <p class="lede">언제·왜: <code>docker build</code>는 먼저 빌드 컨텍스트(현재 디렉터리 전체)를 데몬으로 전송합니다. <code>.gradle</code>·<code>build</code>·<code>node_modules</code>가 딸려가면 느리고, 캐시도 무의미하게 깨집니다. <em>컨텍스트를 줄이고, 잘 안 바뀌는 것부터 COPY</em>가 캐시의 핵심.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">.dockerignore — Dockerfile과 같은 위치</span><br>
-.git<br>
-.gradle<br>
-build<br>
-*.md<br>
-.env<br>
-.idea<br>
-node_modules<br>
-Dockerfile<br>
-compose.yaml
-</div>
+<div class="semantic-card process-card"><span class="sc-label">.dockerignore — Dockerfile과 같은 위치</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>.git .gradle build *.md .env .idea node_modules Dockerfile compose.yaml</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>.git</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>.gradle → build → *.md → .env → .idea → node_modules → Dockerfile</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>compose.yaml</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>레이어 캐시는 <em>위에서부터 한 줄씩</em> 검증됩니다. 어떤 줄의 입력이 바뀌면 그 줄부터 아래 레이어가 전부 다시 빌드됩니다. 그래서 <strong>거의 안 바뀌는 의존성 정의를 먼저 COPY·다운로드하고, 자주 바뀌는 소스는 맨 나중에</strong> 복사합니다 (DOCKER-01의 순서가 그 이유). 소스만 고친 빌드에서 의존성 다운로드 단계가 캐시로 건너뛰어집니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">캐시 친화적 순서 (요지)</span><br>
-<span class="seg2">COPY</span> build.gradle settings.gradle ./  <span class="dim"># 1. 의존성 정의 (드물게 변경)</span><br>
-<span class="seg2">RUN</span> gradle dependencies --no-daemon    <span class="dim"># 2. 의존성 받기 → 캐시됨</span><br>
-<span class="seg2">COPY</span> src ./src                          <span class="dim"># 3. 소스 (자주 변경)</span><br>
-<span class="seg2">RUN</span> gradle bootJar --no-daemon          <span class="dim"># 4. 빌드</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">캐시 친화적 순서 (요지)</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>COPY build.gradle settings.gradle ./ # 1. 의존성 정의 (드물게 변경) RUN gradle dependencies --no-daemon # 2. 의존성 받기 → 캐시됨 COPY src ./src # 3. 소스 (자주 변경) RUN gradle bootJar --no-daemon # 4....</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>COPY build.gradle settings.gradle ./ # 1. 의존성 정의 (드물게 변경)</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>RUN gradle dependencies --no-daemon # 2. 의존성 받기 → 캐시됨 → COPY src ./src # 3. 소스 (자주 변경)</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>RUN gradle bootJar --no-daemon # 4. 빌드</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout">
 <span class="co-label">실전 팁</span>
 <p>이미지 크기를 더 줄이려면 런타임 베이스를 <code>eclipse-temurin:21-jre</code>처럼 <em>JRE</em> 변형으로(JDK 아님), 또는 <code>-alpine</code>/<code>-jammy</code> 슬림 태그로. 단 alpine은 glibc가 아니라 musl이라 일부 네이티브 라이브러리에서 문제가 날 수 있으니, 검증 없이 alpine으로 바꾸지 마세요.</p>
@@ -1179,58 +1149,15 @@ compose.yaml
 <section id="docker-ch3">
 <div class="ch-head"><span class="ch-code">DOCKER-03</span><h2>compose — 이 스택 한 파일</h2></div>
 <p class="lede">언제·왜: app(Spring Boot) + postgres + redis + nginx를 한 명령으로 띄우고 내립니다. 아래가 네 서비스를 다 담은 <code>compose.yaml</code> 골격 — 이후 챕터(환경변수·볼륨·네트워크·헬스체크)가 이 파일을 한 조각씩 채웁니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">compose.yaml — 전체 골격</span><br>
-<span class="seg2">services:</span><br>
-&nbsp;&nbsp;<span class="seg">app:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
-&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shop<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_USERNAME: app_user<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATA_REDIS_HOST: redis<br>
-&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;postgres:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redis:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy<br>
-<br>
-&nbsp;&nbsp;<span class="seg">postgres:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
-&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_DB: shop<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_USER: app_user<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- pgdata:/var/lib/postgresql/data<br>
-&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD-SHELL"</span>, <span class="seg">"pg_isready -U app_user"</span>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5<br>
-<br>
-&nbsp;&nbsp;<span class="seg">redis:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: redis:7<br>
-&nbsp;&nbsp;&nbsp;&nbsp;command: redis-server --appendonly yes<br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- redisdata:/data<br>
-&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD"</span>, <span class="seg">"redis-cli"</span>, <span class="seg">"ping"</span>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5<br>
-<br>
-&nbsp;&nbsp;<span class="seg">nginx:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: nginx:1.27<br>
-&nbsp;&nbsp;&nbsp;&nbsp;ports:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="seg">"80:80"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ./nginx.conf:/etc/nginx/conf.d/default.conf:ro<br>
-&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- app<br>
-<br>
-<span class="seg2">volumes:</span><br>
-&nbsp;&nbsp;pgdata:<br>
-&nbsp;&nbsp;redisdata:
-</div>
+<div class="semantic-card process-card"><span class="sc-label">compose.yaml — 전체 골격</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>services: app: build: . environment: SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shop SPRING_DATASOURCE_USERNAME: app_user SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWO...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>services:</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>app: → build: . → environment: → SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/shop → SPRING_DATASOURCE_USERNAME: app_user → SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD} → SPRING_DATA_REDIS_HOST: redis → de...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>redisdata:</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">포트 노출 범위</span>
 <p>외부로 여는 포트는 <code>nginx</code>의 <code>80:80</code> 하나뿐입니다. app·postgres·redis는 <code>ports</code>를 두지 않아 호스트로 노출되지 않고, compose 내부 네트워크에서만 서로 통신합니다(DOCKER-06). DB 포트를 호스트로 굳이 열지 마세요 — 로컬 디버깅이 꼭 필요할 때만 <code>"5432:5432"</code>를 한시적으로 추가하세요.</p>
@@ -1250,21 +1177,24 @@ compose.yaml
 <tr><td><code>SPRING_DATA_REDIS_HOST</code></td><td>Redis 호스트 — 서비스명 <code>redis</code></td></tr>
 </table>
 <p>compose는 같은 디렉터리의 <code>.env</code> 파일을 자동으로 읽어 <code>${VAR}</code> 치환에 씁니다. 비밀값은 yaml에 직접 박지 말고 <code>.env</code>로 분리하고, <code>.env</code>는 git에서 제외하세요(<code>.gitignore</code>·<code>.dockerignore</code> 둘 다).</p>
-<div class="semantic-card process-card">
-<span class="sc-label">.env — compose.yaml과 같은 위치 (git 제외)</span><br>
-POSTGRES_PASSWORD=change-me-in-secret-manager<br>
-SPRING_PROFILES_ACTIVE=prod
-</div>
-<div class="semantic-card process-card">
-<span class="sc-label">app 서비스 — .env 값 참조 + 파일째 주입</span><br>
-&nbsp;&nbsp;<span class="seg">app:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
-&nbsp;&nbsp;&nbsp;&nbsp;env_file:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- .env<br>
-&nbsp;&nbsp;&nbsp;&nbsp;environment:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">.env — compose.yaml과 같은 위치 (git 제외)</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>POSTGRES_PASSWORD=change-me-in-secret-manager SPRING_PROFILES_ACTIVE=prod</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>POSTGRES_PASSWORD=change-me-in-secret-manager</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>SPRING_PROFILES_ACTIVE=prod</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>SPRING_PROFILES_ACTIVE=prod</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">app 서비스 — .env 값 참조 + 파일째 주입</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>app: build: . env_file: - .env environment: SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE} SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>app:</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>build: . → env_file: → .env → environment: → SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout risk">
 <span class="co-label">secret을 이미지에 굽지 마라</span>
 <p>비밀번호·토큰을 <code>Dockerfile</code>의 <code>ENV</code>나 빌드 인자로 넣으면 이미지 레이어에 영구히 남아 <code>docker history</code>로 노출됩니다. 비밀은 <em>런타임에</em> 환경변수·secret으로 주입하고, 운영에서는 <code>.env</code>가 아니라 secret manager를 쓰세요. <code>.env</code>는 반드시 <code>.dockerignore</code>·<code>.gitignore</code>에 둘 것.</p>
@@ -1275,24 +1205,15 @@ SPRING_PROFILES_ACTIVE=prod
 <section id="docker-ch5">
 <div class="ch-head"><span class="ch-code">DOCKER-05</span><h2>데이터 영속 — 볼륨</h2></div>
 <p class="lede">언제·왜: 컨테이너는 지워지면 안의 데이터도 사라집니다. DB 데이터가 컨테이너 수명과 함께 증발하면 안 되니, <em>named volume</em>에 데이터를 두어 컨테이너를 재생성해도 살아남게 합니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">postgres·redis 볼륨 매핑</span><br>
-&nbsp;&nbsp;<span class="seg">postgres:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- pgdata:/var/lib/postgresql/data   <span class="dim"># PG 데이터 디렉터리</span><br>
-<br>
-&nbsp;&nbsp;<span class="seg">redis:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: redis:7<br>
-&nbsp;&nbsp;&nbsp;&nbsp;command: redis-server --appendonly yes  <span class="dim"># AOF 영속 켜기</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;volumes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- redisdata:/data                  <span class="dim"># AOF/RDB 저장 위치</span><br>
-<br>
-<span class="dim"># 파일 맨 아래 — named volume 선언</span><br>
-<span class="seg2">volumes:</span><br>
-&nbsp;&nbsp;pgdata:<br>
-&nbsp;&nbsp;redisdata:
-</div>
+<div class="semantic-card process-card"><span class="sc-label">postgres·redis 볼륨 매핑</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>postgres: image: postgres:16 volumes: - pgdata:/var/lib/postgresql/data # PG 데이터 디렉터리 redis: image: redis:7 command: redis-server --appendonly yes # AOF 영속 켜기 volumes: - redisdata...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>postgres:</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>image: postgres:16 → volumes: → pgdata:/var/lib/postgresql/data # PG 데이터 디렉터리 → redis: → image: redis:7 → command: redis-server --appendonly yes # AOF 영속 켜기 → redisdata:/data # AOF/RDB 저장 위치 → # 파일 맨 아래 — named volume 선...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>redisdata:</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>구분</th><th>형태 / 설명</th></tr>
 <tr><td>named volume</td><td><code>pgdata:/var/lib/postgresql/data</code> — Docker가 관리. DB 데이터에 권장</td></tr>
@@ -1316,18 +1237,15 @@ SPRING_PROFILES_ACTIVE=prod
 <tr><td>nginx → app</td><td><code>proxy_pass http://app:8080;</code></td></tr>
 <tr><td>호스트(브라우저) → nginx</td><td><code>http://localhost</code> (nginx의 <code>80:80</code>만 외부 노출)</td></tr>
 </table>
-<div class="semantic-card process-card">
-<span class="sc-label">nginx.conf — app으로 리버스 프록시</span><br>
-<span class="seg2">server</span> {<br>
-&nbsp;&nbsp;listen 80;<br>
-&nbsp;&nbsp;<span class="seg2">location</span> / {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim"># 서비스명 app = compose 내부 DNS</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;proxy_pass http://app:8080;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;proxy_set_header Host $host;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;proxy_set_header X-Real-IP $remote_addr;<br>
-&nbsp;&nbsp;}<br>
-}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">nginx.conf — app으로 리버스 프록시</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>server { listen 80; location / { # 서비스명 app = compose 내부 DNS proxy_pass http://app:8080; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; } }</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>server {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>listen 80; → location / { → # 서비스명 app = compose 내부 DNS → proxy_pass http://app:8080; → proxy_set_header Host $host; → proxy_set_header X-Real-IP $remote_addr;</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>}</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">localhost 함정</span>
 <p>컨테이너 안에서 <code>localhost</code>는 <em>그 컨테이너 자신</em>이지 호스트나 다른 서비스가 아닙니다. app의 DB URL을 <code>jdbc:postgresql://localhost:5432</code>로 두면 app 컨테이너 안에서 자기 자신을 찾다가 실패합니다 — 반드시 서비스명 <code>postgres</code>를 쓰세요. 별도 <code>networks:</code> 선언 없이도 같은 compose 파일의 서비스끼리는 기본 네트워크로 자동 연결됩니다.</p>
@@ -1341,25 +1259,15 @@ SPRING_PROFILES_ACTIVE=prod
 <div class="flow">
 <span class="step">컨테이너 start</span><span class="arr">→</span><span class="step">healthcheck 통과</span><span class="arr">→</span><span class="step hl">service_healthy</span><span class="arr">→</span><span class="step">app 기동</span>
 </div>
-<div class="semantic-card process-card">
-<span class="sc-label">healthcheck + depends_on (조건부)</span><br>
-&nbsp;&nbsp;<span class="seg">postgres:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;image: postgres:16<br>
-&nbsp;&nbsp;&nbsp;&nbsp;healthcheck:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: [<span class="seg">"CMD-SHELL"</span>, <span class="seg">"pg_isready -U app_user"</span>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval: 10s    <span class="dim"># 검사 주기</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout: 5s      <span class="dim"># 한 번 검사 제한시간</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retries: 5       <span class="dim"># 실패 N회면 unhealthy</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_period: 30s <span class="dim"># 초기 유예 (실패로 안 셈)</span><br>
-<br>
-&nbsp;&nbsp;<span class="seg">app:</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;build: .<br>
-&nbsp;&nbsp;&nbsp;&nbsp;depends_on:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;postgres:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy  <span class="dim"># healthy 될 때까지 대기</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redis:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition: service_healthy
-</div>
+<div class="semantic-card process-card"><span class="sc-label">healthcheck + depends_on (조건부)</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>postgres: image: postgres:16 healthcheck: test: [ &quot;CMD-SHELL&quot; , &quot;pg_isready -U app_user&quot; ] interval: 10s # 검사 주기 timeout: 5s # 한 번 검사 제한시간 retries: 5 # 실패 N회면 unhealthy start_peri...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>postgres:</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>image: postgres:16 → healthcheck: → test: [ &quot;CMD-SHELL&quot; , &quot;pg_isready -U app_user&quot; ] → interval: 10s # 검사 주기 → timeout: 5s # 한 번 검사 제한시간 → retries: 5 # 실패 N회면 unhealthy → start_period: 30s # 초기 유예 (실패로 안 셈) → app: → bui...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>condition: service_healthy</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>condition 값</th><th>의미</th></tr>
 <tr><td><code>service_started</code></td><td>컨테이너가 시작되기만 하면 (기본값, 약한 보장)</td></tr>
@@ -1493,26 +1401,15 @@ NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : 
 <div class="ch-head"><span class="ch-code">NGINX-02</span><h2>정적 파일·SPA</h2></div>
 <p class="lede">프론트 빌드 산출물(React/Next export, Vite <code>dist/</code>)을 서빙하는 패턴. nginx가 정적 파일을 직접 내보내는 건 백엔드를 거치는 것보다 압도적으로 빠릅니다 — 디스크에서 바로 읽어 보냅니다.</p>
 <p>핵심은 SPA의 <em>client-side routing</em> 처리입니다. <code>/dashboard</code> 같은 경로는 실제 파일이 아니라 JavaScript 라우터가 그릴 화면이라, 그 경로로 새로고침하면 서버엔 해당 파일이 없어 404가 납니다. <code>try_files</code>로 <em>없으면 <code>index.html</code>로 떨어뜨리는</em> fallback이 필요합니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">SPA — STATIC SERVE + FALLBACK</span><br>
-<span class="seg">server</span> {<br>
-&nbsp;&nbsp;<span class="seg2">listen</span> 80;<br>
-&nbsp;&nbsp;<span class="seg2">server_name</span> app.example.com;<br>
-&nbsp;&nbsp;<span class="seg2">root</span> /var/www/dist;<br>
-&nbsp;&nbsp;<span class="seg2">index</span> index.html;<br>
-<br>
-&nbsp;&nbsp;<span class="dim"># SPA: 실제 파일이 없으면 index.html로 fallback</span><br>
-&nbsp;&nbsp;<span class="seg">location</span> / {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">try_files</span> $uri $uri/ /index.html;<br>
-&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;<span class="dim"># API 요청만 백엔드로 분리</span><br>
-&nbsp;&nbsp;<span class="seg">location</span> /api/ {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_pass</span> http://app:8080;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_set_header</span> Host $host;<br>
-&nbsp;&nbsp;}<br>
-}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">SPA — STATIC SERVE + FALLBACK</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>server { listen 80; server_name app.example.com; root /var/www/dist; index index.html; # SPA: 실제 파일이 없으면 index.html로 fallback location / { try_files $uri $uri/ /index.html; } # AP...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>server {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>listen 80; → server_name app.example.com; → root /var/www/dist; → index index.html; → # SPA: 실제 파일이 없으면 index.html로 fallback → location / { → try_files $uri $uri/ /index.html; → } → # API 요청만 백엔드로 분리 → location /api/ {...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>proxy_set_header Host $host;</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p><code>try_files $uri $uri/ /index.html</code>는 왼쪽부터 순서대로 시도합니다 — ① 요청 경로에 해당하는 파일(<code>$uri</code>)이 있나 → ② 디렉터리(<code>$uri/</code>)인가 → ③ 둘 다 없으면 <code>/index.html</code>을 돌려줌. 그래서 <code>/main.js</code>는 파일로, <code>/dashboard</code>는 index.html로 가서 라우터가 이어받습니다.</p>
 <table>
 <tr><th>디렉티브</th><th>의미</th></tr>
@@ -1531,30 +1428,15 @@ NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : 
 <section id="nginx-ch3">
 <div class="ch-head"><span class="ch-code">NGINX-03</span><h2>TLS / HTTPS</h2></div>
 <p class="lede">인증서를 붙여 443에서 https를 받고, 80으로 들어온 평문 요청은 https로 영구 리다이렉트(301)합니다. TLS 종료(termination)를 nginx가 맡으면, 뒤의 Spring Boot는 평문 http만 다루면 돼서 단순해집니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">HTTP → HTTPS 리다이렉트 + TLS 종료</span><br>
-<span class="dim"># 80: 평문은 무조건 https로 올림</span><br>
-<span class="seg">server</span> {<br>
-&nbsp;&nbsp;<span class="seg2">listen</span> 80;<br>
-&nbsp;&nbsp;<span class="seg2">server_name</span> api.example.com;<br>
-&nbsp;&nbsp;<span class="seg2">return</span> 301 https://$host$request_uri;<br>
-}<br>
-<br>
-<span class="dim"># 443: 실제 서비스</span><br>
-<span class="seg">server</span> {<br>
-&nbsp;&nbsp;<span class="seg2">listen</span> 443 ssl;<br>
-&nbsp;&nbsp;<span class="seg2">server_name</span> api.example.com;<br>
-<br>
-&nbsp;&nbsp;<span class="seg2">ssl_certificate</span> /etc/letsencrypt/live/api.example.com/fullchain.pem;<br>
-&nbsp;&nbsp;<span class="seg2">ssl_certificate_key</span> /etc/letsencrypt/live/api.example.com/privkey.pem;<br>
-<br>
-&nbsp;&nbsp;<span class="seg">location</span> / {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_pass</span> http://app:8080;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_set_header</span> Host $host;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_set_header</span> X-Forwarded-Proto $scheme;<br>
-&nbsp;&nbsp;}<br>
-}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">HTTP → HTTPS 리다이렉트 + TLS 종료</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong># 80: 평문은 무조건 https로 올림 server { listen 80; server_name api.example.com; return 301 https://$host$request_uri; } # 443: 실제 서비스 server { listen 443 ssl; server_name api.example.com...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em># 80: 평문은 무조건 https로 올림</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>server { → listen 80; → server_name api.example.com; → return 301 https://$host$request_uri; → } → # 443: 실제 서비스 → listen 443 ssl; → ssl_certificate /etc/letsencrypt/live/api.example.com/fullchain.pem; → ssl_certificate...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>proxy_set_header X-Forwarded-Proto $scheme;</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>80 server 블록은 <code>return 301</code> 한 줄로 끝납니다 — 평문으로 들어온 요청은 같은 경로의 https로 즉시 돌려보냅니다. <code>$request_uri</code>는 쿼리스트링까지 포함한 원래 경로라, 리다이렉트 후에도 목적지가 보존됩니다.</p>
 <table>
 <tr><th>디렉티브</th><th>의미</th></tr>
@@ -1573,23 +1455,15 @@ NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : 
 <section id="nginx-ch4">
 <div class="ch-head"><span class="ch-code">NGINX-04</span><h2>로드 밸런싱</h2></div>
 <p class="lede">백엔드 인스턴스가 여럿일 때, nginx가 요청을 나눠 보냅니다. <code>upstream</code> 블록에 서버들을 묶어 이름을 주고, <code>proxy_pass</code>가 그 이름을 가리키게 합니다. 기본 분배 방식은 round-robin(순서대로 돌려가며)입니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">UPSTREAM — 여러 인스턴스 분배</span><br>
-<span class="seg">upstream</span> backend {<br>
-&nbsp;&nbsp;<span class="dim"># least_conn;  ← 연결 수가 가장 적은 서버로 (주석 해제 시)</span><br>
-&nbsp;&nbsp;<span class="seg2">server</span> app1:8080;<br>
-&nbsp;&nbsp;<span class="seg2">server</span> app2:8080;<br>
-&nbsp;&nbsp;<span class="seg2">server</span> app3:8080 weight=2;<br>
-}<br>
-<br>
-<span class="seg">server</span> {<br>
-&nbsp;&nbsp;<span class="seg2">listen</span> 80;<br>
-&nbsp;&nbsp;<span class="seg">location</span> / {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_pass</span> http://backend;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">proxy_set_header</span> Host $host;<br>
-&nbsp;&nbsp;}<br>
-}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">UPSTREAM — 여러 인스턴스 분배</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong>upstream backend { # least_conn; ← 연결 수가 가장 적은 서버로 (주석 해제 시) server app1:8080; server app2:8080; server app3:8080 weight=2; } server { listen 80; location / { proxy_pass http://ba...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em>upstream backend {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em># least_conn; ← 연결 수가 가장 적은 서버로 (주석 해제 시) → server app1:8080; → server app2:8080; → server app3:8080 weight=2; → } → server { → listen 80; → location / { → proxy_pass http://backend;</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>proxy_set_header Host $host;</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>기본은 round-robin — 들어오는 요청을 <code>app1 → app2 → app3 → app1...</code> 순서로 돌립니다. <code>weight=2</code>를 주면 그 서버가 2배 더 받습니다(사양이 다른 인스턴스에). 요청 처리 시간이 들쭉날쭉하면 <code>least_conn</code>이 더 고르게 분배됩니다 — 그 순간 연결이 가장 적은 서버로 보냅니다.</p>
 <table>
 <tr><th>방식 / 옵션</th><th>의미</th></tr>
@@ -1608,29 +1482,15 @@ NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : 
 <section id="nginx-ch5">
 <div class="ch-head"><span class="ch-code">NGINX-05</span><h2>gzip·캐싱</h2></div>
 <p class="lede">전송량을 줄이고, 안 바뀌는 자원은 브라우저가 다시 안 받게 합니다. 프론트 번들·CSS·JSON 응답을 gzip으로 압축하면 전송 크기가 크게 줄고, 해시가 박힌 정적 자원엔 긴 <code>expires</code>를 걸어 캐시합니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">GZIP + 정적 자원 캐시</span><br>
-<span class="dim"># 응답 압축</span><br>
-<span class="seg2">gzip</span> on;<br>
-<span class="seg2">gzip_types</span> text/css application/javascript application/json image/svg+xml;<br>
-<span class="seg2">gzip_min_length</span> 1024;<br>
-<br>
-<span class="seg">server</span> {<br>
-&nbsp;&nbsp;<span class="seg2">listen</span> 80;<br>
-&nbsp;&nbsp;<span class="seg2">root</span> /var/www/dist;<br>
-<br>
-&nbsp;&nbsp;<span class="dim"># 해시가 박힌 빌드 자원: 1년 캐시 + immutable</span><br>
-&nbsp;&nbsp;<span class="seg">location</span> /assets/ {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">expires</span> 1y;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">add_header</span> Cache-Control "public, immutable";<br>
-&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;<span class="dim"># index.html은 캐시 금지 — 항상 최신 자원 해시를 받게</span><br>
-&nbsp;&nbsp;<span class="seg">location</span> = /index.html {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg2">add_header</span> Cache-Control "no-cache";<br>
-&nbsp;&nbsp;}<br>
-}
-</div>
+<div class="semantic-card process-card"><span class="sc-label">GZIP + 정적 자원 캐시</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong># 응답 압축 gzip on; gzip_types text/css application/javascript application/json image/svg+xml; gzip_min_length 1024; server { listen 80; root /var/www/dist; # 해시가 박힌 빌드 자원: 1년 캐시 + i...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em># 응답 압축</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>gzip on; → gzip_types text/css application/javascript application/json image/svg+xml; → gzip_min_length 1024; → server { → listen 80; → root /var/www/dist; → # 해시가 박힌 빌드 자원: 1년 캐시 + immutable → location /assets/ { → exp...</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>add_header Cache-Control &quot;no-cache&quot;;</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p>핵심 전략은 <em>"자원은 길게 캐시, 진입점은 캐시 금지"</em>입니다. Vite/webpack은 빌드 시 파일명에 콘텐츠 해시를 박습니다(<code>main.4f8a.js</code>) — 내용이 바뀌면 이름이 바뀌므로, 이름이 같으면 영원히 캐시해도 안전합니다(<code>immutable</code>). 반면 <code>index.html</code>은 캐시하면 옛 자원을 가리키게 되니 <code>no-cache</code>로 둡니다.</p>
 <table>
 <tr><th>디렉티브</th><th>의미</th></tr>
@@ -1687,18 +1547,15 @@ NOTE : 버전 태그·비밀값은 프로젝트에 맞춰 고정 · COMPANION : 
 <section id="nginx-ch7">
 <div class="ch-head"><span class="ch-code">NGINX-07</span><h2>운영 — 검증·리로드</h2></div>
 <p class="lede">설정을 바꿨으면 <em>적용 전에 문법을 검사</em>하고, 무중단으로 반영합니다. nginx는 설정 오류가 있으면 리로드를 거부하므로, <code>nginx -t</code>를 먼저 거는 습관이 서비스 다운을 막습니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">검증 → 무중단 리로드</span><br>
-<span class="dim"># 1. 문법·설정 검사 (실제 적용 안 함)</span><br>
-$ nginx <span class="seg">-t</span><br>
-<span class="dim">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br>
-<br>
-<span class="dim"># 2. 무중단 리로드 (기존 연결 유지하며 새 설정 적용)</span><br>
-$ nginx <span class="seg">-s reload</span><br>
-<br>
-<span class="dim"># 검사 + 리로드를 한 줄로 (검사 실패 시 리로드 안 함)</span><br>
-$ nginx -t <span class="dim">&amp;&amp;</span> nginx -s reload
-</div>
+<div class="semantic-card process-card"><span class="sc-label">검증 → 무중단 리로드</span>
+<p>설정 조각이나 명령어를 복사하기 전에 실행 환경, 입력 파일, 적용 범위, 검증 명령을 함께 고정하는 카드입니다. 원본 흐름은 <strong># 1. 문법·설정 검사 (실제 적용 안 함) $ nginx -t nginx: configuration file /etc/nginx/nginx.conf test is successful # 2. 무중단 리로드 (기존 연결 유지하며 새 설정 적용) $ nginx -s reload # 검사 + 리로드를 한 줄로 (검사 실패...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어느 파일이나 프로세스에 적용되는 절차인지 확인하고, 로컬·CI·운영 환경 차이를 적습니다. 이 카드에서는 <em># 1. 문법·설정 검사 (실제 적용 안 함)</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 캐시, 권한, 포트, 볼륨, reload처럼 나중에 문제를 만드는 경계를 순서대로 확인합니다. 핵심 흐름은 <em>$ nginx -t → nginx: configuration file /etc/nginx/nginx.conf test is successful → # 2. 무중단 리로드 (기존 연결 유지하며 새 설정 적용) → $ nginx -s reload → # 검사 + 리로드를 한 줄로 (검사 실패 시 리로드 안 함)</em>입니다.</li>
+<li><strong>판정</strong>: 문법 검사, dry-run, healthcheck, 로그 확인 중 하나 이상으로 실제 적용 여부를 증명합니다. 마지막에는 <em>$ nginx -t &amp;&amp; nginx -s reload</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 명령이 성공해도 대상 환경이 다르면 실패할 수 있으므로 실행 위치와 rollback 방법을 같이 남깁니다.</li>
+</ol>
+<p>따라서 이 카드는 플랫폼 도구 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <p><code>nginx -s reload</code>는 재시작이 아닙니다 — master 프로세스가 새 설정으로 새 worker를 띄우고, 기존 worker는 진행 중인 요청을 다 끝낸 뒤 종료합니다. 그래서 사용자 연결이 끊기지 않습니다. <code>&amp;&amp;</code>로 묶으면 <code>nginx -t</code>가 성공할 때만 리로드가 실행돼, 깨진 설정이 반영되는 사고를 원천 차단합니다.</p>
 <table>
 <tr><th>명령 / 위치</th><th>역할</th></tr>

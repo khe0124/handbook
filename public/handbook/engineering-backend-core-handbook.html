@@ -574,13 +574,15 @@ local → CI test DB → staging → production 순서로 같은 migration을 �
 expand-contract 변경은 최소 두 번의 배포로 나누고 rollback 지점을 명시한다<br>
 DDL lock risk, backfill batch size, verification SQL을 migration note에 남긴다
 </div>
-<div class="semantic-card process-card">
-<span class="sc-label">BACKUP RESTORE DRILL</span><br>
-백업 존재보다 복구 가능성이 중요하다<br>
-RPO: 잃어도 되는 최대 데이터 시간, RTO: 복구까지 허용 시간<br>
-월 1회 임시 DB에 restore하고 row count, checksum, 핵심 query를 검증한다<br>
-restore 절차, 권한, secret, DNS 전환, 앱 재연결 순서를 runbook에 둔다
-</div>
+<div class="semantic-card process-card"><span class="sc-label">BACKUP RESTORE DRILL</span>
+<p>백엔드 키워드를 나열하는 대신 데이터 정합성, 복구 가능성, 동시성, 장애 시나리오를 실제 운영 절차로 닫는 카드입니다. 원본 흐름은 <strong>백업 존재보다 복구 가능성이 중요하다 RPO: 잃어도 되는 최대 데이터 시간, RTO: 복구까지 허용 시간 월 1회 임시 DB에 restore하고 row count, checksum, 핵심 query를 검증한다 restore 절차, 권한, secret, DNS 전환, 앱 재연결 순서를 runbook에 둔다</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어떤 상태가 바뀌고 어떤 실패가 사용자나 데이터에 영향을 주는지 지정합니다. 이 카드에서는 <em>백업 존재보다 복구 가능성이 중요하다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 트랜잭션, 조건부 업데이트, 백업·복구, 재시도 가능성, 관측 지표를 순서대로 확인합니다. 핵심 흐름은 <em>RPO: 잃어도 되는 최대 데이터 시간, RTO: 복구까지 허용 시간 → 월 1회 임시 DB에 restore하고 row count, checksum, 핵심 query를 검증한다</em>입니다.</li>
+<li><strong>판정</strong>: affected rows, restore 검증, checksum, 로그, 알림 조건, rollback runbook을 증거로 남깁니다. 마지막에는 <em>restore 절차, 권한, secret, DNS 전환, 앱 재연결 순서를 runbook에 둔다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 정상 요청만 통과해도 충분하지 않으므로 중복 요청, 부분 실패, 복구 테스트를 같이 고정합니다.</li>
+</ol>
+<p>따라서 이 카드는 백엔드 운영 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="semantic-card decision-card">
 <span class="sc-label">LOCK TRIAGE QUESTION</span><br>
 lock wait인가 connection wait인가를 먼저 분리한다<br>
@@ -674,13 +676,15 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 <tr><td>부분 실패</td><td>DB 변경과 외부 side effect가 한 트랜잭션에 묶이지 않음</td><td>outbox, saga, 보상 트랜잭션, 상태 machine</td><td>outbox lag, pending state age, compensation failure</td></tr>
 </table>
 <p>가장 강한 방어선은 애플리케이션 if문이 아니라 DB 제약입니다. “이미 쓴 쿠폰인지 조회하고 없으면 저장”은 두 요청이 동시에 들어오면 둘 다 조회를 통과할 수 있습니다. 반대로 <code>UNIQUE(user_id, coupon_id)</code> 제약을 두고 insert를 먼저 시도하면 둘 중 하나는 DB가 거절합니다. 애플리케이션은 그 예외를 “이미 사용됨”으로 번역하면 됩니다.</p>
-<div class="semantic-card process-card">
-<span class="sc-label">ATOMIC STOCK DECREASE</span><br>
-UPDATE product<br>
-SET stock = stock - :qty<br>
-WHERE id = :id AND stock &gt;= :qty;<br>
-<span class="dim">affected rows == 1 이면 성공, 0이면 재고 부족 또는 조건 불만족</span>
-</div>
+<div class="semantic-card process-card"><span class="sc-label">ATOMIC STOCK DECREASE</span>
+<p>백엔드 키워드를 나열하는 대신 데이터 정합성, 복구 가능성, 동시성, 장애 시나리오를 실제 운영 절차로 닫는 카드입니다. 원본 흐름은 <strong>UPDATE product SET stock = stock - :qty WHERE id = :id AND stock &gt;= :qty; affected rows == 1 이면 성공, 0이면 재고 부족 또는 조건 불만족</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 어떤 상태가 바뀌고 어떤 실패가 사용자나 데이터에 영향을 주는지 지정합니다. 이 카드에서는 <em>UPDATE product</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 트랜잭션, 조건부 업데이트, 백업·복구, 재시도 가능성, 관측 지표를 순서대로 확인합니다. 핵심 흐름은 <em>SET stock = stock - :qty → WHERE id = :id AND stock &gt;= :qty;</em>입니다.</li>
+<li><strong>판정</strong>: affected rows, restore 검증, checksum, 로그, 알림 조건, rollback runbook을 증거로 남깁니다. 마지막에는 <em>affected rows == 1 이면 성공, 0이면 재고 부족 또는 조건 불만족</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 정상 요청만 통과해도 충분하지 않으므로 중복 요청, 부분 실패, 복구 테스트를 같이 고정합니다.</li>
+</ol>
+<p>따라서 이 카드는 백엔드 운영 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout">
 <span class="co-label">락 선택 기준</span>
 <p>낙관적 락은 “대부분 충돌하지 않는다”는 가정에서 좋습니다. 충돌하면 실패시키고 다시 읽어 재시도합니다. 비관적 락은 “충돌이 자주 나고, 기다리는 것이 실패보다 싸다”는 상황에서 씁니다. 하지만 락을 오래 잡으면 대기열이 생기고 데드락 가능성이 커집니다. 고급 답변은 “어떤 락을 쓰겠다”가 아니라 “충돌 빈도, 대기 비용, 사용자 경험, 재시도 가능성으로 고르겠다”입니다.</p>

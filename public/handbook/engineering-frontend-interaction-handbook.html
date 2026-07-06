@@ -162,7 +162,15 @@
 <tr><td>Pinch/zoom</td><td>지도, 캔버스, 이미지 검토처럼 공간 확대가 본질일 때</td><td>zoom in/out 버튼, keyboard shortcut</td><td>브라우저 기본 zoom과 충돌하지 않게 설계</td></tr>
 <tr><td>Long press</td><td>보조 context menu에 한정</td><td>보이는 menu button</td><td>발견성이 낮고 assistive tech gesture와 충돌 가능</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span><br>1. 주소창에서 Tab을 눌러 첫 focus가 예측 가능한 위치로 가는지 본다<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다<br>3. Dialog, Menu, Popover, Tooltip이 열리고 닫힐 때 focus가 보존되는지 확인한다<br>4. Drag, slider, carousel, canvas 기능에 키보드 대체 조작이 있는지 본다<br>5. 실패 메시지와 저장 성공이 focus 또는 live status로 전달되는지 확인한다</div>
+<div class="semantic-card process-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 주소창에서 Tab을 눌러 첫 focus가 예측 가능한 위치로 가는지 본다 2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다 3. Dialog, Menu, Popover, Tooltip이 열리고 닫힐 때 focus가 보존되는지 확인한다 4. Drag, slide...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 주소창에서 Tab을 눌러 첫 focus가 예측 가능한 위치로 가는지 본다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다 → 3. Dialog, Menu, Popover, Tooltip이 열리고 닫힐 때 focus가 보존되는지 확인한다 → 4. Drag, slider, carousel, canvas 기능에 키보드 대체 조작이 있는지 본다</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>5. 실패 메시지와 저장 성공이 focus 또는 live status로 전달되는지 확인한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout risk">
 <span class="co-label">HOVER ONLY</span>
 <p>hover-only UI는 터치와 키보드에서 사라집니다. 행에 마우스를 올려야만 삭제 버튼이 보이는 패턴은 시각적으로 깔끔하지만 발견성과 접근성 회귀를 만듭니다. 주요 행동은 항상 보이거나 focus, menu, bulk action 같은 대체 경로가 있어야 합니다.</p>
@@ -188,7 +196,15 @@
 <tr><td>공간 이동</td><td>방향성과 관계가 드러남</td><td>drawer, step transition, list reorder</td><td>motion 없이도 위치와 상태가 이해되는가?</td></tr>
 <tr><td>장시간 처리</td><td>시간 포장보다 진행 정보</td><td>upload, export, AI generation</td><td>progress, 단계, 취소, 백그라운드 전환이 있는가?</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">MOTION TOKEN SET</span><br>duration.fast: 눌림, 작은 상태 변화<br>duration.base: popover, panel, small list change<br>duration.slow: drawer, page-level transition, guided reveal<br>easing.standard: 대부분의 상태 전환<br>easing.exit: 빠르게 사라짐<br>easing.enter: 부드럽게 등장<br>reducedMotion: opacity 또는 즉시 전환으로 축소</div>
+<div class="semantic-card process-card"><span class="sc-label">MOTION TOKEN SET</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>duration.fast: 눌림, 작은 상태 변화 duration.base: popover, panel, small list change duration.slow: drawer, page-level transition, guided reveal easing.standard: 대부분의 상태 전환 easing.exit: 빠...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>duration.fast: 눌림, 작은 상태 변화</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>duration.base: popover, panel, small list change → duration.slow: drawer, page-level transition, guided reveal → easing.standard: 대부분의 상태 전환 → easing.exit: 빠르게 사라짐 → easing.enter: 부드럽게 등장</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>reducedMotion: opacity 또는 즉시 전환으로 축소</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">REDUCED MOTION</span>
 <p><code>prefers-reduced-motion</code>은 “애니메이션을 모두 없애라”가 아니라 불필요한 이동, 확대, parallax, 반복 모션을 줄이라는 신호입니다. 상태 변화 자체는 텍스트, 위치, opacity, focus로 계속 전달해야 합니다.</p>
@@ -219,7 +235,15 @@
 <span class="co-label">SCROLL HIJACKING</span>
 <p>wheel 이벤트를 가로채 페이지를 임의 단계로 넘기는 패턴은 접근성과 신뢰를 크게 해칩니다. 사용자가 브라우저의 기본 스크롤, 키보드 PageDown, 스페이스, touch inertia를 기대한 대로 쓸 수 있어야 합니다.</p>
 </div>
-<div class="semantic-card process-card"><span class="sc-label">SCROLL REVIEW CHECK</span><br>native scroll을 유지하는가<br>키보드, touch, trackpad 관성이 깨지지 않는가<br>anchor 이동 시 sticky header에 제목이 가려지지 않는가<br>새 콘텐츠가 삽입될 때 focus와 scroll 위치가 예측 가능한가<br>reduced motion에서 parallax와 scroll-linked motion이 줄어드는가<br>긴 목록에서 검색, 인쇄, screen reader 요구를 검토했는가</div>
+<div class="semantic-card process-card"><span class="sc-label">SCROLL REVIEW CHECK</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>native scroll을 유지하는가 키보드, touch, trackpad 관성이 깨지지 않는가 anchor 이동 시 sticky header에 제목이 가려지지 않는가 새 콘텐츠가 삽입될 때 focus와 scroll 위치가 예측 가능한가 reduced motion에서 parallax와 scroll-linked motio...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>native scroll을 유지하는가</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>키보드, touch, trackpad 관성이 깨지지 않는가 → anchor 이동 시 sticky header에 제목이 가려지지 않는가 → 새 콘텐츠가 삽입될 때 focus와 scroll 위치가 예측 가능한가 → reduced motion에서 parallax와 scroll-linked motion이 줄어드는가</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>긴 목록에서 검색, 인쇄, screen reader 요구를 검토했는가</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 </section>
 
 <section id="interaction-ch6">
@@ -332,7 +356,15 @@
 <tr><td>Drag/Reorder</td><td>칸반, 리스트 정렬, 캔버스 편집기</td><td>idle, pointerDown, dragging, overTarget, dropped, reverted</td><td>pointer capture가 풀렸는데 dragging이 유지되는 상태</td></tr>
 <tr><td>Viewer</td><td>이미지/지도/3D viewer</td><td>loading, ready, interacting, degraded, failed, fallback</td><td>asset 실패 후 조작 컨트롤만 살아 있는 상태</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">INTERACTION STATE MACHINE TEMPLATE</span><br>States: 가능한 화면 상태를 명사로 쓴다<br>Events: 사용자 입력, async result, timeout, cancel, route leave를 분리한다<br>Guards: 권한, validation, 중복 실행, disabled reason을 전이 조건으로 둔다<br>Actions: DOM focus, network mutation, animation start, analytics emit을 명시한다<br>Finalization: success, error, cancel 뒤 focus와 message, rollback 위치를 정한다<br>Tests: 전이표에 없는 이벤트가 들어왔을 때 무시/복구 정책을 검증한다</div>
+<div class="semantic-card process-card"><span class="sc-label">INTERACTION STATE MACHINE TEMPLATE</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>States: 가능한 화면 상태를 명사로 쓴다 Events: 사용자 입력, async result, timeout, cancel, route leave를 분리한다 Guards: 권한, validation, 중복 실행, disabled reason을 전이 조건으로 둔다 Actions: DOM focus, network m...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>States: 가능한 화면 상태를 명사로 쓴다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>Events: 사용자 입력, async result, timeout, cancel, route leave를 분리한다 → Guards: 권한, validation, 중복 실행, disabled reason을 전이 조건으로 둔다 → Actions: DOM focus, network mutation, animation start, analytics emit을 명시한다 → Finalization:...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>Tests: 전이표에 없는 이벤트가 들어왔을 때 무시/복구 정책을 검증한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">STATE BUG</span>
 <p>인터랙션 버그의 상당수는 CSS 문제가 아니라 불가능해야 할 상태가 가능해서 생깁니다. 예를 들어 modal이 닫혔는데 backdrop은 남고, focus는 내부에 있으며, API 요청은 pending인 상태입니다. 복잡한 인터랙션은 상태 전이표를 먼저 쓰는 편이 코드보다 빠릅니다.</p>
@@ -398,14 +430,30 @@
 <tr><td>Coordinate transform</td><td>canvas, SVG, 3D overlay, zoomable surface</td><td>screen/client/local/world 좌표를 섞지 않음</td><td>DPR, scroll offset, CSS transform, zoom 상태에서 hit test</td></tr>
 <tr><td>Command model</td><td>undo/redo가 필요한 editor</td><td>사용자 행동을 apply/revert 가능한 command로 저장</td><td>drag cancel, batch undo, optimistic rollback</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">REDUCER STATE MACHINE 예시</span><br>type State =<br>&nbsp;&nbsp;| { tag: "idle" }<br>&nbsp;&nbsp;| { tag: "validating" }<br>&nbsp;&nbsp;| { tag: "pending"; requestId: string }<br>&nbsp;&nbsp;| { tag: "failed"; message: string; retryable: boolean }<br>&nbsp;&nbsp;| { tag: "succeeded"; savedAt: number };<br><br>type Event =<br>&nbsp;&nbsp;| { type: "SUBMIT" }<br>&nbsp;&nbsp;| { type: "VALIDATION_FAILED"; message: string }<br>&nbsp;&nbsp;| { type: "REQUEST_STARTED"; requestId: string }<br>&nbsp;&nbsp;| { type: "REQUEST_RESOLVED"; requestId: string }<br>&nbsp;&nbsp;| { type: "REQUEST_REJECTED"; requestId: string; message: string }<br>&nbsp;&nbsp;| { type: "CANCEL" };</div>
+<div class="semantic-card process-card"><span class="sc-label">REDUCER STATE MACHINE 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>type State = | { tag: &quot;idle&quot; } | { tag: &quot;validating&quot; } | { tag: &quot;pending&quot;; requestId: string } | { tag: &quot;failed&quot;; message: string; retryable: boolean } | { tag: &quot;succeeded&quot;; saved...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>type State =</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>| { tag: &quot;idle&quot; } → | { tag: &quot;validating&quot; } → | { tag: &quot;pending&quot;; requestId: string } → | { tag: &quot;failed&quot;; message: string; retryable: boolean } → | { tag: &quot;succeeded&quot;; savedAt: number }; → type Event = → | { type: &quot;SUB...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>| { type: &quot;CANCEL&quot; };</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>Reducer 규칙</th><th>이유</th><th>나쁜 신호</th></tr>
 <tr><td>늦게 도착한 응답은 requestId가 다르면 무시</td><td>stale response가 최신 상태를 덮어쓰지 않게 함</td><td>빠른 재시도 뒤 이전 실패 메시지가 다시 보임</td></tr>
 <tr><td>pending 중 SUBMIT은 무시하거나 queue 정책을 명시</td><td>중복 mutation과 시각 상태 불일치를 막음</td><td>버튼 disabled만 믿고 서버 중복 방어가 없음</td></tr>
 <tr><td>CANCEL은 abort, focus restore, message 정리를 함께 수행</td><td>취소가 시각 상태만 닫고 작업은 계속되는 문제 방지</td><td>modal을 닫아도 요청이 완료되어 toast가 뜸</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">POINTER CAPTURE LIFECYCLE 예시</span><br>onPointerDown(e):<br>&nbsp;&nbsp;target.setPointerCapture(e.pointerId)<br>&nbsp;&nbsp;session = { pointerId, startClient, mode: "dragging" }<br><br>onPointerMove(e):<br>&nbsp;&nbsp;if session.pointerId !== e.pointerId return<br>&nbsp;&nbsp;local = clientToLocal(e.clientX, e.clientY)<br>&nbsp;&nbsp;updatePreview(local)<br><br>finish(e):<br>&nbsp;&nbsp;target.releasePointerCapture(e.pointerId)<br>&nbsp;&nbsp;commitOrRevert(session)</div>
+<div class="semantic-card process-card"><span class="sc-label">POINTER CAPTURE LIFECYCLE 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>onPointerDown(e): target.setPointerCapture(e.pointerId) session = { pointerId, startClient, mode: &quot;dragging&quot; } onPointerMove(e): if session.pointerId !== e.pointerId return local...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>onPointerDown(e):</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>target.setPointerCapture(e.pointerId) → session = { pointerId, startClient, mode: &quot;dragging&quot; } → onPointerMove(e): → if session.pointerId !== e.pointerId return → local = clientToLocal(e.clientX, e.clientY) → updatePrev...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>commitOrRevert(session)</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>좌표계</th><th>의미</th><th>대표 사용</th><th>주의</th></tr>
 <tr><td>Screen</td><td>물리 화면 기준</td><td>OS/브라우저 바깥 정보와 연결할 때</td><td>웹 UI 대부분에는 부적합</td></tr>
@@ -431,7 +479,15 @@
 <tr><td><code>useInteractionMachine</code></td><td>복잡한 mutation 상태 전이 제한</td><td>requestId, stale response ignore, cancel event</td><td>double submit, retry, late response</td></tr>
 <tr><td><code>useFocusReturn</code></td><td>dialog/menu 종료 후 focus 복귀</td><td>trigger ref, fallback target, unmount guard</td><td>Escape, route leave, trigger 제거</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">usePointerSession 예시</span><br>function usePointerSession({ onMove, onCommit, onCancel }) {<br>&nbsp;&nbsp;const sessionRef = useRef(null);<br>&nbsp;&nbsp;const start = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;event.currentTarget.setPointerCapture(event.pointerId);<br>&nbsp;&nbsp;&nbsp;&nbsp;sessionRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY };<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;const move = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;const session = sessionRef.current;<br>&nbsp;&nbsp;&nbsp;&nbsp;if (!session || session.pointerId !== event.pointerId) return;<br>&nbsp;&nbsp;&nbsp;&nbsp;onMove({ dx: event.clientX - session.startX, dy: event.clientY - session.startY });<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;const end = (event) =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;event.currentTarget.releasePointerCapture(event.pointerId);<br>&nbsp;&nbsp;&nbsp;&nbsp;onCommit(sessionRef.current);<br>&nbsp;&nbsp;&nbsp;&nbsp;sessionRef.current = null;<br>&nbsp;&nbsp;};<br>&nbsp;&nbsp;return { onPointerDown: start, onPointerMove: move, onPointerUp: end, onPointerCancel: onCancel };<br>}</div>
+<div class="semantic-card process-card"><span class="sc-label">usePointerSession 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>function usePointerSession({ onMove, onCommit, onCancel }) { const sessionRef = useRef(null); const start = (event) =&gt; { event.currentTarget.setPointerCapture(event.pointerId); se...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>function usePointerSession({ onMove, onCommit, onCancel }) {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>const sessionRef = useRef(null); → const start = (event) =&gt; { → event.currentTarget.setPointerCapture(event.pointerId); → sessionRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY }...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>}</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>접근성 구현 패턴</th><th>DOM 구조</th><th>키보드 동작</th><th>Announcement</th></tr>
 <tr><td>Keyboard drag reorder</td><td>listbox 또는 list + button controls</td><td>Space로 집기, Arrow로 이동, Space로 놓기, Esc 취소</td><td>“3번째 항목을 1번째 위치로 이동했습니다”</td></tr>
@@ -439,7 +495,15 @@
 <tr><td>Async form status</td><td>submit button + status region + field error</td><td>오류 시 첫 오류 필드 또는 summary로 focus</td><td>“저장 실패. 이메일 형식을 확인하세요”</td></tr>
 <tr><td>Canvas object list</td><td>canvas 옆 hidden이 아닌 DOM list</td><td>object list에서 선택/삭제/이동 가능</td><td>선택된 object와 좌표/상태 설명</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">PLAYWRIGHT INTERACTION SMOKE</span><br>await page.keyboard.press("Tab");<br>await expect(page.getByRole("button", { name: "옵션 열기" })).toBeFocused();<br>await page.keyboard.press("Enter");<br>await page.keyboard.press("ArrowDown");<br>await page.keyboard.press("Space");<br>await expect(page.getByRole("status")).toContainText("선택됨");<br><br>// pointer path<br>await page.mouse.move(120, 240);<br>await page.mouse.down();<br>await page.mouse.move(240, 260);<br>await page.mouse.up();</div>
+<div class="semantic-card process-card"><span class="sc-label">PLAYWRIGHT INTERACTION SMOKE</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>await page.keyboard.press(&quot;Tab&quot;); await expect(page.getByRole(&quot;button&quot;, { name: &quot;옵션 열기&quot; })).toBeFocused(); await page.keyboard.press(&quot;Enter&quot;); await page.keyboard.press(&quot;ArrowDown...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>await page.keyboard.press(&quot;Tab&quot;);</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>await expect(page.getByRole(&quot;button&quot;, { name: &quot;옵션 열기&quot; })).toBeFocused(); → await page.keyboard.press(&quot;Enter&quot;); → await page.keyboard.press(&quot;ArrowDown&quot;); → await page.keyboard.press(&quot;Space&quot;); → await expect(page.getByRol...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>await page.mouse.up();</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout gm">
 <span class="co-label">PRACTICAL BAR</span>
 <p>접근성은 “aria를 붙였다”가 아니라 동일한 작업을 키보드와 보조기술 경로로 완료할 수 있다는 뜻입니다. 정교한 인터랙션일수록 canvas/drag/gesture 기능과 같은 정보를 DOM control로 병렬 제공해야 합니다.</p>
@@ -477,7 +541,15 @@
 <tr><td>Optimistic UI가 실제 상태와 어긋남</td><td>성공처럼 보였는데 새로고침하면 사라짐</td><td>낙관 업데이트와 서버 응답 병합 규칙, 실패 rollback, stale response ignore가 없음</td><td>operation log, request version, 실패 시 원래 값 복원, 성공 응답으로 canonical state 재동기화</td><td>느린 응답, 실패 응답, 순서가 뒤바뀐 응답, retry 테스트</td></tr>
 <tr><td>Canvas/drag 기능이 접근 불가능</td><td>마우스로만 조작 가능하고 키보드·보조기술 경로가 없음</td><td>시각 객체를 DOM control이나 command model로 노출하지 않음</td><td>object list, keyboard commands, live announcement, hidden이 아닌 대체 control 제공</td><td>마우스 없이 선택·이동·삭제·취소 완료</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">INTERACTION DEBUG ORDER</span><br>1. 문제가 발생한 user action 이름과 입력 장치를 고정한다<br>2. idle, pending, success, error, cancelled 중 어느 상태에서 깨졌는지 찾는다<br>3. event lifecycle(pointerdown/move/up/cancel, keydown, blur)을 로그로 확인한다<br>4. async response가 늦게 오거나 순서가 바뀌는 경우를 재현한다<br>5. focus, scroll, announcement, cleanup까지 같은 테스트에 넣는다</div>
+<div class="semantic-card process-card"><span class="sc-label">INTERACTION DEBUG ORDER</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 문제가 발생한 user action 이름과 입력 장치를 고정한다 2. idle, pending, success, error, cancelled 중 어느 상태에서 깨졌는지 찾는다 3. event lifecycle(pointerdown/move/up/cancel, keydown, blur)을 로그로 확인한다 4. as...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 문제가 발생한 user action 이름과 입력 장치를 고정한다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. idle, pending, success, error, cancelled 중 어느 상태에서 깨졌는지 찾는다 → 3. event lifecycle(pointerdown/move/up/cancel, keydown, blur)을 로그로 확인한다 → 4. async response가 늦게 오거나 순서가 바뀌는 경우를 재현한다</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>5. focus, scroll, announcement, cleanup까지 같은 테스트에 넣는다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">ANTI-PATCH</span>
 <p>인터랙션 버그를 <code>setTimeout</code>, 전역 flag, CSS <code>pointer-events: none</code>만으로 막으면 다음 입력 장치나 느린 네트워크에서 다시 터집니다. 해결 단위는 “한 이벤트 핸들러”가 아니라 “입력 세션과 상태 전이 전체”여야 합니다.</p>
@@ -515,7 +587,15 @@
 <tr><td>성능 예산 안에 있는가</td><td>transform/opacity 중심, long task 없음, frame drop 제한</td><td>height, top, box-shadow, filter가 큰 영역에서 반복</td></tr>
 <tr><td>접근성 설정을 존중하는가</td><td><code>prefers-reduced-motion</code>에서 대체 상태가 존재</td><td>패럴랙스, 자동 재생, 흔들림을 끌 수 없음</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">MOTION FIRST PRINCIPLES</span><br>1. 모션은 사용자의 원인과 결과를 연결한다<br>2. 빠른 작업 흐름에서는 짧게, 학습이 필요한 변화에서는 명확하게 둔다<br>3. show보다 hide가 보통 더 짧다<br>4. layout을 움직이기보다 composite 가능한 속성을 우선한다<br>5. motion off 상태에서도 제품 의미와 조작 가능성이 유지되어야 한다</div>
+<div class="semantic-card process-card"><span class="sc-label">MOTION FIRST PRINCIPLES</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 모션은 사용자의 원인과 결과를 연결한다 2. 빠른 작업 흐름에서는 짧게, 학습이 필요한 변화에서는 명확하게 둔다 3. show보다 hide가 보통 더 짧다 4. layout을 움직이기보다 composite 가능한 속성을 우선한다 5. motion off 상태에서도 제품 의미와 조작 가능성이 유지되어야 한다</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 모션은 사용자의 원인과 결과를 연결한다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 빠른 작업 흐름에서는 짧게, 학습이 필요한 변화에서는 명확하게 둔다 → 3. show보다 hide가 보통 더 짧다 → 4. layout을 움직이기보다 composite 가능한 속성을 우선한다</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>5. motion off 상태에서도 제품 의미와 조작 가능성이 유지되어야 한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">PRACTICAL RULE</span><p>애니메이션 duration을 정할 때 “예뻐 보이는가”보다 “사용자가 다음 행동을 하기 전에 필요한 정보를 받는가”를 먼저 봅니다. 80ms 이하는 변화가 거의 감지되지 않고, 500ms 이상은 반복 업무에서 지연으로 느껴지기 쉽습니다.</p></div>
 </section>
 
@@ -537,8 +617,24 @@
 <tr><td><code>top</code>, <code>left</code></td><td>낮음</td><td>positioned element라도 layout/paint 비용이 커질 수 있음</td><td>대부분 translate로 대체</td></tr>
 <tr><td><code>box-shadow</code>, <code>filter</code></td><td>제한</td><td>큰 영역 repaint와 GPU 비용 증가</td><td>작은 요소에만 사용하고 Performance trace 확인</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">CSS MOTION TOKEN 예시</span><br>:root {<br>&nbsp;&nbsp;--motion-fast: 120ms;<br>&nbsp;&nbsp;--motion-base: 180ms;<br>&nbsp;&nbsp;--motion-slow: 280ms;<br>&nbsp;&nbsp;--ease-standard: cubic-bezier(0.2, 0, 0, 1);<br>&nbsp;&nbsp;--ease-enter: cubic-bezier(0, 0, 0.2, 1);<br>&nbsp;&nbsp;--ease-exit: cubic-bezier(0.4, 0, 1, 1);<br>}</div>
-<div class="semantic-card process-card"><span class="sc-label">TRANSITION 예시</span><br>.panel {<br>&nbsp;&nbsp;opacity: 0;<br>&nbsp;&nbsp;transform: translateY(8px);<br>&nbsp;&nbsp;transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);<br>}<br>.panel[data-open="true"] {<br>&nbsp;&nbsp;opacity: 1;<br>&nbsp;&nbsp;transform: translateY(0);<br>}</div>
+<div class="semantic-card process-card"><span class="sc-label">CSS MOTION TOKEN 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>:root { --motion-fast: 120ms; --motion-base: 180ms; --motion-slow: 280ms; --ease-standard: cubic-bezier(0.2, 0, 0, 1); --ease-enter: cubic-bezier(0, 0, 0.2, 1); --ease-exit: cubic...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>:root {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>motion-fast: 120ms; → motion-base: 180ms; → motion-slow: 280ms; → ease-standard: cubic-bezier(0.2, 0, 0, 1); → ease-enter: cubic-bezier(0, 0, 0.2, 1); → ease-exit: cubic-bezier(0.4, 0, 1, 1);</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>}</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">TRANSITION 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>.panel { opacity: 0; transform: translateY(8px); transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard); } .panel[data-open...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>.panel {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>opacity: 0; → transform: translateY(8px); → transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard); → } → .panel[data-open=&quot;true&quot;] { → opacity: 1;</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>transform: translateY(0);</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout risk"><span class="co-label">COMMON FAILURE</span><p><code>transition: all</code>은 편하지만 위험합니다. 나중에 width, color, shadow, filter가 추가되면 의도하지 않은 속성까지 움직여 성능과 예측 가능성을 망칩니다. 움직일 속성은 명시합니다.</p></div>
 </section>
 
@@ -559,7 +655,15 @@
 <tr><td>Route transition</td><td>이전 route exit 완료 후 다음 route enter를 조율</td><td>단순 fade in만 필요</td></tr>
 <tr><td>Chart</td><td>데이터 값 변화에 따라 path, axis, tooltip을 보간</td><td>legend hover나 point highlight 수준</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">WAAPI CLEANUP 예시</span><br>const animation = node.animate(<br>&nbsp;&nbsp;[{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }],<br>&nbsp;&nbsp;{ duration: 180, easing: "cubic-bezier(0.2, 0, 0, 1)", fill: "both" }<br>);<br><br>return () =&gt; animation.cancel();</div>
+<div class="semantic-card process-card"><span class="sc-label">WAAPI CLEANUP 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>const animation = node.animate( [{ opacity: 0, transform: &quot;translateY(8px)&quot; }, { opacity: 1, transform: &quot;translateY(0)&quot; }], { duration: 180, easing: &quot;cubic-bezier(0.2, 0, 0, 1)&quot;,...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>const animation = node.animate(</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>[{ opacity: 0, transform: &quot;translateY(8px)&quot; }, { opacity: 1, transform: &quot;translateY(0)&quot; }], → { duration: 180, easing: &quot;cubic-bezier(0.2, 0, 0, 1)&quot;, fill: &quot;both&quot; } → );</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>return () =&gt; animation.cancel();</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">FRAME BUDGET</span><p>60fps에서 한 frame 예산은 약 16.7ms입니다. 이 안에 JS, style, layout, paint, composite가 모두 들어와야 합니다. pointermove마다 React state를 바꾸거나 DOM read/write를 섞으면 금방 예산을 넘습니다.</p></div>
 <div class="semantic-card evidence-card"><span class="sc-label">JS ANIMATION REVIEW</span><br>animation lifecycle이 component lifecycle과 연결되어 있는가<br>unmount, route change, rapid toggle에서 cancel되는가<br>prefers-reduced-motion일 때 즉시 완료 또는 단순 전환되는가<br>동일 interaction을 10회 반복해도 memory와 DOM node가 증가하지 않는가<br>Performance trace에서 long task와 forced reflow가 없는가</div>
 </section>
@@ -632,7 +736,15 @@
 <tr><td>layout animation은 몇 개 요소까지 허용하는가?</td><td>큰 목록은 virtualization 또는 motion 제한</td><td>100개 이상 카드가 동시에 layout 측정</td></tr>
 <tr><td>route transition이 데이터 로딩과 충돌하지 않는가?</td><td>skeleton, pending, scroll restoration, error state가 함께 정의됨</td><td>전환만 있고 느린 API에서 빈 화면</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">ADVANCED MOTION PR GATE</span><br>전환 목적과 사용자 상태 변화<br>animation 중 interrupt/cancel 정책<br>focus trap, restore, scroll lock 수명주기<br>route/data loading/error와의 결합 지점<br>reduced motion variant<br>rapid toggle과 slow network 검증 결과</div>
+<div class="semantic-card process-card"><span class="sc-label">ADVANCED MOTION PR GATE</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>전환 목적과 사용자 상태 변화 animation 중 interrupt/cancel 정책 focus trap, restore, scroll lock 수명주기 route/data loading/error와의 결합 지점 reduced motion variant rapid toggle과 slow network 검증 결과</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>전환 목적과 사용자 상태 변화</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>animation 중 interrupt/cancel 정책 → focus trap, restore, scroll lock 수명주기 → route/data loading/error와의 결합 지점 → reduced motion variant</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>rapid toggle과 slow network 검증 결과</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">STATE FIRST</span><p>고급 모션은 시각 효과보다 상태 기계에 가깝습니다. animation이 끝났는지보다 제품 상태가 정확히 하나로 수렴하는지가 더 중요합니다.</p></div>
 </section>
 
@@ -648,7 +760,15 @@
 <tr><td>Loop</td><td>loading, illustration, background</td><td>정지 프레임, progress text, 수동 재생</td><td>필수 loading은 텍스트 상태를 함께 제공</td></tr>
 <tr><td>3D camera</td><td>자동 회전, orbit, fly-through</td><td>정적 camera, 사용자가 직접 조작할 때만 이동</td><td>자동 재생을 멈춰도 조작 가능해야 함</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">REDUCED MOTION CSS 예시</span><br>@media (prefers-reduced-motion: reduce) {<br>&nbsp;&nbsp;*, *::before, *::after {<br>&nbsp;&nbsp;&nbsp;&nbsp;animation-duration: 1ms !important;<br>&nbsp;&nbsp;&nbsp;&nbsp;animation-iteration-count: 1 !important;<br>&nbsp;&nbsp;&nbsp;&nbsp;scroll-behavior: auto !important;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;.motion-slide, .motion-parallax, .motion-spin {<br>&nbsp;&nbsp;&nbsp;&nbsp;transform: none !important;<br>&nbsp;&nbsp;}<br>}</div>
+<div class="semantic-card process-card"><span class="sc-label">REDUCED MOTION CSS 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>@media (prefers-reduced-motion: reduce) {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>*, *::before, *::after { → animation-duration: 1ms !important; → animation-iteration-count: 1 !important; → scroll-behavior: auto !important; → } → .motion-slide, .motion-parallax, .motion-spin {</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>transform: none !important;</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>제품 요구</th><th>잘못된 대응</th><th>좋은 대응</th></tr>
 <tr><td>로딩 중임을 알려야 함</td><td>무한 shimmer만 제공</td><td>정적 skeleton + “불러오는 중” 상태 텍스트 + timeout 처리</td></tr>
@@ -805,7 +925,15 @@
 <tr><td><code>useFlipList</code></td><td>목록 위치 변화 측정과 transform 보간</td><td>key 안정성, scroll offset, read/write batching</td><td>대량 목록 frame budget</td></tr>
 <tr><td><code>useAnimationController</code></td><td>WAAPI/rAF animation start/cancel/finish 통합</td><td>inline style 정리와 stale animation 무시</td><td>unmount와 reduced motion</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">useReducedMotion 예시</span><br>function useReducedMotion() {<br>&nbsp;&nbsp;const [reduce, setReduce] = useState(false);<br>&nbsp;&nbsp;useEffect(() =&gt; {<br>&nbsp;&nbsp;&nbsp;&nbsp;const query = window.matchMedia("(prefers-reduced-motion: reduce)");<br>&nbsp;&nbsp;&nbsp;&nbsp;setReduce(query.matches);<br>&nbsp;&nbsp;&nbsp;&nbsp;const onChange = () =&gt; setReduce(query.matches);<br>&nbsp;&nbsp;&nbsp;&nbsp;query.addEventListener("change", onChange);<br>&nbsp;&nbsp;&nbsp;&nbsp;return () =&gt; query.removeEventListener("change", onChange);<br>&nbsp;&nbsp;}, []);<br>&nbsp;&nbsp;return reduce;<br>}</div>
+<div class="semantic-card process-card"><span class="sc-label">useReducedMotion 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>function useReducedMotion() { const [reduce, setReduce] = useState(false); useEffect(() =&gt; { const query = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;); setReduce(query.m...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>function useReducedMotion() {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>const [reduce, setReduce] = useState(false); → useEffect(() =&gt; { → const query = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;); → setReduce(query.matches); → const onChange = () =&gt; setReduce(query.matches); → qu...</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>}</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>자동화 항목</th><th>방법</th><th>통과 기준</th></tr>
 <tr><td>Reduced motion snapshot</td><td>브라우저 context에 reduced motion emulate</td><td>slide/scale/parallax 제거, 상태 의미 유지</td></tr>
@@ -853,7 +981,15 @@
 <tr><td>Reduced motion 누락</td><td>OS 설정을 켜도 parallax, scale, slide가 계속 동작</td><td>CSS만 처리하고 JS animation, library transition, scroll effect는 분기하지 않음</td><td>motion token에 reduce variant를 두고 CSS/JS/library 공통 hook으로 적용</td><td>emulate reduced motion에서 상태 의미와 layout이 유지되는지 확인</td></tr>
 <tr><td>Layer 과다와 메모리 압박</td><td>처음엔 부드럽지만 오래 쓰면 mobile에서 느려짐</td><td><code>will-change</code>, blur, fixed overlay, large transform layer를 상시 유지</td><td>animation 직전만 promotion하고 종료 후 제거, 큰 blur와 full-screen filter 제한</td><td>Layers panel, memory timeline, low-end device 장시간 세션 측정</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">MOTION DEBUG ORDER</span><br>1. 움직이는 CSS property가 layout, paint, composite 중 어디에 걸리는지 분류한다<br>2. animation 시작 전 layout read와 style write가 섞였는지 확인한다<br>3. cancel, interrupt, rapid toggle, unmount 경로를 먼저 재현한다<br>4. focus trap, scroll lock, inert, aria-hidden의 수명이 animation과 맞는지 본다<br>5. reduced motion과 low-end tier에서 같은 의미가 남는지 확인한다</div>
+<div class="semantic-card process-card"><span class="sc-label">MOTION DEBUG ORDER</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 움직이는 CSS property가 layout, paint, composite 중 어디에 걸리는지 분류한다 2. animation 시작 전 layout read와 style write가 섞였는지 확인한다 3. cancel, interrupt, rapid toggle, unmount 경로를 먼저 재현한다 4. foc...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 움직이는 CSS property가 layout, paint, composite 중 어디에 걸리는지 분류한다</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. animation 시작 전 layout read와 style write가 섞였는지 확인한다 → 3. cancel, interrupt, rapid toggle, unmount 경로를 먼저 재현한다 → 4. focus trap, scroll lock, inert, aria-hidden의 수명이 animation과 맞는지 본다</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>5. reduced motion과 low-end tier에서 같은 의미가 남는지 확인한다</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn">
 <span class="co-label">PRACTICAL FIX</span>
 <p>모션 문제를 duration만 줄여서 해결하면 원인은 남습니다. 끊김은 속성 선택과 main thread 점유 문제이고, 잔상은 animation lifecycle 문제이며, 접근성 충돌은 DOM 수명과 상태 machine 문제입니다.</p>
@@ -938,7 +1074,15 @@
 <tr><td>Texture upload stall</td><td>모델 진입 순간 긴 freeze</td><td>큰 이미지 decode/upload를 interaction 시점에 수행</td><td>프리로드, KTX2/Basis 압축, 점진 로딩, skeleton scene</td></tr>
 <tr><td>Overdraw</td><td>투명 효과가 많은 장면에서 FPS 하락</td><td>겹치는 transparent mesh, particle, post effect</td><td>정렬, alpha test, particle 수 cap, 해상도 scale</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">GPU COST ORDER</span><br>CPU: scene update → frustum culling → draw call submit<br>GPU upload: buffer/texture 변경 데이터 전송<br>Vertex: 정점 수와 skinning/morph 계산<br>Fragment: 화면 픽셀, overdraw, shader, post-processing<br>Memory: texture, geometry, render target, shadow map</div>
+<div class="semantic-card process-card"><span class="sc-label">GPU COST ORDER</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>CPU: scene update → frustum culling → draw call submit GPU upload: buffer/texture 변경 데이터 전송 Vertex: 정점 수와 skinning/morph 계산 Fragment: 화면 픽셀, overdraw, shader, post-processing Memo...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>CPU: scene update</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>frustum culling → draw call submit → GPU upload: buffer/texture 변경 데이터 전송 → Vertex: 정점 수와 skinning/morph 계산 → Fragment: 화면 픽셀, overdraw, shader, post-processing</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>Memory: texture, geometry, render target, shadow map</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout"><span class="co-label">MENTAL MODEL</span><p>WebGL 성능은 “triangle이 몇 개인가” 하나로 설명되지 않습니다. 같은 polygon 수라도 material이 200개면 draw call이 많아지고, 같은 draw call 수라도 4K texture와 bloom이 있으면 GPU memory와 fragment 비용이 커집니다.</p></div>
 </section>
 
@@ -984,7 +1128,15 @@
 <tr><td>상태 표시</td><td>로딩 진행률, 저해상도 preview, 실패 메시지, retry</td><td>검은 canvas 또는 무한 spinner만 노출</td></tr>
 <tr><td>측정</td><td>view start, model ready, first interaction, variant applied 이벤트</td><td>3D가 전환율에 기여하는지 비용만 쓰는지 모름</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">3D PRODUCT REVIEW</span><br>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가<br>정적 이미지보다 나은 상호작용이 명확한가<br>모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가<br>카메라와 조명이 제품 사실성을 왜곡하지 않는가<br>상호작용 로그로 실제 사용 가치를 확인할 수 있는가</div>
+<div class="semantic-card process-card"><span class="sc-label">3D PRODUCT REVIEW</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가 정적 이미지보다 나은 상호작용이 명확한가 모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가 카메라와 조명이 제품 사실성을 왜곡하지 않는가 상호작용 로그로 실제 사용 가치를 확인할 수 있는가</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>정적 이미지보다 나은 상호작용이 명확한가 → 모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가 → 카메라와 조명이 제품 사실성을 왜곡하지 않는가</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>상호작용 로그로 실제 사용 가치를 확인할 수 있는가</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="callout warn"><span class="co-label">PRODUCT RISK</span><p>3D는 강한 첫인상을 만들지만, 제품 과업을 느리게 만들기도 쉽습니다. 핵심 CTA가 모델 로딩 뒤로 밀리거나, 모바일에서 스크롤을 방해하거나, 색상 판단을 왜곡하면 3D는 경험 개선이 아니라 장애물이 됩니다.</p></div>
 </section>
 
@@ -1171,7 +1323,15 @@
 <tr><td>World</td><td>3D scene의 실제 object 위치</td><td>camera projection과 inverse matrix를 거쳐 ray 생성</td><td>object parent transform을 무시해 label 위치가 어긋남</td></tr>
 <tr><td>Screen overlay</td><td>3D point를 DOM label로 투영</td><td>world position → project(camera) → CSS pixel</td><td>카메라 이동 뒤 hotspot이 drift</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">RAYCAST COORDINATE 예시</span><br>const rect = canvas.getBoundingClientRect();<br>const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;<br>const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;<br>raycaster.setFromCamera({ x, y }, camera);<br>const hits = raycaster.intersectObjects(selectableObjects, true);</div>
+<div class="semantic-card process-card"><span class="sc-label">RAYCAST COORDINATE 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>const rect = canvas.getBoundingClientRect(); const x = ((event.clientX - rect.left) / rect.width) * 2 - 1; const y = -((event.clientY - rect.top) / rect.height) * 2 + 1; raycaster...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>const rect = canvas.getBoundingClientRect();</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>const x = ((event.clientX - rect.left) / rect.width) * 2 - 1; → const y = -((event.clientY - rect.top) / rect.height) * 2 + 1; → raycaster.setFromCamera({ x, y }, camera);</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>const hits = raycaster.intersectObjects(selectableObjects, true);</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <table>
 <tr><th>Shader/Material 개념</th><th>실무 의미</th><th>비용 신호</th><th>검증</th></tr>
 <tr><td>Vertex shader</td><td>정점 위치, skinning, morph target 계산</td><td>skinned mesh와 morph가 많은 scene</td><td>animation on/off 비교</td></tr>
@@ -1252,7 +1412,15 @@
 <tr><td>Asset budget</td><td>모델/texture 크기 회귀 차단</td><td>CI에서 asset manifest 검사</td><td>예산 초과에 예외 근거 없음</td></tr>
 <tr><td>Interaction smoke</td><td>raycast, camera reset, option apply 검증</td><td>Playwright pointer와 keyboard 병행</td><td>선택/초기화/옵션 변경 실패</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">CANVAS NONBLANK 예시</span><br>const pixels = await page.locator("canvas").evaluate((canvas) =&gt; {<br>&nbsp;&nbsp;const ctx = canvas.getContext("2d") || canvas.getContext("webgl");<br>&nbsp;&nbsp;// WebGL이면 테스트 전용 debug readback helper를 앱에 노출한다.<br>&nbsp;&nbsp;return window.__readCanvasNonBlankRatio?.() ?? 0;<br>});<br>expect(pixels).toBeGreaterThan(0.02);</div>
+<div class="semantic-card process-card"><span class="sc-label">CANVAS NONBLANK 예시</span>
+<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>const pixels = await page.locator(&quot;canvas&quot;).evaluate((canvas) =&gt; { const ctx = canvas.getContext(&quot;2d&quot;) || canvas.getContext(&quot;webgl&quot;); // WebGL이면 테스트 전용 debug readback helper를 앱에 노...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<ol>
+<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>const pixels = await page.locator(&quot;canvas&quot;).evaluate((canvas) =&gt; {</em>에서 시작합니다.</li>
+<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>const ctx = canvas.getContext(&quot;2d&quot;) || canvas.getContext(&quot;webgl&quot;); → // WebGL이면 테스트 전용 debug readback helper를 앱에 노출한다. → return window.__readCanvasNonBlankRatio?.() ?? 0; → });</em>입니다.</li>
+<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>expect(pixels).toBeGreaterThan(0.02);</em>이(가) 실제로 확인되어야 합니다.</li>
+<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+</ol>
+<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
 <div class="semantic-card evidence-card"><span class="sc-label">renderer.info regression 예시</span><br>await openViewerAndWaitReady(page);<br>const baseline = await page.evaluate(() =&gt; window.__threeInfo());<br>for (let i = 0; i &lt; 10; i++) {<br>&nbsp;&nbsp;await page.goto("/other");<br>&nbsp;&nbsp;await page.goto("/viewer");<br>&nbsp;&nbsp;await openViewerAndWaitReady(page);<br>}<br>const after = await page.evaluate(() =&gt; window.__threeInfo());<br>expect(after.memory.textures).toBeLessThanOrEqual(baseline.memory.textures + 1);</div>
 <div class="callout warn">
 <span class="co-label">TEST HOOK POLICY</span>
