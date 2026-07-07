@@ -26,7 +26,11 @@
   <a href="#fe-ch12"><span class="code">FE-12</span>보안: XSS·CSRF·토큰 저장</a>
   <a href="#fe-ch13"><span class="code">FE-13</span>대규모 제품 운영</a>
   <a href="#fe-ch14"><span class="code">FE-14</span>실무 의사결정 게이트</a>
-  <a href="#fe-ch15"><span class="code">FE-15</span>용어집</a>
+  <a href="#fe-ch15"><span class="code">FE-15</span>애플리케이션 아키텍처</a>
+  <a href="#fe-ch16"><span class="code">FE-16</span>서버 상태·캐시 일관성</a>
+  <a href="#fe-ch17"><span class="code">FE-17</span>제품형 UI 패턴</a>
+  <a href="#fe-ch18"><span class="code">FE-18</span>디자인 시스템 운영</a>
+  <a href="#fe-ch19"><span class="code">FE-19</span>용어집</a>
   <a href="#doc-browser"><span class="code">PART</span>브라우저 동작 원리</a>
 <a href="#browser-ch1"><span class="code">BR-01</span>브라우저는 앱 런타임이다</a>
   <a href="#browser-ch2"><span class="code">BR-02</span>이벤트 루프와 태스크 큐</a>
@@ -128,15 +132,18 @@
 <tr><td><b>Compound</b></td><td>Tabs, Dialog, Menu처럼 내부 부품이 협력할 때</td><td>암묵적 규칙이 많아지면 사용법이 어려움</td></tr>
 <tr><td><b>Headless</b></td><td>동작과 UI 스타일을 분리해야 할 때</td><td>접근성 책임이 호출자에게 넘어가지 않게 주의</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">COMPOSITION OVER CONFIGURATION</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>좋은 방향 &lt;Card&gt; &lt;CardHeader&gt;프로젝트&lt;/CardHeader&gt; &lt;CardBody&gt;&lt;ProjectList /&gt;&lt;/CardBody&gt; &lt;/Card&gt; 위험 신호 &lt;Card title=&quot;프로젝트&quot; body={list} padded bordered compact interactive /&gt;</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>좋은 방향</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>→ 프로젝트 → → → 위험 신호</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em></em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
-</ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">COMPOSITION OVER CONFIGURATION</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+<span class="dim">좋은 방향</span><br>
+&lt;Card&gt;<br>
+&nbsp;&nbsp;&lt;CardHeader&gt;프로젝트&lt;/CardHeader&gt;<br>
+&nbsp;&nbsp;&lt;CardBody&gt;&lt;ProjectList /&gt;&lt;/CardBody&gt;<br>
+&lt;/Card&gt;<br>
+<br>
+<span class="dim">위험 신호</span><br>
+&lt;Card title="프로젝트" body={list} padded bordered compact interactive /&gt;
+</div>
 <p>props가 늘어나는 것은 컴포넌트가 너무 많은 결정을 떠안고 있다는 신호일 수 있습니다. variant가 제품의 실제 의미를 표현하는지, 아니면 호출자가 내부 구현을 조종하기 위한 스위치인지 구분해야 합니다.</p>
 <div class="callout warn">
 <span class="co-label">BOUNDARY CHECK</span>
@@ -367,7 +374,110 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </section>
 
 <section id="fe-ch15">
-<div class="ch-head"><span class="ch-code">FE-15</span><h2>용어집</h2></div>
+<div class="ch-head"><span class="ch-code">FE-15</span><h2>프론트엔드 애플리케이션 아키텍처</h2></div>
+<p class="lede">시니어 프론트엔드 아키텍처는 폴더 구조를 예쁘게 나누는 일이 아니라 변경이 어디까지 전파되는지 제한하는 일입니다. route, feature, entity, shared layer, design system, platform adapter가 서로 무엇을 알고 무엇을 몰라야 하는지 규칙으로 남겨야 합니다.</p>
+<div class="semantic-card evidence-card"><span class="sc-label">FRONTEND APPLICATION ARCHITECTURE DECISION MODEL</span><br>product capability → route boundary → feature owner → server state owner<br>→ UI state owner → shared component contract → platform adapter<br>→ dependency rule → public API → test and release evidence</div>
+<table>
+<tr><th>경계</th><th>좋은 기준</th><th>실패 신호</th><th>필수 증거</th></tr>
+<tr><td>Route</td><td>사용자 작업 단위와 데이터 로딩 단위가 맞는다</td><td>한 route가 unrelated feature의 loader, modal, store를 모두 안다</td><td>route map, loader contract, error boundary</td></tr>
+<tr><td>Feature</td><td>도메인 행동, UI 상태, mutation이 한 owner 아래 있다</td><td>shared 폴더에 비즈니스 규칙이 쌓인다</td><td>feature public API, owner, tests</td></tr>
+<tr><td>Entity</td><td>서버 모델의 최소 공통 타입과 정규화 기준만 둔다</td><td>entity layer가 화면별 표시 규칙까지 안다</td><td>schema, mapper, compatibility note</td></tr>
+<tr><td>Shared UI</td><td>제품 의미가 없는 순수 UI contract만 제공한다</td><td>공통 Button이 결제, 권한, 라우팅을 알기 시작한다</td><td>component API, story, a11y contract</td></tr>
+<tr><td>Platform adapter</td><td>analytics, auth, storage, router, API client를 경계 뒤에 숨긴다</td><td>화면 컴포넌트가 SDK 세부 API에 직접 결합된다</td><td>adapter interface, mock-free integration test</td></tr>
+</table>
+<h3>FEATURE ROUTE BOUNDARY MATRIX</h3>
+<table>
+<tr><th>변경 유형</th><th>route layer</th><th>feature layer</th><th>shared layer</th><th>금지</th></tr>
+<tr><td>새 업무 흐름</td><td>진입, loader, 권한, error boundary</td><td>상태 기계, mutation, validation</td><td>필요한 순수 UI만 조합</td><td>shared에 업무 전용 helper 추가</td></tr>
+<tr><td>API shape 변경</td><td>fallback과 loading 정책 확인</td><td>mapper, query key, invalidation 수정</td><td>변경 없음이 원칙</td><td>컴포넌트가 raw API shape에 직접 의존</td></tr>
+<tr><td>디자인 시스템 변경</td><td>route별 회귀 캡처</td><td>feature-specific override 제거</td><td>token, primitive, component API 수정</td><td>화면마다 임의 px/hex 추가</td></tr>
+<tr><td>권한 변경</td><td>route guard와 401/403 화면</td><td>가능/불가능 액션과 안내 문구</td><td>disabled/hidden 표현만 제공</td><td>버튼 숨김을 보안 통제로 취급</td></tr>
+</table>
+<h3>DEPENDENCY RULE AND PUBLIC API GATE</h3>
+<p>프론트엔드 모듈의 품질은 import 방향에서 드러납니다. feature는 shared를 사용할 수 있지만 shared가 feature를 알면 안 됩니다. route는 feature를 조립하지만 feature 내부 구현 파일을 직접 import하지 않고 공개 entry를 통해 사용합니다.</p>
+<div class="semantic-card process-card"><span class="sc-label">DEPENDENCY RULE AND PUBLIC API GATE</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. route는 feature public API만 import한다<br>2. feature는 다른 feature의 내부 파일을 import하지 않는다<br>3. shared에는 제품 도메인 단어가 들어가지 않는다<br>4. platform SDK는 adapter 뒤에서만 접근한다<br>5. public API 변경은 consumer diff와 migration note를 남긴다</div>
+</section>
+
+<section id="fe-ch16">
+<div class="ch-head"><span class="ch-code">FE-16</span><h2>서버 상태·캐시 일관성</h2></div>
+<p class="lede">서버 상태는 클라이언트가 소유한 데이터가 아니라 특정 시점의 복사본입니다. 고급 프론트엔드는 데이터를 “가져왔다”에서 멈추지 않고 stale, invalidation, optimistic rollback, conflict, multi-tab drift, URL 복원까지 하나의 일관성 모델로 다룹니다.</p>
+<div class="semantic-card decision-card"><span class="sc-label">SERVER STATE CONSISTENCY MODEL</span><br>query key → fetch policy → stale time → mutation scope<br>→ optimistic patch → rollback snapshot → invalidation target<br>→ conflict resolution → multi-tab sync → release telemetry</div>
+<table>
+<tr><th>결정</th><th>질문</th><th>좋은 기준</th><th>실패 모드</th></tr>
+<tr><td>Query key</td><td>어떤 입력이 데이터 정체성을 바꾸는가</td><td>route params, filter, auth scope, locale을 명시</td><td>필터가 바뀌어도 같은 cache를 재사용</td></tr>
+<tr><td>Stale time</td><td>얼마나 오래 낡아도 안전한가</td><td>가격·권한은 짧게, 문서·코드는 길게</td><td>항상 refetch 또는 영구 stale 둘 중 하나로 단순화</td></tr>
+<tr><td>Mutation scope</td><td>성공 후 어떤 query가 낡아지는가</td><td>list, detail, aggregate, badge를 분리</td><td>상세만 갱신하고 목록 count가 낡음</td></tr>
+<tr><td>Conflict</td><td>동시 수정이 생기면 누가 이기는가</td><td>version, updatedAt, 409 UI 계약</td><td>마지막 저장이 조용히 덮어씀</td></tr>
+<tr><td>Multi-tab</td><td>다른 탭의 변경을 반영해야 하는가</td><td>storage event, BroadcastChannel, visibility refetch</td><td>오래 열린 탭이 폐기된 권한으로 mutation</td></tr>
+</table>
+<h3>CACHE INVALIDATION DECISION TABLE</h3>
+<table>
+<tr><th>변경</th><th>캐시 처리</th><th>사용자 피드백</th><th>검증</th></tr>
+<tr><td>상세 수정</td><td>detail 즉시 patch, list item invalidate</td><td>저장 완료와 변경 필드 표시</td><td>detail/list 동시 일관성 테스트</td></tr>
+<tr><td>생성</td><td>list invalidate 또는 prepend optimistic item</td><td>새 항목 위치와 실패 rollback 안내</td><td>중복 생성, pagination, sorting 케이스</td></tr>
+<tr><td>삭제</td><td>detail 제거, list count 갱신, undo 가능성 판단</td><td>삭제 후 복구 가능 여부 명확화</td><td>뒤로가기, stale detail, 404 처리</td></tr>
+<tr><td>권한 변경</td><td>auth scope의 query 전체 폐기</td><td>접근 불가 route와 액션 설명</td><td>role downgrade E2E</td></tr>
+</table>
+<h3>OPTIMISTIC UPDATE FAILURE MATRIX</h3>
+<table>
+<tr><th>실패</th><th>위험</th><th>대응</th><th>증거</th></tr>
+<tr><td>서버 validation 실패</td><td>UI가 성공처럼 보임</td><td>snapshot rollback, 필드 오류 연결</td><td>422 fixture와 rollback test</td></tr>
+<tr><td>중복 클릭</td><td>동일 mutation 중복 전송</td><td>mutation key, pending lock, idempotency key</td><td>double submit E2E</td></tr>
+<tr><td>네트워크 timeout</td><td>성공 여부 불명확</td><td>확인 상태, 재조회, 중복 재시도 방지</td><td>timeout/retry trace</td></tr>
+<tr><td>동시 수정 conflict</td><td>타인 변경 덮어쓰기</td><td>409 compare UI, 내 draft 보존</td><td>version conflict fixture</td></tr>
+</table>
+</section>
+
+<section id="fe-ch17">
+<div class="ch-head"><span class="ch-code">FE-17</span><h2>제품형 UI 패턴</h2></div>
+<p class="lede">운영형 SaaS와 복잡한 제품 UI는 단순 컴포넌트 모음으로 풀리지 않습니다. data grid, wizard, bulk action, command palette, undo/redo, permission-aware UI는 상태, 권한, 접근성, 성능, 회귀 테스트가 동시에 닫혀야 합니다.</p>
+<table>
+<tr><th>PRODUCT UI PATTERN ACCEPTANCE MATRIX</th><th>핵심 위험</th><th>완료 기준</th><th>테스트 증거</th></tr>
+<tr><td>Data grid</td><td>대량 DOM, 편집 draft, 정렬·필터·권한</td><td>visible render, URL state, cell validation, keyboard navigation</td><td>10k row trace, cell edit E2E, a11y table audit</td></tr>
+<tr><td>Wizard</td><td>단계 이탈, 저장 중단, 뒤로가기</td><td>step state machine, draft persistence, resumable flow</td><td>refresh/back/validation 실패 테스트</td></tr>
+<tr><td>Bulk action</td><td>부분 실패, 권한 혼합, undo</td><td>selection model, dry-run summary, partial result UI</td><td>mixed permission fixture, partial failure E2E</td></tr>
+<tr><td>Command palette</td><td>권한 없는 명령 노출, keyboard trap</td><td>searchable command registry, shortcut conflict, focus restore</td><td>keyboard-only walkthrough, permission snapshot</td></tr>
+<tr><td>Undo/redo editor</td><td>상태 불일치, 메모리 증가, 서버 sync</td><td>command stack, inverse operation, conflict policy</td><td>redo/undo sequence, rollback, memory slope</td></tr>
+</table>
+<h3>PERMISSION AWARE UI MODEL</h3>
+<p>권한형 UI는 버튼을 숨기는 문제가 아닙니다. 사용자가 할 수 없는 일을 왜 할 수 없는지, 권한 요청 경로가 있는지, 서버 403과 UI 상태가 일치하는지를 설계해야 합니다.</p>
+<div class="semantic-card decision-card"><span class="sc-label">PERMISSION AWARE UI MODEL</span><br>server authorization → route availability → action affordance<br>→ disabled or hidden decision → explanation → request access path<br>→ 401/403 negative test → audit event</div>
+<table>
+<tr><th>상황</th><th>UI 선택</th><th>이유</th><th>주의</th></tr>
+<tr><td>역할상 절대 불가능</td><td>숨김 또는 읽기 전용</td><td>불필요한 노이즈 제거</td><td>서버 권한 검사는 반드시 유지</td></tr>
+<tr><td>권한 요청 가능</td><td>disabled + 이유 + 요청 CTA</td><td>사용자가 다음 행동을 알 수 있음</td><td>disabled 요소의 설명 접근성 제공</td></tr>
+<tr><td>일시 조건 미충족</td><td>비활성 + 조건 안내</td><td>상태를 바꾸면 가능함을 전달</td><td>색만으로 전달하지 않음</td></tr>
+<tr><td>세션 만료</td><td>로그인 복구 흐름</td><td>작업 맥락 보존</td><td>draft 손실 방지</td></tr>
+</table>
+</section>
+
+<section id="fe-ch18">
+<div class="ch-head"><span class="ch-code">FE-18</span><h2>디자인 시스템 운영</h2></div>
+<p class="lede">디자인 시스템은 컴포넌트 라이브러리가 아니라 제품 UI의 변경 관리 시스템입니다. 시니어 수준에서는 token, component API, Storybook, 접근성, visual regression, deprecation, Figma-code drift를 하나의 운영 루프로 관리합니다.</p>
+<div class="semantic-card evidence-card"><span class="sc-label">DESIGN SYSTEM OPERATING MODEL</span><br>design token source → component contract → usage guideline<br>→ story and fixture coverage → visual/a11y regression<br>→ release note → migration path → deprecation and adoption metric</div>
+<table>
+<tr><th>층</th><th>운영 기준</th><th>실패 신호</th><th>증거</th></tr>
+<tr><td>Token</td><td>color, spacing, radius, typography가 의미 이름으로 관리됨</td><td>화면마다 raw hex와 임의 px 증가</td><td>token diff, contrast audit, theme snapshot</td></tr>
+<tr><td>Component API</td><td>제품 의미 중심 variant와 안정적인 합성 구조</td><td>boolean prop 폭증, style escape hatch 남발</td><td>API review, usage search, migration note</td></tr>
+<tr><td>Story coverage</td><td>loading, empty, error, disabled, long text, locale, permission 상태 포함</td><td>happy path story만 존재</td><td>Storybook matrix, visual baseline</td></tr>
+<tr><td>Regression</td><td>visual, a11y, keyboard, responsive 회귀 자동화</td><td>디자인 QA가 매번 같은 오류 발견</td><td>screenshot diff, axe, keyboard walkthrough</td></tr>
+</table>
+<h3>COMPONENT API LIFECYCLE</h3>
+<table>
+<tr><th>단계</th><th>질문</th><th>산출물</th></tr>
+<tr><td>Proposal</td><td>기존 컴포넌트로 해결할 수 없는 새 의미인가</td><td>use case, non-goal, accessibility contract</td></tr>
+<tr><td>Adoption</td><td>어떤 화면이 이 API를 소비하는가</td><td>story matrix, usage example, migration target</td></tr>
+<tr><td>Change</td><td>breaking change인가 additive change인가</td><td>codemod 또는 migration guide, deprecation warning</td></tr>
+<tr><td>Retirement</td><td>낡은 variant를 언제 제거할 것인가</td><td>owner, deadline, usage count, release note</td></tr>
+</table>
+<h3>FIGMA CODE DRIFT CONTROL</h3>
+<p>Figma와 코드가 어긋나는 순간 디자인 시스템은 신뢰를 잃습니다. drift를 사람 기억에 맡기지 말고 token export, component status, screenshot baseline, release note로 추적합니다.</p>
+<div class="semantic-card evidence-card"><span class="sc-label">FIGMA CODE DRIFT CONTROL</span><br>token name and value diff<br>component status: design only | code only | synced | deprecated<br>variant parity table<br>visual regression baseline<br>accessibility exception log<br>release note and migration owner</div>
+</section>
+
+<section id="fe-ch19">
+<div class="ch-head"><span class="ch-code">FE-19</span><h2>용어집</h2></div>
 <p class="lede">실무에서 자주 부딪히는 프론트엔드 용어를 의사결정 관점으로 정리합니다. 통합 문서에서는 브라우저·접근성 용어와 함께 마지막 참조 장으로 읽습니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Hydration</b><span>SSR → client 연결</span></div><div class="g-def">서버가 만든 HTML에 클라이언트 JS 이벤트와 상태를 연결하는 과정. hydration 전 UI는 보이지만 상호작용이 제한될 수 있습니다.</div></div>
@@ -456,15 +566,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td><code>defer</code></td><td>HTML 파싱을 막지 않고 script 실행</td><td>DOM 준비 이후 실행됨</td></tr>
 <tr><td>lazy image</td><td>아래쪽 이미지를 늦게 로드</td><td>hero image에는 쓰지 않음</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">LOADING WATERFALL REVIEW</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다. 2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다. 3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다. 4. cache-control, immutable asset...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다. → 3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
-</ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">LOADING WATERFALL REVIEW</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. HTML이 늦는가, JS/CSS가 늦는가, 데이터 API가 늦는가를 분리한다.<br>2. LCP 후보 이미지가 preload 또는 높은 우선순위를 받는지 확인한다.<br>3. route chunk와 data fetch가 직렬 waterfall을 만들지 않는지 본다.<br>4. cache-control, immutable asset, index.html 재검증 정책을 함께 확인한다.</div>
 <table>
 <tr><th>캐시 대상</th><th>권장 방향</th><th>실패 신호</th></tr>
 <tr><td>해시가 붙은 JS/CSS asset</td><td>길게 cache, immutable</td><td>새 배포마다 같은 URL을 덮어써 사용자가 낡은 코드 실행</td></tr>
@@ -589,15 +692,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>Tabs</td><td><code>role="tablist/tab/tabpanel"</code>, <code>aria-selected</code>, <code>aria-controls</code>, keyboard arrow 처리</td><td>일반 링크 목록을 tabs로 꾸미지 않음</td></tr>
 <tr><td>Disclosure</td><td>button + <code>aria-expanded</code> + 연결된 panel</td><td>상태가 시각적으로만 드러나지 않게 함</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다. 2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다. 3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다. 4. focus가 화면 밖...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다.</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다. → 3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다.</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>4. focus가 화면 밖, 숨김 요소, disabled처럼 보이는 요소에 머물지 않는지 본다.</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
-</ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">KEYBOARD WALKTHROUGH</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. 주소창에서 Tab을 눌러 첫 focus가 skip link 또는 주요 내비게이션으로 가는지 본다.<br>2. 핵심 작업을 Tab, Shift+Tab, Enter, Space, Esc, Arrow만으로 완료한다.<br>3. 모달·메뉴·드롭다운을 닫은 뒤 focus가 원래 트리거로 돌아오는지 확인한다.<br>4. focus가 화면 밖, 숨김 요소, disabled처럼 보이는 요소에 머물지 않는지 본다.</div>
 <div class="callout warn"><span class="co-label">FOCUS RING</span><p>outline을 지우는 것은 접근성 회귀입니다. 디자인에 맞춰 focus style을 새로 정의할 수는 있지만, 키보드 사용자가 현재 위치를 알 수 있어야 합니다.</p></div>
 </section>
 
@@ -624,15 +720,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="a11y-ch5">
 <div class="ch-head"><span class="ch-code">A11Y-05</span><h2>폼·오류·상태 전달</h2></div>
 <p class="lede">폼 접근성은 label, 설명, 오류, 필수 여부, 제출 상태를 사용자가 이해할 수 있게 연결하는 일입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>label과 input은 htmlFor/id로 연결 오류 문구는 aria-describedby로 연결 오류 상태는 aria-invalid로 표시 제출 실패 후 첫 오류 필드로 focus 이동 필수값은 시각 표시와 텍스트 설명을 함께 제공</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>label과 input은 htmlFor/id로 연결</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>오류 문구는 aria-describedby로 연결 → 오류 상태는 aria-invalid로 표시 → 제출 실패 후 첫 오류 필드로 focus 이동</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>필수값은 시각 표시와 텍스트 설명을 함께 제공</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
-</ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">FORM ACCESSIBILITY CHECK</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>label과 input은 htmlFor/id로 연결<br>오류 문구는 aria-describedby로 연결<br>오류 상태는 aria-invalid로 표시<br>제출 실패 후 첫 오류 필드로 focus 이동<br>필수값은 시각 표시와 텍스트 설명을 함께 제공</div>
 <table>
 <tr><th>상황</th><th>구현 기준</th><th>놓치기 쉬운 점</th></tr>
 <tr><td>필수 입력</td><td>label 또는 설명에 필수 여부를 텍스트로 제공</td><td>별표만 표시하면 의미가 전달되지 않음</td></tr>
@@ -695,15 +784,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>테스트</td><td>keyboard-only 플로우, 오류 상태, zoom 200%, reduced motion 확인</td><td>체크리스트와 실패 재현 링크</td></tr>
 <tr><td>릴리즈</td><td>새 공통 컴포넌트가 기존 화면의 focus 순서를 깨지 않는지 확인</td><td>시각 회귀와 접근성 회귀 결과</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 이 화면의 주요 작업은 마우스 없이 끝나는가? 2. 보이는 label과 보조기술의 이름이 같은 의미인가? 3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가? 4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가? 5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 보이는 label과 보조기술의 이름이 같은 의미인가? → 3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가? → 4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
-</ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?<br>2. 보이는 label과 보조기술의 이름이 같은 의미인가?<br>3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가?<br>4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?<br>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</div>
 </section>
 </main>
 </div>

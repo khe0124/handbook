@@ -10,6 +10,7 @@
   <a href="#ch4"><span class="code">FTEST-04</span>E2E 테스트</a>
   <a href="#ch5"><span class="code">FTEST-05</span>Mock 전략</a>
   <a href="#ch6"><span class="code">FTEST-06</span>시각 회귀</a>
+  <a href="#ch7"><span class="code">FTEST-07</span>테스트 방법론</a>
 </nav><main>
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-TESTING-V1</span><span>SCOPE : UNIT · COMPONENT · E2E · VISUAL</span><span>LANG : KO</span></div>
@@ -133,6 +134,54 @@
 </table>
 <div class="glossary"><div class="g-row"><div class="g-term"><b>Test Contract</b><span>user behavior</span></div><div class="g-def">테스트가 보호하는 사용자 관찰 가능 동작입니다.</div></div><div class="g-row"><div class="g-term"><b>Fixture</b><span>test data</span></div><div class="g-def">테스트에서 반복 사용하는 현실적인 예제 데이터입니다.</div></div></div>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p>새 기능 PR은 어떤 계층의 테스트가 필요한지 명시합니다. 순수 로직은 unit, 사용자 상호작용은 component, 핵심 업무 흐름은 E2E, 공통 UI 변경은 visual regression 후보로 분류합니다.</p></div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FTEST-07</span><h2>테스트 방법론: 위험을 가장 싼 위치에서 막기</h2></div>
+<p class="lede">프론트엔드 테스트의 목적은 테스트 개수를 늘리는 것이 아니라 변경 위험을 가장 빠르고 안정적인 계층에서 차단하는 것입니다. 좋은 테스트 전략은 “무엇을 테스트할까”보다 “이 변경이 실패하면 사용자는 어떤 행동을 완료하지 못하고, 그 실패를 어느 계층에서 가장 싸게 잡을 수 있는가”를 먼저 묻습니다.</p>
+<div class="serial-card"><span class="sc-label">TEST STRATEGY AS RISK DESIGN</span>change risk → user failure mode → cheapest reliable test layer → fixture contract<br>→ CI evidence → release health signal → regression ownership</div>
+<table>
+<tr><th>위험</th><th>대표 실패</th><th>우선 테스트</th><th>보조 증거</th></tr>
+<tr><td>순수 계산·format</td><td>가격, 날짜, 권한 label이 틀림</td><td>unit</td><td>edge case table</td></tr>
+<tr><td>컴포넌트 상호작용</td><td>loading/error/disabled/focus 상태 누락</td><td>component + Testing Library</td><td>role/label 기반 assertion</td></tr>
+<tr><td>API 계약</td><td>nullable, enum, error shape 변경으로 UI crash</td><td>contract + MSW schema validation</td><td>runtime monitoring</td></tr>
+<tr><td>권한·세션</td><td>403, role downgrade, expired session에서 잘못된 화면</td><td>E2E negative path</td><td>server authorization log</td></tr>
+<tr><td>레이아웃·디자인 시스템</td><td>모바일 겹침, 긴 텍스트 잘림, 회귀</td><td>visual + a11y</td><td>responsive screenshots</td></tr>
+<tr><td>계측</td><td>중복 이벤트, PII 전송, consent 무시</td><td>analytics event test</td><td>network payload capture</td></tr>
+</table>
+<h3>TEST LAYER DECISION TABLE</h3>
+<p>테스트 계층은 선호가 아니라 비용과 신뢰도 선택입니다. unit은 빠르지만 통합을 못 보고, E2E는 신뢰도가 높지만 느리고 흔들릴 수 있습니다. 같은 위험을 unit으로 안정적으로 막을 수 있으면 E2E로 올리지 않고, 사용자 여정이 여러 시스템을 지나야만 드러나는 위험은 E2E로 고정합니다.</p>
+<table>
+<tr><th>질문</th><th>예라면</th><th>아니라면</th></tr>
+<tr><td>DOM 없이 판단 가능한가?</td><td>unit으로 둔다</td><td>component 이상으로 올린다</td></tr>
+<tr><td>사용자 역할, 이름, focus로 관찰 가능한가?</td><td>Testing Library로 보호한다</td><td>구현 세부 테스트를 피하고 UI 계약을 재정의한다</td></tr>
+<tr><td>라우팅, 인증, 브라우저 저장소, 새로고침이 핵심인가?</td><td>Playwright E2E로 둔다</td><td>component/integration에서 더 싸게 막는다</td></tr>
+<tr><td>API shape drift가 위험인가?</td><td>schema 기반 fixture와 contract test를 둔다</td><td>mock만 늘리지 않는다</td></tr>
+<tr><td>픽셀, 반응형, 시각 위계가 실패 지점인가?</td><td>visual regression과 수동 review를 결합한다</td><td>snapshot 남발을 피한다</td></tr>
+</table>
+<h3>PLAYWRIGHT SCENARIO METHOD</h3>
+<p>Playwright 시나리오는 happy path 녹화가 아니라 브라우저 상태 전이를 검증하는 문서입니다. 로그인 성공만 보지 말고 deep link, reload, back navigation, expired session, role downgrade, duplicate submit, network retry, permission denied를 같은 기능의 위험군으로 묶습니다.</p>
+<div class="serial-card"><span class="sc-label">PLAYWRIGHT SCENARIO METHOD</span>1. 핵심 사용자 목표를 한 문장으로 쓴다<br>2. 시작 상태를 anonymous/authenticated/expired/forbidden으로 나눈다<br>3. role, route, storageState, network fixture를 명시한다<br>4. 성공 path와 최소 1개 negative path를 같이 둔다<br>5. trace, screenshot, console, network artifact를 실패 증거로 남긴다</div>
+<h3>ANALYTICS EVENT TESTING METHOD</h3>
+<p>계측도 테스트 대상입니다. 이벤트는 클릭 순간이 아니라 의사결정 데이터 계약입니다. trigger, required parameter, identity, consent, PII 제외, 중복 방지, 실패 시 미전송 기준을 테스트해야 합니다.</p>
+<table>
+<tr><th>검증</th><th>방법</th><th>차단 기준</th></tr>
+<tr><td>정확한 trigger</td><td>사용자 행동 후 network payload 또는 dataLayer capture</td><td>렌더링만으로 이벤트 발송</td></tr>
+<tr><td>중복 방지</td><td>double click, retry, route back/forward</td><td>동일 conversion 중복 발송</td></tr>
+<tr><td>privacy</td><td>payload에서 email, phone, free text 검색</td><td>PII 또는 민감 query 포함</td></tr>
+<tr><td>consent</td><td>동의 전/후 상태를 나눠 테스트</td><td>동의 전 광고·분석 cookie 생성</td></tr>
+<tr><td>schema</td><td>event_schema_version과 required params 검사</td><td>dashboard가 깨지는 이름/타입 변경</td></tr>
+</table>
+<h3>TEST FAILURE TRIAGE MODEL</h3>
+<p>실패한 테스트는 고치는 것이 아니라 먼저 분류합니다. 제품 버그, 테스트 버그, fixture drift, 환경 문제, 타이밍 문제, 요구사항 변경을 구분해야 신뢰가 유지됩니다.</p>
+<table>
+<tr><th>분류</th><th>판단 질문</th><th>처리</th></tr>
+<tr><td>제품 버그</td><td>사용자도 같은 실패를 겪는가</td><td>코드를 고치고 회귀 테스트 유지</td></tr>
+<tr><td>테스트 버그</td><td>테스트가 구현 세부나 불안정한 selector에 묶였는가</td><td>role/label/상태 assertion으로 재작성</td></tr>
+<tr><td>fixture drift</td><td>mock이 실제 API와 달라졌는가</td><td>schema source에서 fixture 재생성</td></tr>
+<tr><td>환경 문제</td><td>CI만 실패하고 trace에서 인프라 지연이 보이는가</td><td>격리, retry 정책, 환경 소유자 지정</td></tr>
+<tr><td>요구사항 변경</td><td>새 동작이 의도된 변경인가</td><td>테스트 이름과 기대 동작을 명시적으로 갱신</td></tr>
+</table>
 </section>
 <footer>FRONTEND TESTING HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>

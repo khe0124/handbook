@@ -420,75 +420,97 @@ export const ENGINEERING_HANDBOOKS = [
   },
   {
     id: "engineering-frontend-interaction",
-    label: "05 프론트엔드 인터랙션·3D",
+    label: "05 프론트엔드 인터랙션",
     kind: "개발 핸드북",
     file: "engineering-frontend-interaction-handbook.html",
   },
   {
+    id: "engineering-frontend-motion",
+    label: "06 프론트엔드 모션·애니메이션",
+    kind: "개발 핸드북",
+    file: "engineering-frontend-motion-handbook.html",
+  },
+  {
+    id: "engineering-frontend-graphics-3d",
+    label: "07 프론트엔드 그래픽·3D·WebGL",
+    kind: "개발 핸드북",
+    file: "engineering-frontend-graphics-3d-handbook.html",
+  },
+  {
     id: "engineering-frontend-performance",
-    label: "06 프론트엔드 성능·진단",
+    label: "08 프론트엔드 성능·진단",
     kind: "개발 핸드북",
     file: "engineering-frontend-performance-handbook.html",
   },
   {
     id: "engineering-frontend-seo-analytics",
-    label: "07 SEO·AEO·GEO·애널리틱스",
+    label: "09 SEO·AEO·GEO·애널리틱스",
     kind: "개발 핸드북",
     file: "engineering-frontend-seo-analytics-handbook.html",
   },
   {
     id: "engineering-frontend-quality",
-    label: "08 프론트엔드 품질·릴리스",
+    label: "10 프론트엔드 품질·릴리스",
     kind: "개발 핸드북",
     file: "engineering-frontend-quality-handbook.html",
   },
   {
     id: "engineering-backend-core",
-    label: "09 백엔드 핵심",
+    label: "11 백엔드 핵심",
     kind: "개발 핸드북",
     file: "engineering-backend-core-handbook.html",
   },
   {
     id: "engineering-backend-auth-security",
-    label: "10 백엔드 인증·보안",
+    label: "12 백엔드 인증·보안",
     kind: "개발 핸드북",
     file: "engineering-backend-auth-security-handbook.html",
   },
   {
     id: "engineering-backend-architecture",
-    label: "11 백엔드 아키텍처",
+    label: "13 백엔드 아키텍처",
     kind: "개발 핸드북",
     file: "engineering-backend-architecture-handbook.html",
   },
   {
     id: "engineering-data",
-    label: "12 데이터 계층·저장소",
+    label: "14 데이터 계층·저장소",
     kind: "개발 핸드북",
     file: "engineering-data-handbook.html",
   },
   {
     id: "engineering-runtime-quality",
-    label: "13 런타임 품질·장애대응",
+    label: "15 런타임 품질·장애대응",
     kind: "개발 핸드북",
     file: "engineering-runtime-quality-handbook.html",
   },
   {
     id: "engineering-platform-tools",
-    label: "14 플랫폼 도구·운영 기본기",
+    label: "16 플랫폼 도구·운영 기본기",
     kind: "개발 핸드북",
     file: "engineering-platform-tools-handbook.html",
   },
   {
     id: "engineering-java-spring",
-    label: "15 Java·Spring·JPA 사례",
+    label: "17 Java·Spring·JPA 사례",
     kind: "개발 핸드북",
     file: "engineering-java-spring-handbook.html",
   },
 ];
 
+const renumberMenuItems = (items) =>
+  items.map((item, index) => ({
+    ...item,
+    label: item.label.replace(/^\d{2}\s+/, `${String(index).padStart(2, "0")} `),
+  }));
+
 export const ENGINEERING_CS_BASIC_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(0, 4);
-export const ENGINEERING_FRONTEND_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(4, 9);
-export const ENGINEERING_BACKEND_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(9);
+export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems(
+  ENGINEERING_HANDBOOKS.slice(4, 11),
+);
+export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
+  ENGINEERING_HANDBOOKS.slice(11),
+);
 
 export const LLM_HANDBOOKS = [
   {
@@ -569,49 +591,49 @@ export const AI_NATIVE_TRAINING_HANDBOOKS = [
   {
     id: "ai-native-workday-timeline",
     label: "00 AI Agent·Loop 업무 흐름",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-workday-timeline-handbook.html",
   },
   {
     id: "ai-native-real-workflow",
     label: "01 실제 업무과정",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-real-workflow-handbook.html",
   },
   {
     id: "ai-native-competency-map",
     label: "02 요구사항 정의·문제 분해",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-competency-map-handbook.html",
   },
   {
     id: "ai-native-labs",
     label: "03 기획·사용자 시나리오 설계",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-labs-handbook.html",
   },
   {
     id: "ai-native-toolkit",
     label: "04 UX/UI 디자인 검토와 화면 설계",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-toolkit-handbook.html",
   },
   {
     id: "ai-native-evaluation-harness",
     label: "05 프론트엔드 구현 루프",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-evaluation-harness-handbook.html",
   },
   {
     id: "ai-native-security-red-team",
     label: "06 백엔드·DB·API 설계 루프",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-security-red-team-handbook.html",
   },
   {
     id: "ai-native-agent-runtime",
     label: "07 테스트·리뷰·릴리스 자동화",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "ai-native-agent-runtime-handbook.html",
   },
 ];
@@ -1172,19 +1194,19 @@ export const AX_PRACTICE_HANDBOOKS = [
   {
     id: "practice-ax-foundation",
     label: "08 AX 기반·조직 적용",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "practice-ax-foundation-handbook.html",
   },
   {
     id: "practice-ax-workflow",
     label: "09 AX 실행 루프·자동화",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "practice-ax-workflow-handbook.html",
   },
   {
     id: "practice-ax-scale-governance",
     label: "10 AX 확장·거버넌스",
-    kind: "AI Native 훈련",
+    kind: "AI Native",
     file: "practice-ax-scale-governance-handbook.html",
   },
 ];
@@ -1198,55 +1220,55 @@ export const DESIGN_PRACTICE_HANDBOOKS = [
   {
     id: "practice-design-foundation",
     label: "00 디자인 기반·사용자 흐름",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-design-foundation-handbook.html",
   },
   {
     id: "practice-design-systems",
     label: "01 디자인 실행·시스템 품질",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-design-systems-handbook.html",
   },
   {
     id: "practice-visual-design-foundations",
     label: "02 시각디자인 기초·조형 원리",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-visual-design-foundations-handbook.html",
   },
   {
     id: "practice-color-typography-brand",
     label: "03 색채·타이포그래피·브랜드 시각 언어",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-color-typography-brand-handbook.html",
   },
   {
     id: "practice-iconography-illustration",
     label: "04 아이콘·일러스트레이션 시스템",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-iconography-illustration-handbook.html",
   },
   {
     id: "practice-data-visualization",
     label: "05 데이터 시각화",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-data-visualization-handbook.html",
   },
   {
     id: "practice-motion-animation",
     label: "06 모션·애니메이션 원리",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-motion-animation-handbook.html",
   },
   {
     id: "practice-photography-image-literacy",
     label: "07 사진학·이미지 리터러시",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "practice-photography-image-literacy-handbook.html",
   },
   {
     id: "design-ai-product-ux",
     label: "08 AI 제품 UX·신뢰 설계",
-    kind: "디자인 실무",
+    kind: "디자인",
     file: "design-ai-product-ux-handbook.html",
   },
 ];
@@ -1281,29 +1303,30 @@ export const HANDBOOK_GROUPS = [
   },
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
   {
-    key: "engineering-context",
-    label: "엔지니어링 맥락",
-    items: ENGINEERING_CONTEXT_HANDBOOKS,
+    key: "operations",
+    label: "인프라·운영",
+    items: [...OPERATIONS_HANDBOOKS, ...ENGINEERING_CONTEXT_HANDBOOKS],
   },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   {
     key: "ai-native",
-    label: "AI Native 훈련",
+    label: "AI Native",
     items: AI_NATIVE_GROUP_HANDBOOKS,
   },
-  { key: "operations", label: "인프라·운영", items: OPERATIONS_HANDBOOKS },
-  { key: "design", label: "디자인 실무", items: DESIGN_PRACTICE_HANDBOOKS },
+  { key: "design", label: "디자인", items: DESIGN_PRACTICE_HANDBOOKS },
   { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
   { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
 ];
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
-  ...ENGINEERING_HANDBOOKS,
+  ...ENGINEERING_CS_BASIC_HANDBOOKS,
+  ...ENGINEERING_FRONTEND_HANDBOOKS,
+  ...ENGINEERING_BACKEND_HANDBOOKS,
+  ...OPERATIONS_HANDBOOKS,
   ...ENGINEERING_CONTEXT_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
-  ...OPERATIONS_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,
   ...PRACTICE_HANDBOOKS,
   ...CAREER_HANDBOOKS,

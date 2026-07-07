@@ -87,22 +87,22 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <nav aria-label="목차">
   <div class="nav-brand">BACKEND ENGINEERING</div>
   <div class="nav-title">백엔드 핵심 · API와 상태 변경</div>
-  <a href="#ch1"><span class="code">BE-00</span>백엔드 학습 지도</a>
-  <a href="#ch1-5"><span class="code">BE-01</span>요청 생명주기와 서버 책임</a>
-  <a href="#ch2"><span class="code">BE-02</span>HTTP·REST·API 계약</a>
-  <a href="#ch2-5"><span class="code">BE-03</span>Java·Spring 실행 모델</a>
-  <a href="#ch3"><span class="code">BE-04</span>관계형 DB·SQL·트랜잭션</a>
-  <a href="#ch4"><span class="code">BE-05</span>ORM·JPA와 영속성 경계</a>
-  <a href="#ch5"><span class="code">BE-06</span>동시성·락·멱등성</a>
-  <a href="#ch10"><span class="code">BE-07</span>인증·보안 핸드북 포인터</a>
-  <a href="#ch6"><span class="code">BE-08</span>캐시·Redis·정합성</a>
-  <a href="#ch7"><span class="code">BE-09</span>비동기·메시징·이벤트</a>
-  <a href="#ch11"><span class="code">BE-10</span>테스트 전략</a>
-  <a href="#ch15"><span class="code">BE-11</span>배포·런타임·운영 준비</a>
-  <a href="#ch9"><span class="code">BE-12</span>관측가능성·장애 대응</a>
-  <a href="#ch12"><span class="code">BE-13</span>아키텍처와 시스템 설계</a>
-  <a href="#ch19"><span class="code">BE-14</span>학습 산출물 포인터</a>
-  <a href="#ch13"><span class="code">BE-15</span>용어집</a>
+  <a href="#ch1"><span class="code">BE-01</span>백엔드 학습 지도</a>
+  <a href="#ch1-5"><span class="code">BE-02</span>요청 생명주기와 서버 책임</a>
+  <a href="#ch2"><span class="code">BE-03</span>HTTP·REST·API 계약</a>
+  <a href="#ch2-5"><span class="code">BE-04</span>Java·Spring 실행 모델</a>
+  <a href="#ch3"><span class="code">BE-05</span>관계형 DB·SQL·트랜잭션</a>
+  <a href="#ch4"><span class="code">BE-06</span>ORM·JPA와 영속성 경계</a>
+  <a href="#ch5"><span class="code">BE-07</span>동시성·락·멱등성</a>
+  <a href="#ch10"><span class="code">BE-08</span>인증·보안 핸드북 포인터</a>
+  <a href="#ch6"><span class="code">BE-09</span>캐시·Redis·정합성</a>
+  <a href="#ch7"><span class="code">BE-10</span>비동기·메시징·이벤트</a>
+  <a href="#ch11"><span class="code">BE-11</span>테스트 전략</a>
+  <a href="#ch15"><span class="code">BE-12</span>배포·런타임·운영 준비</a>
+  <a href="#ch9"><span class="code">BE-13</span>관측가능성·장애 대응</a>
+  <a href="#ch12"><span class="code">BE-14</span>아키텍처와 시스템 설계</a>
+  <a href="#ch19"><span class="code">BE-15</span>학습 산출물 포인터</a>
+  <a href="#ch13"><span class="code">BE-16</span>용어집</a>
 </nav>
 <main>
 
@@ -118,7 +118,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 </header>
 
 <section id="ch1">
-<div class="ch-head"><span class="ch-code">BE-00</span><h2>백엔드 학습 지도</h2></div>
+<div class="ch-head"><span class="ch-code">BE-01</span><h2>백엔드 학습 지도</h2></div>
 <p class="lede">실무형 백엔드 엔지니어는 더 많은 기능을 짜는 사람이 아니라, 모든 선택에 대해 <em>"이 결정의 비용은 무엇인가"</em>와 <em>"어떤 증거로 맞게 동작한다고 말할 수 있는가"</em>를 묻는 사람입니다. 코드가 도는 것은 시작점일 뿐입니다.</p>
 <div class="semantic-card">
 <span class="sc-label">BACKEND ROADMAP OVERVIEW</span>
@@ -138,7 +138,7 @@ HTTP·DNS·TLS·Linux·Git<br>
 <tr><td><b>품질과 운영</b></td><td>테스트, 배포, 로그, 메트릭, SLO</td><td>배포 전후 검증과 장애 추적</td><td>로컬 성공만 증거로 제시</td></tr>
 <tr><td><b>아키텍처</b></td><td>경계, 모듈, MSA, 시스템 설계</td><td>제약 기반 트레이드오프 설명</td><td>패턴명을 정답처럼 말함</td></tr>
 </table>
-<p>프론트엔드 경험의 자산은 그대로 옮겨옵니다 — <strong>계약(인터페이스) 사고, 상태 관리, 사용자 관점</strong>은 백엔드의 API 설계·일관성·에러 응답으로 직결됩니다. 새로 장착할 근육은 <em>지속성(persistence)과 동시성</em>입니다: 프론트는 대개 한 사용자의 한 세션을 다루지만, 백엔드는 같은 데이터를 동시에 만지는 수천 개의 요청과 영구 저장된 상태를 다룹니다. 이 핸드북의 무게중심이 DB(BE-04), JPA(BE-05), 동시성(BE-06)에 쏠린 이유입니다.</p>
+<p>프론트엔드 경험의 자산은 그대로 옮겨옵니다 — <strong>계약(인터페이스) 사고, 상태 관리, 사용자 관점</strong>은 백엔드의 API 설계·일관성·에러 응답으로 직결됩니다. 새로 장착할 근육은 <em>지속성(persistence)과 동시성</em>입니다: 프론트는 대개 한 사용자의 한 세션을 다루지만, 백엔드는 같은 데이터를 동시에 만지는 수천 개의 요청과 영구 저장된 상태를 다룹니다. 이 핸드북의 무게중심이 DB(BE-05), JPA(BE-06), 동시성(BE-07)에 쏠린 이유입니다.</p>
 <div class="semantic-card">
 <span class="sc-label">BACKEND READINESS GATE</span>
 1. API contract: request, response, error, authZ, idempotency를 문서화한다<br>
@@ -148,6 +148,59 @@ HTTP·DNS·TLS·Linux·Git<br>
 5. Ops evidence: log key, metric, traceId, alert, runbook을 배포 전에 확인한다<br>
 6. Learning evidence: API 문서, 트랜잭션 노트, 테스트 결과, 운영 점검표를 남긴다
 </div>
+<div class="semantic-card">
+<span class="sc-label">BACKEND METHODOLOGY LOOP</span>
+1. Goal: 사용자가 끝내야 하는 행동과 깨지면 안 되는 불변식을 한 문장으로 고정한다<br>
+2. Contract: API, 데이터, 권한, 에러, 멱등성 계약을 코드보다 먼저 적는다<br>
+3. Boundary: 같은 트랜잭션에 둘 상태와 이벤트/비동기로 분리할 효과를 나눈다<br>
+4. Failure: timeout, 중복 요청, race condition, 부분 실패, rollback 이후 상태를 먼저 설계한다<br>
+5. Evidence: 테스트, EXPLAIN, 로그, 메트릭, traceId, runbook으로 맞게 동작함을 증명한다<br>
+6. Evolution: 지금은 단순하게 두되 어느 지표가 나오면 cache, queue, read model, service split로 옮길지 남긴다
+</div>
+<table>
+<tr><th>방법론 축</th><th>핵심 질문</th><th>남길 산출물</th></tr>
+<tr><td>Concept model</td><td>이 주제를 어떤 mental model로 설명할 수 있는가</td><td>요청 흐름, 상태 전이, 데이터 소유권 그림</td></tr>
+<tr><td>Decision method</td><td>선택지가 있을 때 어떤 순서로 판단하는가</td><td>decision table, ADR, tradeoff note</td></tr>
+<tr><td>Failure mode</td><td>성공 흐름이 아니라 어디서 깨지는가</td><td>negative case, incident drill, regression test</td></tr>
+<tr><td>Verification</td><td>동작한다는 말을 무엇으로 증명하는가</td><td>test result, EXPLAIN, metric screenshot, log query</td></tr>
+<tr><td>Reuse</td><td>다음 기능에서도 쓸 수 있는 형태인가</td><td>packet template, checklist, review rubric</td></tr>
+</table>
+<table>
+<tr><th>SENIOR BACKEND MENTAL MODEL</th><th>초점</th><th>시니어 수준의 질문</th></tr>
+<tr><td>State</td><td>영구 상태와 임시 상태를 분리한다</td><td>이 데이터의 source of truth는 어디이고, 누가 언제 바꿀 수 있는가</td></tr>
+<tr><td>Invariant</td><td>깨지면 안 되는 규칙을 먼저 찾는다</td><td>코드가 죽거나 요청이 중복되어도 DB와 메시지 경계가 이 규칙을 막는가</td></tr>
+<tr><td>Time</td><td>동기, 비동기, 지연, 재시도를 시간 축으로 본다</td><td>사용자가 응답을 받은 뒤 아직 끝나지 않은 일은 무엇이고 어떻게 수렴하는가</td></tr>
+<tr><td>Failure</td><td>성공 경로보다 실패 경로를 먼저 설계한다</td><td>timeout, partial commit, duplicate delivery, stale cache가 생기면 어떤 상태로 남는가</td></tr>
+<tr><td>Scale</td><td>성능을 느낌이 아니라 자릿수로 추정한다</td><td>QPS, row count, payload size, pool size, p95 latency가 어느 자원을 압박하는가</td></tr>
+<tr><td>Evidence</td><td>판단을 테스트와 운영 신호로 검증한다</td><td>설계가 맞다는 증거가 unit test, integration test, metric, log, trace 중 어디에 남는가</td></tr>
+</table>
+<table>
+<tr><th>SENIOR EXPERT COVERAGE MAP</th><th>전문가 축</th><th>검증 질문</th></tr>
+<tr><td>Domain</td><td>업무 규칙, 생명주기, 상태 전이, ledger, 감사 이력</td><td>이 시스템의 핵심 불변식과 상태 machine을 코드 없이 설명할 수 있는가</td></tr>
+<tr><td>Data</td><td>정규화, 인덱스, replica lag, partitioning, archival, reconciliation</td><td>데이터가 커지고 늦게 복제되고 일부 틀렸을 때 어떻게 발견하고 고치는가</td></tr>
+<tr><td>Distributed</td><td>ordering, partition key, retry storm, backpressure, saga, idempotency</td><td>네트워크와 메시지가 중복·지연·역순·유실될 때 사용자 상태가 안전한가</td></tr>
+<tr><td>Runtime</td><td>thread, heap, GC, pool, timeout budget, saturation, load shedding</td><td>느림이 CPU인지 대기인지 포화인지 숫자로 구분할 수 있는가</td></tr>
+<tr><td>Security/Privacy</td><td>threat modeling, least privilege, PII lifecycle, auditability, abuse case</td><td>정상 사용자뿐 아니라 공격자와 내부자 오남용 경로를 설계에 반영했는가</td></tr>
+<tr><td>Operations</td><td>SLO, error budget, on-call, incident review, cost, ownership</td><td>누가 어떤 알람을 받고 어떤 기준으로 완화·rollback·재발방지를 결정하는가</td></tr>
+<tr><td>Verification</td><td>property, contract, chaos, migration rehearsal, canary, shadow traffic</td><td>성공 경로뿐 아니라 불변식·호환성·장애 복원력을 실행 증거로 남겼는가</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">INVARIANT LED DESIGN</span>
+1. 사용자가 끝내려는 행동을 command로 이름 붙인다<br>
+2. 그 행동 뒤에도 절대 깨지면 안 되는 invariant를 먼저 적는다<br>
+3. invariant를 지키는 최종 방어선을 DB constraint, lock, atomic update, idempotency key 중에서 고른다<br>
+4. 같은 트랜잭션에 넣을 상태와 outbox/worker로 분리할 side effect를 나눈다<br>
+5. 실패, 재시도, 중복 요청, 동시 요청에서 invariant가 유지되는지 테스트로 재현한다<br>
+6. 운영에서는 invariant 위반을 직접 세는 metric이나 reconciliation query를 둔다
+</div>
+<table>
+<tr><th>시니어 판단 습관</th><th>좋은 질문</th><th>미숙한 답변</th></tr>
+<tr><td>정답 대신 조건</td><td>어떤 트래픽, 데이터 규모, 팀 역량이면 이 선택이 맞는가</td><td>Kafka가 좋다, MSA가 좋다처럼 기술명을 결론으로 둔다</td></tr>
+<tr><td>최종 방어선</td><td>애플리케이션 버그가 나도 DB나 메시지 중복 방어가 막는가</td><td>service에서 if문으로 검사하니 충분하다고 말한다</td></tr>
+<tr><td>시간 경계</td><td>응답 시점, commit 시점, 이벤트 발행 시점, cache 반영 시점이 각각 언제인가</td><td>저장하고 알림 보내면 된다고 한 문장으로 끝낸다</td></tr>
+<tr><td>되돌림 가능성</td><td>이 배포를 rollback하면 schema, message, cache는 어떤 상태가 되는가</td><td>배포하면 끝이라고 본다</td></tr>
+<tr><td>검증 가능성</td><td>실패를 어떻게 재현하고 어떤 지표로 나아졌다고 말할 것인가</td><td>로컬에서 한 번 눌러봤다고 말한다</td></tr>
+</table>
 <table>
 <tr><th>BACKEND FOUNDATION CHECKLIST</th><th>최소 설명 수준</th><th>확인 산출물</th></tr>
 <tr><td>HTTP·DNS·TLS</td><td>URL 입력 후 DNS, TCP/TLS, HTTP, 서버 라우팅, 응답 캐시까지 순서대로 설명</td><td>요청 생명주기 다이어그램, 상태코드 표</td></tr>
@@ -171,7 +224,7 @@ HTTP·DNS·TLS·Linux·Git<br>
 </section>
 
 <section id="ch1-5">
-<div class="ch-head"><span class="ch-code">BE-01</span><h2>요청 생명주기와 서버 책임</h2></div>
+<div class="ch-head"><span class="ch-code">BE-02</span><h2>요청 생명주기와 서버 책임</h2></div>
 <p class="lede">백엔드 학습은 기술 이름을 나열하는 순서가 아니라 요청 하나가 시스템을 통과하며 어떤 계약, 상태, 실패, 증거를 남기는지 따라가는 순서여야 합니다. 이 모델을 먼저 잡으면 API, DB, 검증, 테스트, 운영이 따로 놀지 않습니다.</p>
 <div class="semantic-card">
 <span class="sc-label">REQUEST TO OPERATIONS MAP</span>
@@ -180,6 +233,21 @@ client → controller → validation → principal/scope handoff<br>
 → domain rule → repository / external client<br>
 → commit / rollback → response → log / metric / trace
 </div>
+<div class="semantic-card">
+<span class="sc-label">REQUEST TO STATE CHANGE MODEL</span>
+input trust boundary → principal and scope → command object<br>
+→ invariant check → transaction decision → state transition<br>
+→ constraint enforcement → side-effect scheduling → response contract<br>
+→ audit/log/metric evidence
+</div>
+<table>
+<tr><th>상태 변경 질문</th><th>좋은 답</th><th>위험 신호</th></tr>
+<tr><td>무엇이 바뀌는가</td><td>테이블, row, aggregate, event, cache key를 구체적으로 말한다</td><td>"저장한다"로 끝난다</td></tr>
+<tr><td>누가 바꾸는가</td><td>actor, tenant, resource scope가 service와 repository까지 전달된다</td><td>controller의 userId만 믿고 query scope가 빠진다</td></tr>
+<tr><td>함께 성공해야 하는가</td><td>트랜잭션 안 상태와 outbox/worker 후처리를 분리한다</td><td>외부 API를 트랜잭션 안에서 오래 기다린다</td></tr>
+<tr><td>중복되면 안전한가</td><td>idempotency key, unique constraint, processed message table을 둔다</td><td>timeout 재시도가 새 작업을 만든다</td></tr>
+<tr><td>어떻게 볼 것인가</td><td>traceId, domain event, audit log, RED metric을 남긴다</td><td>장애가 난 뒤 grep할 문자열을 찾는다</td></tr>
+</table>
 <table>
 <tr><th>축</th><th>개념</th><th>왜 중요한가</th><th>구현 증거</th></tr>
 <tr><td>API 계약</td><td>클라이언트가 믿고 호출하는 공개 약속</td><td>배포 주기가 다른 소비자를 깨지 않게 한다</td><td>OpenAPI, request/response DTO, error contract, contract test</td></tr>
@@ -227,11 +295,15 @@ client → controller → validation → principal/scope handoff<br>
 </section>
 
 <section id="ch2">
-<div class="ch-head"><span class="ch-code">BE-02</span><h2>HTTP·REST·API 계약</h2></div>
+<div class="ch-head"><span class="ch-code">BE-03</span><h2>HTTP·REST·API 계약</h2></div>
 <p class="lede">API는 코드가 아니라 <em>계약</em>입니다. 한 번 공개하면 수많은 클라이언트가 의존하고, 함부로 못 바꿉니다. 설계의 무게가 내부 함수와 다른 이유입니다.</p>
 
 <h3><span class="h3-tag">2.1</span>메서드 의미와 멱등성</h3>
-<p>HTTP 메서드는 단순 동사가 아니라 <strong>안전성(safe)과 멱등성(idempotent)</strong>의 약속입니다. <code>GET</code>은 안전(상태 변경 없음)하고 멱등하며, <code>PUT</code>·<code>DELETE</code>는 멱등(여러 번 호출해도 결과 동일), <code>POST</code>는 비멱등(호출마다 새 자원). 이 약속이 중요한 이유는 <em>재시도</em> 때문입니다 — 네트워크가 끊겨 응답을 못 받았을 때 멱등한 요청만 안전하게 다시 보낼 수 있습니다.</p>
+<p>HTTP 메서드는 단순 동사가 아니라 <strong>안전성(safe)과 멱등성(idempotent)</strong>의 약속입니다. <code>GET</code>은 안전(상태 변경 없음)하고 멱등하며, <code>PUT</code>·<code>DELETE</code>는 올바르게 구현되면 여러 번 호출해도 최종 상태가 같아야 합니다. <code>POST</code>는 기본 의미상 멱등성이 보장되지 않지만, 서버가 idempotency key를 받아 별도 계약으로 멱등하게 만들 수 있습니다. 이 약속이 중요한 이유는 <em>재시도</em> 때문입니다 — 네트워크가 끊겨 응답을 못 받았을 때 멱등한 요청만 안전하게 다시 보낼 수 있습니다.</p>
+<div class="callout">
+<span class="co-label">HTTP METHOD SEMANTICS CAVEAT</span>
+<p>HTTP 메서드의 멱등성은 “응답 코드가 항상 같다”가 아니라 “서버의 의도한 최종 상태가 같다”는 뜻입니다. 예를 들어 같은 <code>DELETE</code>의 두 번째 호출이 <code>404</code>를 반환하더라도 자원이 삭제된 최종 상태가 같으면 멱등 설계로 볼 수 있습니다. 반대로 <code>GET</code>이 조회 카운터나 감사 로그를 남길 수는 있지만, 클라이언트가 의미 있게 의존하는 자원 상태를 바꾸면 안전한 메서드 계약을 깨는 것입니다.</p>
+</div>
 <div class="callout warn">
 <span class="co-label">IDEMPOTENCY KEY</span>
 <p>결제·주문 같은 비멱등 <code>POST</code>를 재시도 안전하게 만들려면 <strong>멱등성 키</strong>를 씁니다 — 클라이언트가 요청마다 고유 키를 헤더로 보내고, 서버는 같은 키의 두 번째 요청을 "이미 처리됨"으로 같은 응답을 돌려줍니다. "결제 버튼 두 번 눌러서 두 번 결제됨"을 막는 표준 장치입니다.</p>
@@ -323,6 +395,14 @@ Pagination rule: offset, cursor, keyset 중 데이터 특성에 맞게 선택<br
 AuthZ rule: role뿐 아니라 resource ownership과 tenant boundary 확인<br>
 Backward compatibility note: 필드 삭제, 의미 변경, enum 추가의 consumer 영향 기록
 </div>
+<table>
+<tr><th>API DESIGN METHOD</th><th>판단 질문</th><th>결정 기준</th></tr>
+<tr><td>Resource vs action</td><td>URL이 자원을 가리키는가, 상태 전이 명령인가</td><td>조회/수정은 resource 중심, 승인/취소처럼 의미 있는 전이는 command endpoint로 명확히 표현한다</td></tr>
+<tr><td>Status code</td><td>요청자가 고쳐야 하는가, 서버/의존성이 실패했는가</td><td>검증/권한/상태 충돌은 4xx, 내부 오류와 downstream 실패는 5xx 계열로 분리한다</td></tr>
+<tr><td>Idempotency</td><td>timeout 후 재시도하면 돈, 재고, 권한이 두 번 바뀌는가</td><td>위험한 POST에는 idempotency key와 request fingerprint를 저장한다</td></tr>
+<tr><td>Pagination</td><td>데이터가 계속 삽입되는 목록인가, 깊은 페이지가 필요한가</td><td>작은 관리자 목록은 offset, 사용자 feed와 대량 목록은 cursor/keyset을 기본으로 둔다</td></tr>
+<tr><td>Compatibility</td><td>구버전 client가 이 변경을 모른 채 배포 후에도 동작하는가</td><td>필드 추가는 허용, 삭제/의미 변경/enum 추가는 사용량 계측과 contract test 후 진행한다</td></tr>
+</table>
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>주문 생성 API가 timeout을 냈을 때 클라이언트는 성공인지 실패인지 알 수 없습니다. 이때 같은 idempotency key로 재요청하면 서버는 이전 처리 결과를 반환해야 합니다. key 저장소에는 요청 fingerprint, 응답, 만료 시간을 함께 저장하고, 같은 key에 다른 payload가 오면 충돌로 거절해야 합니다.</p>
@@ -330,7 +410,7 @@ Backward compatibility note: 필드 삭제, 의미 변경, enum 추가의 consum
 </section>
 
 <section id="ch2-5">
-<div class="ch-head"><span class="ch-code">BE-03</span><h2>Java·Spring 실행 모델</h2></div>
+<div class="ch-head"><span class="ch-code">BE-04</span><h2>Java·Spring 실행 모델</h2></div>
 <p class="lede">프레임워크를 잘 쓴다는 것은 annotation을 많이 아는 것이 아니라, 요청이 어떤 객체를 거쳐 어떤 proxy, transaction, validation, exception handler를 통과하는지 설명하는 것입니다.</p>
 <table>
 <tr><th>Spring 실행 지점</th><th>무엇을 책임지는가</th><th>자주 생기는 오해</th></tr>
@@ -386,7 +466,7 @@ domain/application exception → error code mapping<br>
 </section>
 
 <section id="ch3">
-<div class="ch-head"><span class="ch-code">BE-04</span><h2>관계형 DB·SQL·트랜잭션</h2></div>
+<div class="ch-head"><span class="ch-code">BE-05</span><h2>관계형 DB·SQL·트랜잭션</h2></div>
 <p class="lede">백엔드 실무의 진짜 시험장. 성능 문제의 대부분과 정합성 버그의 거의 전부가 여기서 납니다. ORM 뒤에 숨지 말고 직접 봐야 하는 층입니다.</p>
 <table>
 <tr><th>TRANSACTION BOUNDARY</th><th>같은 트랜잭션</th><th>분리할 작업</th><th>운영 증거</th></tr>
@@ -394,6 +474,39 @@ domain/application exception → error code mapping<br>
 <tr><td>권한 변경</td><td>role 변경, audit log, 권한 version 증가</td><td>캐시 무효화 broadcast, 알림</td><td>권한 version mismatch, stale cache hit</td></tr>
 <tr><td>파일 업로드 완료</td><td>metadata 저장, owner/tenant 연결, scan 상태 기록</td><td>썸네일 생성, 바이러스 스캔 후처리</td><td>pending scan count, orphan metadata count</td></tr>
 <tr><td>포인트 적립</td><td>ledger append, balance update, unique event id</td><td>마케팅 알림, 통계 집계</td><td>duplicate event reject count, balance diff check</td></tr>
+</table>
+<table>
+<tr><th>TRANSACTION DECISION METHOD</th><th>질문</th><th>선택 기준</th></tr>
+<tr><td>불변식</td><td>이 유스케이스에서 절대 깨지면 안 되는 값은 무엇인가</td><td>돈, 재고, 권한, ledger는 DB constraint와 단일 트랜잭션을 우선한다</td></tr>
+<tr><td>외부 효과</td><td>외부 API, 메일, 알림, 색인이 함께 원자적이어야 하는가</td><td>원자성이 불가능하면 outbox, 상태 machine, compensation으로 분리한다</td></tr>
+<tr><td>격리수준</td><td>read skew, phantom, lost update 중 실제 위험은 무엇인가</td><td>기본 격리수준에서 재현 테스트를 먼저 만들고 필요한 곳만 lock/isolation을 올린다</td></tr>
+<tr><td>재시도</td><td>실패 후 같은 명령을 다시 실행해도 안전한가</td><td>idempotency key, unique event id, retry budget, duplicate handling을 함께 둔다</td></tr>
+<tr><td>운영 신호</td><td>경계가 틀렸을 때 어떤 지표가 먼저 나빠지는가</td><td>lock wait, idle in transaction, outbox lag, pending state age를 대시보드에 둔다</td></tr>
+</table>
+<table>
+<tr><th>CONSISTENCY MODEL DECISION</th><th>선택 기준</th><th>대표 방어선</th></tr>
+<tr><td>Strong consistency</td><td>돈, 재고, 권한, quota처럼 틀린 값을 보여주거나 처리하면 손실이 즉시 발생한다</td><td>단일 DB 트랜잭션, unique/check/FK constraint, conditional update, lock</td></tr>
+<tr><td>Read-your-writes</td><td>사용자가 방금 바꾼 값은 바로 봐야 하지만 다른 사용자의 지연은 허용된다</td><td>primary read, session stickiness, write version, cache bypass after write</td></tr>
+<tr><td>Monotonic read</td><td>사용자가 이전에 본 상태보다 과거 상태를 다시 보면 혼란이 크다</td><td>version token, replica lag check, client observed version</td></tr>
+<tr><td>Eventual consistency</td><td>알림, 검색 색인, 통계, 추천처럼 잠깐 틀려도 나중에 맞으면 된다</td><td>outbox, retry, reconciliation job, lag metric, 사용자 상태 표시</td></tr>
+<tr><td>Compensating action</td><td>여러 시스템을 원자적으로 묶을 수 없고, 실패 후 되돌림 또는 보정이 필요하다</td><td>saga, state machine, compensation event, manual review queue</td></tr>
+</table>
+<p>시니어 답변은 “일관성이 중요합니다”에서 끝나지 않습니다. 어떤 값은 즉시 맞아야 하고, 어떤 값은 몇 초 늦어도 되며, 어떤 값은 사용자에게 “처리 중”으로 보여야 합니다. 정합성 모델은 기술 선택이 아니라 도메인 손실 비용의 표현입니다.</p>
+<table>
+<tr><th>DATA MODELING METHOD</th><th>판단 질문</th><th>산출물</th></tr>
+<tr><td>Entity</td><td>식별자가 유지되고 시간이 지나며 상태가 바뀌는가</td><td>ERD, 상태 전이표, lifecycle rule</td></tr>
+<tr><td>Value object</td><td>값 자체가 의미이며 불변으로 다룰 수 있는가</td><td>Money, Address, Period 같은 타입과 validation rule</td></tr>
+<tr><td>Aggregate</td><td>무엇이 같은 트랜잭션 안에서 함께 보호되어야 하는가</td><td>aggregate root, invariant, repository boundary</td></tr>
+<tr><td>Constraint</td><td>애플리케이션 버그가 나도 DB가 막아야 하는 규칙은 무엇인가</td><td>unique, check, FK, not null, exclusion constraint 목록</td></tr>
+<tr><td>Retention</td><td>삭제, 복구, 감사, 개인정보 보존 요구가 있는가</td><td>soft delete 기준, audit log schema, purge job plan</td></tr>
+</table>
+<table>
+<tr><th>DOMAIN LIFECYCLE MODELING</th><th>모델링 질문</th><th>전문가 기준</th></tr>
+<tr><td>Lifecycle</td><td>이 객체는 어떤 상태로 태어나고, 어떤 사건으로 상태가 바뀌며, 언제 닫히는가</td><td>생성, 승인, 취소, 만료, 정산, 삭제 같은 상태 전이를 명시하고 불가능한 전이를 테스트한다</td></tr>
+<tr><td>Invariant</td><td>상태 전이 전후에 항상 참이어야 하는 규칙은 무엇인가</td><td>도메인 method, DB constraint, transaction boundary, concurrency test가 같은 규칙을 보호한다</td></tr>
+<tr><td>Ledger</td><td>현재값만 저장해도 되는가, 변경 이력을 재구성해야 하는가</td><td>돈, 포인트, 재고 예약, 권한 변경은 append-only ledger나 audit event를 우선 검토한다</td></tr>
+<tr><td>Temporal rule</td><td>시간, 만료, 예약, 지연 처리가 도메인 규칙에 포함되는가</td><td>clock abstraction, scheduled job, expiry index, overdue metric, 재처리 runbook을 둔다</td></tr>
+<tr><td>Reconciliation</td><td>외부 시스템과 우리 상태가 어긋났을 때 무엇을 기준으로 맞추는가</td><td>source of truth, diff query, repair job, manual review queue, 보정 audit log를 설계한다</td></tr>
 </table>
 <table>
 <tr><th>트랜잭션 답변 프레임</th><th>핵심 문장</th><th>구현 확인</th><th>면접에서 붙일 말</th></tr>
@@ -416,6 +529,15 @@ domain/application exception → error code mapping<br>
 <tr><td>쿼리</td><td>join으로 의미를 조합한다</td><td>핵심 화면의 p95가 join 비용을 감당하지 못할 때 검토한다</td></tr>
 <tr><td>운영</td><td>schema가 명확하고 migration 위험이 낮다</td><td>rebuild job, diff metric, 재처리 runbook이 있어야 한다</td></tr>
 </table>
+<table>
+<tr><th>DATA OPERATIONS MATURITY MODEL</th><th>초급 운영</th><th>전문가 운영</th></tr>
+<tr><td>Replica lag</td><td>read replica를 붙이면 읽기 부하가 줄어든다고 본다</td><td>read-your-writes, stale read 허용 범위, lag metric, primary read fallback을 계약에 둔다</td></tr>
+<tr><td>Partitioning</td><td>테이블이 커지면 partition을 한다고 말한다</td><td>partition key, pruning, hot partition, global index 제약, archive/drop window를 같이 설계한다</td></tr>
+<tr><td>Archival</td><td>오래된 데이터 삭제 job을 만든다</td><td>법적 보존, 복구 가능성, cold storage, query 영향, 삭제 증거를 분리한다</td></tr>
+<tr><td>Data quality</td><td>버그가 나면 수동 SQL로 고친다</td><td>invariant violation metric, reconciliation report, repair script review, audit trail을 둔다</td></tr>
+<tr><td>Backfill</td><td>한 번에 update를 돌린다</td><td>batch size, lock/replication impact, pause/resume, progress table, rollback-less correction을 둔다</td></tr>
+<tr><td>Restore</td><td>백업이 있으니 안전하다고 본다</td><td>RPO/RTO 기준으로 restore drill, checksum, application reconnect, DNS/secret 복구까지 검증한다</td></tr>
+</table>
 
 <h3><span class="h3-tag">3.1</span>ACID — 트랜잭션의 4가지 약속</h3>
 <ul>
@@ -435,7 +557,7 @@ domain/application exception → error code mapping<br>
 <tr><td><b>커버링 인덱스</b></td><td>필요한 컬럼이 인덱스에 다 있으면 테이블을 안 읽는다 (가장 빠른 읽기)</td></tr>
 <tr><td>인덱스는 <b>공짜가 아니다</b></td><td>쓰기마다 인덱스도 갱신 → 과다 인덱스는 쓰기·저장 비용. 필요한 것만</td></tr>
 </table>
-<p>판단의 도구는 <code>EXPLAIN</code>(실행계획)입니다 — "이 쿼리가 인덱스를 타는가, 풀스캔하는가, 몇 행을 훑는가"를 추측하지 말고 <em>보세요</em>. 측정 없는 인덱스 추가는 BE-12의 "측정 없는 최적화"와 같은 실수입니다.</p>
+<p>판단의 도구는 <code>EXPLAIN</code>(실행계획)입니다 — "이 쿼리가 인덱스를 타는가, 풀스캔하는가, 몇 행을 훑는가"를 추측하지 말고 <em>보세요</em>. 측정 없는 인덱스 추가는 BE-13의 "측정 없는 최적화"와 같은 실수입니다.</p>
 <div class="serial-card">
 <span class="sc-label">EXPLAIN ANALYZE CHECKLIST</span>
 □ 실제 실행 시간과 예상 비용이 크게 어긋나는가<br>
@@ -462,10 +584,14 @@ domain/application exception → error code mapping<br>
 <tr><th>격리수준</th><th>Dirty Read</th><th>Non-repeatable</th><th>Phantom</th></tr>
 <tr><td><b>Read Uncommitted</b></td><td>발생</td><td>발생</td><td>발생</td></tr>
 <tr><td><b>Read Committed</b> <span class="mono">(PostgreSQL 기본)</span></td><td>차단</td><td>발생</td><td>발생</td></tr>
-<tr><td><b>Repeatable Read</b> <span class="mono">(MySQL/InnoDB 기본)</span></td><td>차단</td><td>차단</td><td>발생*</td></tr>
+<tr><td><b>Repeatable Read</b></td><td>차단</td><td>차단</td><td>엔진별 차이*</td></tr>
 <tr><td><b>Serializable</b></td><td>차단</td><td>차단</td><td>차단</td></tr>
 </table>
-<p style="font-size:13px;color:var(--ink-soft)">* InnoDB의 Repeatable Read는 갭 락으로 팬텀을 상당 부분 막는 등 구현마다 디테일이 다릅니다 — "표준 정의"와 "엔진 실제 동작"은 구분해서 확인하세요.</p>
+<p style="font-size:13px;color:var(--ink-soft)">* Repeatable Read의 실제 동작은 엔진 구현에 따라 다릅니다. PostgreSQL의 Repeatable Read는 snapshot isolation에 가까워 일반 조회의 phantom을 막지만 write skew는 가능하고, InnoDB는 next-key/gap lock으로 범위 삽입까지 막는 경우가 있습니다. "표준 정의"와 "엔진 실제 동작"은 구분해서 확인하세요.</p>
+<div class="callout">
+<span class="co-label">WRITE SKEW</span>
+<p>snapshot isolation은 같은 row를 동시에 갱신하는 lost update에는 강하지만, 서로 다른 row를 읽고 각자 다른 row를 갱신해 전체 불변식을 깨는 write skew는 남을 수 있습니다. 예를 들어 “항상 의사 한 명은 당직이어야 한다”는 규칙에서 두 트랜잭션이 서로 다른 의사의 당직을 동시에 해제하면 각자 읽은 snapshot에서는 안전해 보여도 최종 상태는 규칙을 깰 수 있습니다. 이런 규칙은 constraint, explicit lock, serializable transaction, 또는 불변식을 대표하는 guard row로 보호해야 합니다.</p>
+</div>
 <table>
 <tr><th>ISOLATION LEVEL ENGINE NOTES</th><th>PostgreSQL</th><th>MySQL/InnoDB</th></tr>
 <tr><td>기본 격리수준</td><td>Read Committed. statement마다 새 snapshot을 본다</td><td>Repeatable Read. transaction snapshot과 next-key/gap lock 영향을 함께 봐야 한다</td></tr>
@@ -476,7 +602,7 @@ domain/application exception → error code mapping<br>
 </table>
 <div class="callout warn">
 <span class="co-label">N+1 — ORM의 대표 함정</span>
-<p>목록 100건을 가져온 뒤 각 건의 연관 데이터를 위해 쿼리를 100번 더 날리는 것 = 1+100 쿼리. 단위 테스트·로컬에선 안 보이다가 운영 부하에서 터집니다. 해법은 <code>fetch join</code>·배치 로딩·명시적 IN 조회 — 핵심은 <strong>"이 코드가 쿼리를 몇 번 날리는가"를 항상 의식</strong>하는 것입니다(→ BE-04).</p>
+<p>목록 100건을 가져온 뒤 각 건의 연관 데이터를 위해 쿼리를 100번 더 날리는 것 = 1+100 쿼리. 단위 테스트·로컬에선 안 보이다가 운영 부하에서 터집니다. 해법은 <code>fetch join</code>·배치 로딩·명시적 IN 조회 — 핵심은 <strong>"이 코드가 쿼리를 몇 번 날리는가"를 항상 의식</strong>하는 것입니다(→ BE-06).</p>
 </div>
 <table>
 <tr><th>MIGRATION SAFETY RULES</th><th>안전한 순서</th><th>위험 신호</th></tr>
@@ -511,7 +637,7 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 </section>
 
 <section id="ch4">
-<div class="ch-head"><span class="ch-code">BE-05</span><h2>ORM·JPA와 영속성 경계</h2></div>
+<div class="ch-head"><span class="ch-code">BE-06</span><h2>ORM·JPA와 영속성 경계</h2></div>
 <p class="lede">ORM은 객체와 테이블 사이의 임피던스 불일치를 <em>가립니다 — 가리지만 없애지 않습니다.</em> 생성되는 SQL을 모르면, ORM은 편의가 아니라 지뢰밭이 됩니다.</p>
 <table>
 <tr><th>JPA PERSISTENCE BOUNDARY</th><th>개념</th><th>왜 중요한가</th><th>구현 증거</th></tr>
@@ -553,6 +679,14 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 □ flush가 언제 발생하고 DB constraint violation이 어느 시점에 터지는가
 </div>
 <table>
+<tr><th>JPA SPRING METHOD</th><th>확인 질문</th><th>실무 판단</th></tr>
+<tr><td>Transaction proxy</td><td>이 메서드 호출이 실제로 Spring proxy를 통과하는가</td><td>public application service method에 boundary를 두고 self-invocation을 피한다</td></tr>
+<tr><td>Entity mutation</td><td>어떤 managed entity가 언제 dirty checking으로 flush되는가</td><td>command method 이름과 SQL log로 변경 지점을 드러낸다</td></tr>
+<tr><td>Fetch plan</td><td>응답 schema 기준으로 필요한 연관만 가져오는가</td><td>fetch join, entity graph, batch size, DTO projection을 데이터 크기별로 고른다</td></tr>
+<tr><td>Query expression</td><td>repository method name으로 의도가 읽히는가</td><td>조건이 복잡해지면 QueryDSL, specification, native SQL, read model로 전환한다</td></tr>
+<tr><td>OSIV</td><td>편의 때문에 connection 점유와 hidden query를 허용하고 있지 않은가</td><td>API는 service transaction 안에서 DTO를 완성하고 controller lazy loading을 피한다</td></tr>
+</table>
+<table>
 <tr><th>JPA ENTITY RELATIONSHIP FAILURE MODES</th><th>무엇을 봐야 하는가</th><th>방어선</th></tr>
 <tr><td>entity lifecycle</td><td>new, managed, detached, removed 상태와 flush 시점을 구분한다</td><td>command service 안에서 변경 지점을 끝내고 응답은 DTO로 분리한다</td></tr>
 <tr><td>owning side</td><td>양방향 연관에서 외래키를 갱신하는 owning side가 어디인지 설명한다</td><td>편의 메서드로 양쪽 컬렉션과 참조를 함께 맞추고 테스트로 SQL을 확인한다</td></tr>
@@ -564,7 +698,7 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 </section>
 
 <section id="ch5">
-<div class="ch-head"><span class="ch-code">BE-06</span><h2>동시성·락·멱등성</h2></div>
+<div class="ch-head"><span class="ch-code">BE-07</span><h2>동시성·락·멱등성</h2></div>
 <p class="lede">단일 요청에선 멀쩡하던 코드가 동시 요청에서 무너집니다. "재고 1개 남았는데 두 명이 동시에 주문"은 백엔드의 통과의례입니다.</p>
 
 <h3><span class="h3-tag">5.1</span>경쟁 상태와 갱신 손실</h3>
@@ -576,10 +710,10 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 </table>
 
 <h3><span class="h3-tag">5.2</span>멱등성 — 분산의 안전벨트</h3>
-<p>네트워크·메시지큐·재시도가 있는 한 <em>"정확히 한 번"은 보장되지 않습니다</em>(→ BE-07). 그래서 백엔드는 <strong>같은 작업이 두 번 실행돼도 결과가 같도록</strong> 설계합니다 — 멱등성 키(BE-02), 유니크 제약으로 중복 삽입 차단, "이미 처리된 주문인가" 상태 검사. 멱등성은 기능이 아니라 <em>분산 환경의 기본 자세</em>입니다.</p>
+<p>네트워크·메시지큐·재시도가 있는 한 <em>DB 변경, 외부 API, 메시지 소비까지 묶은 end-to-end 정확히 한 번 처리는 기본 가정으로 삼으면 안 됩니다</em>(→ BE-10). 그래서 백엔드는 <strong>같은 작업이 두 번 실행돼도 결과가 같도록</strong> 설계합니다 — 멱등성 키(BE-03), 유니크 제약으로 중복 삽입 차단, "이미 처리된 주문인가" 상태 검사. 멱등성은 기능이 아니라 <em>분산 환경의 기본 자세</em>입니다.</p>
 <div class="callout">
 <span class="co-label">CORE INSIGHT</span>
-<p>동시성 버그의 공통 뿌리는 <strong>"읽고-판단하고-쓰는" 사이의 틈</strong>입니다. 그 틈에 남이 끼어듭니다. 해법은 항상 둘 중 하나 — 틈을 <em>잠그거나</em>(비관적), 틈에서 바뀌었는지 <em>나중에 확인하거나</em>(낙관적). DB의 원자적 연산(<code>UPDATE ... SET n=n-1 WHERE n&gt;0</code>) 한 줄로 틈 자체를 없애는 것이 가장 단순한 정답일 때도 많습니다.</p>
+<p>동시성 버그의 공통 뿌리는 <strong>"읽고-판단하고-쓰는" 사이의 틈</strong>입니다. 그 틈에 남이 끼어듭니다. 대표 해법은 틈을 <em>잠그거나</em>(비관적), 틈에서 바뀌었는지 <em>나중에 확인하거나</em>(낙관적), 조건부 UPDATE·unique constraint처럼 틈 자체를 DB 연산으로 줄이는 것입니다. DB의 원자적 연산(<code>UPDATE ... SET n=n-1 WHERE n&gt;0</code>) 한 줄이 가장 단순한 정답일 때도 많습니다.</p>
 </div>
 <h3><span class="h3-tag">DEEP</span>동시성 사고와 멱등성 설계</h3>
 <p class="lede">백엔드에서 “가끔 두 번 처리된다”, “재고가 음수가 된다”, “같은 쿠폰이 여러 번 쓰인다”는 버그는 대부분 동시성, 재시도, 중복 요청을 정상 입력으로 보지 않았기 때문에 생깁니다.</p>
@@ -590,6 +724,14 @@ expand-contract 순서로 schema와 code를 분리 배포할 수 있는가
 <tr><td>쿠폰 중복 사용</td><td>사용 이력 확인과 저장 사이의 경쟁 조건</td><td><code>UNIQUE(user_id, coupon_id)</code>, insert-first 설계</td><td>unique violation translated to domain conflict</td></tr>
 <tr><td>메시지 중복 소비</td><td>at-least-once delivery에서 ack 전 consumer 장애</td><td>processed message table, idempotent consumer</td><td>duplicate message skip count, consumer lag</td></tr>
 <tr><td>부분 실패</td><td>DB 변경과 외부 side effect가 한 트랜잭션에 묶이지 않음</td><td>outbox, saga, 보상 트랜잭션, 상태 machine</td><td>outbox lag, pending state age, compensation failure</td></tr>
+</table>
+<table>
+<tr><th>CONCURRENCY IDEMPOTENCY METHOD</th><th>질문</th><th>선택 기준</th></tr>
+<tr><td>정상 입력으로 보기</td><td>같은 요청이 동시에, 여러 번, 순서가 바뀌어 들어와도 안전한가</td><td>중복과 race condition을 예외가 아니라 설계 입력으로 둔다</td></tr>
+<tr><td>Atomic update</td><td>읽고 판단하고 쓰는 틈을 SQL 한 문장으로 줄일 수 있는가</td><td>재고, quota, balance 차감은 조건부 UPDATE를 먼저 검토한다</td></tr>
+<tr><td>Lock</td><td>충돌이 잦은가, 기다림이 실패보다 싼가</td><td>충돌이 드물면 optimistic, 충돌 비용이 크고 잦으면 pessimistic을 검토한다</td></tr>
+<tr><td>Idempotency store</td><td>같은 key의 재시도와 다른 payload 충돌을 구분하는가</td><td>key, fingerprint, status, response, expires_at을 저장한다</td></tr>
+<tr><td>Consumer dedupe</td><td>메시지 ack 전 장애가 나도 side effect가 두 번 나가지 않는가</td><td>event id를 inbox table에 먼저 기록하고 이미 처리한 event는 skip한다</td></tr>
 </table>
 <p>가장 강한 방어선은 애플리케이션 if문이 아니라 DB 제약입니다. “이미 쓴 쿠폰인지 조회하고 없으면 저장”은 두 요청이 동시에 들어오면 둘 다 조회를 통과할 수 있습니다. 반대로 <code>UNIQUE(user_id, coupon_id)</code> 제약을 두고 insert를 먼저 시도하면 둘 중 하나는 DB가 거절합니다. 애플리케이션은 그 예외를 “이미 사용됨”으로 번역하면 됩니다.</p>
 <div class="serial-card">
@@ -613,7 +755,7 @@ WHERE id = :id AND stock &gt;= :qty;<br>
 </section>
 
 <section id="ch10">
-<div class="ch-head"><span class="ch-code">BE-07</span><h2>인증·보안 핸드북 포인터</h2></div>
+<div class="ch-head"><span class="ch-code">BE-08</span><h2>인증·보안 핸드북 포인터</h2></div>
 <p class="lede">이 백엔드 코어 문서는 인증·인가·보안을 깊게 설명하지 않습니다. 상세한 토큰 설계, OAuth/OIDC, 세션 탈취 대응, 취약점 검증, 감사 정책은 별도의 <strong>백엔드 인증·보안 핸드북</strong>에서 다룹니다.</p>
 <table>
 <tr><th>BACKEND CORE SECURITY HANDOFF</th><th>이 문서에서 유지할 질문</th><th>별도 인증·보안 핸드북으로 넘길 질문</th></tr>
@@ -621,6 +763,14 @@ WHERE id = :id AND stock &gt;= :qty;<br>
 <tr><td>검증 경계</td><td>DTO validation, domain validation, DB constraint가 어떤 순서로 막는가</td><td>공격 payload, allowlist 정책, 보안 테스트 자동화</td></tr>
 <tr><td>권한 확인 위치</td><td>controller에서 넘긴 인증 주체가 service/repository query scope까지 유지되는가</td><td>RBAC/ABAC 정책 모델, 객체 단위 권한 위협 모델</td></tr>
 <tr><td>운영 증거</td><td>권한 실패, 입력 실패, rate limit, 민감정보 마스킹이 로그와 metric에 남는가</td><td>감사 로그 보존, 키 회전, 침해 대응 runbook</td></tr>
+</table>
+<table>
+<tr><th>PRIVACY ABUSE AUDIT MODEL</th><th>핵심 질문</th><th>코어 문서에서 남길 증거</th></tr>
+<tr><td>Threat modeling</td><td>정상 사용자, 악의적 사용자, 내부자, 자동화 공격자가 각각 무엇을 시도할 수 있는가</td><td>abuse case, negative access test, rate limit metric, alert condition</td></tr>
+<tr><td>Least privilege</td><td>서비스, 배치, 운영자, DB 계정이 필요한 최소 권한만 갖는가</td><td>권한 scope 표, service account 분리, write 권한 사용 지점</td></tr>
+<tr><td>PII lifecycle</td><td>개인정보가 어디서 수집, 저장, 마스킹, 전송, 삭제, 보존되는가</td><td>PII field inventory, retention rule, purge job, log masking test</td></tr>
+<tr><td>Auditability</td><td>누가 언제 어떤 민감한 상태를 바꿨는지 재구성할 수 있는가</td><td>actor, reason, before/after, traceId, immutable audit log</td></tr>
+<tr><td>Abuse response</td><td>계정 탈취, 크리덴셜 스터핑, scraping, 권한 우회가 의심되면 무엇을 제한하는가</td><td>rate limit, device/session revocation, anomaly metric, manual review queue</td></tr>
 </table>
 <div class="callout">
 <span class="co-label">POINTER ONLY</span>
@@ -638,7 +788,7 @@ Deep topic은 백엔드 인증·보안 핸드북으로 연결한다
 </section>
 
 <section id="ch6">
-<div class="ch-head"><span class="ch-code">BE-08</span><h2>캐시·Redis·정합성</h2></div>
+<div class="ch-head"><span class="ch-code">BE-09</span><h2>캐시·Redis·정합성</h2></div>
 <p class="lede">캐시는 가장 손쉬운 성능 개선이자 가장 흔한 정합성 버그의 원천입니다. "캐시 무효화는 컴퓨터 과학의 두 어려운 문제 중 하나"라는 농담은 진담입니다.</p>
 <table>
 <tr><th>CACHE DECISION TABLE</th><th>동작</th><th>특징</th></tr>
@@ -658,6 +808,14 @@ Deep topic은 백엔드 인증·보안 핸드북으로 연결한다
 6. hot key는 local cache, request coalescing, sharding key로 분산한다<br>
 7. Redis distributed lock은 TTL, fencing token, DB final constraint 없이는 최종 방어선으로 쓰지 않는다
 </div>
+<table>
+<tr><th>CACHE ASYNC METHOD</th><th>판단 질문</th><th>실무 기준</th></tr>
+<tr><td>Cache need</td><td>정말 병목이 읽기인가, 쿼리/인덱스/페이지네이션으로 먼저 해결 가능한가</td><td>측정 전 캐시 도입을 피하고 p95, DB load, hit ratio 목표를 정한다</td></tr>
+<tr><td>Freshness</td><td>사용자가 오래된 값을 몇 초/분까지 받아들일 수 있는가</td><td>가격, 권한, 재고는 짧게 또는 무효화 중심, 카탈로그/설정은 TTL 중심으로 둔다</td></tr>
+<tr><td>Key scope</td><td>tenant, user, permission, filter 조건이 key에 포함되는가</td><td>전역 key가 멀티테넌트 누출이나 권한 누락을 만들지 않게 한다</td></tr>
+<tr><td>Async split</td><td>사용자 응답에 꼭 필요한 작업인가, 나중에 해도 되는 작업인가</td><td>응답 필수 작업은 동기, 알림/색인/집계/외부 fan-out은 outbox와 worker로 분리한다</td></tr>
+<tr><td>Replay</td><td>DLQ 메시지를 다시 실행해도 중복 side effect가 안전한가</td><td>idempotent consumer, schema version, replay batch, stop condition을 runbook에 둔다</td></tr>
+</table>
 <table>
 <tr><th>REDIS PRACTICAL USES</th><th>좋은 용도</th><th>주의</th></tr>
 <tr><td>session store</td><td>서버 수평 확장 중 세션 공유</td><td>eviction, TTL, 장애 시 로그인 영향</td></tr>
@@ -682,14 +840,18 @@ Deep topic은 백엔드 인증·보안 핸드북으로 연결한다
 </section>
 
 <section id="ch7">
-<div class="ch-head"><span class="ch-code">BE-09</span><h2>비동기·메시징·이벤트</h2></div>
+<div class="ch-head"><span class="ch-code">BE-10</span><h2>비동기·메시징·이벤트</h2></div>
 <p class="lede">동기 호출은 두 서비스를 시간으로 묶습니다 — 하나가 느리거나 죽으면 다른 하나도 같이 멈춥니다. 큐는 그 결합을 끊어, 시간과 장애를 분리합니다.</p>
 <table>
 <tr><th>ASYNC DECISION TABLE</th><th>모델</th><th>대표</th><th>강점</th></tr>
 <tr><td><b>메시지 큐</b></td><td>작업을 소비하면 사라짐 (work queue)</td><td>RabbitMQ, AWS SQS</td><td>작업 분산·부하 평탄화</td></tr>
 <tr><td><b>이벤트 스트림</b></td><td>로그에 쌓이고 여러 소비자가 각자 읽음</td><td>Apache Kafka</td><td>이벤트 소싱·재처리·다중 구독</td></tr>
 </table>
-<p><strong>전달 보장</strong>은 세 단계입니다: <code>at-most-once</code>(유실 가능), <code>at-least-once</code>(중복 가능), <code>exactly-once</code>(이상적). 실무의 현실은 거의 항상 <em>at-least-once + 멱등 소비자</em>입니다 — 메시지가 중복 도착할 수 있다고 가정하고, 소비 측에서 "이미 처리했나"를 검사해 중복을 무해하게 만듭니다(→ BE-05 멱등성).</p>
+<p><strong>전달 보장</strong>은 세 단계로 설명합니다: <code>at-most-once</code>(유실 가능), <code>at-least-once</code>(중복 가능), <code>exactly-once</code>(제한된 범위의 중복 방지와 트랜잭션 보장). 실무의 기본값은 거의 항상 <em>at-least-once + 멱등 소비자</em>입니다 — 메시지가 중복 도착할 수 있다고 가정하고, 소비 측에서 "이미 처리했나"를 검사해 중복을 무해하게 만듭니다(→ BE-07 멱등성).</p>
+<div class="callout">
+<span class="co-label">END TO END EXACTLY ONCE CAVEAT</span>
+<p>Kafka 같은 시스템의 exactly-once 기능은 broker 내부 producer/consumer offset/transaction 범위에서는 강한 도구가 될 수 있습니다. 하지만 DB row 변경, 외부 결제 API, 이메일 발송, 검색 색인 갱신까지 포함한 end-to-end exactly once를 자동으로 보장하지는 않습니다. 외부 side effect가 섞이면 outbox/inbox, idempotency key, unique event id, reconciliation job으로 “중복 실행되어도 안전한 처리”를 설계해야 합니다.</p>
+</div>
 <div class="callout">
 <span class="co-label">OUTBOX PATTERN</span>
 <p>"DB에 주문을 저장하고 + 메시지큐에 이벤트를 발행한다"를 원자적으로 하려는 순간 문제가 생깁니다 — DB 커밋은 됐는데 발행이 실패하면(또는 반대) 둘이 어긋납니다(이중 쓰기 문제). 해법인 <strong>outbox 패턴</strong>: 이벤트를 <em>같은 DB 트랜잭션 안의 outbox 테이블</em>에 함께 쓰고, 별도 프로세스가 그 테이블을 읽어 발행합니다. "DB 트랜잭션 하나"라는 원자성에 메시지 발행을 얹는 영리한 우회입니다.</p>
@@ -712,6 +874,15 @@ schema: event name, version, occurredAt, aggregateId, actor, traceId를 포함�
 <tr><td>스키마</td><td>event name, version, aggregateId, occurredAt, traceId가 계약이다</td><td>새 field, enum, 의미 변경이 구버전 consumer를 깨지 않는가</td></tr>
 <tr><td>재처리</td><td>retry topic, backoff, DLQ replay는 운영 기능이다</td><td>작은 batch replay와 중단 기준, 모니터링 지표가 있는가</td></tr>
 </table>
+<table>
+<tr><th>DISTRIBUTED SYSTEMS REALITY CHECK</th><th>실패 현실</th><th>전문가 방어선</th></tr>
+<tr><td>Ordering</td><td>전체 순서는 비싸고 대부분 필요하지 않다</td><td>aggregate id, account id, order id처럼 순서가 필요한 단위로 partition key를 고른다</td></tr>
+<tr><td>Retry storm</td><td>모든 client와 worker가 동시에 재시도하면 장애가 증폭된다</td><td>retry budget, exponential backoff, jitter, circuit breaker, load shedding을 함께 둔다</td></tr>
+<tr><td>Backpressure</td><td>생산 속도가 소비 속도를 계속 넘으면 큐는 장애를 지연시킬 뿐이다</td><td>queue depth, age of oldest message, producer throttle, consumer autoscale, graceful degradation을 설계한다</td></tr>
+<tr><td>Saga orchestration</td><td>중앙 조율자가 단계와 보상을 관리한다</td><td>복잡한 장기 거래, 명확한 상태 machine, 운영자가 진행 상태를 봐야 할 때 적합하다</td></tr>
+<tr><td>Saga choreography</td><td>서비스들이 이벤트에 반응하며 흐름이 분산된다</td><td>단순한 fan-out에는 좋지만 흐름 추적과 순환 의존, 이벤트 폭주를 조심한다</td></tr>
+<tr><td>Schema evolution</td><td>이벤트는 이미 발행되면 오래 살아남는다</td><td>version, optional field, consumer capability, replay compatibility, tombstone 정책을 둔다</td></tr>
+</table>
 <div class="callout warn">
 <span class="co-label">DLQ RECOVERY PLAYBOOK</span>
 <p>소비가 계속 실패하는 메시지는 무한 재시도하면 큐를 막습니다 — <strong>지수 백오프 + 지터</strong>로 재시도하되, N회 실패하면 <strong>DLQ(dead letter queue)</strong>로 보내 격리하고 사람이 보게 하세요. 실패를 삼키지도, 무한 반복하지도 않는 중간 길입니다.</p>
@@ -720,7 +891,7 @@ schema: event name, version, occurredAt, aggregateId, actor, traceId를 포함�
 </section>
 
 <section id="ch11">
-<div class="ch-head"><span class="ch-code">BE-10</span><h2>테스트 전략</h2></div>
+<div class="ch-head"><span class="ch-code">BE-11</span><h2>테스트 전략</h2></div>
 <p class="lede">테스트의 목적은 커버리지 숫자가 아니라 <em>변경을 두렵지 않게 만드는 것</em>입니다. 리팩토링·배포의 자신감이 테스트에서 나옵니다.</p>
 <div class="flow">
 <span class="step hl">단위 Unit — 多</span><span class="arr">▲</span>
@@ -788,10 +959,19 @@ consumer가 기대하는 field, status, enum, nullable, error code를 고정한�
 provider는 새 버전 배포 전 contract test를 통과해야 한다<br>
 field addition은 호환이지만 enum addition과 의미 변경은 consumer 처리를 먼저 확인한다
 </div>
+<table>
+<tr><th>ADVANCED VERIFICATION STRATEGY</th><th>검증 기법</th><th>언제 쓰는가</th></tr>
+<tr><td>Property-based test</td><td>예시 몇 개가 아니라 불변식을 만족하는 입력 공간을 생성해 검증</td><td>금액 계산, 상태 전이, parser, 정렬/페이징, idempotency invariant</td></tr>
+<tr><td>Mutation/regression test</td><td>버그를 재현하는 실패 사례와 방어 테스트를 남김</td><td>장애나 hotfix 이후 같은 원인이 반복되지 않게 할 때</td></tr>
+<tr><td>Migration rehearsal</td><td>운영 크기와 유사한 데이터에서 DDL, backfill, rollback-less correction을 예행</td><td>큰 테이블 schema 변경, dual write/read switch, index 추가</td></tr>
+<tr><td>Shadow traffic</td><td>실제 요청을 새 경로에 복제하되 응답은 사용자에게 쓰지 않음</td><td>검색, 추천, pricing, read model 전환 전 결과 차이를 비교할 때</td></tr>
+<tr><td>Canary analysis</td><td>일부 traffic만 새 버전에 보내고 error, latency, business metric을 비교</td><td>rollback 비용이 큰 release, dependency 변경, runtime/config 변경</td></tr>
+<tr><td>Chaos drill</td><td>DB 지연, Redis 장애, broker lag, downstream timeout을 의도적으로 주입</td><td>timeout, circuit breaker, fallback, runbook, alert가 실제로 작동하는지 볼 때</td></tr>
+</table>
 </section>
 
 <section id="ch15">
-<div class="ch-head"><span class="ch-code">BE-11</span><h2>배포·런타임·운영 준비</h2></div>
+<div class="ch-head"><span class="ch-code">BE-12</span><h2>배포·런타임·운영 준비</h2></div>
 <p class="lede">시스템이 커지면 “어떤 기술을 쓸까”보다 “어디까지 단순하게 버티고, 언제 복잡도를 받아들일까”가 중요해집니다. 이 장은 기존의 <strong>대규모 운영 판단</strong>을 배포·런타임 준비와 합쳐, 규모, 위험, 팀 역량, 운영 비용을 함께 놓고 결정하는 기준으로 재정리합니다.</p>
 <div class="serial-card">
 <span class="sc-label">DEPLOYMENT READINESS CHECKLIST</span>
@@ -815,6 +995,33 @@ field addition은 호환이지만 enum addition과 의미 변경은 consumer 처
 <div class="callout">
 <span class="co-label">Capacity thinking</span>
 <p>용량 산정은 완벽한 예측이 아니라 자릿수 감각입니다. 예를 들어 초당 2,000요청, 평균 응답 20KB면 egress만 약 40MB/s입니다. 요청당 DB 쿼리 5개면 DB는 초당 10,000쿼리를 받습니다. 이 숫자가 connection pool, CPU, index, cache, network 비용을 압박하는지 먼저 계산해야 합니다.</p>
+</div>
+<table>
+<tr><th>CAPACITY ESTIMATION METHOD</th><th>계산할 것</th><th>설계에 주는 압력</th></tr>
+<tr><td>Traffic</td><td>평균 QPS, peak QPS, read/write 비율, burst 지속 시간</td><td>instance 수, autoscaling 기준, rate limit, queue buffer를 결정한다</td></tr>
+<tr><td>Payload</td><td>요청/응답 크기, 첨부 파일 크기, 압축 여부, egress 비용</td><td>pagination, streaming, object storage, CDN, timeout을 결정한다</td></tr>
+<tr><td>Database</td><td>요청당 query 수, rows examined, index hit, lock wait, connection hold time</td><td>pool size, query rewrite, index, read replica, transaction boundary를 결정한다</td></tr>
+<tr><td>Async</td><td>produce rate, consume rate, handler p95, retry rate, DLQ 유입률</td><td>consumer 수, partition key, backpressure, replay runbook을 결정한다</td></tr>
+<tr><td>Storage</td><td>일별 row 증가량, 보존 기간, audit/event/log 크기, 백업 시간</td><td>partitioning, archival, purge job, backup/restore 전략을 결정한다</td></tr>
+<tr><td>Tail latency</td><td>p95/p99, 외부 API tail, GC pause, connection acquisition time</td><td>timeout budget, bulkhead, circuit breaker, cache, degradation을 결정한다</td></tr>
+</table>
+<table>
+<tr><th>LATENCY BUDGET QUEUEING METHOD</th><th>질문</th><th>판단 기준</th></tr>
+<tr><td>Latency budget</td><td>사용자 p95 목표를 controller, DB, cache, external API, queue wait에 어떻게 배분할 것인가</td><td>전체 300ms 목표라면 DB 80ms, external 100ms, app 40ms처럼 budget을 나누고 초과 지점을 trace로 확인한다</td></tr>
+<tr><td>Little's Law</td><td>동시 처리량은 도착률과 체류 시간으로 설명되는가</td><td>대략 concurrency = throughput × latency로 계산해 thread, pool, queue size가 현실적인지 본다</td></tr>
+<tr><td>Saturation</td><td>CPU가 높은가, 아니면 thread/connection/queue가 꽉 차서 기다리는가</td><td>utilization보다 saturation 지표를 같이 보고, 대기열이 길어지면 tail latency가 폭증한다고 판단한다</td></tr>
+<tr><td>Load shedding</td><td>모든 요청을 끝까지 처리하려다 전체를 죽이고 있지 않은가</td><td>rate limit, priority queue, 429/503, graceful degradation, optional feature off를 설계한다</td></tr>
+<tr><td>Timeout budget</td><td>상위 timeout보다 하위 timeout과 retry 총합이 더 길지 않은가</td><td>client timeout, gateway timeout, service timeout, DB timeout, retry budget을 한 장에 맞춘다</td></tr>
+<tr><td>Tail amplification</td><td>fan-out 호출이 많아질수록 p99가 어떻게 나빠지는가</td><td>parallel fan-out, hedged request, cache, partial response, fallback을 비용과 함께 검토한다</td></tr>
+</table>
+<div class="serial-card">
+<span class="sc-label">PRODUCTION RISK REGISTER</span>
+risk: 어떤 실패가 사용자, 돈, 데이터, 보안, 운영에 영향을 주는가<br>
+trigger: 어떤 지표나 상황에서 위험이 현실화되는가<br>
+blast radius: endpoint, tenant, region, job, downstream 중 어디까지 번지는가<br>
+mitigation: timeout, rollback, feature flag, rate limit, queue pause, manual review 중 무엇으로 완화하는가<br>
+owner: 누가 알람을 받고 어떤 runbook을 실행하는가<br>
+evidence: 테스트, dashboard, log query, reconciliation SQL이 어디에 있는가
 </div>
 <div class="callout warn">
 <span class="co-label">Case study</span>
@@ -897,7 +1104,7 @@ post-deploy check: p95 latency, error rate, saturation, business event count
 <span class="step">재시도<br>Retry+백오프</span><span class="arr">→</span>
 <span class="step hl">서킷브레이커<br>Circuit Breaker</span>
 </div>
-<p>다른 서비스를 호출할 때 반드시 갖춰야 할 셋입니다. <strong>타임아웃</strong> — 무한 대기는 스레드·커넥션을 고갈시켜 <em>한 서비스의 느림이 전체 장애로 번지게</em> 합니다(연결·읽기 타임아웃 둘 다). <strong>재시도</strong> — 일시적 실패엔 효과적이지만, 즉시·고정 간격 재시도는 죽어가는 서버를 더 때립니다 → 지수 백오프 + 지터, 그리고 멱등한 요청만. <strong>서킷브레이커</strong> — 연속 실패가 임계를 넘으면 회로를 열어 한동안 호출 자체를 차단하고 빠르게 실패시켜, 회복할 시간을 줍니다.</p>
+<p>다른 서비스를 호출할 때 대부분 먼저 검토해야 할 셋입니다. <strong>타임아웃</strong> — 무한 대기는 스레드·커넥션을 고갈시켜 <em>한 서비스의 느림이 전체 장애로 번지게</em> 합니다(연결·읽기 타임아웃 둘 다). <strong>재시도</strong> — 일시적 실패엔 효과적이지만, 즉시·고정 간격 재시도는 죽어가는 서버를 더 때립니다 → 지수 백오프 + 지터, 그리고 멱등한 요청만. <strong>서킷브레이커</strong> — 연속 실패가 임계를 넘으면 회로를 열어 한동안 호출 자체를 차단하고 빠르게 실패시켜, 회복할 시간을 줍니다.</p>
 <div class="callout risk">
 <span class="co-label">FAILURE MODE — 캐스케이딩 장애</span>
 <p>타임아웃 없는 호출 하나가 전체를 무너뜨리는 전형: A가 느려진 B를 무한 대기 → A의 스레드풀 고갈 → A도 응답 불능 → A를 호출하던 C도... 한 군데의 느림이 도미노로 번집니다. <strong>타임아웃과 격벽(bulkhead)은 선택이 아니라 분산 시스템의 기본 위생</strong>입니다.</p>
@@ -905,7 +1112,7 @@ post-deploy check: p95 latency, error rate, saturation, business event count
 </section>
 
 <section id="ch9">
-<div class="ch-head"><span class="ch-code">BE-12</span><h2>관측가능성·장애 대응</h2></div>
+<div class="ch-head"><span class="ch-code">BE-13</span><h2>관측가능성·장애 대응</h2></div>
 <p class="lede">운영을 책임질 수 있느냐가 백엔드 품질의 분기점입니다. 관측가능성은 <em>"안 돼요"를 "여기가 이래서 안 됩니다"로</em> 바꾸는 능력입니다.</p>
 <table>
 <tr><th>OBSERVABILITY SIGNAL MATRIX</th><th>답하는 질문</th><th>형태</th></tr>
@@ -924,6 +1131,23 @@ readiness / liveness: 트래픽 수신 가능 여부와 프로세스 생존 여�
 alert owner: 알람마다 담당자, 기준, 조치 링크를 둔다<br>
 runbook: 증상 → 확인 지표 → 완화 → 복구 확인 → 사후 기록
 </div>
+<table>
+<tr><th>OPERABILITY METHOD</th><th>질문</th><th>실무 기준</th></tr>
+<tr><td>Log</td><td>한 요청이 어디서 실패했는지 traceId와 domain key로 찾을 수 있는가</td><td>structured log에 endpoint, actor, resource, error code, latency를 남긴다</td></tr>
+<tr><td>Metric</td><td>전체 영향과 사용자 영향이 숫자로 보이는가</td><td>RED와 USE를 기본으로 p95/p99, saturation, business event count를 본다</td></tr>
+<tr><td>Trace</td><td>느린 요청 하나를 DB, cache, external call, queue까지 따라갈 수 있는가</td><td>entrypoint에서 traceId를 만들고 하위 호출과 event payload에 전파한다</td></tr>
+<tr><td>Alert</td><td>알람이 조치 가능한가, owner와 runbook이 있는가</td><td>SLO burn rate, error burst, queue lag, pool saturation처럼 행동 가능한 조건을 둔다</td></tr>
+<tr><td>Release</td><td>배포 후 나빠졌는지 15분 안에 판단 가능한가</td><td>release marker, canary metric, rollback 기준, smoke result를 기록한다</td></tr>
+</table>
+<table>
+<tr><th>SLO ERROR BUDGET OPERATING MODEL</th><th>운영 질문</th><th>결정 기준</th></tr>
+<tr><td>SLI</td><td>사용자 경험을 가장 잘 대표하는 측정값은 무엇인가</td><td>availability, successful request ratio, p95/p99 latency, freshness, durability를 기능별로 고른다</td></tr>
+<tr><td>SLO</td><td>어느 수준이면 사용자가 신뢰할 수 있고 팀이 감당 가능한가</td><td>99.9% 같은 숫자만 쓰지 말고 window, 제외 조건, 측정 경로를 명시한다</td></tr>
+<tr><td>Error budget</td><td>이번 기간에 실패를 얼마나 이미 썼는가</td><td>budget burn이 빠르면 feature release보다 안정화, rollback, capacity, dependency fix를 우선한다</td></tr>
+<tr><td>Alert policy</td><td>사람을 깨울 알람과 티켓으로 남길 알람을 구분했는가</td><td>multi-window burn rate, sustained saturation, data loss risk처럼 행동 가능한 조건만 page한다</td></tr>
+<tr><td>Ownership</td><td>누가 완화 결정을 내리고 누가 재발 방지를 끝내는가</td><td>service owner, on-call, escalation, incident commander, postmortem action owner를 둔다</td></tr>
+<tr><td>Cost</td><td>가용성 목표를 올릴수록 어떤 비용이 증가하는가</td><td>multi-region, redundancy, observability, on-call load, operational complexity를 예산과 함께 본다</td></tr>
+</table>
 <div class="callout">
 <span class="co-label">HEALTH CHECK</span>
 <p><code>liveness</code>(살아있나 — 죽었으면 재시작)와 <code>readiness</code>(요청 받을 준비 됐나 — DB 연결 전엔 트래픽 차단)를 구분하세요. 둘을 합치면 "DB가 잠깐 끊겼다고 컨테이너가 통째로 재시작되는" 사고가 납니다. SLI(측정 지표)로 SLO(목표, 예: 가용성 99.9%)를 정하는 것이 운영 성숙의 시작입니다.</p>
@@ -965,7 +1189,7 @@ runbook: 증상 → 확인 지표 → 완화 → 복구 확인 → 사후 기록
 </section>
 
 <section id="ch12">
-<div class="ch-head"><span class="ch-code">BE-13</span><h2>아키텍처와 시스템 설계</h2></div>
+<div class="ch-head"><span class="ch-code">BE-14</span><h2>아키텍처와 시스템 설계</h2></div>
 <p class="lede">백엔드 설계의 최종 시험은 "정답을 아는가"가 아니라 <em>"트레이드오프를 설명하는가"</em>입니다. 시스템 설계엔 정답이 없고, 제약에 맞는 선택과 그 비용의 명시가 있을 뿐입니다.</p>
 
 <h3><span class="h3-tag">12.1</span>먼저 묻는 질문 — 비기능 요구</h3>
@@ -985,9 +1209,9 @@ API 계약: request/response, error code, idempotency key, pagination, versionin
 
 <h3><span class="h3-tag">12.2</span>확장과 일관성의 거래</h3>
 <ul>
-<li><strong>수직 확장</strong>(서버 키우기)은 단순하지만 한계·단일 장애점. <strong>수평 확장</strong>(서버 늘리기)은 무한하지만 <em>무상태(stateless)</em> 설계와 데이터 분산을 요구합니다.</li>
-<li><strong>CAP</strong> — 네트워크 분단(P)은 피할 수 없으니, 분단 시 일관성(C)과 가용성(A) 중 무엇을 포기할지의 선택입니다. 은행 잔액은 C, 좋아요 수는 A.</li>
-<li><strong>일관성 모델</strong> — 강한 일관성(항상 최신)은 비싸고, 최종 일관성(잠깐 어긋나도 결국 수렴)은 싸고 빠릅니다. 도메인이 결정합니다.</li>
+<li><strong>수직 확장</strong>(서버 키우기)은 단순하지만 한계·단일 장애점. <strong>수평 확장</strong>(서버 늘리기)은 더 큰 확장 여지를 주지만 <em>무상태(stateless)</em> 설계와 데이터 분산을 요구합니다.</li>
+<li><strong>CAP</strong> — 네트워크 분단(P)이 발생한 동안, 분산 시스템이 모든 요청에 최신 일관성(C)을 보장할지, 일부 stale/partial 상태를 허용하고 가용성(A)을 유지할지의 선택입니다. 계좌 잔액 변경처럼 손실 비용이 큰 쓰기는 C를 우선하고, 좋아요 수나 추천 집계처럼 잠깐 어긋나도 되는 값은 A와 최종 일관성을 우선할 수 있습니다.</li>
+<li><strong>일관성 모델</strong> — 강한 일관성(읽기/쓰기 경계에서 최신성·순서 보장을 강하게 요구)은 비용이 크고, 최종 일관성(잠깐 어긋나도 결국 수렴)은 지연·가용성 측면에서 유리할 수 있지만 보정 비용이 듭니다. 도메인이 결정합니다.</li>
 </ul>
 <div class="table-wrap">
 <table>
@@ -1005,6 +1229,19 @@ API 계약: request/response, error code, idempotency key, pagination, versionin
 <span class="rb-label">DESIGN DECISION MATRIX</span>
 결정은 기술 선호가 아니라 제약의 결과여야 합니다. 설계 리뷰에서는 "왜 이 기술인가"보다 "어떤 제약 때문에 이 선택이 최소 비용인가", "어떤 지표가 나오면 다음 단계로 바꿀 것인가", "되돌리거나 확장할 수 있는가"를 먼저 설명하세요.
 </div>
+<div class="callout">
+<span class="co-label">CAP SCOPE CAVEAT</span>
+<p>CAP은 모든 아키텍처 선택을 설명하는 만능 법칙이 아닙니다. 특히 단일 DB 안의 트랜잭션 설계, 지연 시간 최적화, 데이터 모델링 문제를 CAP 하나로 설명하면 오히려 사고가 흐려집니다. CAP은 네트워크 분단이 있는 분산 시스템에서 복제된 데이터의 읽기/쓰기 요청을 어떻게 처리할지 묻는 틀이고, 평상시 지연·일관성·비용 문제는 PACELC, replica lag, SLO, 도메인 손실 비용까지 함께 봐야 합니다.</p>
+</div>
+<table>
+<tr><th>BACKEND ANTI PATTERN RADAR</th><th>위험 신호</th><th>수정 방향</th></tr>
+<tr><td>Pattern-first design</td><td>요구사항보다 MSA, CQRS, Kafka 같은 이름이 먼저 나온다</td><td>트래픽, 정합성, 배포 경계, 장애 격리 요구를 먼저 적고 기술을 나중에 고른다</td></tr>
+<tr><td>Transaction soup</td><td>service 메서드마다 관성적으로 <code>@Transactional</code>을 붙이고 외부 호출도 안에 넣는다</td><td>불변식 기준으로 transaction boundary를 줄이고 side effect는 outbox로 분리한다</td></tr>
+<tr><td>Cache as correctness</td><td>캐시 값을 최신 truth처럼 믿고 권한, 재고, 가격 판단에 사용한다</td><td>source of truth를 DB로 고정하고 cache는 freshness와 invalidation 계약을 둔다</td></tr>
+<tr><td>Stringly typed errors</td><td>프론트가 에러 메시지 문자열을 파싱해 분기한다</td><td>stable error code, field, retryable, traceId가 있는 error contract를 둔다</td></tr>
+<tr><td>Unbounded retry</td><td>장애가 난 하류 시스템을 즉시 무한 재시도한다</td><td>timeout, retry budget, exponential backoff, jitter, circuit breaker를 둔다</td></tr>
+<tr><td>Happy-path testing</td><td>생성/조회 성공 E2E 하나로 정합성, 권한, 동시성을 증명하려 한다</td><td>negative access, duplicate request, concurrency, migration, rollback regression을 추가한다</td></tr>
+</table>
 <table>
 <tr><th>ARCHITECTURE CHOICE MATRIX</th><th>선택 기준</th><th>비용</th></tr>
 <tr><td>Layered architecture</td><td>팀이 작고 CRUD 중심이며 흐름이 단순</td><td>도메인 규칙이 service에 비대해지기 쉬움</td></tr>
@@ -1040,6 +1277,15 @@ Failure: 결제 실패는 주문을 취소하거나 결제대기 만료 작업�
 Observability: 주문 생성 성공률, 재고 예약 실패율, 결제 retry count, outbox lag, consumer error를 대시보드에 둔다
 </div>
 <p>이 사례에서 "처음부터 마이크로서비스"가 답은 아닙니다. 먼저 모듈 경계를 선명하게 두고, 결제·재고·알림의 실패 모드와 데이터 소유권이 실제로 갈라질 때 서비스 분리를 검토합니다.</p>
+<table>
+<tr><th>CASE STUDY ANALYSIS METHOD</th><th>질문</th><th>산출물</th></tr>
+<tr><td>Problem frame</td><td>사용자가 끝내야 하는 행동, 실패하면 생기는 손실, 성공 기준은 무엇인가</td><td>one-line goal, loss model, SLO/acceptance criteria</td></tr>
+<tr><td>Domain model</td><td>핵심 entity, value object, aggregate, invariant, 상태 전이는 무엇인가</td><td>state diagram, invariant list, table/constraint draft</td></tr>
+<tr><td>Request path</td><td>API에서 transaction, repository, outbox, response까지 어떤 순서로 흐르는가</td><td>sequence outline, transaction boundary, error contract</td></tr>
+<tr><td>Failure matrix</td><td>DB, cache, queue, external API, client retry가 실패하면 어떤 상태가 남는가</td><td>failure table, retry/compensation rule, user-visible state</td></tr>
+<tr><td>Scale check</td><td>QPS, row growth, payload, pool, p95/p99, lag가 어느 정도인가</td><td>capacity estimate, bottleneck hypothesis, next scaling trigger</td></tr>
+<tr><td>Evidence plan</td><td>이 설계가 맞다는 것을 어떤 테스트와 운영 신호로 증명할 것인가</td><td>test matrix, dashboard signals, log query, runbook draft</td></tr>
+</table>
 
 <h3><span class="h3-tag">12.5</span>설계 리뷰 루브릭</h3>
 <div class="table-wrap">
@@ -1059,6 +1305,15 @@ Observability: 주문 생성 성공률, 재고 예약 실패율, 결제 retry co
 <span class="rb-label">BACKEND DESIGN REVIEW RUBRIC</span>
 설계안을 제출할 때는 다이어그램보다 먼저 "무엇을 절대 깨면 안 되는가", "어디까지 같은 트랜잭션인가", "중복·재시도·부분 실패를 어떻게 처리하는가", "어떤 지표로 맞게 동작하는지 볼 것인가"를 답하세요. 이 네 가지를 답하지 못하면 설계가 아니라 구현 아이디어에 가깝습니다.
 </div>
+<table>
+<tr><th>SENIOR DECISION DEFENSE RUBRIC</th><th>검증 질문</th><th>좋은 방어 방식</th></tr>
+<tr><td>Why now</td><td>왜 지금 이 복잡도를 받아들여야 하는가</td><td>현재 지표, 장애 이력, 성장률, 손실 비용이 단순 설계의 한계를 넘었다고 설명한다</td></tr>
+<tr><td>Why this</td><td>왜 이 기술이나 패턴이 대안보다 낫다고 보는가</td><td>대안 2개 이상과 latency, consistency, operability, team skill, cost를 비교한다</td></tr>
+<tr><td>How fail</td><td>이 선택이 실패하면 어떤 증상으로 드러나는가</td><td>metric, log, trace, reconciliation query, user-visible state를 미리 정한다</td></tr>
+<tr><td>How rollback</td><td>되돌릴 수 있는가, 아니면 forward fix만 가능한가</td><td>feature flag, expand-contract, dual write, data repair, rollback stop point를 구분한다</td></tr>
+<tr><td>When replace</td><td>언제 이 설계를 버리고 다음 단계로 갈 것인가</td><td>QPS, p95, lock wait, queue age, error budget, cost threshold 같은 전환 신호를 둔다</td></tr>
+<tr><td>Who owns</td><td>운영과 장애 대응 책임자가 누구인가</td><td>service owner, runbook, dashboard, alert policy, postmortem owner까지 설계 산출물에 포함한다</td></tr>
+</table>
 <div class="serial-card">
 <span class="sc-label">SERVICE BOUNDARY CHECKLIST</span>
 □ 이 모듈이 소유하는 데이터와 다른 모듈이 읽어도 되는 view가 분리되는가<br>
@@ -1070,7 +1325,7 @@ Observability: 주문 생성 성공률, 재고 예약 실패율, 결제 retry co
 </section>
 
 <section id="ch19">
-<div class="ch-head"><span class="ch-code">BE-14</span><h2>학습 산출물 포인터</h2></div>
+<div class="ch-head"><span class="ch-code">BE-15</span><h2>학습 산출물 포인터</h2></div>
 <p class="lede">백엔드 핵심 페이지에서 남겨야 할 산출물은 커리어 문장이 아니라 <strong>설계 판단과 동작 증거</strong>입니다. 면접 답변, 포트폴리오 구성, 개인 경험 편집은 면접·커리어 문서로 넘기고, 이 장은 코어 학습이 실제로 쌓였는지 확인하는 최소 증거만 고정합니다.</p>
 <table>
 <tr><th>BACKEND CORE OUTPUT BOUNDARY</th><th>이 문서에 남길 것</th><th>다른 문서로 넘길 것</th></tr>
@@ -1087,6 +1342,33 @@ Persistence note 1개: schema constraint, index, migration 순서, EXPLAIN 근�
 Concurrency test 1개: 중복 요청, race condition, lock/idempotency 방어 증거<br>
 Operability checklist 1개: log key, metric, traceId, health, rollback, runbook
 </div>
+<div class="serial-card">
+<span class="sc-label">BACKEND PRACTICE LAB</span>
+과제: 환불 승인 API를 설계한다<br>
+API: <code>POST /admin/refund-requests/{id}/approve</code>, idempotency key, 400/403/404/409/422 error contract<br>
+Data: refund_request, refund_decision, payment_refund_attempt, audit_log, outbox_event<br>
+Transaction: 승인 상태 변경, 결정 기록, audit log, outbox append를 함께 커밋한다<br>
+Async: 결제사 환불 호출과 알림은 outbox worker가 처리한다<br>
+Concurrency: 이미 처리된 요청은 409, 같은 key 재시도는 같은 결과, 다른 payload는 conflict<br>
+Test: 권한 없음, 이미 처리됨, 금액 초과, 동시 승인, outbox 중복 소비를 회귀 테스트로 고정한다<br>
+Ops: refund approval rate, provider failure rate, outbox lag, retry count, traceId log를 남긴다
+</div>
+<table>
+<tr><th>BACKEND EVIDENCE PACKET TEMPLATE</th><th>포함할 내용</th><th>통과 기준</th></tr>
+<tr><td>API contract</td><td>endpoint, method, request/response, status, error code, authZ, idempotency</td><td>프론트와 consumer가 문자열 추측 없이 구현 가능</td></tr>
+<tr><td>Transaction decision note</td><td>같은 트랜잭션, 분리한 외부 효과, rollback/compensation 정책</td><td>부분 실패 이후 남는 상태가 명확함</td></tr>
+<tr><td>Data model note</td><td>ERD, constraint, index, migration order, retention/audit policy</td><td>DB가 최종 방어선으로 핵심 불변식을 막음</td></tr>
+<tr><td>Failure test packet</td><td>negative authZ, duplicate request, race condition, downstream timeout, DLQ replay</td><td>운영에서 본 실패가 테스트 이름으로 재현됨</td></tr>
+<tr><td>Operability packet</td><td>log key, metric, trace, alert, runbook, rollback 기준</td><td>장애 첫 15분에 원인 후보와 완화책을 좁힐 수 있음</td></tr>
+</table>
+<table>
+<tr><th>EXTERNAL REVIEW DEFENSE PACKET</th><th>받을 질문</th><th>방어할 답변 기준</th></tr>
+<tr><td>범위</td><td>이 문서가 백엔드 보안, DB, 아키텍처를 전부 완결한다고 주장하는가</td><td>아니다. 이 문서는 코어 요청 경로와 상태 변경 판단을 묶고, 인증·보안·DB·아키텍처 심화는 별도 문서와 공식 문서로 검증한다.</td></tr>
+<tr><td>정확성</td><td>HTTP, CAP, isolation, exactly-once 같은 개념을 너무 단순화하지 않았는가</td><td>각 장에 caveat를 두고 “표준 의미”와 “엔진/제품 구현”, “제한된 보장”과 “end-to-end 보장”을 구분한다.</td></tr>
+<tr><td>실무성</td><td>체크리스트가 실제 설계 판단으로 이어지는가</td><td>API contract, transaction boundary, invariant, failure matrix, capacity estimate, operability evidence로 산출물을 강제한다.</td></tr>
+<tr><td>검증성</td><td>이 문서의 조언이 맞다는 것을 어떻게 증명하는가</td><td>동시성 회귀 테스트, Testcontainers 통합 테스트, EXPLAIN, 부하 테스트, 로그·메트릭·트레이스, incident drill을 증거로 둔다.</td></tr>
+<tr><td>한계</td><td>이 문서만 믿고 운영 결정을 내려도 되는가</td><td>안 된다. 실제 시스템에서는 트래픽, 장애 허용도, 데이터 손실 비용, 팀 숙련도, 클라우드/DB 제품 구현, 공식 문서를 함께 확인해야 한다.</td></tr>
+</table>
 <table>
 <tr><th>QUALITY FLOOR</th><th>통과 기준</th><th>부실한 신호</th></tr>
 <tr><td>요청 설명</td><td>controller부터 commit/rollback, response mapping, log/metric까지 이어서 설명한다</td><td>컨트롤러 메서드와 repository 호출만 설명한다</td></tr>
@@ -1102,11 +1384,11 @@ Operability checklist 1개: log key, metric, traceId, health, rollback, runbook
 </section>
 
 <section id="ch13">
-<div class="ch-head"><span class="ch-code">BE-15</span><h2>용어집</h2></div>
+<div class="ch-head"><span class="ch-code">BE-16</span><h2>용어집</h2></div>
 <div class="glossary">
-<div class="g-row"><div class="g-term"><b>멱등성</b><span>Idempotency</span></div><div class="g-def">같은 요청을 여러 번 해도 결과가 같은 성질. 재시도·중복 메시지 안전의 핵심. PUT/DELETE는 멱등, POST는 아님.</div></div>
+<div class="g-row"><div class="g-term"><b>멱등성</b><span>Idempotency</span></div><div class="g-def">같은 요청을 여러 번 처리해도 의도한 최종 상태가 같은 성질. 재시도·중복 메시지 안전의 핵심. PUT/DELETE는 멱등하게 구현되어야 하고, POST도 idempotency key로 별도 멱등 계약을 만들 수 있다.</div></div>
 <div class="g-row"><div class="g-term"><b>ACID</b><span>Atomicity·Consistency·Isolation·Durability</span></div><div class="g-def">트랜잭션의 4가지 약속 — 전부-또는-전무, 제약 유지, 동시 격리, 커밋 영속.</div></div>
-<div class="g-row"><div class="g-term"><b>격리수준</b><span>Isolation Level</span></div><div class="g-def">동시 트랜잭션이 서로를 얼마나 보는지의 등급. 높을수록 정합성↑ 동시성↓. Read Committed / Repeatable Read / Serializable.</div></div>
+<div class="g-row"><div class="g-term"><b>격리수준</b><span>Isolation Level</span></div><div class="g-def">동시 트랜잭션이 서로를 얼마나 보는지의 등급. 높을수록 정합성은 강해지고 동시성 비용은 커진다. Read Committed / Repeatable Read / Serializable의 실제 동작은 DB 엔진별로 확인해야 한다.</div></div>
 <div class="g-row"><div class="g-term"><b>N+1 문제</b><span>N+1 Query</span></div><div class="g-def">목록 1번 조회 후 각 항목마다 추가 쿼리 N번. ORM의 대표 성능 함정 — fetch join·배치 로딩으로 해결.</div></div>
 <div class="g-row"><div class="g-term"><b>영속성 컨텍스트</b><span>Persistence Context</span></div><div class="g-def">JPA의 1차 캐시. 엔티티 변경을 감지(dirty checking)해 커밋 시 자동 UPDATE. 트랜잭션 경계와 생명주기를 공유.</div></div>
 <div class="g-row"><div class="g-term"><b>낙관적/비관적 락</b><span>Optimistic / Pessimistic Lock</span></div><div class="g-def">동시 수정 방어 — 버전 검사 후 충돌 시 재시도(낙관적) vs 읽을 때 행 잠금(비관적). 충돌 빈도가 선택 기준.</div></div>
@@ -1122,8 +1404,8 @@ Operability checklist 1개: log key, metric, traceId, health, rollback, runbook
 <div class="g-row"><div class="g-term"><b>liveness/readiness</b><span>Health Probe</span></div><div class="g-def">살아있나(죽으면 재시작) vs 요청 받을 준비됐나(아니면 트래픽 차단). 합치면 사고.</div></div>
 <div class="g-row"><div class="g-term"><b>IDOR</b><span>Insecure Direct Object Reference</span></div><div class="g-def">남의 식별자로 남의 자원에 접근하는 인가 누락. 가장 흔한 실제 침해. authN≠authZ.</div></div>
 <div class="g-row"><div class="g-term"><b>Parameterized Query</b><span>Prepared Statement</span></div><div class="g-def">값을 코드와 분리해 바인딩하는 쿼리. SQL injection의 근본 방어 — 문자열 결합 금지.</div></div>
-<div class="g-row"><div class="g-term"><b>CAP 정리</b><span>Consistency·Availability·Partition</span></div><div class="g-def">네트워크 분단 시 일관성과 가용성 중 하나를 포기해야 한다는 분산 시스템의 제약.</div></div>
-<div class="g-row"><div class="g-term"><b>최종 일관성</b><span>Eventual Consistency</span></div><div class="g-def">잠깐 어긋나도 결국 수렴하는 일관성 모델. 강한 일관성보다 싸고 빠름 — 도메인이 허용하면 선택.</div></div>
+<div class="g-row"><div class="g-term"><b>CAP 정리</b><span>Consistency·Availability·Partition</span></div><div class="g-def">네트워크 분단 중 복제된 데이터의 요청을 최신 일관성으로 거절할지, stale 가능성을 안고 가용하게 처리할지의 제약. 모든 성능·DB 설계를 설명하는 만능 법칙은 아니다.</div></div>
+<div class="g-row"><div class="g-term"><b>최종 일관성</b><span>Eventual Consistency</span></div><div class="g-def">잠깐 어긋나도 결국 수렴하는 일관성 모델. 대개 지연·가용성 측면에서 유리하지만 보정·관측 비용이 든다 — 도메인이 허용하면 선택.</div></div>
 <div class="g-row"><div class="g-term"><b>Testcontainers</b><span>Integration Test</span></div><div class="g-def">테스트 시 진짜 DB·브로커를 컨테이너로 띄워 통합 테스트. mock DB의 거짓 안심을 피함.</div></div>
 </div>
 </section>

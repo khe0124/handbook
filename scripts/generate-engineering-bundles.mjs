@@ -139,15 +139,41 @@ const BUNDLES = [
     id: "engineering-frontend-interaction",
     file: "engineering-frontend-interaction-handbook.html",
     navBrand: "ENGINEERING · FRONTEND INTERACTION",
-    navTitle: "프론트엔드 인터랙션 · 애니메이션과 3D",
-    title: "프론트엔드 인터랙션과 그래픽",
-    subtitle: "인터랙션 아키텍처, 모션 엔진, SVG·Canvas·WebGL·Three.js, 진단 루틴과 실전 과제를 하나의 성장 흐름으로 통합했습니다.",
-    scope: "INTERACTION ARCHITECTURE · MOTION ENGINE · CANVAS · WEBGL · THREE.JS · DIAGNOSTICS",
+    navTitle: "프론트엔드 인터랙션",
+    title: "프론트엔드 인터랙션",
+    subtitle: "입력 모델, 상태 기계, 좌표계, 접근성, 제품형 조작 패턴, QA 게이트를 인터랙션 엔지니어링 관점으로 정리했습니다.",
+    scope: "INPUT MODEL · STATE MACHINE · POINTER · KEYBOARD · ACCESSIBILITY · INTERACTION QA",
     indexDescription:
-      "목표는 화면을 보기 좋게 움직이는 개발자가 아니라 입력 모델, 상태 기계, 모션 파이프라인, Canvas/WebGL 렌더링, asset pipeline, 성능 진단, fallback까지 설명하고 구현할 수 있는 수준급 인터랙티브 개발자입니다. 이 문서는 인터랙션 계약 → 입력 이벤트와 상태 아키텍처 → 모션 시스템과 FLIP/spring → 그래픽·3D 구현 → 진단 도구 → 실전 과제 로드맵 순서로 읽습니다.",
+      "목표는 버튼에 효과를 붙이는 개발자가 아니라 사용자 의도, 입력 장치, 상태 전이, focus, 좌표계, undo, 실패 복구를 하나의 계약으로 설계하는 수준급 인터랙션 엔지니어입니다. 이 문서는 인터랙션 계약 → 상태 기계 → 포인터·키보드 생명주기 → 제품형 조작 패턴 → 접근성 수용 기준 → 관측과 QA 게이트 순서로 읽습니다.",
     sources: [
       { prefix: "interaction", label: "인터랙션 설계", file: "frontend-interaction-handbook.html" },
+    ],
+  },
+  {
+    id: "engineering-frontend-motion",
+    file: "engineering-frontend-motion-handbook.html",
+    navBrand: "ENGINEERING · FRONTEND MOTION",
+    navTitle: "프론트엔드 모션·애니메이션",
+    title: "프론트엔드 모션·애니메이션",
+    subtitle: "CSS/WAAPI/JS animation, motion token, FLIP, spring, reduced motion, animation lifecycle, 회귀 방지를 독립 축으로 다룹니다.",
+    scope: "CSS MOTION · WAAPI · JS ANIMATION · FLIP · SPRING · REDUCED MOTION · MOTION QA",
+    indexDescription:
+      "목표는 화려한 화면 전환이 아니라 상태 변화와 공간 관계를 빠르고 안전하게 설명하는 모션 시스템을 설계하는 것입니다. 이 문서는 모션 판단 원칙 → 구현 선택 → motion system → animation lifecycle → FLIP/spring → compositor 진단 → reduced motion release gate 순서로 읽습니다.",
+    sources: [
       { prefix: "motion", label: "애니메이션·모션 시스템", file: "frontend-animation-motion-handbook.html" },
+    ],
+  },
+  {
+    id: "engineering-frontend-graphics-3d",
+    file: "engineering-frontend-graphics-3d-handbook.html",
+    navBrand: "ENGINEERING · FRONTEND GRAPHICS 3D",
+    navTitle: "프론트엔드 그래픽·3D·WebGL",
+    title: "프론트엔드 그래픽·3D·WebGL",
+    subtitle: "SVG, Canvas, WebGL, Three.js, R3F, asset pipeline, GPU 예산, fallback, 자동화 테스트를 그래픽 시스템 관점으로 분리했습니다.",
+    scope: "SVG · CANVAS · WEBGL · THREE.JS · R3F · ASSET PIPELINE · GPU BUDGET · FALLBACK",
+    indexDescription:
+      "목표는 3D 모델을 띄우는 데서 멈추지 않고 렌더링 기술 선택, GPU 자원 수명, scene state boundary, asset pipeline, context loss, 접근성 fallback, canvas/WebGL 자동화까지 운영 가능한 그래픽 시스템을 설계하는 것입니다.",
+    sources: [
       { prefix: "graphics", label: "그래픽·3D·WebGL", file: "frontend-graphics-3d-handbook.html" },
     ],
   },
@@ -1012,12 +1038,20 @@ function transformEngineeringCards(html) {
       return `<pre class="snippet-card">${inner}</pre>`;
     }
 
-    const body = inner.replace(
+    let body = inner.replace(
       /<span class="sc-label">([^<]+)<\/span>(?!<br>)/,
       `<span class="sc-label">$1</span><br>`,
     );
+    const cardClass = semanticCardClass(inner);
 
-    return `<div class="${semanticCardClass(inner)}">${body}</div>`;
+    if (cardClass === "semantic-card process-card" && !/<p>/i.test(body)) {
+      body = body.replace(
+        /(<span class="sc-label">[^<]+<\/span><br>)/,
+        `$1\n<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>`,
+      );
+    }
+
+    return `<div class="${cardClass}">${body}</div>`;
   });
 
   if (transformed.includes(".semantic-card") && transformed.includes(".snippet-card")) {

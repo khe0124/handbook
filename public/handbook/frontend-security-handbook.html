@@ -10,6 +10,7 @@
   <a href="#ch4"><span class="code">FSEC-04</span>토큰 저장</a>
   <a href="#ch5"><span class="code">FSEC-05</span>CSP와 보안 헤더</a>
   <a href="#ch6"><span class="code">FSEC-06</span>의존성과 공급망</a>
+  <a href="#ch7"><span class="code">FSEC-07</span>보안 방법론</a>
 </nav><main>
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-SECURITY-V1</span><span>SCOPE : XSS · CSRF · TOKEN · CSP · SUPPLY CHAIN</span><span>LANG : KO</span></div>
@@ -133,6 +134,43 @@
 </table>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p><code>dangerouslySetInnerHTML</code>, token storage, CSP, 새 third-party script, 인증 redirect, sanitizer 설정 변경은 보안 리뷰 대상으로 표시합니다. 단순 UI 변경처럼 취급하지 않습니다.</p></div>
 <div class="glossary"><div class="g-row"><div class="g-term"><b>SRI</b><span>Subresource Integrity</span></div><div class="g-def">CDN script가 기대한 hash와 일치하는지 브라우저가 검증하는 기능입니다.</div></div><div class="g-row"><div class="g-term"><b>Nonce</b><span>CSP</span></div><div class="g-def">허용된 inline script를 식별하기 위한 요청별 임의값입니다.</div></div></div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">FSEC-07</span><h2>보안 방법론: 신뢰 경계와 데이터 흐름</h2></div>
+<p class="lede">프론트엔드 보안의 출발점은 “브라우저는 신뢰할 수 없는 실행 환경”이라는 관점입니다. 사용자가 보는 UI는 권한 판단의 근거가 될 수 없고, 클라이언트 상태는 변조 가능하며, 브라우저에 도착한 secret은 이미 노출 가능한 값입니다. 따라서 보안 리뷰는 컴포넌트 이름이 아니라 데이터가 어디서 들어와 어디로 흘러가고 어떤 권한으로 실행되는지를 추적해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">BROWSER TRUST BOUNDARY MODEL</span>untrusted input → parse/normalize → validate/allowlist → encode or sanitize → render/use<br>identity signal → session boundary → authorization check → UI affordance<br>third-party code → CSP boundary → data exfiltration review → monitoring</div>
+<table>
+<tr><th>경계</th><th>핵심 관점</th><th>잘못된 판단</th><th>좋은 증거</th></tr>
+<tr><td>DOM</td><td>HTML, URL, style, markdown은 실행 표면이다</td><td>React라서 XSS가 자동으로 전부 막힌다고 생각</td><td>sanitizer 설정, payload negative test, CSP report</td></tr>
+<tr><td>Session</td><td>토큰 저장은 XSS와 CSRF 사이의 위험 배분이다</td><td>localStorage는 편하고 cookie는 안전하다고 단순화</td><td>token TTL, refresh rotation, SameSite/HttpOnly/Secure, logout/revoke 테스트</td></tr>
+<tr><td>Navigation</td><td>URL은 명령이자 데이터다</td><td>returnTo, redirect_uri, deep link를 문자열로 그대로 신뢰</td><td>origin allowlist, scheme 제한, open redirect negative test</td></tr>
+<tr><td>Third-party</td><td>외부 script는 사용자 세션 안에서 실행되는 코드다</td><td>analytics tag를 비즈니스 설정으로만 취급</td><td>owner, 목적, 전송 데이터, CSP connect/script 출처, 제거 기준</td></tr>
+<tr><td>Client state</td><td>UI 권한 상태는 편의 신호일 뿐 최종 권한이 아니다</td><td>버튼 숨김을 보안 통제로 착각</td><td>서버 401/403 처리, role downgrade, stale session E2E</td></tr>
+</table>
+<h3>DATA FLOW SECURITY REVIEW</h3>
+<p>보안 리뷰는 “위험한 API를 썼는가”보다 “신뢰할 수 없는 값이 위험한 sink까지 검증 없이 도달하는가”를 묻습니다. source는 URL parameter, form input, CMS, API response, postMessage, localStorage, clipboard, uploaded file name입니다. sink는 DOM HTML, href/src/style, fetch URL, analytics payload, redirect, storage, worker message, download filename입니다.</p>
+<table>
+<tr><th>단계</th><th>질문</th><th>산출물</th></tr>
+<tr><td>1. Source 표시</td><td>외부에서 온 값과 사용자 조작 가능 값을 표시했는가</td><td>source/sink map</td></tr>
+<tr><td>2. Trust 변환</td><td>parse, normalize, validate, allowlist가 어느 지점에서 일어나는가</td><td>validation function, schema, allowlist</td></tr>
+<tr><td>3. Sink 확인</td><td>값이 DOM, URL, script, analytics, storage, redirect 중 어디로 가는가</td><td>dangerous sink checklist</td></tr>
+<tr><td>4. Abuse case</td><td>공격자가 어떤 payload와 순서로 오용할 수 있는가</td><td>XSS/open redirect/PII leak negative cases</td></tr>
+<tr><td>5. Regression</td><td>같은 버그가 다시 들어오면 어떤 테스트가 잡는가</td><td>security regression test와 CSP report alert</td></tr>
+</table>
+<h3>AUTH TOKEN DECISION MODEL</h3>
+<p>토큰 저장은 “어디가 안전한가”가 아니라 어떤 공격을 우선 줄이고 어떤 보완 통제를 붙일지의 결정입니다. access token은 짧게, refresh token은 회전과 폐기를 갖게 하고, 브라우저 JS가 장기 secret을 직접 다루지 않게 만드는 쪽이 기본값입니다.</p>
+<table>
+<tr><th>선택</th><th>막는 것</th><th>남는 위험</th><th>필수 보완</th></tr>
+<tr><td>memory access token</td><td>영구 저장소 탈취 창을 줄임</td><td>새로고침, 여러 탭, XSS 실행 요청</td><td>refresh 계약, session restore, CSP, logout</td></tr>
+<tr><td>HttpOnly refresh cookie</td><td>JS가 refresh token을 읽지 못함</td><td>CSRF와 same-site 오해</td><td>SameSite, CSRF token, origin 검증, rotation</td></tr>
+<tr><td>localStorage token</td><td>구현과 복구가 쉬움</td><td>XSS 한 번에 장기 탈취</td><td>강한 CSP, 짧은 TTL, 민감 서비스에서는 재검토</td></tr>
+<tr><td>BFF/session cookie</td><td>토큰을 브라우저 밖으로 숨김</td><td>서버 복잡도, CSRF</td><td>backend session 정책, CSRF, cache-control</td></tr>
+</table>
+<h3>THIRD PARTY SCRIPT GOVERNANCE</h3>
+<p>광고, 분석, 채팅, 결제, A/B 테스트 script는 기능이 아니라 배포 가능한 외부 코드입니다. 추가할 때는 성능 예산, CSP, PII 전송, consent 상태, owner, 제거 조건을 같이 기록합니다. Tag manager는 권한 없는 배포 경로가 될 수 있으므로 변경 승인과 audit log가 필요합니다.</p>
+<div class="serial-card"><span class="sc-label">SECURITY REGRESSION METHOD</span>1. 취약 패턴을 source/sink로 재현한다<br>2. payload negative test를 component 또는 E2E에 추가한다<br>3. CSP report-only에서 위반 신호를 확인한다<br>4. analytics/network payload에 PII가 없는지 검사한다<br>5. PR template에 같은 경계 변경 여부를 묻는다</div>
+<div class="callout warn"><span class="co-label">관점</span><p>프론트엔드 보안은 백엔드 보안을 대체하지 않습니다. 다만 사용자의 브라우저 안에서 발생하는 실행, 표시, 이동, 추적, 저장의 위험을 줄이고, 백엔드 권한 실패를 사용자 경험과 관측 신호로 드러나게 만드는 책임을 집니다.</p></div>
 </section>
 <footer>FRONTEND SECURITY HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>

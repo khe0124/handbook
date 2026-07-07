@@ -339,16 +339,10 @@ export default function App() {
             onClick={() => setMobileTopbarOpen((isOpen) => !isOpen)}
             aria-expanded={mobileTopbarOpen}
             aria-controls="mobile-topbar-content"
-            aria-label={
-              mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"
-            }
+            aria-label={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
             title={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
           >
-            {mobileTopbarOpen ? (
-              <X size={18} aria-hidden />
-            ) : (
-              <Menu size={18} aria-hidden />
-            )}
+            {mobileTopbarOpen ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
           </button>
           <div className="app-header-title">
             <h1>
@@ -497,11 +491,7 @@ export default function App() {
             className="doc-nav-button"
             onClick={() => previousItem && handleSelectItem(previousItem)}
             disabled={!previousItem}
-            aria-label={
-              previousItem
-                ? `이전 항목: ${previousItem.label}`
-                : "이전 항목 없음"
-            }
+            aria-label={previousItem ? `이전 항목: ${previousItem.label}` : "이전 항목 없음"}
             title={
               previousItem
                 ? `이전 항목: ${previousItem.label}`
@@ -534,9 +524,7 @@ export default function App() {
             className="doc-nav-button doc-nav-button-next"
             onClick={() => nextItem && handleSelectItem(nextItem)}
             disabled={!nextItem}
-            aria-label={
-              nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"
-            }
+            aria-label={nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"}
             title={nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"}
           >
             <span className="doc-nav-copy">

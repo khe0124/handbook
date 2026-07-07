@@ -4,29 +4,53 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-brand">FRONTEND GRAPHICS · 3D</div>
+<div class="nav-brand">ENGINEERING · FRONTEND GRAPHICS 3D</div>
   <div class="nav-title">프론트엔드 그래픽·3D·WebGL</div>
-  <a href="#ch1"><span class="code">GFX-01</span>SVG·Canvas·WebGL 선택</a>
-  <a href="#ch2"><span class="code">GFX-02</span>Canvas 실무 패턴</a>
-  <a href="#ch3"><span class="code">GFX-03</span>WebGL 기초 모델</a>
-  <a href="#ch4"><span class="code">GFX-04</span>Three.js 구조</a>
-  <a href="#ch5"><span class="code">GFX-05</span>3D 제품 경험 설계</a>
-  <a href="#ch6"><span class="code">GFX-06</span>성능·메모리 예산</a>
-  <a href="#ch7"><span class="code">GFX-07</span>Fallback·접근성</a>
-  <a href="#ch8"><span class="code">GFX-08</span>QA와 릴리스 게이트</a>
-  <a href="#ch9"><span class="code">GFX-09</span>Asset pipeline</a>
-  <a href="#ch10"><span class="code">GFX-10</span>R3F와 상호작용 구조</a>
-  <a href="#ch11"><span class="code">GFX-11</span>그래픽 진단 도구</a>
-  <a href="#ch12"><span class="code">GFX-12</span>3D 실전 로드맵</a>
-  <a href="#ch13"><span class="code">GFX-13</span>좌표·Shader·Lighting</a>
-  <a href="#ch14"><span class="code">GFX-14</span>Configurator case study</a>
-  <a href="#ch15"><span class="code">GFX-15</span>추가 case studies</a>
-  <a href="#ch16"><span class="code">GFX-16</span>Canvas·WebGL 자동화</a>
-  <a href="#ch17"><span class="code">GFX-17</span>근거 기반 그래픽 예산</a>
-  <a href="#ch18"><span class="code">GFX-18</span>자주 봉착하는 문제와 해결</a>
-  <a href="#ch19"><span class="code">GFX-19</span>렌더링 시스템 운영 모델</a>
+  <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#doc-graphics"><span class="code">DOC</span>그래픽·3D·WebGL</a>
+  <a href="#doc-graphics"><span class="code">SRC</span>그래픽·3D·WebGL</a>
+<a href="#graphics-ch1"><span class="code">GFX-01</span>SVG·Canvas·WebGL 선택</a>
+  <a href="#graphics-ch2"><span class="code">GFX-02</span>Canvas 실무 패턴</a>
+  <a href="#graphics-ch3"><span class="code">GFX-03</span>WebGL 기초 모델</a>
+  <a href="#graphics-ch4"><span class="code">GFX-04</span>Three.js 구조</a>
+  <a href="#graphics-ch5"><span class="code">GFX-05</span>3D 제품 경험 설계</a>
+  <a href="#graphics-ch6"><span class="code">GFX-06</span>성능·메모리 예산</a>
+  <a href="#graphics-ch7"><span class="code">GFX-07</span>Fallback·접근성</a>
+  <a href="#graphics-ch8"><span class="code">GFX-08</span>QA와 릴리스 게이트</a>
+  <a href="#graphics-ch9"><span class="code">GFX-09</span>Asset pipeline</a>
+  <a href="#graphics-ch10"><span class="code">GFX-10</span>R3F와 상호작용 구조</a>
+  <a href="#graphics-ch11"><span class="code">GFX-11</span>그래픽 진단 도구</a>
+  <a href="#graphics-ch12"><span class="code">GFX-12</span>3D 실전 로드맵</a>
+  <a href="#graphics-ch13"><span class="code">GFX-13</span>좌표·Shader·Lighting</a>
+  <a href="#graphics-ch14"><span class="code">GFX-14</span>Configurator case study</a>
+  <a href="#graphics-ch15"><span class="code">GFX-15</span>추가 case studies</a>
+  <a href="#graphics-ch16"><span class="code">GFX-16</span>Canvas·WebGL 자동화</a>
+  <a href="#graphics-ch17"><span class="code">GFX-17</span>근거 기반 그래픽 예산</a>
+  <a href="#graphics-ch18"><span class="code">GFX-18</span>자주 봉착하는 문제와 해결</a>
+  <a href="#graphics-ch19"><span class="code">GFX-19</span>렌더링 시스템 운영 모델</a>
 </nav>
 <main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : ENGINEERING-FRONTEND-GRAPHICS-3D</span>
+    <span>SCOPE : SVG · CANVAS · WEBGL · THREE.JS · R3F · ASSET PIPELINE · GPU BUDGET · FALLBACK</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>프론트엔드 그래픽·3D·WebGL</h1>
+  <p class="hero-sub">SVG, Canvas, WebGL, Three.js, R3F, asset pipeline, GPU 예산, fallback, 자동화 테스트를 그래픽 시스템 관점으로 분리했습니다.</p>
+  <div class="hero-meta">CURATED HANDBOOK PATH · SOURCES : 1 DOCUMENTS · UPDATED 2026-06</div>
+</header>
+
+<section id="bundle-index">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
+<p class="lede">목표는 3D 모델을 띄우는 데서 멈추지 않고 렌더링 기술 선택, GPU 자원 수명, scene state boundary, asset pipeline, context loss, 접근성 fallback, canvas/WebGL 자동화까지 운영 가능한 그래픽 시스템을 설계하는 것입니다.</p>
+<ul><li>그래픽·3D·WebGL</li></ul>
+</section>
+
+<section id="doc-graphics">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>그래픽·3D·WebGL</h2></div>
+</section>
+
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-GRAPHICS-3D-V1</span><span>SCOPE : SVG · CANVAS · WEBGL · THREE.JS · QA</span><span>LANG : KO</span></div>
   <h1>프론트엔드 그래픽·3D·WebGL</h1>
@@ -34,7 +58,7 @@
   <div class="hero-meta">AUDIENCE : Frontend · Product UI · Creative Engineering · UPDATED 2026-06</div>
 </header>
 
-<section id="ch1">
+<section id="graphics-ch1">
 <div class="ch-head"><span class="ch-code">GFX-01</span><h2>SVG·Canvas·WebGL 선택</h2></div>
 <p class="lede">SVG, Canvas, WebGL은 렌더링 단위와 책임이 다릅니다. SVG는 DOM 기반 벡터, Canvas는 명령형 2D bitmap, WebGL은 GPU 파이프라인입니다. 기술 선택은 나중에 바꾸기 어렵기 때문에 “현재 구현 편의”보다 데이터 크기, hit testing, 접근성, 애니메이션 빈도, 메모리 상한으로 결정합니다.</p>
 <table>
@@ -53,11 +77,11 @@
 <tr><td>품질 저하 없이 fallback이 가능한가</td><td>정적 SVG 또는 HTML 표로 대체 가능</td><td>정적 이미지, 저해상도 Canvas, 2D viewer, 제품 사진으로 대체 필요</td></tr>
 <tr><td>팀이 디버깅할 수 있는가</td><td>DOM Inspector와 CSS 지식으로 충분</td><td>GPU trace, memory, shader, asset pipeline 운영 역량 필요</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">GRAPHICS DECISION GATE</span>1. 상호작용 대상이 semantic DOM이어야 하는지 먼저 결정한다<br>2. 최악 데이터 크기와 화면 픽셀 수를 숫자로 적는다<br>3. 60fps가 필요한 구간과 정적 렌더가 충분한 구간을 나눈다<br>4. 저사양 기기 fallback과 no-WebGL 경로를 먼저 설계한다<br>5. 성능 예산을 통과한 prototype trace가 없으면 기술 선택을 확정하지 않는다</div>
+<div class="semantic-card evidence-card"><span class="sc-label">GRAPHICS DECISION GATE</span><br>1. 상호작용 대상이 semantic DOM이어야 하는지 먼저 결정한다<br>2. 최악 데이터 크기와 화면 픽셀 수를 숫자로 적는다<br>3. 60fps가 필요한 구간과 정적 렌더가 충분한 구간을 나눈다<br>4. 저사양 기기 fallback과 no-WebGL 경로를 먼저 설계한다<br>5. 성능 예산을 통과한 prototype trace가 없으면 기술 선택을 확정하지 않는다</div>
 <div class="callout warn"><span class="co-label">COMMON MISTAKE</span><p>SVG가 “벡터라 가볍다”거나 WebGL이 “GPU라 무조건 빠르다”는 식으로 고르면 실패합니다. DOM node 수, draw call 수, texture 크기, shader 비용, hit testing 방식 중 실제 병목이 어디 생기는지 prototype으로 확인해야 합니다.</p></div>
 </section>
 
-<section id="ch2">
+<section id="graphics-ch2">
 <div class="ch-head"><span class="ch-code">GFX-02</span><h2>Canvas 실무 패턴</h2></div>
 <p class="lede">Canvas는 React 컴포넌트처럼 선언적으로 관리되지 않습니다. 한 번 그린 픽셀은 DOM 요소가 아니므로 상태, invalidation, 좌표계, hit testing, 접근성을 직접 설계해야 합니다. 좋은 Canvas 구현은 매 frame 전체를 무작정 다시 그리지 않고, 무엇이 dirty인지 알고 그립니다.</p>
 <table>
@@ -76,11 +100,11 @@
 <tr><td>Redraw 범위</td><td>cursor/hover는 overlay layer만 redraw</td><td>paint flashing, custom debug bounds</td></tr>
 <tr><td>Resize</td><td>DPR 변경과 container resize에서 bitmap 재할당 1회로 제한</td><td>ResizeObserver 호출 수와 memory spike 확인</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">CANVAS DRAW LOOP</span>state 변경을 scene model에 반영<br>dirty region 또는 dirty layer 표시<br>rAF에서 입력 이벤트를 한 번에 소비<br>좌표계를 CSS pixel과 device pixel로 분리<br>clear → draw static cache → draw dynamic objects → draw overlay 순서 유지<br>성능 mark로 draw, hit test, upload 시간을 나눠 기록</div>
+<div class="semantic-card answer-card"><span class="sc-label">CANVAS DRAW LOOP</span><br>state 변경을 scene model에 반영<br>dirty region 또는 dirty layer 표시<br>rAF에서 입력 이벤트를 한 번에 소비<br>좌표계를 CSS pixel과 device pixel로 분리<br>clear → draw static cache → draw dynamic objects → draw overlay 순서 유지<br>성능 mark로 draw, hit test, upload 시간을 나눠 기록</div>
 <div class="callout risk"><span class="co-label">DPR TRAP</span><p>고해상도 디스플레이에서 Canvas를 CSS 크기만큼만 만들면 흐리고, device pixel ratio만큼 키우면 메모리와 fill-rate가 증가합니다. DPR을 무조건 3까지 쓰지 말고 화면 크기와 기기 등급에 따라 1.5 또는 2로 cap을 둡니다.</p></div>
 </section>
 
-<section id="ch3">
+<section id="graphics-ch3">
 <div class="ch-head"><span class="ch-code">GFX-03</span><h2>WebGL 기초 모델</h2></div>
 <p class="lede">WebGL은 DOM에 도형을 추가하는 API가 아니라 GPU에게 버퍼, 텍스처, shader, state를 넘겨 draw call을 실행하는 모델입니다. 문제를 빨리 잡으려면 “무엇을 그리는가”보다 “얼마나 자주 state를 바꾸고, 얼마나 많은 데이터를 GPU에 올리고, 몇 번 draw하는가”를 봐야 합니다.</p>
 <table>
@@ -99,11 +123,12 @@
 <tr><td>Texture upload stall</td><td>모델 진입 순간 긴 freeze</td><td>큰 이미지 decode/upload를 interaction 시점에 수행</td><td>프리로드, KTX2/Basis 압축, 점진 로딩, skeleton scene</td></tr>
 <tr><td>Overdraw</td><td>투명 효과가 많은 장면에서 FPS 하락</td><td>겹치는 transparent mesh, particle, post effect</td><td>정렬, alpha test, particle 수 cap, 해상도 scale</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">GPU COST ORDER</span>CPU: scene update → frustum culling → draw call submit<br>GPU upload: buffer/texture 변경 데이터 전송<br>Vertex: 정점 수와 skinning/morph 계산<br>Fragment: 화면 픽셀, overdraw, shader, post-processing<br>Memory: texture, geometry, render target, shadow map</div>
+<div class="semantic-card process-card"><span class="sc-label">GPU COST ORDER</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>CPU: scene update → frustum culling → draw call submit<br>GPU upload: buffer/texture 변경 데이터 전송<br>Vertex: 정점 수와 skinning/morph 계산<br>Fragment: 화면 픽셀, overdraw, shader, post-processing<br>Memory: texture, geometry, render target, shadow map</div>
 <div class="callout"><span class="co-label">MENTAL MODEL</span><p>WebGL 성능은 “triangle이 몇 개인가” 하나로 설명되지 않습니다. 같은 polygon 수라도 material이 200개면 draw call이 많아지고, 같은 draw call 수라도 4K texture와 bloom이 있으면 GPU memory와 fragment 비용이 커집니다.</p></div>
 </section>
 
-<section id="ch4">
+<section id="graphics-ch4">
 <div class="ch-head"><span class="ch-code">GFX-04</span><h2>Three.js 구조</h2></div>
 <p class="lede">Three.js는 WebGL을 scene graph, camera, material, loader, renderer로 다루게 해줍니다. 추상화는 빠른 제품 개발에 유리하지만, 자원 생명주기와 frame loop 비용은 여전히 개발자가 책임져야 합니다.</p>
 <table>
@@ -122,11 +147,11 @@
 <tr><td>Render on demand</td><td>제품 configurator, 3D preview, static model viewer</td><td>상호작용 때만 렌더링해 전력·열 감소</td><td>texture load, resize, control damping, animation 종료 시 invalidate 필요</td></tr>
 <tr><td>Hybrid</td><td>정적 대부분 + 짧은 transition/hover animation</td><td>체감 품질과 비용 균형</td><td>render trigger가 누락되면 상태 변경이 화면에 반영되지 않음</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">THREE RESOURCE LIFECYCLE</span>route enter: renderer, scene, camera, controls 생성<br>asset load: geometry, material, texture cache 등록<br>interaction: raycast와 state mutation을 한 방향으로 흐르게 유지<br>route leave: animation frame 중단, listener 제거, geometry/material/texture/render target dispose<br>restore: context restored 또는 재진입 시 asset cache와 scene 재구성 검증</div>
+<div class="semantic-card answer-card"><span class="sc-label">THREE RESOURCE LIFECYCLE</span><br>route enter: renderer, scene, camera, controls 생성<br>asset load: geometry, material, texture cache 등록<br>interaction: raycast와 state mutation을 한 방향으로 흐르게 유지<br>route leave: animation frame 중단, listener 제거, geometry/material/texture/render target dispose<br>restore: context restored 또는 재진입 시 asset cache와 scene 재구성 검증</div>
 <div class="callout risk"><span class="co-label">DISPOSE</span><p>Three.js object를 scene에서 제거해도 GPU 자원이 자동으로 모두 해제되는 것은 아닙니다. geometry, material, texture, render target, controls listener를 해제하지 않으면 route를 여러 번 오간 뒤 메모리와 FPS가 무너집니다.</p></div>
 </section>
 
-<section id="ch5">
+<section id="graphics-ch5">
 <div class="ch-head"><span class="ch-code">GFX-05</span><h2>3D 제품 경험 설계</h2></div>
 <p class="lede">3D 제품 경험은 모델을 화면에 띄우는 일이 아니라 사용자가 제품을 이해하고, 비교하고, 설정하고, 구매·승인 같은 다음 행동을 결정하게 만드는 흐름입니다. 카메라, 조명, 입력, 상태 표시, fallback은 같은 제품 경험의 일부입니다.</p>
 <table>
@@ -145,11 +170,12 @@
 <tr><td>상태 표시</td><td>로딩 진행률, 저해상도 preview, 실패 메시지, retry</td><td>검은 canvas 또는 무한 spinner만 노출</td></tr>
 <tr><td>측정</td><td>view start, model ready, first interaction, variant applied 이벤트</td><td>3D가 전환율에 기여하는지 비용만 쓰는지 모름</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">3D PRODUCT REVIEW</span>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가<br>정적 이미지보다 나은 상호작용이 명확한가<br>모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가<br>카메라와 조명이 제품 사실성을 왜곡하지 않는가<br>상호작용 로그로 실제 사용 가치를 확인할 수 있는가</div>
+<div class="semantic-card process-card"><span class="sc-label">3D PRODUCT REVIEW</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>이 3D가 사용자의 어떤 결정을 더 빠르고 정확하게 만드는가<br>정적 이미지보다 나은 상호작용이 명확한가<br>모델이 늦거나 실패해도 구매·설정·검토 흐름이 막히지 않는가<br>카메라와 조명이 제품 사실성을 왜곡하지 않는가<br>상호작용 로그로 실제 사용 가치를 확인할 수 있는가</div>
 <div class="callout warn"><span class="co-label">PRODUCT RISK</span><p>3D는 강한 첫인상을 만들지만, 제품 과업을 느리게 만들기도 쉽습니다. 핵심 CTA가 모델 로딩 뒤로 밀리거나, 모바일에서 스크롤을 방해하거나, 색상 판단을 왜곡하면 3D는 경험 개선이 아니라 장애물이 됩니다.</p></div>
 </section>
 
-<section id="ch6">
+<section id="graphics-ch6">
 <div class="ch-head"><span class="ch-code">GFX-06</span><h2>성능·메모리 예산</h2></div>
 <p class="lede">그래픽 성능은 FPS 하나로 관리하면 부족합니다. CPU frame, GPU frame, draw call, texture memory, geometry memory, shader compile, asset download, battery/thermal을 나눠야 원인과 owner가 선명해집니다.</p>
 <table>
@@ -170,11 +196,11 @@
 <tr><td>Post-processing scale</td><td>bloom/SSAO 등 fill-rate 절감</td><td>품질 저하, edge artifact</td><td>render target 해상도별 frame time 비교</td></tr>
 <tr><td>Render-on-demand</td><td>정적 viewer의 배터리·열 감소</td><td>invalidate 누락으로 화면 갱신 실패</td><td>상태 변경·resize·texture load 이벤트별 갱신 테스트</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">TRACE PACKET</span>route와 device class<br>model 파일 크기, texture 크기, material 수, triangle 수<br>draw call, renderer.info.memory, renderer.info.render<br>CPU frame과 GPU 추정 병목<br>첫 표시 시간, 첫 조작 latency, context loss 여부<br>route 재진입 10회 뒤 memory 변화</div>
+<div class="semantic-card answer-card"><span class="sc-label">TRACE PACKET</span><br>route와 device class<br>model 파일 크기, texture 크기, material 수, triangle 수<br>draw call, renderer.info.memory, renderer.info.render<br>CPU frame과 GPU 추정 병목<br>첫 표시 시간, 첫 조작 latency, context loss 여부<br>route 재진입 10회 뒤 memory 변화</div>
 <div class="callout risk"><span class="co-label">BUDGET NOTE</span><p>위 숫자는 공식 표준이 아니라 시작 예산입니다. 제품의 사용자 기기, 모델 복잡도, 구매 전환 가치에 맞게 조정하되 PR마다 같은 기준으로 측정해야 합니다. 예산 초과는 기능 가치, 대안, 만료일 있는 예외로 관리합니다.</p></div>
 </section>
 
-<section id="ch7">
+<section id="graphics-ch7">
 <div class="ch-head"><span class="ch-code">GFX-07</span><h2>Fallback·접근성</h2></div>
 <p class="lede">Canvas와 WebGL은 보조기술이 내부 픽셀 구조를 이해하지 못합니다. 접근성은 나중에 aria를 붙이는 작업이 아니라, 어떤 정보와 작업을 DOM으로 병렬 제공할지 정하는 설계입니다. Fallback도 “안 보이면 이미지”가 아니라 사용자가 같은 결정을 내릴 수 있는 대체 경로입니다.</p>
 <table>
@@ -194,11 +220,11 @@
 <tr><td>Gesture</td><td>drag/rotate에 버튼·키보드 대체 제공</td><td>pinch/drag가 유일한 조작 방법</td></tr>
 <tr><td>Color</td><td>경고·선택·품절 상태가 색 외 텍스트·패턴으로 표현</td><td>3D 재질 색만으로 상태 구분</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">FALLBACK CONTRACT</span>no-WebGL: 어떤 화면과 CTA를 보여줄지 정의<br>low-end: 어떤 effect와 해상도를 끌지 정의<br>reduced-motion: 어떤 camera animation을 제거할지 정의<br>keyboard: 어떤 조작을 DOM control로 제공할지 정의<br>screen reader: 모델의 핵심 정보와 상태 변화를 어떤 문장으로 전달할지 정의</div>
+<div class="semantic-card decision-card"><span class="sc-label">FALLBACK CONTRACT</span><br>no-WebGL: 어떤 화면과 CTA를 보여줄지 정의<br>low-end: 어떤 effect와 해상도를 끌지 정의<br>reduced-motion: 어떤 camera animation을 제거할지 정의<br>keyboard: 어떤 조작을 DOM control로 제공할지 정의<br>screen reader: 모델의 핵심 정보와 상태 변화를 어떤 문장으로 전달할지 정의</div>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p>3D PR은 멋진 capture보다 fallback capture가 더 중요합니다. WebGL off, reduced motion, keyboard-only, low network, model load failure 화면이 PR 설명에 포함되어야 합니다.</p></div>
 </section>
 
-<section id="ch8">
+<section id="graphics-ch8">
 <div class="ch-head"><span class="ch-code">GFX-08</span><h2>QA와 릴리스 게이트</h2></div>
 <p class="lede">그래픽 기능 QA는 화면이 예쁘게 보이는지 확인하는 단계가 아닙니다. 기기·브라우저·GPU·입력 방식·네트워크·메모리 반복 시나리오를 통과해야 운영에서 깨지지 않습니다.</p>
 <table>
@@ -218,7 +244,7 @@
 <tr><td><code>gfx_context_loss</code></td><td>route, renderer_info, memory_hint, restored</td><td>GPU 안정성 문제와 복구율 추적</td></tr>
 <tr><td><code>gfx_variant_apply</code></td><td>variant_id, duration_ms, success, visual_tier</td><td>configurator의 핵심 제품 행동 측정</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">RELEASE GATE</span>성능 예산: target device에서 frame time, draw call, texture memory 통과<br>메모리: route 반복과 variant 반복 뒤 증가 추세 없음<br>fallback: WebGL off, asset failure, reduced motion, low-end tier 확인<br>접근성: keyboard-only와 screen reader 핵심 플로우 확인<br>관측성: load failure, context loss, fallback 사용 이벤트 수집<br>롤백: 3D feature flag 또는 static fallback 전환 경로 준비</div>
+<div class="semantic-card answer-card"><span class="sc-label">RELEASE GATE</span><br>성능 예산: target device에서 frame time, draw call, texture memory 통과<br>메모리: route 반복과 variant 반복 뒤 증가 추세 없음<br>fallback: WebGL off, asset failure, reduced motion, low-end tier 확인<br>접근성: keyboard-only와 screen reader 핵심 플로우 확인<br>관측성: load failure, context loss, fallback 사용 이벤트 수집<br>롤백: 3D feature flag 또는 static fallback 전환 경로 준비</div>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Draw call</b><span>GPU command</span></div><div class="g-def">GPU에 한 묶음의 geometry와 material state를 그리라고 보내는 명령입니다. 오브젝트, material, state 변경이 많으면 증가합니다.</div></div>
 <div class="g-row"><div class="g-term"><b>Fill-rate</b><span>pixel cost</span></div><div class="g-def">GPU가 화면 픽셀을 채우는 비용입니다. 고해상도, 투명 overdraw, post-processing에서 빠르게 커집니다.</div></div>
@@ -230,7 +256,7 @@
 </div>
 </section>
 
-<section id="ch9">
+<section id="graphics-ch9">
 <div class="ch-head"><span class="ch-code">GFX-09</span><h2>Asset pipeline</h2></div>
 <p class="lede">3D 품질은 코드만으로 결정되지 않습니다. 모델링 툴에서 export된 glTF, mesh 압축, texture 포맷, color management, variant 구조, CDN cache 전략이 모두 런타임 성능과 시각 품질을 좌우합니다.</p>
 <table>
@@ -250,11 +276,11 @@
 <tr><td>KTX2/Basis</td><td>texture download와 GPU memory를 줄일 때</td><td>GPU 친화 압축 texture</td><td>기기별 transcoding, 색 품질, alpha 처리 확인</td></tr>
 <tr><td>Texture atlas</td><td>작은 texture/material이 많을 때</td><td>draw call과 state 변경 감소</td><td>UV 관리와 variant 자유도 제한</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">ASSET BUDGET REPORT</span>model: 파일 크기, triangle, mesh, node, animation clip 수<br>texture: map별 해상도, 포맷, memory estimate<br>material: material 수, transparent/doubleSide/shadow 사용 여부<br>compression: Draco/Meshopt/KTX2 적용 전후 크기와 decode 시간<br>delivery: poster, low LOD, high LOD 로딩 순서<br>quality: target device screenshot과 색상/재질 검수</div>
+<div class="semantic-card decision-card"><span class="sc-label">ASSET BUDGET REPORT</span><br>model: 파일 크기, triangle, mesh, node, animation clip 수<br>texture: map별 해상도, 포맷, memory estimate<br>material: material 수, transparent/doubleSide/shadow 사용 여부<br>compression: Draco/Meshopt/KTX2 적용 전후 크기와 decode 시간<br>delivery: poster, low LOD, high LOD 로딩 순서<br>quality: target device screenshot과 색상/재질 검수</div>
 <div class="callout warn"><span class="co-label">PIPELINE RULE</span><p>3D 성능 최적화는 런타임에서만 해결할 수 없습니다. 모델 export와 texture 제작 단계에서 예산을 넘긴 asset은 코드에서 일부 완화할 수 있을 뿐입니다. 수준급 개발자는 디자이너·3D 아티스트와 예산 언어를 공유해야 합니다.</p></div>
 </section>
 
-<section id="ch10">
+<section id="graphics-ch10">
 <div class="ch-head"><span class="ch-code">GFX-10</span><h2>R3F와 상호작용 구조</h2></div>
 <p class="lede">React Three Fiber는 React 컴포넌트 모델로 Three.js scene을 구성하게 해주지만, 3D scene은 여전히 imperative한 GPU 자원을 다룹니다. React state, scene mutation, frame loop, pointer event, asset lifecycle의 경계를 명확히 해야 합니다.</p>
 <table>
@@ -272,11 +298,11 @@
 <tr><td>Variant switch</td><td>material/texture 교체를 preload하고 적용 시간 측정</td><td>static preview 또는 옵션 표</td><td><code>gfx_variant_apply</code>, duration_ms</td></tr>
 <tr><td>Camera reset</td><td>bounds fitting, target, distance, easing, reduced motion 분기</td><td>Reset view 버튼과 keyboard shortcut</td><td><code>gfx_camera_reset</code></td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">R3F ARCHITECTURE PACKET</span>Canvas boundary: route, Suspense, fallback 위치<br>State split: product state, interaction ref, frame-local 값<br>Render mode: always, demand, hybrid 선택 이유<br>Event map: raycast 대상, DOM overlay, controls 충돌 처리<br>Cleanup: dispose 대상, listener, animation frame, cache policy<br>Test: canvas nonblank, object select, camera reset, fallback 캡처</div>
+<div class="semantic-card answer-card"><span class="sc-label">R3F ARCHITECTURE PACKET</span><br>Canvas boundary: route, Suspense, fallback 위치<br>State split: product state, interaction ref, frame-local 값<br>Render mode: always, demand, hybrid 선택 이유<br>Event map: raycast 대상, DOM overlay, controls 충돌 처리<br>Cleanup: dispose 대상, listener, animation frame, cache policy<br>Test: canvas nonblank, object select, camera reset, fallback 캡처</div>
 <div class="callout risk"><span class="co-label">R3F TRAP</span><p>R3F를 쓰면 JSX로 scene을 쓰기 쉬워지지만, GPU 자원이 React DOM처럼 자동으로 안전해지는 것은 아닙니다. 특히 texture, render target, custom material, external controls는 수명주기와 dispose 전략을 명시해야 합니다.</p></div>
 </section>
 
-<section id="ch11">
+<section id="graphics-ch11">
 <div class="ch-head"><span class="ch-code">GFX-11</span><h2>그래픽 진단 도구</h2></div>
 <p class="lede">그래픽 성능 문제는 “FPS가 낮다”로 끝나면 해결되지 않습니다. CPU submit, GPU fragment, texture upload, shader compile, memory leak, context loss 중 어디가 병목인지 나눠야 합니다.</p>
 <table>
@@ -296,10 +322,10 @@
 <tr><td>특정 모바일에서 검은 화면</td><td>precision, extension, texture format, context loss</td><td>console log, WebGL support probe, fallback event</td><td>fallback material, feature detection, no-WebGL path</td></tr>
 <tr><td>옵션 변경이 느림</td><td>새 material/texture 생성, shader variant compile</td><td>variant apply duration, renderer.info 증가</td><td>precompile, material reuse, variant cap</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">GRAPHICS DIAGNOSTIC ROUTINE</span>1. target device와 scene 데이터를 고정한다<br>2. renderer.info baseline을 저장한다<br>3. Performance trace로 CPU freeze와 image decode를 본다<br>4. Spector.js로 draw call, shader, texture를 확인한다<br>5. effect, shadow, DPR, texture tier를 하나씩 끄며 병목을 분리한다<br>6. route 10회와 variant 50회 반복 뒤 memory slope를 확인한다<br>7. PR에는 before/after 수치와 fallback 캡처를 첨부한다</div>
+<div class="semantic-card answer-card"><span class="sc-label">GRAPHICS DIAGNOSTIC ROUTINE</span><br>1. target device와 scene 데이터를 고정한다<br>2. renderer.info baseline을 저장한다<br>3. Performance trace로 CPU freeze와 image decode를 본다<br>4. Spector.js로 draw call, shader, texture를 확인한다<br>5. effect, shadow, DPR, texture tier를 하나씩 끄며 병목을 분리한다<br>6. route 10회와 variant 50회 반복 뒤 memory slope를 확인한다<br>7. PR에는 before/after 수치와 fallback 캡처를 첨부한다</div>
 </section>
 
-<section id="ch12">
+<section id="graphics-ch12">
 <div class="ch-head"><span class="ch-code">GFX-12</span><h2>3D 실전 로드맵</h2></div>
 <p class="lede">수준급 3D 프론트엔드 개발자는 모델을 띄우는 데서 멈추지 않습니다. asset budget, camera, interaction, fallback, performance trace, 운영 관측까지 한 세트로 제출할 수 있어야 합니다.</p>
 <table>
@@ -319,10 +345,10 @@
 <tr><td>접근성은 어떻게 보장했는가?</td><td>DOM controls, hotspot list, 모델 요약, keyboard flow, reduced motion 증거를 제시</td></tr>
 <tr><td>운영에서 실패를 어떻게 알 수 있는가?</td><td>model load, fallback, context loss, variant apply 이벤트와 dashboard 기준을 제시</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">3D PORTFOLIO PACKET</span>사용자 가치와 2D 대안 비교<br>asset budget report와 optimization 전후 비교<br>camera, controls, hotspot, fallback architecture<br>Performance trace, Spector capture, renderer.info log<br>접근성 대체 경로와 reduced motion 캡처<br>운영 이벤트와 context loss 복구 시나리오</div>
+<div class="semantic-card evidence-card"><span class="sc-label">3D PORTFOLIO PACKET</span><br>사용자 가치와 2D 대안 비교<br>asset budget report와 optimization 전후 비교<br>camera, controls, hotspot, fallback architecture<br>Performance trace, Spector capture, renderer.info log<br>접근성 대체 경로와 reduced motion 캡처<br>운영 이벤트와 context loss 복구 시나리오</div>
 </section>
 
-<section id="ch13">
+<section id="graphics-ch13">
 <div class="ch-head"><span class="ch-code">GFX-13</span><h2>좌표·Shader·Lighting</h2></div>
 <p class="lede">정교한 3D 경험은 모델을 띄우는 수준을 넘어 좌표계, shader 비용, 색과 조명 파이프라인을 이해해야 안정됩니다. 클릭한 DOM 좌표가 어떤 3D object를 의미하는지, 왜 같은 색상이 기기마다 다르게 보이는지 설명할 수 있어야 합니다.</p>
 <table>
@@ -332,7 +358,8 @@
 <tr><td>World</td><td>3D scene의 실제 object 위치</td><td>camera projection과 inverse matrix를 거쳐 ray 생성</td><td>object parent transform을 무시해 label 위치가 어긋남</td></tr>
 <tr><td>Screen overlay</td><td>3D point를 DOM label로 투영</td><td>world position → project(camera) → CSS pixel</td><td>카메라 이동 뒤 hotspot이 drift</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">RAYCAST COORDINATE 예시</span>const rect = canvas.getBoundingClientRect();<br>const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;<br>const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;<br>raycaster.setFromCamera({ x, y }, camera);<br>const hits = raycaster.intersectObjects(selectableObjects, true);</div>
+<div class="semantic-card process-card"><span class="sc-label">RAYCAST COORDINATE 예시</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>const rect = canvas.getBoundingClientRect();<br>const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;<br>const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;<br>raycaster.setFromCamera({ x, y }, camera);<br>const hits = raycaster.intersectObjects(selectableObjects, true);</div>
 <table>
 <tr><th>Shader/Material 개념</th><th>실무 의미</th><th>비용 신호</th><th>검증</th></tr>
 <tr><td>Vertex shader</td><td>정점 위치, skinning, morph target 계산</td><td>skinned mesh와 morph가 많은 scene</td><td>animation on/off 비교</td></tr>
@@ -354,7 +381,7 @@
 </div>
 </section>
 
-<section id="ch14">
+<section id="graphics-ch14">
 <div class="ch-head"><span class="ch-code">GFX-14</span><h2>Configurator case study</h2></div>
 <p class="lede">아래 사례는 3D product configurator를 설계할 때 어떤 순서로 판단하고 증거를 남길지 보여줍니다. 목표는 멋진 데모가 아니라 사용자가 옵션을 이해하고, 잘못된 조합을 피하고, 느린 기기에서도 구매 결정을 이어가는 것입니다.</p>
 <table>
@@ -375,14 +402,14 @@
 <tr><td>degraded</td><td>low_device 또는 effect_budget_exceeded</td><td>effect off, DPR cap, low texture tier 표시</td><td><code>gfx_tier_changed</code></td></tr>
 <tr><td>fallback</td><td>webgl_unavailable 또는 asset_failed</td><td>2D gallery와 옵션 표로 구매 흐름 유지</td><td><code>gfx_fallback_used</code></td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">CONFIGURATOR ACCEPTANCE CRITERIA</span>첫 의미 있는 제품 표시: target mobile에서 2초 안에 poster 또는 low LOD 표시<br>옵션 반영: 이미 로드된 variant는 200ms 안에 시각 상태와 가격/spec 동기화<br>상호작용: orbit, reset, hotspot, option select가 mouse/touch/keyboard로 가능<br>성능: mobile p95 frame 33ms 이하 또는 low tier 자동 전환<br>접근성: 같은 정보가 DOM option list와 hotspot summary로 제공<br>복구: asset 404, WebGL off, context loss에서 구매 CTA 유지</div>
+<div class="semantic-card answer-card"><span class="sc-label">CONFIGURATOR ACCEPTANCE CRITERIA</span><br>첫 의미 있는 제품 표시: target mobile에서 2초 안에 poster 또는 low LOD 표시<br>옵션 반영: 이미 로드된 variant는 200ms 안에 시각 상태와 가격/spec 동기화<br>상호작용: orbit, reset, hotspot, option select가 mouse/touch/keyboard로 가능<br>성능: mobile p95 frame 33ms 이하 또는 low tier 자동 전환<br>접근성: 같은 정보가 DOM option list와 hotspot summary로 제공<br>복구: asset 404, WebGL off, context loss에서 구매 CTA 유지</div>
 <div class="callout warn">
 <span class="co-label">CASE STUDY RULE</span>
 <p>Configurator 사례에서 가장 중요한 것은 3D 자체가 아니라 제품 상태와 3D 상태의 동기화입니다. 옵션은 상품 데이터의 진실이고, 3D는 그 상태를 이해시키는 표현입니다. 3D가 늦거나 실패해도 상품 선택과 구매 흐름은 무너지면 안 됩니다.</p>
 </div>
 </section>
 
-<section id="ch15">
+<section id="graphics-ch15">
 <div class="ch-head"><span class="ch-code">GFX-15</span><h2>추가 case studies</h2></div>
 <p class="lede">정교한 인터랙티브 개발자는 3D configurator만 만드는 사람이 아닙니다. 대량 데이터 편집, 스크롤 기반 설명, workflow 조작, 공간 dashboard처럼 서로 다른 입력·렌더링·접근성 문제를 풀 수 있어야 합니다.</p>
 <table>
@@ -399,10 +426,10 @@
 <tr><td>느린 기기에서 무엇을 낮추는가?</td><td>DPR, effect, marker density, LOD, animation, texture tier를 단계적으로 조정</td></tr>
 <tr><td>운영에서 실패를 어떻게 감지하는가?</td><td>load failure, long frame, fallback used, interaction result, memory slope 이벤트 수집</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">CANVAS EDITOR ACCEPTANCE</span>pan/zoom 중 p95 frame 16.7ms 또는 mobile 33ms 이하<br>object 10k에서 hit test p95 2ms 이하<br>키보드 object list로 선택·이동·삭제 가능<br>undo/redo command stack과 optimistic rollback 가능<br>canvas와 DOM overlay 좌표 drift 없음<br>저사양 기기에서 DPR cap과 density reduction 적용</div>
+<div class="semantic-card answer-card"><span class="sc-label">CANVAS EDITOR ACCEPTANCE</span><br>pan/zoom 중 p95 frame 16.7ms 또는 mobile 33ms 이하<br>object 10k에서 hit test p95 2ms 이하<br>키보드 object list로 선택·이동·삭제 가능<br>undo/redo command stack과 optimistic rollback 가능<br>canvas와 DOM overlay 좌표 drift 없음<br>저사양 기기에서 DPR cap과 density reduction 적용</div>
 </section>
 
-<section id="ch16">
+<section id="graphics-ch16">
 <div class="ch-head"><span class="ch-code">GFX-16</span><h2>Canvas·WebGL 자동화</h2></div>
 <p class="lede">Canvas와 WebGL은 DOM snapshot만으로 품질을 검증하기 어렵습니다. 최소한 canvas가 비어 있지 않은지, fallback이 동작하는지, renderer.info가 반복 후 증가하지 않는지, reduced motion과 low-end tier가 적용되는지 자동화해야 합니다.</p>
 <table>
@@ -413,15 +440,16 @@
 <tr><td>Asset budget</td><td>모델/texture 크기 회귀 차단</td><td>CI에서 asset manifest 검사</td><td>예산 초과에 예외 근거 없음</td></tr>
 <tr><td>Interaction smoke</td><td>raycast, camera reset, option apply 검증</td><td>Playwright pointer와 keyboard 병행</td><td>선택/초기화/옵션 변경 실패</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">CANVAS NONBLANK 예시</span>const pixels = await page.locator("canvas").evaluate((canvas) =&gt; {<br>&nbsp;&nbsp;const ctx = canvas.getContext("2d") || canvas.getContext("webgl");<br>&nbsp;&nbsp;// WebGL이면 테스트 전용 debug readback helper를 앱에 노출한다.<br>&nbsp;&nbsp;return window.__readCanvasNonBlankRatio?.() ?? 0;<br>});<br>expect(pixels).toBeGreaterThan(0.02);</div>
-<div class="serial-card"><span class="sc-label">renderer.info regression 예시</span>await openViewerAndWaitReady(page);<br>const baseline = await page.evaluate(() =&gt; window.__threeInfo());<br>for (let i = 0; i &lt; 10; i++) {<br>&nbsp;&nbsp;await page.goto("/other");<br>&nbsp;&nbsp;await page.goto("/viewer");<br>&nbsp;&nbsp;await openViewerAndWaitReady(page);<br>}<br>const after = await page.evaluate(() =&gt; window.__threeInfo());<br>expect(after.memory.textures).toBeLessThanOrEqual(baseline.memory.textures + 1);</div>
+<div class="semantic-card process-card"><span class="sc-label">CANVAS NONBLANK 예시</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>const pixels = await page.locator("canvas").evaluate((canvas) =&gt; {<br>&nbsp;&nbsp;const ctx = canvas.getContext("2d") || canvas.getContext("webgl");<br>&nbsp;&nbsp;// WebGL이면 테스트 전용 debug readback helper를 앱에 노출한다.<br>&nbsp;&nbsp;return window.__readCanvasNonBlankRatio?.() ?? 0;<br>});<br>expect(pixels).toBeGreaterThan(0.02);</div>
+<div class="semantic-card evidence-card"><span class="sc-label">renderer.info regression 예시</span><br>await openViewerAndWaitReady(page);<br>const baseline = await page.evaluate(() =&gt; window.__threeInfo());<br>for (let i = 0; i &lt; 10; i++) {<br>&nbsp;&nbsp;await page.goto("/other");<br>&nbsp;&nbsp;await page.goto("/viewer");<br>&nbsp;&nbsp;await openViewerAndWaitReady(page);<br>}<br>const after = await page.evaluate(() =&gt; window.__threeInfo());<br>expect(after.memory.textures).toBeLessThanOrEqual(baseline.memory.textures + 1);</div>
 <div class="callout warn">
 <span class="co-label">TEST HOOK POLICY</span>
 <p>그래픽 테스트를 위해 <code>window.__threeInfo</code> 같은 debug hook을 둘 수 있습니다. 단, production에서는 feature flag나 test build에서만 노출하고, 사용자 데이터나 원본 입력값을 노출하지 않아야 합니다.</p>
 </div>
 </section>
 
-<section id="ch17">
+<section id="graphics-ch17">
 <div class="ch-head"><span class="ch-code">GFX-17</span><h2>근거 기반 그래픽 예산과 부수효과</h2></div>
 <p class="lede">Canvas와 WebGL 품질은 “GPU를 썼다”로 보장되지 않습니다. 픽셀 수, DPR, texture 해상도, draw call, context loss 복구, fallback 비용을 숫자로 계산해야 저사양 기기와 긴 세션에서 품질이 유지됩니다.</p>
 <table>
@@ -434,14 +462,14 @@
 <tr><td>Fallback 비용</td><td>fallback 자체도 LCP, INP, accessibility tree에 포함된다</td><td>3D 실패 시 단순 “지원하지 않음”보다 제품 행동을 계속할 수 있어야 한다</td><td>fallback이 무거운 이미지 묶음이면 WebGL을 끈 사용자에게도 느린 경험을 준다</td><td>poster image, option list, static preview, server-rendered summary, lazy asset load</td></tr>
 </table>
 <p class="lede">근거 출처는 MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/webglcontextlost_event">webglcontextlost</a> 문서와 WebGL 메모리 계산식을 기준으로 삼습니다. Canvas와 texture 예산은 압축 다운로드 크기가 아니라 실제 backing store와 GPU 업로드 후 비용을 기준으로 봅니다.</p>
-<div class="serial-card"><span class="sc-label">GRAPHICS BUDGET FORMULAS</span>Canvas memory MiB = width * height * DPR^2 * 4 / 1024 / 1024<br>RGBA texture MiB = textureWidth * textureHeight * 4 / 1024 / 1024<br>Mipmap 포함 texture MiB ~= base texture MiB * 1.33<br>Frame budget ms = 1000 / targetFPS<br>GPU 위험 신호 = texture count 증가 + context loss + long frame + fallback used</div>
+<div class="semantic-card answer-card"><span class="sc-label">GRAPHICS BUDGET FORMULAS</span><br>Canvas memory MiB = width * height * DPR^2 * 4 / 1024 / 1024<br>RGBA texture MiB = textureWidth * textureHeight * 4 / 1024 / 1024<br>Mipmap 포함 texture MiB ~= base texture MiB * 1.33<br>Frame budget ms = 1000 / targetFPS<br>GPU 위험 신호 = texture count 증가 + context loss + long frame + fallback used</div>
 <div class="callout warn">
 <span class="co-label">OPERATING STANDARD</span>
 <p>그래픽 기능의 근거는 “Three.js로 구현했다”가 아니라 “DPR 2에서 backing store가 31.6MiB이고, 4096 texture 2장을 쓰며, route 10회 왕복 뒤 renderer.info가 증가하지 않고, context loss를 시뮬레이션해도 선택 상태가 복구된다” 같은 운영 문장이어야 합니다.</p>
 </div>
 </section>
 
-<section id="ch18">
+<section id="graphics-ch18">
 <div class="ch-head"><span class="ch-code">GFX-18</span><h2>자주 봉착하는 문제와 해결</h2></div>
 <p class="lede">그래픽/3D 문제는 눈에 보이는 증상이 강해서 즉흥적으로 수정하기 쉽지만, 실제 원인은 GPU resource 수명, 좌표계 변환, asset pipeline, fallback 계약에 있는 경우가 많습니다. 해결은 shader나 camera 값을 찍어 맞추는 것이 아니라 재현 조건과 resource lifecycle을 고정하는 데서 시작합니다.</p>
 <table>
@@ -454,17 +482,17 @@
 <tr><td>Fallback이 제품 행동을 막음</td><td>WebGL 실패 시 구매, 선택, 비교가 불가능함</td><td>3D viewer를 상품 상태의 유일한 표현으로 설계</td><td>DOM option list, static preview, text summary, CTA를 viewer 밖 독립 layer로 유지</td><td>No-WebGL 환경에서 핵심 task completion 확인</td></tr>
 <tr><td>Post-processing 과다</td><td>bloom, blur, SSAO를 켜면 mobile 조작이 끊김</td><td>full-screen pass와 render target이 frame budget을 초과</td><td>effect tier, dynamic resolution, interaction 중 effect off, 중요 정보와 장식 효과 분리</td><td>orbit/drag 중 frame time, effect on/off trace 비교</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">GRAPHICS DEBUG ORDER</span>1. 재현 기기, DPR, GPU tier, WebGL version, reduced motion 여부를 기록한다<br>2. 실패가 context 생성, asset load, shader compile, render loop, interaction 중 어디인지 나눈다<br>3. renderer.info와 resource registry로 memory slope를 먼저 확인한다<br>4. 좌표 문제는 client, canvas, NDC, world, overlay를 단계별로 로그한다<br>5. fallback에서도 사용자가 같은 제품 결정을 완료할 수 있는지 확인한다</div>
+<div class="semantic-card answer-card"><span class="sc-label">GRAPHICS DEBUG ORDER</span><br>1. 재현 기기, DPR, GPU tier, WebGL version, reduced motion 여부를 기록한다<br>2. 실패가 context 생성, asset load, shader compile, render loop, interaction 중 어디인지 나눈다<br>3. renderer.info와 resource registry로 memory slope를 먼저 확인한다<br>4. 좌표 문제는 client, canvas, NDC, world, overlay를 단계별로 로그한다<br>5. fallback에서도 사용자가 같은 제품 결정을 완료할 수 있는지 확인한다</div>
 <div class="callout warn">
 <span class="co-label">NO BLACK BOX</span>
 <p>3D 라이브러리를 쓰더라도 resource 수명은 팀의 책임입니다. 모델이 보이는 데서 끝내면 운영에서 검은 화면, 메모리 누수, 선택 오차, fallback 실패가 뒤늦게 드러납니다. 정교한 그래픽 개발자는 렌더링 결과와 함께 실패 경로를 설계합니다.</p>
 </div>
 </section>
 
-<section id="ch19">
+<section id="graphics-ch19">
 <div class="ch-head"><span class="ch-code">GFX-19</span><h2>렌더링 시스템 운영 모델</h2></div>
 <p class="lede">그래픽·3D 개발은 장면을 보이게 만드는 일에서 끝나지 않습니다. 기술 선택, GPU 자원 수명, asset pipeline, scene state, fallback, 자동화 테스트, 관측 이벤트를 하나의 운영 모델로 묶어야 제품 기능으로 유지할 수 있습니다.</p>
-<div class="serial-card"><span class="sc-label">GRAPHICS RENDERING DECISION MODEL</span>semantic requirement → DOM/SVG/Canvas/WebGL choice<br>→ data size and update frequency → hit testing model<br>→ accessibility fallback → GPU budget → asset pipeline<br>→ test automation → telemetry and rollback</div>
+<div class="semantic-card decision-card"><span class="sc-label">GRAPHICS RENDERING DECISION MODEL</span><br>semantic requirement → DOM/SVG/Canvas/WebGL choice<br>→ data size and update frequency → hit testing model<br>→ accessibility fallback → GPU budget → asset pipeline<br>→ test automation → telemetry and rollback</div>
 <table>
 <tr><th>결정</th><th>SVG 신호</th><th>Canvas 신호</th><th>WebGL·3D 신호</th><th>릴리스 증거</th></tr>
 <tr><td>렌더링 단위</td><td>개별 object가 DOM 의미를 가져야 함</td><td>픽셀 기반 대량 draw가 핵심</td><td>3D 공간, shader, camera, material 필요</td><td>기술 선택 ADR과 대체 경로</td></tr>
@@ -473,7 +501,7 @@
 <tr><td>접근성</td><td>semantic tree에 직접 노출</td><td>DOM overlay와 object list 필요</td><td>텍스트 요약, option list, hotspot list 필요</td><td>screen reader flow와 fallback capture</td></tr>
 <tr><td>운영 비용</td><td>CSS/DOM 디버깅</td><td>bitmap, DPR, redraw 예산</td><td>GPU memory, context loss, asset budget</td><td>renderer.info, nonblank, context loss test</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">WEBGL RESOURCE LIFECYCLE MODEL</span>create renderer → configure DPR and capabilities<br>load asset → register geometry/material/texture/renderTarget<br>render → measure draw calls, texture count, frame time<br>change variant → reuse or dispose resources intentionally<br>route leave → stop loop, remove listeners, dispose GPU resources<br>context restore → rebuild resources and restore user selection</div>
+<div class="semantic-card answer-card"><span class="sc-label">WEBGL RESOURCE LIFECYCLE MODEL</span><br>create renderer → configure DPR and capabilities<br>load asset → register geometry/material/texture/renderTarget<br>render → measure draw calls, texture count, frame time<br>change variant → reuse or dispose resources intentionally<br>route leave → stop loop, remove listeners, dispose GPU resources<br>context restore → rebuild resources and restore user selection</div>
 <table>
 <tr><th>자원</th><th>생성 시점</th><th>공유 정책</th><th>해제 기준</th><th>누수 신호</th></tr>
 <tr><td>Geometry</td><td>모델 로드 또는 procedural build</td><td>동일 mesh는 cache reuse</td><td>scene에서 더 이상 참조하지 않을 때 dispose</td><td>route 왕복 뒤 geometries count 증가</td></tr>
@@ -482,7 +510,7 @@
 <tr><td>RenderTarget</td><td>postprocessing, picking, reflection</td><td>해상도와 수량 제한</td><td>effect off 또는 scene dispose</td><td>mobile에서 context loss와 long frame</td></tr>
 <tr><td>Controls/listener</td><td>viewer mount</td><td>canvas별 단일 owner</td><td>unmount와 context loss 시 remove</td><td>route leave 후 pointer event 중복</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">R3F SCENE STATE BOUNDARY</span>React state: product option, selected id, route state, UI control<br>Three scene: mesh transform, material instance, camera, lights, controls<br>Bridge: derived props, refs, event command, invalidate trigger<br>Forbidden: render loop에서 React state를 매 frame setState하거나 scene mutation을 domain state로 숨기는 것</div>
+<div class="semantic-card answer-card"><span class="sc-label">R3F SCENE STATE BOUNDARY</span><br>React state: product option, selected id, route state, UI control<br>Three scene: mesh transform, material instance, camera, lights, controls<br>Bridge: derived props, refs, event command, invalidate trigger<br>Forbidden: render loop에서 React state를 매 frame setState하거나 scene mutation을 domain state로 숨기는 것</div>
 <table>
 <tr><th>경계</th><th>React가 소유</th><th>Three/R3F가 소유</th><th>동기화 규칙</th></tr>
 <tr><td>제품 옵션</td><td>선택된 variant, 가격, 재고, URL state</td><td>material map, visible mesh</td><td>상품 데이터가 source of truth, 3D는 표현</td></tr>
@@ -490,7 +518,8 @@
 <tr><td>카메라</td><td>reset, preset, share URL에 필요한 값</td><td>orbit damping, projection matrix</td><td>의미 있는 preset만 React에 반영</td></tr>
 <tr><td>성능 tier</td><td>device class, low power, reduced motion</td><td>DPR, shadows, effects, texture tier</td><td>tier 변경 이벤트와 fallback reason 기록</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">CANVAS WEBGL AUTOMATION GATE</span>canvas nonblank smoke 통과<br>WebGL unavailable fallback에서 핵심 CTA 유지<br>asset 404와 slow network에서 무한 spinner 없음<br>context loss/restore 시 선택 상태 복구<br>route 10회 왕복 뒤 renderer.info memory 증가 없음<br>keyboard-only와 reduced-motion 경로 캡처 첨부</div>
+<div class="semantic-card process-card"><span class="sc-label">CANVAS WEBGL AUTOMATION GATE</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>canvas nonblank smoke 통과<br>WebGL unavailable fallback에서 핵심 CTA 유지<br>asset 404와 slow network에서 무한 spinner 없음<br>context loss/restore 시 선택 상태 복구<br>route 10회 왕복 뒤 renderer.info memory 증가 없음<br>keyboard-only와 reduced-motion 경로 캡처 첨부</div>
 <div class="callout warn">
 <span class="co-label">SENIOR REVIEW STANDARD</span>
 <p>그래픽 PR은 화면 캡처 하나로 승인하지 않습니다. 기술 선택 근거, GPU 자원 수명, R3F state boundary, asset budget, fallback, nonblank/context-loss 자동화까지 있어야 운영 가능한 그래픽 기능입니다.</p>

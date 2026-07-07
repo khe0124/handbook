@@ -24,7 +24,11 @@
   <a href="#ch12"><span class="code">FE-12</span>보안: XSS·CSRF·토큰 저장</a>
   <a href="#ch13"><span class="code">FE-13</span>대규모 제품 운영</a>
   <a href="#ch14"><span class="code">FE-14</span>실무 의사결정 게이트</a>
-  <a href="#ch15"><span class="code">FE-15</span>용어집</a>
+  <a href="#ch15"><span class="code">FE-15</span>애플리케이션 아키텍처</a>
+  <a href="#ch16"><span class="code">FE-16</span>서버 상태·캐시 일관성</a>
+  <a href="#ch17"><span class="code">FE-17</span>제품형 UI 패턴</a>
+  <a href="#ch18"><span class="code">FE-18</span>디자인 시스템 운영</a>
+  <a href="#ch19"><span class="code">FE-19</span>용어집</a>
 </nav>
 <main>
 
@@ -340,7 +344,109 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </section>
 
 <section id="ch15">
-<div class="ch-head"><span class="ch-code">FE-15</span><h2>용어집</h2></div>
+<div class="ch-head"><span class="ch-code">FE-15</span><h2>프론트엔드 애플리케이션 아키텍처</h2></div>
+<p class="lede">시니어 프론트엔드 아키텍처는 폴더 구조를 예쁘게 나누는 일이 아니라 변경이 어디까지 전파되는지 제한하는 일입니다. route, feature, entity, shared layer, design system, platform adapter가 서로 무엇을 알고 무엇을 몰라야 하는지 규칙으로 남겨야 합니다.</p>
+<div class="serial-card"><span class="sc-label">FRONTEND APPLICATION ARCHITECTURE DECISION MODEL</span>product capability → route boundary → feature owner → server state owner<br>→ UI state owner → shared component contract → platform adapter<br>→ dependency rule → public API → test and release evidence</div>
+<table>
+<tr><th>경계</th><th>좋은 기준</th><th>실패 신호</th><th>필수 증거</th></tr>
+<tr><td>Route</td><td>사용자 작업 단위와 데이터 로딩 단위가 맞는다</td><td>한 route가 unrelated feature의 loader, modal, store를 모두 안다</td><td>route map, loader contract, error boundary</td></tr>
+<tr><td>Feature</td><td>도메인 행동, UI 상태, mutation이 한 owner 아래 있다</td><td>shared 폴더에 비즈니스 규칙이 쌓인다</td><td>feature public API, owner, tests</td></tr>
+<tr><td>Entity</td><td>서버 모델의 최소 공통 타입과 정규화 기준만 둔다</td><td>entity layer가 화면별 표시 규칙까지 안다</td><td>schema, mapper, compatibility note</td></tr>
+<tr><td>Shared UI</td><td>제품 의미가 없는 순수 UI contract만 제공한다</td><td>공통 Button이 결제, 권한, 라우팅을 알기 시작한다</td><td>component API, story, a11y contract</td></tr>
+<tr><td>Platform adapter</td><td>analytics, auth, storage, router, API client를 경계 뒤에 숨긴다</td><td>화면 컴포넌트가 SDK 세부 API에 직접 결합된다</td><td>adapter interface, mock-free integration test</td></tr>
+</table>
+<h3>FEATURE ROUTE BOUNDARY MATRIX</h3>
+<table>
+<tr><th>변경 유형</th><th>route layer</th><th>feature layer</th><th>shared layer</th><th>금지</th></tr>
+<tr><td>새 업무 흐름</td><td>진입, loader, 권한, error boundary</td><td>상태 기계, mutation, validation</td><td>필요한 순수 UI만 조합</td><td>shared에 업무 전용 helper 추가</td></tr>
+<tr><td>API shape 변경</td><td>fallback과 loading 정책 확인</td><td>mapper, query key, invalidation 수정</td><td>변경 없음이 원칙</td><td>컴포넌트가 raw API shape에 직접 의존</td></tr>
+<tr><td>디자인 시스템 변경</td><td>route별 회귀 캡처</td><td>feature-specific override 제거</td><td>token, primitive, component API 수정</td><td>화면마다 임의 px/hex 추가</td></tr>
+<tr><td>권한 변경</td><td>route guard와 401/403 화면</td><td>가능/불가능 액션과 안내 문구</td><td>disabled/hidden 표현만 제공</td><td>버튼 숨김을 보안 통제로 취급</td></tr>
+</table>
+<h3>DEPENDENCY RULE AND PUBLIC API GATE</h3>
+<p>프론트엔드 모듈의 품질은 import 방향에서 드러납니다. feature는 shared를 사용할 수 있지만 shared가 feature를 알면 안 됩니다. route는 feature를 조립하지만 feature 내부 구현 파일을 직접 import하지 않고 공개 entry를 통해 사용합니다.</p>
+<div class="serial-card"><span class="sc-label">DEPENDENCY RULE AND PUBLIC API GATE</span>1. route는 feature public API만 import한다<br>2. feature는 다른 feature의 내부 파일을 import하지 않는다<br>3. shared에는 제품 도메인 단어가 들어가지 않는다<br>4. platform SDK는 adapter 뒤에서만 접근한다<br>5. public API 변경은 consumer diff와 migration note를 남긴다</div>
+</section>
+
+<section id="ch16">
+<div class="ch-head"><span class="ch-code">FE-16</span><h2>서버 상태·캐시 일관성</h2></div>
+<p class="lede">서버 상태는 클라이언트가 소유한 데이터가 아니라 특정 시점의 복사본입니다. 고급 프론트엔드는 데이터를 “가져왔다”에서 멈추지 않고 stale, invalidation, optimistic rollback, conflict, multi-tab drift, URL 복원까지 하나의 일관성 모델로 다룹니다.</p>
+<div class="serial-card"><span class="sc-label">SERVER STATE CONSISTENCY MODEL</span>query key → fetch policy → stale time → mutation scope<br>→ optimistic patch → rollback snapshot → invalidation target<br>→ conflict resolution → multi-tab sync → release telemetry</div>
+<table>
+<tr><th>결정</th><th>질문</th><th>좋은 기준</th><th>실패 모드</th></tr>
+<tr><td>Query key</td><td>어떤 입력이 데이터 정체성을 바꾸는가</td><td>route params, filter, auth scope, locale을 명시</td><td>필터가 바뀌어도 같은 cache를 재사용</td></tr>
+<tr><td>Stale time</td><td>얼마나 오래 낡아도 안전한가</td><td>가격·권한은 짧게, 문서·코드는 길게</td><td>항상 refetch 또는 영구 stale 둘 중 하나로 단순화</td></tr>
+<tr><td>Mutation scope</td><td>성공 후 어떤 query가 낡아지는가</td><td>list, detail, aggregate, badge를 분리</td><td>상세만 갱신하고 목록 count가 낡음</td></tr>
+<tr><td>Conflict</td><td>동시 수정이 생기면 누가 이기는가</td><td>version, updatedAt, 409 UI 계약</td><td>마지막 저장이 조용히 덮어씀</td></tr>
+<tr><td>Multi-tab</td><td>다른 탭의 변경을 반영해야 하는가</td><td>storage event, BroadcastChannel, visibility refetch</td><td>오래 열린 탭이 폐기된 권한으로 mutation</td></tr>
+</table>
+<h3>CACHE INVALIDATION DECISION TABLE</h3>
+<table>
+<tr><th>변경</th><th>캐시 처리</th><th>사용자 피드백</th><th>검증</th></tr>
+<tr><td>상세 수정</td><td>detail 즉시 patch, list item invalidate</td><td>저장 완료와 변경 필드 표시</td><td>detail/list 동시 일관성 테스트</td></tr>
+<tr><td>생성</td><td>list invalidate 또는 prepend optimistic item</td><td>새 항목 위치와 실패 rollback 안내</td><td>중복 생성, pagination, sorting 케이스</td></tr>
+<tr><td>삭제</td><td>detail 제거, list count 갱신, undo 가능성 판단</td><td>삭제 후 복구 가능 여부 명확화</td><td>뒤로가기, stale detail, 404 처리</td></tr>
+<tr><td>권한 변경</td><td>auth scope의 query 전체 폐기</td><td>접근 불가 route와 액션 설명</td><td>role downgrade E2E</td></tr>
+</table>
+<h3>OPTIMISTIC UPDATE FAILURE MATRIX</h3>
+<table>
+<tr><th>실패</th><th>위험</th><th>대응</th><th>증거</th></tr>
+<tr><td>서버 validation 실패</td><td>UI가 성공처럼 보임</td><td>snapshot rollback, 필드 오류 연결</td><td>422 fixture와 rollback test</td></tr>
+<tr><td>중복 클릭</td><td>동일 mutation 중복 전송</td><td>mutation key, pending lock, idempotency key</td><td>double submit E2E</td></tr>
+<tr><td>네트워크 timeout</td><td>성공 여부 불명확</td><td>확인 상태, 재조회, 중복 재시도 방지</td><td>timeout/retry trace</td></tr>
+<tr><td>동시 수정 conflict</td><td>타인 변경 덮어쓰기</td><td>409 compare UI, 내 draft 보존</td><td>version conflict fixture</td></tr>
+</table>
+</section>
+
+<section id="ch17">
+<div class="ch-head"><span class="ch-code">FE-17</span><h2>제품형 UI 패턴</h2></div>
+<p class="lede">운영형 SaaS와 복잡한 제품 UI는 단순 컴포넌트 모음으로 풀리지 않습니다. data grid, wizard, bulk action, command palette, undo/redo, permission-aware UI는 상태, 권한, 접근성, 성능, 회귀 테스트가 동시에 닫혀야 합니다.</p>
+<table>
+<tr><th>PRODUCT UI PATTERN ACCEPTANCE MATRIX</th><th>핵심 위험</th><th>완료 기준</th><th>테스트 증거</th></tr>
+<tr><td>Data grid</td><td>대량 DOM, 편집 draft, 정렬·필터·권한</td><td>visible render, URL state, cell validation, keyboard navigation</td><td>10k row trace, cell edit E2E, a11y table audit</td></tr>
+<tr><td>Wizard</td><td>단계 이탈, 저장 중단, 뒤로가기</td><td>step state machine, draft persistence, resumable flow</td><td>refresh/back/validation 실패 테스트</td></tr>
+<tr><td>Bulk action</td><td>부분 실패, 권한 혼합, undo</td><td>selection model, dry-run summary, partial result UI</td><td>mixed permission fixture, partial failure E2E</td></tr>
+<tr><td>Command palette</td><td>권한 없는 명령 노출, keyboard trap</td><td>searchable command registry, shortcut conflict, focus restore</td><td>keyboard-only walkthrough, permission snapshot</td></tr>
+<tr><td>Undo/redo editor</td><td>상태 불일치, 메모리 증가, 서버 sync</td><td>command stack, inverse operation, conflict policy</td><td>redo/undo sequence, rollback, memory slope</td></tr>
+</table>
+<h3>PERMISSION AWARE UI MODEL</h3>
+<p>권한형 UI는 버튼을 숨기는 문제가 아닙니다. 사용자가 할 수 없는 일을 왜 할 수 없는지, 권한 요청 경로가 있는지, 서버 403과 UI 상태가 일치하는지를 설계해야 합니다.</p>
+<div class="serial-card"><span class="sc-label">PERMISSION AWARE UI MODEL</span>server authorization → route availability → action affordance<br>→ disabled or hidden decision → explanation → request access path<br>→ 401/403 negative test → audit event</div>
+<table>
+<tr><th>상황</th><th>UI 선택</th><th>이유</th><th>주의</th></tr>
+<tr><td>역할상 절대 불가능</td><td>숨김 또는 읽기 전용</td><td>불필요한 노이즈 제거</td><td>서버 권한 검사는 반드시 유지</td></tr>
+<tr><td>권한 요청 가능</td><td>disabled + 이유 + 요청 CTA</td><td>사용자가 다음 행동을 알 수 있음</td><td>disabled 요소의 설명 접근성 제공</td></tr>
+<tr><td>일시 조건 미충족</td><td>비활성 + 조건 안내</td><td>상태를 바꾸면 가능함을 전달</td><td>색만으로 전달하지 않음</td></tr>
+<tr><td>세션 만료</td><td>로그인 복구 흐름</td><td>작업 맥락 보존</td><td>draft 손실 방지</td></tr>
+</table>
+</section>
+
+<section id="ch18">
+<div class="ch-head"><span class="ch-code">FE-18</span><h2>디자인 시스템 운영</h2></div>
+<p class="lede">디자인 시스템은 컴포넌트 라이브러리가 아니라 제품 UI의 변경 관리 시스템입니다. 시니어 수준에서는 token, component API, Storybook, 접근성, visual regression, deprecation, Figma-code drift를 하나의 운영 루프로 관리합니다.</p>
+<div class="serial-card"><span class="sc-label">DESIGN SYSTEM OPERATING MODEL</span>design token source → component contract → usage guideline<br>→ story and fixture coverage → visual/a11y regression<br>→ release note → migration path → deprecation and adoption metric</div>
+<table>
+<tr><th>층</th><th>운영 기준</th><th>실패 신호</th><th>증거</th></tr>
+<tr><td>Token</td><td>color, spacing, radius, typography가 의미 이름으로 관리됨</td><td>화면마다 raw hex와 임의 px 증가</td><td>token diff, contrast audit, theme snapshot</td></tr>
+<tr><td>Component API</td><td>제품 의미 중심 variant와 안정적인 합성 구조</td><td>boolean prop 폭증, style escape hatch 남발</td><td>API review, usage search, migration note</td></tr>
+<tr><td>Story coverage</td><td>loading, empty, error, disabled, long text, locale, permission 상태 포함</td><td>happy path story만 존재</td><td>Storybook matrix, visual baseline</td></tr>
+<tr><td>Regression</td><td>visual, a11y, keyboard, responsive 회귀 자동화</td><td>디자인 QA가 매번 같은 오류 발견</td><td>screenshot diff, axe, keyboard walkthrough</td></tr>
+</table>
+<h3>COMPONENT API LIFECYCLE</h3>
+<table>
+<tr><th>단계</th><th>질문</th><th>산출물</th></tr>
+<tr><td>Proposal</td><td>기존 컴포넌트로 해결할 수 없는 새 의미인가</td><td>use case, non-goal, accessibility contract</td></tr>
+<tr><td>Adoption</td><td>어떤 화면이 이 API를 소비하는가</td><td>story matrix, usage example, migration target</td></tr>
+<tr><td>Change</td><td>breaking change인가 additive change인가</td><td>codemod 또는 migration guide, deprecation warning</td></tr>
+<tr><td>Retirement</td><td>낡은 variant를 언제 제거할 것인가</td><td>owner, deadline, usage count, release note</td></tr>
+</table>
+<h3>FIGMA CODE DRIFT CONTROL</h3>
+<p>Figma와 코드가 어긋나는 순간 디자인 시스템은 신뢰를 잃습니다. drift를 사람 기억에 맡기지 말고 token export, component status, screenshot baseline, release note로 추적합니다.</p>
+<div class="serial-card"><span class="sc-label">FIGMA CODE DRIFT CONTROL</span>token name and value diff<br>component status: design only | code only | synced | deprecated<br>variant parity table<br>visual regression baseline<br>accessibility exception log<br>release note and migration owner</div>
+</section>
+
+<section id="ch19">
+<div class="ch-head"><span class="ch-code">FE-19</span><h2>용어집</h2></div>
 <p class="lede">실무에서 자주 부딪히는 프론트엔드 용어를 의사결정 관점으로 정리합니다. 통합 문서에서는 브라우저·접근성 용어와 함께 마지막 참조 장으로 읽습니다.</p>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>Hydration</b><span>SSR → client 연결</span></div><div class="g-def">서버가 만든 HTML에 클라이언트 JS 이벤트와 상태를 연결하는 과정. hydration 전 UI는 보이지만 상호작용이 제한될 수 있습니다.</div></div>

@@ -165,15 +165,17 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="async-ch1">
 <div class="ch-head"><span class="ch-code">MSG-01</span><h2>동기 vs 비동기</h2></div>
 <p class="lede">핵심 질문은 "빠르냐 느리냐"가 아니라 <em>"호출자가 결과를 기다리느냐"</em>입니다. 동기 호출은 두 서비스를 같은 시간선에 묶습니다 — 한쪽이 느리거나 죽으면 다른 쪽도 그만큼 멈춥니다. 비동기는 그 시간 결합(temporal coupling)을 끊는 도구입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">TEMPORAL COUPLING — 동기 호출의 사슬</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>[ 주문 서비스 ] ──요청──▶ [ 결제 ] ──요청──▶ [ 알림 ] ◀──────── 응답 대기(blocked) ────────────────┘ └ 알림이 2초 느리면 주문 응답도 2초 느려진다 — 지연·장애가 전파 ASYNC — 큐로 시간선을 끊는다 [ 주문 서비스 ] ──발행──▶ [ QUEUE ] ──▶ [...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>[ 주문 서비스 ] ──요청</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>[ 결제 ] ──요청 → [ 알림 ] → ◀──────── 응답 대기(blocked) ────────────────┘ → └ 알림이 2초 느리면 주문 응답도 2초 느려진다 — 지연·장애가 전파 → ASYNC — 큐로 시간선을 끊는다 → [ 주문 서비스 ] ──발행 → [ QUEUE ] → [ 결제 ] [ 알림 ]</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>└ 발행 즉시 응답 반환. 소비자 장애는 큐에 쌓일 뿐 호출자엔 안 보임</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">TEMPORAL COUPLING — 동기 호출의 사슬</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+[ <span class="seg">주문 서비스</span> ] ──요청──▶ [ <span class="seg2">결제</span> ] ──요청──▶ [ <span class="seg2">알림</span> ]<br>
+<span class="dim">      ◀──────── 응답 대기(blocked) ────────────────┘</span><br>
+<span class="dim">      └ 알림이 2초 느리면 주문 응답도 2초 느려진다 — 지연·장애가 전파</span><br>
+<br>
+<span class="sc-label">ASYNC — 큐로 시간선을 끊는다</span>
+[ <span class="seg">주문 서비스</span> ] ──발행──▶ [ <span class="seg">QUEUE</span> ] ──▶ [ <span class="seg2">결제</span> ] [ <span class="seg2">알림</span> ]<br>
+<span class="dim">      └ 발행 즉시 응답 반환. 소비자 장애는 큐에 쌓일 뿐 호출자엔 안 보임</span>
+</div>
 <table>
 <tr><th>관점</th><th>동기 (sync / request-response)</th><th>비동기 (async / messaging)</th></tr>
 <tr><td>시간 결합</td><td>강함 — 둘이 동시에 살아 있어야 함</td><td>약함 — 소비자는 나중에 처리해도 됨</td></tr>
@@ -213,15 +215,18 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="async-ch3">
 <div class="ch-head"><span class="ch-code">MSG-03</span><h2>메시지 큐 vs 이벤트 스트림</h2></div>
 <p class="lede">"카프카랑 래빗엠큐 뭐 써요?"의 진짜 질문은 <em>"메시지가 소비되면 사라지길 원하나, 로그로 남아 여러 번 읽히길 원하나"</em>입니다. 둘은 비슷해 보이지만 데이터 수명 모델이 근본적으로 다릅니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">WORK QUEUE (RabbitMQ) — 소비하면 사라진다</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>producer ──▶ [ msg msg msg ] ──▶ consumer A (ack 후 삭제) └──────────▶ consumer B ← 같은 메시지는 둘 중 하나만 받음(경쟁 소비) EVENT LOG (Kafka) — 쌓이고, 각자 오프셋으로 읽는다 producer ──▶ [ 0 1 2 3 4 5 6 ... ]...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>producer</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>[ msg msg msg ] → consumer A (ack 후 삭제) → └──────────▶ consumer B ← 같은 메시지는 둘 중 하나만 받음(경쟁 소비) → EVENT LOG (Kafka) — 쌓이고, 각자 오프셋으로 읽는다 → producer ──▶ [ 0 1 2 3 4 5 6 ... ] (append-only log) → ▲offset=3 ▲offset=6 → group...</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>└ 읽어도 안 사라짐. 보존기간 동안 재생(replay) 가능</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">WORK QUEUE (RabbitMQ) — 소비하면 사라진다</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+producer ──▶ [ msg msg msg ] ──▶ <span class="seg">consumer A</span> (ack 후 삭제)<br>
+<span class="dim">                  └──────────▶ consumer B  ← 같은 메시지는 둘 중 하나만 받음(경쟁 소비)</span><br>
+<br>
+<span class="sc-label">EVENT LOG (Kafka) — 쌓이고, 각자 오프셋으로 읽는다</span>
+producer ──▶ [ 0 1 2 3 4 5 6 ... ] (append-only log)<br>
+<span class="dim">                       ▲offset=3  ▲offset=6</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="seg">group A</span> 여기 읽는 중 &nbsp;&nbsp;<span class="seg2">group B</span> 여기 (서로 독립)<br>
+<span class="dim">                       └ 읽어도 안 사라짐. 보존기간 동안 재생(replay) 가능</span>
+</div>
 <table>
 <tr><th>관점</th><th>메시지 큐 (RabbitMQ, SQS)</th><th>이벤트 스트림 (Kafka, Kinesis)</th></tr>
 <tr><td>모델</td><td>work queue — 작업 분배</td><td>append-only log — 사건 기록</td></tr>
@@ -247,15 +252,14 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <tr><td>at-least-once</td><td>적어도 한 번 — 처리 후 ack, ack 유실 시 재전송</td><td><strong>중복 발생.</strong> 가장 흔한 현실 선택 — 단, 소비자가 멱등해야(→ MSG-05)</td></tr>
 <tr><td>exactly-once</td><td>정확히 한 번</td><td>분산 환경에서 일반적으로는 불가능. 특정 조건에서만 근사</td></tr>
 </table>
-<div class="semantic-card process-card"><span class="sc-label">왜 exactly-once가 환상인가 — ack가 유실되는 순간</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>consumer ──처리완료──▶ DB commit OK consumer ──ack 전송──▶ ✗ 네트워크 단절 (브로커는 ack를 못 받음) broker ──타임아웃──▶ 같은 메시지 재전송 └ 소비자 입장: 이미 처리한 메시지가 또 옴 → 중복. 막을 방법은 멱등성뿐</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>consumer ──처리완료──▶ DB commit OK</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>consumer ──ack 전송──▶ ✗ 네트워크 단절 (브로커는 ack를 못 받음) → broker ──타임아웃──▶ 같은 메시지 재전송</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>└ 소비자 입장: 이미 처리한 메시지가 또 옴 → 중복. 막을 방법은 멱등성뿐</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">왜 exactly-once가 환상인가 — ack가 유실되는 순간</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+consumer ──처리완료──▶ DB commit OK<br>
+consumer ──ack 전송──▶ <span class="seg">✗ 네트워크 단절</span> (브로커는 ack를 못 받음)<br>
+broker ──타임아웃──▶ <span class="seg2">같은 메시지 재전송</span><br>
+<span class="dim">         └ 소비자 입장: 이미 처리한 메시지가 또 옴 → 중복. 막을 방법은 멱등성뿐</span>
+</div>
 <div class="callout risk">
 <span class="co-label">exactly-once는 마케팅 용어에 가깝다</span>
 <p>Kafka의 "exactly-once semantics(EOS)"는 <em>Kafka 내부에서 읽기→처리→쓰기가 모두 Kafka일 때</em>(트랜잭션 + idempotent producer)만 성립합니다. 메시지를 받아 <em>외부 DB나 외부 API</em>를 건드리는 순간 그 보장은 깨집니다 — 외부 시스템은 Kafka 트랜잭션 밖이니까요. 그래서 실무 설계 원칙은 단순합니다: <strong>"at-least-once로 전달되고 중복이 온다"를 가정하고, 소비자를 멱등하게 만들어 effectively-once를 달성한다.</strong> 중복을 막으려 하지 말고 중복에 무해하게 만드세요.</p>
@@ -290,15 +294,13 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="async-ch6">
 <div class="ch-head"><span class="ch-code">MSG-06</span><h2>순서와 파티셔닝</h2></div>
 <p class="lede">"메시지가 보낸 순서대로 처리되나?" — 분산 큐에서 <em>전역 순서(total order)</em>는 비싸고, 대부분의 시스템은 <strong>"관련된 것끼리만" 순서</strong>를 보장하는 타협을 택합니다. Kafka의 파티션이 그 도구입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">PARTITION KEY로 순서 범위를 정한다</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>key= &quot;account-7&quot; ─▶ hash ─▶ partition 1 : [ e1 e2 e3 ] ← 같은 키는 항상 같은 파티션 = 순서 보장 key= &quot;account-9&quot; ─▶ hash ─▶ partition 2 : [ e4 e5 ] 파티션 1과 2 사이의 상대 순서는 보장 안 됨 — 하지만 한 계정 안에서는 보장됨</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>key= &quot;account-7&quot; ─</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>hash ─ → partition 1 : [ e1 e2 e3 ] ← 같은 키는 항상 같은 파티션 = 순서 보장 → key= &quot;account-9&quot; ─ → partition 2 : [ e4 e5 ]</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>파티션 1과 2 사이의 상대 순서는 보장 안 됨 — 하지만 한 계정 안에서는 보장됨</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">PARTITION KEY로 순서 범위를 정한다</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+key=<span class="seg">"account-7"</span> ─▶ hash ─▶ partition 1 : [ e1 e2 e3 ] <span class="dim">← 같은 키는 항상 같은 파티션 = 순서 보장</span><br>
+key=<span class="seg2">"account-9"</span> ─▶ hash ─▶ partition 2 : [ e4 e5 ]<br>
+<span class="dim">파티션 1과 2 사이의 상대 순서는 보장 안 됨 — 하지만 한 계정 안에서는 보장됨</span>
+</div>
 <table>
 <tr><th>순서 범위</th><th>방법</th><th>대가</th></tr>
 <tr><td>파티션 내 순서</td><td>같은 엔티티는 같은 파티션 키(예: <code>accountId</code>)</td><td>저렴 — 키별로 병렬 처리 가능. 대부분 이걸로 충분</td></tr>
@@ -314,15 +316,14 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="async-ch7">
 <div class="ch-head"><span class="ch-code">MSG-07</span><h2>이중 쓰기 문제와 Outbox 패턴</h2></div>
 <p class="lede">비동기 설계의 핵심 함정 하나: <em>"DB에 저장하고, 그다음 메시지를 발행한다"</em>는 두 줄의 코드는 원자적이지 않습니다. 둘 사이에서 프로세스가 죽으면 DB는 바뀌었는데 메시지는 안 나갔거나, 그 반대가 됩니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">DUAL WRITE — 두 시스템에 쓰는데 트랜잭션이 하나가 아니다</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>db.save(order) → commit OK ✗ 프로세스 crash broker.publish(event) → 실행 안 됨 결과: 주문은 DB에 있는데 &quot;주문 생성됨&quot; 이벤트는 영영 안 나감 → 하류가 모름</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>db.save(order) → commit OK</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>✗ 프로세스 crash → broker.publish(event) → 실행 안 됨</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>결과: 주문은 DB에 있는데 &quot;주문 생성됨&quot; 이벤트는 영영 안 나감 → 하류가 모름</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">DUAL WRITE — 두 시스템에 쓰는데 트랜잭션이 하나가 아니다</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+db.save(order)        <span class="dim">→ commit OK</span><br>
+<span class="seg">✗ 프로세스 crash</span><br>
+broker.publish(event) <span class="dim">→ 실행 안 됨</span><br>
+<span class="dim">결과: 주문은 DB에 있는데 "주문 생성됨" 이벤트는 영영 안 나감 → 하류가 모름</span>
+</div>
 <p>순서를 뒤집어 "발행 먼저, DB 나중"으로 해도 반대 불일치(이벤트는 나갔는데 DB엔 없음)가 생길 뿐, 근본 문제는 같습니다 — <strong>서로 다른 두 시스템에 걸친 원자성은 분산 트랜잭션(2PC) 없이는 보장 안 됩니다.</strong> 2PC는 느리고 깨지기 쉬워 대부분 피합니다.</p>
 <h3><span class="h3-tag">7.1</span>Outbox 패턴 — 한 트랜잭션으로 묶는다</h3>
 <p>해법은 영리하게 단순합니다: 메시지를 브로커에 직접 보내지 말고, <strong>같은 DB의 <code>outbox</code> 테이블에 비즈니스 데이터와 함께 한 트랜잭션으로</strong> 씁니다. DB 트랜잭션은 원자적이니 "주문 저장 + outbox 기록"은 전부 되거나 전부 안 됩니다. 그다음 별도 프로세스가 outbox를 읽어 브로커로 발행합니다.</p>
@@ -341,15 +342,13 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <p class="lede">소비자는 실패합니다 — 일시적 실패(DB 잠깐 끊김)와 영구적 실패(메시지 자체가 깨짐)는 대응이 달라야 합니다. 무한 재시도는 시스템을 마비시키고, 재시도 없는 포기는 데이터를 잃습니다.</p>
 <h3><span class="h3-tag">8.1</span>지수 백오프 + 지터</h3>
 <p>실패를 즉시·반복 재시도하면 이미 힘든 하류를 더 두드려 장애를 키웁니다(retry storm). <strong>지수 백오프(exponential backoff)</strong>는 재시도 간격을 1s → 2s → 4s → 8s로 늘려 압박을 줄입니다. 여기에 <strong>지터(jitter, 무작위 흔들기)</strong>를 더하는 이유는, 동시에 실패한 수천 소비자가 똑같은 타이밍에 재시도하면 또 한꺼번에 몰리는 thundering herd가 생기기 때문입니다 — 간격을 랜덤하게 분산시켜 충돌을 막습니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">RETRY LADDER — 횟수 제한 후 격리</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>attempt 1 fail ─▶ wait ~1s ─▶ attempt 2 fail ─▶ wait ~2s ─▶ attempt 3 fail ↓ N회 초과 [ DLQ ] ← 격리. 메인 흐름은 계속 흐른다</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>attempt 1 fail ─</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>wait ~1s ─ → attempt 2 fail ─ → wait ~2s ─ → attempt 3 fail → ↓ N회 초과</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>[ DLQ ] ← 격리. 메인 흐름은 계속 흐른다</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">RETRY LADDER — 횟수 제한 후 격리</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+attempt 1 <span class="dim">fail</span> ─▶ wait ~1s ─▶ attempt 2 <span class="dim">fail</span> ─▶ wait ~2s ─▶ attempt 3 <span class="dim">fail</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ N회 초과<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="seg">DLQ</span> ] <span class="dim">← 격리. 메인 흐름은 계속 흐른다</span>
+</div>
 <h3><span class="h3-tag">8.2</span>DLQ와 독성 메시지</h3>
 <p><strong>독성 메시지(poison message)</strong>는 몇 번을 재시도해도 항상 실패하는 메시지입니다 — 깨진 페이로드, 처리 불가능한 상태. 이걸 큐 맨 앞에 두고 무한 재시도하면 뒤 메시지가 영영 못 나가는 head-of-line blocking이 생깁니다. <strong>DLQ(Dead Letter Queue)</strong>는 N회 실패한 메시지를 별도 큐로 격리해, 메인 흐름은 계속 흐르게 하고 실패 건은 나중에 사람이 조사하게 합니다.</p>
 <table>
@@ -368,15 +367,16 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <section id="async-ch9">
 <div class="ch-head"><span class="ch-code">MSG-09</span><h2>백프레셔와 흐름 제어</h2></div>
 <p class="lede">생산자가 소비자보다 빠르면 어딘가 메시지가 쌓입니다. <strong>백프레셔(backpressure)</strong>는 "느리니까 천천히 보내"라는 <em>역방향 신호</em>입니다 — 이게 없으면 큐 적체나 메모리 폭발로 시스템이 무너집니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">생산 &gt; 소비 — 어디선가 부하가 새어 나간다</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>producer 1000/s ──▶ [ QUEUE 무한정 적체 ▓▓▓▓▓▓▓▓ ] ──▶ consumer 200/s 결과 ① 큐 지연 폭증(메시지가 오래된 채 처리됨) 결과 ② 메모리 큐면 OOM, 디스크 큐면 디스크 풀 BACKPRESSURE — 소비자가 속도를 되먹인다 consumer ──&quot;천천히&quot;──▶ produc...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>producer 1000/s</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>[ QUEUE 무한정 적체 ▓▓▓▓▓▓▓▓ ] → consumer 200/s → 결과 ① 큐 지연 폭증(메시지가 오래된 채 처리됨) → 결과 ② 메모리 큐면 OOM, 디스크 큐면 디스크 풀 → BACKPRESSURE — 소비자가 속도를 되먹인다</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>consumer ──&quot;천천히&quot;──▶ producer (요청 거절 / rate limit / 버퍼 제한)</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">생산 &gt; 소비 — 어디선가 부하가 새어 나간다</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+producer <span class="seg">1000/s</span> ──▶ [ QUEUE 무한정 적체 ▓▓▓▓▓▓▓▓ ] ──▶ consumer <span class="seg2">200/s</span><br>
+<span class="dim">         결과 ① 큐 지연 폭증(메시지가 오래된 채 처리됨)</span><br>
+<span class="dim">         결과 ② 메모리 큐면 OOM, 디스크 큐면 디스크 풀</span><br>
+<br>
+<span class="sc-label">BACKPRESSURE — 소비자가 속도를 되먹인다</span>
+consumer ──"천천히"──▶ producer <span class="dim">(요청 거절 / rate limit / 버퍼 제한)</span>
+</div>
 <table>
 <tr><th>전략</th><th>작동</th><th>트레이드오프</th></tr>
 <tr><td>버퍼링(buffer)</td><td>일시적 급증을 큐에 흡수</td><td>피크엔 좋지만 지속적 초과면 적체만 미룸</td></tr>
@@ -395,15 +395,14 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <div class="ch-head"><span class="ch-code">MSG-10</span><h2>사가 패턴 — 분산 트랜잭션의 대체</h2></div>
 <p class="lede">여러 서비스에 걸친 작업을 하나의 ACID 트랜잭션으로 묶을 수는 없습니다(서비스마다 DB가 다름). <strong>사가(Saga)</strong>는 이를 <em>"로컬 트랜잭션의 연쇄 + 실패 시 보상"</em>으로 풀어, 최종 일관성(eventual consistency)을 달성합니다.</p>
 <p>핵심 아이디어: 전체를 롤백하는 대신, 이미 커밋된 단계들을 <strong>보상 트랜잭션(compensating transaction)</strong>으로 의미적으로 되돌립니다. "결제 취소", "예약 해제"처럼 — 진짜 롤백이 아니라 반대 작업입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">SAGA — 성공 경로와 보상 경로</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>주문생성 ─▶ 재고차감 ─▶ 결제 ─▶ ✗ 배송예약 실패 ↓ 보상 시작(역방향) ◀── 재고복원 ◀────── 결제취소 ◀──┘ └ 이미 커밋된 단계를 &quot;반대 작업&quot;으로 되돌린다 — rollback이 아니라 compensate</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>주문생성 ─</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>재고차감 ─ → 결제 ─ → ✗ 배송예약 실패 → ↓ 보상 시작(역방향) → ◀── 재고복원 ◀────── 결제취소 ◀──┘</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>└ 이미 커밋된 단계를 &quot;반대 작업&quot;으로 되돌린다 — rollback이 아니라 compensate</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">SAGA — 성공 경로와 보상 경로</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+주문생성 ─▶ <span class="seg2">재고차감</span> ─▶ <span class="seg2">결제</span> ─▶ <span class="seg">✗ 배송예약 실패</span><br>
+<span class="dim">                                          ↓ 보상 시작(역방향)</span><br>
+<span class="dim">          ◀── 재고복원 ◀────── 결제취소 ◀──┘</span><br>
+<span class="dim">          └ 이미 커밋된 단계를 "반대 작업"으로 되돌린다 — rollback이 아니라 compensate</span>
+</div>
 <table>
 <tr><th>방식</th><th>조정 주체</th><th>강점 / 약점</th></tr>
 <tr><td>오케스트레이션(orchestration)</td><td>중앙 조정자(orchestrator)가 각 단계를 명령</td><td>흐름이 한곳에 보여 추적·디버깅 쉬움 / 조정자가 단일 의존점, 다소 결합</td></tr>
@@ -545,15 +544,16 @@ NOTE : 핵심 원칙은 at-least-once + 멱등 소비 · COMPANION : BACKEND ENG
 <tr><td><b>T</b>imely</td><td>코드와 함께(또는 먼저) 작성. 나중으로 미루면 안 씀(→ TEST-06)</td></tr>
 </table>
 <p>구조는 <strong>given-when-then</strong>으로 잡습니다 — 상황을 준비(given), 행위를 실행(when), 결과를 단언(then). 그리고 테스트 이름은 <em>"어떤 조건에서 어떤 결과가 나와야 하는지"를 문장으로</em> 읽히게 씁니다. <code>test1</code>이나 <code>testCalculate</code>가 아니라 <code>만료된_쿠폰이면_할인을_적용하지_않는다</code>처럼요. 테스트가 깨졌을 때 이름만 보고 "무엇이 무너졌는지" 알 수 있어야 합니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">GIVEN — WHEN — THEN</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>given // 만료일이 지난 쿠폰과 주문 금액 10000원 Coupon coupon = expiredCoupon(); when // 할인을 적용하면 int total = applyCoupon(10000, coupon); then // 할인 없이 원래 금액이 나온다 assertThat(total).isEqualTo(10...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>given // 만료일이 지난 쿠폰과 주문 금액 10000원</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>Coupon coupon = expiredCoupon(); → when // 할인을 적용하면 → int total = applyCoupon(10000, coupon); → then // 할인 없이 원래 금액이 나온다</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>assertThat(total).isEqualTo(10000);</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">GIVEN — WHEN — THEN</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+<span class="seg">given</span> <span class="dim">// 만료일이 지난 쿠폰과 주문 금액 10000원</span><br>
+&nbsp;&nbsp;Coupon coupon = expiredCoupon();<br>
+<span class="seg2">when</span> <span class="dim">// 할인을 적용하면</span><br>
+&nbsp;&nbsp;int total = applyCoupon(10000, coupon);<br>
+<span class="seg">then</span> <span class="dim">// 할인 없이 원래 금액이 나온다</span><br>
+&nbsp;&nbsp;assertThat(total).isEqualTo(10000);
+</div>
 <div class="callout">
 <span class="co-label">실전</span>
 <p>단위 테스트가 자꾸 mock 범벅이 된다면, 그건 테스트 문제가 아니라 <em>설계가 순수 로직과 I/O를 안 갈라놨다</em>는 신호입니다. 계산·판단 같은 결정 로직을 부수효과 없는 함수로 떼어내면, mock 없이 입력·출력만으로 테스트됩니다(→ TEST-04 과한 mock의 함정).</p>
@@ -869,15 +869,15 @@ PRINCIPLE : 구현이 아니라 동작을 테스트 · flaky는 즉시 격리·�
 <div class="ch-head"><span class="ch-code">OBS-05</span><h2>백분위 지연</h2></div>
 <p class="lede">"평균 응답시간 120ms"는 안심되는 숫자처럼 보이지만, 종종 거짓말입니다. 평균은 소수의 느린 요청을 다수의 빠른 요청에 희석시켜 숨깁니다. 사용자 경험을 결정하는 건 평균이 아니라 <em>꼬리(tail)</em>입니다.</p>
 <p><strong>백분위(percentile)</strong>는 "전체 요청을 느린 순으로 줄 세웠을 때 N%가 이 값 이하"를 뜻합니다. <code>p99 = 300ms</code>는 "요청의 99%는 300ms 안에 끝났고, 가장 느린 1%만 그보다 느렸다"는 의미입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">평균의 거짓말 — 같은 평균, 다른 경험</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>요청 100건: 99건이 50ms , 1건이 5000ms 평균(avg) = (99×50 + 5000) / 100 = 99.5ms ← &quot;빠르네&quot; p50 = 50ms p99 = 50ms p99.9 = 5000ms ← 누군가는 5초를 기다렸다</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>요청 100건: 99건이 50ms , 1건이 5000ms</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>평균(avg) = (99×50 + 5000) / 100 = 99.5ms ← &quot;빠르네&quot; → p50 = 50ms → p99 = 50ms</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>p99.9 = 5000ms ← 누군가는 5초를 기다렸다</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">평균의 거짓말 — 같은 평균, 다른 경험</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+요청 100건: 99건이 <span class="seg2">50ms</span>, 1건이 <span class="seg">5000ms</span><br>
+<span class="dim">평균(avg)</span> = (99×50 + 5000) / 100 = <span class="seg2">99.5ms</span>  <span class="dim">← "빠르네"</span><br>
+<span class="dim">p50    </span> = 50ms<br>
+<span class="dim">p99    </span> = 50ms<br>
+<span class="dim">p99.9  </span> = <span class="seg">5000ms</span>  <span class="dim">← 누군가는 5초를 기다렸다</span>
+</div>
 <table>
 <tr><th>지표</th><th>읽는 법</th><th>무엇에 쓰나</th></tr>
 <tr><td><b>p50</b> (중앙값)</td><td>절반의 사용자가 이보다 빠름 — "전형적" 경험</td><td>일반적 체감 속도의 기준선</td></tr>
@@ -936,15 +936,16 @@ PRINCIPLE : 구현이 아니라 동작을 테스트 · flaky는 즉시 격리·�
 <tr><td><b>에러버짓</b><br>(error budget)</td><td>SLO가 허용하는 <em>실패의 총량</em> = 100% − SLO</td><td>99.9% → 0.1% = 30일에 약 43분</td></tr>
 </table>
 <p>핵심 통찰은 <strong>"100% 신뢰성은 목표가 아니다"</strong>입니다. 100%를 추구하면 비용이 무한대로 가고 어떤 변경도 못 합니다. SLO를 99.9%로 정하면 0.1%만큼의 <em>실패할 여유(에러버짓)</em>가 생기고, 이 여유를 어디에 쓸지 정할 수 있습니다 — 새 기능 배포, 위험한 마이그레이션, 인프라 실험. 에러버짓은 "안정성 팀 vs 기능 팀"의 해묵은 싸움을 숫자로 중재합니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">ERROR BUDGET — 한 달치 실패 예산</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>SLO 99.9% (30일 기준) 허용 다운타임 = 30일 × 0.1% = 약 43분 / 월 budget 남음 → 배포 속도 올려도 됨, 위험한 실험 OK budget 소진 → 기능 동결, 안정화에 집중 (새 배포 중단) budget 초과 → 인시던트 — 무엇이 예산을 태웠는지 회고</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>SLO 99.9% (30일 기준)</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>허용 다운타임 = 30일 × 0.1% = 약 43분 / 월 → budget 남음 → 배포 속도 올려도 됨, 위험한 실험 OK → budget 소진 → 기능 동결, 안정화에 집중 (새 배포 중단)</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>budget 초과 → 인시던트 — 무엇이 예산을 태웠는지 회고</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">ERROR BUDGET — 한 달치 실패 예산</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+SLO 99.9% (30일 기준)<br>
+허용 다운타임 = 30일 × 0.1% = <span class="seg">약 43분 / 월</span><br>
+<br>
+<span class="dim">budget 남음 →</span> 배포 속도 올려도 됨, 위험한 실험 OK<br>
+<span class="dim">budget 소진 →</span> <span class="seg">기능 동결, 안정화에 집중</span> (새 배포 중단)<br>
+<span class="dim">budget 초과 →</span> 인시던트 — 무엇이 예산을 태웠는지 회고
+</div>
 <div class="callout">
 <span class="co-label">SLI는 사용자 관점으로 골라라</span>
 <p>SLI를 CPU 사용률 같은 <em>내부 지표</em>로 잡으면 안 됩니다 — 사용자는 CPU에 관심 없습니다. <strong>사용자가 체감하는 것</strong>(요청 성공률, 응답 지연, 데이터 신선도)으로 골라야 의미가 있습니다. 그리고 SLO는 한 번 정하고 끝이 아니라, 에러버짓 소진 추세를 보며 <em>현실에 맞게 조정</em>하는 살아있는 합의입니다. 버짓 소진 속도(burn rate)를 알림으로 거는 게 단순 임계치 알림보다 훨씬 신호가 좋습니다(→ OBS-09).</p>
@@ -1013,15 +1014,16 @@ PRINCIPLE : 구현이 아니라 동작을 테스트 · flaky는 즉시 격리·�
 <tr><td><b>액션 아이템</b></td><td>재발 방지책 — 담당자·기한이 붙은 <em>실행 가능한</em> 것만</td></tr>
 </table>
 <p><strong>5 Whys</strong>는 "왜"를 다섯 번 정도 반복해 표면 증상에서 구조적 원인으로 내려가는 기법입니다.</p>
-<div class="semantic-card process-card"><span class="sc-label">5 WHYS — 표면에서 구조로</span>
-<p>비동기·장애 대응 용어를 외우는 대신 지연과 실패가 어디서 전파되고 어디서 끊기는지 추적하는 카드입니다. 원본 흐름은 <strong>결제가 5분간 실패했다. why? → DB 커넥션 풀이 고갈됐다. why? → 느린 쿼리가 커넥션을 오래 잡았다. why? → 새 기능이 인덱스 없는 컬럼으로 조회했다. why? → 리뷰에서 쿼리 플랜을 아무도 안 봤다. why? → PR 체크리스트에 쿼리 검토 항목이 없다. ← 진짜 액션</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
-<ol>
-<li><strong>출발점</strong>: 먼저 요청, 메시지, 트랜잭션 중 무엇이 시간 결합을 만들고 있는지 지정합니다. 이 카드에서는 <em>결제가 5분간 실패했다.</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 ack, retry, partition, 보상 트랜잭션, backpressure처럼 장애 때 동작이 갈리는 지점을 확인합니다. 핵심 흐름은 <em>why? → DB 커넥션 풀이 고갈됐다. → why? → 느린 쿼리가 커넥션을 오래 잡았다. → why? → 새 기능이 인덱스 없는 컬럼으로 조회했다. → why? → 리뷰에서 쿼리 플랜을 아무도 안 봤다.</em>입니다.</li>
-<li><strong>판정</strong>: 큐 지연, 중복 처리, DLQ, error budget, incident note 중 어떤 증거로 안전성을 판단할지 남깁니다. 마지막에는 <em>why? → PR 체크리스트에 쿼리 검토 항목이 없다. ← 진짜 액션</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 평상시 성공 경로만 보면 위험하므로 재전송, 소비자 지연, 부분 실패를 반드시 시나리오에 넣습니다.</li>
-</ol>
-<p>따라서 이 카드는 런타임 품질 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+<div class="semantic-card process-card">
+<span class="sc-label">5 WHYS — 표면에서 구조로</span><br>
+<p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
+결제가 5분간 실패했다.<br>
+<span class="seg2">why?</span> → DB 커넥션 풀이 고갈됐다.<br>
+<span class="seg2">why?</span> → 느린 쿼리가 커넥션을 오래 잡았다.<br>
+<span class="seg2">why?</span> → 새 기능이 인덱스 없는 컬럼으로 조회했다.<br>
+<span class="seg2">why?</span> → 리뷰에서 쿼리 플랜을 아무도 안 봤다.<br>
+<span class="seg2">why?</span> → <span class="seg">PR 체크리스트에 쿼리 검토 항목이 없다.</span> <span class="dim">← 진짜 액션</span>
+</div>
 <div class="callout">
 <span class="co-label">액션 아이템이 핵심 — 안 그러면 의식일 뿐</span>
 <p>위 예에서 액션은 "그 개발자를 혼낸다"가 아니라 "인덱스 없는 컬럼 조회를 CI에서 막는다 / PR 체크리스트에 쿼리 플랜 검토를 넣는다"입니다 — <strong>같은 부류의 실수를 시스템이 자동으로 잡게</strong> 만드는 것. 액션 아이템에 담당자와 기한이 없으면 포스트모템은 한 번 쓰고 잊히는 의식에 그칩니다. 그리고 액션은 추적되어 <em>실제로 완료</em>돼야 합니다 — 같은 원인의 장애가 두 번 나면 그건 첫 포스트모템이 실패했다는 뜻입니다(→ OBS-08 에러버짓을 무엇이 태웠는지와 연결).</p>

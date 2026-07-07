@@ -115,6 +115,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <p>두 가지 축이 변경 비용을 지배한다. <strong>결합도(coupling)</strong>는 한 모듈이 바뀔 때 함께 바뀌어야 하는 다른 모듈의 양이다 — 낮을수록 좋다. <strong>응집도(cohesion)</strong>는 한 모듈 안의 요소들이 같은 목적을 향하는 정도다 — 높을수록 좋다. 결합도가 높으면 작은 변경이 멀리까지 번지고, 응집도가 낮으면 하나의 변경이 여러 모듈에 흩어진다. 둘 다 "함께 바뀌는 것을 한곳에, 따로 바뀌는 것을 떨어뜨려라"는 같은 원칙의 두 얼굴이다.</p>
 <div class="serial-card">
 <span class="sc-label">COUPLING &times; COHESION — 변경의 전파 범위</span>
+<p>이 도식은 모듈 간 선의 강도를 그림으로 보려는 장치입니다. strong 연결은 한쪽 변경이 다른 쪽 수정과 재테스트를 부르고, weak 연결은 공개 계약만 지켜도 내부 변경이 경계 밖으로 새지 않는 상태를 뜻합니다.</p>
 <span class="dim">[ 모듈 A ]</span> <span class="seg">───strong───</span> <span class="dim">[ 모듈 B ]</span>  <span class="dim">← A 변경 시 B도 변경 (전파)</span><br>
 <span class="dim">[ 모듈 A ]</span> <span class="seg2">- - weak - -</span> <span class="dim">[ 모듈 B ]</span>  <span class="dim">← A 변경이 B에 안 닿음 (격리)</span><br>
 <br>

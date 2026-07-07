@@ -13,6 +13,7 @@
   <a href="#ch7"><span class="code">PM-07</span>성능 예산과 SLO</a>
   <a href="#ch8"><span class="code">PM-08</span>RUM 계측 설계</a>
   <a href="#ch9"><span class="code">PM-09</span>자주 봉착하는 성능 문제</a>
+  <a href="#ch10"><span class="code">PM-10</span>텔레메트리 계약</a>
 </nav><main>
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-PERF-METRICS-V1</span><span>SCOPE : LIGHTHOUSE · WEB VITALS · RUM</span><span>LANG : KO</span></div>
@@ -173,6 +174,32 @@
 </table>
 <div class="serial-card"><span class="sc-label">COMMON ISSUE TRIAGE</span>1. 증상을 metric 이름으로 바꾸지 말고 사용자 행동으로 쓴다<br>2. “느림”을 load, interaction, scroll, memory, route transition 중 하나로 분류한다<br>3. 공식 기준과 팀 예산 중 어떤 기준을 넘었는지 구분한다<br>4. before/after 숫자가 없는 최적화는 완료 처리하지 않는다<br>5. 같은 문제가 재발하지 않도록 budget, RUM alert, synthetic scenario 중 하나를 남긴다</div>
 <div class="callout risk"><span class="co-label">반복되는 실수</span><p>가장 흔한 실수는 도구 이름을 해결책으로 착각하는 것입니다. Lighthouse, Profiler, memo, virtualization은 결론이 아니라 원인을 확인하거나 특정 비용을 줄이는 수단입니다. 먼저 병목 계층을 확정해야 합니다.</p></div>
+</section>
+
+<section id="ch10">
+<div class="ch-head"><span class="ch-code">PM-10</span><h2>텔레메트리 계약</h2></div>
+<p class="lede">시니어 수준의 프론트엔드 관측가능성은 에러, 성능, API, 분석 이벤트를 따로 보지 않습니다. 사용자의 한 행동이 어떤 route와 release에서 시작됐고, 어떤 API와 Web Vital, JS error, analytics event로 이어졌는지 연결되어야 배포 회귀와 제품 영향을 빠르게 판정할 수 있습니다.</p>
+<div class="serial-card"><span class="sc-label">FRONTEND TELEMETRY CONTRACT</span>release_id + route_id + user_action_id + session_segment<br>+ web_vital_event + js_error_event + api_span + analytics_event<br>+ feature_flag_state + experiment_variant + privacy_classification</div>
+<table>
+<tr><th>필드</th><th>역할</th><th>좋은 값</th><th>금지</th></tr>
+<tr><td>release_id</td><td>배포 회귀 추적</td><td>commit SHA, build id, sourcemap release</td><td>환경마다 다른 임의 문자열</td></tr>
+<tr><td>route_id</td><td>화면 단위 분석</td><td><code>/projects/:id/settings</code>처럼 정규화</td><td>개인정보가 섞인 raw URL</td></tr>
+<tr><td>user_action_id</td><td>행동 흐름 연결</td><td>save_project, filter_grid, checkout_submit</td><td>button_1_clicked 같은 구현명</td></tr>
+<tr><td>api_span</td><td>서버와 프론트 시간 분리</td><td>request id, status class, normalized endpoint</td><td>token, email, query 원문</td></tr>
+<tr><td>privacy_classification</td><td>수집 위험 통제</td><td>public, internal, pseudonymous, sensitive</td><td>분류 없는 자유 payload</td></tr>
+</table>
+<h3>WEB VITAL ERROR API TRACE CORRELATION</h3>
+<p>성능 지표가 나빠졌을 때 같은 release의 JS error, API 5xx, chunk load error, feature flag 변경을 함께 봐야 합니다. INP 악화가 React render 때문인지, API 실패 retry storm 때문인지, third-party script long task 때문인지 분리할 수 있어야 합니다.</p>
+<table>
+<tr><th>증상</th><th>함께 볼 신호</th><th>가능한 원인</th><th>다음 행동</th></tr>
+<tr><td>INP 악화 + JS error 증가</td><td>error stack, interaction target, release id</td><td>새 widget이 예외 후 retry/render loop</td><td>feature flag off, trace 재현, regression test</td></tr>
+<tr><td>LCP 악화 + API latency 증가</td><td>route loader span, TTFB, cache hit</td><td>서버 data dependency가 LCP를 blocking</td><td>server cache, streaming boundary, shell 분리</td></tr>
+<tr><td>CLS 증가 + experiment variant</td><td>variant id, shift source, viewport</td><td>A/B banner 또는 consent UI가 공간 미예약</td><td>variant rollback, fixed slot, visual regression</td></tr>
+<tr><td>Chunk error 증가</td><td>asset URL, service worker, release mix</td><td>stale index 또는 이전 asset 삭제</td><td>asset 보존, reload UX, SW update 수정</td></tr>
+</table>
+<h3>RUM SEGMENTATION MODEL</h3>
+<div class="serial-card"><span class="sc-label">RUM SEGMENTATION MODEL</span>route × release × device_class × network_class × locale<br>× auth_state × feature_flag × experiment_variant × data_size_bucket</div>
+<p>평균 지표는 문제를 숨깁니다. route와 release는 필수 segment이고, 대형 grid나 editor는 data_size_bucket을 반드시 포함해야 합니다. locale과 device class를 보지 않으면 긴 번역, 폰트, 저사양 기기 문제를 놓칩니다.</p>
 </section>
 <footer>PERFORMANCE METRICS HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>

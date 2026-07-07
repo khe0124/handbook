@@ -10,6 +10,7 @@
   <a href="#ch4"><span class="code">DEP-04</span>sourcemap과 오류 수집</a>
   <a href="#ch5"><span class="code">DEP-05</span>rollback과 release</a>
   <a href="#ch6"><span class="code">DEP-06</span>배포 체크리스트</a>
+  <a href="#ch7"><span class="code">DEP-07</span>릴리스 증거와 피드백 루프</a>
 </nav><main>
 <header class="hero">
   <div class="hero-serial"><span>DOC : FE-DEPLOY-V1</span><span>SCOPE : BUILD · CDN · CACHE · SOURCEMAP · ROLLBACK</span><span>LANG : KO</span></div>
@@ -124,6 +125,35 @@
 6. rollback, feature flag kill switch, forward fix 중 하나의 판단 근거를 남긴다
 </div>
 <div class="callout gm"><span class="co-label">PR CHECK</span><p>배포 관련 변경은 cache header, sourcemap 공개 여부, release id 주입, 이전 assets 보존, rollback 절차, service worker 업데이트 정책을 체크합니다. 한 항목이라도 바뀌면 배포 리허설 또는 staging 검증을 거칩니다.</p></div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">DEP-07</span><h2>릴리스 증거와 피드백 루프</h2></div>
+<p class="lede">고급 프론트엔드 릴리스는 “빌드 성공”으로 끝나지 않습니다. 변경 유형별 회귀 위험을 분류하고, preview에서 증거를 남기고, 배포 후 release health window에서 실제 사용자 지표를 확인한 뒤, 사고가 나면 같은 실패를 막는 테스트와 게이트로 되돌려야 합니다.</p>
+<div class="serial-card"><span class="sc-label">RELEASE EVIDENCE PACKET</span>change risk label<br>route and feature impact list<br>test evidence: unit, component, E2E, visual, a11y, contract<br>build evidence: bundle diff, sourcemap upload, asset hash<br>observability evidence: release_id, dashboard link, alert owner<br>rollback evidence: flag, previous artifact, CDN purge scope<br>post-release evidence: error, Web Vitals, API failure, user report window</div>
+<h3>REGRESSION MATRIX BY CHANGE TYPE</h3>
+<table>
+<tr><th>변경 유형</th><th>필수 회귀</th><th>릴리스 차단 조건</th><th>운영 관찰</th></tr>
+<tr><td>Design system/token</td><td>visual, a11y, responsive, long text</td><td>focus ring 손실, contrast 실패, 핵심 화면 overlap</td><td>rage click, support UI 문의, visual diff</td></tr>
+<tr><td>Server state/API</td><td>contract, loading/error/empty, stale cache</td><td>409/422/403 처리 누락, optimistic rollback 없음</td><td>API failure, retry volume, JS error</td></tr>
+<tr><td>Route/rendering</td><td>SSR/hydration, route transition, chunk load</td><td>hydration mismatch, blank screen, chunk 404</td><td>LCP, route latency, chunk error</td></tr>
+<tr><td>Analytics/SEO</td><td>event payload, metadata, schema, consent</td><td>PII 전송, canonical 오류, 이벤트 중복</td><td>event anomaly, Search Console, consent opt-out</td></tr>
+<tr><td>Security</td><td>XSS payload, redirect, token/session, CSP</td><td>untrusted sink, open redirect, token leak</td><td>CSP report, auth error, suspicious redirect</td></tr>
+</table>
+<h3>DESIGN SYSTEM REGRESSION GOVERNANCE</h3>
+<p>디자인 시스템 변경은 작은 CSS 수정이 아니라 제품 전체의 UI 계약 변경입니다. token, primitive, composite component, pattern, page template 중 어디를 바꾸는지 분류하고, 각 층별 소유자와 회귀 범위를 다르게 둡니다.</p>
+<table>
+<tr><th>층</th><th>회귀 범위</th><th>승인 기준</th><th>증거</th></tr>
+<tr><td>Token</td><td>전체 화면 색·간격·타이포그래피</td><td>contrast, density, theme snapshot 통과</td><td>token diff, visual baseline</td></tr>
+<tr><td>Primitive</td><td>Button, Input, Dialog, Menu</td><td>keyboard, focus, disabled/loading/error 상태</td><td>Storybook state matrix, axe result</td></tr>
+<tr><td>Composite</td><td>Table, FilterBar, FormSection</td><td>긴 텍스트, empty/error, permission 상태</td><td>responsive screenshots, E2E smoke</td></tr>
+<tr><td>Pattern</td><td>wizard, bulk action, command palette</td><td>state machine, recovery, telemetry</td><td>scenario trace, event payload capture</td></tr>
+</table>
+<h3>OBSERVABILITY RELEASE GATE</h3>
+<div class="serial-card"><span class="sc-label">OBSERVABILITY RELEASE GATE</span>release_id is injected into bundle and error events<br>sourcemap upload matches release_id and commit SHA<br>Web Vitals dashboard is filtered by route and release<br>API spans carry request id or normalized endpoint<br>analytics events include schema version and consent state<br>alert owner and rollback decision window are documented</div>
+<h3>INCIDENT FEEDBACK LOOP</h3>
+<p>프론트엔드 사고의 후속 조치는 hotfix로 끝나면 안 됩니다. 원인을 회귀 테스트, 릴리스 게이트, 관측 신호, 디자인 시스템 정책 중 하나 이상으로 되돌려야 같은 사고가 반복되지 않습니다.</p>
+<div class="serial-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span>incident symptom → affected route and release<br>→ user impact and rollback decision<br>→ root cause category: state, API, render, cache, security, design system<br>→ missing test or missing signal<br>→ new regression case<br>→ release gate update<br>→ owner and review date</div>
 </section>
 <footer>FRONTEND DEPLOYMENT HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>
