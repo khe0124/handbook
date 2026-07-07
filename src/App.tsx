@@ -1,4 +1,11 @@
-import { ArrowLeft, ArrowRight, ArrowUp, ChevronDown, Menu, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ChevronDown,
+  Menu,
+  X,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DEFAULT_HANDBOOK_ID,
@@ -37,9 +44,12 @@ const activeIdStorageKey = "dev-handbook:last-active-id";
 const scrollPositionStoragePrefix = "dev-handbook:scroll:";
 
 const getGroupKeyForItemId = (itemId: string) =>
-  groups.find((group) => group.items.some((item) => item.id === itemId))?.key ?? groups[0]?.key ?? "";
+  groups.find((group) => group.items.some((item) => item.id === itemId))?.key ??
+  groups[0]?.key ??
+  "";
 
-const hasHandbookItem = (itemId: string) => items.some((item) => item.id === itemId);
+const hasHandbookItem = (itemId: string) =>
+  items.some((item) => item.id === itemId);
 
 const getStoredActiveId = () => {
   if (typeof window === "undefined") {
@@ -48,13 +58,16 @@ const getStoredActiveId = () => {
 
   try {
     const storedId = window.localStorage.getItem(activeIdStorageKey);
-    return storedId && hasHandbookItem(storedId) ? storedId : DEFAULT_HANDBOOK_ID;
+    return storedId && hasHandbookItem(storedId)
+      ? storedId
+      : DEFAULT_HANDBOOK_ID;
   } catch {
     return DEFAULT_HANDBOOK_ID;
   }
 };
 
-const getScrollPositionStorageKey = (itemId: string) => `${scrollPositionStoragePrefix}${itemId}`;
+const getScrollPositionStorageKey = (itemId: string) =>
+  `${scrollPositionStoragePrefix}${itemId}`;
 
 const getStoredScrollPosition = (itemId: string) => {
   if (typeof window === "undefined") {
@@ -62,13 +75,17 @@ const getStoredScrollPosition = (itemId: string) => {
   }
 
   try {
-    const storedPosition = window.localStorage.getItem(getScrollPositionStorageKey(itemId));
+    const storedPosition = window.localStorage.getItem(
+      getScrollPositionStorageKey(itemId),
+    );
     if (!storedPosition) {
       return null;
     }
 
     const parsedPosition = Number.parseInt(storedPosition, 10);
-    return Number.isFinite(parsedPosition) && parsedPosition > 0 ? parsedPosition : null;
+    return Number.isFinite(parsedPosition) && parsedPosition > 0
+      ? parsedPosition
+      : null;
   } catch {
     return null;
   }
@@ -84,13 +101,22 @@ const saveActiveId = (itemId: string) => {
 
 const saveScrollPosition = (itemId: string, scrollY = window.scrollY) => {
   try {
-    window.localStorage.setItem(getScrollPositionStorageKey(itemId), String(Math.max(0, Math.round(scrollY))));
+    window.localStorage.setItem(
+      getScrollPositionStorageKey(itemId),
+      String(Math.max(0, Math.round(scrollY))),
+    );
   } catch {
     // Reading should continue even when storage is unavailable.
   }
 };
 
-function DocumentMenuItems({ items, activeId, className, onSelect, role }: DocumentMenuItemsProps) {
+function DocumentMenuItems({
+  items,
+  activeId,
+  className,
+  onSelect,
+  role,
+}: DocumentMenuItemsProps) {
   return (
     <>
       {items.map((item) => (
@@ -125,13 +151,19 @@ export default function App() {
     () => items.find((item) => item.id === activeId) ?? items[0],
     [activeId],
   );
-  const activeGroupKey = useMemo(() => getGroupKeyForItemId(activeItem.id), [activeItem.id]);
+  const activeGroupKey = useMemo(
+    () => getGroupKeyForItemId(activeItem.id),
+    [activeItem.id],
+  );
   const activeIndex = useMemo(
     () => items.findIndex((item) => item.id === activeItem.id),
     [activeItem.id],
   );
   const previousItem = activeIndex > 0 ? items[activeIndex - 1] : null;
-  const nextItem = activeIndex >= 0 && activeIndex < items.length - 1 ? items[activeIndex + 1] : null;
+  const nextItem =
+    activeIndex >= 0 && activeIndex < items.length - 1
+      ? items[activeIndex + 1]
+      : null;
   const homeItem = useMemo(
     () => items.find((item) => item.id === DEFAULT_HANDBOOK_ID) ?? items[0],
     [],
@@ -214,7 +246,8 @@ export default function App() {
   }, [activeGroupKey]);
 
   const handleScrollTop = () => {
-    const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches
       ? "auto"
       : "smooth";
 
@@ -230,7 +263,9 @@ export default function App() {
       pendingSectionIdRef.current = null;
       pendingScrollRestoreIdRef.current = "";
       window.requestAnimationFrame(() => {
-        window.document.getElementById(pendingSectionId)?.scrollIntoView({ behavior: "auto" });
+        window.document
+          .getElementById(pendingSectionId)
+          ?.scrollIntoView({ behavior: "auto" });
       });
       return;
     }
@@ -272,7 +307,9 @@ export default function App() {
 
   const handleSelectSearchResult = (docId: string, sectionId: string) => {
     if (docId === activeItem.id) {
-      window.document.getElementById(sectionId)?.scrollIntoView({ behavior: "auto" });
+      window.document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "auto" });
       return;
     }
 
@@ -289,8 +326,12 @@ export default function App() {
   };
 
   return (
-    <div className={`app-shell ${mobileTopbarOpen ? "mobile-topbar-open" : "mobile-topbar-collapsed"}`}>
-      <header className={`app-header ${mobileTopbarOpen ? "app-header-open" : "app-header-collapsed"}`}>
+    <div
+      className={`app-shell ${mobileTopbarOpen ? "mobile-topbar-open" : "mobile-topbar-collapsed"}`}
+    >
+      <header
+        className={`app-header ${mobileTopbarOpen ? "app-header-open" : "app-header-collapsed"}`}
+      >
         <div className="app-header-brand">
           <button
             type="button"
@@ -298,10 +339,16 @@ export default function App() {
             onClick={() => setMobileTopbarOpen((isOpen) => !isOpen)}
             aria-expanded={mobileTopbarOpen}
             aria-controls="mobile-topbar-content"
-            aria-label={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
+            aria-label={
+              mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"
+            }
             title={mobileTopbarOpen ? "상단 메뉴 접기" : "상단 메뉴 펼치기"}
           >
-            {mobileTopbarOpen ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
+            {mobileTopbarOpen ? (
+              <X size={18} aria-hidden />
+            ) : (
+              <Menu size={18} aria-hidden />
+            )}
           </button>
           <div className="app-header-title">
             <h1>
@@ -315,16 +362,19 @@ export default function App() {
                 Dev Handbook
               </button>
             </h1>
-            <p>
-              {activeItem.kind} · {activeItem.label}
-            </p>
           </div>
         </div>
-        <div id="mobile-topbar-content" className="mobile-topbar-content" data-mobile-collapsed={!mobileTopbarOpen}>
+        <div
+          id="mobile-topbar-content"
+          className="mobile-topbar-content"
+          data-mobile-collapsed={!mobileTopbarOpen}
+        >
           <GlobalSearch onSelectSection={handleSelectSearchResult} />
           <nav aria-label="문서 분류" className="menubar">
             {groups.map((group) => {
-              const groupActive = group.items.some((item) => item.id === activeItem.id);
+              const groupActive = group.items.some(
+                (item) => item.id === activeItem.id,
+              );
 
               return (
                 <div className="menu" key={group.key}>
@@ -334,7 +384,10 @@ export default function App() {
                     aria-haspopup="true"
                     data-active={groupActive ? "true" : undefined}
                   >
-                    {group.label} <span className="caret" aria-hidden>▾</span>
+                    {group.label}{" "}
+                    <span className="caret" aria-hidden>
+                      ▾
+                    </span>
                   </button>
                   <div className="menu-panel" role="menu">
                     <DocumentMenuItems
@@ -404,7 +457,11 @@ export default function App() {
                         <ChevronDown size={16} aria-hidden />
                       </button>
                     </h2>
-                    <div className="mobile-menu-items" id={panelId} hidden={!groupOpen}>
+                    <div
+                      className="mobile-menu-items"
+                      id={panelId}
+                      hidden={!groupOpen}
+                    >
                       <DocumentMenuItems
                         items={group.items}
                         activeId={activeItem.id}
@@ -428,7 +485,11 @@ export default function App() {
             aria-label={mobileMenuOpen ? "전체 메뉴 닫기" : "전체 메뉴 열기"}
             title={mobileMenuOpen ? "전체 메뉴 닫기" : "전체 메뉴 열기"}
           >
-            {mobileMenuOpen ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
+            {mobileMenuOpen ? (
+              <X size={18} aria-hidden />
+            ) : (
+              <Menu size={18} aria-hidden />
+            )}
           </button>
 
           <button
@@ -436,13 +497,23 @@ export default function App() {
             className="doc-nav-button"
             onClick={() => previousItem && handleSelectItem(previousItem)}
             disabled={!previousItem}
-            aria-label={previousItem ? `이전 항목: ${previousItem.label}` : "이전 항목 없음"}
-            title={previousItem ? `이전 항목: ${previousItem.label}` : "이전 항목 없음"}
+            aria-label={
+              previousItem
+                ? `이전 항목: ${previousItem.label}`
+                : "이전 항목 없음"
+            }
+            title={
+              previousItem
+                ? `이전 항목: ${previousItem.label}`
+                : "이전 항목 없음"
+            }
           >
             <ArrowLeft size={17} aria-hidden />
             <span className="doc-nav-copy">
               <span className="doc-nav-kicker">이전</span>
-              <span className="doc-nav-label">{previousItem?.label ?? "없음"}</span>
+              <span className="doc-nav-label">
+                {previousItem?.label ?? "없음"}
+              </span>
             </span>
           </button>
 
@@ -463,7 +534,9 @@ export default function App() {
             className="doc-nav-button doc-nav-button-next"
             onClick={() => nextItem && handleSelectItem(nextItem)}
             disabled={!nextItem}
-            aria-label={nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"}
+            aria-label={
+              nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"
+            }
             title={nextItem ? `다음 항목: ${nextItem.label}` : "다음 항목 없음"}
           >
             <span className="doc-nav-copy">
