@@ -22,6 +22,7 @@
   <a href="#fer-06"><span class="code">FER-06</span>읽히는 신호</a>
   <a href="#metric-anchor"><span class="code">METRIC</span>수치 앵커</a>
   <a href="#case"><span class="code">CASE</span>실무 상황 예시</a>
+  <a href="#runtime-packet"><span class="code">PACKET</span>런타임 증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -137,6 +138,34 @@
 <div class="case-row"><strong>LESSON</strong><p>SSR 문제는 React 문법 문제가 아니라 서버 산출물과 클라이언트 첫 렌더의 계약 문제다. 날짜, 랜덤값, 브라우저 API는 mismatch의 흔한 원인이다.</p></div>
 </article>
 </div>
+</section>
+
+<section id="runtime-packet">
+<div class="ch-head"><span class="ch-code">PACKET</span><h2>Frontend runtime evidence packet</h2></div>
+<p class="lede">프론트엔드 생태계 판단은 도구 이름이 아니라 산출물 비용으로 증명한다. 번들러, 패키지 형식, hydration, polyfill 결정을 바꿨다면 초기 JS, parse/execute, LCP/INP, mismatch rate, cache hit을 같은 조건에서 비교해야 한다.</p>
+<table>
+<tr><th>결정</th><th>통과 증거</th><th>반려 신호</th></tr>
+<tr><td>dynamic import</td><td>초기 JS 감소량과 지연된 chunk 첫 진입 비용을 함께 기록</td><td>bundle size만 줄고 사용자가 자주 여는 탭이 늦어진다</td></tr>
+<tr><td>패키지 교체</td><td>ESM tree-shaking 결과, sideEffects 설정, legacy browser 영향 기록</td><td>라이브러리 이름만 바꾸고 vendor chunk diff를 보지 않는다</td></tr>
+<tr><td>SSR/hydration</td><td>mismatch rate, client-only 값 목록, 서버/클라이언트 formatter 일치 여부</td><td>경고를 suppressHydrationWarning으로 덮고 원인을 남기지 않는다</td></tr>
+<tr><td>polyfill 정책</td><td>browserslist, polyfill byte cost, 실제 사용자 브라우저 분포</td><td>모든 polyfill을 전역으로 넣어 최신 브라우저 사용자에게도 비용을 부과한다</td></tr>
+</table>
+<pre class="snippet-card"><code>frontend_runtime_evidence_packet:
+  feature: "admin dashboard chart tab split"
+  before:
+    initial_js_kb: 980
+    lcp_p75_ms: 2900
+    chart_tab_first_open_ms: 120
+  after:
+    initial_js_kb: 560
+    lcp_p75_ms: 1900
+    chart_tab_first_open_ms: 570
+  decision:
+    pass: "차트 탭 사용률 18%, 첫 화면 task success가 핵심이라 lazy load 유지"
+    follow_up: "탭 hover prefetch와 idle prefetch를 A/B로 검토"
+  rejected_submission:
+    reason: "초기 JS 감소만 보고 후속 탭 지연 비용을 기록하지 않음"
+  reviewer_note: "비용을 제거한 것이 아니라 이동시켰다는 해석이 포함되어 A급"</code></pre>
 </section>
 
 <footer>
