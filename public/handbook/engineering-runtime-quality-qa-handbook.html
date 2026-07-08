@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>런타임 품질·장애대응 Q&amp;A</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:0}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:0;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:0;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:0;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:720px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:0}h3{font-size:18px;font-weight:700;margin:30px 0 12px}h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:0}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.callout.gm{border-left-color:var(--ink);background:#ECEEF3}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}.semantic-card{background:var(--green-tint);border:1px solid var(--line);border-radius:0;padding:22px 26px;margin:24px 0;font-size:14px;line-height:1.9}.semantic-card .sc-label{font-family:var(--mono);color:var(--green-deep);font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:0;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.9;overflow-x:auto;white-space:pre-wrap}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">BACKEND Q&amp;A</div>
+  <div class="nav-title">런타임 품질·장애대응 Q&amp;A</div>
+  <a href="#overview"><span class="code">GUIDE</span>훈련 방식</a>
+  <a href="#qa-1"><span class="code">Q01</span>p99 latency가 튀었을 때 어떤 순서로 봅니까?</a>
+  <a href="#qa-2"><span class="code">Q02</span>Retry는 언제 위험해지나요?</a>
+  <a href="#qa-3"><span class="code">Q03</span>Consumer lag와 DLQ를 어떻게 운영하나요?</a>
+  <a href="#qa-4"><span class="code">Q04</span>장애 대응에서 postmortem의 목적은 무엇인가요?</a>
+  <a href="#qa-5"><span class="code">Q05</span>SLI와 SLO는 어떻게 정하나요?</a>
+  <a href="#qa-6"><span class="code">Q06</span>Health check는 무엇을 확인해야 하나요?</a>
+  <a href="#qa-7"><span class="code">Q07</span>Alert fatigue를 줄이려면 어떻게 하나요?</a>
+  <a href="#qa-8"><span class="code">Q08</span>Circuit breaker는 retry와 어떤 관계인가요?</a>
+  <a href="#qa-9"><span class="code">Q09</span>Backpressure와 rate limit은 어떻게 다른가요?</a>
+  <a href="#qa-10"><span class="code">Q10</span>Runbook에는 무엇이 있어야 하나요?</a>
+  <a href="#qa-11"><span class="code">Q11</span>배포 후 health window에서는 무엇을 보나요?</a>
+  <a href="#qa-12"><span class="code">Q12</span>분산 trace가 있어도 로그가 필요한 이유는 무엇인가요?</a>
+  <a href="#qa-13"><span class="code">Q13</span>RED와 USE metric은 어떻게 설명하나요?</a>
+  <a href="#qa-14"><span class="code">Q14</span>p95와 p99은 어떻게 설명하나요?</a>
+  <a href="#qa-15"><span class="code">Q15</span>Thread pool saturation은 어떻게 설명하나요?</a>
+  <a href="#qa-16"><span class="code">Q16</span>GC latency은 어떻게 설명하나요?</a>
+  <a href="#qa-17"><span class="code">Q17</span>Connection pool starvation은 어떻게 설명하나요?</a>
+  <a href="#qa-18"><span class="code">Q18</span>Timeout 전파은 어떻게 설명하나요?</a>
+  <a href="#qa-19"><span class="code">Q19</span>DLQ replay은 어떻게 설명하나요?</a>
+  <a href="#qa-20"><span class="code">Q20</span>Consumer lag triage은 어떻게 설명하나요?</a>
+  <a href="#qa-21"><span class="code">Q21</span>Incident commander은 어떻게 설명하나요?</a>
+  <a href="#qa-22"><span class="code">Q22</span>Postmortem action item은 어떻게 설명하나요?</a>
+  <a href="#qa-23"><span class="code">Q23</span>Log sampling은 어떻게 설명하나요?</a>
+  <a href="#qa-24"><span class="code">Q24</span>High-cardinality metric은 어떻게 설명하나요?</a>
+  <a href="#qa-25"><span class="code">Q25</span>Rollback threshold은 어떻게 설명하나요?</a>
+  <a href="#qa-26"><span class="code">Q26</span>Degraded mode은 어떻게 설명하나요?</a>
+  <a href="#qa-27"><span class="code">Q27</span>Queue ordering은 어떻게 설명하나요?</a>
+  <a href="#qa-28"><span class="code">Q28</span>Idempotent consumer은 어떻게 설명하나요?</a>
+  <a href="#qa-29"><span class="code">Q29</span>PR 운영 지표은 어떻게 설명하나요?</a>
+  <a href="#qa-30"><span class="code">Q30</span>운영 경험 부족 답변은 어떻게 설명하나요?</a>
+  <a href="#drill"><span class="code">DRILL</span>꼬리질문 반복 훈련</a>
+  <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : ENGINEERING-RUNTIME-QUALITY-QA</span>
+    <span>SOURCE : 런타임 품질·장애대응</span>
+    <span>MODE : QUESTION · ANSWER · FOLLOW-UP</span>
+  </div>
+  <h1>런타임 품질·장애대응 Q&amp;A</h1>
+  <p class="hero-sub">관측성, SLO, p99, retry, DLQ, backpressure, incident command를 실전처럼 답하는 훈련 페이지입니다.</p>
+  <div class="hero-meta">TRAINING : 30초 답변 → 90초 확장 → 꼬리질문 방어 → 증거 패킷 확인</div>
+</header>
+
+<section id="overview">
+<div class="ch-head"><span class="ch-code">GUIDE</span><h2>훈련 방식</h2></div>
+<p class="lede">각 문항은 외워서 읽는 답이 아니라, 질문 의도를 파악하고 판단 기준을 말하는 훈련용입니다. 답변은 항상 결론, 메커니즘, trade-off, 실패 모드, 검증 증거 순서로 확장합니다.</p>
+<div class="snippet-card"><code>answer_loop:
+  1_conclusion: "질문에 대한 결론을 한 문장으로 말한다"
+  2_mechanism: "내부 동작이나 시스템 경계를 설명한다"
+  3_tradeoff: "얻는 것과 잃는 것을 나눈다"
+  4_failure: "운영 중 깨지는 조건을 말한다"
+  5_evidence: "테스트, 로그, 지표, 쿼리, ADR 중 하나를 증거로 든다"</code></div>
+</section>
+
+<section id="qa-1">
+<div class="ch-head"><span class="ch-code">Q01</span><h2>p99 latency가 튀었을 때 어떤 순서로 봅니까?</h2></div>
+<p class="lede">route별 p99와 error rate로 증상을 잡고 trace로 span을 분해합니다. 이후 app thread/GC, DB pool/lock/query, downstream timeout/retry, queue lag를 순서대로 확인합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>평균 latency가 괜찮으면 장애가 아니라고 볼 수 있나요?</td><td>route별 p99와 error rate로 증상을 잡고 trace로 span을 분해합니다. 이 꼬리질문에서는 P99 LATENCY DECOMPOSITION TABLE, JFR, thread dump, pg_stat_activity, trace span를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>pool saturation과 DB slow query를 어떻게 구분하나요?</td><td>route별 p99와 error rate로 증상을 잡고 trace로 span을 분해합니다. 이 꼬리질문에서는 P99 LATENCY DECOMPOSITION TABLE, JFR, thread dump, pg_stat_activity, trace span를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>GC pause는 어떤 증거로 확인하나요?</td><td>route별 p99와 error rate로 증상을 잡고 trace로 span을 분해합니다. 이 꼬리질문에서는 P99 LATENCY DECOMPOSITION TABLE, JFR, thread dump, pg_stat_activity, trace span를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+P99 LATENCY DECOMPOSITION TABLE, JFR, thread dump, pg_stat_activity, trace span
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-2">
+<div class="ch-head"><span class="ch-code">Q02</span><h2>Retry는 언제 위험해지나요?</h2></div>
+<p class="lede">하류가 이미 포화된 상황에서 여러 계층이 동시에 재시도하면 retry amplification으로 장애를 키웁니다. retry budget, exponential backoff with jitter, timeout, circuit breaker를 같이 둬야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>모든 5xx는 재시도해도 되나요?</td><td>하류가 이미 포화된 상황에서 여러 계층이 동시에 재시도하면 retry amplification으로 장애를 키웁니다. 이 꼬리질문에서는 retry count metric, circuit state, idempotency key, downstream SLO를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>timeout은 client와 server 중 어디에 두나요?</td><td>하류가 이미 포화된 상황에서 여러 계층이 동시에 재시도하면 retry amplification으로 장애를 키웁니다. 이 꼬리질문에서는 retry count metric, circuit state, idempotency key, downstream SLO를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>재시도해도 안전하려면 API가 무엇을 가져야 하나요?</td><td>하류가 이미 포화된 상황에서 여러 계층이 동시에 재시도하면 retry amplification으로 장애를 키웁니다. 이 꼬리질문에서는 retry count metric, circuit state, idempotency key, downstream SLO를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+retry count metric, circuit state, idempotency key, downstream SLO
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-3">
+<div class="ch-head"><span class="ch-code">Q03</span><h2>Consumer lag와 DLQ를 어떻게 운영하나요?</h2></div>
+<p class="lede">lag 증가는 생산 증가, 소비 실패, partition skew, downstream 지연으로 나눠 봅니다. DLQ는 독성 메시지를 격리하고, replay 전에는 idempotency와 dry-run count, 재처리 범위를 확인합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>DLQ를 비우면 해결인가요?</td><td>lag 증가는 생산 증가, 소비 실패, partition skew, downstream 지연으로 나눠 봅니다. 이 꼬리질문에서는 CONSUMER LAG DLQ REPLAY RUNBOOK, consume rate, partition lag, replay fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>replay가 중복 부작용을 만들면 어떻게 하나요?</td><td>lag 증가는 생산 증가, 소비 실패, partition skew, downstream 지연으로 나눠 봅니다. 이 꼬리질문에서는 CONSUMER LAG DLQ REPLAY RUNBOOK, consume rate, partition lag, replay fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>worker를 늘리면 항상 좋아지나요?</td><td>lag 증가는 생산 증가, 소비 실패, partition skew, downstream 지연으로 나눠 봅니다. 이 꼬리질문에서는 CONSUMER LAG DLQ REPLAY RUNBOOK, consume rate, partition lag, replay fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+CONSUMER LAG DLQ REPLAY RUNBOOK, consume rate, partition lag, replay fixture
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-4">
+<div class="ch-head"><span class="ch-code">Q04</span><h2>장애 대응에서 postmortem의 목적은 무엇인가요?</h2></div>
+<p class="lede">책임자를 찾는 것이 아니라 시스템이 사고를 허용한 조건을 찾아 재발 가능성을 줄이는 것입니다. impact, timeline, contributing factors, action item을 owner와 due date가 있는 형태로 남깁니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>root cause 하나만 찾으면 충분한가요?</td><td>책임자를 찾는 것이 아니라 시스템이 사고를 허용한 조건을 찾아 재발 가능성을 줄이는 것입니다. 이 꼬리질문에서는 BACKEND INCIDENT POSTMORTEM MODEL, incident timeline, alert/runbook change를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>액션 아이템이 좋은지 어떻게 판단하나요?</td><td>책임자를 찾는 것이 아니라 시스템이 사고를 허용한 조건을 찾아 재발 가능성을 줄이는 것입니다. 이 꼬리질문에서는 BACKEND INCIDENT POSTMORTEM MODEL, incident timeline, alert/runbook change를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>고객 커뮤니케이션은 언제 시작하나요?</td><td>책임자를 찾는 것이 아니라 시스템이 사고를 허용한 조건을 찾아 재발 가능성을 줄이는 것입니다. 이 꼬리질문에서는 BACKEND INCIDENT POSTMORTEM MODEL, incident timeline, alert/runbook change를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+BACKEND INCIDENT POSTMORTEM MODEL, incident timeline, alert/runbook change
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-5">
+<div class="ch-head"><span class="ch-code">Q05</span><h2>SLI와 SLO는 어떻게 정하나요?</h2></div>
+<p class="lede">SLI는 사용자 경험을 나타내는 측정값이고 SLO는 그 목표입니다. API라면 availability, latency, correctness를 route와 중요도별로 나누고, error budget으로 알림과 릴리스 판단을 연결합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>모든 API에 같은 SLO를 적용하나요?</td><td>중요도에 따라 다르게 둡니다. 결제·로그인 같은 critical path와 관리자 통계 API는 latency와 availability 목표가 달라야 합니다.</td></tr>
+<tr><td>내부 batch도 SLO가 필요한가요?</td><td>사용자 요청이 아니어도 마감 시간, 데이터 신선도, downstream 영향이 있으면 SLO가 필요합니다. 예를 들어 정산 batch는 completion freshness가 SLI가 됩니다.</td></tr>
+<tr><td>SLO 위반과 장애 선언은 같은가요?</td><td>항상 같지는 않습니다. SLO 위반은 사용자 영향 가능성을 나타내는 신호이고, 장애 선언은 영향 범위와 대응 필요성까지 판단한 운영 결정입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+SLI definition, SLO target, burn rate alert, error budget policy
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-6">
+<div class="ch-head"><span class="ch-code">Q06</span><h2>Health check는 무엇을 확인해야 하나요?</h2></div>
+<p class="lede">liveness는 프로세스 생존, readiness는 트래픽 수신 준비 상태를 봅니다. readiness에 핵심 dependency 상태를 반영하되, 일시 장애 때 전체 재시작 폭주가 생기지 않도록 신중히 나눠야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>DB가 잠깐 느리면 readiness를 실패시켜야 하나요?</td><td>핵심 DB가 완전히 불가하면 readiness 실패가 맞을 수 있지만, 짧은 지연마다 트래픽을 빼면 flapping이 생깁니다. threshold와 hysteresis가 필요합니다.</td></tr>
+<tr><td>liveness에 외부 API를 넣으면 왜 위험한가요?</td><td>외부 API 장애 때문에 내 프로세스를 재시작하면 불필요한 restart storm이 생깁니다. liveness는 프로세스 생존, readiness는 의존성 준비 상태를 봅니다.</td></tr>
+<tr><td>startup probe는 언제 필요한가요?</td><td>초기 로딩이 긴 앱이 liveness에 의해 계속 재시작되는 것을 막을 때 씁니다. migration, warmup, large cache load가 있는 앱에 유용합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+health endpoint contract, probe config, restart count, dependency status
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-7">
+<div class="ch-head"><span class="ch-code">Q07</span><h2>Alert fatigue를 줄이려면 어떻게 하나요?</h2></div>
+<p class="lede">사람을 깨우는 알림은 즉시 행동 가능한 증상 기반이어야 합니다. CPU 같은 원인 후보보다 user-visible error, SLO burn rate, data loss risk, sustained saturation을 우선합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>warning과 page를 어떻게 나누나요?</td><td>page는 즉시 사람 행동이 필요한 사용자 영향 또는 데이터 손실 위험에 씁니다. warning은 추세 관찰이나 업무 시간 내 처리 가능한 신호로 둡니다.</td></tr>
+<tr><td>알림 임계값은 누가 정하나요?</td><td>SLO, historical baseline, incident history를 기준으로 owner가 정하고 조정합니다. 임의 CPU 80% 같은 원인 후보 임계값은 노이즈가 되기 쉽습니다.</td></tr>
+<tr><td>한밤중에 깨우면 안 되는 알림은 무엇인가요?</td><td>즉시 조치가 필요 없거나 자동 복구되는 단발성 warning은 깨우면 안 됩니다. sustained user impact나 data loss risk만 page합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+alert policy, runbook link, page history, false positive review
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-8">
+<div class="ch-head"><span class="ch-code">Q08</span><h2>Circuit breaker는 retry와 어떤 관계인가요?</h2></div>
+<p class="lede">retry는 일시 실패를 흡수하지만 하류가 죽었을 때는 부담을 키울 수 있습니다. circuit breaker는 실패율이 높을 때 호출을 빠르게 차단해 자원 고갈과 cascading failure를 줄입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>OPEN, HALF_OPEN 상태는 무엇인가요?</td><td>OPEN은 호출 차단, HALF_OPEN은 일부 요청으로 회복 여부를 시험하는 상태입니다. 성공하면 CLOSED로 돌아가고 실패하면 다시 OPEN으로 갑니다.</td></tr>
+<tr><td>circuit open 시 사용자에게 무엇을 보여주나요?</td><td>기능별 fallback을 보여줍니다. 읽기 기능은 cached/stale 표시, 쓰기 기능은 일시 불가와 재시도 안내를 주고 silent failure는 피합니다.</td></tr>
+<tr><td>fallback이 stale data면 어떻게 표시하나요?</td><td>도메인별 허용 시간을 정해야 합니다. 통계는 분 단위 stale이 가능하지만 결제 상태나 권한은 stale 허용 범위가 거의 없습니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+circuit state metric, fallback policy, retry budget, downstream error rate
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-9">
+<div class="ch-head"><span class="ch-code">Q09</span><h2>Backpressure와 rate limit은 어떻게 다른가요?</h2></div>
+<p class="lede">rate limit은 외부 요청량을 제한하는 정책이고, backpressure는 소비자가 처리 능력을 초과했을 때 생산자나 upstream에 늦추라는 신호를 주는 흐름 제어입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>queue가 쌓이면 worker만 늘리면 되나요?</td><td>worker를 늘리면 downstream DB나 API를 더 압박할 수 있습니다. lag 원인이 CPU인지 partition skew인지 downstream saturation인지 먼저 봐야 합니다.</td></tr>
+<tr><td>load shedding은 언제 하나요?</td><td>시스템 보호를 위해 낮은 우선순위 요청을 거절하거나 지연시키는 전략입니다. 핵심 경로를 살리기 위해 추천·통계·비필수 batch부터 줄입니다.</td></tr>
+<tr><td>낮은 우선순위 작업은 어떻게 구분하나요?</td><td>비즈니스 중요도, 사용자 대면 여부, 재처리 가능성, 마감 시간으로 나눕니다. 주문/로그인과 분석 batch는 같은 우선순위가 아닙니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+queue depth, lag slope, load shedding policy, priority class
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-10">
+<div class="ch-head"><span class="ch-code">Q10</span><h2>Runbook에는 무엇이 있어야 하나요?</h2></div>
+<p class="lede">증상, 확인 명령, 정상/비정상 판정, 완화 조치, rollback 또는 escalation, 사후 기록 위치가 있어야 합니다. 명령어만 있고 판단 기준이 없으면 runbook이 아닙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>runbook은 언제 업데이트하나요?</td><td>incident 후, 알림 변경 후, 수동 조치가 반복된 후 업데이트합니다. postmortem action item에 runbook 수정이 포함되어야 합니다.</td></tr>
+<tr><td>자동화와 수동 절차는 어떻게 나누나요?</td><td>반복적이고 판정 기준이 명확한 조치는 자동화하고, 데이터 손실 위험이나 고객 영향 판단이 필요한 조치는 승인 단계를 둡니다.</td></tr>
+<tr><td>위험한 명령은 어떻게 보호하나요?</td><td>dry-run, 대상 환경 표시, confirmation, backup, readback 검증을 둡니다. 삭제·권한 변경·migration 명령은 특히 guardrail이 필요합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+runbook step, command output sample, escalation owner, post-incident update
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-11">
+<div class="ch-head"><span class="ch-code">Q11</span><h2>배포 후 health window에서는 무엇을 보나요?</h2></div>
+<p class="lede">새 release id 기준으로 error rate, p95/p99 latency, saturation, business metric, log anomaly, rollback trigger를 봅니다. 전체 평균보다 변경된 route와 canary cohort를 우선합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>business metric은 왜 보나요?</td><td>기술 지표가 정상이어도 결제 성공률, 가입 전환, 주문 생성 수가 깨질 수 있습니다. 사용자가 실제로 목표를 달성했는지 보는 지표입니다.</td></tr>
+<tr><td>canary가 정상인데 전체 배포 후 깨질 수 있나요?</td><td>canary cohort가 작거나 특정 tenant/region/payload를 포함하지 않으면 전체 배포 후 문제가 드러날 수 있습니다. segment coverage를 확인해야 합니다.</td></tr>
+<tr><td>rollback과 forward fix 판단 기준은?</td><td>새 release id 기준으로 error rate, p95/p99 latency, saturation, business metric, log anomaly, rollback trigger를 봅니다. 이 꼬리질문에서는 release dashboard, canary analysis, rollback threshold, feature flag state를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+release dashboard, canary analysis, rollback threshold, feature flag state
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-12">
+<div class="ch-head"><span class="ch-code">Q12</span><h2>분산 trace가 있어도 로그가 필요한 이유는 무엇인가요?</h2></div>
+<p class="lede">trace는 경로와 시간 분해에 강하고, 로그는 특정 결정과 원인 세부 정보에 강합니다. metric이 증상을 잡고 trace가 위치를 좁히며 log가 원인을 확정하는 식으로 함께 씁니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>모든 요청을 trace sampling해야 하나요?</td><td>비용 때문에 모든 요청을 full trace하지 않을 수 있습니다. 오류, high latency, critical route는 tail-based sampling이나 높은 sampling rate를 둡니다.</td></tr>
+<tr><td>PII는 로그에 어떻게 다루나요?</td><td>PII는 기본적으로 남기지 않거나 masking/tokenization합니다. 필요한 경우 접근 권한, 보존 기간, 삭제 정책을 audit와 함께 둡니다.</td></tr>
+<tr><td>trace id 전파가 끊기면 어떻게 찾나요?</td><td>gateway, async producer/consumer, HTTP client, message header 전파 지점을 확인합니다. 끊긴 boundary에 instrumentation을 추가해야 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+trace sample, structured log, sampling policy, redaction rule
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-13">
+<div class="ch-head"><span class="ch-code">Q13</span><h2>RED와 USE metric은 어떻게 설명하나요?</h2></div>
+<p class="lede">RED는 요청 기반 서비스의 rate, errors, duration을 보고 USE는 리소스의 utilization, saturation, errors를 봅니다. 사용자 증상은 RED로, 병목 자원은 USE로 좁힙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>RED와 USE metric에서 가장 흔한 실패는 무엇인가요?</td><td>RED는 요청 기반 서비스의 rate, errors, duration을 보고 USE는 리소스의 utilization, saturation, errors를 봅니다. 이 꼬리질문에서는 RED dashboard, USE dashboard, incident trace를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>RED와 USE metric은 어떤 증거로 검증하나요?</td><td>RED는 요청 기반 서비스의 rate, errors, duration을 보고 USE는 리소스의 utilization, saturation, errors를 봅니다. 이 꼬리질문에서는 RED dashboard, USE dashboard, incident trace를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>RED와 USE metric을 과하게 적용하면 무엇이 문제인가요?</td><td>RED는 요청 기반 서비스의 rate, errors, duration을 보고 USE는 리소스의 utilization, saturation, errors를 봅니다. 이 꼬리질문에서는 RED dashboard, USE dashboard, incident trace를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+RED dashboard, USE dashboard, incident trace
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-14">
+<div class="ch-head"><span class="ch-code">Q14</span><h2>p95와 p99은 어떻게 설명하나요?</h2></div>
+<p class="lede">p95는 일반적인 나쁜 경험을, p99는 꼬리 지연과 소수 병목을 보여줍니다. 평균은 tail latency를 숨기므로 장애와 성능 리뷰에는 percentile이 필요합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>p95와 p99에서 가장 흔한 실패는 무엇인가요?</td><td>p95는 일반적인 나쁜 경험을, p99는 꼬리 지연과 소수 병목을 보여줍니다. 이 꼬리질문에서는 latency histogram, p95/p99 trend, route segment를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>p95와 p99은 어떤 증거로 검증하나요?</td><td>p95는 일반적인 나쁜 경험을, p99는 꼬리 지연과 소수 병목을 보여줍니다. 이 꼬리질문에서는 latency histogram, p95/p99 trend, route segment를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>p95와 p99을 과하게 적용하면 무엇이 문제인가요?</td><td>p95는 일반적인 나쁜 경험을, p99는 꼬리 지연과 소수 병목을 보여줍니다. 이 꼬리질문에서는 latency histogram, p95/p99 trend, route segment를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+latency histogram, p95/p99 trend, route segment
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-15">
+<div class="ch-head"><span class="ch-code">Q15</span><h2>Thread pool saturation은 어떻게 설명하나요?</h2></div>
+<p class="lede">thread pool saturation은 active thread, queue length, rejected task, request latency, thread dump로 봅니다. CPU가 낮아도 DB pool 대기면 latency가 커질 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Thread pool saturation에서 가장 흔한 실패는 무엇인가요?</td><td>thread pool saturation은 active thread, queue length, rejected task, request latency, thread dump로 봅니다. 이 꼬리질문에서는 executor metric, thread dump, rejected count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Thread pool saturation은 어떤 증거로 검증하나요?</td><td>thread pool saturation은 active thread, queue length, rejected task, request latency, thread dump로 봅니다. 이 꼬리질문에서는 executor metric, thread dump, rejected count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Thread pool saturation을 과하게 적용하면 무엇이 문제인가요?</td><td>thread pool saturation은 active thread, queue length, rejected task, request latency, thread dump로 봅니다. 이 꼬리질문에서는 executor metric, thread dump, rejected count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+executor metric, thread dump, rejected count
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-16">
+<div class="ch-head"><span class="ch-code">Q16</span><h2>GC latency은 어떻게 설명하나요?</h2></div>
+<p class="lede">GC가 원인인지 보려면 pause time, allocation rate, heap after GC, p99 spike timestamp를 맞춰봐야 합니다. 증상과 시간 상관이 없으면 다른 병목일 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>GC latency에서 가장 흔한 실패는 무엇인가요?</td><td>GC가 원인인지 보려면 pause time, allocation rate, heap after GC, p99 spike timestamp를 맞춰봐야 합니다. 이 꼬리질문에서는 GC log, JFR, heap usage, p99 timestamp를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>GC latency은 어떤 증거로 검증하나요?</td><td>GC가 원인인지 보려면 pause time, allocation rate, heap after GC, p99 spike timestamp를 맞춰봐야 합니다. 이 꼬리질문에서는 GC log, JFR, heap usage, p99 timestamp를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>GC latency을 과하게 적용하면 무엇이 문제인가요?</td><td>GC가 원인인지 보려면 pause time, allocation rate, heap after GC, p99 spike timestamp를 맞춰봐야 합니다. 이 꼬리질문에서는 GC log, JFR, heap usage, p99 timestamp를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+GC log, JFR, heap usage, p99 timestamp
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-17">
+<div class="ch-head"><span class="ch-code">Q17</span><h2>Connection pool starvation은 어떻게 설명하나요?</h2></div>
+<p class="lede">pool wait 증가, active connection 고정, usage time 증가를 확인합니다. 원인은 느린 query, 긴 transaction, connection leak, pool size mismatch일 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Connection pool starvation에서 가장 흔한 실패는 무엇인가요?</td><td>pool wait 증가, active connection 고정, usage time 증가를 확인합니다. 이 꼬리질문에서는 pool wait metric, leak detection, slow query sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Connection pool starvation은 어떤 증거로 검증하나요?</td><td>pool wait 증가, active connection 고정, usage time 증가를 확인합니다. 이 꼬리질문에서는 pool wait metric, leak detection, slow query sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Connection pool starvation을 과하게 적용하면 무엇이 문제인가요?</td><td>pool wait 증가, active connection 고정, usage time 증가를 확인합니다. 이 꼬리질문에서는 pool wait metric, leak detection, slow query sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+pool wait metric, leak detection, slow query sample
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-18">
+<div class="ch-head"><span class="ch-code">Q18</span><h2>Timeout 전파은 어떻게 설명하나요?</h2></div>
+<p class="lede">계층별 timeout과 cancellation이 맞지 않으면 이미 실패한 요청이 하류에서 계속 실행됩니다. 전체 latency budget 안에서 gateway, app, DB, client timeout을 맞춰야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Timeout 전파에서 가장 흔한 실패는 무엇인가요?</td><td>계층별 timeout과 cancellation이 맞지 않으면 이미 실패한 요청이 하류에서 계속 실행됩니다. 이 꼬리질문에서는 timeout budget, client/server config, cancellation log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Timeout 전파은 어떤 증거로 검증하나요?</td><td>계층별 timeout과 cancellation이 맞지 않으면 이미 실패한 요청이 하류에서 계속 실행됩니다. 이 꼬리질문에서는 timeout budget, client/server config, cancellation log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Timeout 전파을 과하게 적용하면 무엇이 문제인가요?</td><td>계층별 timeout과 cancellation이 맞지 않으면 이미 실패한 요청이 하류에서 계속 실행됩니다. 이 꼬리질문에서는 timeout budget, client/server config, cancellation log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+timeout budget, client/server config, cancellation log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-19">
+<div class="ch-head"><span class="ch-code">Q19</span><h2>DLQ replay은 어떻게 설명하나요?</h2></div>
+<p class="lede">DLQ는 원인 분류, poison message 여부, schema mismatch, downstream 복구 여부, idempotency 보장을 확인한 뒤 replay해야 합니다. 바로 replay하면 장애를 반복할 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>DLQ replay에서 가장 흔한 실패는 무엇인가요?</td><td>DLQ는 원인 분류, poison message 여부, schema mismatch, downstream 복구 여부, idempotency 보장을 확인한 뒤 replay해야 합니다. 이 꼬리질문에서는 DLQ sample, replay dry-run, idempotency fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>DLQ replay은 어떤 증거로 검증하나요?</td><td>DLQ는 원인 분류, poison message 여부, schema mismatch, downstream 복구 여부, idempotency 보장을 확인한 뒤 replay해야 합니다. 이 꼬리질문에서는 DLQ sample, replay dry-run, idempotency fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>DLQ replay을 과하게 적용하면 무엇이 문제인가요?</td><td>DLQ는 원인 분류, poison message 여부, schema mismatch, downstream 복구 여부, idempotency 보장을 확인한 뒤 replay해야 합니다. 이 꼬리질문에서는 DLQ sample, replay dry-run, idempotency fixture를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+DLQ sample, replay dry-run, idempotency fixture
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-20">
+<div class="ch-head"><span class="ch-code">Q20</span><h2>Consumer lag triage은 어떻게 설명하나요?</h2></div>
+<p class="lede">consumer lag는 생산량 증가, 소비 실패, partition skew, downstream 지연, deploy regression으로 나눠 봐야 합니다. worker만 늘리면 하류를 더 압박할 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Consumer lag triage에서 가장 흔한 실패는 무엇인가요?</td><td>consumer lag는 생산량 증가, 소비 실패, partition skew, downstream 지연, deploy regression으로 나눠 봐야 합니다. 이 꼬리질문에서는 produce/consume rate, partition lag, downstream error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Consumer lag triage은 어떤 증거로 검증하나요?</td><td>consumer lag는 생산량 증가, 소비 실패, partition skew, downstream 지연, deploy regression으로 나눠 봐야 합니다. 이 꼬리질문에서는 produce/consume rate, partition lag, downstream error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Consumer lag triage을 과하게 적용하면 무엇이 문제인가요?</td><td>consumer lag는 생산량 증가, 소비 실패, partition skew, downstream 지연, deploy regression으로 나눠 봐야 합니다. 이 꼬리질문에서는 produce/consume rate, partition lag, downstream error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+produce/consume rate, partition lag, downstream error
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-21">
+<div class="ch-head"><span class="ch-code">Q21</span><h2>Incident commander은 어떻게 설명하나요?</h2></div>
+<p class="lede">incident commander는 직접 모든 로그를 보는 사람이 아니라 의사결정, 우선순위, 역할 분담, 커뮤니케이션을 관리하는 사람입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Incident commander에서 가장 흔한 실패는 무엇인가요?</td><td>incident commander는 직접 모든 로그를 보는 사람이 아니라 의사결정, 우선순위, 역할 분담, 커뮤니케이션을 관리하는 사람입니다. 이 꼬리질문에서는 incident role assignment, timeline, comms log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Incident commander은 어떤 증거로 검증하나요?</td><td>incident commander는 직접 모든 로그를 보는 사람이 아니라 의사결정, 우선순위, 역할 분담, 커뮤니케이션을 관리하는 사람입니다. 이 꼬리질문에서는 incident role assignment, timeline, comms log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Incident commander을 과하게 적용하면 무엇이 문제인가요?</td><td>incident commander는 직접 모든 로그를 보는 사람이 아니라 의사결정, 우선순위, 역할 분담, 커뮤니케이션을 관리하는 사람입니다. 이 꼬리질문에서는 incident role assignment, timeline, comms log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+incident role assignment, timeline, comms log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-22">
+<div class="ch-head"><span class="ch-code">Q22</span><h2>Postmortem action item은 어떻게 설명하나요?</h2></div>
+<p class="lede">좋은 action item은 owner, due date, 검증 가능한 완료 기준이 있습니다. '주의한다'가 아니라 alert, test, runbook, gate를 바꾸는 항목이어야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Postmortem action item에서 가장 흔한 실패는 무엇인가요?</td><td>좋은 action item은 owner, due date, 검증 가능한 완료 기준이 있습니다. 이 꼬리질문에서는 postmortem action list, owner/date, verification result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Postmortem action item은 어떤 증거로 검증하나요?</td><td>좋은 action item은 owner, due date, 검증 가능한 완료 기준이 있습니다. 이 꼬리질문에서는 postmortem action list, owner/date, verification result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Postmortem action item을 과하게 적용하면 무엇이 문제인가요?</td><td>좋은 action item은 owner, due date, 검증 가능한 완료 기준이 있습니다. 이 꼬리질문에서는 postmortem action list, owner/date, verification result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+postmortem action list, owner/date, verification result
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-23">
+<div class="ch-head"><span class="ch-code">Q23</span><h2>Log sampling은 어떻게 설명하나요?</h2></div>
+<p class="lede">log sampling은 고QPS route나 반복 오류의 log volume을 줄일 때 필요합니다. 다만 error, security, audit, rare high latency 이벤트는 보존 정책을 별도로 둬야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Log sampling에서 가장 흔한 실패는 무엇인가요?</td><td>log sampling은 고QPS route나 반복 오류의 log volume을 줄일 때 필요합니다. 이 꼬리질문에서는 log volume metric, sampling rule, retained error sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Log sampling은 어떤 증거로 검증하나요?</td><td>log sampling은 고QPS route나 반복 오류의 log volume을 줄일 때 필요합니다. 이 꼬리질문에서는 log volume metric, sampling rule, retained error sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Log sampling을 과하게 적용하면 무엇이 문제인가요?</td><td>log sampling은 고QPS route나 반복 오류의 log volume을 줄일 때 필요합니다. 이 꼬리질문에서는 log volume metric, sampling rule, retained error sample를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+log volume metric, sampling rule, retained error sample
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-24">
+<div class="ch-head"><span class="ch-code">Q24</span><h2>High-cardinality metric은 어떻게 설명하나요?</h2></div>
+<p class="lede">userId나 requestId를 metric label로 쓰면 time series가 폭발해 비용과 query 성능이 망가집니다. 상세 식별자는 log/trace로 보내야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>High-cardinality metric에서 가장 흔한 실패는 무엇인가요?</td><td>userId나 requestId를 metric label로 쓰면 time series가 폭발해 비용과 query 성능이 망가집니다. 이 꼬리질문에서는 metric cardinality report, label policy, cost trend를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>High-cardinality metric은 어떤 증거로 검증하나요?</td><td>userId나 requestId를 metric label로 쓰면 time series가 폭발해 비용과 query 성능이 망가집니다. 이 꼬리질문에서는 metric cardinality report, label policy, cost trend를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>High-cardinality metric을 과하게 적용하면 무엇이 문제인가요?</td><td>userId나 requestId를 metric label로 쓰면 time series가 폭발해 비용과 query 성능이 망가집니다. 이 꼬리질문에서는 metric cardinality report, label policy, cost trend를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+metric cardinality report, label policy, cost trend
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-25">
+<div class="ch-head"><span class="ch-code">Q25</span><h2>Rollback threshold은 어떻게 설명하나요?</h2></div>
+<p class="lede">rollback 기준은 새 release에서 error rate, p99, saturation, business metric이 baseline 대비 임계값을 넘는지로 사전에 정해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Rollback threshold에서 가장 흔한 실패는 무엇인가요?</td><td>rollback 기준은 새 release에서 error rate, p99, saturation, business metric이 baseline 대비 임계값을 넘는지로 사전에 정해야 합니다. 이 꼬리질문에서는 rollback threshold, release dashboard, baseline metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Rollback threshold은 어떤 증거로 검증하나요?</td><td>rollback 기준은 새 release에서 error rate, p99, saturation, business metric이 baseline 대비 임계값을 넘는지로 사전에 정해야 합니다. 이 꼬리질문에서는 rollback threshold, release dashboard, baseline metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Rollback threshold을 과하게 적용하면 무엇이 문제인가요?</td><td>rollback 기준은 새 release에서 error rate, p99, saturation, business metric이 baseline 대비 임계값을 넘는지로 사전에 정해야 합니다. 이 꼬리질문에서는 rollback threshold, release dashboard, baseline metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+rollback threshold, release dashboard, baseline metric
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-26">
+<div class="ch-head"><span class="ch-code">Q26</span><h2>Degraded mode은 어떻게 설명하나요?</h2></div>
+<p class="lede">degraded mode는 전체 실패 대신 일부 기능을 제한해 핵심 기능을 살리는 모드입니다. 추천, 통계, export를 끄고 주문/로그인 같은 critical path를 보호합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Degraded mode에서 가장 흔한 실패는 무엇인가요?</td><td>degraded mode는 전체 실패 대신 일부 기능을 제한해 핵심 기능을 살리는 모드입니다. 이 꼬리질문에서는 degraded mode policy, feature flag, user notice를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Degraded mode은 어떤 증거로 검증하나요?</td><td>degraded mode는 전체 실패 대신 일부 기능을 제한해 핵심 기능을 살리는 모드입니다. 이 꼬리질문에서는 degraded mode policy, feature flag, user notice를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Degraded mode을 과하게 적용하면 무엇이 문제인가요?</td><td>degraded mode는 전체 실패 대신 일부 기능을 제한해 핵심 기능을 살리는 모드입니다. 이 꼬리질문에서는 degraded mode policy, feature flag, user notice를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+degraded mode policy, feature flag, user notice
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-27">
+<div class="ch-head"><span class="ch-code">Q27</span><h2>Queue ordering은 어떻게 설명하나요?</h2></div>
+<p class="lede">전역 순서는 비용이 커서 보통 aggregate 단위 순서만 보장합니다. partition key를 잘못 잡으면 같은 aggregate 이벤트가 흩어져 상태 전이가 꼬입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Queue ordering에서 가장 흔한 실패는 무엇인가요?</td><td>전역 순서는 비용이 커서 보통 aggregate 단위 순서만 보장합니다. 이 꼬리질문에서는 partition key policy, sequence check, stale event discard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Queue ordering은 어떤 증거로 검증하나요?</td><td>전역 순서는 비용이 커서 보통 aggregate 단위 순서만 보장합니다. 이 꼬리질문에서는 partition key policy, sequence check, stale event discard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Queue ordering을 과하게 적용하면 무엇이 문제인가요?</td><td>전역 순서는 비용이 커서 보통 aggregate 단위 순서만 보장합니다. 이 꼬리질문에서는 partition key policy, sequence check, stale event discard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+partition key policy, sequence check, stale event discard
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-28">
+<div class="ch-head"><span class="ch-code">Q28</span><h2>Idempotent consumer은 어떻게 설명하나요?</h2></div>
+<p class="lede">idempotent consumer는 message id나 business key를 inbox/processed table에 기록하고 side effect를 unique constraint와 transaction으로 보호합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Idempotent consumer에서 가장 흔한 실패는 무엇인가요?</td><td>idempotent consumer는 message id나 business key를 inbox/processed table에 기록하고 side effect를 unique constraint와 transaction으로 보호합니다. 이 꼬리질문에서는 inbox table, processed unique key, duplicate delivery test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Idempotent consumer은 어떤 증거로 검증하나요?</td><td>idempotent consumer는 message id나 business key를 inbox/processed table에 기록하고 side effect를 unique constraint와 transaction으로 보호합니다. 이 꼬리질문에서는 inbox table, processed unique key, duplicate delivery test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Idempotent consumer을 과하게 적용하면 무엇이 문제인가요?</td><td>idempotent consumer는 message id나 business key를 inbox/processed table에 기록하고 side effect를 unique constraint와 transaction으로 보호합니다. 이 꼬리질문에서는 inbox table, processed unique key, duplicate delivery test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+inbox table, processed unique key, duplicate delivery test
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-29">
+<div class="ch-head"><span class="ch-code">Q29</span><h2>PR 운영 지표은 어떻게 설명하나요?</h2></div>
+<p class="lede">새 기능 PR에는 성공/실패 count, latency, dependency call, business outcome, 주요 decision log가 포함되어야 합니다. 배포 후 볼 지표가 없으면 운영 준비가 부족합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>PR 운영 지표에서 가장 흔한 실패는 무엇인가요?</td><td>새 기능 PR에는 성공/실패 count, latency, dependency call, business outcome, 주요 decision log가 포함되어야 합니다. 이 꼬리질문에서는 metric spec, log field list, dashboard link를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>PR 운영 지표은 어떤 증거로 검증하나요?</td><td>새 기능 PR에는 성공/실패 count, latency, dependency call, business outcome, 주요 decision log가 포함되어야 합니다. 이 꼬리질문에서는 metric spec, log field list, dashboard link를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>PR 운영 지표을 과하게 적용하면 무엇이 문제인가요?</td><td>새 기능 PR에는 성공/실패 count, latency, dependency call, business outcome, 주요 decision log가 포함되어야 합니다. 이 꼬리질문에서는 metric spec, log field list, dashboard link를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+metric spec, log field list, dashboard link
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-30">
+<div class="ch-head"><span class="ch-code">Q30</span><h2>운영 경험 부족 답변은 어떻게 설명하나요?</h2></div>
+<p class="lede">직접 운영 경험이 부족하면 원인 분해 순서와 확인 증거를 말해야 합니다. p99 상승이면 trace, pool, GC, lock, downstream 순서로 확인하겠다고 답합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>운영 경험 부족 답변에서 가장 흔한 실패는 무엇인가요?</td><td>직접 운영 경험이 부족하면 원인 분해 순서와 확인 증거를 말해야 합니다. 이 꼬리질문에서는 triage sequence, evidence checklist, practice incident packet를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>운영 경험 부족 답변은 어떤 증거로 검증하나요?</td><td>직접 운영 경험이 부족하면 원인 분해 순서와 확인 증거를 말해야 합니다. 이 꼬리질문에서는 triage sequence, evidence checklist, practice incident packet를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>운영 경험 부족 답변을 과하게 적용하면 무엇이 문제인가요?</td><td>직접 운영 경험이 부족하면 원인 분해 순서와 확인 증거를 말해야 합니다. 이 꼬리질문에서는 triage sequence, evidence checklist, practice incident packet를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+triage sequence, evidence checklist, practice incident packet
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="drill">
+<div class="ch-head"><span class="ch-code">DRILL</span><h2>꼬리질문 반복 훈련</h2></div>
+<table>
+<tr><th>라운드</th><th>훈련 방식</th><th>실패 신호</th></tr>
+<tr><td>1</td><td>각 문항을 30초 안에 결론 중심으로 답한다.</td><td>정의만 말하고 판단 기준이 없다.</td></tr>
+<tr><td>2</td><td>꼬리질문 하나를 골라 90초 답변으로 확장한다.</td><td>프레임워크 이름은 나오지만 실패 모드가 없다.</td></tr>
+<tr><td>3</td><td>답변마다 테스트, 로그, metric, query, ADR 중 하나를 증거로 붙인다.</td><td>말은 그럴듯하지만 검증 방법이 없다.</td></tr>
+<tr><td>4</td><td>직접 경험과 설계 지식의 경계를 한 문장으로 밝힌다.</td><td>해보지 않은 운영을 직접 경험처럼 말한다.</td></tr>
+</table>
+</section>
+
+<section id="rubric">
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>통과 기준</h2></div>
+<div class="semantic-card">
+<span class="sc-label">BACKEND QA TRAINING PACKET</span>
+통과 답변은 핵심 결론, 내부 동작, trade-off, 실패 모드, 검증 증거를 모두 포함한다.<br>
+보완 답변은 개념 정의는 맞지만 운영 중 깨지는 조건이나 테스트 기준이 빠진다.<br>
+실패 답변은 기술명 나열, 복붙식 해결책, “상황에 따라 다릅니다” 이후 기준 없음으로 끝난다.
+</div>
+</section>
+
+<footer>
+런타임 품질·장애대응 Q&amp;A · BACKEND QUESTION TRAINING · GENERATED 2026-07<br>
+PAIRING SOURCE : 런타임 품질·장애대응 · USE : 외부 검증 전 예상 질문, 답변, 꼬리질문 훈련
+</footer>
+</main>
+</div>
+</body>
+</html>

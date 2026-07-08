@@ -101,6 +101,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#auth-auth-ch11"><span class="code">SEC-11</span>Security Review Rubric</a>
   <a href="#auth-auth-ch12"><span class="code">SEC-12</span>Security Tabletop Drills</a>
   <a href="#auth-auth-ch13"><span class="code">SEC-13</span>SECURITY INCIDENT PACKET</a>
+  <a href="#auth-backend-security-threat-model-depth"><span class="code">DEPTH</span>공격 경로 기반 보안 심화</a>
   <a href="#backend-security-review-packet"><span class="code">PACKET</span>보안 리뷰 패킷</a>
 </nav>
 <main>
@@ -486,6 +487,63 @@ permanent_fix: Require tenant_id predicate in export lookup and add IDOR regress
 <div class="callout gm">
 <span class="co-label">면접 답변 프레임</span>
 <p>사고 대응 질문에는 "바로 고치겠습니다"보다 순서가 중요합니다. 먼저 증거를 보존하고 재현을 확보한 뒤, 영향 범위를 산정하고 임시 통제로 확산을 막습니다. 그 다음 영구 수정과 negative test를 배포하고, 고객/법무/지원 커뮤니케이션과 재발 방지 액션을 남깁니다.</p>
+</div>
+</section>
+
+<section id="auth-backend-security-threat-model-depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>공격 경로 기반 보안 심화</h2></div>
+<p class="lede">시니어 백엔드 보안 설명은 "JWT를 쓴다", "권한 체크를 한다"에서 멈추지 않습니다. 보호 자산, 공격자 능력, 진입점, 신뢰 경계, 탐지 증거를 연결해 어떤 공격 경로를 끊는지 설명해야 합니다.</p>
+<table>
+<tr><th>BACKEND SECURITY THREAT MODEL METHOD</th><th>질문</th><th>산출물</th></tr>
+<tr><td>Asset</td><td>유출·변조·부인 방지가 필요한 데이터와 행위는 무엇인가?</td><td>PII, 결제, 권한, tenant data, admin action 목록</td></tr>
+<tr><td>Actor</td><td>익명 사용자, 일반 사용자, 내부 운영자, 탈취된 계정은 무엇을 할 수 있는가?</td><td>role matrix와 abuse case</td></tr>
+<tr><td>Entry point</td><td>API, webhook, admin, batch, file export 중 신뢰 경계를 넘는 곳은 어디인가?</td><td>trust boundary diagram</td></tr>
+<tr><td>Control</td><td>인증, 인가, tenant predicate, rate limit, audit가 어느 경로를 끊는가?</td><td>negative test와 alert query</td></tr>
+</table>
+<div class="grid-2">
+<div class="semantic-card">
+<span class="sc-label">SESSION TOKEN ATTACK PATHS</span><br>
+세션과 토큰의 핵심 공격 경로는 탈취, 재사용, 고정, 권한 상승, 로그아웃 이후 생존입니다. access token은 짧게, refresh token은 회전과 재사용 탐지, 서버 측 revoke state를 갖춰야 하며, 브라우저 쿠키는 HttpOnly, Secure, SameSite, CSRF 방어를 함께 설계합니다.
+</div>
+<div class="semantic-card">
+<span class="sc-label">TENANT ESCAPE ATTACK MATRIX</span><br>
+멀티테넌트 사고는 대부분 tenant_id 누락, 객체 ID 직접 접근, background job scope 누락, export URL 재사용에서 발생합니다. 모든 read/write/export/job에는 actor tenant와 resource tenant가 일치한다는 invariant를 두고, 실패 시 403 또는 존재 은닉 404를 일관되게 선택합니다.
+</div>
+</div>
+<div class="callout risk">
+<span class="co-label">REFRESH TOKEN ROTATION RACE CAVEAT</span>
+<p>refresh token rotation은 탈취 탐지에 유용하지만, 모바일 재시도나 탭 동시 요청 때문에 정상 요청도 race를 만들 수 있습니다. token family, grace window, reuse detection, device binding, idempotent refresh 응답 정책을 함께 정하지 않으면 보안 강화가 세션 불안정으로 바뀝니다.</p>
+</div>
+<table>
+<tr><th>AUDIT LOG TAMPER RESISTANCE</th><th>요구</th><th>구현 기준</th></tr>
+<tr><td>Completeness</td><td>누가 언제 어떤 자산에 어떤 권한으로 접근했는지 남긴다.</td><td>actor_id, tenant_id, resource_id, action, decision, request_id</td></tr>
+<tr><td>Integrity</td><td>사고자가 흔적을 쉽게 고치거나 지우지 못하게 한다.</td><td>append-only sink, restricted delete, hash/export, retention policy</td></tr>
+<tr><td>Usefulness</td><td>감사 로그가 탐지와 영향 범위 산정에 바로 쓰인다.</td><td>alert query, incident packet, customer impact query</td></tr>
+</table>
+<div class="checklist">
+<strong>SECURITY EVIDENCE PACKET</strong>
+<ul>
+<li>인가 변경은 허용 테스트보다 forbidden/foreign tenant/expired session negative test를 먼저 보여준다.</li>
+<li>토큰 변경은 만료, 재발급, 재사용 탐지, 로그아웃, 강제 revoke 시나리오를 표로 남긴다.</li>
+<li>관리자·export·webhook 기능은 actor, tenant, idempotency key, audit event를 한 PR에서 확인한다.</li>
+<li>사고 대응은 탐지 쿼리, 영향 범위 쿼리, 임시 차단 수단, 고객 설명 가능성을 포함한다.</li>
+</ul>
+</div>
+<h3><span class="h3-tag">DEPTH</span>SECURITY ABUSE CASE FIXTURE SET</h3>
+<p>보안 테스트가 강해지려면 “정상 사용자가 정상 리소스를 본다”가 아니라 공격자가 실제로 시도할 오용 fixture가 있어야 합니다. 아래 fixture는 API, webhook, export, admin 기능 리뷰에서 반복 재사용할 수 있는 최소 세트입니다.</p>
+<table>
+<tr><th>SSRF WEBHOOK EXPORT ADMIN ABUSE MATRIX</th><th>공격 시나리오</th><th>차단 증거</th></tr>
+<tr><td>SSRF</td><td>이미지 import, webhook test, PDF generation URL이 metadata endpoint나 private IP로 향함</td><td>scheme/host allowlist, DNS 재검증, private/link-local 차단, redirect 후 재검증, egress log</td></tr>
+<tr><td>Webhook replay</td><td>서명된 결제 webhook payload를 여러 번 보내 중복 결제 확정 또는 쿠폰 발급 유도</td><td>signature timestamp, event id ledger, idempotency constraint, replay negative test</td></tr>
+<tr><td>Export IDOR</td><td>다른 tenant의 export file id나 signed URL을 추측해 다운로드</td><td>tenant predicate, short TTL, actor-resource tenant match, audit event</td></tr>
+<tr><td>Admin abuse</td><td>내부 계정이 업무 시간 외 대량 PII export 또는 권한 상승 수행</td><td>reason code, approval, step-up auth, anomaly alert, immutable audit log</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">ABUSE CASE NEGATIVE TEST PACKET</span>
+actor: anonymous, expired user, foreign tenant user, support admin, compromised token<br>
+resource: own resource, foreign tenant resource, deleted resource, export file, webhook event<br>
+assertion: 401/403/404 policy, no state change, no data leak, audit event emitted, alert condition preserved<br>
+evidence: request fixture, response body contract, DB before/after, audit query, trace id
 </div>
 </section>
 

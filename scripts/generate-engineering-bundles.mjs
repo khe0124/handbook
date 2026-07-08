@@ -424,8 +424,8 @@ domain language → bounded context → module boundary<br>
     id: "engineering-data",
     file: "engineering-data-handbook.html",
     navBrand: "ENGINEERING · DATA",
-    navTitle: "데이터 계층 · DB와 저장소 사례",
-    title: "데이터 계층과 저장소",
+    navTitle: "데이터 계층 · DB와 저장소 심화",
+    title: "데이터 계층과 저장소 심화",
     subtitle: "DB 핸드북, PostgreSQL 예시, Redis 예시를 데이터 모델링과 운영 관점으로 통합했습니다.",
     scope: "DATABASE · POSTGRESQL · REDIS",
     sources: [
@@ -520,8 +520,8 @@ local reproduce → build/test → image build<br>
     id: "engineering-java-spring",
     file: "engineering-java-spring-handbook.html",
     navBrand: "ENGINEERING · JAVA SPRING",
-    navTitle: "Java Spring JPA 실전 사례",
-    title: "Java·Spring·JPA 사례",
+    navTitle: "Java Spring JPA 내부 동작",
+    title: "Java·Spring·JPA 내부 동작",
     subtitle: "Java 예시, JPA 예시, Spring Boot 예시를 백엔드 구현 사례 중심으로 통합했습니다.",
     scope: "JAVA · SPRING BOOT · JPA",
     sources: [

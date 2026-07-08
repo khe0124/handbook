@@ -98,6 +98,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#architecture-ch9"><span class="code">ARCH-09</span>패턴 선택 기준</a>
   <a href="#architecture-ch10"><span class="code">ARCH-10</span>용어집</a>
   <a href="#architecture-ch11"><span class="code">ARCH-11</span>경계 설계와 점진적 전환</a>
+  <a href="#architecture-architecture-senior-depth"><span class="code">DEPTH</span>경계와 전환 심화</a>
 </nav>
 <main>
 <header class="hero">
@@ -453,6 +454,69 @@ domain language → bounded context → module boundary<br>
 <div class="callout">
 <span class="co-label">Case study</span>
 <p>정산 로직을 주문 서비스에서 바로 분리하려 하면 데이터 소유권과 배포 순서가 얽힙니다. 먼저 정산 읽기 모델을 만들고, 주문 이벤트를 outbox로 발행하고, anti-corruption layer에서 레거시 상태를 새 도메인 언어로 변환한 뒤, 트래픽을 strangler fig 방식으로 일부 기능부터 넘기는 편이 안전합니다.</p>
+</div>
+</section>
+
+<section id="architecture-architecture-senior-depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>아키텍처 경계와 전환 심화</h2></div>
+<p class="lede">아키텍처 문서가 깊어지려면 패턴 카탈로그를 넘어, 경계를 발견하는 근거와 분리 이후 감당할 운영 비용을 설명해야 합니다. 좋은 답은 "MSA가 좋다"가 아니라 "지금 이 경계는 독립 배포와 데이터 소유권을 감당할 준비가 됐다"입니다.</p>
+<table>
+<tr><th>ARCHITECTURE SENIOR DEPTH MODEL</th><th>핵심 질문</th><th>좋은 증거</th></tr>
+<tr><td>Change axis</td><td>어떤 요구가 함께 바뀌고, 어떤 요구는 독립적으로 바뀌는가?</td><td>최근 6개월 변경 이력, PR touch map, incident owner</td></tr>
+<tr><td>Runtime coupling</td><td>동기 호출, 공유 DB, 공통 라이브러리가 장애를 전파하는가?</td><td>dependency graph, timeout, retry, circuit breaker, SLO impact</td></tr>
+<tr><td>Data ownership</td><td>어떤 서비스가 어떤 사실의 원본인가?</td><td>write owner, read model, migration path, reconciliation job</td></tr>
+<tr><td>Operational maturity</td><td>분리된 서비스를 관측·배포·복구할 팀 역량이 있는가?</td><td>runbook, dashboard, alert, rollback, on-call ownership</td></tr>
+</table>
+<div class="grid-2">
+<div class="semantic-card">
+<span class="sc-label">BOUNDED CONTEXT DISCOVERY METHOD</span><br>
+경계는 테이블 이름이 아니라 언어와 변경 이유로 찾습니다. 같은 "주문"이라도 결제의 주문, 물류의 주문, 정산의 주문이 다른 불변식과 생명주기를 가지면 다른 모델입니다. 이벤트 스토밍, 도메인 용어 사전, 변경 이력, 장애 owner를 함께 보고 경계를 확정합니다.
+</div>
+<div class="semantic-card">
+<span class="sc-label">SERVICE SPLIT READINESS GATE</span><br>
+서비스 분리는 모듈 경계, API 계약, 데이터 소유권, 관측성, 배포 독립성, 장애 격리가 준비된 뒤에 합니다. 이 중 데이터 소유권과 운영 owner가 없으면 마이크로서비스가 아니라 네트워크를 탄 모놀리스가 됩니다.
+</div>
+</div>
+<table>
+<tr><th>DATA OWNERSHIP MIGRATION PATH</th><th>단계</th><th>검증</th></tr>
+<tr><td>1. Encapsulate</td><td>기존 DB 접근을 모듈 API 뒤로 숨긴다.</td><td>외부 모듈의 직접 table 접근 제거</td></tr>
+<tr><td>2. Publish facts</td><td>outbox로 도메인 이벤트를 발행한다.</td><td>event idempotency, retry, dead letter policy</td></tr>
+<tr><td>3. Build read model</td><td>새 컨텍스트가 자체 조회 모델을 만든다.</td><td>원본과 read model reconciliation</td></tr>
+<tr><td>4. Move writes</td><td>쓰기 owner를 새 서비스로 옮긴다.</td><td>dual-write 금지 또는 보상 트랜잭션, rollback point</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">EVENT CONTRACT EVOLUTION POLICY</span>
+<p>이벤트는 내부 구현 로그가 아니라 소비자와 맺는 계약입니다. 필드는 additive change를 기본으로 하고, 삭제·의미 변경은 새 event type 또는 version을 둡니다. producer는 outbox와 schema validation을 갖추고, consumer는 unknown field tolerant, idempotent, replay-safe하게 구현합니다.</p>
+</div>
+<div class="checklist">
+<strong>ARCHITECTURE EVIDENCE PACKET</strong>
+<ul>
+<li>분리 제안에는 변경 이력, 장애 전파, 팀 owner, SLO 영향, 대안 비용을 함께 넣는다.</li>
+<li>새 경계에는 소유 데이터, 외부 계약, 실패 격리, 롤백 전략, 관측 지표를 명시한다.</li>
+<li>이벤트 기반 전환에는 outbox, idempotency, replay, ordering, schema evolution 정책을 포함한다.</li>
+<li>아키텍처 결정은 ADR로 남기고, 결정 만료 조건과 재검토 신호를 같이 기록한다.</li>
+</ul>
+</div>
+<h3><span class="h3-tag">DEPTH</span>ADR DECISION RECORD TEMPLATE</h3>
+<pre class="snippet-card"><code># ADR-014: 주문 완료 후 정산 처리를 비동기 이벤트로 분리한다
+Status: Accepted
+Context: 주문 API p99가 정산 API 지연에 묶이고, 정산 실패가 주문 완료 응답을 막고 있다.
+Decision: 주문 서비스는 OrderCompleted 이벤트를 outbox로 발행하고, 정산 컨텍스트가 idempotent consumer로 처리한다.
+Consequences: 주문 응답 latency와 장애 격리는 좋아지지만, 정산 상태는 결과적 일관성이 되며 reconciliation job과 customer-facing pending state가 필요하다.
+Rejected options: 동기 REST 유지, 공유 DB 직접 조회, 모든 주문 트랜잭션에 정산 테이블 쓰기.
+Review trigger: 정산 lag p95가 5분을 넘거나 고객 문의가 증가하면 UX/state contract를 재검토한다.</code></pre>
+<table>
+<tr><th>TRADEOFF DECISION LEDGER</th><th>선택</th><th>얻는 것</th><th>잃는 것</th><th>검증 신호</th></tr>
+<tr><td>Modular monolith 유지</td><td>프로세스 하나, 모듈 경계 강화</td><td>단순 배포, 트랜잭션 단순성</td><td>독립 스케일/배포 제한</td><td>모듈 간 직접 DB 접근, 변경 충돌 빈도</td></tr>
+<tr><td>Service split</td><td>독립 서비스와 API 계약</td><td>팀 owner, 장애 격리, 독립 배포</td><td>네트워크 실패, 관측성, 데이터 복제 비용</td><td>SLO impact, dependency graph, incident blast radius</td></tr>
+<tr><td>Event-driven</td><td>outbox와 async consumer</td><td>시간 결합 제거, peak 완충</td><td>최종 일관성, replay, ordering 복잡도</td><td>consumer lag, DLQ, reconciliation mismatch</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">ARCHITECTURE REVIEW SCENARIO PACKET</span>
+scenario: 주문 완료가 결제, 재고, 정산, 알림을 모두 건드리는 기능<br>
+questions: 어느 데이터가 source of truth인가, 어떤 단계가 동기여야 하는가, 어떤 실패가 고객에게 보이는가<br>
+evidence: sequence diagram, owner map, SLO budget, rollback path, ADR, event contract, migration path<br>
+review bar: 선택한 구조의 장점보다 포기한 일관성, 운영 비용, 장애 복구 절차를 더 명확히 설명한다
 </div>
 </section>
 

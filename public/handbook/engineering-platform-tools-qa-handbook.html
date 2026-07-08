@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>플랫폼 도구·운영 기본기 Q&amp;A</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#22418A;--green-deep:#15294F;--green-tint:#E8EDF7;--amber:#A8650D;--amber-tint:#FBF2E3;--red:#9A3324;--red-tint:#F9ECE9;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:0}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;border-radius:0;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;border-radius:0;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:0;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:720px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:0}h3{font-size:18px;font-weight:700;margin:30px 0 12px}h3 .h3-tag{font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500;margin-right:8px;letter-spacing:.06em}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}ul,ol{margin:0 0 16px 22px}li{margin-bottom:7px}code{font-family:var(--mono);font-size:.86em;background:var(--green-tint);color:var(--green-deep);padding:1px 6px;border-radius:0}.callout{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);padding:18px 22px;border-radius:0;margin:22px 0}.callout.warn{border-left-color:var(--amber);background:var(--amber-tint)}.callout.risk{border-left-color:var(--red);background:var(--red-tint)}.callout.gm{border-left-color:var(--ink);background:#ECEEF3}.co-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;font-weight:600;color:var(--green);display:block;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}.semantic-card{background:var(--green-tint);border:1px solid var(--line);border-radius:0;padding:22px 26px;margin:24px 0;font-size:14px;line-height:1.9}.semantic-card .sc-label{font-family:var(--mono);color:var(--green-deep);font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;border-radius:0;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.9;overflow-x:auto;white-space:pre-wrap}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">BACKEND Q&amp;A</div>
+  <div class="nav-title">플랫폼 도구·운영 기본기 Q&amp;A</div>
+  <a href="#overview"><span class="code">GUIDE</span>훈련 방식</a>
+  <a href="#qa-1"><span class="code">Q01</span>Dockerfile을 리뷰할 때 무엇을 보나요?</a>
+  <a href="#qa-2"><span class="code">Q02</span>배포가 성공했는데 서비스가 깨졌다면 어떤 순서로 보나요?</a>
+  <a href="#qa-3"><span class="code">Q03</span>NGINX나 reverse proxy 문제를 어떻게 좁히나요?</a>
+  <a href="#qa-4"><span class="code">Q04</span>운영 도구 문서가 좋은지 어떻게 판단하나요?</a>
+  <a href="#qa-5"><span class="code">Q05</span>컨테이너 이미지에서 secret이 새면 어떻게 발견하나요?</a>
+  <a href="#qa-6"><span class="code">Q06</span>컨테이너가 OOMKilled 되면 무엇을 보나요?</a>
+  <a href="#qa-7"><span class="code">Q07</span>환경변수 문제를 어떻게 빠르게 좁히나요?</a>
+  <a href="#qa-8"><span class="code">Q08</span>NGINX 502와 504는 어떻게 다르게 접근하나요?</a>
+  <a href="#qa-9"><span class="code">Q09</span>Git history를 깨끗하게 만드는 것보다 중요한 것은 무엇인가요?</a>
+  <a href="#qa-10"><span class="code">Q10</span>운영 서버에서 직접 수정해야 할 때 어떤 원칙을 지키나요?</a>
+  <a href="#qa-11"><span class="code">Q11</span>배포 artifact 재현성은 왜 중요한가요?</a>
+  <a href="#qa-12"><span class="code">Q12</span>로컬에서는 되는데 CI에서 깨지는 문제를 어떻게 보나요?</a>
+  <a href="#qa-13"><span class="code">Q13</span>Docker layer cache은 어떻게 설명하나요?</a>
+  <a href="#qa-14"><span class="code">Q14</span>Multi-stage build은 어떻게 설명하나요?</a>
+  <a href="#qa-15"><span class="code">Q15</span>Container healthcheck은 어떻게 설명하나요?</a>
+  <a href="#qa-16"><span class="code">Q16</span>Docker volume은 어떻게 설명하나요?</a>
+  <a href="#qa-17"><span class="code">Q17</span>Linux port 진단은 어떻게 설명하나요?</a>
+  <a href="#qa-18"><span class="code">Q18</span>Disk full 장애은 어떻게 설명하나요?</a>
+  <a href="#qa-19"><span class="code">Q19</span>Process 생존과 지연은 어떻게 설명하나요?</a>
+  <a href="#qa-20"><span class="code">Q20</span>Header forwarding은 어떻게 설명하나요?</a>
+  <a href="#qa-21"><span class="code">Q21</span>TLS 인증서 진단은 어떻게 설명하나요?</a>
+  <a href="#qa-22"><span class="code">Q22</span>Artifact와 deploy 분리은 어떻게 설명하나요?</a>
+  <a href="#qa-23"><span class="code">Q23</span>Secret scope은 어떻게 설명하나요?</a>
+  <a href="#qa-24"><span class="code">Q24</span>NGINX access log은 어떻게 설명하나요?</a>
+  <a href="#qa-25"><span class="code">Q25</span>Readback 검증은 어떻게 설명하나요?</a>
+  <a href="#qa-26"><span class="code">Q26</span>Config drift은 어떻게 설명하나요?</a>
+  <a href="#qa-27"><span class="code">Q27</span>Blue-green과 canary은 어떻게 설명하나요?</a>
+  <a href="#qa-28"><span class="code">Q28</span>Rollback 불가능 배포은 어떻게 설명하나요?</a>
+  <a href="#qa-29"><span class="code">Q29</span>로컬 개발환경 문서은 어떻게 설명하나요?</a>
+  <a href="#qa-30"><span class="code">Q30</span>도구 질문 답변 방식은 어떻게 설명하나요?</a>
+  <a href="#drill"><span class="code">DRILL</span>꼬리질문 반복 훈련</a>
+  <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : ENGINEERING-PLATFORM-TOOLS-QA</span>
+    <span>SOURCE : 플랫폼 도구·운영 기본기</span>
+    <span>MODE : QUESTION · ANSWER · FOLLOW-UP</span>
+  </div>
+  <h1>플랫폼 도구·운영 기본기 Q&amp;A</h1>
+  <p class="hero-sub">Git, Docker, NGINX, 배포, 환경변수, 런타임 운영 도구를 재현성과 복구 기준으로 답하는 훈련 페이지입니다.</p>
+  <div class="hero-meta">TRAINING : 30초 답변 → 90초 확장 → 꼬리질문 방어 → 증거 패킷 확인</div>
+</header>
+
+<section id="overview">
+<div class="ch-head"><span class="ch-code">GUIDE</span><h2>훈련 방식</h2></div>
+<p class="lede">각 문항은 외워서 읽는 답이 아니라, 질문 의도를 파악하고 판단 기준을 말하는 훈련용입니다. 답변은 항상 결론, 메커니즘, trade-off, 실패 모드, 검증 증거 순서로 확장합니다.</p>
+<div class="snippet-card"><code>answer_loop:
+  1_conclusion: "질문에 대한 결론을 한 문장으로 말한다"
+  2_mechanism: "내부 동작이나 시스템 경계를 설명한다"
+  3_tradeoff: "얻는 것과 잃는 것을 나눈다"
+  4_failure: "운영 중 깨지는 조건을 말한다"
+  5_evidence: "테스트, 로그, 지표, 쿼리, ADR 중 하나를 증거로 든다"</code></div>
+</section>
+
+<section id="qa-1">
+<div class="ch-head"><span class="ch-code">Q01</span><h2>Dockerfile을 리뷰할 때 무엇을 보나요?</h2></div>
+<p class="lede">멀티스테이지, base image 고정, non-root user, secret 미포함, layer cache, healthcheck, runtime env 주입 방식을 봅니다. 이미지는 빌드 산출물이고 환경별 값은 runtime에 주입해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>build-time env와 runtime env를 왜 구분하나요?</td><td>멀티스테이지, base image 고정, non-root user, secret 미포함, layer cache, healthcheck, runtime env 주입 방식을 봅니다. 이 꼬리질문에서는 image digest, Dockerfile review, container logs, exit code, env diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>latest 태그가 왜 위험한가요?</td><td>멀티스테이지, base image 고정, non-root user, secret 미포함, layer cache, healthcheck, runtime env 주입 방식을 봅니다. 이 꼬리질문에서는 image digest, Dockerfile review, container logs, exit code, env diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>컨테이너가 재시작을 반복하면 무엇을 확인하나요?</td><td>멀티스테이지, base image 고정, non-root user, secret 미포함, layer cache, healthcheck, runtime env 주입 방식을 봅니다. 이 꼬리질문에서는 image digest, Dockerfile review, container logs, exit code, env diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+image digest, Dockerfile review, container logs, exit code, env diff
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-2">
+<div class="ch-head"><span class="ch-code">Q02</span><h2>배포가 성공했는데 서비스가 깨졌다면 어떤 순서로 보나요?</h2></div>
+<p class="lede">배포 artifact, release id, health check, config/env, DB migration, dependency connectivity, error rate, rollback 조건을 순서대로 확인합니다. CI 성공은 런타임 성공의 충분조건이 아닙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>readiness와 liveness를 왜 나누나요?</td><td>배포 artifact, release id, health check, config/env, DB migration, dependency connectivity, error rate, rollback 조건을 순서대로 확인합니다. 이 꼬리질문에서는 deployment log, artifact hash, health probe, migration status, canary metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>migration 실패 시 rollback이 항상 가능한가요?</td><td>배포 artifact, release id, health check, config/env, DB migration, dependency connectivity, error rate, rollback 조건을 순서대로 확인합니다. 이 꼬리질문에서는 deployment log, artifact hash, health probe, migration status, canary metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>canary에서 어떤 지표를 봐야 하나요?</td><td>배포 artifact, release id, health check, config/env, DB migration, dependency connectivity, error rate, rollback 조건을 순서대로 확인합니다. 이 꼬리질문에서는 deployment log, artifact hash, health probe, migration status, canary metric를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+deployment log, artifact hash, health probe, migration status, canary metric
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-3">
+<div class="ch-head"><span class="ch-code">Q03</span><h2>NGINX나 reverse proxy 문제를 어떻게 좁히나요?</h2></div>
+<p class="lede">DNS, TLS, routing, upstream health, header forwarding, timeout, body size limit, proxy buffering을 분리합니다. 502는 앱 문제일 수도 있고 upstream 연결, protocol, timeout 문제일 수도 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>X-Forwarded-For를 왜 신뢰하면 안 되나요?</td><td>DNS, TLS, routing, upstream health, header forwarding, timeout, body size limit, proxy buffering을 분리합니다. 이 꼬리질문에서는 access/error log, upstream status, curl -v, request id, proxy config diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>idle timeout이 긴 요청에 어떤 영향을 주나요?</td><td>DNS, TLS, routing, upstream health, header forwarding, timeout, body size limit, proxy buffering을 분리합니다. 이 꼬리질문에서는 access/error log, upstream status, curl -v, request id, proxy config diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>CDN과 origin 중 어디서 막혔는지 어떻게 구분하나요?</td><td>DNS, TLS, routing, upstream health, header forwarding, timeout, body size limit, proxy buffering을 분리합니다. 이 꼬리질문에서는 access/error log, upstream status, curl -v, request id, proxy config diff를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+access/error log, upstream status, curl -v, request id, proxy config diff
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-4">
+<div class="ch-head"><span class="ch-code">Q04</span><h2>운영 도구 문서가 좋은지 어떻게 판단하나요?</h2></div>
+<p class="lede">명령어 목록보다 전제 조건, 대상 환경, 성공/실패 판정, 되돌리기 절차가 있어야 합니다. 위험 명령은 dry-run과 readback 확인을 포함해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>로컬에서만 성공한 절차를 어떻게 팀 절차로 바꾸나요?</td><td>명령어 목록보다 전제 조건, 대상 환경, 성공/실패 판정, 되돌리기 절차가 있어야 합니다. 이 꼬리질문에서는 runbook, command output, readback query, rollback checklist, incident ticket를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>환경변수 누락을 어떻게 빨리 찾나요?</td><td>명령어 목록보다 전제 조건, 대상 환경, 성공/실패 판정, 되돌리기 절차가 있어야 합니다. 이 꼬리질문에서는 runbook, command output, readback query, rollback checklist, incident ticket를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>수동 조치 후 무엇을 기록해야 하나요?</td><td>명령어 목록보다 전제 조건, 대상 환경, 성공/실패 판정, 되돌리기 절차가 있어야 합니다. 이 꼬리질문에서는 runbook, command output, readback query, rollback checklist, incident ticket를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+runbook, command output, readback query, rollback checklist, incident ticket
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-5">
+<div class="ch-head"><span class="ch-code">Q05</span><h2>컨테이너 이미지에서 secret이 새면 어떻게 발견하나요?</h2></div>
+<p class="lede">이미지 layer, build arg, env dump, repository history를 확인합니다. secret은 build artifact에 들어가면 안 되고 runtime secret store나 mounted secret으로 주입해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>ARG와 ENV는 어떻게 다른가요?</td><td>ARG는 build time 변수이고 image layer/history에 남을 수 있습니다. ENV는 runtime 환경 변수지만 image에 박으면 역시 노출 위험이 있어 secret에는 둘 다 조심해야 합니다.</td></tr>
+<tr><td>이미 push된 secret은 파일만 지우면 끝인가요?</td><td>파일 삭제만으로는 history와 이미 배포된 artifact에 남습니다. 즉시 revoke/rotate하고, repo history와 image registry, CI log까지 스캔해야 합니다.</td></tr>
+<tr><td>secret rotation은 어떤 순서로 하나요?</td><td>새 secret 발급, 애플리케이션 dual-read 또는 순차 배포, old secret revoke, 실패 모니터링 순서로 진행합니다. 영향 범위도 audit해야 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+image history, secret scan, revoked key record, runtime injection config
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-6">
+<div class="ch-head"><span class="ch-code">Q06</span><h2>컨테이너가 OOMKilled 되면 무엇을 보나요?</h2></div>
+<p class="lede">exit code, container memory limit, RSS, heap, direct memory, GC log, traffic spike를 봅니다. JVM이면 heap만 줄이면 direct memory나 native memory 문제를 놓칠 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>memory limit과 JVM heap은 어떻게 맞추나요?</td><td>컨테이너 limit 안에 heap, metaspace, direct memory, thread stack, native memory가 모두 들어가야 합니다. heap만 limit까지 잡으면 OOMKilled가 날 수 있습니다.</td></tr>
+<tr><td>OOM과 GC thrashing은 어떻게 다르나요?</td><td>OOM은 메모리 할당 실패나 cgroup kill이고, GC thrashing은 회수할 메모리가 적어 GC 시간이 급증하는 상태입니다. GC log와 container event를 함께 봅니다.</td></tr>
+<tr><td>재시작하면 해결된 것처럼 보이는 이유는?</td><td>메모리나 connection leak은 재시작으로 일시 회복됩니다. 하지만 leak 원인과 증가율을 잡지 않으면 다시 같은 주기로 장애가 납니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+container exit code, memory graph, GC log, heap/native memory setting
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-7">
+<div class="ch-head"><span class="ch-code">Q07</span><h2>환경변수 문제를 어떻게 빠르게 좁히나요?</h2></div>
+<p class="lede">빌드 시점 변수와 실행 시점 변수를 구분하고, 배포 대상 namespace, secret key, config map, process env readback을 확인합니다. 민감값은 redacted dump로 존재 여부만 확인합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>frontend env와 backend env는 왜 다르게 다루나요?</td><td>프론트 env는 build artifact에 박히는 경우가 많아 runtime 변경이 어렵고 secret을 넣으면 노출됩니다. 백엔드는 runtime secret store로 주입할 수 있습니다.</td></tr>
+<tr><td>기본값을 코드에 넣으면 어떤 위험이 있나요?</td><td>운영 필수값에 위험한 기본값을 넣으면 누락을 숨깁니다. fail-fast로 부팅을 막고 redacted config dump로 누락을 찾는 편이 안전합니다.</td></tr>
+<tr><td>환경별 설정 drift는 어떻게 막나요?</td><td>IaC, config repo, environment diff check, startup config fingerprint로 막습니다. 수동 콘솔 변경은 ticket과 PR로 회수해야 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+redacted config dump, deployment manifest, secret version, startup log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-8">
+<div class="ch-head"><span class="ch-code">Q08</span><h2>NGINX 502와 504는 어떻게 다르게 접근하나요?</h2></div>
+<p class="lede">502는 upstream 연결, protocol, process crash, bad gateway 문제를 의심하고, 504는 upstream timeout이나 처리 지연을 의심합니다. 둘 다 upstream status, request time, app log, network path를 함께 봅니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>upstream health는 정상인데 502가 날 수 있나요?</td><td>health check 경로는 정상이어도 특정 route, header, body size, protocol mismatch에서 502가 날 수 있습니다. 실제 실패 request와 upstream log를 봐야 합니다.</td></tr>
+<tr><td>proxy_read_timeout은 무엇을 의미하나요?</td><td>NGINX가 upstream 응답을 기다리는 시간입니다. 앱 처리가 이 시간을 넘으면 504가 날 수 있고, 무작정 늘리면 thread 점유가 길어질 수 있습니다.</td></tr>
+<tr><td>large body upload는 어떤 설정을 보나요?</td><td>client_max_body_size, proxy buffering, upstream timeout, app multipart limit, disk temp path를 봅니다. 업로드는 streaming과 size limit 정책도 필요합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+nginx access/error log, upstream status, app request id, timeout config
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-9">
+<div class="ch-head"><span class="ch-code">Q09</span><h2>Git history를 깨끗하게 만드는 것보다 중요한 것은 무엇인가요?</h2></div>
+<p class="lede">변경 의도, 리뷰 가능성, bisect 가능성, rollback 가능성이 더 중요합니다. 커밋은 논리 단위로 나누고, 대형 refactor와 기능 변경을 섞지 않는 것이 핵심입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>squash merge는 언제 유리한가요?</td><td>작은 PR이나 noisy commit 정리에 유리합니다. 하지만 bisect와 단계별 revert가 필요한 migration/refactor는 논리 커밋을 유지하는 편이 낫습니다.</td></tr>
+<tr><td>revert가 쉬운 PR은 어떤 PR인가요?</td><td>기능 변경과 refactor가 분리되고, schema change가 backward-compatible하며, feature flag가 있으면 revert가 쉽습니다. 데이터 파괴 변경은 revert가 어렵습니다.</td></tr>
+<tr><td>migration 포함 PR은 어떻게 나누나요?</td><td>expand schema, application write/read change, backfill, contract cleanup을 나눕니다. 한 PR에 모두 넣으면 rollback 지점이 사라집니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+commit series, PR description, revert plan, migration split
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-10">
+<div class="ch-head"><span class="ch-code">Q10</span><h2>운영 서버에서 직접 수정해야 할 때 어떤 원칙을 지키나요?</h2></div>
+<p class="lede">대상 환경, 변경 파일 백업, diff, 적용 명령, 검증, rollback 명령, 사후 코드 반영을 기록합니다. 임시 수정이 source of truth가 되지 않게 ticket과 PR로 회수해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>hotfix와 임시 조치는 어떻게 다르나요?</td><td>hotfix는 source-controlled 변경을 빠르게 배포하는 것이고, 임시 조치는 운영 환경에서 직접 완화하는 것입니다. 임시 조치는 반드시 PR로 회수해야 합니다.</td></tr>
+<tr><td>vi로 수정한 설정을 어떻게 코드에 반영하나요?</td><td>수정 전 백업과 diff를 남기고, 같은 변경을 repo/IaC에 반영한 PR을 만듭니다. 운영 서버의 수동 상태가 source of truth가 되면 drift가 생깁니다.</td></tr>
+<tr><td>누가 승인해야 하나요?</td><td>영향 범위에 따라 service owner, on-call incident commander, security/data owner가 승인합니다. 권한·데이터·고객 영향 변경은 단독 판단하지 않습니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+change ticket, config backup, diff, readback result, follow-up PR
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-11">
+<div class="ch-head"><span class="ch-code">Q11</span><h2>배포 artifact 재현성은 왜 중요한가요?</h2></div>
+<p class="lede">같은 commit에서 같은 artifact가 나와야 사고 분석과 rollback이 가능합니다. dependency lock, build image, environment input, artifact digest가 고정되어야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>빌드마다 hash가 달라지면 왜 문제인가요?</td><td>같은 source에서 다른 artifact가 나오면 재현성과 rollback 신뢰가 깨집니다. timestamp, dependency latest, non-deterministic build input을 확인해야 합니다.</td></tr>
+<tr><td>dependency latest는 왜 위험한가요?</td><td>빌드 시점마다 다른 버전이 들어와 예측 불가능합니다. lockfile과 digest pinning으로 같은 입력에서 같은 artifact가 나오게 해야 합니다.</td></tr>
+<tr><td>artifact와 source commit을 어떻게 연결하나요?</td><td>release metadata에 commit SHA, build id, artifact digest, deploy time을 남깁니다. 장애 시 어떤 코드가 실행 중인지 바로 알아야 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+lockfile, build image tag, artifact digest, release metadata
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-12">
+<div class="ch-head"><span class="ch-code">Q12</span><h2>로컬에서는 되는데 CI에서 깨지는 문제를 어떻게 보나요?</h2></div>
+<p class="lede">runtime version, OS, env var, timezone/locale, network, dependency cache, test order, file path case sensitivity를 비교합니다. 로컬 성공은 재현성의 충분조건이 아닙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>timezone 때문에 어떤 테스트가 깨지나요?</td><td>날짜 경계, 만료, 정렬, 스냅샷 테스트가 환경별 timezone에 따라 달라질 수 있습니다. UTC 고정과 clock injection을 사용합니다.</td></tr>
+<tr><td>캐시를 지우면 고쳐지는 문제는 어떻게 추적하나요?</td><td>dependency cache나 build cache가 문제를 숨겼다는 뜻일 수 있습니다. clean install 로그와 cache key, lockfile 변화, generated artifact를 비교합니다.</td></tr>
+<tr><td>flaky test와 환경 차이는 어떻게 구분하나요?</td><td>같은 환경에서 반복 실패/성공하면 flaky 가능성이 크고, 특정 환경에서만 실패하면 env diff 가능성이 큽니다. seed, time, order dependency를 확인합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+CI env dump, version matrix, clean install log, flaky test history
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-13">
+<div class="ch-head"><span class="ch-code">Q13</span><h2>Docker layer cache은 어떻게 설명하나요?</h2></div>
+<p class="lede">Dockerfile 명령 순서는 cache hit와 build time을 좌우합니다. dependency install은 lockfile 기준으로 먼저 두고 자주 바뀌는 source copy는 뒤에 두는 편이 효율적입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Docker layer cache에서 가장 흔한 실패는 무엇인가요?</td><td>Dockerfile 명령 순서는 cache hit와 build time을 좌우합니다. 이 꼬리질문에서는 Dockerfile layer order, build time, cache hit log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Docker layer cache은 어떤 증거로 검증하나요?</td><td>Dockerfile 명령 순서는 cache hit와 build time을 좌우합니다. 이 꼬리질문에서는 Dockerfile layer order, build time, cache hit log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Docker layer cache을 과하게 적용하면 무엇이 문제인가요?</td><td>Dockerfile 명령 순서는 cache hit와 build time을 좌우합니다. 이 꼬리질문에서는 Dockerfile layer order, build time, cache hit log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+Dockerfile layer order, build time, cache hit log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-14">
+<div class="ch-head"><span class="ch-code">Q14</span><h2>Multi-stage build은 어떻게 설명하나요?</h2></div>
+<p class="lede">multi-stage build는 build tool과 source를 runtime image에서 제거해 이미지 크기와 공격 표면을 줄입니다. runtime에는 실행 artifact와 필요한 runtime dependency만 남겨야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Multi-stage build에서 가장 흔한 실패는 무엇인가요?</td><td>multi-stage build는 build tool과 source를 runtime image에서 제거해 이미지 크기와 공격 표면을 줄입니다. 이 꼬리질문에서는 image size diff, runtime package list, vulnerability scan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Multi-stage build은 어떤 증거로 검증하나요?</td><td>multi-stage build는 build tool과 source를 runtime image에서 제거해 이미지 크기와 공격 표면을 줄입니다. 이 꼬리질문에서는 image size diff, runtime package list, vulnerability scan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Multi-stage build을 과하게 적용하면 무엇이 문제인가요?</td><td>multi-stage build는 build tool과 source를 runtime image에서 제거해 이미지 크기와 공격 표면을 줄입니다. 이 꼬리질문에서는 image size diff, runtime package list, vulnerability scan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+image size diff, runtime package list, vulnerability scan
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-15">
+<div class="ch-head"><span class="ch-code">Q15</span><h2>Container healthcheck은 어떻게 설명하나요?</h2></div>
+<p class="lede">container healthcheck는 process 생존과 request 처리 준비 상태를 구분해야 합니다. liveness와 readiness를 섞으면 restart storm이나 잘못된 traffic routing이 생깁니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Container healthcheck에서 가장 흔한 실패는 무엇인가요?</td><td>container healthcheck는 process 생존과 request 처리 준비 상태를 구분해야 합니다. 이 꼬리질문에서는 healthcheck command, readiness endpoint, restart count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Container healthcheck은 어떤 증거로 검증하나요?</td><td>container healthcheck는 process 생존과 request 처리 준비 상태를 구분해야 합니다. 이 꼬리질문에서는 healthcheck command, readiness endpoint, restart count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Container healthcheck을 과하게 적용하면 무엇이 문제인가요?</td><td>container healthcheck는 process 생존과 request 처리 준비 상태를 구분해야 합니다. 이 꼬리질문에서는 healthcheck command, readiness endpoint, restart count를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+healthcheck command, readiness endpoint, restart count
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-16">
+<div class="ch-head"><span class="ch-code">Q16</span><h2>Docker volume은 어떻게 설명하나요?</h2></div>
+<p class="lede">container는 ephemeral이므로 DB data, upload file, persistent state는 volume이나 외부 storage에 둬야 합니다. stateless app container에는 상태를 남기지 않는 편이 좋습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Docker volume에서 가장 흔한 실패는 무엇인가요?</td><td>container는 ephemeral이므로 DB data, upload file, persistent state는 volume이나 외부 storage에 둬야 합니다. 이 꼬리질문에서는 volume mount, backup policy, container recreation test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Docker volume은 어떤 증거로 검증하나요?</td><td>container는 ephemeral이므로 DB data, upload file, persistent state는 volume이나 외부 storage에 둬야 합니다. 이 꼬리질문에서는 volume mount, backup policy, container recreation test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Docker volume을 과하게 적용하면 무엇이 문제인가요?</td><td>container는 ephemeral이므로 DB data, upload file, persistent state는 volume이나 외부 storage에 둬야 합니다. 이 꼬리질문에서는 volume mount, backup policy, container recreation test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+volume mount, backup policy, container recreation test
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-17">
+<div class="ch-head"><span class="ch-code">Q17</span><h2>Linux port 진단은 어떻게 설명하나요?</h2></div>
+<p class="lede">포트가 열려 있는데 접속이 안 되면 process listen, bind address, firewall, route, container mapping, reverse proxy를 순서대로 봅니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Linux port 진단에서 가장 흔한 실패는 무엇인가요?</td><td>포트가 열려 있는데 접속이 안 되면 process listen, bind address, firewall, route, container mapping, reverse proxy를 순서대로 봅니다. 이 꼬리질문에서는 ss/lsof output, firewall rule, route, curl result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Linux port 진단은 어떤 증거로 검증하나요?</td><td>포트가 열려 있는데 접속이 안 되면 process listen, bind address, firewall, route, container mapping, reverse proxy를 순서대로 봅니다. 이 꼬리질문에서는 ss/lsof output, firewall rule, route, curl result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Linux port 진단을 과하게 적용하면 무엇이 문제인가요?</td><td>포트가 열려 있는데 접속이 안 되면 process listen, bind address, firewall, route, container mapping, reverse proxy를 순서대로 봅니다. 이 꼬리질문에서는 ss/lsof output, firewall rule, route, curl result를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+ss/lsof output, firewall rule, route, curl result
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-18">
+<div class="ch-head"><span class="ch-code">Q18</span><h2>Disk full 장애은 어떻게 설명하나요?</h2></div>
+<p class="lede">disk full은 log write 실패, DB WAL/write 실패, temp file 실패, image pull 실패로 이어질 수 있습니다. inode 고갈도 별도 장애 원인이 됩니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Disk full 장애에서 가장 흔한 실패는 무엇인가요?</td><td>disk full은 log write 실패, DB WAL/write 실패, temp file 실패, image pull 실패로 이어질 수 있습니다. 이 꼬리질문에서는 df/du/inode check, log rotation config, DB disk alert를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Disk full 장애은 어떤 증거로 검증하나요?</td><td>disk full은 log write 실패, DB WAL/write 실패, temp file 실패, image pull 실패로 이어질 수 있습니다. 이 꼬리질문에서는 df/du/inode check, log rotation config, DB disk alert를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Disk full 장애을 과하게 적용하면 무엇이 문제인가요?</td><td>disk full은 log write 실패, DB WAL/write 실패, temp file 실패, image pull 실패로 이어질 수 있습니다. 이 꼬리질문에서는 df/du/inode check, log rotation config, DB disk alert를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+df/du/inode check, log rotation config, DB disk alert
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-19">
+<div class="ch-head"><span class="ch-code">Q19</span><h2>Process 생존과 지연은 어떻게 설명하나요?</h2></div>
+<p class="lede">process가 살아 있어도 thread pool, DB pool, external call 대기 때문에 사용자는 장애를 겪을 수 있습니다. health, CPU, thread dump, socket state, log timestamp를 함께 봐야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Process 생존과 지연에서 가장 흔한 실패는 무엇인가요?</td><td>process가 살아 있어도 thread pool, DB pool, external call 대기 때문에 사용자는 장애를 겪을 수 있습니다. 이 꼬리질문에서는 ps/top/thread dump, health result, access log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Process 생존과 지연은 어떤 증거로 검증하나요?</td><td>process가 살아 있어도 thread pool, DB pool, external call 대기 때문에 사용자는 장애를 겪을 수 있습니다. 이 꼬리질문에서는 ps/top/thread dump, health result, access log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Process 생존과 지연을 과하게 적용하면 무엇이 문제인가요?</td><td>process가 살아 있어도 thread pool, DB pool, external call 대기 때문에 사용자는 장애를 겪을 수 있습니다. 이 꼬리질문에서는 ps/top/thread dump, health result, access log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+ps/top/thread dump, health result, access log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-20">
+<div class="ch-head"><span class="ch-code">Q20</span><h2>Header forwarding은 어떻게 설명하나요?</h2></div>
+<p class="lede">X-Forwarded-For, X-Forwarded-Proto, Host는 redirect, audit, rate limit, auth 판단에 쓰일 수 있습니다. trusted proxy 경계 밖의 header는 신뢰하면 안 됩니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Header forwarding에서 가장 흔한 실패는 무엇인가요?</td><td>X-Forwarded-For, X-Forwarded-Proto, Host는 redirect, audit, rate limit, auth 판단에 쓰일 수 있습니다. 이 꼬리질문에서는 proxy_set_header config, trusted proxy policy, audit IP test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Header forwarding은 어떤 증거로 검증하나요?</td><td>X-Forwarded-For, X-Forwarded-Proto, Host는 redirect, audit, rate limit, auth 판단에 쓰일 수 있습니다. 이 꼬리질문에서는 proxy_set_header config, trusted proxy policy, audit IP test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Header forwarding을 과하게 적용하면 무엇이 문제인가요?</td><td>X-Forwarded-For, X-Forwarded-Proto, Host는 redirect, audit, rate limit, auth 판단에 쓰일 수 있습니다. 이 꼬리질문에서는 proxy_set_header config, trusted proxy policy, audit IP test를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+proxy_set_header config, trusted proxy policy, audit IP test
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-21">
+<div class="ch-head"><span class="ch-code">Q21</span><h2>TLS 인증서 진단은 어떻게 설명하나요?</h2></div>
+<p class="lede">TLS 문제는 chain, expiry, SAN, SNI, intermediate CA, client trust store를 확인합니다. 서버 인증서가 있어도 SNI mismatch나 chain 누락으로 실패할 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>TLS 인증서 진단에서 가장 흔한 실패는 무엇인가요?</td><td>TLS 문제는 chain, expiry, SAN, SNI, intermediate CA, client trust store를 확인합니다. 이 꼬리질문에서는 openssl s_client, cert expiry, SAN list, client error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>TLS 인증서 진단은 어떤 증거로 검증하나요?</td><td>TLS 문제는 chain, expiry, SAN, SNI, intermediate CA, client trust store를 확인합니다. 이 꼬리질문에서는 openssl s_client, cert expiry, SAN list, client error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>TLS 인증서 진단을 과하게 적용하면 무엇이 문제인가요?</td><td>TLS 문제는 chain, expiry, SAN, SNI, intermediate CA, client trust store를 확인합니다. 이 꼬리질문에서는 openssl s_client, cert expiry, SAN list, client error를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+openssl s_client, cert expiry, SAN list, client error
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-22">
+<div class="ch-head"><span class="ch-code">Q22</span><h2>Artifact와 deploy 분리은 어떻게 설명하나요?</h2></div>
+<p class="lede">빌드 산출물을 한 번 만들고 여러 환경에 같은 artifact를 배포해야 재현성이 생깁니다. 환경별 재빌드는 환경 차이와 artifact 차이를 섞습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Artifact와 deploy 분리에서 가장 흔한 실패는 무엇인가요?</td><td>빌드 산출물을 한 번 만들고 여러 환경에 같은 artifact를 배포해야 재현성이 생깁니다. 이 꼬리질문에서는 artifact digest, pipeline stages, deploy metadata를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Artifact와 deploy 분리은 어떤 증거로 검증하나요?</td><td>빌드 산출물을 한 번 만들고 여러 환경에 같은 artifact를 배포해야 재현성이 생깁니다. 이 꼬리질문에서는 artifact digest, pipeline stages, deploy metadata를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Artifact와 deploy 분리을 과하게 적용하면 무엇이 문제인가요?</td><td>빌드 산출물을 한 번 만들고 여러 환경에 같은 artifact를 배포해야 재현성이 생깁니다. 이 꼬리질문에서는 artifact digest, pipeline stages, deploy metadata를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+artifact digest, pipeline stages, deploy metadata
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-23">
+<div class="ch-head"><span class="ch-code">Q23</span><h2>Secret scope은 어떻게 설명하나요?</h2></div>
+<p class="lede">dev, stage, prod secret은 분리하고 최소 권한으로 접근해야 합니다. prod secret이 dev artifact, CI log, local env에 섞이면 사고 범위가 커집니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Secret scope에서 가장 흔한 실패는 무엇인가요?</td><td>dev, stage, prod secret은 분리하고 최소 권한으로 접근해야 합니다. 이 꼬리질문에서는 secret scope matrix, access audit, redacted log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Secret scope은 어떤 증거로 검증하나요?</td><td>dev, stage, prod secret은 분리하고 최소 권한으로 접근해야 합니다. 이 꼬리질문에서는 secret scope matrix, access audit, redacted log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Secret scope을 과하게 적용하면 무엇이 문제인가요?</td><td>dev, stage, prod secret은 분리하고 최소 권한으로 접근해야 합니다. 이 꼬리질문에서는 secret scope matrix, access audit, redacted log를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+secret scope matrix, access audit, redacted log
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-24">
+<div class="ch-head"><span class="ch-code">Q24</span><h2>NGINX access log은 어떻게 설명하나요?</h2></div>
+<p class="lede">NGINX access log에서는 status, request time, upstream response time, upstream status, bytes, request id를 봅니다. proxy 문제와 app 문제를 분리하는 증거입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>NGINX access log에서 가장 흔한 실패는 무엇인가요?</td><td>NGINX access log에서는 status, request time, upstream response time, upstream status, bytes, request id를 봅니다. 이 꼬리질문에서는 access log format, upstream timing, request id를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>NGINX access log은 어떤 증거로 검증하나요?</td><td>NGINX access log에서는 status, request time, upstream response time, upstream status, bytes, request id를 봅니다. 이 꼬리질문에서는 access log format, upstream timing, request id를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>NGINX access log을 과하게 적용하면 무엇이 문제인가요?</td><td>NGINX access log에서는 status, request time, upstream response time, upstream status, bytes, request id를 봅니다. 이 꼬리질문에서는 access log format, upstream timing, request id를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+access log format, upstream timing, request id
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-25">
+<div class="ch-head"><span class="ch-code">Q25</span><h2>Readback 검증은 어떻게 설명하나요?</h2></div>
+<p class="lede">명령 실행 성공과 실제 상태 변경 성공은 다릅니다. 설정 적용, 배포, 권한 변경 후에는 조회 명령으로 원하는 상태가 되었는지 확인해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Readback 검증에서 가장 흔한 실패는 무엇인가요?</td><td>명령 실행 성공과 실제 상태 변경 성공은 다릅니다. 이 꼬리질문에서는 command log, readback output, expected state를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Readback 검증은 어떤 증거로 검증하나요?</td><td>명령 실행 성공과 실제 상태 변경 성공은 다릅니다. 이 꼬리질문에서는 command log, readback output, expected state를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Readback 검증을 과하게 적용하면 무엇이 문제인가요?</td><td>명령 실행 성공과 실제 상태 변경 성공은 다릅니다. 이 꼬리질문에서는 command log, readback output, expected state를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+command log, readback output, expected state
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-26">
+<div class="ch-head"><span class="ch-code">Q26</span><h2>Config drift은 어떻게 설명하나요?</h2></div>
+<p class="lede">config drift는 git/IaC 상태와 runtime 상태가 달라지는 문제입니다. state, runtime readback, checksum, periodic audit로 탐지하고 수동 변경은 PR로 회수해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Config drift에서 가장 흔한 실패는 무엇인가요?</td><td>config drift는 git/IaC 상태와 runtime 상태가 달라지는 문제입니다. 이 꼬리질문에서는 config checksum, drift report, IaC plan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Config drift은 어떤 증거로 검증하나요?</td><td>config drift는 git/IaC 상태와 runtime 상태가 달라지는 문제입니다. 이 꼬리질문에서는 config checksum, drift report, IaC plan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Config drift을 과하게 적용하면 무엇이 문제인가요?</td><td>config drift는 git/IaC 상태와 runtime 상태가 달라지는 문제입니다. 이 꼬리질문에서는 config checksum, drift report, IaC plan를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+config checksum, drift report, IaC plan
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-27">
+<div class="ch-head"><span class="ch-code">Q27</span><h2>Blue-green과 canary은 어떻게 설명하나요?</h2></div>
+<p class="lede">blue-green은 두 환경을 전환해 빠른 rollback이 쉽고 canary는 일부 traffic으로 새 버전을 검증합니다. canary는 segment coverage와 metric 비교가 중요합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Blue-green과 canary에서 가장 흔한 실패는 무엇인가요?</td><td>blue-green은 두 환경을 전환해 빠른 rollback이 쉽고 canary는 일부 traffic으로 새 버전을 검증합니다. 이 꼬리질문에서는 deployment strategy ADR, traffic split, canary dashboard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Blue-green과 canary은 어떤 증거로 검증하나요?</td><td>blue-green은 두 환경을 전환해 빠른 rollback이 쉽고 canary는 일부 traffic으로 새 버전을 검증합니다. 이 꼬리질문에서는 deployment strategy ADR, traffic split, canary dashboard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Blue-green과 canary을 과하게 적용하면 무엇이 문제인가요?</td><td>blue-green은 두 환경을 전환해 빠른 rollback이 쉽고 canary는 일부 traffic으로 새 버전을 검증합니다. 이 꼬리질문에서는 deployment strategy ADR, traffic split, canary dashboard를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+deployment strategy ADR, traffic split, canary dashboard
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-28">
+<div class="ch-head"><span class="ch-code">Q28</span><h2>Rollback 불가능 배포은 어떻게 설명하나요?</h2></div>
+<p class="lede">data destructive change나 외부 side effect가 있으면 rollback보다 forward fix가 현실적일 수 있습니다. 사전에 feature flag, expand-contract migration, repair script를 준비해야 합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>Rollback 불가능 배포에서 가장 흔한 실패는 무엇인가요?</td><td>data destructive change나 외부 side effect가 있으면 rollback보다 forward fix가 현실적일 수 있습니다. 이 꼬리질문에서는 rollback assessment, forward fix plan, migration stop point를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Rollback 불가능 배포은 어떤 증거로 검증하나요?</td><td>data destructive change나 외부 side effect가 있으면 rollback보다 forward fix가 현실적일 수 있습니다. 이 꼬리질문에서는 rollback assessment, forward fix plan, migration stop point를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>Rollback 불가능 배포을 과하게 적용하면 무엇이 문제인가요?</td><td>data destructive change나 외부 side effect가 있으면 rollback보다 forward fix가 현실적일 수 있습니다. 이 꼬리질문에서는 rollback assessment, forward fix plan, migration stop point를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+rollback assessment, forward fix plan, migration stop point
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-29">
+<div class="ch-head"><span class="ch-code">Q29</span><h2>로컬 개발환경 문서은 어떻게 설명하나요?</h2></div>
+<p class="lede">좋은 로컬 문서는 clean install, dependency version, env var, seed data, 실행 명령, health check, 흔한 오류 해결책을 포함합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>로컬 개발환경 문서에서 가장 흔한 실패는 무엇인가요?</td><td>좋은 로컬 문서는 clean install, dependency version, env var, seed data, 실행 명령, health check, 흔한 오류 해결책을 포함합니다. 이 꼬리질문에서는 setup guide, clean install log, troubleshooting table를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>로컬 개발환경 문서은 어떤 증거로 검증하나요?</td><td>좋은 로컬 문서는 clean install, dependency version, env var, seed data, 실행 명령, health check, 흔한 오류 해결책을 포함합니다. 이 꼬리질문에서는 setup guide, clean install log, troubleshooting table를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>로컬 개발환경 문서을 과하게 적용하면 무엇이 문제인가요?</td><td>좋은 로컬 문서는 clean install, dependency version, env var, seed data, 실행 명령, health check, 흔한 오류 해결책을 포함합니다. 이 꼬리질문에서는 setup guide, clean install log, troubleshooting table를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+setup guide, clean install log, troubleshooting table
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="qa-30">
+<div class="ch-head"><span class="ch-code">Q30</span><h2>도구 질문 답변 방식은 어떻게 설명하나요?</h2></div>
+<p class="lede">도구 질문은 명령어 암기가 아니라 계층별 진단 순서를 말해야 합니다. 예를 들어 502는 proxy log, upstream status, app log, timeout config, request id로 좁힙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>도구 질문 답변 방식에서 가장 흔한 실패는 무엇인가요?</td><td>도구 질문은 명령어 암기가 아니라 계층별 진단 순서를 말해야 합니다. 이 꼬리질문에서는 triage checklist, command output, layer model를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>도구 질문 답변 방식은 어떤 증거로 검증하나요?</td><td>도구 질문은 명령어 암기가 아니라 계층별 진단 순서를 말해야 합니다. 이 꼬리질문에서는 triage checklist, command output, layer model를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+<tr><td>도구 질문 답변 방식을 과하게 적용하면 무엇이 문제인가요?</td><td>도구 질문은 명령어 암기가 아니라 계층별 진단 순서를 말해야 합니다. 이 꼬리질문에서는 triage checklist, command output, layer model를 근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">TRAINING EVIDENCE</span>
+triage checklist, command output, layer model
+</div>
+<div class="callout gm">
+<span class="co-label">답변 기준</span>
+<p>30초 답변은 결론과 기준을 먼저 말하고, 90초 답변은 메커니즘, trade-off, 실패 신호, 테스트 또는 운영 증거까지 확장한다. 경험이 없으면 직접 경험처럼 말하지 말고 설계 지식과 검증 계획으로 경계를 분명히 한다.</p>
+</div>
+</section>
+
+<section id="drill">
+<div class="ch-head"><span class="ch-code">DRILL</span><h2>꼬리질문 반복 훈련</h2></div>
+<table>
+<tr><th>라운드</th><th>훈련 방식</th><th>실패 신호</th></tr>
+<tr><td>1</td><td>각 문항을 30초 안에 결론 중심으로 답한다.</td><td>정의만 말하고 판단 기준이 없다.</td></tr>
+<tr><td>2</td><td>꼬리질문 하나를 골라 90초 답변으로 확장한다.</td><td>프레임워크 이름은 나오지만 실패 모드가 없다.</td></tr>
+<tr><td>3</td><td>답변마다 테스트, 로그, metric, query, ADR 중 하나를 증거로 붙인다.</td><td>말은 그럴듯하지만 검증 방법이 없다.</td></tr>
+<tr><td>4</td><td>직접 경험과 설계 지식의 경계를 한 문장으로 밝힌다.</td><td>해보지 않은 운영을 직접 경험처럼 말한다.</td></tr>
+</table>
+</section>
+
+<section id="rubric">
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>통과 기준</h2></div>
+<div class="semantic-card">
+<span class="sc-label">BACKEND QA TRAINING PACKET</span>
+통과 답변은 핵심 결론, 내부 동작, trade-off, 실패 모드, 검증 증거를 모두 포함한다.<br>
+보완 답변은 개념 정의는 맞지만 운영 중 깨지는 조건이나 테스트 기준이 빠진다.<br>
+실패 답변은 기술명 나열, 복붙식 해결책, “상황에 따라 다릅니다” 이후 기준 없음으로 끝난다.
+</div>
+</section>
+
+<footer>
+플랫폼 도구·운영 기본기 Q&amp;A · BACKEND QUESTION TRAINING · GENERATED 2026-07<br>
+PAIRING SOURCE : 플랫폼 도구·운영 기본기 · USE : 외부 검증 전 예상 질문, 답변, 꼬리질문 훈련
+</footer>
+</main>
+</div>
+</body>
+</html>

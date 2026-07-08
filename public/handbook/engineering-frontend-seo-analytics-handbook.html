@@ -35,8 +35,8 @@
 
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 개요</h2></div>
-<p class="lede">검색 최적화는 더 이상 title과 description을 채우는 작업만이 아닙니다. 사용자는 검색엔진 결과, AI 요약, 음성 답변, 소셜 미리보기, 앱 내부 검색, 추천 피드 등 여러 발견 경로를 통해 제품을 만납니다. 프론트엔드는 이 경로들이 읽을 수 있는 HTML, 의미 구조, 성능, 콘텐츠 신뢰 신호, 구조화 데이터, canonical 정책, 이벤트 계측을 책임지는 실행 지점입니다.</p>
-<ul><li>SEO: 검색엔진이 페이지를 발견, 크롤링, 색인, 랭킹할 수 있게 만드는 기술·콘텐츠 기반</li><li>AEO: 사용자의 질문에 직접 답변될 수 있도록 명확한 질문-답변 구조와 entity 관계를 설계하는 방식</li><li>GEO: 생성형 AI 엔진이 내용을 인용, 요약, 추천할 때 맥락과 출처를 잃지 않도록 문서와 데이터를 구성하는 방식</li><li>Analytics: 유입, 행동, 전환, 유지, 품질 지표를 신뢰 가능한 의사결정 자료로 만드는 측정 체계</li></ul>
+<p class="lede">검색 최적화는 더 이상 title과 description을 채우는 작업만이 아닙니다. 사용자는 검색 결과, AI 요약, 음성 답변, 소셜 미리보기, 앱 내부 검색, 추천 피드 등 여러 발견 경로를 통해 제품을 만납니다. 프론트엔드는 이 경로들이 읽을 수 있는 HTML, 의미 구조, 성능, 콘텐츠 신뢰 신호, 구조화 데이터, canonical 정책, 이벤트 계측을 책임지는 실행 지점입니다. 단, AI 검색을 별도 해킹 대상으로 보면 안 됩니다. Google Search 기준으로 AI 검색 노출은 별도 마법이 아니라 SEO의 연장입니다.</p>
+<ul><li>SEO: 검색엔진이 페이지를 발견, 크롤링, 색인, 이해, 평가할 수 있게 만드는 기술·콘텐츠·경험 기반</li><li>AEO: 답변형 검색에서 질문, 결론, 조건, 근거가 잘 분리되도록 콘텐츠를 설계하는 실무 프레임. Google Search에서는 독립 표준이 아니라 SEO의 일부로 다룬다</li><li>GEO: 생성형 AI 엔진이 내용을 선택, 인용, 요약할 때 출처와 맥락을 잃지 않도록 문서와 근거를 구성하는 연구·실무 프레임. 플랫폼별 동작이 달라 보장 지표로 쓰면 안 된다</li><li>Analytics: 유입, 행동, 전환, 유지, 품질 지표를 신뢰 가능한 의사결정 자료로 만드는 측정 체계</li></ul>
 </section>
 
 <section id="discovery-model">
@@ -56,6 +56,7 @@ intent research → information architecture → crawlable HTML → structured d
 <tr><td>Experience</td><td>검색에서 들어온 사용자가 빠르고 안정적으로 핵심 정보를 보는가</td><td>LCP/INP/CLS, route-level Web Vitals, landing page QA</td></tr>
 <tr><td>Measurement</td><td>노출에서 전환까지의 흐름이 중복·누락 없이 측정되는가</td><td>event taxonomy, UTM policy, consent mode, dashboard</td></tr>
 </table>
+<div class="callout warn"><span class="co-label">AI 검색 경계</span><p>llms.txt나 AI 전용 특수 마크업은 Google Search 노출을 보장하지 않는다. Google의 AI Overviews와 AI Mode는 색인 가능성, 스니펫 표시 가능성, helpful content, crawlable text, structured data와 visible text의 일치 같은 기존 검색 품질 조건 위에서 작동한다. 다른 AI 검색 플랫폼은 별도 수집·인용 정책을 가질 수 있으므로, 문서는 플랫폼별 관찰 결과와 공식 기준을 분리해 적어야 한다.</p></div>
 </section>
 
 <section id="discovery-method">
@@ -84,7 +85,7 @@ query intent → page promise → first viewport evidence → action → measure
 <tr><td>5. Measurement</td><td>의도별 성공 행동과 보호 지표를 연결한다</td><td>event and dashboard spec</td></tr>
 </table>
 <h3>AEO GEO ANSWER READINESS MODEL</h3>
-<p>AEO/GEO의 관점은 “AI에게 잘 보이기”가 아니라 “답변으로 잘려 나가도 맥락이 유지되는 문서”를 만드는 것입니다. 짧은 답, 제약, 근거, 출처, 업데이트 날짜, entity 관계가 가까이 있어야 AI와 사람이 같은 의미로 읽습니다.</p>
+<p>AEO/GEO의 관점은 “AI에게 잘 보이기”가 아니라 “답변으로 잘려 나가도 맥락이 유지되는 문서”를 만드는 것입니다. 다만 이것은 SEO와 충돌하는 별도 작업이 아닙니다. Google Search 기준으로 AI 검색 노출은 별도 마법이 아니라 SEO의 연장이고, 핵심은 색인 가능한 공개 콘텐츠가 사람에게 유용하며 기계도 구조를 잃지 않고 읽는 것입니다.</p>
 <div class="semantic-card evidence-card"><span class="sc-label">AEO GEO ANSWER READINESS MODEL</span><br>
 question phrase: 사용자가 실제로 묻는 문장<br>
 direct answer: 40-80자 결론<br>
@@ -93,6 +94,13 @@ evidence: 수치, 정책, 코드, 비교 표, 출처<br>
 entity links: 제품, 기능, 대안, 관련 문서<br>
 freshness: 작성일, 수정일, 버전, 폐기 여부
 </div>
+<table>
+<tr><th>AI 검색 검증 단위</th><th>질문</th><th>증거</th></tr>
+<tr><td>eligibility</td><td>페이지가 색인 가능하고 snippet 표시가 허용되는가</td><td>robots, noindex, canonical, Search Console URL inspection</td></tr>
+<tr><td>citation selection</td><td>AI 검색이 이 페이지를 출처 후보 또는 supporting link로 선택하는가</td><td>query set별 SERP/AI answer snapshot, cited URL, 날짜, locale</td></tr>
+<tr><td>answer absorption</td><td>선택된 페이지의 정의, 수치, 비교, 제약이 최종 답변에 실제로 반영되는가</td><td>답변 문장과 원문 block 매핑, 누락·왜곡 유형</td></tr>
+<tr><td>business effect</td><td>출처 노출이 유입, 전환, 문의 품질, 오해 감소로 이어지는가</td><td>referral, brand query, landing engagement, support misunderstanding log</td></tr>
+</table>
 <h3>MEASUREMENT QUESTION CONTRACT</h3>
 <p>지표는 수집 항목이 아니라 의사결정 질문의 계약입니다. “이 버튼 클릭 수를 보자”가 아니라 “pricing page의 월간 결제 전환이 낮은 이유가 메시지, 성능, 가격 비교, 오류 중 무엇인지 구분하자”처럼 질문을 먼저 써야 합니다.</p>
 <table>
@@ -135,16 +143,18 @@ freshness: 작성일, 수정일, 버전, 폐기 여부
 
 <section id="aeo-geo">
 <div class="ch-head"><span class="ch-code">AEO-04</span><h2>AEO·GEO·LLM 최적화</h2></div>
-<p class="lede">AEO는 Answer Engine Optimization, GEO는 Generative Engine Optimization으로 부릅니다. 두 용어 모두 고정된 표준이라기보다 검색 경험이 답변형·생성형으로 바뀌면서 생긴 실무 프레임입니다. 핵심은 AI가 문서를 읽을 때 질문, 답, 근거, entity, 출처, 최신성을 잃지 않도록 구조를 제공하는 것입니다.</p>
+<p class="lede">AEO는 Answer Engine Optimization, GEO는 Generative Engine Optimization으로 부릅니다. 두 용어 모두 고정된 표준이라기보다 검색 경험이 답변형·생성형으로 바뀌면서 생긴 실무 프레임입니다. 그래서 문서에서는 “AEO/GEO를 했다”가 아니라 어떤 검색 표면에서, 어떤 query set으로, 어떤 출처 선택과 답변 반영을 관찰했는지 말해야 합니다.</p>
+<div class="callout warn"><span class="co-label">과장 금지</span><p>AI 검색 최적화는 ranking trick이 아닙니다. Google Search에서는 AI 기능도 기본 SEO best practice 위에서 작동하며, 추가 기술 요구사항이 따로 있는 것이 아닙니다. llms.txt나 AI 전용 특수 마크업은 Google Search 노출을 보장하지 않는다. 문서가 해야 할 일은 공개적으로 접근 가능한 텍스트, 명확한 내부 링크, visible content와 일치하는 structured data, 고유한 경험·근거·비교를 제공하는 것입니다.</p></div>
 <table>
 <tr><th>목표</th><th>구현 전략</th><th>검증 방법</th></tr>
-<tr><td>질문에 답변됨</td><td>FAQ, HowTo, 정의 문단, 비교 표를 명확히 구성</td><td>검색 결과 rich result, AI 요약에서 핵심 답 누락 여부 확인</td></tr>
-<tr><td>출처로 인용됨</td><td>저자/조직, 업데이트 날짜, 원문 근거, 고유 관점 제공</td><td>브랜드/제품명 query, citation monitoring, referral 분석</td></tr>
-<tr><td>맥락 보존</td><td>entity 관계, 용어 일관성, 내부 링크, schema.org 연결</td><td>AI 답변이 제품 범위와 제한사항을 왜곡하지 않는지 점검</td></tr>
-<tr><td>비교에 포함됨</td><td>대안 대비 강점·제약·적합 상황을 숨기지 않음</td><td>comparison query SERP, third-party mention, sales 문의 품질</td></tr>
-<tr><td>오답 감소</td><td>모호한 마케팅 문구보다 구체적 기능, 조건, 제한 명시</td><td>AI answer audit, support ticket의 오해 유형 분석</td></tr>
+<tr><td>질문에 답변됨</td><td>FAQ, 정의 문단, 비교 표를 화면에 실제로 보이는 콘텐츠로 구성</td><td>query set별 SERP/AI snapshot, 핵심 답·조건·근거 누락 여부</td></tr>
+<tr><td>출처 후보가 됨</td><td>저자/조직, 업데이트 날짜, 원문 근거, 고유 경험, 내부 링크 제공</td><td>citation selection 로그: query, platform, cited URL, 날짜, locale</td></tr>
+<tr><td>답변에 반영됨</td><td>정의, 수치, 절차, 비교 기준을 복사 가능한 문장과 표로 제공</td><td>answer absorption audit: 답변 문장과 원문 evidence block 매핑</td></tr>
+<tr><td>비교에 포함됨</td><td>대안 대비 강점·제약·적합 상황을 숨기지 않음</td><td>comparison query, third-party mention, sales 문의 품질, 오해 유형</td></tr>
+<tr><td>오답 감소</td><td>모호한 마케팅 문구보다 구체적 기능, 조건, 제한 명시</td><td>support ticket, sales call note, AI answer drift log</td></tr>
 </table>
-<div class="callout"><span class="co-label">GEO 실무 기준</span><p>AI 엔진은 페이지의 아름다운 섹션보다 명확한 문장, 표, 용어, 출처, 업데이트 신호를 더 안정적으로 활용합니다. “최고의 솔루션” 같은 표현보다 “어떤 환경에서 어떤 문제를 어떤 제약으로 해결한다”는 문장이 인용 가능성이 높습니다.</p></div>
+<div class="semantic-card evidence-card"><span class="sc-label">AI SEARCH AUDIT PACKET</span><br>query_set: brand / problem / comparison / price / how-to / error<br>platform: Google Search AI feature, Perplexity, ChatGPT search, 기타 관찰 대상<br>snapshot: date, locale, device, logged-in state, result URL<br>citation selection: source chosen / not chosen / competitor chosen<br>answer absorption: definition, statistic, comparison, caveat, procedure 반영 여부<br>quality issue: outdated, missing caveat, wrong product scope, no source, hallucinated feature<br>action: content evidence 보강, canonical 수정, internal link 보강, third-party profile 정비</div>
+<div class="callout"><span class="co-label">GEO 실무 기준</span><p>AI 엔진은 페이지의 장식보다 명확한 문장, 표, 용어, 출처, 업데이트 신호를 더 안정적으로 활용합니다. “최고의 솔루션” 같은 표현보다 “어떤 환경에서 어떤 문제를 어떤 제약으로 해결한다”는 문장이 검증하기 쉽습니다. 단, 인용 가능성을 보장한다고 쓰지 말고 관찰한 query set과 날짜를 함께 남겨야 합니다.</p></div>
 </section>
 
 <section id="technical-seo">
@@ -169,7 +179,7 @@ freshness: 작성일, 수정일, 버전, 폐기 여부
 
 <section id="structured-data">
 <div class="ch-head"><span class="ch-code">SEO-06</span><h2>구조화 데이터와 메타</h2></div>
-<p class="lede">구조화 데이터는 검색엔진과 AI가 페이지의 대상과 관계를 이해하도록 돕는 명시적 힌트입니다. schema.org JSON-LD를 주로 사용하며, 실제 화면에 없는 거짓 정보를 넣으면 신뢰를 해칩니다. 메타 정보는 검색 결과, 공유 미리보기, 브라우저 탭, 접근성, 분석 지표까지 연결됩니다.</p>
+<p class="lede">구조화 데이터는 검색엔진과 AI가 페이지의 대상과 관계를 이해하도록 돕는 명시적 힌트입니다. schema.org JSON-LD를 주로 사용하며, 실제 화면에 없는 거짓 정보를 넣으면 신뢰를 해칩니다. 구조화 데이터는 rich result 노출을 보장하지 않습니다. 정확하고 완전한 속성을 제공하고, 배포 전 Rich Results Test와 배포 후 Search Console 상태 리포트로 유효성을 확인해야 합니다.</p>
 <table>
 <tr><th>타입</th><th>사용 상황</th><th>필수 주의점</th></tr>
 <tr><td>Organization</td><td>회사, 브랜드, 연락처, 로고</td><td>공식 URL, sameAs, 로고 경로 안정성</td></tr>
@@ -229,14 +239,16 @@ freshness: 작성일, 수정일, 버전, 폐기 여부
 <tr><td>Server logs</td><td>bot crawl, status code, redirect, API 오류</td><td>클라이언트 이벤트와 시간축을 맞춰야 함</td></tr>
 </table>
 <div class="semantic-card process-card"><span class="sc-label">MEASUREMENT PLAN</span>
-<p>UI 키워드를 나열하는 대신 사용자의 입력, 화면 상태, focus, 네트워크, 렌더링 결과가 한 흐름으로 닫히는지 확인하는 카드입니다. 원본 흐름은 <strong>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가 2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다 3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다 4. 동의, 보존 기간, PII 제외 정책을 확인한다 5. QA 환경에서 DebugView,...</strong>이며, 아래 순서대로 읽으면 단순한 단어 나열이 아니라 작업 판단으로 바뀝니다.</p>
+<p>측정 설계의 목적은 이벤트를 많이 찍는 것이 아니라 검색 전 표면, 방문 후 행동, 성능과 오류, 개인정보 동의 상태를 한 의사결정 질문에 연결하는 것입니다. 아래 순서로 먼저 질문을 고정하고, 도구별 경계를 나눈 뒤, 이벤트 계약과 릴리스 관찰 창을 닫습니다.</p>
 <ol>
-<li><strong>출발점</strong>: 먼저 사용자가 수행하는 핵심 행동과 시작 상태를 한 문장으로 고정합니다. 이 카드에서는 <em>1. 의사결정 질문을 쓴다: 어떤 판단을 위해 측정하는가</em>에서 시작합니다.</li>
-<li><strong>전개</strong>: 중간 단계에서는 키보드, 포인터, 로딩, 오류, 취소, 재시도처럼 흐름을 깨는 상태를 차례로 밟습니다. 핵심 흐름은 <em>2. 성공 지표와 보호 지표를 나눈다: conversion과 error/Web Vitals를 같이 본다 → 3. 이벤트 이름, 파라미터, 사용자 속성, 수집 조건을 정의한다 → 4. 동의, 보존 기간, PII 제외 정책을 확인한다 → 5. QA 환경에서 DebugView, network payload, dashboard 반영을 검증한다</em>입니다.</li>
-<li><strong>판정</strong>: 완료 기준은 접근성 이름, focus 위치, 수동 walkthrough, Playwright나 trace 결과로 남깁니다. 마지막에는 <em>6. 릴리스 후 데이터 누락, 중복, 급증을 health window에서 확인한다</em>이(가) 실제로 확인되어야 합니다.</li>
-<li><strong>주의</strong>: 마우스로만 되는 성공 경로는 충분하지 않으므로 keyboard, reduced motion, 실패 상태를 함께 확인합니다.</li>
+<li><strong>Decision question</strong>: 어떤 판단을 위해 측정하는지 먼저 쓴다. 예: 검색 유입 사용자가 pricing CTA까지 도달하지 못하는 원인이 title mismatch, 첫 화면 메시지, 성능, 오류 중 무엇인가.</li>
+<li><strong>Metric boundary</strong>: Search Console은 impression, click, query처럼 방문 전 검색 표면을 설명하고, GA4와 product analytics는 session, event, conversion처럼 방문 후 행동을 설명한다.</li>
+<li><strong>Event contract</strong>: event_name, trigger, required params, identity, consent state, schema version, owner를 고정한다. 클릭만 보지 말고 success, validation_error, server_error를 분리한다.</li>
+<li><strong>Privacy gate</strong>: email, phone, raw search text, 문의 본문 같은 PII와 자유 입력값을 이벤트 payload에서 제외한다. 동의 상태에 따라 비필수 태그가 지연 또는 제한되는지 확인한다.</li>
+<li><strong>Release health</strong>: QA 환경에서 DebugView, network payload, test dashboard를 확인하고, 배포 후 24-48시간 동안 event volume, duplicate rate, consent opt-out, JS error, Web Vitals를 함께 본다.</li>
 </ol>
-<p>따라서 이 카드는 프론트엔드 상호작용 절차를 설명할 때 “무엇을 먼저 보고, 무엇을 증거로 남기며, 어디서 실패를 의심할지”를 순서대로 말하게 하는 압축 체크리스트입니다.</p></div>
+</div>
+<div class="semantic-card evidence-card"><span class="sc-label">SEARCH CONSOLE AND GA4 BOUNDARY</span><br>Search Console: query, impression, click, average position, indexing, Core Web Vitals<br>GA4: session, event, conversion, audience, campaign, landing engagement<br>Do not expect exact match: click과 session은 계산 체계가 다르다<br>Join key: landing URL, date, country/device, query group, campaign where available<br>Decision use: Search Console은 발견 문제를, GA4는 방문 후 행동 문제를 좁힌다</div>
 <pre class="snippet-card"><code><span class="sc-label">GA4 event payload · pricing CTA</span>
 gtag("event", "pricing_plan_selected", {
   plan_id: "pro",
@@ -302,7 +314,8 @@ gtag("event", "pricing_plan_selected", {
 Day 0: rendered HTML, metadata, schema, sitemap, event payload QA<br>
 Day 1-2: index coverage, crawl error, Web Vitals, JS error, event volume anomaly<br>
 Day 3-7: query group, CTR, landing engagement, conversion, support misunderstanding<br>
-Weekly: AI answer/citation audit, content gap, guardrail review, next experiment
+Weekly: AI answer/citation audit, citation selection, answer absorption, content gap, guardrail review<br>
+Monthly: query set refresh, outdated answer cleanup, comparison page evidence review
 </div>
 <div class="callout gm"><span class="co-label">관점</span><p>검색·AI 최적화와 계측은 마케팅 부속 작업이 아닙니다. 프론트엔드가 HTML 구조, route 정책, 성능, 이벤트 계약, 개인정보 경계를 구현하기 때문에 제품 발견과 지표 신뢰성의 상당 부분이 프론트엔드 품질에 달려 있습니다.</p></div>
 </section>

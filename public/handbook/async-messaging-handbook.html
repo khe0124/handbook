@@ -95,6 +95,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch10"><span class="code">MSG-10</span>사가 패턴</a>
   <a href="#ch11"><span class="code">MSG-11</span>용어집</a>
   <a href="#ch12"><span class="code">MSG-12</span>운영 가능한 메시징 설계</a>
+  <a href="#distributed-systems-operating-depth"><span class="code">MSG-13</span>분산 시스템 운영 심화</a>
 </nav>
 <main>
 
@@ -400,6 +401,36 @@ consumer ──"천천히"──▶ producer <span class="dim">(요청 거절 / 
 <span class="co-label">Case study</span>
 <p>주문 완료 이벤트를 소비해 쿠폰을 발급하는 서비스가 있습니다. consumer가 쿠폰 DB 저장 후 ack 전에 죽으면 같은 메시지가 다시 옵니다. inbox 테이블에 message id와 처리 결과를 저장하고, 쿠폰에는 주문 ID 기준 unique constraint를 둬야 at-least-once 전달에서도 effectively-once 결과를 만들 수 있습니다.</p>
 </div>
+</section>
+
+<section id="distributed-systems-operating-depth">
+<div class="ch-head"><span class="ch-code">MSG-13</span><h2>분산 시스템 운영 심화</h2></div>
+<p class="lede">서비스를 나누면 함수 호출이 네트워크 호출, 큐 적체, 중복 메시지, 부분 실패로 바뀝니다. 시니어 수준의 비동기 설계는 “큐를 붙인다”가 아니라 실패해도 수렴하는 운영 모델을 제시하는 것입니다.</p>
+<table>
+<tr><th>DISTRIBUTED SYSTEMS FAILURE MODEL</th><th>깨지는 지점</th><th>방어 설계</th></tr>
+<tr><td>Timeout</td><td>호출자는 실패로 보지만 수신자는 성공했을 수 있음</td><td>idempotency key, request ledger, read-after-write 확인</td></tr>
+<tr><td>Retry amplification</td><td>여러 계층 재시도가 하류 장애를 증폭</td><td>retry budget, exponential backoff with jitter, circuit breaker</td></tr>
+<tr><td>Duplicate delivery</td><td>ack 전 consumer crash로 같은 메시지 재전달</td><td>inbox table, unique constraint, idempotent side effect</td></tr>
+<tr><td>Out-of-order</td><td>상태 전이가 역순으로 도착</td><td>aggregate key partitioning, version check, stale event discard</td></tr>
+<tr><td>Partial failure</td><td>한 단계는 커밋되고 다음 단계는 실패</td><td>saga state machine, compensating transaction, reconciliation job</td></tr>
+</table>
+<div class="grid-2">
+<div class="semantic-card">
+<span class="sc-label">OUTBOX SAGA IDEMPOTENCY OPERATING MODEL</span><br>
+상태 변경과 이벤트 발행은 같은 DB 트랜잭션의 outbox에 기록하고, relay가 at-least-once로 발행합니다. consumer는 inbox와 business unique constraint로 중복을 무해하게 만들고, 여러 서비스가 얽힌 흐름은 saga state와 보상 트랜잭션으로 수렴시킵니다. “exactly once”를 약속하기보다 “중복돼도 최종 상태가 같다”를 증명해야 합니다.
+</div>
+<div class="semantic-card">
+<span class="sc-label">BACKPRESSURE LOAD SHEDDING POLICY</span><br>
+consumer lag가 늘 때 무조건 worker를 늘리면 DB나 downstream을 더 빨리 죽일 수 있습니다. 큐 depth, consumer lag slope, downstream error, DB pool wait를 같이 보고, 생산 속도 제한, 낮은 우선순위 drop, read-only mode, batch size 축소, circuit open을 단계별로 적용합니다.
+</div>
+</div>
+<table>
+<tr><th>CONSUMER LAG DLQ REPLAY RUNBOOK</th><th>판단</th><th>절차</th></tr>
+<tr><td>Lag 증가</td><td>생산 증가인지 소비 실패인지 구분</td><td>produce rate, consume rate, error rate, partition skew 확인</td></tr>
+<tr><td>DLQ 유입</td><td>독성 메시지인지 일시 장애인지 구분</td><td>error class별 샘플링, schema version, payload diff, dependency status 확인</td></tr>
+<tr><td>Replay</td><td>재처리가 부작용을 중복시키지 않는지 확인</td><td>idempotency fixture, dry-run count, replay window, rollback stop point 지정</td></tr>
+<tr><td>Reconciliation</td><td>최종 상태가 원장과 맞는지 검증</td><td>source-of-truth query, missing event query, compensation job result</td></tr>
+</table>
 </section>
 
 <footer>

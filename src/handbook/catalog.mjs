@@ -419,10 +419,22 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-core-handbook.html",
   },
   {
+    id: "engineering-frontend-core-qa",
+    label: "04 프론트엔드 핵심 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-core-qa-handbook.html",
+  },
+  {
     id: "engineering-frontend-interaction",
     label: "05 프론트엔드 인터랙션",
     kind: "개발 핸드북",
     file: "engineering-frontend-interaction-handbook.html",
+  },
+  {
+    id: "engineering-frontend-interaction-qa",
+    label: "05 프론트엔드 인터랙션 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-interaction-qa-handbook.html",
   },
   {
     id: "engineering-frontend-motion",
@@ -431,10 +443,22 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-motion-handbook.html",
   },
   {
+    id: "engineering-frontend-motion-qa",
+    label: "06 프론트엔드 모션·애니메이션 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-motion-qa-handbook.html",
+  },
+  {
     id: "engineering-frontend-graphics-3d",
     label: "07 프론트엔드 그래픽·3D·WebGL",
     kind: "개발 핸드북",
     file: "engineering-frontend-graphics-3d-handbook.html",
+  },
+  {
+    id: "engineering-frontend-graphics-3d-qa",
+    label: "07 프론트엔드 그래픽·3D·WebGL Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-graphics-3d-qa-handbook.html",
   },
   {
     id: "engineering-frontend-performance",
@@ -443,10 +467,22 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-performance-handbook.html",
   },
   {
+    id: "engineering-frontend-performance-qa",
+    label: "08 프론트엔드 성능·진단 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-performance-qa-handbook.html",
+  },
+  {
     id: "engineering-frontend-seo-analytics",
     label: "09 SEO·AEO·GEO·애널리틱스",
     kind: "개발 핸드북",
     file: "engineering-frontend-seo-analytics-handbook.html",
+  },
+  {
+    id: "engineering-frontend-seo-analytics-qa",
+    label: "09 SEO·AEO·GEO·애널리틱스 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-seo-analytics-qa-handbook.html",
   },
   {
     id: "engineering-frontend-quality",
@@ -455,10 +491,22 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-quality-handbook.html",
   },
   {
+    id: "engineering-frontend-quality-qa",
+    label: "10 프론트엔드 품질·릴리스 Q&A",
+    kind: "프론트엔드 Q&A",
+    file: "engineering-frontend-quality-qa-handbook.html",
+  },
+  {
     id: "engineering-backend-core",
     label: "11 백엔드 핵심",
     kind: "개발 핸드북",
     file: "engineering-backend-core-handbook.html",
+  },
+  {
+    id: "engineering-backend-core-qa",
+    label: "11 백엔드 핵심 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-backend-core-qa-handbook.html",
   },
   {
     id: "engineering-backend-auth-security",
@@ -467,16 +515,34 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-backend-auth-security-handbook.html",
   },
   {
+    id: "engineering-backend-auth-security-qa",
+    label: "12 백엔드 인증·보안 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-backend-auth-security-qa-handbook.html",
+  },
+  {
     id: "engineering-backend-architecture",
     label: "13 백엔드 아키텍처",
     kind: "개발 핸드북",
     file: "engineering-backend-architecture-handbook.html",
   },
   {
+    id: "engineering-backend-architecture-qa",
+    label: "13 백엔드 아키텍처 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-backend-architecture-qa-handbook.html",
+  },
+  {
     id: "engineering-data",
-    label: "14 데이터 계층·저장소",
+    label: "14 데이터 계층·저장소 심화",
     kind: "개발 핸드북",
     file: "engineering-data-handbook.html",
+  },
+  {
+    id: "engineering-data-qa",
+    label: "14 데이터 계층·저장소 심화 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-data-qa-handbook.html",
   },
   {
     id: "engineering-runtime-quality",
@@ -485,16 +551,34 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-runtime-quality-handbook.html",
   },
   {
+    id: "engineering-runtime-quality-qa",
+    label: "15 런타임 품질·장애대응 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-runtime-quality-qa-handbook.html",
+  },
+  {
     id: "engineering-platform-tools",
     label: "16 플랫폼 도구·운영 기본기",
     kind: "개발 핸드북",
     file: "engineering-platform-tools-handbook.html",
   },
   {
+    id: "engineering-platform-tools-qa",
+    label: "16 플랫폼 도구·운영 기본기 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-platform-tools-qa-handbook.html",
+  },
+  {
     id: "engineering-java-spring",
-    label: "17 Java·Spring·JPA 사례",
+    label: "17 Java·Spring·JPA 내부 동작",
     kind: "개발 핸드북",
     file: "engineering-java-spring-handbook.html",
+  },
+  {
+    id: "engineering-java-spring-qa",
+    label: "17 Java·Spring·JPA 내부 동작 Q&A",
+    kind: "백엔드 Q&A",
+    file: "engineering-java-spring-qa-handbook.html",
   },
 ];
 
@@ -506,10 +590,10 @@ const renumberMenuItems = (items) =>
 
 export const ENGINEERING_CS_BASIC_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(0, 4);
 export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems(
-  ENGINEERING_HANDBOOKS.slice(4, 11),
+  ENGINEERING_HANDBOOKS.slice(4, 18),
 );
 export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
-  ENGINEERING_HANDBOOKS.slice(11),
+  ENGINEERING_HANDBOOKS.slice(18),
 );
 
 export const LLM_HANDBOOKS = [

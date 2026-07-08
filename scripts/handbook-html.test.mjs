@@ -255,26 +255,101 @@ test("frontend and backend menu item labels use group-local numbering", () => {
     frontendGroup?.items.map((item) => item.label),
     [
       "00 프론트엔드 핵심",
-      "01 프론트엔드 인터랙션",
-      "02 프론트엔드 모션·애니메이션",
-      "03 프론트엔드 그래픽·3D·WebGL",
-      "04 프론트엔드 성능·진단",
-      "05 SEO·AEO·GEO·애널리틱스",
-      "06 프론트엔드 품질·릴리스",
+      "01 프론트엔드 핵심 Q&A",
+      "02 프론트엔드 인터랙션",
+      "03 프론트엔드 인터랙션 Q&A",
+      "04 프론트엔드 모션·애니메이션",
+      "05 프론트엔드 모션·애니메이션 Q&A",
+      "06 프론트엔드 그래픽·3D·WebGL",
+      "07 프론트엔드 그래픽·3D·WebGL Q&A",
+      "08 프론트엔드 성능·진단",
+      "09 프론트엔드 성능·진단 Q&A",
+      "10 SEO·AEO·GEO·애널리틱스",
+      "11 SEO·AEO·GEO·애널리틱스 Q&A",
+      "12 프론트엔드 품질·릴리스",
+      "13 프론트엔드 품질·릴리스 Q&A",
     ],
   );
   assert.deepEqual(
     backendGroup?.items.map((item) => item.label),
     [
       "00 백엔드 핵심",
-      "01 백엔드 인증·보안",
-      "02 백엔드 아키텍처",
-      "03 데이터 계층·저장소",
-      "04 런타임 품질·장애대응",
-      "05 플랫폼 도구·운영 기본기",
-      "06 Java·Spring·JPA 사례",
+      "01 백엔드 핵심 Q&A",
+      "02 백엔드 인증·보안",
+      "03 백엔드 인증·보안 Q&A",
+      "04 백엔드 아키텍처",
+      "05 백엔드 아키텍처 Q&A",
+      "06 데이터 계층·저장소 심화",
+      "07 데이터 계층·저장소 심화 Q&A",
+      "08 런타임 품질·장애대응",
+      "09 런타임 품질·장애대응 Q&A",
+      "10 플랫폼 도구·운영 기본기",
+      "11 플랫폼 도구·운영 기본기 Q&A",
+      "12 Java·Spring·JPA 내부 동작",
+      "13 Java·Spring·JPA 내부 동작 Q&A",
     ],
   );
+});
+
+test("frontend menu exposes a paired Q&A handbook for every frontend item", async () => {
+  const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
+  const items = frontendGroup?.items ?? [];
+  const expectedPairs = [
+    ["engineering-frontend-core", "engineering-frontend-core-qa"],
+    ["engineering-frontend-interaction", "engineering-frontend-interaction-qa"],
+    ["engineering-frontend-motion", "engineering-frontend-motion-qa"],
+    ["engineering-frontend-graphics-3d", "engineering-frontend-graphics-3d-qa"],
+    ["engineering-frontend-performance", "engineering-frontend-performance-qa"],
+    ["engineering-frontend-seo-analytics", "engineering-frontend-seo-analytics-qa"],
+    ["engineering-frontend-quality", "engineering-frontend-quality-qa"],
+  ];
+
+  assert.equal(items.length, expectedPairs.length * 2);
+
+  for (const [sourceId, qaId] of expectedPairs) {
+    const sourceIndex = items.findIndex((item) => item.id === sourceId);
+    const qaIndex = items.findIndex((item) => item.id === qaId);
+
+    assert.ok(sourceIndex >= 0, `${sourceId} should be in the frontend menu`);
+    assert.equal(qaIndex, sourceIndex + 1, `${qaId} should immediately follow ${sourceId}`);
+
+    const qaItem = items[qaIndex];
+    const file = path.join("public", "handbook", qaItem.file);
+    const source = await readFile(file, "utf8");
+
+    assert.match(source, /<h1>[\s\S]*Q&amp;A<\/h1>/, `${file} should render as a Q&A handbook`);
+    assert.ok((source.match(/<span class="ch-code">Q\d{2}<\/span>/g) ?? []).length >= 25, `${file} should include at least 25 Q&A drills`);
+    assert.match(source, /꼬리질문/, `${file} should include follow-up training`);
+    assert.match(source, /TRAINING EVIDENCE/, `${file} should include answer evidence`);
+    assert.match(source, /FRONTEND QA TRAINING PACKET/, `${file} should include the frontend Q&A rubric`);
+    assert.doesNotMatch(source, /답변에서 열어야 할 깊이|정의보다 선택 기준/, `${file} should not contain placeholder answer guidance`);
+  }
+});
+
+test("backend menu exposes a paired Q&A handbook for every backend item", async () => {
+  const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
+  const labels = backendGroup?.items.map((item) => item.label) ?? [];
+  const expectedPairs = [
+    ["00 백엔드 핵심", "01 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html"],
+    ["02 백엔드 인증·보안", "03 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html"],
+    ["04 백엔드 아키텍처", "05 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html"],
+    ["06 데이터 계층·저장소 심화", "07 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html"],
+    ["08 런타임 품질·장애대응", "09 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html"],
+    ["10 플랫폼 도구·운영 기본기", "11 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html"],
+    ["12 Java·Spring·JPA 내부 동작", "13 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html"],
+  ];
+
+  for (const [sourceLabel, qaLabel, file] of expectedPairs) {
+    assert.equal(labels.indexOf(qaLabel), labels.indexOf(sourceLabel) + 1, `${qaLabel} should follow ${sourceLabel}`);
+    const source = await readFile(path.join("public", "handbook", file), "utf8");
+    const qaTitle = qaLabel.replace(/^[0-9]{2}\s+/, "").replace(/&/g, "&amp;");
+    assert.match(source, new RegExp(`<h1>${qaTitle}</h1>`));
+    assert.ok((source.match(/<span class="ch-code">Q\d{2}<\/span>/g) ?? []).length >= 25, `${file} should include at least 25 Q&A drills`);
+    assert.match(source, /꼬리질문/);
+    assert.doesNotMatch(source, /정의보다 선택 기준, 실패 모드, 검증 증거를 먼저 말한다\./);
+    assert.match(source, /TRAINING EVIDENCE/);
+    assert.match(source, /BACKEND QA TRAINING PACKET/);
+  }
 });
 
 test("AI Native training handbooks include sample outputs and pass-fail review packets", async () => {
@@ -328,11 +403,11 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 86);
+  assert.equal(HANDBOOK_ITEMS.length, 100);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(csBasicGroup?.items.length, 4);
-  assert.equal(frontendGroup?.items.length, 7);
-  assert.equal(backendGroup?.items.length, 7);
+  assert.equal(frontendGroup?.items.length, 14);
+  assert.equal(backendGroup?.items.length, 14);
   assert.equal(operationsGroup?.items.length, 22);
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 11);
@@ -395,19 +470,33 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
   assert.ok(labels.includes("03 응용 수학·측정·검증"));
   assert.ok(labels.includes("00 프론트엔드 핵심"));
-  assert.ok(labels.includes("01 프론트엔드 인터랙션"));
-  assert.ok(labels.includes("02 프론트엔드 모션·애니메이션"));
-  assert.ok(labels.includes("03 프론트엔드 그래픽·3D·WebGL"));
-  assert.ok(labels.includes("04 프론트엔드 성능·진단"));
-  assert.ok(labels.includes("05 SEO·AEO·GEO·애널리틱스"));
-  assert.ok(labels.includes("06 프론트엔드 품질·릴리스"));
+  assert.ok(labels.includes("01 프론트엔드 핵심 Q&A"));
+  assert.ok(labels.includes("02 프론트엔드 인터랙션"));
+  assert.ok(labels.includes("03 프론트엔드 인터랙션 Q&A"));
+  assert.ok(labels.includes("04 프론트엔드 모션·애니메이션"));
+  assert.ok(labels.includes("05 프론트엔드 모션·애니메이션 Q&A"));
+  assert.ok(labels.includes("06 프론트엔드 그래픽·3D·WebGL"));
+  assert.ok(labels.includes("07 프론트엔드 그래픽·3D·WebGL Q&A"));
+  assert.ok(labels.includes("08 프론트엔드 성능·진단"));
+  assert.ok(labels.includes("09 프론트엔드 성능·진단 Q&A"));
+  assert.ok(labels.includes("10 SEO·AEO·GEO·애널리틱스"));
+  assert.ok(labels.includes("11 SEO·AEO·GEO·애널리틱스 Q&A"));
+  assert.ok(labels.includes("12 프론트엔드 품질·릴리스"));
+  assert.ok(labels.includes("13 프론트엔드 품질·릴리스 Q&A"));
   assert.ok(labels.includes("00 백엔드 핵심"));
-  assert.ok(labels.includes("01 백엔드 인증·보안"));
-  assert.ok(labels.includes("02 백엔드 아키텍처"));
-  assert.ok(labels.includes("03 데이터 계층·저장소"));
-  assert.ok(labels.includes("04 런타임 품질·장애대응"));
-  assert.ok(labels.includes("05 플랫폼 도구·운영 기본기"));
-  assert.ok(labels.includes("06 Java·Spring·JPA 사례"));
+  assert.ok(labels.includes("01 백엔드 핵심 Q&A"));
+  assert.ok(labels.includes("02 백엔드 인증·보안"));
+  assert.ok(labels.includes("03 백엔드 인증·보안 Q&A"));
+  assert.ok(labels.includes("04 백엔드 아키텍처"));
+  assert.ok(labels.includes("05 백엔드 아키텍처 Q&A"));
+  assert.ok(labels.includes("06 데이터 계층·저장소 심화"));
+  assert.ok(labels.includes("07 데이터 계층·저장소 심화 Q&A"));
+  assert.ok(labels.includes("08 런타임 품질·장애대응"));
+  assert.ok(labels.includes("09 런타임 품질·장애대응 Q&A"));
+  assert.ok(labels.includes("10 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("11 플랫폼 도구·운영 기본기 Q&A"));
+  assert.ok(labels.includes("12 Java·Spring·JPA 내부 동작"));
+  assert.ok(labels.includes("13 Java·Spring·JPA 내부 동작 Q&A"));
   assert.ok(labels.includes("00 LLM 로드맵·AI Native 개발자 모델"));
   assert.ok(labels.includes("01 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("02 LLM 기초·모델 동작 원리"));
@@ -688,9 +777,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["FRONTEND ENGINEERING HANDBOOK", "BROWSER RUNTIME HANDBOOK", "WEB ACCESSIBILITY HANDBOOK"],
     },
     {
+      file: "engineering-frontend-core-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-frontend-interaction-handbook.html",
       sources: ["인터랙션 설계"],
       evidence: ["FRONTEND INTERACTION HANDBOOK", "INTERACTION STATE MACHINE MODEL", "POINTER LIFECYCLE CONTRACT"],
+    },
+    {
+      file: "engineering-frontend-interaction-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-frontend-motion-handbook.html",
@@ -698,9 +797,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["FRONTEND ANIMATION MOTION HANDBOOK", "MOTION SYSTEM DECISION MODEL", "REDUCED MOTION RELEASE GATE"],
     },
     {
+      file: "engineering-frontend-motion-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-frontend-graphics-3d-handbook.html",
       sources: ["그래픽·3D·WebGL"],
       evidence: ["FRONTEND GRAPHICS · 3D HANDBOOK", "GRAPHICS RENDERING DECISION MODEL", "CANVAS WEBGL AUTOMATION GATE"],
+    },
+    {
+      file: "engineering-frontend-graphics-3d-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-frontend-performance-handbook.html",
@@ -708,9 +817,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["RENDERING OPTIMIZATION HANDBOOK", "PERFORMANCE METRICS HANDBOOK", "DEVTOOLS HANDBOOK", "RENDER BOTTLENECK TRACE", "PERFORMANCE BUDGET POLICY", "PERFORMANCE REGRESSION PACKET"],
     },
     {
+      file: "engineering-frontend-performance-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-frontend-seo-analytics-handbook.html",
       sources: ["문서 개요", "SEO의 기술 기반", "AEO·GEO·LLM 최적화", "애널리틱스 측정 설계"],
       evidence: ["DISCOVERY AND MEASUREMENT MODEL", "TECHNICAL SEO RELEASE PACKET", "EVENT SPEC TEMPLATE", "SEO", "AEO", "GEO"],
+    },
+    {
+      file: "engineering-frontend-seo-analytics-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-frontend-quality-handbook.html",
@@ -718,9 +837,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["FRONTEND SECURITY HANDBOOK", "FRONTEND TESTING HANDBOOK", "FRONTEND DEPLOYMENT HANDBOOK"],
     },
     {
+      file: "engineering-frontend-quality-qa-handbook.html",
+      sources: [],
+      evidence: ["FRONTEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-backend-core-handbook.html",
       sources: ["백엔드 개요"],
       evidence: ["BACKEND ENGINEERING HANDBOOK", "BACKEND ROADMAP OVERVIEW", "REQUEST TO OPERATIONS MAP", "API ERROR CONTRACT"],
+    },
+    {
+      file: "engineering-backend-core-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-backend-auth-security-handbook.html",
@@ -733,9 +862,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       ],
     },
     {
+      file: "engineering-backend-auth-security-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-backend-architecture-handbook.html",
       sources: ["아키텍처 패턴"],
       evidence: ["ARCHITECTURE PATTERNS HANDBOOK", "ARCHITECTURE CHOICE MATRIX", "SERVICE BOUNDARY CHECKLIST"],
+    },
+    {
+      file: "engineering-backend-architecture-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-data-handbook.html",
@@ -743,9 +882,19 @@ test("engineering handbook menu splits backend core and architecture into separa
       evidence: ["DATABASE HANDBOOK", "POSTGRESQL EXAMPLES", "REDIS EXAMPLES"],
     },
     {
+      file: "engineering-data-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-runtime-quality-handbook.html",
       sources: ["비동기·메시지 큐", "테스트", "로깅·모니터링·장애대응"],
       evidence: ["ASYNC &amp; MESSAGING HANDBOOK", "TESTING HANDBOOK", "OBSERVABILITY HANDBOOK"],
+    },
+    {
+      file: "engineering-runtime-quality-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
     {
       file: "engineering-platform-tools-handbook.html",
@@ -763,15 +912,25 @@ test("engineering handbook menu splits backend core and architecture into separa
       ],
     },
     {
+      file: "engineering-platform-tools-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
+    },
+    {
       file: "engineering-java-spring-handbook.html",
       sources: ["Java 예시", "JPA 예시", "Spring Boot 예시"],
       evidence: ["JAVA EXAMPLES", "JPA EXAMPLES", "SPRING BOOT 예시 사례"],
+    },
+    {
+      file: "engineering-java-spring-qa-handbook.html",
+      sources: [],
+      evidence: ["BACKEND QA TRAINING PACKET", "TRAINING EVIDENCE", "꼬리질문"],
     },
   ];
 
   const engineeringItems = engineeringGroups.flatMap((group) => group?.items ?? []);
 
-  assert.equal(engineeringItems.length, 18);
+  assert.equal(engineeringItems.length, 32);
   assert.deepEqual(
     engineeringItems.map((item) => item.file),
     bundles.map((bundle) => bundle.file),
@@ -1267,7 +1426,7 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   const menuPurposeSection = homeSource.match(/<section id="ch5">[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(menuPurposeSection, /CS 기본[\s\S]*프론트엔드[\s\S]*백엔드[\s\S]*인프라·운영[\s\S]*LLM[\s\S]*AI Native[\s\S]*디자인[\s\S]*실무 도구[\s\S]*커리어/);
   assert.match(menuPurposeSection, /프론트엔드 핵심[\s\S]*프론트엔드 인터랙션[\s\S]*프론트엔드 모션·애니메이션[\s\S]*프론트엔드 그래픽·3D·WebGL[\s\S]*프론트엔드 성능·진단[\s\S]*SEO·AEO·GEO·애널리틱스[\s\S]*프론트엔드 품질·릴리스/);
-  assert.match(menuPurposeSection, /백엔드 핵심[\s\S]*백엔드 인증·보안[\s\S]*백엔드 아키텍처[\s\S]*데이터 계층·저장소[\s\S]*런타임 품질·장애대응[\s\S]*플랫폼 도구·운영 기본기[\s\S]*Java·Spring·JPA 사례/);
+  assert.match(menuPurposeSection, /백엔드 핵심[\s\S]*백엔드 핵심 Q&A[\s\S]*백엔드 인증·보안[\s\S]*백엔드 인증·보안 Q&A[\s\S]*백엔드 아키텍처[\s\S]*데이터 계층·저장소 심화[\s\S]*런타임 품질·장애대응[\s\S]*플랫폼 도구·운영 기본기[\s\S]*Java·Spring·JPA 내부 동작[\s\S]*Q&A/);
   assert.match(menuPurposeSection, /인프라·운영 로드맵[\s\S]*요청 경로[\s\S]*관측 가능성[\s\S]*장애·복구[\s\S]*엔지니어링 맥락/);
   assert.doesNotMatch(menuPurposeSection, /AI Native 훈련|디자인 실무|면접·커리어|DevOps/);
   assert.match(homeSource, /핸드북 사용법/);
@@ -2469,6 +2628,79 @@ test("backend core handbook addresses reviewed depth gaps with concrete upgrade 
   assert.match(source, /BACKEND CORE OUTPUT BOUNDARY/);
 });
 
+test("backend engineering group applies senior-depth standards across core examples and architecture", async () => {
+  const [catalog, javaSpring, data, security, architecture] = await Promise.all([
+    readFile("src/handbook/catalog.mjs", "utf8"),
+    readFile("public/handbook/engineering-java-spring-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-data-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-auth-security-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-architecture-handbook.html", "utf8"),
+  ]);
+
+  assert.match(catalog, /label: "17 Java·Spring·JPA 내부 동작"/);
+  assert.match(catalog, /label: "14 데이터 계층·저장소 심화"/);
+
+  assert.match(javaSpring, /JAVA SPRING SENIOR DEPTH MODEL/);
+  assert.match(javaSpring, /JVM MEMORY THREAD FAILURE MATRIX/);
+  assert.match(javaSpring, /SPRING TRANSACTION PROPAGATION DECISION/);
+  assert.match(javaSpring, /JPA FLUSH DIRTY CHECKING MECHANISM/);
+  assert.match(javaSpring, /JPA BULK UPDATE CONSISTENCY CAVEAT/);
+  assert.match(javaSpring, /JAVA SPRING EVIDENCE PACKET/);
+  assert.doesNotMatch(javaSpring, /개념이 아니라 바로 쓰는 코드/);
+  assert.doesNotMatch(javaSpring, /바로 복붙해 쓰는 JPA 레시피/);
+
+  assert.match(data, /DATA STORE SENIOR DEPTH MODEL/);
+  assert.match(data, /POSTGRESQL MVCC VACUUM OPERATING MODEL/);
+  assert.match(data, /REPLICATION LAG READ ROUTING POLICY/);
+  assert.match(data, /REDIS PRODUCTION FAILURE MATRIX/);
+  assert.match(data, /REDIS LOCKING RATE LIMITING CAVEAT/);
+  assert.match(data, /DATA STORE EVIDENCE PACKET/);
+  assert.doesNotMatch(data, /바로 쓰는 PostgreSQL 레시피/);
+  assert.doesNotMatch(data, /바로 복붙해 동작하는 코드/);
+
+  assert.match(security, /BACKEND SECURITY THREAT MODEL METHOD/);
+  assert.match(security, /SESSION TOKEN ATTACK PATHS/);
+  assert.match(security, /REFRESH TOKEN ROTATION RACE CAVEAT/);
+  assert.match(security, /TENANT ESCAPE ATTACK MATRIX/);
+  assert.match(security, /AUDIT LOG TAMPER RESISTANCE/);
+  assert.match(security, /SECURITY EVIDENCE PACKET/);
+
+  assert.match(architecture, /ARCHITECTURE SENIOR DEPTH MODEL/);
+  assert.match(architecture, /BOUNDED CONTEXT DISCOVERY METHOD/);
+  assert.match(architecture, /SERVICE SPLIT READINESS GATE/);
+  assert.match(architecture, /DATA OWNERSHIP MIGRATION PATH/);
+  assert.match(architecture, /EVENT CONTRACT EVOLUTION POLICY/);
+  assert.match(architecture, /ARCHITECTURE EVIDENCE PACKET/);
+});
+
+test("backend engineering group covers remaining senior weakness areas with review-grade artifacts", async () => {
+  const [core, runtimeQuality, security, architecture] = await Promise.all([
+    readFile("public/handbook/engineering-backend-core-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-runtime-quality-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-auth-security-handbook.html", "utf8"),
+    readFile("public/handbook/engineering-backend-architecture-handbook.html", "utf8"),
+  ]);
+
+  assert.match(core, /BACKEND INCIDENT POSTMORTEM MODEL/);
+  assert.match(core, /BACKEND PERFORMANCE NUMERIC DIAGNOSTIC MODEL/);
+  assert.match(core, /P99 LATENCY DECOMPOSITION TABLE/);
+  assert.match(core, /POOL SATURATION GC LOCK TRIAGE/);
+  assert.match(core, /SENIOR BACKEND REVIEW PACKET/);
+
+  assert.match(runtimeQuality, /DISTRIBUTED SYSTEMS FAILURE MODEL/);
+  assert.match(runtimeQuality, /OUTBOX SAGA IDEMPOTENCY OPERATING MODEL/);
+  assert.match(runtimeQuality, /BACKPRESSURE LOAD SHEDDING POLICY/);
+  assert.match(runtimeQuality, /CONSUMER LAG DLQ REPLAY RUNBOOK/);
+
+  assert.match(security, /SECURITY ABUSE CASE FIXTURE SET/);
+  assert.match(security, /SSRF WEBHOOK EXPORT ADMIN ABUSE MATRIX/);
+  assert.match(security, /ABUSE CASE NEGATIVE TEST PACKET/);
+
+  assert.match(architecture, /ADR DECISION RECORD TEMPLATE/);
+  assert.match(architecture, /TRADEOFF DECISION LEDGER/);
+  assert.match(architecture, /ARCHITECTURE REVIEW SCENARIO PACKET/);
+});
+
 test("frontend quality handbook defines release-grade quality gates", async () => {
   const source = await readFile("public/handbook/engineering-frontend-quality-handbook.html", "utf8");
 
@@ -2523,10 +2755,17 @@ test("frontend discovery analytics handbook includes methodology and concept mod
   assert.match(source, /DISCOVERY SURFACE MODEL/);
   assert.match(source, /SEARCH INTENT TO INFORMATION ARCHITECTURE METHOD/);
   assert.match(source, /AEO GEO ANSWER READINESS MODEL/);
+  assert.match(source, /Google Search 기준으로 AI 검색 노출은 별도 마법이 아니라 SEO의 연장/);
+  assert.match(source, /llms\.txt나 AI 전용 특수 마크업은 Google Search 노출을 보장하지 않는다/);
+  assert.match(source, /citation selection/);
+  assert.match(source, /answer absorption/);
   assert.match(source, /MEASUREMENT QUESTION CONTRACT/);
+  assert.match(source, /SEARCH CONSOLE AND GA4 BOUNDARY/);
   assert.match(source, /EVENT DESIGN METHOD/);
   assert.match(source, /METRIC INTERPRETATION MODEL/);
   assert.match(source, /SEO GEO RELEASE OBSERVATION LOOP/);
+  assert.doesNotMatch(source, /UI 키워드를 나열하는 대신/);
+  assert.doesNotMatch(source, /keyboard, reduced motion/);
 });
 
 test("frontend discovery analytics sections use continuous numeric codes", async () => {
@@ -2650,6 +2889,7 @@ test("backend source handbook follows roadmap order without duplicate BE chapter
     "BE-14",
     "BE-15",
     "BE-16",
+    "BE-17",
   ];
 
   const seen = [...main.matchAll(/<span class="ch-code">(BE-\d{2})<\/span>/g)].map((match) => match[1]);

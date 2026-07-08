@@ -95,6 +95,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch10"><span class="code">SPRING-10</span>운영 — Actuator</a>
   <a href="#ch11"><span class="code">SPRING-11</span>치트시트</a>
   <a href="#ch12"><span class="code">SPRING-12</span>프록시·트랜잭션·테스트 심화</a>
+  <a href="#spring-java-senior-depth"><span class="code">DEPTH</span>Java·Spring·JPA 내부 동작 심화</a>
 </nav>
 <main>
 
@@ -105,7 +106,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
     <span>LANG : KO</span>
   </div>
   <h1>Spring Boot<br>예시 사례</h1>
-  <p class="hero-sub">컨트롤러부터 예외 처리·검증·테스트까지 — <strong>한 기능을 끝까지 짜는</strong> 레시피. 개념 설명보다 실제로 동작하는 코드를 먼저 보고, 계층(Controller / Service / Repository)이 각자 무슨 책임을 지는지 손에 익히는 게 목표입니다. 프론트엔드에서 넘어온 감각으로 읽히게 썼습니다.</p>
+  <p class="hero-sub">컨트롤러부터 예외 처리·검증·테스트까지를 Spring container, proxy, transaction, validation, error contract의 실행 경계로 읽습니다. 목표는 한 기능을 끝까지 짜는 것을 넘어, 왜 이 계층에서 이 책임을 가져야 하고 어떤 실패가 운영에서 드러나는지 설명하는 것입니다.</p>
   <div class="hero-meta">NOTE : Spring Boot 3.x 기준 — 패키지는 <code>jakarta.*</code>(구 <code>javax.*</code> 아님). 깊은 개념은 (→ 백엔드 개요), (→ 아키텍처 패턴) 참조<br>COMPILED : 2026-06</div>
 </header>
 
@@ -573,6 +574,48 @@ proxy: 정상 return이면 commit, runtime exception이면 rollback<br>
 <tr><td>@SpringBootTest</td><td>실제 wiring, 전체 흐름, 설정 통합</td><td>모든 edge case를 통합 테스트로만 검증</td></tr>
 </table>
 <div class="serial-card"><span class="sc-label">SPRING DEPTH ANSWER</span>Spring의 @Transactional은 메서드에 마법이 걸리는 게 아니라 Spring bean을 감싼 proxy가 호출 전후로 트랜잭션을 시작하고 종료하는 구조입니다. 그래서 같은 클래스 내부 호출은 proxy를 거치지 않아 트랜잭션 속성이 적용되지 않을 수 있고, 기본 rollback은 unchecked exception 기준입니다. 테스트도 이 구조를 기준으로 domain은 순수 단위 테스트, web은 @WebMvcTest, repository는 @DataJpaTest, wiring은 소수의 @SpringBootTest로 나눕니다.</div>
+</section>
+
+<section id="spring-java-senior-depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>Java·Spring·JPA 내부 동작 심화</h2></div>
+<p class="lede">Java·Spring·JPA 문서가 얕아 보이는 순간은 코드 조각은 있는데 런타임 설명이 없을 때입니다. 이 장은 문법, 어노테이션, repository 호출을 JVM 메모리, Spring proxy, JPA persistence context, SQL 실행, 운영 증거까지 연결하는 기준입니다.</p>
+<table>
+<tr><th>JAVA SPRING SENIOR DEPTH MODEL</th><th>내부 모델</th><th>검증 질문</th></tr>
+<tr><td>Java runtime</td><td>heap, stack, GC, thread, executor, blocking call</td><td>이 코드가 CPU를 쓰는지, heap을 늘리는지, thread를 점유하는지 설명할 수 있는가</td></tr>
+<tr><td>Spring container</td><td>bean lifecycle, singleton scope, proxy, AOP interception</td><td>이 호출이 proxy를 거치는가, transaction/security/cache advice가 실제로 적용되는가</td></tr>
+<tr><td>Transaction</td><td>propagation, isolation, rollback rule, connection binding</td><td>같은 요청 안에서 어떤 connection과 transaction이 어디까지 살아 있는가</td></tr>
+<tr><td>JPA</td><td>persistence context, identity map, dirty checking, flush, lazy proxy</td><td>이 코드가 언제 SQL을 보내고, 어떤 엔티티 상태를 1차 캐시에 들고 있는가</td></tr>
+<tr><td>Evidence</td><td>SQL log, transaction log, thread dump, heap/GC metric, integration test</td><td>주장이 로그와 테스트, 지표로 재현되는가</td></tr>
+</table>
+<table>
+<tr><th>JVM MEMORY THREAD FAILURE MATRIX</th><th>실패 모드</th><th>운영 신호</th><th>방어선</th></tr>
+<tr><td>Thread pool starvation</td><td>blocking I/O나 future.get이 worker를 오래 점유</td><td>active thread=max, queue 증가, p95 급등</td><td>timeout, bounded queue, bulkhead, async boundary 분리</td></tr>
+<tr><td>Heap pressure</td><td>대량 조회, DTO 변환, cache 적재가 heap을 밀어 올림</td><td>GC pause, allocation rate, old gen 증가</td><td>pagination, streaming, projection, object lifetime 축소</td></tr>
+<tr><td>Lock contention</td><td>synchronized, DB row lock, connection pool 대기가 겹침</td><td>thread dump BLOCKED/WAITING, lock wait, pool wait</td><td>critical section 축소, lock order, retry budget</td></tr>
+<tr><td>Context leak</td><td>ThreadLocal, MDC, SecurityContext가 worker 재사용 뒤 남음</td><td>다른 사용자 trace/userId가 로그에 섞임</td><td>filter cleanup, task decorator, finally clear</td></tr>
+</table>
+<table>
+<tr><th>SPRING TRANSACTION PROPAGATION DECISION</th><th>의미</th><th>주의</th></tr>
+<tr><td>REQUIRED</td><td>있으면 참여, 없으면 새 transaction 시작. 대부분의 use case 기본값</td><td>내부 호출 self-invocation은 proxy를 거치지 않아 새 속성이 적용되지 않을 수 있음</td></tr>
+<tr><td>REQUIRES_NEW</td><td>기존 transaction을 suspend하고 별도 transaction으로 커밋</td><td>audit/outbox를 살리려다 원 요청 rollback과 의미가 어긋날 수 있음</td></tr>
+<tr><td>NESTED</td><td>savepoint 기반 부분 rollback</td><td>DB/transaction manager 지원 여부를 확인해야 함</td></tr>
+<tr><td>readOnly</td><td>flush 최적화와 의도 표현</td><td>모든 DB 쓰기를 자동 차단하는 보안 장치가 아님</td></tr>
+</table>
+<div class="callout warn">
+<span class="co-label">JPA FLUSH DIRTY CHECKING MECHANISM</span>
+<p>JPA는 managed entity의 변경을 즉시 UPDATE로 보내지 않고 persistence context에 들고 있다가 flush 시점에 dirty checking으로 SQL을 만듭니다. flush는 commit 직전뿐 아니라 JPQL 실행 전에도 일어날 수 있습니다. 그래서 “save를 호출하지 않았는데 UPDATE가 나갔다”, “쿼리 전에 예상 밖 flush가 발생했다”는 현상은 버그가 아니라 JPA 실행 모델의 결과입니다.</p>
+</div>
+<div class="callout risk">
+<span class="co-label">JPA BULK UPDATE CONSISTENCY CAVEAT</span>
+<p>JPQL bulk update/delete는 persistence context를 우회해 DB를 직접 바꿉니다. 이미 managed 상태로 들고 있는 엔티티는 오래된 값을 계속 갖고 있을 수 있으므로, bulk 연산 뒤에는 clear, reload, 별도 transaction 경계를 검토해야 합니다. 이 caveat를 모르면 운영에서 “DB 값은 바뀌었는데 응답은 예전 값” 같은 정합성 버그를 만듭니다.</p>
+</div>
+<table>
+<tr><th>JAVA SPRING EVIDENCE PACKET</th><th>남길 증거</th><th>통과 기준</th></tr>
+<tr><td>Transaction</td><td>transaction boundary note, propagation choice, rollback case test</td><td>정상/예외/내부 호출에서 커밋과 롤백이 설명됨</td></tr>
+<tr><td>JPA</td><td>SQL log, fetch plan, N+1 regression test, flush scenario</td><td>endpoint 1개가 만드는 SQL 수와 시점이 예측됨</td></tr>
+<tr><td>Runtime</td><td>thread dump, pool metric, GC/heap snapshot, timeout policy</td><td>느림이 CPU, I/O, lock, pool 중 어디인지 구분됨</td></tr>
+<tr><td>API</td><td>validation error contract, exception mapping, negative MVC test</td><td>예외가 stack trace가 아니라 합의된 error body로 닫힘</td></tr>
+</table>
 </section>
 
 <footer>

@@ -92,6 +92,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
   <a href="#ch7"><span class="code">REDIS-07</span>rate limiting</a>
   <a href="#ch8"><span class="code">REDIS-08</span>TTL·만료·메모리</a>
   <a href="#ch9"><span class="code">REDIS-09</span>치트시트</a>
+  <a href="#data-store-senior-depth"><span class="code">DEPTH</span>데이터 계층·저장소 심화</a>
 </nav>
 <main>
 
@@ -102,7 +103,7 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
     <span>LANG : KO</span>
   </div>
   <h1>Redis<br>예시 사례</h1>
-  <p class="hero-sub">캐시·세션·분산 락·rate limit — Spring Boot에서 Redis를 쓰는 실전 레시피. 개념(캐싱 무효화 전략 등)은 백엔드 개요를 참조하고, 여기서는 <strong>바로 복붙해 동작하는 코드</strong>에 집중합니다. Java/Spring 코드와 <code>redis-cli</code>를 나란히 두어, 애플리케이션이 실제로 무슨 명령을 보내는지 눈으로 잇습니다.</p>
+  <p class="hero-sub">캐시·세션·분산 락·rate limit을 Redis 명령어 사용법이 아니라 운영 중 깨지는 메모리 저장소의 모델로 다룹니다. Java/Spring 코드와 <code>redis-cli</code>를 연결하되, eviction, persistence, replication, hot key, lock token, rate limit 경계 조건까지 함께 확인합니다.</p>
   <div class="hero-meta">NOTE : Spring Boot 3.x · Spring Data Redis · 실재하는 API/명령만 사용<br>COMPILED : 2026-06</div>
 </header>
 
@@ -453,6 +454,48 @@ public boolean allow(String ip) {<br>
 <div class="callout gm">
 <span class="co-label">학습 순서 제안</span>
 <p>처음 익힐 때는 이 순서를 권합니다: ① <code>redis-cli</code>로 <code>SET/GET/EXPIRE/TTL/INCR</code>을 직접 쳐서 감을 잡고 → ② <code>@Cacheable</code>로 첫 캐시를 붙이고(REDIS-03) → ③ 어노테이션으로 안 되는 곳을 cache-aside로 직접 짜 보고(REDIS-04) → ④ 세션·rate limit으로 확장. 분산 락(REDIS-06)은 가장 마지막에, 그리고 가급적 라이브러리로. 캐싱 무효화·일관성 같은 개념적 트레이드오프는 백엔드 개요와 함께 보세요.</p>
+</div>
+</section>
+
+<section id="data-store-senior-depth">
+<div class="ch-head"><span class="ch-code">DEPTH</span><h2>데이터 계층·저장소 운영 심화</h2></div>
+<p class="lede">데이터 문서가 얕아 보이는 지점은 SQL이나 Redis 명령이 “잘 동작하는 예시”로만 남을 때입니다. 시니어 백엔드의 데이터 설명은 저장소 내부 동작, 일관성 한계, 장애 신호, 복구 절차까지 이어져야 합니다.</p>
+<table>
+<tr><th>DATA STORE SENIOR DEPTH MODEL</th><th>내부 모델</th><th>검증 질문</th></tr>
+<tr><td>PostgreSQL</td><td>MVCC, transaction isolation, lock queue, planner statistics, index selectivity, vacuum</td><td>읽기 지연이 DB CPU인지, 락 대기인지, dead tuple 누적인지 분리했는가?</td></tr>
+<tr><td>Redis</td><td>single-thread event loop, memory eviction, TTL, replication, persistence, hot key</td><td>캐시 miss와 Redis 장애가 원본 DB를 동시에 압박하지 않게 설계했는가?</td></tr>
+<tr><td>Replication</td><td>primary write, replica replay lag, read-your-writes gap, failover window</td><td>방금 쓴 데이터를 replica에서 읽어도 되는 요청과 안 되는 요청을 나눴는가?</td></tr>
+<tr><td>Migration</td><td>expand-migrate-contract, online index, backfill, dual write, verification query</td><td>배포 중 이전 버전과 새 버전이 같은 스키마를 안전하게 읽고 쓰는가?</td></tr>
+</table>
+<div class="grid-2">
+<div class="semantic-card">
+<span class="sc-label">POSTGRESQL MVCC VACUUM OPERATING MODEL</span><br>
+MVCC는 업데이트 때 기존 row를 덮어쓰지 않고 새 버전을 만들며, 오래된 트랜잭션이 살아 있으면 dead tuple 회수가 늦어집니다. vacuum은 성능 튜닝 옵션이 아니라 MVCC 저장소를 계속 운영 가능하게 만드는 청소 절차입니다. 테이블 bloat, autovacuum lag, long transaction, index-only scan hit ratio를 함께 봐야 합니다.
+</div>
+<div class="semantic-card">
+<span class="sc-label">REPLICATION LAG READ ROUTING POLICY</span><br>
+읽기 replica는 확장 수단이지만 일관성 비용을 만듭니다. 사용자 본인이 방금 변경한 프로필, 결제 상태, 권한 변경은 primary 또는 session consistency가 보장되는 경로에서 읽고, 통계·목록·검색처럼 stale 허용 범위가 명확한 요청만 replica로 보냅니다.
+</div>
+</div>
+<table>
+<tr><th>REDIS PRODUCTION FAILURE MATRIX</th><th>장애 신호</th><th>대응</th></tr>
+<tr><td>Hot key</td><td>특정 키 QPS 급증, p99 latency 상승</td><td>key sharding, local cache, request coalescing, TTL jitter</td></tr>
+<tr><td>Cache stampede</td><td>TTL 만료 직후 DB read burst</td><td>soft TTL, single-flight, background refresh, negative cache</td></tr>
+<tr><td>Memory pressure</td><td>evicted_keys 증가, used_memory_rss와 maxmemory 근접</td><td>TTL 재검토, value 크기 축소, eviction policy 명시, capacity 증설</td></tr>
+<tr><td>Replica or failover gap</td><td>master_link_down, replication lag, lock 중복 획득</td><td>락·카운터의 일관성 요구 재평가, idempotency key와 DB constraint로 최종 방어</td></tr>
+</table>
+<div class="callout risk">
+<span class="co-label">REDIS LOCKING RATE LIMITING CAVEAT</span>
+<p>Redis lock과 rate limit은 원자 명령이 있다고 끝나지 않습니다. lock은 owner token, TTL 연장, unlock 원자성, 작업 멱등성을 같이 설계해야 하고, rate limit은 고정 윈도우 경계 burst, 사용자 식별자 위조, Redis 장애 시 fail-open/fail-closed 정책을 정해야 합니다.</p>
+</div>
+<div class="checklist">
+<strong>DATA STORE EVIDENCE PACKET</strong>
+<ul>
+<li>쿼리 변경은 실행 계획, 예상 cardinality, 실제 row 수, 인덱스 선택 이유를 함께 남긴다.</li>
+<li>스키마 변경은 expand-migrate-contract 단계, 롤백 가능 지점, backfill 검증 쿼리를 포함한다.</li>
+<li>캐시 도입은 TTL, invalidation trigger, stampede 방어, 원본 DB 보호 한계를 설명한다.</li>
+<li>장애 대응은 metric, log, slow query, lock wait, Redis INFO 지표로 원인을 재현 가능하게 만든다.</li>
+</ul>
 </div>
 </section>
 
