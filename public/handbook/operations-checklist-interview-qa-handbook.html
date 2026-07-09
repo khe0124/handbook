@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>운영 체크리스트·면접 답변 Q&amp;A</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#24513A;--green-deep:#183827;--green-tint:#E8F2EC;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:0}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:0;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:720px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:0}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}.semantic-card{background:var(--green-tint);border:1px solid var(--line);padding:22px 26px;margin:24px 0;font-size:14px;line-height:1.9}.semantic-card .sc-label{font-family:var(--mono);color:var(--green-deep);font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.9;overflow-x:auto;white-space:pre-wrap}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">OPERATIONS Q&amp;A</div>
+  <div class="nav-title">운영 체크리스트·면접 답변 Q&amp;A</div>
+  <a href="#overview"><span class="code">GUIDE</span>훈련 방식</a>
+  <a href="#qa-1"><span class="code">Q01</span>장애 답변을 상황-영향-증거-조치-검증 순서로 어떻게 구성하나요?</a>
+  <a href="#qa-2"><span class="code">Q02</span>직접 경험과 간접 학습을 면접에서 어떻게 구분해 말하나요?</a>
+  <a href="#qa-3"><span class="code">Q03</span>명령 출력은 명령 이름보다 어떤 필드를 해석해야 하나요?</a>
+  <a href="#qa-4"><span class="code">Q04</span>장애 triage 답변에서 사용자 영향과 완화 우선순위를 어떻게 잡나요?</a>
+  <a href="#qa-5"><span class="code">Q05</span>최근 변경을 배포·설정·인프라·의존성 시간축으로 어떻게 연결하나요?</a>
+  <a href="#qa-6"><span class="code">Q06</span>사용자 영향을 cohort·SLO·business path·blast radius로 어떻게 설명하나요?</a>
+  <a href="#qa-7"><span class="code">Q07</span>복구 완료를 정상화 기준과 남은 위험으로 어떻게 증명하나요?</a>
+  <a href="#qa-8"><span class="code">Q08</span>로그·metric·trace·ticket·runbook·screenshot은 각각 언제 쓰나요?</a>
+  <a href="#qa-9"><span class="code">Q09</span>모르는 주제가 나오면 솔직한 범위와 검증 계획을 어떻게 말하나요?</a>
+  <a href="#qa-10"><span class="code">Q10</span>클라우드 서비스 답변은 서비스 암기 대신 어떤 경계로 설명하나요?</a>
+  <a href="#qa-11"><span class="code">Q11</span>보안 질문은 threat·control·evidence·tradeoff·rollback으로 어떻게 답하나요?</a>
+  <a href="#qa-12"><span class="code">Q12</span>운영 성장 계획은 약점·drill·shadowing·runbook·review로 어떻게 증명하나요?</a>
+  <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
+  <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+  <a href="#qa-validation-criteria"><span class="code">VERIFY</span>Q&A 검증 기준</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : OPERATIONS-CHECKLIST-INTERVIEW-QA</span>
+    <span>SOURCE : 운영 체크리스트·면접 답변</span>
+    <span>MODE : INCIDENT · CHANGE · EVIDENCE</span>
+  </div>
+  <h1>운영 체크리스트·면접 답변 Q&amp;A</h1>
+  <p class="hero-sub">면접 답변 검증에서 판단 기준, 실패 신호, 완화 선택, 인계 증거를 실제 운영 언어로 답하는 Q&amp;A입니다.</p>
+  <div class="hero-meta">TRAINING : 30초 판단 → 90초 증거 확장 → 장애/변경 꼬리질문 방어</div>
+</header>
+
+<section id="overview">
+<div class="ch-head"><span class="ch-code">GUIDE</span><h2>훈련 방식</h2></div>
+<p class="lede">각 문항은 클라우드 서비스 이름 암기가 아니라 사용자 영향, 최근 변경, 신뢰 경계, 관측 증거, 복구 선택지를 연결해 답하는 훈련용입니다.</p>
+<div class="snippet-card"><code>operations_answer_loop:
+  1_user_impact: "누가 어떤 실패를 겪는지 먼저 말한다"
+  2_path_boundary: "request/change/recovery path 중 어디를 좁히는지 정한다"
+  3_first_evidence: "로그, 지표, trace, cloud readback 중 첫 증거를 말한다"
+  4_mitigation: "원인 확정 전 가능한 완화책을 분리한다"
+  5_follow_up: "rollback, runbook diff, postmortem action으로 닫는다"</code></div>
+</section>
+
+<section id="qa-1">
+<div class="ch-head"><span class="ch-code">Q01</span><h2>장애 답변을 상황-영향-증거-조치-검증 순서로 어떻게 구성하나요?</h2></div>
+<p class="lede">좋은 운영 면접 답변은 사건 설명보다 판단 흐름이 먼저 보입니다. 상황, 사용자 영향, 첫 증거, 즉시 조치, 검증 기준을 이 순서로 말하면 면접관은 지원자가 원인 추측과 운영 대응을 구분하는지 평가할 수 있습니다.</p>
+<p>처음부터 원인 가설이나 익숙한 기술 이름으로 들어가면 고객 피해와 완화 기준이 사라집니다. 증거 없이 결론을 말하거나 복구 검증을 빼면 실제 장애에서 같은 방식으로 오판할 위험이 큽니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>첫 30초 답변에는 무엇이 들어가야 하나요?</td><td>서비스, 발생 시각, 영향을 받은 사용자나 경로, 현재 확인한 증거 하나, 즉시 줄일 피해를 말합니다. 아직 모르는 원인은 모른다고 두고, 다음 확인 대상을 로그인지 지표인지 사용자 재현인지 지정합니다. 이 구조가 없으면 면접관은 지원자가 원인 설명에만 끌려가는 것으로 봅니다.</td></tr>
+<tr><td>원인 가설은 언제 넣는 것이 안전한가요?</td><td>사용자 영향과 첫 증거를 말한 뒤 가설이라고 표시해야 합니다. 예를 들어 에러율 상승, 최근 배포 marker, 특정 cohort 실패가 함께 있을 때만 배포 관련 가설을 둡니다. 다음 조치는 가설을 검증할 출력이나 dashboard를 지정하고, 틀릴 때의 우회책을 같이 말하는 것입니다.</td></tr>
+<tr><td>답변의 마지막은 무엇으로 닫아야 하나요?</td><td>완료 선언이 아니라 검증 기준으로 닫습니다. 정상화된 SLI, 실제 사용자 path smoke, 남은 위험, 관찰 시간을 말하고 owner를 지정합니다. 이 마무리가 없으면 조치는 했지만 복구를 증명하지 못한 답변으로 평가됩니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+incident timeline, affected endpoint, first log or metric sample, mitigation decision log, recovery check
+</div>
+</section>
+
+<section id="qa-2">
+<div class="ch-head"><span class="ch-code">Q02</span><h2>직접 경험과 간접 학습을 면접에서 어떻게 구분해 말하나요?</h2></div>
+<p class="lede">면접관은 경험의 크기보다 경계 표시를 봅니다. 직접 수행, 참관, 문서 학습, 추론을 나눠 말하고 각 범위에서 무엇을 판단할 수 있는지 설명하면 과장 없이도 운영 사고력을 보여줄 수 있습니다.</p>
+<p>참관이나 학습 내용을 직접 수행한 것처럼 말하면 꼬리질문에서 역할, 권한, 출력, 실패 처리 근거가 맞지 않습니다. 반대로 모른다고만 끝내면 학습 계획과 검증 능력을 보여주지 못합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>직접 해본 경험은 어떻게 증명하나요?</td><td>내 역할, 사용한 권한, 본 출력, 내린 결정, 실패했을 때 바꾼 조치를 말합니다. 예를 들어 rollback을 실행했다면 artifact, 승인자, 전후 SLI를 같이 제시합니다. 명령 이름만 나열하면 실제 수행 증거가 약하므로 출력 필드나 결정 시각을 붙입니다.</td></tr>
+<tr><td>간접 경험은 답변에서 어떤 가치가 있나요?</td><td>참관한 incident나 postmortem은 판단 구조를 배운 근거로 쓸 수 있습니다. 다만 실행 주체가 아니었다고 밝히고, 내가 확인한 artifact와 다음에 직접 검증할 항목을 분리합니다. 실패 모드는 남의 결론을 외워 말하는 것이며, 보완 조치는 lab 재현이나 shadowing 계획을 제시하는 것입니다.</td></tr>
+<tr><td>아직 안 해본 주제는 어떻게 답하나요?</td><td>모른다고 끝내지 말고 경계를 표시한 뒤 검증 계획을 말합니다. 관련 runbook을 찾고, staging에서 어떤 명령 출력과 지표를 볼지, 누구에게 확인할지 제시합니다. 이렇게 말하면 지식 부족은 남아도 운영 리스크를 숨기지 않는 태도로 평가됩니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+incident role, change ticket comment, shadowing note, lab reproduction log, learning backlog
+</div>
+</section>
+
+<section id="qa-3">
+<div class="ch-head"><span class="ch-code">Q03</span><h2>명령 출력은 명령 이름보다 어떤 필드를 해석해야 하나요?</h2></div>
+<p class="lede">운영 답변에서 명령은 실행 사실이 아니라 출력 해석이 핵심입니다. status, reason, timestamp, count, desired/current 값, error code, 대상 scope를 읽고 그 필드가 어떤 운영 결정을 바꾸는지 설명해야 합니다.</p>
+<p>명령어를 안다고만 말하면 정상과 위험을 가르는 기준이 없습니다. 평균 상태나 성공 exit code만 보면 일부 shard, region, tenant, replica의 실패를 놓칠 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>출력에서 가장 먼저 고를 필드는 무엇인가요?</td><td>질문이 묻는 운영 결정에 연결되는 필드를 고릅니다. 배포면 desired/current revision, 장애면 failing endpoint와 error code, 권한이면 principal과 denied action, 용량이면 limit과 current usage입니다. 필드를 고른 이유를 말하지 못하면 명령 실행은 증거가 아니라 장식이 됩니다.</td></tr>
+<tr><td>정상 출력과 위험 출력을 어떻게 비교하나요?</td><td>같은 scope의 정상 샘플과 실패 샘플을 나란히 둡니다. 값이 다르면 차이가 사용자 영향과 연결되는지 확인하고, 값이 같으면 관측 위치가 틀렸을 가능성을 봅니다. 다음 조치는 더 가까운 boundary의 로그나 trace를 붙여 출력 해석을 검증하는 것입니다.</td></tr>
+<tr><td>면접에서 출력 예시는 어떻게 설명하나요?</td><td>한 줄을 그대로 읽기보다 필드 의미와 판단을 붙입니다. 예를 들어 `Ready 1/3`이면 두 replica가 traffic을 못 받는 상태이고, rollout 중인지 crash인지 events로 갈라야 한다고 설명합니다. 후속으로 어떤 명령을 실행할지 말하면 단순 암기와 운영 판독이 분리됩니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+raw CLI output, field annotation, expected value, abnormal sample, command timestamp
+</div>
+</section>
+
+<section id="qa-4">
+<div class="ch-head"><span class="ch-code">Q04</span><h2>장애 triage 답변에서 사용자 영향과 완화 우선순위를 어떻게 잡나요?</h2></div>
+<p class="lede">triage 답변은 원인 찾기보다 피해 축소 판단을 먼저 보여야 합니다. 영향을 받는 사용자, 최근 변경, 첫 증거, 즉시 가능한 완화, escalation 기준을 분리하면 면접관은 지원자가 장애 중 우선순위를 세울 수 있는지 봅니다.</p>
+<p>원인 분석에만 몰두하면 고객 피해가 커지고, 완화와 영구 수정을 섞으면 임시 예외가 남습니다. 증거 없이 팀을 호출하거나 rollback을 말하면 영향 반경과 부작용을 평가하지 못한 답변입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>첫 증거가 부족해도 완화를 말할 수 있나요?</td><td>사용자 피해가 진행 중이면 원인 확정 전에도 reversible한 완화는 말할 수 있습니다. 예를 들어 traffic shift, feature flag off, read-only mode, rate limit 조정처럼 영향과 rollback이 분명한 조치입니다. 단, 실행 조건과 중단 조건을 SLO나 cohort 지표로 정해야 합니다.</td></tr>
+<tr><td>최근 변경은 triage에서 어떤 위치에 두나요?</td><td>최근 변경은 유력한 가설이지 결론이 아닙니다. 변경 marker와 오류 시작 시각, 영향 cohort, rollback 가능성을 맞춰 봅니다. 시간이 맞지 않거나 rollback 뒤에도 영향이 같으면 다른 boundary로 이동하고, 그 배제 근거를 timeline에 남깁니다.</td></tr>
+<tr><td>누구에게 언제 넘기는지 어떻게 답하나요?</td><td>영향이 SLO burn, 보안, 데이터 손상, 결제 경로에 닿으면 escalation 기준을 명시합니다. 넘길 때는 증상 요약이 아니라 확인한 증거, 배제한 가설, 진행 중인 완화, 필요한 결정 권한을 전달합니다. 이 정보가 없으면 다음 담당자가 같은 triage를 반복합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+customer impact counter, SLO burn, recent change marker, mitigation option list, escalation log
+</div>
+</section>
+
+<section id="qa-5">
+<div class="ch-head"><span class="ch-code">Q05</span><h2>최근 변경을 배포·설정·인프라·의존성 시간축으로 어떻게 연결하나요?</h2></div>
+<p class="lede">최근 변경 확인은 배포 하나를 찾는 일이 아니라 시간축의 후보를 정리하는 일입니다. code deploy, config, feature flag, IaC, dependency, provider incident를 같은 timeline에 놓고 영향 시작 시각과 scope가 맞는지 판단합니다.</p>
+<p>가장 눈에 띄는 배포만 탓하면 config drift, 인증서 교체, quota 변경, downstream 장애를 놓칩니다. 반대로 모든 변경을 동일하게 의심하면 rollback 우선순위가 흐려지고 복구가 늦어집니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>변경 후보는 어떤 순서로 모으나요?</td><td>사용자 영향이 시작된 시각 전후로 code, config, infrastructure, dependency, traffic routing 변경을 모읍니다. 각 후보에 owner, scope, rollback 방법, 검증 지표를 붙입니다. scope가 영향 cohort와 맞지 않으면 우선순위를 낮추고 배제 근거를 남깁니다.</td></tr>
+<tr><td>상관관계와 원인 후보를 어떻게 구분하나요?</td><td>시각이 맞는 것만으로는 부족합니다. 변경된 scope와 실패한 cohort, 전후 지표, rollback 또는 disable 결과가 같은 방향을 가리켜야 원인 후보로 올립니다. 맞지 않으면 우연한 동시 발생으로 표시하고 다른 boundary의 증거를 찾습니다.</td></tr>
+<tr><td>변경이 없다고 나올 때 다음 조치는 무엇인가요?</td><td>변경 없음은 결론이 아니라 감사 범위의 결과입니다. automation 계정, scheduled job, secret rotation, provider health, dependency release를 추가로 봅니다. 그래도 없으면 관측 누락 가능성을 incident record에 표시하고, 다음 장애에서 자동 수집할 change feed를 backlog로 남깁니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+deploy marker, config diff, IaC plan or apply log, dependency status, feature flag audit, incident start time
+</div>
+</section>
+
+<section id="qa-6">
+<div class="ch-head"><span class="ch-code">Q06</span><h2>사용자 영향을 cohort·SLO·business path·blast radius로 어떻게 설명하나요?</h2></div>
+<p class="lede">운영 면접에서 사용자 영향은 단순히 많고 적음이 아닙니다. 어떤 cohort가 어떤 business path에서 실패하는지, SLO가 얼마나 타는지, 영향 반경을 어디까지 막았는지 말해야 대응 우선순위가 보입니다.</p>
+<p>전체 평균이나 단일 오류율만 말하면 특정 region, plan, device, tenant의 장애를 숨길 수 있습니다. business path를 빼면 결제, 가입, 알림 같은 실제 피해의 우선순위를 판단하지 못합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>affected cohort는 어떻게 잡나요?</td><td>region, tenant, plan, device, browser, auth 상태, 새 버전 여부처럼 실패율이 갈리는 축을 봅니다. cohort를 정하면 같은 축의 정상 샘플과 비교해야 합니다. 증거는 query 결과와 support sample이며, 다음 조치는 cohort를 기준으로 완화나 공지를 좁히는 것입니다.</td></tr>
+<tr><td>business path는 왜 따로 말해야 하나요?</td><td>같은 1% 실패라도 결제 승인, 로그인, 데이터 삭제, 알림 지연은 우선순위가 다릅니다. 답변에는 실패 path, 손실 가능성, 대체 경로, 고객 커뮤니케이션 필요 여부가 들어가야 합니다. path가 없으면 기술 오류 설명은 맞아도 운영 의사결정이 비어 있습니다.</td></tr>
+<tr><td>blast radius 축소는 어떻게 증명하나요?</td><td>트래픽 분리, feature flag off, bad node drain, cohort별 공지처럼 반경을 줄인 조치를 전후 지표로 보여줍니다. 전체 회복이 아니어도 affected cohort의 실패율이 줄고 새로운 cohort가 악화되지 않아야 합니다. 결과는 mitigation log와 SLO snapshot으로 남깁니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+affected cohort query, SLO dashboard, business journey metric, support ticket sample, traffic split or isolation record
+</div>
+</section>
+
+<section id="qa-7">
+<div class="ch-head"><span class="ch-code">Q07</span><h2>복구 완료를 정상화 기준과 남은 위험으로 어떻게 증명하나요?</h2></div>
+<p class="lede">복구 답변은 '돌아왔다'가 아니라 어떤 기준으로 정상화됐는지와 무엇이 아직 위험한지 말해야 합니다. user journey, SLO, backlog, error budget, monitoring window를 함께 제시하면 복구 선언의 품질이 드러납니다.</p>
+<p>알람이 조용해졌다는 이유만으로 복구를 말하면 누적 queue, cache warm-up, delayed retry, 특정 cohort 실패를 놓칩니다. 남은 위험을 숨기면 다음 교대자가 같은 장애를 재개시킬 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>정상화 기준은 몇 개가 적당한가요?</td><td>최소한 사용자 path, 시스템 지표, 잔여 작업 지표가 필요합니다. 예를 들어 login smoke 성공, 5xx와 latency 회복, queue lag 감소가 함께 있어야 합니다. 하나만 회복되면 부분 정상일 수 있으므로 면접에서는 추가 관찰 기준을 말해야 합니다.</td></tr>
+<tr><td>monitoring window는 어떻게 정하나요?</td><td>장애의 재발 주기와 지연 효과에 맞춥니다. cache, queue, batch, client retry가 있으면 즉시 회복 뒤에도 충분한 창을 둬야 합니다. evidence는 전후 dashboard snapshot과 alert silence 여부이며, owner가 창 끝에서 재확인하도록 남깁니다.</td></tr>
+<tr><td>남은 위험은 어떻게 인계하나요?</td><td>해결된 증상, 아직 불확실한 원인, 임시 조치의 만료 시각, 재발 시 실행할 rollback이나 escalation을 분리합니다. 증거는 handoff note, dashboard link, open ticket입니다. 이 인계가 없으면 복구 선언 뒤 운영 부채가 숨어버립니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+post-mitigation SLI, smoke test result, backlog drain chart, error budget snapshot, monitoring handoff note
+</div>
+</section>
+
+<section id="qa-8">
+<div class="ch-head"><span class="ch-code">Q08</span><h2>로그·metric·trace·ticket·runbook·screenshot은 각각 언제 쓰나요?</h2></div>
+<p class="lede">운영 증거 packet은 많은 링크가 아니라 각 artifact의 역할이 분명해야 합니다. 로그는 사건, metric은 규모와 추세, trace는 경로, ticket은 결정, runbook은 재현 절차, screenshot은 당시 UI 상태를 보완합니다.</p>
+<p>증거를 한 종류로만 채우면 판단이 흔들립니다. screenshot만 있으면 재현성이 약하고, metric만 있으면 개별 요청 경로가 빠지며, ticket만 있으면 실제 시스템 상태를 증명하지 못합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>incident packet에는 무엇을 최소로 넣나요?</td><td>timeline, 영향 cohort, 첫 증거, 실행한 완화, 검증 결과, 남은 action을 넣습니다. 각 항목은 원본 링크나 출력 일부가 있어야 합니다. 누락되면 postmortem에서 같은 결정을 재현하지 못하므로 packet을 닫기 전에 owner가 readback합니다.</td></tr>
+<tr><td>screenshot은 언제 충분하지 않나요?</td><td>screenshot은 순간 상태를 보여주지만 query, scope, 권한, 갱신 시각을 보장하지 않습니다. 면접에서는 screenshot을 ticket 보조 증거로 두고 원본 metric query나 audit log를 함께 제시해야 합니다. 보안 정보가 보이면 redaction과 원본 보관 위치도 말합니다.</td></tr>
+<tr><td>증거가 서로 충돌하면 어떻게 답하나요?</td><td>먼저 timestamp, scope, sampling, aggregation window를 맞춥니다. trace는 실패인데 metric이 정상일 수 있고, metric은 평균이라 cohort 실패를 숨길 수 있습니다. 충돌을 숨기지 말고 더 원천에 가까운 artifact를 찾는 다음 조치를 말합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+log excerpt, metric snapshot, trace id, change or incident ticket, runbook diff, screenshot with timestamp
+</div>
+</section>
+
+<section id="qa-9">
+<div class="ch-head"><span class="ch-code">Q09</span><h2>모르는 주제가 나오면 솔직한 범위와 검증 계획을 어떻게 말하나요?</h2></div>
+<p class="lede">면접관은 모든 기술 암기보다 모르는 상태에서의 운영 태도를 봅니다. 모르는 부분, 알고 있는 인접 개념, 위험 가설, 검증 순서, 확인할 사람이나 문서를 분리해 말하면 과장 없이 문제를 다룰 수 있습니다.</p>
+<p>모르는 것을 숨기면 꼬리질문에서 출력, 권한, 실패 모드가 무너집니다. 반대로 모른다고만 하면 운영 현장에서 다음 행동을 만들지 못하는 답변이 됩니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>모른다고 말한 뒤 바로 무엇을 덧붙이나요?</td><td>내가 확실히 아는 경계와 확인할 순서를 덧붙입니다. 예를 들어 특정 managed service 내부는 모르지만 control plane 상태, data plane metric, provider health, support case를 확인하겠다고 말합니다. 이 답변은 지식 공백을 운영 절차로 관리합니다.</td></tr>
+<tr><td>가설은 몇 개까지 말하는 것이 좋나요?</td><td>영향과 증거에 연결되는 2-3개면 충분합니다. 각 가설에는 확인 증거와 틀렸을 때 배제할 기준이 있어야 합니다. 가설을 많이 늘어놓으면 우선순위가 흐려지므로 사용자 피해를 줄일 수 있는 순서로 정리합니다.</td></tr>
+<tr><td>follow-up 질문은 어떻게 요청하나요?</td><td>면접관에게 책임 회피처럼 묻지 말고 판단에 필요한 범위를 좁혀 묻습니다. 예를 들어 '이 상황이 multi-region active-active인지 single-region failover인지에 따라 확인 순서가 달라집니다'처럼 조건을 제시합니다. 질문 뒤에는 각 조건에서 볼 증거를 바로 말합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+known/unknown list, hypothesis note, runbook lookup, lab validation plan, escalation contact
+</div>
+</section>
+
+<section id="qa-10">
+<div class="ch-head"><span class="ch-code">Q10</span><h2>클라우드 서비스 답변은 서비스 암기 대신 어떤 경계로 설명하나요?</h2></div>
+<p class="lede">클라우드 면접 답변은 서비스 이름보다 control plane, data plane, quota, cost, security boundary를 나눠야 합니다. 이 경계로 답하면 AWS나 Azure 세부 이름이 달라도 운영 판단이 유지됩니다.</p>
+<p>서비스 기능 목록만 외우면 장애 때 설정 변경 실패와 실제 트래픽 실패를 구분하지 못합니다. quota, IAM, region, 비용 한계를 빼면 정상처럼 보이는 서비스가 운영상 위험한 상태인지 판단할 수 없습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>control plane과 data plane은 왜 나누나요?</td><td>control plane은 설정 변경과 API 작업이고, data plane은 실제 요청 처리입니다. 설정 변경이 실패해도 기존 traffic은 정상일 수 있고, 반대로 관리 API가 정상이어도 사용자 요청은 실패할 수 있습니다. 답변에는 두 지표와 대응 차이를 분리해야 합니다.</td></tr>
+<tr><td>서비스 limit은 답변에서 어떻게 다루나요?</td><td>limit은 장애 원인 후보이면서 변경 승인 조건입니다. current usage, burst behavior, region별 quota, 증설 lead time, 실패 시 error code를 말합니다. 다음 조치는 quota increase, traffic shaping, fallback region 검토처럼 사용자 영향과 비용을 함께 보는 것입니다.</td></tr>
+<tr><td>비용과 보안 경계는 왜 같이 말하나요?</td><td>운영 완화가 scale-out, cross-region, public exposure, broad IAM 권한으로 이어질 수 있기 때문입니다. 답변에는 비용 급증 신호와 권한 확대 rollback 조건을 같이 둡니다. evidence는 billing anomaly, IAM policy diff, security finding, mitigation expiry ticket입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+service health event, API error log, data plane metric, quota dashboard, IAM denial, billing anomaly
+</div>
+</section>
+
+<section id="qa-11">
+<div class="ch-head"><span class="ch-code">Q11</span><h2>보안 질문은 threat·control·evidence·tradeoff·rollback으로 어떻게 답하나요?</h2></div>
+<p class="lede">보안 답변은 정책 이름보다 위협과 통제의 연결이 중요합니다. 어떤 threat를 줄이는지, 어떤 control이 적용되는지, evidence가 무엇인지, 운영 tradeoff와 rollback 조건이 무엇인지 말해야 합니다.</p>
+<p>보안 모범 사례만 말하면 실제 위험, 사용자 영향, 운영 예외를 다루지 못합니다. control을 적용했지만 evidence와 rollback을 빼면 장애나 우회 예외가 생겼을 때 안전하게 되돌리지 못합니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>threat를 어떻게 구체화하나요?</td><td>자산, 공격자, 경로, 영향으로 threat를 말합니다. 예를 들어 public bucket이라는 표현보다 민감 로그가 외부 principal에게 읽히는 경로와 예상 피해를 설명합니다. 이렇게 해야 control이 encryption인지 IAM 축소인지 network 차단인지 분명해집니다.</td></tr>
+<tr><td>control이 작동한다는 evidence는 무엇인가요?</td><td>정책 diff만으로는 부족합니다. denied audit log, access analyzer 결과, test principal의 실패, alert firing 또는 suppression 증거를 봅니다. 정상 사용자의 path가 깨지지 않았다는 smoke도 같이 있어야 보안 강화와 운영 안정성을 함께 증명합니다.</td></tr>
+<tr><td>보안 조치의 rollback은 어떻게 말하나요?</td><td>rollback은 보호를 포기한다는 뜻이 아니라 안전한 예외 범위를 정하는 것입니다. 예외 principal, 만료 시각, compensating control, 재적용 조건을 명시합니다. evidence는 exception ticket, audit log, owner approval이며, 무기한 예외는 실패 모드로 지적합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+threat scenario, policy diff, audit log, access test, exception ticket, rollback plan
+</div>
+</section>
+
+<section id="qa-12">
+<div class="ch-head"><span class="ch-code">Q12</span><h2>운영 성장 계획은 약점·drill·shadowing·runbook·review로 어떻게 증명하나요?</h2></div>
+<p class="lede">성장 계획 답변은 열심히 하겠다는 의지가 아니라 개선 루프를 보여야 합니다. 약점 진단, 반복 drill, 숙련자 shadowing, runbook 수정, incident review 참여를 연결하면 학습이 운영 성과로 이어지는지 평가할 수 있습니다.</p>
+<p>기술 목록을 많이 공부하겠다고만 하면 현재 약점과 검증 방법이 없습니다. drill 없이 문서만 읽거나 review 없이 혼자 연습하면 실제 장애 압박에서 재현 가능한 성장이 아닙니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>약점은 어떻게 진단했다고 말하나요?</td><td>막연히 부족하다고 하지 말고 실패한 상황과 증거를 듭니다. 예를 들어 incident에서 first evidence를 늦게 잡았거나 rollback 기준을 설명하지 못했다면 그 항목을 약점으로 둡니다. 다음 조치는 같은 상황을 재현하는 drill과 측정 기준을 정하는 것입니다.</td></tr>
+<tr><td>drill과 shadowing은 어떻게 다르게 쓰나요?</td><td>drill은 내가 직접 판단하고 시간을 재는 연습이고, shadowing은 숙련자의 분기 기준을 배우는 과정입니다. 둘을 연결해 shadowing에서 본 decision point를 다음 drill checklist에 넣습니다. evidence는 drill log, 관찰 메모, 개선된 runbook diff입니다.</td></tr>
+<tr><td>성장 결과는 어떤 산출물로 증명하나요?</td><td>runbook PR, alert tuning, postmortem action closure, incident review 발표, 재실행한 drill 결과처럼 남는 산출물로 말합니다. 좋은 답변은 다음 장애에서 시간이 얼마나 줄었는지나 누락 증거가 어떻게 줄었는지를 포함합니다. 산출물이 없으면 학습이 운영 개선으로 검증되지 않은 상태입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+skill gap list, drill result, shadowing note, runbook pull request, incident review action, mentor feedback
+</div>
+</section>
+
+<section id="drill">
+<div class="ch-head"><span class="ch-code">DRILL</span><h2>운영 답변 반복</h2></div>
+<table>
+<tr><th>라운드</th><th>방법</th><th>통과 기준</th></tr>
+<tr><td>1회차</td><td>각 질문을 30초 장애 판단으로 녹음한다.</td><td>사용자 영향, 경계, 첫 증거가 빠지지 않는다.</td></tr>
+<tr><td>2회차</td><td>꼬리질문 3개를 90초 답변으로 확장한다.</td><td>정상/비정상 판독 기준과 완화책을 말한다.</td></tr>
+<tr><td>3회차</td><td>실제 경험 또는 대체 drill 계획으로 연결한다.</td><td>직접 경험, 추론, 검증 계획을 섞지 않고 구분한다.</td></tr>
+</table>
+</section>
+
+<section id="rubric">
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>통과 기준</h2></div>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS QA TRAINING PACKET</span>
+통과 답변은 서비스 이름이나 명령어 나열에서 멈추지 않고 사용자 영향, 경계, 증거, 완화, 복구, 재발 방지 action을 함께 닫는다.
+</div>
+</section>
+
+<section id="qa-validation-criteria">
+<div class="ch-head"><span class="ch-code">VERIFY</span><h2>Q&A 검증 기준</h2></div>
+<p class="lede">Q&amp;A 답변은 기준일, 관련 본문 앵커, 확인 명령/로그, 좋은 답변과 나쁜 답변의 차이가 함께 있어야 통과로 본다. 기준일은 <strong>2026-07-09</strong>이며, 문항별 최신성은 실제 운영 도구 출력으로 다시 고정한다.</p>
+<table>
+<tr><th>검증 항목</th><th>기준</th></tr>
+<tr><td>관련 본문 앵커</td><td><a href="operations-checklist-interview-handbook.html#checklist-evidence-packet">운영 체크리스트·면접 답변 운영 증거 패킷</a>을 먼저 읽고 답변의 증거 이름을 맞춘다.</td></tr>
+<tr><td>확인 명령/로그</td><td>runbook version, dashboard link, smoke test output, escalation ladder, rollback dry-run</td></tr>
+<tr><td>좋은 답변</td><td>실제 산출물과 명령 출력으로 자신의 역할과 판단 경계를 설명한다.</td></tr>
+<tr><td>나쁜 답변</td><td>장애를 열심히 대응했다는 경험담만 말한다.</td></tr>
+<tr><td>승인/rollback 기준</td><td>severity, 사용자 영향, rollback 가능성, 승인자를 답변 마지막에 명시한다.</td></tr>
+</table>
+
+</section>
+<footer>OPERATIONS QA TRAINING PACKET · 운영 체크리스트·면접 답변 Q&amp;A · generated for handbook practice</footer>
+</main>
+</div>
+</body>
+</html>

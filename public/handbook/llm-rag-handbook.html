@@ -16,6 +16,7 @@
   <a href="#ch5"><span class="code">RAG-05</span>Security</a>
   <a href="#ch6"><span class="code">RAG-06</span>Evaluation</a>
   <a href="#depth"><span class="code">DEPTH</span>디버깅</a>
+  <a href="#freshness-evaluation-standards"><span class="code">FRESH</span>최신성·평가 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -239,6 +240,23 @@ tenant_B_same_question_expected_chunks: []
 expected_log: {permission_filter_applied: true, blocked_chunk_count: 1}</code></pre>
 <h3>MARKER: failure-driven — 권한 필터를 생성 단계에서만 처리하는 실패</h3>
 <p>RAG에서 “모델에게 민감 정보는 답하지 말라고 지시한다”는 방식은 보안 경계가 아닙니다. 이미 금지된 chunk가 prompt에 들어갔다면 모델이 답변을 거절하더라도 데이터는 모델 context와 log, trace, cache 경로에 노출된 것입니다. 이 실패는 데모에서는 잘 보이지 않지만 멀티테넌트 서비스에서는 치명적입니다. 권한 필터는 retrieval candidate를 prompt에 넣기 전에 적용되어야 하고, trace에는 어떤 chunk가 왜 제외되었는지 남아야 합니다. RAG 품질을 recall만으로 보면 이런 사고를 놓치므로, permission-filtered recall과 forbidden-context exposure를 별도 지표로 두어야 합니다.</p>
+</section>
+<section id="freshness-evaluation-standards">
+<div class="ch-head"><span class="ch-code">FRESH</span><h2>최신성·평가 기준</h2></div>
+<p class="lede">LLM 문서는 모델과 API가 바뀌는 속도를 전제로 읽어야 합니다. 기준일, 모델/API/평가셋 버전, 비용·지연·안전 trace, 갱신 주기를 함께 고정해야 같은 결론을 다시 검증할 수 있습니다.</p>
+<table>
+<tr><th>기준</th><th>기록할 값</th><th>검증 질문</th></tr>
+<tr><td>기준일</td><td>문서를 마지막으로 검증한 날짜와 변경 이력을 남깁니다.</td><td>이 결론이 2026-07-09 기준으로 어떤 모델/API 동작에 의존하나요?</td></tr>
+<tr><td>모델/API/평가셋 버전</td><td>model id, API surface, prompt/schema version, eval dataset id, red-team fixture id를 묶습니다.</td><td>모델 route나 tool schema가 바뀌어도 baseline과 비교할 수 있나요?</td></tr>
+<tr><td>cost/latency/safety trace</td><td>input/output tokens, cache hit, p50/p95 latency, cost per successful answer, blocked/allowed safety decision을 저장합니다.</td><td>품질 점수 상승이 비용 폭증, 지연 악화, safety regression을 숨기지 않나요?</td></tr>
+<tr><td>갱신 주기</td><td>정기 점검 주기와 즉시 재검증 trigger를 정의합니다.</td><td>모델 deprecation, API 변경, 정책 변경, 평가셋 drift가 발생하면 누가 갱신하나요?</td></tr>
+</table>
+<pre><code>LLM FRESHNESS RECORD
+verified_at: 2026-07-09
+model_api: provider/model-route + API version + tool schema version
+eval_set: dataset_id, fixture_version, red_team_suite
+trace: input_tokens, output_tokens, p95_latency_ms, cost_per_success, safety_decision
+refresh: monthly review + immediate review on model/API/policy/eval-set change</code></pre>
 </section>
 </main>
 </div>

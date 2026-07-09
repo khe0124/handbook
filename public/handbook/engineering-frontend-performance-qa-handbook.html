@@ -46,6 +46,7 @@
   <a href="#qa-30"><span class="code">Q30</span>성능 최적화가 기능 회귀를 만들지 않게 하려면?</a>
   <a href="#drill"><span class="code">DRILL</span>꼬리질문 반복 훈련</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+  <a href="#qa-strengthening-criteria"><span class="code">PERF-QA</span>Q&amp;A 보강 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -76,9 +77,9 @@
 <p>Lighthouse 점수만 보면 실제 사용자 기기·네트워크·로그인 상태의 병목을 놓칩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>실험실 점수와 RUM이 다르면?</td><td>Lighthouse는 재현 가능한 실험실 지표이고 RUM은 실제 사용자 환경입니다. 둘이 다르면 route, device, network, 로그인 상태를 나눠 field data를 우선 해석하고 lab으로 재현합니다. 이 꼬리질문에서는 &quot;실험실 점수와 RUM이 다르면&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 RUM dashboard 또는 Web Vitals attribution로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>route별로 봐야 하는 이유는?</td><td>&quot;route별로 봐야 하는 이유는&quot;가 중요한 이유는 Lighthouse 점수만 보면 실제 사용자 기기·네트워크·로그인 상태의 병목을 놓칩니다 때문입니다. 단순 구현 설명으로 끝내지 말고 사용자 영향 지표인 LCP, INP, CLS, error rate, route별 RUM을 먼저 보고 network, main thread, rendering, backend wait로 분해합니다라는 선택 기준과 RUM dashboard 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>성능 문제를 백엔드와 어떻게 나누나요?</td><td>&quot;성능 문제를 백엔드와 어떻게 나누나요&quot;는 먼저 재현 조건을 고정하고, RUM dashboard와 Web Vitals attribution를 같이 확인합니다. 답변에서는 Lighthouse 점수만 보면 실제 사용자 기기·네트워크·로그인 상태의 병목을 놓칩니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>실험실 점수와 RUM이 다르면?</td><td>lab은 고정 기기와 네트워크에서 회귀를 재현하는 데 좋고, RUM은 실제 브라우저·지역·로그인 상태의 p75를 보여줍니다. 차이가 나면 route, device tier, connection, release version으로 RUM을 나누고 같은 조건을 Lighthouse나 WebPageTest에 맞춰 재현합니다.</td></tr>
+<tr><td>route별로 봐야 하는 이유는?</td><td>홈, 검색, checkout, dashboard는 LCP element, API chain, JS chunk, third-party 의존성이 다릅니다. 전체 평균만 보면 핵심 route의 p75 LCP나 INP 악화를 내부 페이지의 좋은 수치가 가릴 수 있습니다.</td></tr>
+<tr><td>성능 문제를 백엔드와 어떻게 나누나요?</td><td>waterfall에서 DNS/TLS, TTFB, download, render-blocking, JS execution을 분리하고 Server-Timing header로 backend 처리 시간을 표시합니다. TTFB 이후 LCP resource 발견이나 hydration이 늦으면 프론트 병목이고, TTFB 자체가 route별로 높으면 API·SSR·edge cache를 같이 봅니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -92,9 +93,9 @@ RUM dashboard, Web Vitals attribution, Performance trace, network waterfall
 <p>이미지만 압축하면 서버 응답 지연이나 JS hydration 지연 때문에 개선이 안 될 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>LCP element가 바뀌면?</td><td>&quot;LCP element가 바뀌면&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 LCP attribution와 server timing를 함께 확인합니다. 이 꼬리질문에서는 &quot;LCP element가 바뀌면&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 LCP attribution 또는 server timing로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>preload는 언제?</td><td>&quot;preload는 언제&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 LCP가 느릴 때 무엇을 보나요의 맥락에 맞게 비교하는 것입니다. TTFB, render-blocking resource, LCP element load priority, image size/format, client rendering delay를 나눠 봅니다 이후 LCP attribution를 통과 기준으로 둡니다.</td></tr>
-<tr><td>SSR이 항상 LCP에 좋은가요?</td><td>&quot;SSR이 항상 LCP에 좋은가요&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 LCP attribution와 server timing를 함께 확인합니다. 이 꼬리질문에서는 &quot;SSR이 항상 LCP에 좋은가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 LCP attribution 또는 server timing로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>LCP element가 바뀌면?</td><td>viewport, 로그인 상태, A/B variant마다 LCP 후보가 hero image, 제목, skeleton, video poster로 바뀔 수 있습니다. Web Vitals attribution으로 실제 element selector를 기록하고 각 후보의 size, priority, cache hit, render delay를 따로 봅니다.</td></tr>
+<tr><td>preload는 언제?</td><td>초기 viewport의 LCP 이미지나 핵심 font처럼 브라우저가 늦게 발견하지만 반드시 필요한 resource에만 씁니다. preload 후 실제 사용되지 않거나 너무 많이 걸면 bandwidth 경쟁으로 JS/CSS와 LCP 이미지 우선순위가 꼬일 수 있습니다.</td></tr>
+<tr><td>SSR이 항상 LCP에 좋은가요?</td><td>항상 그렇지 않습니다. SSR은 초기 HTML 표시를 앞당길 수 있지만 서버 TTFB가 크거나 hydration JS가 무거우면 LCP와 INP가 같이 나빠집니다. SSR, SSG, CSR을 같은 route에서 TTFB, LCP render delay, hydration cost로 비교해야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -108,9 +109,9 @@ LCP attribution, server timing, priority hint, image audit
 <p>평균 입력 지연이 괜찮아도 특정 컴포넌트의 긴 작업이 p75/p98을 망칠 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>FID와 INP 차이는?</td><td>&quot;FID와 INP 차이는&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 INP attribution와 long task trace를 함께 확인합니다. 이 꼬리질문에서는 &quot;FID와 INP 차이는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 INP attribution 또는 long task trace로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>debounce로 해결되나요?</td><td>아니요. &quot;debounce로 해결되나요&quot;라는 질문은 조건부로 답해야 합니다. 느린 interaction을 찾고 event handler, long task, render cost, layout, third-party script를 분해합니다라는 전제가 맞을 때만 안전하고, 평균 입력 지연이 괜찮아도 특정 컴포넌트의 긴 작업이 p75/p98을 망칠 수 있습니다 따라서 INP attribution로 깨지는 조건을 재현하고 long task trace로 변경 후 부작용을 확인해야 합니다.</td></tr>
-<tr><td>React rerender와 INP 연결은?</td><td>&quot;React rerender와 INP 연결은&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 INP attribution와 long task trace를 함께 확인합니다. 이 꼬리질문에서는 &quot;React rerender와 INP 연결은&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 INP attribution 또는 long task trace로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>FID와 INP 차이는?</td><td>FID는 첫 입력의 delay만 봤지만 INP는 페이지 생애 전체 interaction의 latency를 대표합니다. 그래서 최초 클릭은 빠르더라도 필터 변경, 검색 입력, 모달 열기에서 long task나 큰 commit이 있으면 INP가 나빠집니다.</td></tr>
+<tr><td>debounce로 해결되나요?</td><td>일부 입력 처리에는 도움이 되지만 클릭 후 화면 반응 자체가 늦거나 render commit이 길면 debounce만으로는 부족합니다. expensive calculation을 worker로 옮기거나 render 범위를 줄이고, immediate feedback을 먼저 보여 INP interaction delay와 presentation delay를 줄여야 합니다.</td></tr>
+<tr><td>React rerender와 INP 연결은?</td><td>interaction 뒤에 넓은 context 구독, 큰 list render, 불필요한 memo miss가 발생하면 main thread가 막혀 INP가 올라갑니다. React Profiler의 interaction commit과 DevTools Performance의 long task를 marker로 맞춰 어떤 component commit이 느린지 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -124,9 +125,9 @@ INP attribution, long task trace, React Profiler, interaction marker
 <p>시각적으로 작은 이동도 사용자가 버튼을 잘못 누르게 만들 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>animation도 CLS인가요?</td><td>&quot;animation도 CLS인가요&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 CLS attribution와 layout shift rectangles를 함께 확인합니다. 이 꼬리질문에서는 &quot;animation도 CLS인가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 CLS attribution 또는 layout shift rectangles로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>skeleton이 CLS를 줄이나요?</td><td>&quot;skeleton이 CLS를 줄이나요&quot;는 단일 점수가 아니라 사용자 체감 지표로 봅니다. LCP는 표시 지연, INP는 입력 반응, CLS는 시각 안정성 문제이므로 CLS attribution와 layout shift rectangles를 함께 확인합니다. 이 꼬리질문에서는 &quot;skeleton이 CLS를 줄이나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 CLS attribution 또는 layout shift rectangles로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>font swap은?</td><td>이 꼬리질문은 &quot;font swap은&quot;를 묻는 압박 지점입니다. CLS는 왜 생기나요에 답할 때는 이미지/광고/폰트/동적 콘텐츠의 크기 예약 부족, late injection, hydration 차이로 layout shift가 생깁니다라는 기준을 먼저 말하고, 시각적으로 작은 이동도 사용자가 버튼을 잘못 누르게 만들 수 있습니다라는 실패 조건을 CLS attribution로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>animation도 CLS인가요?</td><td>transform과 opacity 기반 animation은 보통 layout shift로 잡히지 않지만 top, height, margin처럼 layout을 바꾸는 animation은 CLS를 만들 수 있습니다. Performance 패널의 layout shift rectangle로 움직인 요소와 입력 직후 shift 예외 여부를 확인합니다.</td></tr>
+<tr><td>skeleton이 CLS를 줄이나요?</td><td>skeleton이 최종 콘텐츠와 같은 높이, aspect-ratio, spacing을 예약하면 줄입니다. 반대로 skeleton 높이가 실제 카드나 광고보다 작거나 hydration 후 DOM 구조가 바뀌면 skeleton 자체가 CLS 원인이 됩니다.</td></tr>
+<tr><td>font swap은?</td><td>font-display swap은 텍스트를 빨리 보이게 하지만 fallback과 웹폰트 metrics가 다르면 글줄이 밀려 CLS가 생깁니다. size-adjust, ascent/descent override, subset, preload를 조합해 FOIT와 layout shift 사이를 조정합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -140,9 +141,9 @@ CLS attribution, layout shift rectangles, image dimension audit, font loading st
 <p>무작정 minify만 하면 큰 dependency, 중복 polyfill, 초기 route에 묶인 admin code는 남아 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>dynamic import는 어디에?</td><td>번들 답변은 초기 route에 꼭 필요한 코드와 나중에 불러도 되는 코드를 나누는 것이 핵심입니다. analyzer로 큰 dependency와 중복 polyfill을 확인하고, dynamic import는 사용자 intent 이후 경계에 둡니다. 이 꼬리질문에서는 &quot;dynamic import는 어디에&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 bundle analyzer 또는 coverage tab로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>tree shaking이 안 되는 이유는?</td><td>번들 답변은 초기 route에 꼭 필요한 코드와 나중에 불러도 되는 코드를 나누는 것이 핵심입니다. analyzer로 큰 dependency와 중복 polyfill을 확인하고, dynamic import는 사용자 intent 이후 경계에 둡니다. 이 꼬리질문에서는 &quot;tree shaking이 안 되는 이유는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 bundle analyzer 또는 coverage tab로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>gzip만 보면 충분한가요?</td><td>번들 답변은 초기 route에 꼭 필요한 코드와 나중에 불러도 되는 코드를 나누는 것이 핵심입니다. analyzer로 큰 dependency와 중복 polyfill을 확인하고, dynamic import는 사용자 intent 이후 경계에 둡니다. 이 꼬리질문에서는 &quot;gzip만 보면 충분한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 bundle analyzer 또는 coverage tab로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>dynamic import는 어디에?</td><td>초기 route의 LCP와 interaction에 필요 없는 admin panel, editor, chart, modal, locale data, heavy validator에 우선 적용합니다. import boundary가 너무 잘게 쪼개져 request overhead가 커지지 않도록 route chunk map과 waterfall을 같이 봅니다.</td></tr>
+<tr><td>tree shaking이 안 되는 이유는?</td><td>package가 sideEffects를 과하게 선언했거나 CommonJS, namespace import, top-level side effect 때문에 bundler가 제거하지 못할 수 있습니다. bundle analyzer에서 남은 module을 확인하고 ESM entry, 직접 import, dependency 교체를 검토합니다.</td></tr>
+<tr><td>gzip만 보면 충분한가요?</td><td>충분하지 않습니다. gzip/brotli 전송량이 작아도 parse, compile, execute 비용은 남고 모바일 CPU에서는 JS 실행이 INP와 hydration readiness를 늦춥니다. compressed size와 uncompressed JS, coverage, main-thread execution time을 같이 봅니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -156,9 +157,9 @@ bundle analyzer, coverage tab, route chunk map, dependency diff
 <p>useMemo/useCallback을 무작정 넣으면 비용은 늘고 실제 rerender 원인은 그대로일 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>memo는 언제 효과가 있나요?</td><td>React 병목은 render 원인과 browser 비용을 분리합니다. Profiler로 commit과 render count를 보고, context 구독 범위·불안정한 props·key 변경을 확인한 뒤 실제 interaction trace로 효과를 검증합니다. 이 꼬리질문에서는 &quot;memo는 언제 효과가 있나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 React Profiler export 또는 render count로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>context가 왜 문제인가요?</td><td>React 병목은 render 원인과 browser 비용을 분리합니다. Profiler로 commit과 render count를 보고, context 구독 범위·불안정한 props·key 변경을 확인한 뒤 실제 interaction trace로 효과를 검증합니다. 이 꼬리질문에서는 &quot;context가 왜 문제인가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 React Profiler export 또는 render count로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>key 변경은 어떤 영향을 주나요?</td><td>React 병목은 render 원인과 browser 비용을 분리합니다. Profiler로 commit과 render count를 보고, context 구독 범위·불안정한 props·key 변경을 확인한 뒤 실제 interaction trace로 효과를 검증합니다. 이 꼬리질문에서는 &quot;key 변경은 어떤 영향을 주나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 React Profiler export 또는 render count로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>memo는 언제 효과가 있나요?</td><td>같은 props로 자주 렌더되는 비싼 component가 있고 parent update가 잦을 때 효과가 있습니다. props identity가 매번 바뀌거나 render 비용이 작으면 비교 비용만 늘 수 있으므로 Profiler에서 commit duration과 render count 개선을 확인해야 합니다.</td></tr>
+<tr><td>context가 왜 문제인가요?</td><td>하나의 큰 context value가 바뀌면 그 값을 구독하는 넓은 subtree가 다시 렌더될 수 있습니다. state를 분리하거나 selector 기반 store를 쓰고, theme·auth·filter처럼 갱신 빈도가 다른 값은 provider를 나눠 commit 범위를 줄입니다.</td></tr>
+<tr><td>key 변경은 어떤 영향을 주나요?</td><td>key가 바뀌면 React는 기존 subtree를 재사용하지 않고 unmount/remount합니다. list reorder나 route param 처리에서 key를 잘못 주면 state 손실, effect 재실행, image/font 재로드, 큰 commit으로 INP 악화가 생길 수 있습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -172,9 +173,9 @@ React Profiler export, render count, flamegraph, memoization benchmark
 <p>무조건 virtualization을 넣으면 accessibility, find-in-page, dynamic height, scroll restoration이 어려워집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>동적 높이는?</td><td>이 꼬리질문은 &quot;동적 높이는&quot;를 묻는 압박 지점입니다. list virtualization은 언제 필요한가요에 답할 때는 DOM node 수와 render cost가 사용자 기기에서 frame budget을 넘을 때 사용합니다라는 기준을 먼저 말하고, 무조건 virtualization을 넣으면 accessibility, find-in-page, dynamic height, scroll restoration이 어려워집니다라는 실패 조건을 DOM node count로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>SEO 콘텐츠에도 쓰나요?</td><td>이 꼬리질문은 &quot;SEO 콘텐츠에도 쓰나요&quot;를 묻는 압박 지점입니다. list virtualization은 언제 필요한가요에 답할 때는 DOM node 수와 render cost가 사용자 기기에서 frame budget을 넘을 때 사용합니다라는 기준을 먼저 말하고, 무조건 virtualization을 넣으면 accessibility, find-in-page, dynamic height, scroll restoration이 어려워집니다라는 실패 조건을 DOM node count로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>가상 리스트에서 focus는?</td><td>focus는 사용자의 현재 작업 위치입니다. &quot;가상 리스트에서 focus는&quot;에서는 이전 trigger, 오류 필드, 새 콘텐츠의 heading 중 어디가 다음 작업 위치인지 정하고 DOM node count로 keyboard-only 흐름을 확인합니다. 이 꼬리질문에서는 &quot;가상 리스트에서 focus는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 DOM node count 또는 scroll FPS로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>동적 높이는?</td><td>동적 높이는 측정 cache, estimated size, ResizeObserver, overscan 조정이 필요합니다. 높이 추정이 틀리면 scroll jump와 CLS처럼 보이는 이동이 생기므로 row measurement invalidation과 scroll restoration fixture를 둡니다.</td></tr>
+<tr><td>SEO 콘텐츠에도 쓰나요?</td><td>검색 노출이 중요한 본문이나 상품 목록의 핵심 콘텐츠에는 조심해야 합니다. crawler와 no-JS 환경에서 콘텐츠가 사라질 수 있으므로 SSR/SSG로 의미 있는 초기 목록을 제공하거나 페이지네이션을 우선 검토합니다.</td></tr>
+<tr><td>가상 리스트에서 focus는?</td><td>focus된 row가 unmount되지 않게 overscan과 active item 보존을 설계해야 합니다. keyboard 이동, screen reader announce, scroll restoration을 테스트하고, DOM에 없는 항목 수와 위치는 aria-setsize나 별도 상태로 설명합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -188,9 +189,9 @@ DOM node count, scroll FPS, virtualization fixture, a11y fallback
 <p>모든 이미지를 lazy로 두면 hero LCP가 늦어지고, 원본 해상도를 그대로 쓰면 네트워크 비용이 큽니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>WebP/AVIF 선택은?</td><td>&quot;WebP/AVIF 선택은&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 image optimization은 무엇을 포함하나요의 맥락에 맞게 비교하는 것입니다. format, responsive srcset, intrinsic size, lazy loading, priority, CDN caching, decoding 전략을 포함합니다 이후 image waterfall를 통과 기준으로 둡니다.</td></tr>
-<tr><td>lazy loading의 함정은?</td><td>이 꼬리질문은 &quot;lazy loading의 함정은&quot;를 묻는 압박 지점입니다. image optimization은 무엇을 포함하나요에 답할 때는 format, responsive srcset, intrinsic size, lazy loading, priority, CDN caching, decoding 전략을 포함합니다라는 기준을 먼저 말하고, 모든 이미지를 lazy로 두면 hero LCP가 늦어지고, 원본 해상도를 그대로 쓰면 네트워크 비용이 큽니다라는 실패 조건을 image waterfall로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>priority는 언제 높이나요?</td><td>&quot;priority는 언제 높이나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 image optimization은 무엇을 포함하나요의 맥락에 맞게 비교하는 것입니다. format, responsive srcset, intrinsic size, lazy loading, priority, CDN caching, decoding 전략을 포함합니다 이후 image waterfall를 통과 기준으로 둡니다.</td></tr>
+<tr><td>WebP/AVIF 선택은?</td><td>AVIF는 압축률이 좋지만 인코딩 비용과 decode 지연이 있을 수 있고, WebP는 호환성과 decode 안정성이 좋습니다. 사진, 투명 이미지, 썸네일별로 byte size와 decode time을 비교하고 picture/source fallback을 둡니다.</td></tr>
+<tr><td>lazy loading의 함정은?</td><td>초기 viewport의 hero나 LCP 이미지를 lazy로 두면 브라우저가 요청을 늦게 시작합니다. fold 근처 이미지는 적절한 rootMargin이나 eager loading을 쓰고, below-the-fold만 lazy로 두어 waterfall에서 LCP request가 앞에 있는지 확인합니다.</td></tr>
+<tr><td>priority는 언제 높이나요?</td><td>초기 viewport에서 LCP 후보인 이미지나 poster처럼 사용자에게 첫 화면을 만드는 resource에만 높입니다. 여러 이미지에 fetchpriority high를 주면 CSS, font, JS와 경쟁해 전체 LCP가 느려질 수 있습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -204,9 +205,9 @@ image waterfall, LCP element audit, srcset test, CDN cache header
 <p>웹폰트를 늦게 로드하거나 fallback metrics가 다르면 텍스트가 밀리고 CLS가 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>font-display swap은 항상 좋은가요?</td><td>아니요. &quot;font-display swap은 항상 좋은가요&quot;라는 질문은 조건부로 답해야 합니다. font file size, preload, display strategy, subset, fallback metric이 LCP와 CLS에 영향을 줍니다라는 전제가 맞을 때만 안전하고, 웹폰트를 늦게 로드하거나 fallback metrics가 다르면 텍스트가 밀리고 CLS가 생깁니다 따라서 font waterfall로 깨지는 조건을 재현하고 font-display audit로 변경 후 부작용을 확인해야 합니다.</td></tr>
-<tr><td>variable font는?</td><td>이 꼬리질문은 &quot;variable font는&quot;를 묻는 압박 지점입니다. font가 성능에 미치는 영향은에 답할 때는 font file size, preload, display strategy, subset, fallback metric이 LCP와 CLS에 영향을 줍니다라는 기준을 먼저 말하고, 웹폰트를 늦게 로드하거나 fallback metrics가 다르면 텍스트가 밀리고 CLS가 생깁니다라는 실패 조건을 font waterfall로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>한글 폰트 최적화는?</td><td>이 꼬리질문은 &quot;한글 폰트 최적화는&quot;를 묻는 압박 지점입니다. font가 성능에 미치는 영향은에 답할 때는 font file size, preload, display strategy, subset, fallback metric이 LCP와 CLS에 영향을 줍니다라는 기준을 먼저 말하고, 웹폰트를 늦게 로드하거나 fallback metrics가 다르면 텍스트가 밀리고 CLS가 생깁니다라는 실패 조건을 font waterfall로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>font-display swap은 항상 좋은가요?</td><td>읽기 시작을 빠르게 하지만 fallback과 실제 font의 폭·높이가 다르면 텍스트 재배치가 생깁니다. 브랜드 font가 필수인 hero는 preload와 metric override를 쓰고, 본문은 system font fallback으로 LCP와 CLS를 안정화할 수 있습니다.</td></tr>
+<tr><td>variable font는?</td><td>여러 weight/style 파일을 하나로 줄이면 request와 cache 관리가 좋아질 수 있지만, 필요한 축보다 파일이 크면 오히려 손해입니다. 실제 사용하는 weight, unicode-range, compression 후 size를 비교하고 unused axis를 제거합니다.</td></tr>
+<tr><td>한글 폰트 최적화는?</td><td>한글은 glyph 수가 많아 subset과 unicode-range 전략이 중요합니다. 핵심 화면에 필요한 글자만 preload하고 나머지는 지연 로드하거나 system fallback을 쓰며, font waterfall과 CLS attribution으로 효과를 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -220,9 +221,9 @@ font waterfall, font-display audit, CLS attribution, subset diff
 <p>analytics/chat script가 main thread를 막거나 개인정보 동의 전에 실행될 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>defer와 async 차이는?</td><td>&quot;defer와 async 차이는&quot;의 차이는 책임 경계와 복구 방식에서 납니다. 비즈니스 가치, load timing, async/defer, sandbox, consent, long task 영향, 장애 격리를 봅니다 이 경계를 기준으로 나누고, third-party inventory로 실제 사용자 흐름에서 차이가 드러나는지 확인합니다.</td></tr>
-<tr><td>태그 매니저 위험은?</td><td>&quot;태그 매니저 위험은&quot;가 중요한 이유는 analytics/chat script가 main thread를 막거나 개인정보 동의 전에 실행될 수 있습니다 때문입니다. 단순 구현 설명으로 끝내지 말고 비즈니스 가치, load timing, async/defer, sandbox, consent, long task 영향, 장애 격리를 봅니다라는 선택 기준과 third-party inventory 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>서드파티 장애는 어떻게 격리하나요?</td><td>&quot;서드파티 장애는 어떻게 격리하나요&quot;는 먼저 재현 조건을 고정하고, third-party inventory와 long task attribution를 같이 확인합니다. 답변에서는 analytics/chat script가 main thread를 막거나 개인정보 동의 전에 실행될 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>defer와 async 차이는?</td><td>defer는 HTML parsing을 막지 않고 실행 순서를 보존하며 DOMContentLoaded 전에 실행됩니다. async는 다운로드 완료 즉시 실행되어 순서가 보장되지 않아 tag 간 의존성이 있거나 hydration 중 main thread를 빼앗으면 INP와 초기 렌더를 흔들 수 있습니다.</td></tr>
+<tr><td>태그 매니저 위험은?</td><td>코드 리뷰 밖에서 script가 추가되고 consent, CSP, performance budget을 우회할 수 있습니다. tag inventory, owner, trigger 조건, long task attribution, 개인정보 동의 상태를 정기적으로 점검해야 합니다.</td></tr>
+<tr><td>서드파티 장애는 어떻게 격리하나요?</td><td>timeout, async loading, iframe sandbox, consent gate, circuit breaker를 두고 핵심 UI render path와 분리합니다. third-party가 느리거나 실패해도 LCP element, checkout action, analytics queue flush가 멈추지 않는 fixture를 둡니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -236,9 +237,9 @@ third-party inventory, long task attribution, consent test, script loading polic
 <p>총 시간만 보면 우선순위 문제, render-blocking chain, cache 미스 원인을 놓칩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>TTFB가 크면 무조건 백엔드인가요?</td><td>아니요. &quot;TTFB가 크면 무조건 백엔드인가요&quot;라는 질문은 조건부로 답해야 합니다. DNS, TCP/TLS, TTFB, download, priority, blocking, request chain, cache hit/miss를 봅니다라는 전제가 맞을 때만 안전하고, 총 시간만 보면 우선순위 문제, render-blocking chain, cache 미스 원인을 놓칩니다 따라서 HAR로 깨지는 조건을 재현하고 DevTools waterfall로 변경 후 부작용을 확인해야 합니다.</td></tr>
-<tr><td>HTTP/2면 waterfall이 사라지나요?</td><td>이 꼬리질문은 &quot;HTTP/2면 waterfall이 사라지나요&quot;를 묻는 압박 지점입니다. Network waterfall에서 무엇을 읽나요에 답할 때는 DNS, TCP/TLS, TTFB, download, priority, blocking, request chain, cache hit/miss를 봅니다라는 기준을 먼저 말하고, 총 시간만 보면 우선순위 문제, render-blocking chain, cache 미스 원인을 놓칩니다라는 실패 조건을 HAR로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>cache hit은 어디서 보나요?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;cache hit은 어디서 보나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 HAR 또는 DevTools waterfall로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>TTFB가 크면 무조건 백엔드인가요?</td><td>아닙니다. DNS/TLS, edge miss, redirect, server queue, SSR data fetch, auth middleware가 모두 TTFB에 포함될 수 있습니다. Server-Timing, CDN cache status, redirect chain을 같이 봐야 API 처리와 네트워크·edge 문제를 나눌 수 있습니다.</td></tr>
+<tr><td>HTTP/2면 waterfall이 사라지나요?</td><td>사라지지 않습니다. multiplexing으로 connection 병목은 줄지만 priority, request discovery, server push 오용, 큰 JS download 경쟁은 여전히 보입니다. waterfall에서는 resource가 언제 발견됐고 어떤 요청이 LCP resource를 밀었는지 봅니다.</td></tr>
+<tr><td>cache hit은 어디서 보나요?</td><td>DevTools size column의 memory/disk cache, response header의 Age, x-cache, cf-cache-status 같은 CDN header, RUM resource timing의 transferSize로 확인합니다. cache hit인데 느리면 main thread decode나 render delay도 같이 봐야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -252,9 +253,9 @@ HAR, DevTools waterfall, cache header, priority column
 <p>잘못된 SW는 오래된 JS를 계속 제공해 배포 후 장애를 만들 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>skipWaiting은 위험한가요?</td><td>Service Worker는 성능과 offline에 유용하지만 배포 stale 문제를 만들 수 있습니다. lifecycle, cache version, update prompt, rollback 가능성을 함께 설계해야 합니다. 이 꼬리질문에서는 &quot;skipWaiting은 위험한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 SW lifecycle log 또는 cache inventory로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>API cache는?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;API cache는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 SW lifecycle log 또는 cache inventory로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>오래된 bundle은 어떻게 제거하나요?</td><td>번들 답변은 초기 route에 꼭 필요한 코드와 나중에 불러도 되는 코드를 나누는 것이 핵심입니다. analyzer로 큰 dependency와 중복 polyfill을 확인하고, dynamic import는 사용자 intent 이후 경계에 둡니다. 이 꼬리질문에서는 &quot;오래된 bundle은 어떻게 제거하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 SW lifecycle log 또는 cache inventory로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>skipWaiting은 위험한가요?</td><td>새 SW가 즉시 활성화되면 현재 탭의 HTML은 이전 bundle을 참조하는데 cache는 새 asset으로 바뀌는 식의 version mismatch가 생길 수 있습니다. reload prompt, clients.claim 조건, manifest version 검사를 설계해야 합니다.</td></tr>
+<tr><td>API cache는?</td><td>읽기 전용이고 freshness 허용 범위가 있는 API에만 runtime cache를 적용합니다. 사용자별 응답, 권한, 결제, 재고처럼 stale data가 문제를 만드는 endpoint는 no-store나 짧은 revalidation을 쓰고 cache key에 auth scope를 섞지 않도록 주의합니다.</td></tr>
+<tr><td>오래된 bundle은 어떻게 제거하나요?</td><td>SW activate 단계에서 현재 precache manifest에 없는 cache를 정리하고, content hash asset과 HTML cache policy를 분리합니다. release 후 cache inventory와 update flow 테스트로 사용자가 이전 JS에 갇히지 않는지 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -268,9 +269,9 @@ SW lifecycle log, cache inventory, update flow test, offline fixture
 <p>렌더링 방식을 하나의 정답으로 고르면 데이터 개인화, cache, 배포 복잡도에서 실패합니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>SSR이면 SEO가 끝인가요?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;SSR이면 SEO가 끝인가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 rendering decision record 또는 TTFB/LCP comparison로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>hydration 비용은?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;hydration 비용은&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 rendering decision record 또는 TTFB/LCP comparison로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>ISR은 언제?</td><td>&quot;ISR은 언제&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 SSR/SSG/CSR 성능 trade-off는의 맥락에 맞게 비교하는 것입니다. SSR은 초기 HTML과 SEO에 유리하지만 서버 비용과 hydration 비용이 있고, CSR은 단순하지만 초기 표시가 늦을 수 있습니다 이후 rendering decision record를 통과 기준으로 둡니다.</td></tr>
+<tr><td>SSR이면 SEO가 끝인가요?</td><td>아닙니다. SSR은 crawler가 볼 HTML을 제공하지만 metadata, canonical, structured data, status code, robots 정책, hydration 후 content mismatch까지 맞아야 합니다. 성능 쪽에서는 SSR HTML 이후 LCP resource와 JS hydration도 함께 봅니다.</td></tr>
+<tr><td>hydration 비용은?</td><td>SSR HTML을 interactive하게 만들기 위해 JS를 download, parse, execute하고 event handler를 붙이는 비용입니다. component tree가 크면 초기 LCP는 좋아도 INP readiness가 늦어질 수 있어 hydration trace와 JS coverage로 줄입니다.</td></tr>
+<tr><td>ISR은 언제?</td><td>콘텐츠가 자주 바뀌지만 요청마다 SSR할 필요는 없고, 일정 시간 stale을 허용할 수 있을 때 적합합니다. revalidate 주기, cache purge, preview, 개인화 제외 조건을 명확히 해야 stale content와 cache stampede를 피합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -284,9 +285,9 @@ rendering decision record, TTFB/LCP comparison, hydration trace, cache policy
 <p>HTML은 빨리 보이는데 상호작용이 늦으면 사용자는 페이지가 멈췄다고 느낍니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>partial hydration은?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;partial hydration은&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 hydration trace 또는 JS coverage로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>server component 장점은?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;server component 장점은&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 hydration trace 또는 JS coverage로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>interactive marker는 어떻게?</td><td>&quot;interactive marker는 어떻게&quot;는 먼저 재현 조건을 고정하고, hydration trace와 JS coverage를 같이 확인합니다. 답변에서는 HTML은 빨리 보이는데 상호작용이 늦으면 사용자는 페이지가 멈췄다고 느낍니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>partial hydration은?</td><td>페이지 전체를 한 번에 hydrate하지 않고 실제 상호작용이 필요한 island만 hydrate하는 방식입니다. static content와 interactive widget을 분리하면 JS 실행과 event handler 수가 줄어 LCP 이후 INP readiness가 좋아질 수 있습니다.</td></tr>
+<tr><td>server component 장점은?</td><td>client로 보내는 JS와 data fetching waterfall을 줄일 수 있습니다. 다만 client boundary가 많거나 큰 props를 넘기면 이득이 줄고, cache와 streaming 전략을 함께 설계해야 합니다.</td></tr>
+<tr><td>interactive marker는 어떻게?</td><td>사용자가 누를 수 있는 주요 control이 실제 handler를 받을 준비가 된 시점에 performance.mark를 남깁니다. hydration complete, first input handled, route transition ready 같은 marker를 RUM과 trace에 연결해 보이는 시점과 조작 가능한 시점을 구분합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -300,9 +301,9 @@ hydration trace, JS coverage, INP after load, interaction readiness marker
 <p>거대한 CSS와 late loaded stylesheet는 render blocking과 style 계산 비용을 키웁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>복잡한 selector는?</td><td>이 꼬리질문은 &quot;복잡한 selector는&quot;를 묻는 압박 지점입니다. CSS 성능은 어디서 문제가 되나요에 답할 때는 selector 비용보다 style recalculation, layout invalidation, CSS size, unused rules, critical CSS가 실무에서 더 중요합니다라는 기준을 먼저 말하고, 거대한 CSS와 late loaded stylesheet는 render blocking과 style 계산 비용을 키웁니다라는 실패 조건을 Coverage tab로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>CSS-in-JS는 느린가요?</td><td>이 꼬리질문은 &quot;CSS-in-JS는 느린가요&quot;를 묻는 압박 지점입니다. CSS 성능은 어디서 문제가 되나요에 답할 때는 selector 비용보다 style recalculation, layout invalidation, CSS size, unused rules, critical CSS가 실무에서 더 중요합니다라는 기준을 먼저 말하고, 거대한 CSS와 late loaded stylesheet는 render blocking과 style 계산 비용을 키웁니다라는 실패 조건을 Coverage tab로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>critical CSS는 언제?</td><td>&quot;critical CSS는 언제&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 CSS 성능은 어디서 문제가 되나요의 맥락에 맞게 비교하는 것입니다. selector 비용보다 style recalculation, layout invalidation, CSS size, unused rules, critical CSS가 실무에서 더 중요합니다 이후 Coverage tab를 통과 기준으로 둡니다.</td></tr>
+<tr><td>복잡한 selector는?</td><td>현대 브라우저에서는 selector 자체보다 DOM 규모, style invalidation 범위, 자주 바뀌는 class가 더 큰 영향을 주는 경우가 많습니다. 그래도 deep descendant selector와 전역 rule이 많은 화면은 style recalculation trace와 Coverage로 정리합니다.</td></tr>
+<tr><td>CSS-in-JS는 느린가요?</td><td>런타임에 style을 생성·삽입하는 방식은 초기 render와 interaction 중 style recalculation 비용을 만들 수 있습니다. build-time extraction, critical CSS, stable className, theme 변경 범위를 확인해 실제 trace로 판단합니다.</td></tr>
+<tr><td>critical CSS는 언제?</td><td>초기 viewport 렌더에 필요한 CSS가 큰 stylesheet 뒤에 묶여 LCP가 늦을 때 씁니다. inline critical CSS가 너무 커지면 HTML TTFB와 cache 효율이 나빠지므로 route별 above-the-fold에 제한합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -316,9 +317,9 @@ Coverage tab, style recalculation trace, critical CSS audit, CSS bundle diff
 <p>route를 반복 이동할 때 memory가 계속 증가하면 결국 tab crash나 성능 저하로 이어집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>React에서 흔한 누수는?</td><td>이 꼬리질문은 &quot;React에서 흔한 누수는&quot;를 묻는 압박 지점입니다. 메모리 누수는 어떻게 찾나요에 답할 때는 heap snapshot, allocation timeline, detached DOM, event listener, timer, cache growth, WebGL resource를 봅니다라는 기준을 먼저 말하고, route를 반복 이동할 때 memory가 계속 증가하면 결국 tab crash나 성능 저하로 이어집니다라는 실패 조건을 heap snapshot diff로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>closure가 왜 문제인가요?</td><td>&quot;closure가 왜 문제인가요&quot;가 중요한 이유는 route를 반복 이동할 때 memory가 계속 증가하면 결국 tab crash나 성능 저하로 이어집니다 때문입니다. 단순 구현 설명으로 끝내지 말고 heap snapshot, allocation timeline, detached DOM, event listener, timer, cache growth, WebGL resource를 봅니다라는 선택 기준과 heap snapshot diff 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>cache는 언제 비워야 하나요?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;cache는 언제 비워야 하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 heap snapshot diff 또는 detached node count로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>React에서 흔한 누수는?</td><td>unmount 후 남은 event listener, interval, subscription, pending promise, observer, query cache가 흔합니다. route loop 테스트로 mount/unmount를 반복하고 heap snapshot에서 detached DOM과 retained component tree를 비교합니다.</td></tr>
+<tr><td>closure가 왜 문제인가요?</td><td>closure가 큰 data, DOM node, previous props를 참조한 채 listener나 timer에 남으면 GC가 회수하지 못합니다. handler cleanup과 dependency 관리를 확인하고 allocation timeline에서 interaction 후 retained object가 줄어드는지 봅니다.</td></tr>
+<tr><td>cache는 언제 비워야 하나요?</td><td>route, user, filter 조합으로 무한히 커지는 image/data/cache는 TTL, max size, LRU, logout cleanup이 필요합니다. cache hit 이득과 memory growth를 같이 보고, WebGL texture나 blob URL은 명시적으로 dispose/revoke합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -332,9 +333,9 @@ heap snapshot diff, detached node count, listener audit, route loop test
 <p>전체 앱에 하나의 budget만 두면 checkout 같은 핵심 route와 내부 admin route의 우선순위가 섞입니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>budget 초과 시 배포를 막나요?</td><td>이 꼬리질문은 &quot;budget 초과 시 배포를 막나요&quot;를 묻는 압박 지점입니다. 성능 budget은 어떻게 정하나요에 답할 때는 target device와 business route별 LCP/INP/CLS, JS size, image size, request count, long task 기준을 잡습니다라는 기준을 먼저 말하고, 전체 앱에 하나의 budget만 두면 checkout 같은 핵심 route와 내부 admin route의 우선순위가 섞입니다라는 실패 조건을 performance budget policy로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>기준 수치는 어떻게 잡나요?</td><td>&quot;기준 수치는 어떻게 잡나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 성능 budget은 어떻게 정하나요의 맥락에 맞게 비교하는 것입니다. target device와 business route별 LCP/INP/CLS, JS size, image size, request count, long task 기준을 잡습니다 이후 performance budget policy를 통과 기준으로 둡니다.</td></tr>
-<tr><td>예외는 어떻게 승인하나요?</td><td>&quot;예외는 어떻게 승인하나요&quot;는 먼저 재현 조건을 고정하고, performance budget policy와 CI budget check를 같이 확인합니다. 답변에서는 전체 앱에 하나의 budget만 두면 checkout 같은 핵심 route와 내부 admin route의 우선순위가 섞입니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>budget 초과 시 배포를 막나요?</td><td>핵심 route의 bundle, LCP, INP 같은 guardrail은 차단 대상으로 두고, 낮은 위험 변경은 승인 기록과 후속 작업으로 처리할 수 있습니다. 차단 여부는 RUM impact, release urgency, rollback 가능성을 기준으로 미리 정책화합니다.</td></tr>
+<tr><td>기준 수치는 어떻게 잡나요?</td><td>Core Web Vitals 권장 기준을 출발점으로 삼되 실제 target device, p75 RUM, 경쟁 제품, 업무 SLA를 반영합니다. 예를 들어 checkout은 LCP 2.5초 이하와 INP 200ms 이하를 강하게 두고 내부 admin은 chart render time을 별도 budget으로 둘 수 있습니다.</td></tr>
+<tr><td>예외는 어떻게 승인하나요?</td><td>예외는 route, metric, 초과량, 사용자 영향, 만료일, 보완 계획을 남겨 승인합니다. 영구 예외가 되지 않도록 release dashboard와 backlog ticket에 연결하고 다음 PR에서 budget을 다시 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -348,9 +349,9 @@ performance budget policy, CI budget check, route RUM, bundle threshold
 <p>녹화만 하고 총 시간만 보면 어떤 interaction이 무엇 때문에 느린지 알 수 없습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>Bottom-Up과 Call Tree 차이는?</td><td>&quot;Bottom-Up과 Call Tree 차이는&quot;의 차이는 책임 경계와 복구 방식에서 납니다. main thread flame chart, long task, layout/paint, network, screenshots, user timing marker를 봅니다 이 경계를 기준으로 나누고, Performance trace로 실제 사용자 흐름에서 차이가 드러나는지 확인합니다.</td></tr>
-<tr><td>user timing은 왜 넣나요?</td><td>&quot;user timing은 왜 넣나요&quot;가 중요한 이유는 녹화만 하고 총 시간만 보면 어떤 interaction이 무엇 때문에 느린지 알 수 없습니다 때문입니다. 단순 구현 설명으로 끝내지 말고 main thread flame chart, long task, layout/paint, network, screenshots, user timing marker를 봅니다라는 선택 기준과 Performance trace 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>녹화 환경은?</td><td>이 꼬리질문은 &quot;녹화 환경은&quot;를 묻는 압박 지점입니다. DevTools Performance 패널에서 무엇을 보나요에 답할 때는 main thread flame chart, long task, layout/paint, network, screenshots, user timing marker를 봅니다라는 기준을 먼저 말하고, 녹화만 하고 총 시간만 보면 어떤 interaction이 무엇 때문에 느린지 알 수 없습니다라는 실패 조건을 Performance trace로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>Bottom-Up과 Call Tree 차이는?</td><td>Call Tree는 호출 경로 중심으로 비용을 보여주고 Bottom-Up은 전체 녹화에서 비용이 큰 함수나 작업을 합산해 보여줍니다. 특정 handler 경로를 볼 때는 Call Tree, 반복적으로 비싼 utility나 layout 작업을 찾을 때는 Bottom-Up이 유용합니다.</td></tr>
+<tr><td>user timing은 왜 넣나요?</td><td>route transition, data loaded, hydration ready, filter applied 같은 제품 이벤트를 trace에 표시해 브라우저 작업과 사용자 행동을 연결합니다. marker가 없으면 긴 task가 어느 기능의 결과인지 추적하기 어렵습니다.</td></tr>
+<tr><td>녹화 환경은?</td><td>대상 device class, CPU throttling, network throttling, cache 상태, 로그인 데이터, browser extension 여부를 고정합니다. lab trace는 재현성이 중요하므로 RUM에서 나쁜 segment와 최대한 같은 조건으로 맞춥니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -364,9 +365,9 @@ Performance trace, user timing markers, bottom-up analysis, screenshots
 <p>Profiler만 보면 layout, paint, network, third-party script를 놓칠 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>둘을 어떻게 연결하나요?</td><td>&quot;둘을 어떻게 연결하나요&quot;는 먼저 재현 조건을 고정하고, Profiler export와 Performance trace를 같이 확인합니다. 답변에서는 Profiler만 보면 layout, paint, network, third-party script를 놓칠 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>commit이 길면?</td><td>이 꼬리질문은 &quot;commit이 길면&quot;를 묻는 압박 지점입니다. React Profiler와 브라우저 Performance 차이는에 답할 때는 React Profiler는 React render/commit 원인을, Performance는 전체 browser main thread와 rendering pipeline을 보여줍니다라는 기준을 먼저 말하고, Profiler만 보면 layout, paint, network, third-party script를 놓칠 수 있습니다라는 실패 조건을 Profiler export로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>render가 빨라도 느린 이유는?</td><td>React 병목은 render 원인과 browser 비용을 분리합니다. Profiler로 commit과 render count를 보고, context 구독 범위·불안정한 props·key 변경을 확인한 뒤 실제 interaction trace로 효과를 검증합니다. 이 꼬리질문에서는 &quot;render가 빨라도 느린 이유는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Profiler export 또는 Performance trace로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>둘을 어떻게 연결하나요?</td><td>interaction 시작과 commit 시점에 user timing marker를 남기고 같은 시나리오를 Profiler와 Performance에서 녹화합니다. Profiler의 긴 commit이 Performance flame chart의 scripting, layout, paint 중 어디로 이어졌는지 맞춰 봅니다.</td></tr>
+<tr><td>commit이 길면?</td><td>긴 commit은 DOM mutation, layout effect, ref callback, 많은 component update가 한 번에 몰렸다는 신호입니다. component tree를 나누고 memoization, context 분리, virtualization을 적용한 뒤 commit duration과 INP 변화를 비교합니다.</td></tr>
+<tr><td>render가 빨라도 느린 이유는?</td><td>React render가 짧아도 network wait, image decode, font swap, layout/paint, third-party long task가 main thread를 막을 수 있습니다. 그래서 Profiler 수치만 보지 말고 Performance trace와 Web Vitals attribution을 함께 봅니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -380,9 +381,9 @@ Profiler export, Performance trace, correlation marker, render commit log
 <p>CI가 빠른 네트워크와 고정 기기로 돌면 실제 저사양 모바일 문제를 놓칩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>p75 기준은 왜?</td><td>Lighthouse는 재현 가능한 실험실 지표이고 RUM은 실제 사용자 환경입니다. 둘이 다르면 route, device, network, 로그인 상태를 나눠 field data를 우선 해석하고 lab으로 재현합니다. 이 꼬리질문에서는 &quot;p75 기준은 왜&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Lighthouse CI 또는 RUM p75로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>RUM 표본이 적으면?</td><td>Lighthouse는 재현 가능한 실험실 지표이고 RUM은 실제 사용자 환경입니다. 둘이 다르면 route, device, network, 로그인 상태를 나눠 field data를 우선 해석하고 lab으로 재현합니다. 이 꼬리질문에서는 &quot;RUM 표본이 적으면&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Lighthouse CI 또는 RUM p75로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>실험실 재현은 어떻게?</td><td>Lighthouse는 재현 가능한 실험실 지표이고 RUM은 실제 사용자 환경입니다. 둘이 다르면 route, device, network, 로그인 상태를 나눠 field data를 우선 해석하고 lab으로 재현합니다. 이 꼬리질문에서는 &quot;실험실 재현은 어떻게&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Lighthouse CI 또는 RUM p75로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>p75 기준은 왜?</td><td>평균은 빠른 기기와 느린 기기가 섞여 문제를 가립니다. p75는 상당수 사용자가 경험하는 하위 품질을 대표해 Core Web Vitals 판단에 쓰이며, p95/p98은 심각한 tail latency 분석에 함께 봅니다.</td></tr>
+<tr><td>RUM 표본이 적으면?</td><td>기간을 늘리거나 route/device segment를 합치되, release version과 traffic 변화가 섞이지 않게 봅니다. 표본이 너무 작으면 lab trace와 synthetic monitoring으로 회귀 여부를 보조하고 결론에는 신뢰 구간을 표시합니다.</td></tr>
+<tr><td>실험실 재현은 어떻게?</td><td>RUM에서 나쁜 segment의 device, network, viewport, route, login state, cache state를 가져와 Lighthouse, WebPageTest, DevTools throttling에 반영합니다. 재현 trace에는 Web Vitals attribution과 waterfall, CPU profile을 같이 붙입니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -396,9 +397,9 @@ Lighthouse CI, RUM p75, device segmentation, field/lab diff
 <p>HTML을 길게 cache하면 새 배포가 보이지 않고, hashed asset을 짧게 cache하면 네트워크 비용이 늘어납니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>no-store와 no-cache 차이는?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;no-store와 no-cache 차이는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Cache-Control audit 또는 CDN hit ratio로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>stale-while-revalidate는?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;stale-while-revalidate는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Cache-Control audit 또는 CDN hit ratio로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>CDN purge는 언제?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;CDN purge는 언제&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Cache-Control audit 또는 CDN hit ratio로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>no-store와 no-cache 차이는?</td><td>no-store는 저장 자체를 막고, no-cache는 저장은 가능하지만 사용 전 재검증을 요구합니다. 개인정보나 결제 응답은 no-store가 맞고, HTML처럼 최신성은 필요하지만 revalidation으로 충분한 resource는 no-cache나 짧은 max-age를 쓸 수 있습니다.</td></tr>
+<tr><td>stale-while-revalidate는?</td><td>캐시된 응답을 즉시 보여주면서 백그라운드에서 새 응답을 받아 다음 요청에 반영하는 전략입니다. API와 HTML에 적용할 때는 사용자가 stale data를 봐도 되는 시간과 갱신 표시 방식을 정해야 합니다.</td></tr>
+<tr><td>CDN purge는 언제?</td><td>잘못된 HTML, critical CSS, config, 이미지 변환 결과처럼 content hash로 회피할 수 없는 asset을 즉시 교체해야 할 때 씁니다. 일반 JS/CSS는 content hash와 긴 immutable cache를 쓰고 purge 의존도를 낮추는 편이 안정적입니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -412,9 +413,9 @@ Cache-Control audit, CDN hit ratio, release cache test, ETag validation
 <p>과하게 쓰면 bandwidth 경쟁과 우선순위 역전으로 오히려 LCP가 느려집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>preload 누락 경고는?</td><td>이 꼬리질문은 &quot;preload 누락 경고는&quot;를 묻는 압박 지점입니다. preload, prefetch, preconnect는 어떻게 쓰나요에 답할 때는 critical resource는 preload, 다음 탐색 후보는 prefetch, 외부 origin 연결 비용은 preconnect로 줄입니다라는 기준을 먼저 말하고, 과하게 쓰면 bandwidth 경쟁과 우선순위 역전으로 오히려 LCP가 느려집니다라는 실패 조건을 resource hint audit로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>prefetch는 모바일에서?</td><td>이 꼬리질문은 &quot;prefetch는 모바일에서&quot;를 묻는 압박 지점입니다. preload, prefetch, preconnect는 어떻게 쓰나요에 답할 때는 critical resource는 preload, 다음 탐색 후보는 prefetch, 외부 origin 연결 비용은 preconnect로 줄입니다라는 기준을 먼저 말하고, 과하게 쓰면 bandwidth 경쟁과 우선순위 역전으로 오히려 LCP가 느려집니다라는 실패 조건을 resource hint audit로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>preconnect가 너무 많으면?</td><td>이 꼬리질문은 &quot;preconnect가 너무 많으면&quot;를 묻는 압박 지점입니다. preload, prefetch, preconnect는 어떻게 쓰나요에 답할 때는 critical resource는 preload, 다음 탐색 후보는 prefetch, 외부 origin 연결 비용은 preconnect로 줄입니다라는 기준을 먼저 말하고, 과하게 쓰면 bandwidth 경쟁과 우선순위 역전으로 오히려 LCP가 느려집니다라는 실패 조건을 resource hint audit로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>preload 누락 경고는?</td><td>preload한 resource가 곧 사용되지 않으면 브라우저가 경고를 냅니다. as 속성, crossorigin, media 조건, 실제 사용 시점이 맞는지 확인하고, LCP나 critical font가 아니면 preload 대신 normal discovery를 두는 편이 낫습니다.</td></tr>
+<tr><td>prefetch는 모바일에서?</td><td>모바일에서는 데이터 비용, 배터리, Save-Data, 느린 네트워크를 고려해야 합니다. 다음 route 가능성이 높고 resource가 작을 때만 idle time에 prefetch하고, RUM에서 cache hit 증가와 LCP/INP 부작용을 확인합니다.</td></tr>
+<tr><td>preconnect가 너무 많으면?</td><td>각 origin마다 DNS, TCP, TLS 준비 비용과 socket 자원을 쓰므로 중요한 외부 origin 몇 개로 제한해야 합니다. analytics, font, API 중 초기 화면에 필요한 origin만 남기고 waterfall에서 connection setup이 실제로 줄었는지 봅니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -428,9 +429,9 @@ resource hint audit, waterfall priority, LCP before/after, bandwidth trace
 <p>단일 Lighthouse 점수만 보고하면 실제 사용자 개선인지 판단하기 어렵습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>수치가 흔들리면?</td><td>이 꼬리질문은 &quot;수치가 흔들리면&quot;를 묻는 압박 지점입니다. 성능 개선 결과는 어떻게 보고하나요에 답할 때는 변경 전후 조건, p75/p95, route, device, sample size, 부작용, rollback 조건을 함께 씁니다라는 기준을 먼저 말하고, 단일 Lighthouse 점수만 보고하면 실제 사용자 개선인지 판단하기 어렵습니다라는 실패 조건을 performance regression packet로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>표본은 얼마나?</td><td>이 꼬리질문은 &quot;표본은 얼마나&quot;를 묻는 압박 지점입니다. 성능 개선 결과는 어떻게 보고하나요에 답할 때는 변경 전후 조건, p75/p95, route, device, sample size, 부작용, rollback 조건을 함께 씁니다라는 기준을 먼저 말하고, 단일 Lighthouse 점수만 보고하면 실제 사용자 개선인지 판단하기 어렵습니다라는 실패 조건을 performance regression packet로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>부작용은 무엇을 보나요?</td><td>&quot;부작용은 무엇을 보나요&quot;는 먼저 재현 조건을 고정하고, performance regression packet와 RUM comparison를 같이 확인합니다. 답변에서는 단일 Lighthouse 점수만 보고하면 실제 사용자 개선인지 판단하기 어렵습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>수치가 흔들리면?</td><td>동일 조건의 반복 lab run과 RUM 기간 비교를 나눠 보고, release traffic, cache warmup, bot/internal traffic, seasonality를 표시합니다. 개선 폭이 noise보다 작은 경우에는 결론을 보류하거나 더 큰 표본으로 다시 판단합니다.</td></tr>
+<tr><td>표본은 얼마나?</td><td>route와 device segment별 p75를 볼 수 있을 만큼 필요합니다. 절대 숫자는 트래픽에 따라 다르지만, 작은 표본에서는 p75 변화보다 trace diff와 synthetic run을 보조 증거로 쓰고 sample size를 보고서에 명시합니다.</td></tr>
+<tr><td>부작용은 무엇을 보나요?</td><td>LCP가 좋아졌어도 INP, CLS, error rate, conversion, a11y keyboard flow, analytics event 누락이 나빠질 수 있습니다. 성능 PR에는 개선 metric과 함께 기능 smoke, visual diff, rollback 조건을 붙입니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -444,9 +445,9 @@ performance regression packet, RUM comparison, trace attachment, release note
 <p>성능을 이유로 semantic DOM이나 focus 처리를 제거하면 품질 기준을 낮추는 것입니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>가상화와 screen reader는?</td><td>이 꼬리질문은 &quot;가상화와 screen reader는&quot;를 묻는 압박 지점입니다. 성능과 접근성이 충돌할 때 어떻게 하나요에 답할 때는 접근성 필수 의미 구조와 keyboard 흐름은 유지하고, 비용이 큰 부분은 점진 렌더링이나 fallback으로 조정합니다라는 기준을 먼저 말하고, 성능을 이유로 semantic DOM이나 focus 처리를 제거하면 품질 기준을 낮추는 것입니다라는 실패 조건을 a11y/performance decision note로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>aria를 줄이면 빨라지나요?</td><td>이 꼬리질문은 &quot;aria를 줄이면 빨라지나요&quot;를 묻는 압박 지점입니다. 성능과 접근성이 충돌할 때 어떻게 하나요에 답할 때는 접근성 필수 의미 구조와 keyboard 흐름은 유지하고, 비용이 큰 부분은 점진 렌더링이나 fallback으로 조정합니다라는 기준을 먼저 말하고, 성능을 이유로 semantic DOM이나 focus 처리를 제거하면 품질 기준을 낮추는 것입니다라는 실패 조건을 a11y/performance decision note로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>성능 budget 예외는?</td><td>이 꼬리질문은 &quot;성능 budget 예외는&quot;를 묻는 압박 지점입니다. 성능과 접근성이 충돌할 때 어떻게 하나요에 답할 때는 접근성 필수 의미 구조와 keyboard 흐름은 유지하고, 비용이 큰 부분은 점진 렌더링이나 fallback으로 조정합니다라는 기준을 먼저 말하고, 성능을 이유로 semantic DOM이나 focus 처리를 제거하면 품질 기준을 낮추는 것입니다라는 실패 조건을 a11y/performance decision note로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>가상화와 screen reader는?</td><td>가상화는 DOM에 일부 row만 남기기 때문에 screen reader가 전체 목록을 탐색하기 어려울 수 있습니다. 핵심 목록은 pagination이나 accessible summary를 제공하고, 가상화가 필요하면 aria count, focus 보존, keyboard navigation을 별도 검증합니다.</td></tr>
+<tr><td>aria를 줄이면 빨라지나요?</td><td>ARIA attribute 자체가 성능 병목인 경우는 드뭅니다. 느린 원인은 보통 큰 DOM, 잦은 rerender, layout 계산이므로 의미 정보를 제거하기보다 render 범위와 update 빈도를 줄이는 방식으로 해결합니다.</td></tr>
+<tr><td>성능 budget 예외는?</td><td>접근성 요구를 충족하기 위해 추가 DOM이나 text가 필요하다면 예외를 줄 수 있습니다. 대신 route별 Web Vitals 영향, 대체 최적화, keyboard/screen reader 증거를 남겨 품질 기준이 임의로 흔들리지 않게 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -460,9 +461,9 @@ a11y/performance decision note, DOM count, keyboard test, RUM metric
 <p>첫 로드만 빠르고 필터 변경마다 전체 chart를 다시 그리면 업무 도구로는 느립니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>차트가 많으면?</td><td>이 꼬리질문은 &quot;차트가 많으면&quot;를 묻는 압박 지점입니다. 대시보드 성능은 어떤 지표가 중요한가요에 답할 때는 initial load, filter interaction latency, chart render time, data refresh cost, memory growth를 봅니다라는 기준을 먼저 말하고, 첫 로드만 빠르고 필터 변경마다 전체 chart를 다시 그리면 업무 도구로는 느립니다라는 실패 조건을 interaction timing로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>필터 변경 최적화는?</td><td>이 꼬리질문은 &quot;필터 변경 최적화는&quot;를 묻는 압박 지점입니다. 대시보드 성능은 어떤 지표가 중요한가요에 답할 때는 initial load, filter interaction latency, chart render time, data refresh cost, memory growth를 봅니다라는 기준을 먼저 말하고, 첫 로드만 빠르고 필터 변경마다 전체 chart를 다시 그리면 업무 도구로는 느립니다라는 실패 조건을 interaction timing로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>자동 refresh는?</td><td>이 꼬리질문은 &quot;자동 refresh는&quot;를 묻는 압박 지점입니다. 대시보드 성능은 어떤 지표가 중요한가요에 답할 때는 initial load, filter interaction latency, chart render time, data refresh cost, memory growth를 봅니다라는 기준을 먼저 말하고, 첫 로드만 빠르고 필터 변경마다 전체 chart를 다시 그리면 업무 도구로는 느립니다라는 실패 조건을 interaction timing로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>차트가 많으면?</td><td>초기 viewport chart만 먼저 렌더하고 나머지는 lazy render나 virtualization, canvas/WebGL batch rendering을 검토합니다. chart library bundle size, data transform cost, tooltip interaction INP, memory growth를 함께 측정합니다.</td></tr>
+<tr><td>필터 변경 최적화는?</td><td>filter input에는 immediate feedback을 주고 비싼 aggregation은 debounce, memoized selector, worker, server aggregation으로 분리합니다. 이전 결과 cache와 optimistic loading state를 쓰되 stale data 표시와 cancelation을 명확히 합니다.</td></tr>
+<tr><td>자동 refresh는?</td><td>polling 간격, tab visibility, user activity, network 상태에 맞춰 조절해야 합니다. refresh가 chart rerender와 API waterfall을 계속 만들면 INP와 memory가 나빠지므로 incremental update와 backoff, pause control을 둡니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -476,9 +477,9 @@ interaction timing, chart render benchmark, data cache trace, memory profile
 <p>한 번 최적화하고 끝내면 새 dependency나 UI 변경으로 금방 회귀합니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>경고 기준은?</td><td>&quot;경고 기준은&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 성능 회귀를 어떻게 막나요의 맥락에 맞게 비교하는 것입니다. bundle budget, Web Vitals alert, visual/performance smoke, profiler evidence requirement, dependency review를 둡니다 이후 CI budget를 통과 기준으로 둡니다.</td></tr>
-<tr><td>false positive는?</td><td>이 꼬리질문은 &quot;false positive는&quot;를 묻는 압박 지점입니다. 성능 회귀를 어떻게 막나요에 답할 때는 bundle budget, Web Vitals alert, visual/performance smoke, profiler evidence requirement, dependency review를 둡니다라는 기준을 먼저 말하고, 한 번 최적화하고 끝내면 새 dependency나 UI 변경으로 금방 회귀합니다라는 실패 조건을 CI budget로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>리뷰어가 뭘 봐야 하나요?</td><td>이 꼬리질문은 &quot;리뷰어가 뭘 봐야 하나요&quot;를 묻는 압박 지점입니다. 성능 회귀를 어떻게 막나요에 답할 때는 bundle budget, Web Vitals alert, visual/performance smoke, profiler evidence requirement, dependency review를 둡니다라는 기준을 먼저 말하고, 한 번 최적화하고 끝내면 새 dependency나 UI 변경으로 금방 회귀합니다라는 실패 조건을 CI budget로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>경고 기준은?</td><td>route별 p75 LCP/INP/CLS, JS chunk size, long task count, image weight 같은 기준을 둡니다. 작은 변동은 noise로 처리하고, core journey나 특정 browser segment에서 연속 악화가 보이면 alert를 올립니다.</td></tr>
+<tr><td>false positive는?</td><td>CI lab fluctuation, CDN warmup, test data 변화, browser update로 발생할 수 있습니다. 반복 run, baseline 갱신 절차, RUM corroboration을 두고 false positive도 기록해 threshold를 조정합니다.</td></tr>
+<tr><td>리뷰어가 뭘 봐야 하나요?</td><td>새 dependency, initial chunk 증가, render 범위 확대, image/font priority 변경, cache header 변경, third-party script 추가를 봐야 합니다. PR에는 bundle diff, Profiler trace, Web Vitals 예상 영향, rollback 경로가 있어야 리뷰가 가능합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -492,9 +493,9 @@ CI budget, RUM alert, dependency diff, PR checklist
 <p>개발자 체감 느림만 말하면 다른 기능 우선순위에 밀릴 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>수익 영향이 없으면?</td><td>이 꼬리질문은 &quot;수익 영향이 없으면&quot;를 묻는 압박 지점입니다. 성능 문제를 제품 우선순위로 설득하려면에 답할 때는 사용자 영향, conversion, task completion, support ticket, infra cost와 연결해 말합니다라는 기준을 먼저 말하고, 개발자 체감 느림만 말하면 다른 기능 우선순위에 밀릴 수 있습니다라는 실패 조건을 business metric correlation로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>내부 도구 성능은?</td><td>이 꼬리질문은 &quot;내부 도구 성능은&quot;를 묻는 압박 지점입니다. 성능 문제를 제품 우선순위로 설득하려면에 답할 때는 사용자 영향, conversion, task completion, support ticket, infra cost와 연결해 말합니다라는 기준을 먼저 말하고, 개발자 체감 느림만 말하면 다른 기능 우선순위에 밀릴 수 있습니다라는 실패 조건을 business metric correlation로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>기술부채로 어떻게 표현하나요?</td><td>&quot;기술부채로 어떻게 표현하나요&quot;는 먼저 재현 조건을 고정하고, business metric correlation와 funnel drop를 같이 확인합니다. 답변에서는 개발자 체감 느림만 말하면 다른 기능 우선순위에 밀릴 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>수익 영향이 없으면?</td><td>task completion, support ticket, retention, search crawl, internal labor time, infra cost 같은 대체 지표로 연결합니다. 예를 들어 dashboard filter INP가 높으면 업무 처리 시간이 늘고 오류 재시도가 증가한다는 식으로 설명합니다.</td></tr>
+<tr><td>내부 도구 성능은?</td><td>사용자 수가 적어도 반복 업무 시간이 길면 비용이 큽니다. 특정 화면의 interaction latency, chart render time, memory crash, employee time loss를 수치화해 기능 개발과 같은 우선순위 언어로 바꿉니다.</td></tr>
+<tr><td>기술부채로 어떻게 표현하나요?</td><td>느린 dependency, 거대한 shared chunk, 캐시 불일치, profiler 없는 복잡한 화면이 앞으로 기능 추가 비용과 장애 위험을 키운다고 설명합니다. 개선 범위를 bundle split, render isolation, cache policy처럼 작은 투자 단위로 나눠 제안합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -508,9 +509,9 @@ business metric correlation, funnel drop, RUM segment, user session replay
 <p>빠르게 만들었다는 말만 있고 수치와 trace가 없으면 검증 가능한 답변이 아닙니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>수치가 없으면 어떻게 답하나요?</td><td>&quot;수치가 없으면 어떻게 답하나요&quot;는 먼저 재현 조건을 고정하고, PERFORMANCE REGRESSION PACKET와 trace를 같이 확인합니다. 답변에서는 빠르게 만들었다는 말만 있고 수치와 trace가 없으면 검증 가능한 답변이 아닙니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>추정과 사실을 어떻게 나누나요?</td><td>&quot;추정과 사실을 어떻게 나누나요&quot;는 먼저 재현 조건을 고정하고, PERFORMANCE REGRESSION PACKET와 trace를 같이 확인합니다. 답변에서는 빠르게 만들었다는 말만 있고 수치와 trace가 없으면 검증 가능한 답변이 아닙니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>외부 검증에서 보여줄 증거는?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;외부 검증에서 보여줄 증거는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 PERFORMANCE REGRESSION PACKET 또는 trace로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>수치가 없으면 어떻게 답하나요?</td><td>수치가 없었다고 말하고 다음에는 어떤 지표를 잡을지 구체화합니다. 예를 들어 LCP attribution, INP interaction marker, bundle analyzer, Profiler export, RUM p75 dashboard를 만들고 전후 비교 조건을 정하겠다고 답합니다.</td></tr>
+<tr><td>추정과 사실을 어떻게 나누나요?</td><td>사실은 trace, RUM, bundle diff처럼 확인된 데이터로 말하고, 추정은 가설로 표시한 뒤 검증 방법을 붙입니다. 예를 들어 TTFB가 높다는 사실과 edge cache miss가 원인일 가능성을 분리합니다.</td></tr>
+<tr><td>외부 검증에서 보여줄 증거는?</td><td>before/after Performance trace, Web Vitals p75 chart, route별 bundle diff, React Profiler screenshot, network waterfall, PR checklist를 보여줍니다. 같은 조건에서 재현한 lab 결과와 배포 후 RUM 변화를 함께 제시하면 신뢰도가 높습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -524,9 +525,9 @@ PERFORMANCE REGRESSION PACKET, trace, RUM chart, budget policy
 <p>도구 이름만 나열하면 병목을 분해할 수 있는지 드러나지 않습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>Lighthouse만 써봤다면?</td><td>Lighthouse는 재현 가능한 실험실 지표이고 RUM은 실제 사용자 환경입니다. 둘이 다르면 route, device, network, 로그인 상태를 나눠 field data를 우선 해석하고 lab으로 재현합니다. 이 꼬리질문에서는 &quot;Lighthouse만 써봤다면&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 diagnostic checklist 또는 lab reproduction로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>React가 아니면?</td><td>이 꼬리질문은 &quot;React가 아니면&quot;를 묻는 압박 지점입니다. 성능 경험이 적을 때 답변은 어떻게 구성하나요에 답할 때는 Web Vitals 기준, DevTools 진단 순서, React Profiler 사용, RUM/lab 차이, 개선 검증 계획을 말합니다라는 기준을 먼저 말하고, 도구 이름만 나열하면 병목을 분해할 수 있는지 드러나지 않습니다라는 실패 조건을 diagnostic checklist로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>백엔드 병목이면?</td><td>이 꼬리질문은 &quot;백엔드 병목이면&quot;를 묻는 압박 지점입니다. 성능 경험이 적을 때 답변은 어떻게 구성하나요에 답할 때는 Web Vitals 기준, DevTools 진단 순서, React Profiler 사용, RUM/lab 차이, 개선 검증 계획을 말합니다라는 기준을 먼저 말하고, 도구 이름만 나열하면 병목을 분해할 수 있는지 드러나지 않습니다라는 실패 조건을 diagnostic checklist로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>Lighthouse만 써봤다면?</td><td>Lighthouse는 lab baseline으로 쓰되 실제 답변에서는 LCP/INP/CLS attribution, network waterfall, Coverage, Performance trace를 어떻게 확인할지 말합니다. 배포 후에는 RUM p75와 device segment로 검증하겠다고 보완합니다.</td></tr>
+<tr><td>React가 아니면?</td><td>핵심은 framework가 아니라 main thread, DOM update, network, rendering pipeline입니다. Vue, Svelte, vanilla에서도 browser Performance trace, bundle analyzer, component profiler에 해당하는 도구, RUM Web Vitals로 같은 방식으로 좁힙니다.</td></tr>
+<tr><td>백엔드 병목이면?</td><td>TTFB, Server-Timing, API waterfall, cache hit ratio로 백엔드 병목임을 보여주고 프론트에서 할 수 있는 fallback도 구분합니다. skeleton, streaming, prefetch, edge cache 조정은 프론트와 플랫폼이 함께 볼 수 있습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -540,9 +541,9 @@ diagnostic checklist, lab reproduction, RUM plan, before/after template
 <p>렌더 횟수를 줄이려다 stale UI, 누락된 announcement, 잘못된 cache invalidation을 만들 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>memoization 회귀는?</td><td>React 병목은 render 원인과 browser 비용을 분리합니다. Profiler로 commit과 render count를 보고, context 구독 범위·불안정한 props·key 변경을 확인한 뒤 실제 interaction trace로 효과를 검증합니다. 이 꼬리질문에서는 &quot;memoization 회귀는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 before/after trace 또는 E2E journey로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>cache 최적화 위험은?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;cache 최적화 위험은&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 before/after trace 또는 E2E journey로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>성능 PR 증거는?</td><td>이 꼬리질문은 &quot;성능 PR 증거는&quot;를 묻는 압박 지점입니다. 성능 최적화가 기능 회귀를 만들지 않게 하려면에 답할 때는 변경 전후 사용자 여정, 접근성, analytics event, visual state를 함께 검증합니다라는 기준을 먼저 말하고, 렌더 횟수를 줄이려다 stale UI, 누락된 announcement, 잘못된 cache invalidation을 만들 수 있습니다라는 실패 조건을 before/after trace로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>memoization 회귀는?</td><td>memoization은 stale props, stale closure, 잘못된 dependency로 최신 상태를 막을 수 있습니다. Profiler로 render count와 commit duration 개선을 확인하면서 E2E로 필터, 권한, analytics event, screen reader announcement가 최신 상태로 갱신되는지 검증합니다.</td></tr>
+<tr><td>cache 최적화 위험은?</td><td>runtime cache나 SW cache가 stale API, 오래된 bundle, 권한 변경 누락을 만들 수 있습니다. cache key, TTL, invalidation, release version을 명확히 하고 network waterfall과 RUM error segment에서 cache hit 후 기능 오류가 늘지 않는지 봅니다.</td></tr>
+<tr><td>성능 PR 증거는?</td><td>PR에는 before/after Web Vitals 또는 lab trace, bundle diff, React Profiler export, network waterfall, 영향 route와 device 조건을 붙입니다. 동시에 기능 smoke, a11y keyboard flow, visual diff, rollback 조건을 함께 남겨 최적화가 기능을 깨지 않았음을 보여줍니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -570,6 +571,19 @@ before/after trace, E2E journey, a11y smoke, event QA log
 <span class="co-label">외부 검증 대응</span>
 <p>모르는 주제가 나오면 직접 경험처럼 꾸미지 않는다. 대신 어떤 경계에서 문제가 생기는지, 어떤 도구로 재현할지, 어떤 지표와 테스트로 검증할지 구체적으로 답한다.</p>
 </div>
+</section>
+
+
+<section id="qa-strengthening-criteria">
+<div class="ch-head"><span class="ch-code">PERF-QA</span><h2>Q&amp;A 보강 기준</h2></div>
+<p class="lede">앞으로 각 문항은 답변 문장만 늘리지 않고 본문 앵커, 기준일, 확인 산출물, 나쁜 답변/좋은 답변 비교를 함께 적용해야 합니다.</p>
+<table>
+<tr><th>항목</th><th>적용 기준</th><th>확인 산출물</th></tr>
+<tr><td>관련 본문 앵커</td><td>각 Q는 성능 본문 <code>#reading-path</code>, <code>#perf-ch2</code>, <code>#devtools-ch4</code> 중 직접 관련된 본문 앵커를 최소 1개 연결합니다.</td><td>문항별 <code>관련 본문</code> 링크</td></tr>
+<tr><td>기준일/버전 확인</td><td>2026-07-09 기준으로 브라우저, API, 도구, 정책처럼 변동 가능한 항목은 기준일과 확인 위치를 적습니다.</td><td>기준일, 대상 버전, 확인 출처 메모</td></tr>
+<tr><td>확인 산출물</td><td>답변마다 trace, screenshot, 테스트 결과, checklist, release packet 등 제출 가능한 증거를 1개 이상 지정합니다.</td><td>문항별 evidence 슬롯</td></tr>
+<tr><td>나쁜 답변/좋은 답변 비교</td><td>나쁜 답변은 키워드 암기와 단정, 좋은 답변은 전제·실패 모드·검증 증거·완료 기준을 포함하도록 비교합니다.</td><td>각 문항의 bad/good answer pair</td></tr>
+</table>
 </section>
 
 <footer>FRONTEND QA TRAINING PACKET · 프론트엔드 성능·진단 Q&amp;A · generated for handbook practice</footer>

@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#runtime-evidence-packet"><span class="code">EVIDENCE</span>운영 증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -221,6 +222,73 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
           <li>HPA를 CPU 하나로만 판단한다.</li>
         </ul>
       </section>
+<section id="runtime-evidence-packet">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>운영 증거 패킷</h2></div>
+<p class="lede">Kubernetes 운영 판단은 manifest 의도와 cluster 실제 상태를 같은 시간축에서 대조해야 한다. 이 문서의 실습 기준은 <strong>2026-07-09 기준 Kubernetes stable API(apps/v1 Deployment, policy/v1 PDB)와 kubectl/client-server minor skew 1단계 이내</strong>로 둔다. 실제 운영에서는 아래 첫 명령 출력으로 cluster 기준 버전을 먼저 고정한다.</p>
+<pre class="snippet-card"><code>kubectl version --short
+kubectl get nodes -o wide
+kubectl api-resources | grep -E 'deployments|poddisruptionbudgets'
+kubectl rollout status deploy/api -n production --timeout=120s</code></pre>
+<table>
+<tr><th>증거 종류</th><th>예시</th><th>판정 기준</th></tr>
+<tr><td>기준 버전·도구</td><td>Kubernetes server/client version, CNI, ingress controller, metrics-server, HPA controller, kubectl version</td><td>client/server skew가 크거나 PDB API가 policy/v1이 아니면 실습 결과를 그대로 production 기준으로 쓰지 않는다.</td></tr>
+<tr><td>명령 출력</td><td><code>kubectl describe pod</code>, <code>events --sort-by=.lastTimestamp</code>, <code>logs --previous</code>, <code>rollout history/status</code></td><td>event와 app log timestamp가 맞지 않으면 원인 선언을 보류하고 raw output을 보존한다.</td></tr>
+<tr><td>dashboard/query</td><td>restart count, OOMKilled, probe failure, endpoint count, rollout available replicas, p95/p99 latency</td><td>rollout 성공과 사용자 path 성공을 별도 지표로 닫는다.</td></tr>
+<tr><td>severity·rollback·승인</td><td>SEV1: endpoint 0 또는 auth/payment 5xx, SEV2: 한 zone/tenant degradation, SEV3: rollout 지연</td><td>SEV1/2는 rollout pause 또는 undo를 먼저 검토하고, PDB/selector/probe 변경은 service owner 승인을 요구한다.</td></tr>
+</table>
+<h3>Probe/PDB manifest 기준</h3>
+<pre class="snippet-card"><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 25%
+  template:
+    spec:
+      terminationGracePeriodSeconds: 45
+      containers:
+        - name: api
+          image: registry.example.com/api@sha256:...
+          ports:
+            - containerPort: 8080
+          startupProbe:
+            httpGet: { path: /startup, port: 8080 }
+            periodSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            httpGet: { path: /ready, port: 8080 }
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: { path: /live, port: 8080 }
+            periodSeconds: 10
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 10"]
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api-pdb
+spec:
+  minAvailable: 80%
+  selector:
+    matchLabels:
+      app: api</code></pre>
+<h3>Rollout 실패 실습</h3>
+<table>
+<tr><th>실습</th><th>확인 명령</th><th>기대 판독</th><th>복구</th></tr>
+<tr><td>readiness path를 잘못 배포한다.</td><td><code>kubectl describe pod</code>, <code>kubectl get endpoints api</code></td><td>pod는 Running이나 endpoint 수가 줄고 readiness event가 반복된다.</td><td><code>kubectl rollout pause</code> 후 probe path 수정 또는 <code>kubectl rollout undo</code>.</td></tr>
+<tr><td>PDB minAvailable을 replica 수와 같게 둔다.</td><td><code>kubectl get pdb</code>, drain dry-run event</td><td><code>disruptionsAllowed=0</code>으로 node drain이 막힌다.</td><td>replica 확대, PDB 완화, maintenance window 재승인.</td></tr>
+<tr><td>새 image가 CrashLoop를 만든다.</td><td><code>kubectl logs --previous</code>, <code>rollout history</code></td><td>새 revision label에서만 restart와 5xx가 증가한다.</td><td>rollout undo, image digest 고정, failing revision incident packet 작성.</td></tr>
+</table>
+</section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>
 PRINCIPLE : 운영 지식은 경로, 증거, 복구 절차로 검증한다.

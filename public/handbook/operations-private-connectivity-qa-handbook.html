@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN·Private Connectivity Q&amp;A</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>:root{--paper:#F6F7FA;--panel:#FFFFFF;--ink:#161D2B;--ink-soft:#465063;--line:#D8DCE6;--green:#24513A;--green-deep:#183827;--green-tint:#E8F2EC;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Pretendard Variable',Pretendard,-apple-system,sans-serif}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}.shell{display:grid;grid-template-columns:264px 1fr;max-width:1280px;margin:0 auto}nav{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:32px 20px 48px;background:var(--paper)}main{min-width:0;padding:0 56px 120px;background:var(--paper)}@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--green);font-weight:600;margin-bottom:4px}.nav-title{font-size:15px;font-weight:700;margin-bottom:24px;letter-spacing:0}nav a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-soft);padding:7px 8px;font-size:13.5px;line-height:1.4}nav a:hover{background:var(--green-tint);color:var(--green-deep)}nav a .code{font-family:var(--mono);font-size:10.5px;color:var(--green);flex-shrink:0;letter-spacing:.04em}header.hero{padding:72px 0 48px;border-bottom:1px solid var(--ink)}.hero-serial{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--green);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}.hero-serial span{border:1px solid var(--line);padding:3px 10px;background:var(--panel)}h1{font-size:clamp(30px,4.5vw,46px);font-weight:800;letter-spacing:0;line-height:1.18}.hero-sub{margin-top:18px;font-size:17px;color:var(--ink-soft);max-width:720px}.hero-meta{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.05em}section{padding-top:72px}.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:28px}.ch-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;flex-shrink:0}h2{font-size:26px;font-weight:800;letter-spacing:0}p{margin-bottom:14px}p.lede{font-size:17px;color:var(--ink-soft)}table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--panel);border:1px solid var(--line)}th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-align:left;font-weight:600;color:var(--green-deep);background:var(--green-tint);padding:10px 14px;border-bottom:1px solid var(--line)}td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}.semantic-card{background:var(--green-tint);border:1px solid var(--line);padding:22px 26px;margin:24px 0;font-size:14px;line-height:1.9}.semantic-card .sc-label{font-family:var(--mono);color:var(--green-deep);font-size:10.5px;letter-spacing:.14em;display:block;margin-bottom:8px}.snippet-card{font-family:var(--mono);background:var(--ink);color:#E7EAF1;padding:22px 26px;margin:24px 0;font-size:13.5px;line-height:1.9;overflow-x:auto;white-space:pre-wrap}footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em;line-height:2}</style>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">OPERATIONS Q&amp;A</div>
+  <div class="nav-title">VPN·Private Connectivity Q&amp;A</div>
+  <a href="#overview"><span class="code">GUIDE</span>훈련 방식</a>
+  <a href="#qa-1"><span class="code">Q01</span>site-to-site VPN IKE/IPsec 협상이 실패할 때 무엇을 먼저 결정하나요?</a>
+  <a href="#qa-2"><span class="code">Q02</span>client VPN 접속은 되는데 사내 대역 접근이 안 되면 무엇을 먼저 보나요?</a>
+  <a href="#qa-3"><span class="code">Q03</span>Direct Connect 회선 인수에서는 physical, VIF, BGP 중 어디를 먼저 확정하나요?</a>
+  <a href="#qa-4"><span class="code">Q04</span>BGP prefix propagation 이상은 어떤 prefix부터 좁히나요?</a>
+  <a href="#qa-5"><span class="code">Q05</span>route priority와 asymmetric routing은 어떤 방향부터 확인하나요?</a>
+  <a href="#qa-6"><span class="code">Q06</span>MTU/MSS 조각화 의심 시 어느 payload 경계를 먼저 검증하나요?</a>
+  <a href="#qa-7"><span class="code">Q07</span>customer gateway와 firewall 경계는 어디서 운영 책임을 나누나요?</a>
+  <a href="#qa-8"><span class="code">Q08</span>VPC peering 연결은 route, security group, DNS 제한 중 무엇을 먼저 보나요?</a>
+  <a href="#qa-9"><span class="code">Q09</span>PrivateLink 장애는 endpoint service, DNS, policy 중 무엇을 먼저 분리하나요?</a>
+  <a href="#qa-10"><span class="code">Q10</span>DNS forwarding과 Resolver endpoint 변경은 무엇을 먼저 검증하나요?</a>
+  <a href="#qa-11"><span class="code">Q11</span>packet capture로 사설 연결 장애를 증명할 때 capture 지점은 어떻게 고르나요?</a>
+  <a href="#qa-12"><span class="code">Q12</span>tunnel failover와 HA는 자동 전환을 믿기 전에 무엇을 검증하나요?</a>
+  <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
+  <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+  <a href="#qa-evidence-standards"><span class="code">EVIDENCE</span>Q&amp;A 최신성·증거 기준</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : OPERATIONS-PRIVATE-CONNECTIVITY-QA</span>
+    <span>SOURCE : VPN·Private Connectivity</span>
+    <span>MODE : INCIDENT · CHANGE · EVIDENCE</span>
+  </div>
+  <h1>VPN·Private Connectivity Q&amp;A</h1>
+  <p class="hero-sub">사설 연결 터널에서 판단 기준, 실패 신호, 완화 선택, 인계 증거를 실제 운영 언어로 답하는 Q&amp;A입니다.</p>
+  <div class="hero-meta">TRAINING : 30초 판단 → 90초 증거 확장 → 장애/변경 꼬리질문 방어</div>
+</header>
+
+<section id="overview">
+<div class="ch-head"><span class="ch-code">GUIDE</span><h2>훈련 방식</h2></div>
+<p class="lede">각 문항은 클라우드 서비스 이름 암기가 아니라 사용자 영향, 최근 변경, 신뢰 경계, 관측 증거, 복구 선택지를 연결해 답하는 훈련용입니다.</p>
+<div class="snippet-card"><code>operations_answer_loop:
+  1_user_impact: "누가 어떤 실패를 겪는지 먼저 말한다"
+  2_path_boundary: "request/change/recovery path 중 어디를 좁히는지 정한다"
+  3_first_evidence: "로그, 지표, trace, cloud readback 중 첫 증거를 말한다"
+  4_mitigation: "원인 확정 전 가능한 완화책을 분리한다"
+  5_follow_up: "rollback, runbook diff, postmortem action으로 닫는다"</code></div>
+</section>
+
+<section id="qa-1">
+<div class="ch-head"><span class="ch-code">Q01</span><h2>site-to-site VPN IKE/IPsec 협상이 실패할 때 무엇을 먼저 결정하나요?</h2></div>
+<p class="lede">먼저 운영 결정은 터널을 재협상시킬지, 변경을 되돌릴지, 고객 장비 설정을 동결할지입니다. 첫 경계는 IKE phase 1 proposal, IPsec phase 2 transform, PSK, peer public IP가 양쪽에서 같은지 확인하는 협상 메커니즘입니다. proposal mismatch나 NAT-T/DPD 불일치가 있으면 터널 상태가 간헐적으로 up이어도 실제 payload는 흐르지 않을 수 있으므로 cloud tunnel log와 customer gateway 로그를 같은 시각으로 맞춥니다.</p>
+<p>터널 up/down 색만 보면 암호화 알고리즘, lifetime, PFS group, PSK 변경 뒤 재협상이 반복되는 실패를 놓칩니다. 그 상태에서 라우팅이나 애플리케이션을 먼저 고치면 원인 장비가 아닌 구간에 변경을 쌓게 됩니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>IKE 협상 실패는 어떤 로그부터 대조하나요?</td><td>양쪽 IKE 로그에서 같은 peer IP와 같은 negotiation id를 먼저 맞춥니다. 판단 기준은 phase 1이 끝나기 전이면 proposal, PSK, NAT-T 문제이고 phase 2에서 멈추면 transform set, PFS, traffic selector 문제입니다. 다음 조치는 최근 crypto policy 변경 ticket을 붙이고 한쪽만 바뀐 값을 되돌리는 것입니다.</td></tr>
+<tr><td>터널이 up인데 통신이 안 되면 정상과 위험을 어떻게 나누나요?</td><td>정상은 IKE SA, IPsec SA, byte counter, 암호화된 packet capture가 같은 시각에 증가하는 상태입니다. SA는 있는데 byte counter가 0이면 selector나 route가 잘못된 실패 모드이고, counter는 증가하지만 응답이 없으면 반대 방향 방화벽이나 return route를 봅니다. 증거는 tunnel metric과 양끝 packet capture를 같은 5분 창으로 묶습니다.</td></tr>
+<tr><td>협상 오판을 정리할 때 어떤 기록이 필요하나요?</td><td>남길 기록은 정상 proposal 값, 실패 proposal 값, 변경 시각, 재협상 성공 시각입니다. 실패 모드가 lifetime 차이였으면 양쪽 표준값을 runbook에 고정하고, PSK 문제였으면 secret rotation 절차와 적용 증거를 분리합니다. 마지막 확인은 새 SA 생성 로그와 실제 업무 CIDR ping 또는 TCP probe 결과로 닫습니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+IKE negotiation log, IPsec SA state, customer gateway log, tunnel outside IP, recent crypto policy change
+</div>
+</section>
+
+<section id="qa-2">
+<div class="ch-head"><span class="ch-code">Q02</span><h2>client VPN 접속은 되는데 사내 대역 접근이 안 되면 무엇을 먼저 보나요?</h2></div>
+<p class="lede">운영 결정은 사용자를 계속 접속시킬지, 특정 그룹 권한을 되돌릴지, split-tunnel route를 임시로 줄일지입니다. 첫 경계는 인증 성공 이후 authorization rule, client route push, 보안 그룹, 대상 subnet route가 이어지는 client VPN 메커니즘입니다. 로그인 성공만 정상으로 보면 사용자는 연결된 것처럼 보이지만 허용 rule이나 pushed route가 빠져 업무망에 도달하지 못합니다.</p>
+<p>IdP 인증 성공 로그만 보고 종료하면 그룹 claim 누락, authorization rule 우선순위, client CIDR 충돌, split tunnel 누락을 뒤늦게 발견합니다. 특히 특정 부서만 실패하면 네트워크 공통 장애가 아니라 권한 매핑 장애일 가능성이 큽니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>인증과 권한 문제는 어떤 기준으로 분리하나요?</td><td>connection log가 authentication success를 남기고 곧바로 authorization failed를 남기면 IdP가 아니라 client VPN rule 문제로 분리합니다. 반대로 SAML/OIDC assertion에 필수 group claim이 없으면 권한 rule을 고치기 전에 IdP mapping을 확인합니다. 다음 조치는 실패 사용자 한 명의 claim, rule id, 대상 CIDR을 incident에 붙이는 것입니다.</td></tr>
+<tr><td>접속 후 route 누락은 어떻게 확인하나요?</td><td>클라이언트가 받은 route table과 endpoint route authorization을 비교합니다. 판단 기준은 대상 CIDR이 client에 push됐고 VPC route table에도 client CIDR return path가 있어야 한다는 점입니다. 누락되면 split tunnel 설정을 임시로 되돌리거나 업무 CIDR만 추가한 뒤 traceroute와 Flow Logs로 확인합니다.</td></tr>
+<tr><td>client VPN 변경 승인 전 중단 기준은 무엇인가요?</td><td>중단 기준은 테스트 계정이 인증, authorization, route push, 대상 TCP 연결을 모두 통과하지 못하는 경우입니다. 증거는 connection log, 클라이언트 route 출력, 대상 subnet Flow Logs accept 행입니다. 실패가 그룹별로 갈리면 전체 배포를 멈추고 영향 그룹만 이전 rule set으로 되돌립니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+client VPN connection log, authorization rule export, pushed route list, IdP group claim, endpoint security group
+</div>
+</section>
+
+<section id="qa-3">
+<div class="ch-head"><span class="ch-code">Q03</span><h2>Direct Connect 회선 인수에서는 physical, VIF, BGP 중 어디를 먼저 확정하나요?</h2></div>
+<p class="lede">운영 결정은 회선을 인수 가능한 상태로 볼지, 통신사 또는 고객 장비로 반려할지입니다. 첫 경계는 physical port light, LAG/member state, VLAN tagging, virtual interface state, BGP session state가 순서대로 연결되는 Direct Connect 메커니즘입니다. physical down과 BGP down을 섞으면 통신사 장애와 라우터 설정 장애를 같은 작업으로 처리하게 됩니다.</p>
+<p>포트가 available이어도 VLAN 태그가 다르거나 VIF가 wrong account에 붙으면 BGP는 절대 올라오지 않습니다. BGP만 재시작하면 physical flap, optic error, VLAN mismatch 같은 하위 계층 증거가 사라질 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>physical 장애와 VIF 장애는 어떤 증거로 나누나요?</td><td>physical 장애는 port down, optic alarm, LAG member down, provider NOC ticket로 판단합니다. port는 up인데 VIF가 down이면 VLAN id, account ownership, accepted VIF 상태를 봅니다. 다음 조치는 하위 계층 증거를 먼저 고정하고 BGP 변경은 VIF가 available인 뒤에만 실행하는 것입니다.</td></tr>
+<tr><td>BGP session이 idle이면 무엇을 먼저 확인하나요?</td><td>BGP idle에서는 peer IP, ASN, MD5 password, allowed TCP 179 path를 먼저 확인합니다. 판단 기준은 VIF가 available이고 양쪽 loopback 또는 link-local neighbor가 같은 주소쌍을 보는지입니다. 실패하면 라우터 ACL과 BGP neighbor 설정 diff를 남기고 session reset은 한쪽씩 수행합니다.</td></tr>
+<tr><td>Direct Connect 인수 문서에는 어떤 정상 예시가 들어가야 하나요?</td><td>정상 예시는 port up, VIF available, BGP established, advertised/received prefix 수, 테스트 CIDR 왕복 결과가 한 세트여야 합니다. 실패 모드는 physical, VLAN, BGP, prefix 단계별로 적고 각 단계의 확인 명령을 붙입니다. 다음 담당자는 이 문서로 provider escalation과 라우터 변경 중 어느 쪽을 열지 바로 결정할 수 있어야 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+Direct Connect port state, LAG member state, VIF state, VLAN id, BGP session state, provider ticket
+</div>
+</section>
+
+<section id="qa-4">
+<div class="ch-head"><span class="ch-code">Q04</span><h2>BGP prefix propagation 이상은 어떤 prefix부터 좁히나요?</h2></div>
+<p class="lede">운영 결정은 prefix 광고를 유지할지, 특정 대역을 withdraw할지, 더 구체적인 route로 우회할지입니다. 첫 메커니즘은 local advertise list, BGP import/export policy, route filter, cloud route table propagation입니다. 한쪽에서만 prefix가 보이면 터널이나 회선이 살아 있어도 대상 대역은 blackhole 또는 잘못된 attachment로 갈 수 있습니다.</p>
+<p>세션 established만 보고 정상으로 판단하면 prefix filter, max-prefix, route map, TGW propagation 누락을 놓칩니다. 잘못 광고된 넓은 CIDR은 정상 대역까지 흡수해 영향 반경을 키울 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>prefix가 한쪽에만 보이면 어떤 증거를 먼저 잡나요?</td><td>advertised-routes와 received-routes 출력을 같은 neighbor 기준으로 저장합니다. 판단 기준은 내가 광고한 prefix가 상대 received에 있고, 상대가 광고한 return prefix가 내 route table에 설치됐는지입니다. 빠진 쪽이 있으면 route policy diff와 최근 prefix-list 변경을 먼저 되돌림 후보로 올립니다.</td></tr>
+<tr><td>즉시 완화는 withdraw와 더 구체적인 route 중 무엇을 고르나요?</td><td>잘못 광고된 넓은 CIDR이 피해를 만들면 withdraw가 우선입니다. 특정 업무 대역만 우회해야 하고 return path가 준비돼 있으면 더 구체적인 prefix를 임시 광고합니다. 두 경우 모두 증거는 route table before/after와 영향 CIDR 목록이며, max-prefix나 route dampening 위험이 있으면 변경 폭을 줄입니다.</td></tr>
+<tr><td>BGP propagation 재발 방지는 무엇으로 닫나요?</td><td>재발 방지는 prefix-list 변경 리뷰와 route count 알림으로 닫습니다. 실패 모드가 filter 누락이면 승인 기준에 expected advertised/received prefix 수를 넣고, 과다 광고였으면 max-prefix threshold와 rollback 명령을 문서화합니다. 다음 검증은 cloud route table과 customer router RIB가 같은 prefix 결론을 내는지 비교합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+BGP advertised routes, received routes, route policy diff, TGW route table propagation, max-prefix alert
+</div>
+</section>
+
+<section id="qa-5">
+<div class="ch-head"><span class="ch-code">Q05</span><h2>route priority와 asymmetric routing은 어떤 방향부터 확인하나요?</h2></div>
+<p class="lede">운영 결정은 active 경로를 유지할지, 더 낮은 우선순위 경로를 차단할지, return route를 수정할지입니다. 첫 경계는 longest prefix, static route, propagated route, local preference, AS path, appliance insertion이 실제로 선택한 next hop입니다. 요청 방향과 응답 방향이 다른 보안 장비를 지나면 stateful firewall이 정상 세션을 drop할 수 있습니다.</p>
+<p>한 방향 traceroute만 보면 응답이 다른 VPN, Direct Connect, NAT 또는 firewall cluster로 돌아가는 실패를 놓칩니다. 우선순위가 의도와 다르면 일부 CIDR만 간헐적으로 실패해 애플리케이션 timeout처럼 보입니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>비대칭 경로는 어떤 테스트로 확정하나요?</td><td>같은 5-tuple에 대해 cloud에서 고객망 방향, 고객망에서 cloud 방향 traceroute와 packet capture를 동시에 잡습니다. 판단 기준은 SYN과 SYN-ACK가 같은 보안 상태 장비를 지나야 한다는 점입니다. 응답만 다른 회선으로 보이면 return route 우선순위나 firewall state sync를 다음 조치로 잡습니다.</td></tr>
+<tr><td>static route와 BGP route가 충돌하면 무엇을 우선 보나요?</td><td>effective route table에서 실제 선택된 next hop과 prefix 길이를 먼저 봅니다. 더 구체적인 static route가 BGP보다 앞서면 장애 범위는 해당 CIDR로 좁혀지고, 넓은 static route가 있으면 여러 업무망을 흡수할 수 있습니다. 증거는 route selection snapshot과 변경 ticket이며, 완화는 임시 static route 제거 또는 더 구체적인 정상 route 추가입니다.</td></tr>
+<tr><td>route priority 수정 뒤 정상 선언 조건은 무엇인가요?</td><td>정상 선언은 양방향 traceroute, firewall session established 로그, Flow Logs accept, 업무 포트 probe가 모두 같은 경로를 가리킬 때만 합니다. 실패 모드가 비대칭이었다면 한 방향 ping 성공은 충분하지 않습니다. 다음 조치는 선택된 route와 backup route 우선순위를 runbook 표로 남기는 것입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+effective route table, BGP local preference, AS path, traceroute both directions, firewall session log
+</div>
+</section>
+
+<section id="qa-6">
+<div class="ch-head"><span class="ch-code">Q06</span><h2>MTU/MSS 조각화 의심 시 어느 payload 경계를 먼저 검증하나요?</h2></div>
+<p class="lede">운영 결정은 MSS clamping을 적용할지, PMTUD 차단을 풀지, 애플리케이션 재시도보다 네트워크 경로를 먼저 고칠지입니다. 첫 메커니즘은 VPN/IPsec overhead, Direct Connect MTU, firewall ICMP fragmentation-needed 처리, TCP MSS negotiation입니다. 작은 packet은 통과하지만 TLS handshake 이후 큰 payload가 멈추면 조각화 또는 PMTUD 실패를 우선 봅니다.</p>
+<p>HTTP status나 DB timeout만 보면 네트워크 payload 크기 조건을 놓칩니다. ICMP type 3 code 4가 차단되거나 MSS clamp가 한쪽에만 적용되면 특정 파일 업로드, 백업, replication만 실패할 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>MTU 실패는 어떤 probe로 재현하나요?</td><td>DF bit를 켠 ping 또는 tracepath로 경로별 최대 payload를 찾습니다. 판단 기준은 업무 payload보다 작은 MTU에서 fragmentation-needed 응답이 돌아오거나, 응답이 차단돼 probe가 timeout되는지입니다. 다음 조치는 ICMP 허용 정책과 MSS clamp 후보값을 함께 제시하는 것입니다.</td></tr>
+<tr><td>MSS clamp 변경은 언제 승인하나요?</td><td>승인 기준은 SYN/SYN-ACK capture에서 협상 MSS가 낮아지고, 대용량 업무 요청의 retransmission이 줄어드는 것입니다. 위험은 값을 과도하게 낮춰 처리량을 떨어뜨리거나 한쪽 장비에만 적용해 비대칭 결과를 만드는 경우입니다. 변경 전후 capture와 throughput 샘플을 같은 incident에 남깁니다.</td></tr>
+<tr><td>MTU/MSS 조치 후에도 실패하면 다음 경계는 어디인가요?</td><td>MTU probe와 MSS capture가 정상인데 업무가 실패하면 TLS record size, application timeout, storage replication chunk 같은 상위 payload 조건으로 넘어갑니다. 단, packet capture에 retransmission이나 out-of-order가 남아 있으면 네트워크 경계를 닫지 않습니다. 다음 조치는 성공 크기와 실패 크기를 표로 남겨 재현 조건을 고정하는 것입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+DF-bit MTU probe, TCP MSS value, packet capture retransmission, firewall ICMP policy, interface MTU
+</div>
+</section>
+
+<section id="qa-7">
+<div class="ch-head"><span class="ch-code">Q07</span><h2>customer gateway와 firewall 경계는 어디서 운영 책임을 나누나요?</h2></div>
+<p class="lede">운영 결정은 cloud 팀이 터널 설정을 바꿀지, 고객 네트워크 팀에 firewall/NAT/ACL 조치를 요청할지입니다. 첫 경계는 customer gateway public IP, NAT device, firewall policy, BGP neighbor, 내부 LAN route가 만나는 지점입니다. cloud tunnel이 정상이어도 고객 firewall이 IKE, ESP, UDP 4500, 업무 포트를 막으면 사설 연결은 실패합니다.</p>
+<p>고객 장비 변경 ticket을 확인하지 않으면 공인 IP NAT 변경, firewall policy reorder, HA pair failover 뒤 state 손실을 놓칩니다. cloud 쪽 로그가 비어 있는 경우도 실제로는 고객 장비가 앞에서 drop한 결과일 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>고객 방화벽 차단은 어떤 증거로 요청하나요?</td><td>요청에는 시간대, src/dst IP, port, protocol, cloud tunnel outside IP, packet capture를 넣습니다. 판단 기준은 cloud가 packet을 보냈는데 고객 firewall hit count나 drop log가 같은 tuple을 남기는지입니다. 다음 조치는 임시 permit rule의 만료 시각과 영구 rule owner를 ticket에 명시하는 것입니다.</td></tr>
+<tr><td>NAT 뒤 customer gateway는 무엇이 위험한가요?</td><td>위험은 peer IP가 바뀌거나 UDP 4500 translation이 끊겨 IKE peer가 다른 장비로 보이는 경우입니다. 증거는 NAT translation table, IKE peer 로그, cloud에 등록된 customer gateway IP입니다. 불일치하면 cloud 설정 변경보다 NAT 고정 또는 고객 장비 HA 설정을 먼저 조치합니다.</td></tr>
+<tr><td>고객 장비 인계에는 어떤 정상/비정상 예시가 필요하나요?</td><td>정상 예시는 IKE established, BGP established, firewall allow hit 증가, 업무 포트 성공 probe입니다. 비정상 예시는 IKE no proposal, NAT peer mismatch, firewall deny, return route missing으로 나눕니다. 인계 문서는 고객 담당자, 변경 승인 경로, 긴급 rollback 연락처까지 포함해야 장애 중 책임 경계가 흐려지지 않습니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+customer gateway config, firewall policy hit count, NAT translation table, customer change ticket, cloud tunnel log
+</div>
+</section>
+
+<section id="qa-8">
+<div class="ch-head"><span class="ch-code">Q08</span><h2>VPC peering 연결은 route, security group, DNS 제한 중 무엇을 먼저 보나요?</h2></div>
+<p class="lede">운영 결정은 peering을 유지할지, route를 추가할지, DNS resolution 설정을 바꿀지, 다른 연결 방식으로 전환할지입니다. 첫 메커니즘은 accepter/requester 상태, 양쪽 route table, security group source, DNS resolution option입니다. Peering은 transitive routing을 지원하지 않으므로 다른 VPC나 온프레미스 경유를 기대하면 설계 자체가 실패합니다.</p>
+<p>연결 active만 보고 정상이라고 하면 양쪽 route 누락, SG reference 제약, CIDR overlap, private DNS 미해결을 놓칩니다. 특히 A-VPC와 B-VPC가 붙어 있어도 B를 거쳐 C로 가는 경로는 생기지 않습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>peering route 누락은 어떻게 바로 확인하나요?</td><td>양쪽 route table에 상대 CIDR이 peering connection id를 next hop으로 갖는지 확인합니다. 한쪽만 있으면 요청은 나가도 응답이 돌아오지 않는 실패 모드입니다. 다음 조치는 accepter와 requester route table association까지 확인한 뒤 최소 대상 subnet부터 route를 추가하는 것입니다.</td></tr>
+<tr><td>security group이나 DNS 제한은 언제 의심하나요?</td><td>route는 양쪽에 있는데 TCP가 timeout이면 security group, NACL, endpoint listener를 봅니다. IP 접속은 되지만 이름 접속만 실패하면 peering DNS resolution option과 private hosted zone association을 확인합니다. 증거는 Flow Logs action, SG rule id, resolver query log이며, 조치는 이름 해석과 네트워크 허용을 분리해 적용합니다.</td></tr>
+<tr><td>peering으로 해결하면 안 되는 요구는 무엇인가요?</td><td>transitive routing, 중앙 방화벽 경유, 온프레미스 전파, 다수 VPC 허브 연결이 필요하면 peering이 맞지 않습니다. 판단 기준은 목적지가 직접 연결된 두 VPC를 벗어나는지입니다. 그런 경우 다음 조치는 Transit Gateway, PrivateLink, 또는 라우팅 허브 설계를 비교하고 peering route 추가를 중단하는 것입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+peering connection state, requester/accepter route tables, security group rules, DNS resolution option, VPC CIDR inventory
+</div>
+</section>
+
+<section id="qa-9">
+<div class="ch-head"><span class="ch-code">Q09</span><h2>PrivateLink 장애는 endpoint service, DNS, policy 중 무엇을 먼저 분리하나요?</h2></div>
+<p class="lede">운영 결정은 endpoint 연결 승인을 바꿀지, DNS override를 되돌릴지, endpoint policy를 수정할지입니다. 첫 경계는 consumer interface endpoint, private DNS, endpoint service acceptance, NLB target health, endpoint policy입니다. DNS가 endpoint ENI를 가리키지 않거나 service acceptance가 pending이면 네트워크 경로가 있어도 서비스에 닿지 않습니다.</p>
+<p>NLB target만 보면 consumer 계정의 endpoint policy deny, private DNS 미활성, service acceptance pending을 놓칩니다. 반대로 endpoint ENI가 healthy여도 provider target이 unhealthy면 소비자 쪽 보안 그룹 변경으로 해결되지 않습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>PrivateLink DNS 문제는 어떤 출력으로 확인하나요?</td><td>consumer VPC에서 서비스 이름을 조회해 interface endpoint ENI private IP로 응답하는지 봅니다. public IP나 다른 private zone으로 해석되면 private DNS, PHZ override, resolver rule 충돌을 의심합니다. 다음 조치는 DNS 응답, endpoint id, resolver query log를 붙이고 잘못된 override를 되돌리는 것입니다.</td></tr>
+<tr><td>endpoint policy deny와 provider 장애는 어떻게 나누나요?</td><td>consumer endpoint policy와 provider NLB target health를 동시에 봅니다. policy deny는 특정 principal, action, resource 조건에서만 실패하고 provider 장애는 여러 consumer가 같은 target health 문제를 봅니다. 증거는 endpoint policy evaluation, connection attempt log, target group health이며 다음 조치는 소비자 정책 수정과 provider target 복구를 분리하는 것입니다.</td></tr>
+<tr><td>endpoint service 승인 변경 뒤 정상 조건은 무엇인가요?</td><td>정상 조건은 endpoint connection이 accepted, DNS가 ENI IP로 해석, 보안 그룹이 consumer source를 허용, provider target이 healthy인 상태입니다. 실패 모드가 acceptance pending이면 consumer는 timeout처럼 보일 수 있습니다. 최종 확인은 consumer subnet에서 TLS 또는 TCP probe와 provider access log의 같은 request id로 닫습니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+interface endpoint state, endpoint service acceptance, private DNS setting, endpoint policy, NLB target health, DNS query result
+</div>
+</section>
+
+<section id="qa-10">
+<div class="ch-head"><span class="ch-code">Q10</span><h2>DNS forwarding과 Resolver endpoint 변경은 무엇을 먼저 검증하나요?</h2></div>
+<p class="lede">운영 결정은 forwarding rule을 배포할지, 특정 domain rule을 되돌릴지, inbound/outbound endpoint 용량을 늘릴지입니다. 첫 메커니즘은 Resolver rule domain suffix, outbound endpoint ENI, 온프레미스 resolver, inbound endpoint return path입니다. 네트워크 터널이 정상이어도 DNS UDP/TCP 53 경로와 rule association이 틀리면 이름 해석만 실패합니다.</p>
+<p>ping이나 TCP 업무 포트만 확인하면 조건부 forwarder 누락, resolver endpoint SG 차단, 온프레미스 DNS recursion 거부를 놓칩니다. 특정 suffix만 실패하면 사설 연결 장애가 아니라 rule 우선순위 또는 zone ownership 문제일 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>forwarding rule 적용 여부는 어디서 확인하나요?</td><td>VPC association과 domain suffix match를 먼저 확인합니다. 판단 기준은 질의한 이름이 가장 구체적인 Resolver rule에 매칭되고 outbound endpoint ENI를 통해 온프레미스 DNS로 나가는지입니다. 증거는 Resolver query log와 온프레미스 DNS query log이며, 누락되면 rule association을 되돌리거나 suffix를 더 구체화합니다.</td></tr>
+<tr><td>Resolver endpoint 보안 그룹 문제는 어떤 증상인가요?</td><td>query log에 outbound 시도는 있는데 응답이 없거나 TCP fallback이 실패하면 endpoint SG, NACL, 온프레미스 firewall의 53/UDP와 53/TCP를 봅니다. 판단 기준은 양방향 DNS packet이 endpoint ENI와 고객 resolver에 모두 보여야 한다는 점입니다. 다음 조치는 UDP와 TCP를 모두 허용하고 큰 DNS 응답 재시도를 확인하는 것입니다.</td></tr>
+<tr><td>DNS forwarding 변경의 rollback 기준은 무엇인가요?</td><td>rollback 기준은 핵심 suffix의 SERVFAIL/NXDOMAIN 증가, query latency 급증, 온프레미스 resolver timeout입니다. 증거는 변경 전후 query log 샘플과 synthetic lookup 결과입니다. 다음 조치는 rule을 이전 target resolver로 되돌리고 TTL 영향이 끝날 때까지 public/private 응답 차이를 모니터링하는 것입니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+Resolver query log, forwarding rule association, outbound endpoint ENI state, security group for port 53, on-prem DNS log
+</div>
+</section>
+
+<section id="qa-11">
+<div class="ch-head"><span class="ch-code">Q11</span><h2>packet capture로 사설 연결 장애를 증명할 때 capture 지점은 어떻게 고르나요?</h2></div>
+<p class="lede">운영 결정은 어느 팀의 경계에서 packet이 사라졌는지 확정하고 다음 조치 소유자를 정하는 것입니다. 첫 메커니즘은 source host, cloud ENI, tunnel/VIF edge, customer gateway, destination host를 같은 tuple로 관측하는 것입니다. 한 지점 capture만 있으면 drop 위치가 아니라 관측 위치만 증명합니다.</p>
+<p>평균 지표나 한쪽 tcpdump만 보면 요청 미발송, 중간 drop, 응답 경로 누락을 구분하지 못합니다. 시간 동기화가 안 된 capture는 같은 packet인지 증명하지 못해 고객사와 cloud 팀이 서로 책임을 넘기게 됩니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>capture 필터는 어떤 형태로 남기나요?</td><td>필터는 src IP, dst IP, port, protocol, 시간 범위를 포함한 5-tuple로 남깁니다. 판단 기준은 같은 SYN 또는 DNS query가 source, 중간 경계, destination 중 어디까지 보였는지입니다. 다음 조치는 pcap 파일명과 필터 명령을 incident에 붙여 다른 담당자가 같은 조건으로 재현하게 하는 것입니다.</td></tr>
+<tr><td>SYN은 보이는데 응답이 없으면 무엇을 판단하나요?</td><td>SYN이 destination 앞까지 보이고 SYN-ACK가 없으면 대상 host, local firewall, listener 상태를 봅니다. SYN-ACK가 destination에서 나갔는데 cloud 쪽에 없으면 return route나 중간 firewall drop입니다. 증거는 양방향 capture와 Flow Logs action이며, 다음 조치는 사라진 첫 경계의 소유자에게 packet 번호와 timestamp를 전달하는 것입니다.</td></tr>
+<tr><td>capture 증거로 정상 복구를 어떻게 닫나요?</td><td>정상 복구는 같은 5-tuple에서 request와 response가 양쪽 경계를 모두 통과하고, 애플리케이션 성공 로그가 같은 시각에 남아야 합니다. 실패 모드가 drop rule이었다면 rule id와 hit count 감소를 함께 기록합니다. pcap 원본, 요약 표, 최종 probe 결과를 남겨 재발 때 같은 구간부터 보게 합니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+five-tuple packet capture, synchronized timestamps, Flow Logs, firewall drop log, tcpdump filter, request id
+</div>
+</section>
+
+<section id="qa-12">
+<div class="ch-head"><span class="ch-code">Q12</span><h2>tunnel failover와 HA는 자동 전환을 믿기 전에 무엇을 검증하나요?</h2></div>
+<p class="lede">운영 결정은 장애 터널을 강제로 내릴지, backup 터널로 우회시킬지, 자동 failback을 막을지입니다. 첫 메커니즘은 두 tunnel의 health, BGP metric/local preference, DPD, route propagation, 고객 장비 HA state입니다. backup 터널이 up이어도 route 우선순위와 return path가 준비되지 않으면 failover 순간 일부 트래픽만 살아남습니다.</p>
+<p>터널 두 개가 up이라는 사실만 믿으면 active/standby 정책, BGP convergence 지연, 고객 firewall state 손실, failback flap을 놓칩니다. 자동 전환이 반복되면 장애보다 더 넓은 지연과 세션 끊김을 만들 수 있습니다.</p>
+<table>
+<tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
+<tr><td>failover가 실제로 일어났는지 어떤 순서로 확인하나요?</td><td>터널 health event, BGP best path 변경, route table next hop 변경, 업무 probe 성공 순서로 확인합니다. 판단 기준은 control plane 이벤트만이 아니라 data plane traffic이 backup 터널로 지나간 증거가 있어야 한다는 점입니다. 증거는 event log와 packet capture 또는 byte counter를 같은 시각으로 맞춥니다.</td></tr>
+<tr><td>자동 failback은 언제 막아야 하나요?</td><td>primary 터널이 flapping 중이거나 고객 HA pair가 state를 잃는 동안에는 자동 failback을 막습니다. 실패 모드는 경로가 몇 분마다 바뀌며 장기 세션과 replication을 끊는 것입니다. 다음 조치는 primary 원인 확인 전까지 local preference를 고정하고 failback 해제 조건을 장애 기록에 적는 것입니다.</td></tr>
+<tr><td>HA drill 뒤에는 어떤 runbook 항목을 갱신하나요?</td><td>갱신 항목은 전환 소요 시간, 손실된 세션 유형, BGP convergence 시간, 수동 우회 명령, 되돌림 조건입니다. 판단 기준은 RTO 안에 업무 probe가 회복됐는지와 backup 경로가 과부하되지 않았는지입니다. drill 증거는 before/after route table, tunnel byte counter, 사용자 영향 표로 남깁니다.</td></tr>
+</table>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS EVIDENCE</span>
+tunnel health metric, BGP path preference, failover event log, DPD timeout, route table before/after, customer HA state
+</div>
+</section>
+
+<section id="drill">
+<div class="ch-head"><span class="ch-code">DRILL</span><h2>운영 답변 반복</h2></div>
+<table>
+<tr><th>라운드</th><th>방법</th><th>통과 기준</th></tr>
+<tr><td>1회차</td><td>각 질문을 30초 장애 판단으로 녹음한다.</td><td>사용자 영향, 경계, 첫 증거가 빠지지 않는다.</td></tr>
+<tr><td>2회차</td><td>꼬리질문 3개를 90초 답변으로 확장한다.</td><td>정상/비정상 판독 기준과 완화책을 말한다.</td></tr>
+<tr><td>3회차</td><td>실제 경험 또는 대체 drill 계획으로 연결한다.</td><td>직접 경험, 추론, 검증 계획을 섞지 않고 구분한다.</td></tr>
+</table>
+</section>
+
+<section id="rubric">
+<div class="ch-head"><span class="ch-code">RUBRIC</span><h2>통과 기준</h2></div>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS QA TRAINING PACKET</span>
+통과 답변은 서비스 이름이나 명령어 나열에서 멈추지 않고 사용자 영향, 경계, 증거, 완화, 복구, 재발 방지 action을 함께 닫는다.
+</div>
+</section>
+
+<section id="qa-evidence-standards">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>Q&amp;A 최신성·증거 기준</h2></div>
+<p class="lede">사설 연결 Q&amp;A는 2026-07-09 기준으로 답한다. 관련 본문은 <a href="operations-private-connectivity-handbook.html#evidence-packet">검증 기준·증거 패킷</a>이며, cloud와 고객망 양쪽 증거가 맞아야 좋은 답변이다.</p>
+<table>
+<tr><th>확인 영역</th><th>확인 명령/증거</th><th>좋은 답변</th><th>나쁜 답변</th></tr>
+<tr><td>DNS/TLS</td><td><code>dig</code> forwarding 결과, private resolver log, <code>openssl s_client</code> private endpoint 확인</td><td>사설 DNS answer와 실제 TLS endpoint가 같은 연결 경로를 쓰는지 확인한다.</td><td>VPN이 connected라서 private DNS도 정상이라고 말한다.</td></tr>
+<tr><td>LB health·packet path</td><td>backend health, firewall hit/drop, pcap, Flow Logs, MTU/MSS 테스트</td><td>source, tunnel, destination 중 어느 지점까지 packet이 보였는지 말한다.</td><td>한쪽 방화벽 로그만 보고 상대방 문제라고 넘긴다.</td></tr>
+<tr><td>BGP·failover</td><td>BGP neighbor summary, advertised/received prefix, route propagation, failover drill log</td><td>primary/secondary 경로, prefix 우선순위, asymmetric routing 여부를 구분한다.</td><td>BGP 세션이 Established라서 업무 트래픽도 정상이라고 말한다.</td></tr>
+</table>
+</section>
+
+<footer>OPERATIONS QA TRAINING PACKET · VPN·Private Connectivity Q&amp;A · generated for handbook practice</footer>
+</main>
+</div>
+</body>
+</html>

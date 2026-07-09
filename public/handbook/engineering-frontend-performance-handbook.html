@@ -40,6 +40,7 @@
   <a href="#devtools-ch8"><span class="code">DT-08</span>회귀 재현 패킷</a>
   <a href="#devtools-ch9"><span class="code">DT-09</span>AI 성능 진단 방법론</a>
   <a href="#performance-glossary"><span class="code">GLOSSARY</span>성능 용어 사전</a>
+  <a href="#reading-path"><span class="code">PATH</span>읽기 경로</a>
 </nav>
 <main>
 <header class="hero">
@@ -627,6 +628,20 @@
 <div class="semantic-card evidence-card"><span class="sc-label">AI에 줄 성능 패킷 템플릿</span><br>Problem: 어떤 사용자 행동이 얼마나 느린가<br>Environment: browser, device class, CPU/network throttling, build mode<br>Metrics: LCP/INP/CLS, p50/p75/p95, long task, commit duration, DOM nodes, heap<br>Evidence: trace summary, Profiler summary, Network waterfall, RUM segment<br>Code scope: 관련 컴포넌트와 상태 소유권<br>Constraints: 접근성, UX, 데이터 정합성, rollout 위험<br>Ask: 원인 후보, 확인 증거, 가장 작은 실험, before/after 판정 기준</div>
 <div class="callout warn"><span class="co-label">AI 사용 한계</span><p>AI가 만든 성능 결론은 측정으로 검증하기 전까지 가설입니다. 특히 browser trace, Profiler export, RUM 데이터는 누락된 맥락이 많기 때문에 AI 답변을 그대로 merge하지 말고 반드시 같은 조건에서 before/after를 비교합니다.</p></div>
 </section>
+
+<section id="reading-path">
+<div class="ch-head"><span class="ch-code">PATH</span><h2>읽기 경로와 품질 보강 패킷</h2></div>
+<p class="lede">이 문서는 번들링, 렌더링, 지표, DevTools가 함께 있어 과밀합니다. 아래 순서로 읽고 각 단계의 산출물을 남기면 개념 학습과 실전 진단이 섞이지 않습니다.</p>
+<table>
+<tr><th>순서</th><th>읽을 범위</th><th>확인 산출물</th></tr>
+<tr><td>1. 개념</td><td>렌더링 모델, SSR/Hydration, bundle/code splitting을 먼저 읽고 병목 후보를 분류합니다.</td><td>병목 가설 3개와 영향 route</td></tr>
+<tr><td>2. 지표</td><td>Core Web Vitals, Lighthouse, Lab vs Field, 성능 예산을 읽어 p75 기준과 guardrail을 고정합니다.</td><td>2026-07-09 기준 지표 표, target browser, 예산</td></tr>
+<tr><td>3. DevTools</td><td>Network, Performance, Memory, React Profiler를 사용해 waterfall, long task, commit duration을 캡처합니다.</td><td>trace, profiler export, network HAR, screenshot</td></tr>
+<tr><td>4. 실전 진단</td><td>LCP/INP/CLS 또는 큰 table 렌더링 문제 하나를 fixture로 재현하고 개선 전후를 비교합니다.</td><td>before/after 수치, 변경 diff, 회귀 임계값</td></tr>
+</table>
+<div class="callout"><span class="co-label">완료 기준</span><p>성능 개선은 점수 하나가 아니라 사용자 영향, field/lab 차이, 재현 fixture, DevTools evidence, rollback 기준이 같이 제출될 때 통과입니다.</p></div>
+</section>
+
 <footer>DEVTOOLS HANDBOOK · V1 · 2026-06</footer>
 
 <section id="performance-glossary">

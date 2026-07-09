@@ -60,6 +60,7 @@
   <a href="#personalfe-ch5"><span class="code">FE-PER-04</span>포트폴리오 문장</a>
   <a href="#personalfe-ch6"><span class="code">FE-PER-05</span>대체 증거</a>
   <a href="#personalfe-ch7"><span class="code">FE-PER-06</span>심화 드릴 연결</a>
+  <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
 </nav>
 <main>
 <header class="hero">
@@ -964,6 +965,19 @@ TypeScript 타입은 빌드 후 사라지므로 외부 API 응답, localStorage,
 <h3>짧은 답변 예시</h3>
 <div class="serial-card"><span class="sc-label">90초</span>React/Next 프로젝트에서는 단순히 화면을 구현하는 것보다 서버에서 만든 HTML과 클라이언트 첫 렌더가 어긋나지 않게 하는 점, effect가 재실행되어도 요청과 listener가 중복되지 않게 정리하는 점을 중요하게 봤습니다. 보안은 token 저장 위치를 단정하지 않고 XSS와 CSRF trade-off를 비교하며, 성능은 HTTP cache와 preload가 실제 LCP 후보에 맞는지 확인합니다. TypeScript는 API 응답이 타입과 다를 수 있다는 전제로 adapter와 validation 경계를 둔다고 설명합니다.</div>
 </section>
+<section id="career-evidence-anti-exaggeration">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
+<p class="lede">커리어 답변은 강하게 말하되 증거가 받쳐 주는 범위 안에서만 말한다. 수치, 역할, 성과, 장애 대응 경험은 원천 증거와 공개 가능 범위를 먼저 정한 뒤 답변에 넣는다.</p>
+<table>
+<tr><th>항목</th><th>기준</th><th>금지선</th></tr>
+<tr><td>수치</td><td>커밋, 기간, 사용자 수, 성능 개선율은 산정 기준과 기간을 함께 말한다.</td><td>추정치를 확정 성과처럼 말하지 않는다.</td></tr>
+<tr><td>역할</td><td>직접 구현, 공동 설계, 리뷰 참여, 운영 보조를 구분한다.</td><td>팀 성과를 단독 성과로 바꾸지 않는다.</td></tr>
+<tr><td>증거 위치</td><td>Git log, PR, ticket, dashboard, release note, 회고 문서 중 하나 이상에 연결한다.</td><td>공개할 수 없는 내부 정보를 화면 캡처나 원문으로 노출하지 않는다.</td></tr>
+<tr><td>공개 범위</td><td>공개 가능, 익명화 필요, 면접 구두 설명만 가능, 비공개를 구분한다.</td><td>NDA, 고객명, 보안 설정, 매출·트래픽 원문을 임의로 공개하지 않는다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">답변 기준</span><p>말해도 되는 범위는 “내가 한 행동, 관찰한 문제, 확인 가능한 결과, 배운 점”이다. 모르는 수치나 비공개 지표는 “정확한 원문 수치는 공개할 수 없지만, 개선 방향과 검증 방식은 설명할 수 있습니다”라고 경계를 둔다.</p></div>
+</section>
+
 </main>
 </div>
 </body>

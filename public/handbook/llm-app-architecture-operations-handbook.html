@@ -17,6 +17,7 @@
   <a href="#ch6"><span class="code">OPS-06</span>Release·Runbook</a>
   <a href="#ch7"><span class="code">OPS-07</span>Vendor·Data</a>
   <a href="#depth"><span class="code">DEPTH</span>장애 운영</a>
+  <a href="#freshness-evaluation-standards"><span class="code">FRESH</span>최신성·평가 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -207,6 +208,23 @@ canary: 10% internal tenants for 24h
 rollback_plan: restore rag-answer@43</code></pre>
 <h3>MARKER: failure-driven — 비용 최적화가 품질 퇴행을 숨기는 실패</h3>
 <p>운영 단계에서 비용을 줄이려고 retrieved chunk 수, context compression, model tier, completion budget을 동시에 낮추면 겉으로는 latency와 cost가 좋아질 수 있습니다. 하지만 citation coverage가 줄고 no-answer가 늘거나, 반대로 근거 없는 짧은 답변이 많아지면 제품 품질은 퇴행합니다. 이 실패는 비용 대시보드만 보면 개선처럼 보이는 점이 위험합니다. LLM 앱 운영에서는 cost, latency, quality, safety를 같은 release gate에서 봐야 합니다. 비용 절감 변경은 반드시 golden dataset, groundedness, refusal accuracy, 사용자 fallback 비율과 함께 비교되어야 하며, p95 latency 개선만으로 릴리스하면 안 됩니다.</p>
+</section>
+<section id="freshness-evaluation-standards">
+<div class="ch-head"><span class="ch-code">FRESH</span><h2>최신성·평가 기준</h2></div>
+<p class="lede">LLM 문서는 모델과 API가 바뀌는 속도를 전제로 읽어야 합니다. 기준일, 모델/API/평가셋 버전, 비용·지연·안전 trace, 갱신 주기를 함께 고정해야 같은 결론을 다시 검증할 수 있습니다.</p>
+<table>
+<tr><th>기준</th><th>기록할 값</th><th>검증 질문</th></tr>
+<tr><td>기준일</td><td>문서를 마지막으로 검증한 날짜와 변경 이력을 남깁니다.</td><td>이 결론이 2026-07-09 기준으로 어떤 모델/API 동작에 의존하나요?</td></tr>
+<tr><td>모델/API/평가셋 버전</td><td>model id, API surface, prompt/schema version, eval dataset id, red-team fixture id를 묶습니다.</td><td>모델 route나 tool schema가 바뀌어도 baseline과 비교할 수 있나요?</td></tr>
+<tr><td>cost/latency/safety trace</td><td>input/output tokens, cache hit, p50/p95 latency, cost per successful answer, blocked/allowed safety decision을 저장합니다.</td><td>품질 점수 상승이 비용 폭증, 지연 악화, safety regression을 숨기지 않나요?</td></tr>
+<tr><td>갱신 주기</td><td>정기 점검 주기와 즉시 재검증 trigger를 정의합니다.</td><td>모델 deprecation, API 변경, 정책 변경, 평가셋 drift가 발생하면 누가 갱신하나요?</td></tr>
+</table>
+<pre><code>LLM FRESHNESS RECORD
+verified_at: 2026-07-09
+model_api: provider/model-route + API version + tool schema version
+eval_set: dataset_id, fixture_version, red_team_suite
+trace: input_tokens, output_tokens, p95_latency_ms, cost_per_success, safety_decision
+refresh: monthly review + immediate review on model/API/policy/eval-set change</code></pre>
 </section>
 </main>
 </div>

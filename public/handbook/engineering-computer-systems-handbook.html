@@ -23,6 +23,7 @@
   <a href="#syscall"><span class="code">SYS-05</span>FILE SOCKET SYSCALL TRACE</a>
   <a href="#resources"><span class="code">SYS-06</span>RESOURCE LIMIT PLAYBOOK</a>
   <a href="#network"><span class="code">SYS-07</span>네트워크 기본</a>
+  <a href="#quality-evidence-packet"><span class="code">SYS-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -166,6 +167,19 @@
 </table>
 <div class="callout"><span class="co-label">진단 순서</span><p>connect timeout은 서버 코드 실행 전 문제일 수 있고, read timeout은 서버가 요청을 받은 뒤 응답이 늦은 문제일 수 있습니다. timeout을 하나로 뭉개지 말고 DNS, connect, TLS, request, response timeout을 분리해서 로깅합니다.</p></div>
 </section>
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">SYS-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">시스템 진단 문서는 명령 이름보다 정상/비정상 출력과 분기 기준이 중요합니다. 보고서 지적에 따라 재현 가능한 출력 패킷을 완료 조건으로 둡니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준 Linux 계열 환경에서 CPU, memory, fd, socket, DNS/TCP/TLS 단계별 관측 위치를 구분합니다.</td><td>OS/커널 또는 컨테이너 조건, 명령 버전</td></tr>
+<tr><td>필요 evidence</td><td><code>top</code>, <code>vmstat</code>, <code>strace</code>, <code>ss</code> 출력에 정상 범위와 이상 신호를 표시합니다.</td><td>정상/비정상 출력 캡처와 판정 메모</td></tr>
+<tr><td>최소 실습/fixture</td><td>fd 누수, OOMKilled, connect timeout을 각각 작은 재현 앱이나 컨테이너 제한으로 발생시킵니다.</td><td>재현 절차, 로그, 복구 명령</td></tr>
+<tr><td>완료 기준</td><td>증상에서 자원 고갈 원인으로 좁히고, limit 상향 전 leak 여부와 rollback 기준을 설명하면 통과입니다.</td><td>resource triage packet</td></tr>
+</table>
+</section>
+
 <footer>ENGINEERING COMPUTER SYSTEMS HANDBOOK · V1 · 2026-06</footer>
 </main>
 </div>

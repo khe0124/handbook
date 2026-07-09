@@ -34,6 +34,7 @@
   <a href="#fedeploy-ch5"><span class="code">DEP-05</span>rollback과 release</a>
   <a href="#fedeploy-ch6"><span class="code">DEP-06</span>배포 체크리스트</a>
   <a href="#fedeploy-ch7"><span class="code">DEP-07</span>릴리스 증거와 피드백 루프</a>
+  <a href="#quality-evidence-packet"><span class="code">REL-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -580,5 +581,18 @@ change risk classification → security review gate → risk based test matrix<b
 <p>프론트엔드 사고의 후속 조치는 hotfix로 끝나면 안 됩니다. 원인을 회귀 테스트, 릴리스 게이트, 관측 신호, 디자인 시스템 정책 중 하나 이상으로 되돌려야 같은 사고가 반복되지 않습니다.</p>
 <div class="semantic-card answer-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span><br>incident symptom → affected route and release<br>→ user impact and rollback decision<br>→ root cause category: state, API, render, cache, security, design system<br>→ missing test or missing signal<br>→ new regression case<br>→ release gate update<br>→ owner and review date</div>
 </section>
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">REL-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">프론트엔드 품질·릴리스는 변경 유형별 gate가 흩어지면 누락이 생깁니다. 변경 유형과 필수 증거를 한 패킷으로 묶습니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, 문구·라우팅·인증·공통 컴포넌트·의존성 변경별 필수 gate를 구분합니다.</td><td>release gate matrix</td></tr>
+<tr><td>필요 evidence</td><td>E2E trace, accessibility result, visual diff, CSP/security header 확인, sourcemap/release id 매핑을 남깁니다.</td><td>release evidence packet</td></tr>
+<tr><td>최소 실습/fixture</td><td>문구 변경, route 추가, auth flow 변경 3가지를 fixture로 두고 필요한 gate 차이를 판정합니다.</td><td>변경 유형별 checklist 결과</td></tr>
+<tr><td>완료 기준</td><td>rollback 기준, alert owner, 배포 후 관찰 창, post-release follow-up이 기록되면 통과입니다.</td><td>frontend release packet</td></tr>
+</table>
+</section>
+
 <footer>FRONTEND DEPLOYMENT HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>

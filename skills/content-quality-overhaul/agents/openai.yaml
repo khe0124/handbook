@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Quality Overhaul"
+  short_description: "Audit and improve low-quality content at scale."
+  default_prompt: "Audit the requested content scope end to end, diagnose quality issues, write an improvement plan, implement the improvements, and verify that generic filler cannot ship again."

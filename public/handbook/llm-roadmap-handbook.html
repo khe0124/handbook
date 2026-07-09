@@ -18,6 +18,7 @@
   <a href="#ch5"><span class="code">PORT</span>증거 기준</a>
   <a href="#ai-native-dod"><span class="code">DONE</span>AI Native DoD</a>
   <a href="#depth"><span class="code">DEPTH</span>실무 전환</a>
+  <a href="#freshness-evaluation-standards"><span class="code">FRESH</span>최신성·평가 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -291,6 +292,25 @@ interview-defensible: design decision record, failure case log, regression repor
 </div>
 <h3>MARKER: failure-driven — 로드맵을 기능 목록으로만 따라갈 때 생기는 실패</h3>
 <p>가장 흔한 실패는 structured output, RAG, agent, evaluation을 각각 독립 기능처럼 구현하고 끝내는 것입니다. 이 경우 포트폴리오에는 기능 이름이 많아지지만, 실제 리뷰에서 “왜 이 순서로 배웠는가”, “어떤 실패를 막기 위해 다음 단계로 넘어갔는가”, “품질이 좋아졌다는 증거는 무엇인가”에 답하지 못합니다. 로드맵은 체크박스가 아니라 위험을 줄이는 순서여야 합니다. Phase 1에서 schema validation과 repair loop를 만들지 않으면 Phase 2 RAG의 출력도 검증되지 않고, Phase 3 평가가 없으면 RAG 변경이 개선인지 퇴행인지 구분할 수 없습니다. 따라서 각 단계의 완료 기준은 기능 완성이 아니라 다음 단계의 실패를 줄이는 증거로 정의해야 합니다.</p>
+</section>
+<section id="freshness-evaluation-standards">
+<div class="ch-head"><span class="ch-code">FRESH</span><h2>최신성·평가 기준</h2></div>
+<p class="lede">LLM 문서는 모델과 API가 바뀌는 속도를 전제로 읽어야 합니다. 기준일, 모델/API/평가셋 버전, 비용·지연·안전 trace, 갱신 주기를 함께 고정해야 같은 결론을 다시 검증할 수 있습니다.</p>
+<h3>MARKER: artifact-ready — Freshness record card</h3>
+<p>이 섹션의 표는 읽기용 요약이 아니라 매 릴리스 때 복사해 채우는 검증 카드입니다. 모델 route, tool schema, eval set, red-team suite, cost trace가 한 줄이라도 비어 있으면 로드맵의 다음 단계로 넘어가지 않습니다.</p>
+<table>
+<tr><th>기준</th><th>기록할 값</th><th>검증 질문</th></tr>
+<tr><td>기준일</td><td>문서를 마지막으로 검증한 날짜와 변경 이력을 남깁니다.</td><td>이 결론이 2026-07-09 기준으로 어떤 모델/API 동작에 의존하나요?</td></tr>
+<tr><td>모델/API/평가셋 버전</td><td>model id, API surface, prompt/schema version, eval dataset id, red-team fixture id를 묶습니다.</td><td>모델 route나 tool schema가 바뀌어도 baseline과 비교할 수 있나요?</td></tr>
+<tr><td>cost/latency/safety trace</td><td>input/output tokens, cache hit, p50/p95 latency, cost per successful answer, blocked/allowed safety decision을 저장합니다.</td><td>품질 점수 상승이 비용 폭증, 지연 악화, safety regression을 숨기지 않나요?</td></tr>
+<tr><td>갱신 주기</td><td>정기 점검 주기와 즉시 재검증 trigger를 정의합니다.</td><td>모델 deprecation, API 변경, 정책 변경, 평가셋 drift가 발생하면 누가 갱신하나요?</td></tr>
+</table>
+<pre><code>LLM FRESHNESS RECORD
+verified_at: 2026-07-09
+model_api: provider/model-route + API version + tool schema version
+eval_set: dataset_id, fixture_version, red_team_suite
+trace: input_tokens, output_tokens, p95_latency_ms, cost_per_success, safety_decision
+refresh: monthly review + immediate review on model/API/policy/eval-set change</code></pre>
 </section>
 </main>
 </div>

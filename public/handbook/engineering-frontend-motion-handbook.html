@@ -25,6 +25,7 @@
   <a href="#motion-ch16"><span class="code">MOTION-16</span>자주 봉착하는 문제와 해결</a>
   <a href="#motion-ch17"><span class="code">MOTION-17</span>모션 시스템 운영 모델</a>
   <a href="#motion-ch18"><span class="code">MOTION-18</span>Easing 시각 비교</a>
+  <a href="#quality-evidence-packet"><span class="code">MOT-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -531,6 +532,19 @@
 </table>
 <div class="semantic-card process-card"><span class="sc-label">EASING TOKEN REVIEW</span><br>
 <p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. token 이름은 느낌이 아니라 용도 중심으로 둔다: <code>--ease-enter</code>, <code>--ease-exit</code>, <code>--ease-emphasis</code><br>2. 곡선은 duration과 함께 검토한다. 같은 easing도 120ms와 360ms에서 체감이 다르다<br>3. overshoot 계열은 목표값 초과가 layout, clipping, hit target을 깨지 않는지 본다<br>4. reduced motion에서는 큰 이동보다 opacity·즉시 상태·정적 highlight를 우선한다<br>5. 시각 비교, CSS token, 실제 컴포넌트 캡처를 PR 증거로 남긴다</div>
+</section>
+
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">MOT-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">모션 기준은 수치만 외우면 제품 맥락을 잃습니다. 화면 유형, 기기 성능, 접근성 설정별 예산과 증거를 같이 둡니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, target browser와 <code>prefers-reduced-motion</code> 지원 여부, 제품 화면 유형을 명시합니다.</td><td>motion baseline sheet</td></tr>
+<tr><td>필요 evidence</td><td>duration/easing token 출처, 저사양 모바일 frame trace, reduced motion 캡처, interrupt 처리 결과를 남깁니다.</td><td>motion token table, trace, QA 캡처</td></tr>
+<tr><td>최소 실습/fixture</td><td>반복 업무 UI, 마케팅 화면, 저사양 모바일 각각에 같은 transition을 적용해 motion budget을 비교합니다.</td><td>3개 화면 budget 비교표</td></tr>
+<tr><td>완료 기준</td><td>목적, 예산, 중단 가능성, 접근성 대체 경로가 설명되면 모션 PR을 승인할 수 있습니다.</td><td>motion QA packet</td></tr>
+</table>
 </section>
 
 <footer>FRONTEND ANIMATION MOTION HANDBOOK · V1 · 2026-06<br>PRINCIPLE : MOTION EXPLAINS STATE, SPACE, AND CONSEQUENCE</footer>

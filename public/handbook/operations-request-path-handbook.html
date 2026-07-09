@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -227,6 +228,17 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
           <li>TLS 인증서 문제를 네트워크 장애로 오해한다.</li>
           <li>DB lock wait와 API timeout을 별개 사건으로 본다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">서비스 요청 경로는 브라우저 증상부터 DB 경계까지 같은 traceId와 시간창으로 묶어야 한다. 각 증거는 기준일, provider, region, runtime version을 함께 남긴다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, 장애 drill 또는 구조 변경 시 재확인</td><td>incident 시작/종료 시각, deploy id, runbook revision</td><td>DNS, TLS, LB, app, DB 증거의 시간대와 기준일이 일치한다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>AWS ALB/NLB 또는 Azure Application Gateway/Load Balancer, 운영 region, app runtime, DB engine version을 명시</td><td>listener rule, target group/backend pool, health probe 설정, connection pool 설정</td><td>edge, regional LB, app, DB 중 어느 계층의 책임인지 분리된다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>DNS, TLS, LB health, app log, DB pool 지표를 한 요청 단위로 캡처</td><td><code>dig</code>, <code>openssl s_client</code>, <code>curl -w</code>, ALB/App Gateway access log, target health, DB lock/pool metric</td><td>traceId 또는 5-tuple로 hop별 정상/비정상 판정이 이어진다.</td></tr>
+          <tr><td>완료 기준</td><td>증상, 첫 실패 hop, 완화, rollback, 재검증 명령이 incident packet에 포함</td><td>before/after latency, 5xx, target health, DB wait event</td><td>앱 배포 rollback과 인프라 rollback 중 어느 조치가 필요한지 증거로 결정한다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

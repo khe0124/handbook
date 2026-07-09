@@ -23,6 +23,7 @@
   <a href="#vectors"><span class="code">AM-05</span>VECTOR SIMILARITY BASICS</a>
   <a href="#error"><span class="code">AM-06</span>측정 오차와 편향</a>
   <a href="#verification"><span class="code">AM-07</span>VERIFICATION EVIDENCE PACKET</a>
+  <a href="#quality-evidence-packet"><span class="code">AM-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -167,6 +168,19 @@
 <div class="g-row"><div class="g-term"><b>Property</b><span>invariant</span></div><div class="g-def">개별 예제가 아니라 모든 입력군에서 유지되어야 하는 성질입니다.</div></div>
 </div>
 </section>
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">AM-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">측정 문서는 공식 이름보다 표본, 불확실성, guardrail 판정이 닫혀야 합니다. 계산 예제와 재현 가능한 fixture를 함께 둡니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, 실험 기간·모집단·최소 효과 크기·유의수준·검정력을 먼저 고정합니다.</td><td>experiment design sheet</td></tr>
+<tr><td>필요 evidence</td><td>전환율 또는 latency 개선 사례에서 sample size, confidence interval, p75/p95 변화, guardrail 악화를 계산합니다.</td><td>계산 표, 원본 집계 쿼리, 해석 메모</td></tr>
+<tr><td>최소 실습/fixture</td><td>baseline 10,000명, conversion 3.0%, 개선안 3.3%, latency p95 +20ms guardrail 데이터를 사용합니다.</td><td>sample size와 CI 계산 결과</td></tr>
+<tr><td>완료 기준</td><td>승리/패배 결론뿐 아니라 불확실성, 실험 중단 조건, 후속 관찰 지표가 있으면 통과입니다.</td><td>measurement evidence packet</td></tr>
+</table>
+</section>
+
 <footer>ENGINEERING APPLIED MATH MEASUREMENT HANDBOOK · V1 · 2026-06</footer>
 </main>
 </div>

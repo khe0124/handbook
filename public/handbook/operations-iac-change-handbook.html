@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#iac-evidence-packet"><span class="code">EVIDENCE</span>운영 증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -217,6 +218,17 @@ Lock Info:
           <li>리소스 이름 변경이 실제 destroy/create로 이어지는 것을 놓친다.</li>
         </ul>
       </section>
+<section id="iac-evidence-packet">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>운영 증거 패킷</h2></div>
+<p class="lede">IaC 변경은 계획 파일, provider lock, 실제 drift 판독이 없으면 승인하지 않는다. plan은 리뷰용 텍스트가 아니라 나중에 같은 결정을 재현할 수 있는 변경 증거다.</p>
+<table>
+<tr><th>항목</th><th>증거</th><th>판정 기준</th></tr>
+<tr><td>기준 버전·도구</td><td>Terraform/OpenTofu version, provider lock, backend workspace, module version, cloud account/region</td><td>provider lock 변경과 infra 변경이 같은 PR에 섞이면 변경 사유를 분리한다.</td></tr>
+<tr><td>명령 출력</td><td><code>terraform fmt -check</code>, <code>validate</code>, <code>plan -out</code>, drift-only plan, policy check</td><td>destroy/replace가 있거나 state move가 있으면 별도 승인 없이는 apply 금지.</td></tr>
+<tr><td>dashboard/query</td><td>cloud audit log, resource tag query, cost diff, quota usage, policy violation</td><td>plan에는 없지만 cloud readback에 수동 변경이 보이면 drift 해결 전 apply 보류.</td></tr>
+<tr><td>severity·rollback</td><td>network/auth/data plane 변경은 SEV2 이상 후보, irreversible migration은 SEV1 승인</td><td>rollback이 state로 불가능하면 forward fix와 복구 runbook을 먼저 승인한다.</td></tr>
+</table>
+</section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>
 PRINCIPLE : 운영 지식은 경로, 증거, 복구 절차로 검증한다.

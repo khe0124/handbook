@@ -24,6 +24,7 @@
   <a href="#concurrency"><span class="code">LR-06</span>동시성 의미론</a>
   <a href="#serialization"><span class="code">LR-07</span>SERIALIZATION CONTRACT</a>
   <a href="#runtime-evidence"><span class="code">LR-08</span>Runtime evidence packet</a>
+  <a href="#quality-evidence-packet"><span class="code">LR-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -210,6 +211,19 @@
   reviewer_note: "tail latency, allocation, GC pause가 같은 방향으로 좋아졌고 기능 계약이 유지되어 pass"</code></pre>
 <div class="callout warn"><span class="co-label">반려 예시</span><p>"Go는 빠르고 Java는 무겁다", "Node는 싱글스레드라 느리다"처럼 언어 이름으로 결론을 내면 반려한다. A급 답변은 요청 형태, 데이터 크기, I/O 비율, warmup, GC, 스케줄러, 직렬화 경계를 숫자로 분리한다.</p></div>
 </section>
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">LR-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">언어·런타임 판단은 추상 키워드가 아니라 타입 계약, 변환 전후 코드, 프로파일링 증거로 닫아야 합니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준 사용 언어, 런타임, 컴파일러 또는 VM 버전을 고정하고 warmup 조건을 기록합니다.</td><td>버전 표, 실행 옵션, warmup 규칙</td></tr>
+<tr><td>필요 evidence</td><td>schema fixture, codemod 전후 diff, AST snapshot, JFR/Profiler CPU·allocation evidence를 연결합니다.</td><td>fixture, diff, profiler export</td></tr>
+<tr><td>최소 실습/fixture</td><td>nullable field 추가, enum 확장, DTO mapping 변경, GC pressure 증가 사례 중 하나를 최소 재현합니다.</td><td>재현 테스트와 실패 로그</td></tr>
+<tr><td>완료 기준</td><td>타입 안전성, 직렬화 호환성, 런타임 비용, rollback 가능성이 한 표에서 판정되면 통과입니다.</td><td>runtime change evidence packet</td></tr>
+</table>
+</section>
+
 <footer>ENGINEERING LANGUAGE RUNTIME HANDBOOK · V1 · 2026-06</footer>
 </main>
 </div>

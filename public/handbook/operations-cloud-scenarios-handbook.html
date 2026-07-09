@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -207,6 +208,19 @@ Issue: DNS resolved public endpoint</code></pre></td><td>Private Endpoint는 있
           <li>NAT Gateway 또는 egress 비용을 보지 않아 private subnet의 외부 호출 비용이 폭증한다.</li>
           <li>RDS/Azure SQL 백업은 켜져 있지만 restore drill과 connection pool 장애 대응이 없다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">AWS·Azure 실전 시나리오는 region, quota, managed service 제약이 바뀌면 답이 달라진다. 아래 패킷을 채우기 전까지 서비스명 매핑이나 비용 판단은 확정하지 않는다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, 신규 region/service 출시와 quota 변경 때 재확인</td><td>AWS What&apos;s New, Azure Updates, 공식 service quota 페이지, 변경 티켓</td><td>문서·Q&amp;A·incident packet의 기준일과 확인 출처가 일치한다.</td></tr>
+          <tr><td>AWS/Azure region 전제</td><td>AWS ap-northeast-2/us-east-1, Azure Korea Central/East US처럼 실제 후보 region을 명시하고 AZ/zone 지원을 확인</td><td>region별 ALB/App Gateway, NAT Gateway, RDS/Azure SQL, PrivateLink/Private Endpoint 지원 표</td><td>latency, data residency, zone redundancy, service availability를 같은 표에서 비교한다.</td></tr>
+          <tr><td>quota와 capacity ceiling</td><td>LB target 수, public IP, NAT gateway, route table, vCPU, managed DB connection/storage/IOPS quota를 변경 전 확인</td><td>AWS Service Quotas, Azure Quotas, provider CLI 출력, quota increase request id</td><td>현재 사용량, 한도, 증설 소요 시간, fallback 설계가 모두 기록된다.</td></tr>
+          <tr><td>managed service 제약</td><td>RDS/Azure SQL, ECS/AKS/EKS, App Gateway/Front Door 등 서비스별 failover, maintenance, patch, backup, network 제한을 확인</td><td>engine version, maintenance window, backup retention, failover event, connection reset metric</td><td>self-managed와 managed 선택의 책임 경계와 운영 불가능한 영역이 명확하다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>region 지원, quota, LB health, DNS/TLS, cost anomaly, audit log를 캡처</td><td><code>dig</code>, <code>openssl s_client</code>, ALB/App Gateway health, Azure Resource Graph, AWS CLI quota 출력, cost explorer/export</td><td>정상/비정상 출력과 공식 문서 링크가 incident packet에 같이 들어간다.</td></tr>
+          <tr><td>공식 문서 확인 절차</td><td>서비스 설계 전 provider 공식 문서의 region availability, limits/quotas, SLA, managed service limitations, pricing을 순서대로 확인</td><td>확인 URL, 확인자, 확인일, 적용하지 않은 제약과 이유</td><td>답변에 “현재 기준 확인 필요”가 아니라 확인한 기준과 남은 불확실성이 적혀 있다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

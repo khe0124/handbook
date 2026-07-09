@@ -23,6 +23,7 @@
   <a href="#interaction-ch14"><span class="code">INT-14</span>근거 기반 판단 기준</a>
   <a href="#interaction-ch15"><span class="code">INT-15</span>자주 봉착하는 문제와 해결</a>
   <a href="#interaction-ch16"><span class="code">INT-16</span>상태 기계와 조작 계약</a>
+  <a href="#quality-evidence-packet"><span class="code">INT-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -488,6 +489,19 @@
 <span class="co-label">SENIOR REVIEW STANDARD</span>
 <p>인터랙션 PR은 “클릭하면 된다”로 승인하지 않습니다. 상태 기계, pointer lifecycle, command/undo, 접근성 대체 경로, 실패 복구, 관측 이벤트가 함께 있어야 반복 업무와 예외 상황에서 품질이 유지됩니다.</p>
 </div>
+</section>
+
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">INT-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">인터랙션은 성공 경로보다 cancel, unmount, stale async, pointer lifecycle 같은 실패 경로를 증거로 닫아야 합니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, pointer/keyboard/screen reader/reduced motion 경로를 모두 acceptance matrix에 넣습니다.</td><td>interaction acceptance matrix</td></tr>
+<tr><td>필요 evidence</td><td>상태 전이표, cancel/unmount cleanup, pointer capture release, stale request 무시 로그를 남깁니다.</td><td>state diagram, QA trace, event log</td></tr>
+<tr><td>최소 실습/fixture</td><td>drag reorder 또는 autocomplete 하나를 골라 중단, 빠른 재입력, route 전환, 권한 변경을 재현합니다.</td><td>fixture 시나리오와 녹화 또는 테스트</td></tr>
+<tr><td>완료 기준</td><td>대체 입력 경로, 실패 복구, undo/rollback, analytics 이벤트가 함께 검증되면 통과입니다.</td><td>interaction design packet</td></tr>
+</table>
 </section>
 
 <footer>FRONTEND INTERACTION HANDBOOK · V1 · 2026-06<br>PRINCIPLE : 인터랙션은 장식보다 상태, 입력, 복구, 성능, 접근성을 먼저 설계한다</footer>

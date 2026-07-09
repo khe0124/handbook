@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -205,6 +206,17 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
           <li>secret rotation을 배포 절차와 연결하지 않는다.</li>
           <li>차단 로그가 없어 false positive와 공격을 구분하지 못한다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">보안 경계는 허용 규칙의 의도와 실제 노출면을 함께 증명해야 한다. 공개 ingress, IAM, secret, egress는 기준일과 승인 범위가 없으면 통과로 보지 않는다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, 외부 노출 또는 권한 변경마다 재검토</td><td>security review ticket, exception 만료일, audit log retention 설정</td><td>허용 사유, 승인자, 만료일, 회수 조건이 같은 증거 패킷에 있다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>AWS SG/NACL/IAM/Secrets Manager 또는 Azure NSG/Azure Firewall/Managed Identity/Key Vault, region과 tenant/account를 명시</td><td>rule diff, policy simulator 결과, secret rotation version, WAF/firewall rule id</td><td>stateful/stateful 아님, identity/resource policy 차이를 답변에서 분리한다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>노출, 권한, secret, audit 증거를 각각 캡처</td><td>Reachability Analyzer/Network Watcher, Flow Logs, IAM policy simulation, WAF log, Key Vault/Secrets Manager rotation event</td><td>allow와 deny가 모두 의도한 peer, action, resource, port에 맞는다.</td></tr>
+          <tr><td>완료 기준</td><td>least privilege diff, rollback rule, containment owner가 명확</td><td>before/after policy, denied sample, break-glass 사용 로그</td><td>임시 예외는 만료 시각과 제거 검증 명령까지 포함해야 닫힌다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

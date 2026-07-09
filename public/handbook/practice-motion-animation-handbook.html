@@ -20,6 +20,7 @@
   <a href="#motion-accessibility"><span class="code">A11Y</span>접근성 · 모션 안전</a>
   <a href="#review-checklist"><span class="code">CRIT</span>리뷰 체크리스트</a>
   <a href="#glossary"><span class="code">GLOSSARY</span>용어집</a>
+  <a href="#output-verification-standards"><span class="code">VERIFY</span>산출물·검증</a>
 </nav>
 <main>
 <header class="hero">
@@ -271,6 +272,20 @@
 <div class="g-row"><div class="g-term"><b>prefers-reduced-motion</b><span>동작 줄이기</span></div><div class="g-def">OS 설정에 연동되는 미디어 쿼리. 사용자가 모션 최소화를 요청한 신호로 반드시 존중한다.</div></div>
 <div class="g-row"><div class="g-term"><b>Vestibular disorder</b><span>전정기관 장애</span></div><div class="g-def">균형 감각 기관의 이상. 큰 화면 이동·parallax·zoom에 어지럼·메스꺼움을 겪을 수 있다.</div></div>
 </div>
+</section>
+
+<section id="output-verification-standards">
+<div class="ch-head"><span class="ch-code">VERIFY</span><h2>산출물·검증 보강 기준</h2></div>
+<p class="lede">디자인 산출물은 보기 좋은 화면 설명에서 끝나지 않고, 변경 전후 증거와 개발자가 바로 구현할 수 있는 handoff 샘플로 닫는다.</p>
+<table>
+<tr><th>항목</th><th>필수 포함</th><th>완료 기준</th></tr>
+<tr><td>before/after</td><td>기존 화면 또는 흐름의 문제, 변경 후 화면, 남은 trade-off를 나란히 기록한다.</td><td>리뷰어가 무엇이 좋아졌고 무엇을 포기했는지 1분 안에 설명할 수 있다.</td></tr>
+<tr><td>handoff 샘플</td><td>상태별 화면, empty/loading/error, copy, interaction, responsive breakpoint, analytics event를 포함한다.</td><td>개발자가 추가 질문 없이 첫 구현 PR을 만들 수 있다.</td></tr>
+<tr><td>토큰 검증</td><td>color, type, spacing, radius, shadow, motion token 사용 여부와 예외 사유를 적는다.</td><td>새 hard-coded 값은 design token 후보 또는 명시적 예외로 분류된다.</td></tr>
+<tr><td>접근성 검증</td><td>keyboard path, focus order, contrast, label, reduced motion, screen reader name을 확인한다.</td><td>WCAG 위반 또는 미확인 항목이 release blocker로 남는다.</td></tr>
+<tr><td>권리 검증</td><td>이미지, 아이콘, 폰트, 외부 캡처의 출처와 사용 가능 범위를 남긴다.</td><td>상업 사용, 수정 가능, 크레딧 요구, 만료 조건이 확인된다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">완료 기준</span><p>완성본은 <code>design-output-packet.md</code>에 before/after, handoff 샘플, 토큰·접근성·권리 검증, 미해결 이슈를 채워 제출한다. 화면 이미지만 있고 검증 표가 없으면 초안으로만 취급한다.</p></div>
 </section>
 
 <footer>

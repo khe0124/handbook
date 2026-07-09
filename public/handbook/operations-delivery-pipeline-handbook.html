@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#delivery-evidence-packet"><span class="code">EVIDENCE</span>운영 증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -206,6 +207,25 @@ metric_gate=fail</code></pre></td><td>CI/CD stage는 통과했지만 사용자 �
           <li>production secret을 build-time bundle에 섞는다.</li>
         </ul>
       </section>
+<section id="delivery-evidence-packet">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>운영 증거 패킷</h2></div>
+<p class="lede">CI/CD 변경은 성공한 배포 로그만으로 승인하지 않는다. artifact가 어떤 기준 버전과 도구로 만들어졌고, 어떤 증거로 검증됐으며, 실패하면 어디까지 되돌릴 수 있는지 한 묶음으로 남긴다.</p>
+<table>
+<tr><th>항목</th><th>기록 기준</th><th>승인/중단 기준</th></tr>
+<tr><td>기준 버전·도구</td><td>runner image, build tool, package manager lockfile, container base image, SBOM generator, signer/cosign version</td><td>lockfile과 artifact digest가 없거나 runner 권한이 production secret에 직접 닿으면 승인하지 않는다.</td></tr>
+<tr><td>명령 출력</td><td><code>npm ci</code>, unit/integration test, image build digest, SBOM 생성, vulnerability scan, signature verify 출력</td><td>critical 취약점, unsigned image, provenance 누락, test flake 원인 미해결이면 release block.</td></tr>
+<tr><td>대시보드·쿼리</td><td>deploy frequency, change failure rate, rollback rate, failed job reason, artifact age</td><td>동일 사유 실패가 2회 반복되면 pipeline owner가 runbook diff를 승인한다.</td></tr>
+<tr><td>severity·rollback</td><td>SEV2 이상 사용자 영향, migration 포함 여부, feature flag off 가능 여부, 이전 image digest</td><td>rollback 예상 시간이 SLO error budget보다 길면 수동 승인과 고객 공지 초안을 붙인다.</td></tr>
+</table>
+<pre class="snippet-card"><code>delivery_evidence_packet:
+  기준일: "2026-07-09"
+  artifact: "registry.example.com/payments/api@sha256:..."
+  tools: "node 20.x, pnpm 9.x, cosign, syft/grype, SLSA provenance"
+  command_outputs: ["test summary", "sbom path", "signature verify", "scan result"]
+  severity_rule: "P1: payment/auth path failure, P2: partial tenant degradation"
+  rollback: "previous digest + feature flag off + DB migration forward/backward note"
+  approvers: ["service owner", "security reviewer when supply-chain policy changes"]</code></pre>
+</section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>
 PRINCIPLE : 운영 지식은 경로, 증거, 복구 절차로 검증한다.

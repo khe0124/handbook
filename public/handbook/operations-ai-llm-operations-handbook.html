@@ -17,6 +17,7 @@
   <a href="#ch5"><span class="code">AI-OPS-05</span>Runbook</a>
   <a href="#term"><span class="code">TERM</span>용어 사전</a>
   <a href="#lab"><span class="code">LAB</span>운영 랩</a>
+  <a href="#llm-version-evidence-packet"><span class="code">EVIDENCE</span>운영 증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -166,6 +167,34 @@ Command / Query: dashboard에서 citation_precision, groundedness, index_version
 과제: index rollback, reingest freeze, prompt rollback 중 첫 완화 조치를 고른다.<br>
 증거: incident-packet-llm.md, dashboard capture, follow-up regression fixture.
 </div>
+</section>
+<section id="llm-version-evidence-packet">
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>운영 증거 패킷</h2></div>
+<p class="lede">LLM 운영은 provider가 성공 응답을 줬는지만 보면 안 된다. provider, model, API, prompt, retrieval index, eval dataset, safety policy가 각각 다른 속도로 바뀌므로 <strong>2026-07-09 기준 버전 패킷</strong>을 release마다 갱신한다.</p>
+<table>
+<tr><th>버전 축</th><th>기록할 값</th><th>changelog 확인 루틴</th></tr>
+<tr><td>Provider/API</td><td>provider, endpoint/API version, SDK version, region, rate-limit tier, timeout/retry policy</td><td>주 1회 provider changelog와 deprecation notice를 확인하고 breaking change는 release gate로 등록한다.</td></tr>
+<tr><td>Model route</td><td>primary/fallback model id, context window, structured output/tool support, pricing table snapshot</td><td>모델 alias를 그대로 쓰지 않고 resolved model id와 fallback capability matrix를 남긴다.</td></tr>
+<tr><td>Prompt/RAG</td><td>prompt template hash, tool schema version, retrieval index version, chunker/embedder version</td><td>prompt 또는 index 변경은 golden set replay와 citation precision gate를 통과해야 한다.</td></tr>
+<tr><td>Eval/Safety</td><td>eval dataset id, judge version, threshold, safety policy version, red-team fixture set</td><td>safety policy와 eval fixture 변경은 false positive/negative 샘플을 모두 검토한다.</td></tr>
+</table>
+<pre class="snippet-card"><code>llm_release_evidence_packet:
+  기준일: "2026-07-09"
+  provider_api: "provider + endpoint/API version + SDK + region"
+  model_route: "primary model id, fallback model id, resolved alias, context window"
+  prompt: "template hash, system/developer instruction version, tool schema version"
+  retrieval: "index version, embedder version, chunking rule, source corpus snapshot"
+  eval: "golden set id, judge model/version, threshold, failing examples"
+  safety_policy: "policy version, filter thresholds, appeal workflow, red-team fixture"
+  dashboards: ["schema_success", "groundedness", "citation_precision", "cost_per_success", "fallback_rate", "policy_violation"]
+  rollback: "flag off, prompt rollback, route rollback, index rollback, provider fallback"
+  approval: "AI owner + security/privacy owner for policy or data-boundary changes"</code></pre>
+<table>
+<tr><th>실패 실습</th><th>확인할 로그/쿼리</th><th>좋은 판정</th><th>복구 기준</th></tr>
+<tr><td>structured output 실패 증가</td><td>raw output archive, parser error path, prompt hash, model id</td><td>모델 출력, parser, downstream contract 중 어디서 깨졌는지 분리한다.</td><td>schema success가 baseline으로 회복되고 failing fixture가 재통과한다.</td></tr>
+<tr><td>provider outage/fallback</td><td>provider health probe, route decision log, fallback quality delta</td><td>data residency와 feature parity가 맞는 요청만 fallback한다.</td><td>primary 회복 후 staged rollback, fallback hit rate 감소, 품질 샘플 확인.</td></tr>
+<tr><td>safety policy 회귀</td><td>policy version, filter decision, appeal sample, red-team fixture</td><td>false positive와 false negative를 따로 집계하고 release-blocking category를 고정한다.</td><td>위험 category 통과 0건, 정상 업무 차단률 기준선 회복.</td></tr>
+</table>
 </section>
 <footer>
 OPERATIONS AI LLM ADDENDUM · UPDATED 2026-07 · PRINCIPLE : AI 품질 신호를 일반 운영 신뢰성 루프에 포함한다.

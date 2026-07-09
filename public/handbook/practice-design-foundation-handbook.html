@@ -20,6 +20,7 @@
   <a href="#doc-designux"><span class="code">DOC</span>UX 사고와 문제 정의</a>
   <a href="#doc-designia"><span class="code">DOC</span>정보구조와 내비게이션</a>
   <a href="#doc-designflow"><span class="code">DOC</span>사용자 흐름과 태스크 설계</a>
+  <a href="#output-verification-standards"><span class="code">VERIFY</span>산출물·검증</a>
 </nav>
 <main>
 <header class="hero">
@@ -617,6 +618,20 @@ Recovery: validation error keeps draft, network failure allows retry
 <p>관리자 승인 플로우에서 사용자가 제출한 뒤 “완료”라고 표시했지만 실제로는 운영자 승인 대기라면 UX는 거짓 상태를 보여준 것입니다. 화면 문구는 “제출 완료”와 “승인 완료”를 분리해야 하고, 시스템은 job id와 approval status를 별도로 제공해야 합니다.</p>
 </div>
 </section>
+<section id="output-verification-standards">
+<div class="ch-head"><span class="ch-code">VERIFY</span><h2>산출물·검증 보강 기준</h2></div>
+<p class="lede">디자인 산출물은 보기 좋은 화면 설명에서 끝나지 않고, 변경 전후 증거와 개발자가 바로 구현할 수 있는 handoff 샘플로 닫는다.</p>
+<table>
+<tr><th>항목</th><th>필수 포함</th><th>완료 기준</th></tr>
+<tr><td>before/after</td><td>기존 화면 또는 흐름의 문제, 변경 후 화면, 남은 trade-off를 나란히 기록한다.</td><td>리뷰어가 무엇이 좋아졌고 무엇을 포기했는지 1분 안에 설명할 수 있다.</td></tr>
+<tr><td>handoff 샘플</td><td>상태별 화면, empty/loading/error, copy, interaction, responsive breakpoint, analytics event를 포함한다.</td><td>개발자가 추가 질문 없이 첫 구현 PR을 만들 수 있다.</td></tr>
+<tr><td>토큰 검증</td><td>color, type, spacing, radius, shadow, motion token 사용 여부와 예외 사유를 적는다.</td><td>새 hard-coded 값은 design token 후보 또는 명시적 예외로 분류된다.</td></tr>
+<tr><td>접근성 검증</td><td>keyboard path, focus order, contrast, label, reduced motion, screen reader name을 확인한다.</td><td>WCAG 위반 또는 미확인 항목이 release blocker로 남는다.</td></tr>
+<tr><td>권리 검증</td><td>이미지, 아이콘, 폰트, 외부 캡처의 출처와 사용 가능 범위를 남긴다.</td><td>상업 사용, 수정 가능, 크레딧 요구, 만료 조건이 확인된다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">완료 기준</span><p>완성본은 <code>design-output-packet.md</code>에 before/after, handoff 샘플, 토큰·접근성·권리 검증, 미해결 이슈를 채워 제출한다. 화면 이미지만 있고 검증 표가 없으면 초안으로만 취급한다.</p></div>
+</section>
+
 </main>
 </div>
 </body>

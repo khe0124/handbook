@@ -998,6 +998,48 @@ export const OPERATIONS_HANDBOOKS = [
   },
 ];
 
+export const OPERATIONS_QA_HANDBOOKS = OPERATIONS_HANDBOOKS.map((item) => ({
+  id: `${item.id}-qa`,
+  label: `${item.label} Q&A`,
+  kind: "인프라·운영 Q&A",
+  file: `${item.id}-qa-handbook.html`,
+}));
+
+export const OPERATIONS_MENU_HANDBOOKS = OPERATIONS_HANDBOOKS.flatMap((item, index) => [
+  item,
+  OPERATIONS_QA_HANDBOOKS[index],
+]);
+
+const INFRA_OPERATIONS_IDS = new Set([
+  "operations-roadmap",
+  "operations-request-path",
+  "operations-vpc-routing",
+  "operations-security-boundary",
+  "operations-dns-tls",
+  "operations-private-connectivity",
+  "operations-cloud-scenarios",
+]);
+
+const isMenuItemForBaseIds = (baseIds, item) => {
+  const baseId = item.id.endsWith("-qa") ? item.id.replace(/-qa$/, "") : item.id;
+  return baseIds.has(baseId);
+};
+
+const INFRA_MENU_SOURCE_HANDBOOKS = OPERATIONS_MENU_HANDBOOKS.filter((item) =>
+  isMenuItemForBaseIds(INFRA_OPERATIONS_IDS, item),
+);
+
+const OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS = OPERATIONS_MENU_HANDBOOKS.filter(
+  (item) => !isMenuItemForBaseIds(INFRA_OPERATIONS_IDS, item),
+);
+
+export const INFRA_MENU_HANDBOOKS = renumberMenuItems(INFRA_MENU_SOURCE_HANDBOOKS);
+
+export const OPERATIONS_GROUP_HANDBOOKS = renumberMenuItems([
+  ...OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS,
+  ...ENGINEERING_CONTEXT_HANDBOOKS,
+]);
+
 export const AX_HANDBOOKS = [
   {
     id: "ax",
@@ -1387,9 +1429,14 @@ export const HANDBOOK_GROUPS = [
   },
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
   {
+    key: "infra",
+    label: "인프라",
+    items: INFRA_MENU_HANDBOOKS,
+  },
+  {
     key: "operations",
-    label: "인프라·운영",
-    items: [...OPERATIONS_HANDBOOKS, ...ENGINEERING_CONTEXT_HANDBOOKS],
+    label: "운영",
+    items: OPERATIONS_GROUP_HANDBOOKS,
   },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   {
@@ -1407,7 +1454,7 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_CS_BASIC_HANDBOOKS,
   ...ENGINEERING_FRONTEND_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
-  ...OPERATIONS_HANDBOOKS,
+  ...OPERATIONS_MENU_HANDBOOKS,
   ...ENGINEERING_CONTEXT_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,

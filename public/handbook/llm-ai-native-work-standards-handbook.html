@@ -18,6 +18,7 @@
   <a href="#ch5"><span class="code">SEC</span>Security Fixture</a>
   <a href="#ch6"><span class="code">OPS</span>Trace & Risk</a>
   <a href="#ch7"><span class="code">VERIFY</span>Output Packet</a>
+  <a href="#freshness-evaluation-standards"><span class="code">FRESH</span>최신성·평가 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -235,6 +236,30 @@ context package + prompt/model version record + eval dataset result + security f
 <p>eval 평균 점수가 올랐더라도 출시하면 안 되는 경우가 있습니다. 예를 들어 p95 latency가 두 배로 늘었거나, no-answer precision이 떨어졌거나, high risk tool call이 사람이 승인하기 어려울 만큼 자주 발생하면 제품 경험은 나빠집니다. 따라서 quality score는 cost, latency, approval burden, residual risk와 함께 읽어야 합니다. AI Native Definition of Done은 품질을 넓은 운영 조건 안에서 판단하게 만드는 최소 장치입니다.</p>
 </section>
 
+<section id="freshness-evaluation-standards">
+<div class="ch-head"><span class="ch-code">FRESH</span><h2>최신성·평가 기준</h2></div>
+<p class="lede">LLM 문서는 모델과 API가 바뀌는 속도를 전제로 읽어야 합니다. 기준일, 모델/API/평가셋 버전, 비용·지연·안전 trace, 갱신 주기를 함께 고정해야 같은 결론을 다시 검증할 수 있습니다.</p>
+<table>
+<tr><th>기준</th><th>기록할 값</th><th>검증 질문</th></tr>
+<tr><td>기준일</td><td>문서를 마지막으로 검증한 날짜와 변경 이력을 남깁니다.</td><td>이 결론이 2026-07-09 기준으로 어떤 모델/API 동작에 의존하나요?</td></tr>
+<tr><td>모델/API/평가셋 버전</td><td>model id, API surface, prompt/schema version, eval dataset id, red-team fixture id를 묶습니다.</td><td>모델 route나 tool schema가 바뀌어도 baseline과 비교할 수 있나요?</td></tr>
+<tr><td>cost/latency/safety trace</td><td>input/output tokens, cache hit, p50/p95 latency, cost per successful answer, blocked/allowed safety decision을 저장합니다.</td><td>품질 점수 상승이 비용 폭증, 지연 악화, safety regression을 숨기지 않나요?</td></tr>
+<tr><td>갱신 주기</td><td>정기 점검 주기와 즉시 재검증 trigger를 정의합니다.</td><td>모델 deprecation, API 변경, 정책 변경, 평가셋 drift가 발생하면 누가 갱신하나요?</td></tr>
+</table>
+<pre><code>LLM FRESHNESS RECORD
+verified_at: 2026-07-09
+model_api: provider/model-route + API version + tool schema version
+eval_set: dataset_id, fixture_version, red_team_suite
+trace: input_tokens, output_tokens, p95_latency_ms, cost_per_success, safety_decision
+refresh: monthly review + immediate review on model/API/policy/eval-set change</code></pre>
+<h3>Solo / Team / Production DoD 구분</h3>
+<table>
+<tr><th>수준</th><th>완료 조건</th><th>증거</th></tr>
+<tr><td>solo</td><td>개인 작업자는 task spec, context package, prompt/model record, 최소 eval fixture를 남깁니다.</td><td>재현 가능한 입력, 채택/거절한 AI 출력, 수동 검증 메모</td></tr>
+<tr><td>team</td><td>팀 작업은 reviewer finding, baseline 대비 eval diff, red-team fixture, ownership을 추가합니다.</td><td>PR evidence bundle, reviewer sign-off, residual risk owner</td></tr>
+<tr><td>production</td><td>운영 출시는 rollback target, cost/latency budget, safety gate, human approval tier, monitoring trigger까지 닫습니다.</td><td>release evidence bundle, dashboard link, blocked action trace, rollback rehearsal</td></tr>
+</table>
+</section>
 <footer>
 LLM AI NATIVE WORK STANDARDS · V1 · 2026-06<br>
 PRINCIPLE : AI 출력은 검증 가능한 증거가 붙을 때만 완료 상태가 된다

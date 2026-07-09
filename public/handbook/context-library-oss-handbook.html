@@ -22,6 +22,7 @@
   <a href="#lib-06"><span class="code">LIB-06</span>읽히는 신호</a>
   <a href="#metric-anchor"><span class="code">METRIC</span>수치 앵커</a>
   <a href="#case"><span class="code">CASE</span>실무 상황 예시</a>
+  <a href="#practical-output-criteria"><span class="code">OUTPUT</span>실무 산출물 보강 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -139,6 +140,18 @@
 </div>
 </section>
 
+<section id="practical-output-criteria">
+<div class="ch-head"><span class="ch-code">OUTPUT</span><h2>실무 산출물 보강 기준</h2></div>
+<p class="lede">이 문서는 맥락 설명에서 끝내지 않고 실무자가 제출할 수 있는 산출물로 닫아야 한다. 짧은 글이라도 기준선, 입력 데이터, 판단 기준, 실패 시 조치를 한 표로 남긴다.</p>
+<table>
+<tr><th>보강 항목</th><th>기준</th></tr>
+<tr><td>기준일·범위</td><td>2026-07-09 기준. 라이브러리·패키지·오픈소스 설계 문서에서 다루는 판단 범위와 제외 범위를 명시한다.</td></tr>
+<tr><td>필수 산출물</td><td>npm exports, ESM/CJS, type 배포, changelog, release note</td></tr>
+<tr><td>증거 예시</td><td>public API diff, compatibility matrix, migration note, deprecation window를 함께 제공한다.</td></tr>
+<tr><td>통과 기준</td><td>숫자나 체크리스트가 의사결정, 승인자, rollback/abort 조건 중 하나와 연결되어야 한다.</td></tr>
+<tr><td>나쁜 산출물</td><td>개념 설명만 있고 기준선, 비교 대상, 책임자, 다음 조치가 없는 문서.</td></tr>
+</table>
+</section>
 <footer>
 ENGINEERING CONTEXT HANDBOOK · 라이브러리·패키지·오픈소스 설계 · 2026-07<br>
 PRINCIPLE : 좋은 엔지니어링 글을 술술 읽으려면 기술명보다 규모, 책임, 지표, 호환성, 운영 압력의 언어가 먼저 필요하다.

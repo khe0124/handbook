@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -196,6 +197,17 @@ subjectAltName = DNS:old.example.com</code></pre></td><td>서버 연결은 되�
           <li>내부 resolver와 외부 resolver 결과 차이를 놓친다.</li>
           <li>CNAME flattening이나 ALIAS 동작을 provider마다 같다고 가정한다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">DNS와 TLS는 전파 지연, resolver cache, client 호환성 때문에 기준일과 관측 위치를 분리해 기록해야 한다. 브라우저 성공만으로 배포 완료를 선언하지 않는다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, DNS cutover와 인증서 갱신 전후 재확인</td><td>zone serial, record change id, certificate notBefore/notAfter, issuer</td><td>권한 DNS, recursive resolver, 실제 client 관측값의 시각이 함께 남아 있다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>Route 53/Azure DNS, ACM/Key Vault/App Gateway/Front Door 등 실제 provider와 region, TLS policy version을 명시</td><td>hosted zone/private zone id, certificate ARN 또는 secret id, listener TLS policy</td><td>public DNS와 private DNS view, edge TLS와 origin TLS를 구분한다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>DNS answer, TTL, chain, SAN, protocol/cipher를 캡처</td><td><code>dig +trace</code>, <code>dig @resolver</code>, <code>openssl s_client -servername</code>, <code>curl -v --resolve</code>, LB listener log</td><td>정상/비정상 client matrix와 rollback record가 같은 표에 있다.</td></tr>
+          <tr><td>완료 기준</td><td>cutover, certificate rotation, cache propagation을 재현 가능하게 설명</td><td>old/new answer 비교, expiry alert, OCSP/chain 확인, rollback TTL</td><td>변경 전 낮춘 TTL이 반영됐고, 변경 후 기대 answer와 TLS chain이 모든 필수 client에서 통과한다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

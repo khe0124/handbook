@@ -28,6 +28,7 @@
   <a href="#graphics-ch17"><span class="code">GFX-17</span>근거 기반 그래픽 예산</a>
   <a href="#graphics-ch18"><span class="code">GFX-18</span>자주 봉착하는 문제와 해결</a>
   <a href="#graphics-ch19"><span class="code">GFX-19</span>렌더링 시스템 운영 모델</a>
+  <a href="#quality-evidence-packet"><span class="code">GFX-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -524,6 +525,19 @@
 <span class="co-label">SENIOR REVIEW STANDARD</span>
 <p>그래픽 PR은 화면 캡처 하나로 승인하지 않습니다. 기술 선택 근거, GPU 자원 수명, R3F state boundary, asset budget, fallback, nonblank/context-loss 자동화까지 있어야 운영 가능한 그래픽 기능입니다.</p>
 </div>
+</section>
+
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">GFX-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">그래픽·3D 기능은 데스크톱 캡처 하나로 품질을 판단할 수 없습니다. 실제 기기 행렬과 fallback 증거를 함께 요구합니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, iOS Safari, Android 저사양, 내장 GPU, WebGL unavailable 조건을 검증 행렬에 둡니다.</td><td>device/browser/GPU matrix</td></tr>
+<tr><td>필요 evidence</td><td><code>renderer.info</code>, texture size, draw call, context loss/restore, fallback 캡처, nonblank pixel test를 남깁니다.</td><td>graphics evidence folder</td></tr>
+<tr><td>최소 실습/fixture</td><td>asset 404, slow network, context loss, route 왕복 10회를 같은 scene fixture에서 실행합니다.</td><td>재현 로그와 캡처</td></tr>
+<tr><td>완료 기준</td><td>성능 tier, 자원 해제, 접근성 대체 경로, 제품 CTA 유지가 모두 확인되면 통과입니다.</td><td>3D release packet</td></tr>
+</table>
 </section>
 
 <footer>FRONTEND GRAPHICS · 3D HANDBOOK · V1 · 2026-06</footer>

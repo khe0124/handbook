@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -204,6 +205,17 @@ State: active
           <li>NAT 비용과 가용성을 고려하지 않는다.</li>
           <li>Private Endpoint를 만들고 DNS 설정을 놓친다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">VPC 라우팅 판단은 사람이 그린 경로와 provider가 계산한 경로가 같은지 확인해야 한다. CIDR, subnet, route, security rule은 region과 account 경계를 고정한 뒤 비교한다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, VPC/route/SG 변경마다 재확인</td><td>change ticket, route table diff, SG/NACL diff</td><td>변경 전후 route association과 return path 증거가 남아 있다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>AWS VPC/Transit Gateway/PrivateLink 또는 Azure VNet/Route Table/Private Endpoint, region과 account/subscription을 명시</td><td>VPC/VNet id, subnet id, TGW/peering id, endpoint id, route target</td><td>같은 CIDR이라도 provider별 route precedence와 endpoint DNS 제한을 구분한다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>route, DNS, reachability, packet path를 함께 캡처</td><td>route table export, Reachability Analyzer/Network Watcher 결과, Flow Logs, <code>dig</code>, <code>traceroute</code>, <code>nc -vz</code></td><td>source, destination, protocol, port가 실제 실패 요청과 일치한다.</td></tr>
+          <tr><td>완료 기준</td><td>ingress, egress, return path, DNS view 중 실패 지점을 하나로 좁힘</td><td>blocking component, denied log, endpoint policy, analyzer path</td><td>수정할 owner와 rollback route가 명확하고, 변경 후 같은 조건으로 재실행된다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

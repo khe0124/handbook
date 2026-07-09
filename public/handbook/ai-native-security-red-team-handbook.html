@@ -15,6 +15,7 @@
   <a href="#api"><span class="code">BE-02</span>API 계약</a>
   <a href="#db"><span class="code">BE-03</span>DB 설계</a>
   <a href="#sample"><span class="code">SAMPLE</span>제출 예시</a>
+  <a href="#evaluation-readiness-packet"><span class="code">EVAL</span>평가 가능성</a>
 </nav>
 <main>
 <header class="hero">
@@ -181,6 +182,20 @@ POST /api/admin/refund-requests/:requestId/reject
     decision: pass
     comment: "백엔드 설계가 코드 초안이 아니라 계약, 제약, 권한 판단으로 정리됨"</code></pre>
 </section>
+<section id="evaluation-readiness-packet">
+<div class="ch-head"><span class="ch-code">EVAL</span><h2>평가 가능성 보강 패킷</h2></div>
+<p class="lede">AI Native와 AX 산출물은 좋은 의도보다 재현 가능한 평가 기록으로 닫는다. 아래 패킷이 없으면 데모는 가능해도 운영 승인이나 다음 반복 학습으로 넘기지 않는다.</p>
+<table>
+<tr><th>항목</th><th>기록 기준</th><th>통과 기준</th></tr>
+<tr><td>기준일</td><td>평가 실행일, 사용 모델·도구 버전, 주요 정책·프롬프트 해시, 대상 코드 브랜치를 함께 남긴다.</td><td>2026-07-09 기준으로 재실행자가 같은 입력과 버전을 확인할 수 있다.</td></tr>
+<tr><td>평가셋/fixture</td><td>정상 케이스, 경계값, 실패 유도 케이스, 보안·개인정보 케이스를 최소 3:1:1:1 비율로 둔다.</td><td>fixture 이름, 입력, 기대 출력, 금지 출력, 소유자가 표로 연결된다.</td></tr>
+<tr><td>metric threshold</td><td>정확도, 누락률, hallucination, latency, cost, human override율 중 문서 목적에 맞는 지표를 고른다.</td><td>핵심 경로 pass 95% 이상, 치명 실패 0건, p95 latency와 비용이 사전 budget 안에 있다.</td></tr>
+<tr><td>승인 기준</td><td>제품 책임자, 엔지니어, 보안/운영 검토자가 보는 evidence packet을 분리한다.</td><td>각 승인자가 pass/fail 사유와 남은 예외를 한 줄로 남긴다.</td></tr>
+<tr><td>rollback 기준</td><td>오답 누적, 비용 초과, 개인정보 노출, 권한 없는 자동 실행을 즉시 중단 조건으로 둔다.</td><td>feature flag, 이전 prompt/model, 수동 처리 루트, 사용자 공지 문안이 준비되어 있다.</td></tr>
+</table>
+<div class="callout"><span class="co-label">제출물</span><p><code>eval-packet.md</code>에는 기준일, fixture 링크, metric threshold, 승인자, rollback 절차를 채운 완성 예시와 빈 템플릿을 함께 둔다. 수치가 없는 평가는 학습 기록으로만 보관하고 운영 판단에 쓰지 않는다.</p></div>
+</section>
+
 </main>
 </div>
 </body>

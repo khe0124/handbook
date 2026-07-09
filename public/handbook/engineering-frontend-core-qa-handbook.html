@@ -15,7 +15,7 @@
   <div class="nav-title">프론트엔드 핵심 Q&amp;A</div>
   <a href="#overview"><span class="code">GUIDE</span>훈련 방식</a>
   <a href="#qa-1"><span class="code">Q01</span>프론트엔드의 책임을 어떻게 정의하나요?</a>
-  <a href="#qa-2"><span class="code">Q02</span>브라우저 렌더링 파이프라인을 어떻게 설명하나요?</a>
+  <a href="#qa-2"><span class="code">Q02</span>브라우저 렌더링 파이프라인에서 비용 경계는 어디인가요?</a>
   <a href="#qa-3"><span class="code">Q03</span>접근성을 기능 완료 기준에 어떻게 넣나요?</a>
   <a href="#qa-4"><span class="code">Q04</span>상태 관리는 어떻게 선택하나요?</a>
   <a href="#qa-5"><span class="code">Q05</span>loading, empty, error 상태는 왜 별도로 설계하나요?</a>
@@ -46,6 +46,7 @@
   <a href="#qa-30"><span class="code">Q30</span>API 오류를 UI 상태로 어떻게 매핑하나요?</a>
   <a href="#drill"><span class="code">DRILL</span>꼬리질문 반복 훈련</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
+  <a href="#qa-strengthening-criteria"><span class="code">FE-QA</span>Q&amp;A 보강 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -76,9 +77,9 @@
 <p>컴포넌트 구현만 말하면 loading, empty, error, permission denied, offline, stale data가 빠져 실제 사용자 흐름에서 깨집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>UI와 API 계약 중 무엇을 먼저 고정하나요?</td><td>이 꼬리질문은 &quot;UI와 API 계약 중 무엇을 먼저 고정하나요&quot;를 묻는 압박 지점입니다. 프론트엔드의 책임을 어떻게 정의하나요에 답할 때는 프론트엔드는 화면을 그리는 계층이 아니라 사용자 의도를 안전한 상태 전이와 서버 계약으로 연결하는 runtime boundary입니다라는 기준을 먼저 말하고, 컴포넌트 구현만 말하면 loading, empty, error, permission denied, offline, stale data가 빠져 실제 사용자 흐름에서 깨집니다라는 실패 조건을 screen state matrix로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>상태가 많아지면 어디에 모델링하나요?</td><td>이 꼬리질문은 &quot;상태가 많아지면 어디에 모델링하나요&quot;를 묻는 압박 지점입니다. 프론트엔드의 책임을 어떻게 정의하나요에 답할 때는 프론트엔드는 화면을 그리는 계층이 아니라 사용자 의도를 안전한 상태 전이와 서버 계약으로 연결하는 runtime boundary입니다라는 기준을 먼저 말하고, 컴포넌트 구현만 말하면 loading, empty, error, permission denied, offline, stale data가 빠져 실제 사용자 흐름에서 깨집니다라는 실패 조건을 screen state matrix로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>화면 구현 완료를 어떤 증거로 판단하나요?</td><td>이 꼬리질문은 &quot;화면 구현 완료를 어떤 증거로 판단하나요&quot;를 묻는 압박 지점입니다. 프론트엔드의 책임을 어떻게 정의하나요에 답할 때는 프론트엔드는 화면을 그리는 계층이 아니라 사용자 의도를 안전한 상태 전이와 서버 계약으로 연결하는 runtime boundary입니다라는 기준을 먼저 말하고, 컴포넌트 구현만 말하면 loading, empty, error, permission denied, offline, stale data가 빠져 실제 사용자 흐름에서 깨집니다라는 실패 조건을 screen state matrix로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>UI와 API 계약 중 무엇을 먼저 고정하나요?</td><td>사용자 여정의 상태 행렬을 먼저 고정하고 그 상태를 만들 수 있는 API 응답 계약을 맞춥니다. loading, empty, error, permission denied, stale data가 화면에 어떻게 드러나는지 정해야 필드의 required/nullable, error code, pagination 같은 서버 계약도 안정됩니다.</td></tr>
+<tr><td>상태가 많아지면 어디에 모델링하나요?</td><td>일시적인 입력과 open 상태는 컴포넌트에 두고, 공유 가능한 필터·탭·페이지는 URL에 두며, 서버에서 온 목록과 상세는 server cache에 둡니다. 권한, offline, optimistic update처럼 경계를 넘는 상태는 별도 상태 전이표로 소유자와 만료 조건을 적습니다.</td></tr>
+<tr><td>화면 구현 완료를 어떤 증거로 판단하나요?</td><td>성공 화면 캡처만으로는 부족하고 상태별 스토리, API fixture, keyboard-only 경로, 접근성 tree, route별 RUM 이벤트가 있어야 합니다. 핵심 CTA가 느린 네트워크와 401/403에서도 복구 경로를 보이면 완료로 볼 수 있습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -87,14 +88,14 @@ screen state matrix, API contract, accessibility tree, RUM metric
 </section>
 
 <section id="qa-2">
-<div class="ch-head"><span class="ch-code">Q02</span><h2>브라우저 렌더링 파이프라인을 어떻게 설명하나요?</h2></div>
+<div class="ch-head"><span class="ch-code">Q02</span><h2>브라우저 렌더링 파이프라인에서 비용 경계는 어디인가요?</h2></div>
 <p class="lede">HTML 파싱, CSSOM, style 계산, layout, paint, composite 흐름으로 설명하고, 변경이 어느 단계까지 invalidation시키는지 기준으로 최적화합니다.</p>
 <p>layout을 반복 유발하거나 transform으로 해결할 수 있는 변화를 width/top 변경으로 처리하면 long task와 jank가 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>layout thrashing은 왜 발생하나요?</td><td>렌더링 비용은 layout, paint, composite 중 어디를 건드리는지로 나눕니다. transform/opacity도 layer memory 비용이 있으므로 Performance trace와 frame chart로 실제 개선을 확인합니다. 이 꼬리질문에서는 &quot;layout thrashing은 왜 발생하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Performance trace 또는 Layout/Paint event로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>transform이 항상 좋은가요?</td><td>렌더링 비용은 layout, paint, composite 중 어디를 건드리는지로 나눕니다. transform/opacity도 layer memory 비용이 있으므로 Performance trace와 frame chart로 실제 개선을 확인합니다. 이 꼬리질문에서는 &quot;transform이 항상 좋은가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Performance trace 또는 Layout/Paint event로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>paint와 composite를 어떻게 구분하나요?</td><td>렌더링 비용은 layout, paint, composite 중 어디를 건드리는지로 나눕니다. transform/opacity도 layer memory 비용이 있으므로 Performance trace와 frame chart로 실제 개선을 확인합니다. 이 꼬리질문에서는 &quot;paint와 composite를 어떻게 구분하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 Performance trace 또는 Layout/Paint event로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>layout thrashing은 왜 발생하나요?</td><td>DOM을 읽고 쓰는 작업이 한 frame 안에서 번갈아 일어나면 브라우저가 최신 layout 값을 내기 위해 강제 계산을 반복합니다. 예를 들어 목록 item마다 offsetHeight를 읽고 바로 style을 바꾸면 style recalculation과 layout event가 연쇄로 늘어납니다.</td></tr>
+<tr><td>transform이 항상 좋은가요?</td><td>항상 좋지는 않습니다. transform과 opacity는 layout을 덜 건드릴 수 있지만 새 layer를 만들면 GPU memory와 composite 비용이 늘고, 텍스트 선명도나 hit area가 어긋날 수 있어 Performance trace와 layer border로 확인합니다.</td></tr>
+<tr><td>paint와 composite를 어떻게 구분하나요?</td><td>paint는 픽셀을 다시 그리는 단계이고 composite는 이미 그려진 layer를 합성하는 단계입니다. DevTools Performance에서 Paint event, layer 변화, frame chart를 함께 보면 색상·그림자 변경인지 layer 이동인지 구분할 수 있습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -108,9 +109,9 @@ Performance trace, Layout/Paint event, layer border, frame chart
 <p>마우스로만 확인하면 keyboard trap, focus loss, 잘못된 aria, live region 누락이 출시 후 발견됩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>button 대신 div를 쓰면 무엇이 빠지나요?</td><td>button은 keyboard activation, focus, disabled, accessible name 같은 기본 상호작용 계약을 제공합니다. div로 대체하면 이 계약을 직접 구현해야 하므로 role, tabIndex, Enter/Space 처리, focus style까지 검증해야 합니다. 이 꼬리질문에서는 &quot;button 대신 div를 쓰면 무엇이 빠지나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 axe result 또는 keyboard-only recording로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>aria-label은 언제 위험한가요?</td><td>aria-label은 보이는 텍스트와 다른 이름을 주거나 번역에서 누락되면 오히려 혼란을 만듭니다. 아이콘 단독 버튼처럼 보이는 이름이 없을 때 쓰고, visible label과 accessible name이 어긋나지 않는지 확인합니다. 이 꼬리질문에서는 &quot;aria-label은 언제 위험한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 axe result 또는 keyboard-only recording로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>모달 닫힌 뒤 focus는 어디로 가야 하나요?</td><td>focus는 사용자의 현재 작업 위치입니다. &quot;모달 닫힌 뒤 focus는 어디로 가야 하나요&quot;에서는 이전 trigger, 오류 필드, 새 콘텐츠의 heading 중 어디가 다음 작업 위치인지 정하고 axe result로 keyboard-only 흐름을 확인합니다. 이 꼬리질문에서는 &quot;모달 닫힌 뒤 focus는 어디로 가야 하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 axe result 또는 keyboard-only recording로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>button 대신 div를 쓰면 무엇이 빠지나요?</td><td>button의 기본 focus, Enter/Space activation, disabled 의미, accessible name 계산이 빠집니다. div로 대체하면 role, tabIndex, key handler, focus style, aria-disabled를 직접 맞춰야 하므로 보통 native button을 쓰는 편이 안전합니다.</td></tr>
+<tr><td>aria-label은 언제 위험한가요?</td><td>보이는 텍스트와 aria-label이 다르면 스크린리더와 화면 사용자가 서로 다른 이름을 듣고 보게 됩니다. 번역 누락이나 상태 미반영도 생기므로 아이콘 단독 버튼처럼 시각 이름이 없을 때만 쓰고 accessibility tree로 확인합니다.</td></tr>
+<tr><td>모달 닫힌 뒤 focus는 어디로 가야 하나요?</td><td>대부분 모달을 연 trigger로 돌아가야 합니다. trigger가 삭제되었거나 다음 작업이 명확하면 성공 메시지 heading이나 오류 필드로 보내되, Tab 순서가 body로 빠지지 않는지 keyboard recording으로 검증합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -124,9 +125,9 @@ axe result, keyboard-only recording, screen reader smoke test, DOM snapshot
 <p>모든 상태를 전역 store에 넣으면 stale data, 불필요한 rerender, 테스트 어려움, undo/redo 혼선이 커집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>서버 상태와 클라이언트 상태는 왜 다르나요?</td><td>&quot;서버 상태와 클라이언트 상태는 왜 다르나요&quot;가 중요한 이유는 모든 상태를 전역 store에 넣으면 stale data, 불필요한 rerender, 테스트 어려움, undo/redo 혼선이 커집니다 때문입니다. 단순 구현 설명으로 끝내지 말고 상태의 소유자, 수명, 공유 범위, 서버 동기화 여부로 local state, URL state, external store, server cache를 나눕니다라는 선택 기준과 state ownership map 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>URL에 어떤 상태를 넣어야 하나요?</td><td>이 꼬리질문은 &quot;URL에 어떤 상태를 넣어야 하나요&quot;를 묻는 압박 지점입니다. 상태 관리는 어떻게 선택하나요에 답할 때는 상태의 소유자, 수명, 공유 범위, 서버 동기화 여부로 local state, URL state, external store, server cache를 나눕니다라는 기준을 먼저 말하고, 모든 상태를 전역 store에 넣으면 stale data, 불필요한 rerender, 테스트 어려움, undo/redo 혼선이 커집니다라는 실패 조건을 state ownership map로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>전역 상태가 필요한 신호는 무엇인가요?</td><td>&quot;전역 상태가 필요한 신호는 무엇인가요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 상태 관리는 어떻게 선택하나요의 맥락에 맞게 비교하는 것입니다. 상태의 소유자, 수명, 공유 범위, 서버 동기화 여부로 local state, URL state, external store, server cache를 나눕니다 이후 state ownership map를 통과 기준으로 둡니다.</td></tr>
+<tr><td>서버 상태와 클라이언트 상태는 왜 다르나요?</td><td>서버 상태는 원본 소유자가 서버라 stale, refetch, invalidation, optimistic reconcile이 필요합니다. 클라이언트 상태는 입력값, hover, modal open처럼 브라우저 세션 안에서만 의미가 있어 서버 cache와 같은 규칙으로 다루면 과도하게 복잡해집니다.</td></tr>
+<tr><td>URL에 어떤 상태를 넣어야 하나요?</td><td>공유와 복원이 필요한 검색어, 필터, 정렬, 페이지, 선택된 탭은 URL에 둡니다. 커서 위치, draft 입력, dropdown open처럼 순간적인 UI 상태는 URL에 넣으면 history가 오염되고 뒤로가기 의미가 흐려집니다.</td></tr>
+<tr><td>전역 상태가 필요한 신호는 무엇인가요?</td><td>여러 route에서 같은 상태를 읽고 쓰며, refresh나 권한 변경에 맞춰 일관되게 갱신해야 하면 전역 상태 후보입니다. 단순 prop drilling 불편만으로 전역화하면 render 범위가 넓어지고 stale data 원인이 숨습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -140,9 +141,9 @@ state ownership map, render count, URL restore test, cache invalidation log
 <p>성공 화면만 만들면 네트워크 실패와 권한 실패가 모두 빈 화면으로 보이고 support cost가 늘어납니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>empty와 error를 어떻게 구분하나요?</td><td>&quot;empty와 error를 어떻게 구분하나요&quot;는 먼저 재현 조건을 고정하고, state story와 error fixture를 같이 확인합니다. 답변에서는 성공 화면만 만들면 네트워크 실패와 권한 실패가 모두 빈 화면으로 보이고 support cost가 늘어납니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>부분 성공은 어떻게 보여주나요?</td><td>&quot;부분 성공은 어떻게 보여주나요&quot;는 먼저 재현 조건을 고정하고, state story와 error fixture를 같이 확인합니다. 답변에서는 성공 화면만 만들면 네트워크 실패와 권한 실패가 모두 빈 화면으로 보이고 support cost가 늘어납니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>재시도 버튼은 언제 숨기나요?</td><td>&quot;재시도 버튼은 언제 숨기나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 loading, empty, error 상태는 왜 별도로 설계하나요의 맥락에 맞게 비교하는 것입니다. 각 상태는 사용자의 다음 행동과 복구 경로가 다릅니다 이후 state story를 통과 기준으로 둡니다.</td></tr>
+<tr><td>empty와 error를 어떻게 구분하나요?</td><td>empty는 요청이 성공했고 표시할 데이터가 없는 상태이며, error는 요청이나 권한, 파싱, 네트워크가 실패한 상태입니다. empty에는 생성이나 필터 초기화 action을 주고, error에는 재시도·문의용 traceId·권한 안내를 줍니다.</td></tr>
+<tr><td>부분 성공은 어떻게 보여주나요?</td><td>성공한 데이터는 유지하되 실패한 영역을 독립적으로 표시합니다. 대시보드 카드 일부만 실패했다면 전체 화면을 error로 바꾸지 않고 카드별 retry와 마지막 갱신 시간을 보여주는 편이 사용자의 작업을 덜 막습니다.</td></tr>
+<tr><td>재시도 버튼은 언제 숨기나요?</td><td>권한 없음, 잘못된 입력, 삭제된 리소스처럼 같은 요청을 반복해도 성공 가능성이 낮으면 숨기거나 다른 행동을 제공합니다. network error, 5xx, timeout처럼 일시 실패 가능성이 있으면 retry를 두고 중복 요청 방지를 같이 처리합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -156,9 +157,9 @@ state story, error fixture, retry log, visual regression capture
 <p>onChange 검증만으로 처리하면 IME, paste, autofill, async validation, double submit에서 깨집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>client validation과 server validation은 왜 둘 다 필요한가요?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;client validation과 server validation은 왜 둘 다 필요한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 form state diagram 또는 validation fixture로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>submit 중 버튼을 disable하면 충분한가요?</td><td>아니요. &quot;submit 중 버튼을 disable하면 충분한가요&quot;라는 질문은 조건부로 답해야 합니다. 입력 normalize, validation timing, error placement, submit idempotency, dirty state, browser autofill, IME 조합을 먼저 봅니다라는 전제가 맞을 때만 안전하고, onChange 검증만으로 처리하면 IME, paste, autofill, async validation, double submit에서 깨집니다 따라서 form state diagram로 깨지는 조건을 재현하고 validation fixture로 변경 후 부작용을 확인해야 합니다.</td></tr>
-<tr><td>필드 오류와 전역 오류는 어떻게 나누나요?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;필드 오류와 전역 오류는 어떻게 나누나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 form state diagram 또는 validation fixture로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>client validation과 server validation은 왜 둘 다 필요한가요?</td><td>client validation은 즉시 피드백과 불필요한 요청 감소를 담당하고, server validation은 신뢰 경계에서 최종 데이터 무결성을 보장합니다. 브라우저 우회, 오래된 번들, 권한 변경이 있으므로 서버 오류 코드를 필드 오류로 다시 매핑해야 합니다.</td></tr>
+<tr><td>submit 중 버튼을 disable하면 충분한가요?</td><td>충분하지 않습니다. Enter 제출, 네트워크 재전송, 탭 중복, 느린 응답이 있을 수 있어 pending 상태와 request id, 서버 멱등성 키, 성공 후 중복 navigation 처리가 같이 필요합니다.</td></tr>
+<tr><td>필드 오류와 전역 오류는 어떻게 나누나요?</td><td>필드 오류는 사용자가 특정 입력을 고치면 해결되는 문제에 붙입니다. 인증 만료, 서버 장애, 결제 실패처럼 폼 전체 흐름이나 외부 상태가 원인인 경우는 전역 오류로 보여주고 recovery action을 분리합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -172,9 +173,9 @@ form state diagram, validation fixture, double submit test, IME test
 <p>presentational/container 구분을 기계적으로 적용하면 prop drilling이나 숨은 side effect가 생기고, 반대로 거대한 컴포넌트는 변경 blast radius가 커집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>재사용 컴포넌트는 언제 만들면 안 되나요?</td><td>&quot;재사용 컴포넌트는 언제 만들면 안 되나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 컴포넌트 분리는 어떤 기준으로 하나요의 맥락에 맞게 비교하는 것입니다. 파일 크기가 아니라 책임, state ownership, side effect, 재사용 압력, 테스트 경계를 기준으로 분리합니다 이후 component responsibility table를 통과 기준으로 둡니다.</td></tr>
-<tr><td>hook으로 빼면 항상 좋아지나요?</td><td>아니요. &quot;hook으로 빼면 항상 좋아지나요&quot;라는 질문은 조건부로 답해야 합니다. 파일 크기가 아니라 책임, state ownership, side effect, 재사용 압력, 테스트 경계를 기준으로 분리합니다라는 전제가 맞을 때만 안전하고, presentational/container 구분을 기계적으로 적용하면 prop drilling이나 숨은 side effect가 생기고, 반대로 거대한 컴포넌트는 변경 blast radius가 커집니다 따라서 component responsibility table로 깨지는 조건을 재현하고 story coverage로 변경 후 부작용을 확인해야 합니다.</td></tr>
-<tr><td>컴포넌트 API는 어떻게 안정화하나요?</td><td>&quot;컴포넌트 API는 어떻게 안정화하나요&quot;는 먼저 재현 조건을 고정하고, component responsibility table와 story coverage를 같이 확인합니다. 답변에서는 presentational/container 구분을 기계적으로 적용하면 prop drilling이나 숨은 side effect가 생기고, 반대로 거대한 컴포넌트는 변경 blast radius가 커집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>재사용 컴포넌트는 언제 만들면 안 되나요?</td><td>사용처가 둘뿐인데 요구가 서로 다르거나 접근성 규칙이 안정되지 않았으면 일반화하지 않는 편이 낫습니다. premature abstraction은 variant 폭발과 예외 prop을 만들기 때문에 먼저 반복되는 상태와 API 모양을 확인합니다.</td></tr>
+<tr><td>hook으로 빼면 항상 좋아지나요?</td><td>항상 좋아지지 않습니다. hook은 상태와 side effect 재사용에는 좋지만 UI 계약을 숨기거나 호출 순서 제약을 만들 수 있습니다. DOM 접근, subscription, async race를 포함하면 cleanup과 테스트 경계도 같이 설계해야 합니다.</td></tr>
+<tr><td>컴포넌트 API는 어떻게 안정화하나요?</td><td>필수 상태, 접근성 invariant, 이벤트 payload, controlled/uncontrolled 여부를 문서화하고 Storybook 상태별 예제로 고정합니다. 외부 사용처가 의존할 prop 이름과 의미는 breaking change 정책으로 관리합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -188,9 +189,9 @@ component responsibility table, story coverage, unit test boundary, dependency g
 <p>필터를 local state에만 두면 새로고침/공유/뒤로가기에서 사용자가 같은 화면으로 돌아오지 못합니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>modal state를 URL에 넣어야 할 때는?</td><td>overlay 계열은 시각 위치보다 focus, history, outside click, escape, stacking context가 핵심입니다. 보이는 레이어와 접근성 tree, pointer target이 일치하는지 fixture로 확인합니다. 이 꼬리질문에서는 &quot;modal state를 URL에 넣어야 할 때는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 URL contract 또는 back-forward test로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>query param 변경이 너무 잦으면?</td><td>이 꼬리질문은 &quot;query param 변경이 너무 잦으면&quot;를 묻는 압박 지점입니다. 라우팅 상태와 화면 상태는 어떻게 나누나요에 답할 때는 공유 가능한 탐색 상태는 URL에 두고, 일시적 입력·hover·open 상태는 컴포넌트에 둡니다라는 기준을 먼저 말하고, 필터를 local state에만 두면 새로고침/공유/뒤로가기에서 사용자가 같은 화면으로 돌아오지 못합니다라는 실패 조건을 URL contract로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>뒤로가기 동작은 어떻게 검증하나요?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;뒤로가기 동작은 어떻게 검증하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 URL contract 또는 back-forward test로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>modal state를 URL에 넣어야 할 때는?</td><td>상세 보기, 초대 승인, 결제 단계처럼 공유·새로고침·뒤로가기가 제품 의미를 가지면 URL에 넣습니다. 단순 tooltip이나 임시 설정 panel처럼 페이지 맥락 안에서만 의미가 있으면 local state가 맞습니다.</td></tr>
+<tr><td>query param 변경이 너무 잦으면?</td><td>입력 중에는 local draft로 관리하고 commit 시점에 URL을 갱신합니다. 검색어는 debounce나 제출 시점, slider는 적용 버튼 등으로 history entry가 과도하게 쌓이지 않게 replace와 push 기준을 나눕니다.</td></tr>
+<tr><td>뒤로가기 동작은 어떻게 검증하나요?</td><td>필터 변경, 페이지 이동, modal open/close, form dirty 상태를 포함한 back-forward 시나리오를 Playwright로 확인합니다. URL, 화면 상태, focus, analytics page_view가 같은 의미로 움직이는지 봅니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -204,9 +205,9 @@ URL contract, back-forward test, deep link smoke test, analytics page_view
 <p>디자인 시스템을 우회한 ad hoc 스타일이 늘면 브랜드 일관성뿐 아니라 접근성, dark mode, density 대응이 무너집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>variant가 너무 많아지면 어떻게 줄이나요?</td><td>&quot;variant가 너무 많아지면 어떻게 줄이나요&quot;는 먼저 재현 조건을 고정하고, component contract와 token diff를 같이 확인합니다. 답변에서는 디자인 시스템을 우회한 ad hoc 스타일이 늘면 브랜드 일관성뿐 아니라 접근성, dark mode, density 대응이 무너집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>제품별 예외는 어디에 두나요?</td><td>이 꼬리질문은 &quot;제품별 예외는 어디에 두나요&quot;를 묻는 압박 지점입니다. 디자인 시스템 컴포넌트를 사용할 때 무엇을 검토하나요에 답할 때는 variant, size, disabled/loading/error state, keyboard interaction, token 사용, escape hatch, breaking change 정책을 봅니다라는 기준을 먼저 말하고, 디자인 시스템을 우회한 ad hoc 스타일이 늘면 브랜드 일관성뿐 아니라 접근성, dark mode, density 대응이 무너집니다라는 실패 조건을 component contract로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>토큰 변경의 영향은 어떻게 확인하나요?</td><td>토큰 저장은 XSS와 CSRF 위협 모델을 같이 봅니다. localStorage는 XSS 탈취에 약하고, httpOnly cookie는 CSRF/SameSite 설계가 필요하며, memory 저장은 새로고침과 탭 간 동기화 비용이 있습니다. 이 꼬리질문에서는 &quot;토큰 변경의 영향은 어떻게 확인하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 component contract 또는 token diff로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>variant가 너무 많아지면 어떻게 줄이나요?</td><td>시각 이름이 아니라 제품 의도를 기준으로 합칩니다. primary, danger, ghost처럼 의미가 겹치면 사용 빈도와 접근성 contrast를 보고 제거하며, 일회성 색상은 token 예외로 남기지 않습니다.</td></tr>
+<tr><td>제품별 예외는 어디에 두나요?</td><td>컴포넌트 내부를 fork하기보다 token, slot, composition 같은 명시된 확장 지점에 둡니다. 접근성이나 keyboard 동작을 바꾸는 예외는 디자인 시스템 계약을 깨므로 별도 컴포넌트로 분리해 검토합니다.</td></tr>
+<tr><td>토큰 변경의 영향은 어떻게 확인하나요?</td><td>색, spacing, typography, motion token 변경은 Storybook 상태별 screenshot과 핵심 화면 visual regression으로 확인합니다. contrast, density, dark mode, mobile overflow가 함께 바뀌는지 보는 것이 중요합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -220,9 +221,9 @@ component contract, token diff, Storybook states, visual regression
 <p>하위 컴포넌트마다 fetch하면 waterfall, 중복 요청, loading 상태 분산, error 처리 누락이 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>prefetch는 언제 낭비가 되나요?</td><td>&quot;prefetch는 언제 낭비가 되나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 데이터 fetching 위치를 어떻게 정하나요의 맥락에 맞게 비교하는 것입니다. 페이지 진입에 필요한 데이터는 route/page boundary에서, 사용자 조작 후 필요한 데이터는 interaction boundary에서 가져옵니다 이후 network waterfall를 통과 기준으로 둡니다.</td></tr>
-<tr><td>staleTime은 어떻게 정하나요?</td><td>캐시는 대상별로 다릅니다. hash가 있는 정적 asset은 길게, HTML은 짧게 또는 재검증, API는 freshness 요구에 맞춰야 하며 배포 후 stale bundle 조합을 smoke test로 확인합니다. 이 꼬리질문에서는 &quot;staleTime은 어떻게 정하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 network waterfall 또는 cache key list로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>waterfall은 어디서 확인하나요?</td><td>&quot;waterfall은 어디서 확인하나요&quot;는 먼저 재현 조건을 고정하고, network waterfall와 cache key list를 같이 확인합니다. 답변에서는 하위 컴포넌트마다 fetch하면 waterfall, 중복 요청, loading 상태 분산, error 처리 누락이 생깁니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>prefetch는 언제 낭비가 되나요?</td><td>다음 행동 가능성이 낮거나 모바일 데이터 비용이 큰 화면에서 큰 payload를 미리 받으면 낭비입니다. hover prefetch도 touch 기기에는 의미가 약하므로 route 중요도, cache hit, 취소 가능성을 보고 제한합니다.</td></tr>
+<tr><td>staleTime은 어떻게 정하나요?</td><td>데이터 변경 빈도와 사용자가 오래된 값을 봤을 때의 비용으로 정합니다. 권한, 가격, 재고처럼 민감한 값은 짧게 두고, 문서나 프로필처럼 느리게 바뀌는 값은 길게 둘 수 있습니다.</td></tr>
+<tr><td>waterfall은 어디서 확인하나요?</td><td>DevTools Network waterfall과 framework trace에서 route loader, component fetch, image, script 요청 순서를 봅니다. 같은 cache key 중복, 하위 컴포넌트 지연 fetch, Suspense boundary 배치를 함께 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -236,9 +237,9 @@ network waterfall, cache key list, request dedupe metric, suspense boundary
 <p>브라우저 locale만 믿으면 DST, 해외 사용자, 서버 집계 기준이 엇갈려 날짜가 하루 밀리는 문제가 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>date-only 값은 UTC로 저장하면 안전한가요?</td><td>이 꼬리질문은 &quot;date-only 값은 UTC로 저장하면 안전한가요&quot;를 묻는 압박 지점입니다. 프론트엔드에서 time과 timezone은 어떻게 다루나요에 답할 때는 저장은 UTC, 표시는 사용자 locale/timezone, 입력은 의도한 business timezone을 명시합니다라는 기준을 먼저 말하고, 브라우저 locale만 믿으면 DST, 해외 사용자, 서버 집계 기준이 엇갈려 날짜가 하루 밀리는 문제가 생깁니다라는 실패 조건을 timezone fixture로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>서버 시간이 필요한 이유는?</td><td>&quot;서버 시간이 필요한 이유는&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 프론트엔드에서 time과 timezone은 어떻게 다루나요의 맥락에 맞게 비교하는 것입니다. 저장은 UTC, 표시는 사용자 locale/timezone, 입력은 의도한 business timezone을 명시합니다 이후 timezone fixture를 통과 기준으로 둡니다.</td></tr>
-<tr><td>상대 시간 표시는 어떻게 테스트하나요?</td><td>&quot;상대 시간 표시는 어떻게 테스트하나요&quot;는 먼저 재현 조건을 고정하고, timezone fixture와 DST test를 같이 확인합니다. 답변에서는 브라우저 locale만 믿으면 DST, 해외 사용자, 서버 집계 기준이 엇갈려 날짜가 하루 밀리는 문제가 생깁니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>date-only 값은 UTC로 저장하면 안전한가요?</td><td>항상 안전하지 않습니다. 생일이나 영업일처럼 시간대와 무관한 date-only는 instant가 아니라 calendar date로 저장해야 합니다. UTC midnight으로 바꾸면 미국과 한국 사용자 사이에서 전날이나 다음날로 보일 수 있습니다.</td></tr>
+<tr><td>서버 시간이 필요한 이유는?</td><td>마감, 세션 만료, 할인 종료처럼 판정 기준이 필요한 기능은 클라이언트 clock을 믿으면 조작과 drift에 취약합니다. 서버 timestamp와 남은 시간을 내려받고 브라우저에서는 표시와 countdown만 담당하게 합니다.</td></tr>
+<tr><td>상대 시간 표시는 어떻게 테스트하나요?</td><td>현재 시각을 고정한 fixture로 방금, 1분 전, 하루 전, DST 전후, locale별 문구를 테스트합니다. 시간이 흐르며 hydration mismatch가 생기지 않도록 SSR 값과 client 갱신 시점도 확인합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -252,9 +253,9 @@ timezone fixture, DST test, server timestamp contract, locale snapshot
 <p>버튼을 숨겼다고 API 호출이 막히지 않으며, 캐시된 데이터나 URL 직접 접근에서 권한 누락이 드러납니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>403과 404를 UI에서 어떻게 다루나요?</td><td>&quot;403과 404를 UI에서 어떻게 다루나요&quot;는 먼저 재현 조건을 고정하고, permission matrix와 401/403 fixture를 같이 확인합니다. 답변에서는 버튼을 숨겼다고 API 호출이 막히지 않으며, 캐시된 데이터나 URL 직접 접근에서 권한 누락이 드러납니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>권한 변경 후 캐시는 어떻게 무효화하나요?</td><td>&quot;권한 변경 후 캐시는 어떻게 무효화하나요&quot;는 먼저 재현 조건을 고정하고, permission matrix와 401/403 fixture를 같이 확인합니다. 답변에서는 버튼을 숨겼다고 API 호출이 막히지 않으며, 캐시된 데이터나 URL 직접 접근에서 권한 누락이 드러납니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>관리자 화면의 route guard는 충분한가요?</td><td>아니요. &quot;관리자 화면의 route guard는 충분한가요&quot;라는 질문은 조건부로 답해야 합니다. UI hide는 UX 편의일 뿐 보안 경계는 서버 인가입니다라는 전제가 맞을 때만 안전하고, 버튼을 숨겼다고 API 호출이 막히지 않으며, 캐시된 데이터나 URL 직접 접근에서 권한 누락이 드러납니다 따라서 permission matrix로 깨지는 조건을 재현하고 401/403 fixture로 변경 후 부작용을 확인해야 합니다.</td></tr>
+<tr><td>403과 404를 UI에서 어떻게 다루나요?</td><td>403은 리소스는 있지만 현재 사용자에게 권한이 없다는 복구 안내가 필요하고, 404는 리소스가 없거나 공개하지 않는다는 탐색 복구가 필요합니다. 보안상 존재 여부를 숨겨야 하는 API는 서버 계약에 맞춰 UI 문구를 조정합니다.</td></tr>
+<tr><td>권한 변경 후 캐시는 어떻게 무효화하나요?</td><td>권한 변경 이벤트나 401/403 응답을 받으면 사용자 scope의 query cache와 메뉴, route guard 데이터를 함께 invalidate합니다. 탭이 여러 개라면 BroadcastChannel이나 storage event로 logout과 permission refresh를 전파합니다.</td></tr>
+<tr><td>관리자 화면의 route guard는 충분한가요?</td><td>충분하지 않습니다. route guard는 잘못된 접근을 줄이는 UX 장치이고, 실제 인가는 API와 서버 action에서 매번 확인해야 합니다. deep link, 오래된 bundle, 캐시된 응답도 401/403 fixture로 검증합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -268,9 +269,9 @@ permission matrix, 401/403 fixture, route guard test, server audit log
 <p>한글/영문만 보고 고정 폭을 잡으면 독일어 길이, 아랍어 방향, plural rule, date format에서 UI가 깨집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>문자열 concat이 왜 위험한가요?</td><td>&quot;문자열 concat이 왜 위험한가요&quot;가 중요한 이유는 한글/영문만 보고 고정 폭을 잡으면 독일어 길이, 아랍어 방향, plural rule, date format에서 UI가 깨집니다 때문입니다. 단순 구현 설명으로 끝내지 말고 문장 조립, 숫자/날짜/통화, 복수형, 텍스트 길이, RTL 가능성을 컴포넌트 API와 레이아웃에 반영해야 합니다라는 선택 기준과 locale snapshot 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>아이콘과 텍스트 순서는 어떻게 바뀌나요?</td><td>&quot;아이콘과 텍스트 순서는 어떻게 바뀌나요&quot;는 먼저 재현 조건을 고정하고, locale snapshot와 pseudo localization를 같이 확인합니다. 답변에서는 한글/영문만 보고 고정 폭을 잡으면 독일어 길이, 아랍어 방향, plural rule, date format에서 UI가 깨집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>번역 누락은 어떻게 검출하나요?</td><td>&quot;번역 누락은 어떻게 검출하나요&quot;는 먼저 재현 조건을 고정하고, locale snapshot와 pseudo localization를 같이 확인합니다. 답변에서는 한글/영문만 보고 고정 폭을 잡으면 독일어 길이, 아랍어 방향, plural rule, date format에서 UI가 깨집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>문자열 concat이 왜 위험한가요?</td><td>언어마다 어순, 조사, 복수형, 성별 규칙이 달라 조각을 이어 붙이면 자연스럽게 번역할 수 없습니다. ICU message처럼 변수와 조건을 포함한 문장 단위로 넘겨야 번역자가 맥락을 유지합니다.</td></tr>
+<tr><td>아이콘과 텍스트 순서는 어떻게 바뀌나요?</td><td>RTL에서는 inline 방향과 정렬, chevron 의미, 시작·끝 위치가 바뀔 수 있습니다. CSS logical property와 dir 속성을 사용하고 아이콘이 방향 의미를 갖는지 locale snapshot으로 확인합니다.</td></tr>
+<tr><td>번역 누락은 어떻게 검출하나요?</td><td>빌드 단계에서 key 누락과 미사용 key를 검사하고, pseudo localization으로 길이 증가와 깨진 placeholder를 찾습니다. 런타임 fallback 문구가 그대로 노출되는지도 error logging에 포함합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -284,9 +285,9 @@ locale snapshot, pseudo localization, overflow capture, ICU message lint
 <p>console.log 수준으로 남기면 운영에서 집계할 수 없고, 반대로 payload를 그대로 보내면 개인정보 유출이 됩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>client error와 server error를 어떻게 연결하나요?</td><td>&quot;client error와 server error를 어떻게 연결하나요&quot;는 먼저 재현 조건을 고정하고, client log schema와 redaction test를 같이 확인합니다. 답변에서는 console라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>PII redaction은 어디서 하나요?</td><td>분석과 로그에는 목적에 필요한 최소 정보만 보냅니다. email, token, 입력 원문 같은 PII는 redaction하고, consent 이전 전송과 보존 기간을 privacy review로 막아야 합니다. 이 꼬리질문에서는 &quot;PII redaction은 어디서 하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 client log schema 또는 redaction test로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>console error를 모두 수집하면 되나요?</td><td>이 꼬리질문은 &quot;console error를 모두 수집하면 되나요&quot;를 묻는 압박 지점입니다. 프론트엔드 로그에는 무엇을 남겨야 하나요에 답할 때는 사용자 식별 정보가 아니라 session/request id, route, feature, error code, recovery action, release version을 남깁니다라는 기준을 먼저 말하고, console라는 실패 조건을 client log schema로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>client error와 server error를 어떻게 연결하나요?</td><td>API 응답의 requestId나 traceId를 client log에 함께 남겨 같은 실패를 서버 로그와 묶습니다. route, release version, user action, network status도 포함하면 프론트 오류와 백엔드 오류를 구분하기 쉽습니다.</td></tr>
+<tr><td>PII redaction은 어디서 하나요?</td><td>로그 전송 wrapper에서 schema 기반으로 email, phone, token, free-text input을 제거하거나 hash 처리합니다. 컴포넌트마다 조심하는 방식은 누락되기 쉬우므로 수집 경계에서 막고 테스트 fixture로 확인합니다.</td></tr>
+<tr><td>console error를 모두 수집하면 되나요?</td><td>그대로 모두 수집하면 extension noise와 PII 위험이 커집니다. source map release id, 오류 fingerprint, route, severity를 붙이고 known benign error와 third-party error를 분리해 sampling합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -300,9 +301,9 @@ client log schema, redaction test, sourcemap release id, error dashboard
 <p>개발에서는 경고만 보이고 지나가도 실제로는 이벤트 연결, layout shift, SEO 품질에 영향을 줄 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>window 접근은 어디서 해야 하나요?</td><td>이 꼬리질문은 &quot;window 접근은 어디서 해야 하나요&quot;를 묻는 압박 지점입니다. hydration mismatch는 왜 발생하나요에 답할 때는 서버가 만든 HTML과 클라이언트 첫 렌더 결과가 다를 때 발생합니다라는 기준을 먼저 말하고, 개발에서는 경고만 보이고 지나가도 실제로는 이벤트 연결, layout shift, SEO 품질에 영향을 줄 수 있습니다라는 실패 조건을 hydration warning log로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>random id는 어떻게 안정화하나요?</td><td>&quot;random id는 어떻게 안정화하나요&quot;는 먼저 재현 조건을 고정하고, hydration warning log와 SSR snapshot를 같이 확인합니다. 답변에서는 개발에서는 경고만 보이고 지나가도 실제로는 이벤트 연결, layout shift, SEO 품질에 영향을 줄 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>auth 상태는 SSR에서 어떻게 다루나요?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;auth 상태는 SSR에서 어떻게 다루나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 hydration warning log 또는 SSR snapshot로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>window 접근은 어디서 해야 하나요?</td><td>SSR 렌더 중에는 window가 없으므로 브라우저 전용 값은 effect, client-only boundary, lazy initialization 안에서 읽습니다. 첫 HTML에 영향을 주는 값이면 서버에서 동일한 값을 주입하거나 hydration 전 placeholder를 고정합니다.</td></tr>
+<tr><td>random id는 어떻게 안정화하나요?</td><td>React의 useId처럼 SSR과 client가 같은 순서로 생성하는 API를 쓰거나 서버에서 id를 내려줍니다. Math.random, Date.now로 markup id를 만들면 label-for 연결과 hydration 결과가 달라질 수 있습니다.</td></tr>
+<tr><td>auth 상태는 SSR에서 어떻게 다루나요?</td><td>쿠키나 세션으로 서버에서 초기 auth 상태를 판단해 HTML과 client bootstrap data를 맞춥니다. client에서만 auth를 알 수 있다면 권한 있는 콘텐츠를 SSR로 노출하지 않고 loading 또는 anonymous shell을 고정합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -316,9 +317,9 @@ hydration warning log, SSR snapshot, deterministic render test, Web Vitals CLS
 <p>Error Boundary만 두고 data error를 throw 처리하지 않으면 사용자에게 복구 버튼이나 원인 코드가 전달되지 않습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>boundary를 너무 넓게 두면?</td><td>Error Boundary는 렌더링 subtree 오류를 격리하지만 event handler, async request, 서버 오류를 모두 처리하지는 않습니다. boundary 위치와 fallback 복구 행동을 별도 fixture로 검증해야 합니다. 이 꼬리질문에서는 &quot;boundary를 너무 넓게 두면&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 boundary placement map 또는 fallback story로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>event handler 오류는 어떻게 잡나요?</td><td>애널리틱스는 DOM 클릭이 아니라 사용자 의도와 결과를 기록해야 합니다. event name, action, target, result, error, context를 tracking plan에 고정하고 debug view로 중복·누락을 확인합니다. 이 꼬리질문에서는 &quot;event handler 오류는 어떻게 잡나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 boundary placement map 또는 fallback story로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>fallback에서 어떤 정보를 보여주나요?</td><td>Error Boundary는 렌더링 subtree 오류를 격리하지만 event handler, async request, 서버 오류를 모두 처리하지는 않습니다. boundary 위치와 fallback 복구 행동을 별도 fixture로 검증해야 합니다. 이 꼬리질문에서는 &quot;fallback에서 어떤 정보를 보여주나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 boundary placement map 또는 fallback story로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>boundary를 너무 넓게 두면?</td><td>작은 widget 오류가 전체 route fallback으로 바뀌어 사용자가 다른 정상 영역까지 잃습니다. 결제, grid, sidebar처럼 독립 복구가 가능한 영역은 boundary를 나누고 공통 shell은 유지하는 편이 좋습니다.</td></tr>
+<tr><td>event handler 오류는 어떻게 잡나요?</td><td>React Error Boundary는 event handler 안의 예외를 자동으로 잡지 않습니다. handler 내부 try/catch, promise rejection 처리, error reporting wrapper를 두고 사용자에게는 실패 toast나 inline error를 보여줘야 합니다.</td></tr>
+<tr><td>fallback에서 어떤 정보를 보여주나요?</td><td>사용자가 할 수 있는 재시도, 이전 화면 이동, 문의용 오류 코드, 영향을 받은 영역을 보여줍니다. stack trace나 민감한 payload는 숨기고, logging에는 release id와 boundary 이름을 남깁니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -332,9 +333,9 @@ boundary placement map, fallback story, error reporting event, retry fixture
 <p>코드 diff만 있으면 리뷰어가 사용자 흐름, 성능 변화, 접근성 회귀를 재현하기 어렵습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>작은 UI 변경에도 증거가 필요한가요?</td><td>&quot;작은 UI 변경에도 증거가 필요한가요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 프론트엔드 PR에서 어떤 증거를 남겨야 하나요의 맥락에 맞게 비교하는 것입니다. 주요 state screenshot, keyboard path, network trace, performance before/after, test result, rollout/rollback 조건을 남깁니다 이후 PR evidence packet를 통과 기준으로 둡니다.</td></tr>
-<tr><td>성능 수치가 없으면 무엇을 남기나요?</td><td>이 꼬리질문은 &quot;성능 수치가 없으면 무엇을 남기나요&quot;를 묻는 압박 지점입니다. 프론트엔드 PR에서 어떤 증거를 남겨야 하나요에 답할 때는 주요 state screenshot, keyboard path, network trace, performance before/after, test result, rollout/rollback 조건을 남깁니다라는 기준을 먼저 말하고, 코드 diff만 있으면 리뷰어가 사용자 흐름, 성능 변화, 접근성 회귀를 재현하기 어렵습니다라는 실패 조건을 PR evidence packet로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>롤백 가능성은 어떻게 설명하나요?</td><td>&quot;롤백 가능성은 어떻게 설명하나요&quot;는 먼저 재현 조건을 고정하고, PR evidence packet와 Playwright trace를 같이 확인합니다. 답변에서는 코드 diff만 있으면 리뷰어가 사용자 흐름, 성능 변화, 접근성 회귀를 재현하기 어렵습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>작은 UI 변경에도 증거가 필요한가요?</td><td>위험이 낮은 copy 변경은 간단한 screenshot이면 충분할 수 있지만, 버튼, form, route, auth, analytics에 닿으면 상태별 증거가 필요합니다. 변경 크기보다 사용자 흐름과 실패 비용으로 증거 수준을 정합니다.</td></tr>
+<tr><td>성능 수치가 없으면 무엇을 남기나요?</td><td>수치가 없더라도 변경 전후 DOM 수, bundle diff, network waterfall, render count, 예상 영향 범위를 남깁니다. 성능에 닿는 변경이면 최소한 DevTools trace나 Web Vitals 관측 계획을 함께 적습니다.</td></tr>
+<tr><td>롤백 가능성은 어떻게 설명하나요?</td><td>feature flag로 끌 수 있는지, 이전 API 계약과 호환되는지, cache나 migration 때문에 되돌림이 막히는지 적습니다. release version, guardrail metric, 담당자도 함께 남기면 장애 대응이 빨라집니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -348,9 +349,9 @@ PR evidence packet, Playwright trace, Lighthouse/Web Vitals, visual diff
 <p>TypeScript 타입만 믿으면 실제 API drift, null, unknown enum에서 런타임 UI가 깨집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>nullable과 optional은 왜 다른가요?</td><td>&quot;nullable과 optional은 왜 다른가요&quot;가 중요한 이유는 TypeScript 타입만 믿으면 실제 API drift, null, unknown enum에서 런타임 UI가 깨집니다 때문입니다. 단순 구현 설명으로 끝내지 말고 optional/required, nullable, enum 확장, field removal, versioning을 타입과 runtime validation으로 방어합니다라는 선택 기준과 contract test 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>enum 값이 추가되면 어떻게 하나요?</td><td>&quot;enum 값이 추가되면 어떻게 하나요&quot;는 먼저 재현 조건을 고정하고, contract test와 schema diff를 같이 확인합니다. 답변에서는 TypeScript 타입만 믿으면 실제 API drift, null, unknown enum에서 런타임 UI가 깨집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>GraphQL이면 문제가 사라지나요?</td><td>&quot;GraphQL이면 문제가 사라지나요&quot;가 중요한 이유는 TypeScript 타입만 믿으면 실제 API drift, null, unknown enum에서 런타임 UI가 깨집니다 때문입니다. 단순 구현 설명으로 끝내지 말고 optional/required, nullable, enum 확장, field removal, versioning을 타입과 runtime validation으로 방어합니다라는 선택 기준과 contract test 기반 검증을 함께 제시해야 합니다.</td></tr>
+<tr><td>nullable과 optional은 왜 다른가요?</td><td>optional은 필드가 없을 수 있다는 뜻이고 nullable은 필드는 있지만 값이 null일 수 있다는 뜻입니다. UI에서는 기본값, 숨김, 명시적 빈 상태가 달라지므로 parser와 rendering fixture에서 따로 다뤄야 합니다.</td></tr>
+<tr><td>enum 값이 추가되면 어떻게 하나요?</td><td>unknown enum을 안전한 fallback label과 telemetry로 처리해야 합니다. switch default에서 throw만 하면 새 서버 값 배포 순간 화면이 깨지므로, 미지원 상태를 표시하고 schema diff를 추적합니다.</td></tr>
+<tr><td>GraphQL이면 문제가 사라지나요?</td><td>사라지지 않습니다. GraphQL도 nullable, union, enum 확장, resolver 오류, client cache drift가 있습니다. fragment와 generated type을 쓰더라도 runtime error와 partial data 상태를 UI에 매핑해야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -364,9 +365,9 @@ contract test, schema diff, unknown enum fixture, runtime parser log
 <p>access token을 localStorage에 두거나 대용량 데이터를 동기 storage에 넣으면 보안과 main thread 성능 문제가 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>cookie가 항상 안전한가요?</td><td>토큰 저장은 XSS와 CSRF 위협 모델을 같이 봅니다. localStorage는 XSS 탈취에 약하고, httpOnly cookie는 CSRF/SameSite 설계가 필요하며, memory 저장은 새로고침과 탭 간 동기화 비용이 있습니다. 이 꼬리질문에서는 &quot;cookie가 항상 안전한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 storage policy 또는 XSS threat model로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>IndexedDB는 언제 쓰나요?</td><td>&quot;IndexedDB는 언제 쓰나요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 브라우저 저장소는 어떻게 고르나요의 맥락에 맞게 비교하는 것입니다. 수명, 민감도, 동기/비동기 API, 용량, cross-tab 동기화 기준으로 memory, sessionStorage, localStorage, IndexedDB, cookie를 고릅니다 이후 storage policy를 통과 기준으로 둡니다.</td></tr>
-<tr><td>로그아웃 때 무엇을 지워야 하나요?</td><td>이 꼬리질문은 &quot;로그아웃 때 무엇을 지워야 하나요&quot;를 묻는 압박 지점입니다. 브라우저 저장소는 어떻게 고르나요에 답할 때는 수명, 민감도, 동기/비동기 API, 용량, cross-tab 동기화 기준으로 memory, sessionStorage, localStorage, IndexedDB, cookie를 고릅니다라는 기준을 먼저 말하고, access token을 localStorage에 두거나 대용량 데이터를 동기 storage에 넣으면 보안과 main thread 성능 문제가 생깁니다라는 실패 조건을 storage policy로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>cookie가 항상 안전한가요?</td><td>항상 안전하지 않습니다. httpOnly cookie는 JS 탈취를 줄이지만 CSRF, SameSite, Secure, domain/path 설정이 맞아야 합니다. 민감 데이터 자체를 cookie에 넣기보다 세션 식별자와 서버 검증으로 제한합니다.</td></tr>
+<tr><td>IndexedDB는 언제 쓰나요?</td><td>대용량 구조화 데이터, offline queue, draft, binary cache처럼 비동기 저장과 용량이 필요한 경우에 씁니다. 단순 feature flag나 작은 UI 설정은 복잡도를 고려해 memory, cookie, localStorage와 비교합니다.</td></tr>
+<tr><td>로그아웃 때 무엇을 지워야 하나요?</td><td>access/session 관련 memory state, server cache, IndexedDB draft 중 사용자 scope 데이터, localStorage 설정, BroadcastChannel 상태를 정리합니다. 여러 탭이 열려 있으면 logout event를 전파해 stale 권한 화면을 닫아야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -380,9 +381,9 @@ storage policy, XSS threat model, quota test, cross-tab sync test
 <p>연결만 열면 끝이라고 보면 네트워크 전환, 중복 이벤트, 오래된 토큰, hidden tab 리소스 낭비에서 깨집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>SSE와 WebSocket 선택 기준은?</td><td>&quot;SSE와 WebSocket 선택 기준은&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 웹소켓이나 SSE를 도입할 때 무엇을 보나요의 맥락에 맞게 비교하는 것입니다. 실시간성 요구, 재연결, backoff, ordering, missed event replay, auth refresh, tab visibility를 봅니다 이후 connection state machine를 통과 기준으로 둡니다.</td></tr>
-<tr><td>놓친 이벤트는 어떻게 복구하나요?</td><td>&quot;놓친 이벤트는 어떻게 복구하나요&quot;는 먼저 재현 조건을 고정하고, connection state machine와 reconnect log를 같이 확인합니다. 답변에서는 연결만 열면 끝이라고 보면 네트워크 전환, 중복 이벤트, 오래된 토큰, hidden tab 리소스 낭비에서 깨집니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>토큰 만료 중 연결은 어떻게 되나요?</td><td>토큰 저장은 XSS와 CSRF 위협 모델을 같이 봅니다. localStorage는 XSS 탈취에 약하고, httpOnly cookie는 CSRF/SameSite 설계가 필요하며, memory 저장은 새로고침과 탭 간 동기화 비용이 있습니다. 이 꼬리질문에서는 &quot;토큰 만료 중 연결은 어떻게 되나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 connection state machine 또는 reconnect log로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>SSE와 WebSocket 선택 기준은?</td><td>서버에서 클라이언트로 단방향 이벤트를 보내면 SSE가 단순하고 HTTP 친화적입니다. 양방향 저지연 조작, presence, 협업 편집처럼 client 메시지가 많으면 WebSocket을 고려합니다.</td></tr>
+<tr><td>놓친 이벤트는 어떻게 복구하나요?</td><td>event id나 cursor를 저장하고 재연결 시 마지막 처리 지점 이후를 replay합니다. replay가 불가능하면 snapshot refetch로 상태를 수렴시키고 중복 이벤트는 idempotent reducer로 처리합니다.</td></tr>
+<tr><td>토큰 만료 중 연결은 어떻게 되나요?</td><td>연결이 401/close code로 종료되면 refresh를 시도하고 성공 후 cursor 기준으로 재연결합니다. refresh 실패는 logout 또는 권한 오류 UI로 수렴시키고 무한 reconnect loop를 막습니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -396,9 +397,9 @@ connection state machine, reconnect log, event cursor, stale token fixture
 <p>flag가 권한처럼 사용되거나 제거되지 않으면 복잡도가 누적되고 사용자별 UI 불일치가 생깁니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>flag 기본값은 무엇으로 두나요?</td><td>flag는 권한이 아니라 rollout과 kill switch 수단입니다. 기본값, 노출 이벤트, targeting, stale flag 제거, 서버/클라이언트 불일치 시 동작을 release checklist에 넣어야 합니다. 이 꼬리질문에서는 &quot;flag 기본값은 무엇으로 두나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 flag inventory 또는 exposure event로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>SSR에서 flag는 어떻게 주입하나요?</td><td>렌더링 방식은 SEO, TTFB, LCP, 개인화, hydration 비용의 trade-off입니다. SSR은 HTML을 빨리 주지만 hydration 비용이 있고, CSR은 단순하지만 초기 표시와 색인에 불리할 수 있습니다. 이 꼬리질문에서는 &quot;SSR에서 flag는 어떻게 주입하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 flag inventory 또는 exposure event로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>권한과 flag는 왜 다르나요?</td><td>flag는 권한이 아니라 rollout과 kill switch 수단입니다. 기본값, 노출 이벤트, targeting, stale flag 제거, 서버/클라이언트 불일치 시 동작을 release checklist에 넣어야 합니다. 이 꼬리질문에서는 &quot;권한과 flag는 왜 다르나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 flag inventory 또는 exposure event로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>flag 기본값은 무엇으로 두나요?</td><td>네트워크 실패나 SSR 누락 때 사용자에게 더 안전한 쪽으로 둡니다. 결제나 삭제 같은 위험 기능은 off가 기본이고, 이미 공개된 핵심 기능은 fallback UI가 유지되도록 기본값을 정합니다.</td></tr>
+<tr><td>SSR에서 flag는 어떻게 주입하나요?</td><td>서버에서 평가한 flag snapshot을 HTML bootstrap data로 내려 client 첫 렌더와 맞춥니다. client에서 다시 평가할 때 값이 바뀌면 hydration mismatch와 layout shift가 생길 수 있어 rollout key와 cache 시간을 명확히 둡니다.</td></tr>
+<tr><td>권한과 flag는 왜 다르나요?</td><td>권한은 사용자가 행동할 수 있는 보안·비즈니스 규칙이고 서버가 최종 판단합니다. flag는 배포와 실험을 조절하는 운영 장치라서 flag가 켜져도 서버 인가가 없으면 action은 실패해야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -412,9 +413,9 @@ flag inventory, exposure event, kill switch drill, stale flag cleanup PR
 <p>input만 붙이면 대용량 파일, 중단된 네트워크, 중복 업로드, object URL leak, server scan pending에서 문제가 납니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>확장자 검증만으로 충분한가요?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;확장자 검증만으로 충분한가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 upload state machine 또는 cancel test로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>progress 100%와 처리 완료는 같은가요?</td><td>이 꼬리질문은 &quot;progress 100%와 처리 완료는 같은가요&quot;를 묻는 압박 지점입니다. 파일 업로드 UI는 무엇이 어렵나요에 답할 때는 파일 크기/타입 검증, preview memory, progress, cancel, retry, direct upload URL 만료, 바이러스 검사 상태를 포함해야 합니다라는 기준을 먼저 말하고, input만 붙이면 대용량 파일, 중단된 네트워크, 중복 업로드, object URL leak, server scan pending에서 문제가 납니다라는 실패 조건을 upload state machine로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>업로드 취소는 서버에도 전달해야 하나요?</td><td>이 꼬리질문은 &quot;업로드 취소는 서버에도 전달해야 하나요&quot;를 묻는 압박 지점입니다. 파일 업로드 UI는 무엇이 어렵나요에 답할 때는 파일 크기/타입 검증, preview memory, progress, cancel, retry, direct upload URL 만료, 바이러스 검사 상태를 포함해야 합니다라는 기준을 먼저 말하고, input만 붙이면 대용량 파일, 중단된 네트워크, 중복 업로드, object URL leak, server scan pending에서 문제가 납니다라는 실패 조건을 upload state machine로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>확장자 검증만으로 충분한가요?</td><td>충분하지 않습니다. 확장자는 쉽게 바꿀 수 있으므로 MIME, magic byte, 서버 측 스캔과 크기 제한이 필요합니다. 프론트 검증은 빠른 피드백이고 신뢰 경계는 서버에 둡니다.</td></tr>
+<tr><td>progress 100%와 처리 완료는 같은가요?</td><td>다릅니다. progress 100%는 브라우저가 bytes 전송을 끝냈다는 뜻이고, 서버 저장, 변환, 바이러스 검사, metadata 생성은 아직 진행 중일 수 있습니다. UI는 uploaded와 processing, ready 상태를 분리해야 합니다.</td></tr>
+<tr><td>업로드 취소는 서버에도 전달해야 하나요?</td><td>가능하면 전달해야 합니다. direct upload나 multipart upload는 client abort만으로 서버 임시 파일이 사라지지 않을 수 있어 cancel endpoint, multipart abort, cleanup job을 함께 둡니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -428,9 +429,9 @@ upload state machine, cancel test, object URL cleanup, server scan status fixtur
 <p>index를 row key로 쓰거나 selection을 화면 순서에 묶으면 정렬/필터 후 잘못된 행이 수정됩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>row key는 왜 안정적이어야 하나요?</td><td>그리드 답변은 row identity와 action scope가 핵심입니다. 정렬·필터·페이지 변경 후에도 selection이 어떤 데이터에 적용되는지 stable id와 confirmation copy로 고정해야 합니다. 이 꼬리질문에서는 &quot;row key는 왜 안정적이어야 하나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 row id contract 또는 grid interaction test로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>가상 스크롤에서 접근성은?</td><td>이 꼬리질문은 &quot;가상 스크롤에서 접근성은&quot;를 묻는 압박 지점입니다. 테이블이나 그리드 화면은 어떤 계약이 필요하나요에 답할 때는 정렬/필터/페이지, column visibility, row identity, selection persistence, virtual scroll, inline edit validation을 명시해야 합니다라는 기준을 먼저 말하고, index를 row key로 쓰거나 selection을 화면 순서에 묶으면 정렬/필터 후 잘못된 행이 수정됩니다라는 실패 조건을 row id contract로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>inline edit 실패는 어떻게 복구하나요?</td><td>&quot;inline edit 실패는 어떻게 복구하나요&quot;는 먼저 재현 조건을 고정하고, row id contract와 grid interaction test를 같이 확인합니다. 답변에서는 index를 row key로 쓰거나 selection을 화면 순서에 묶으면 정렬/필터 후 잘못된 행이 수정됩니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>row key는 왜 안정적이어야 하나요?</td><td>정렬, 필터, pagination, realtime update 후에도 같은 데이터를 같은 행으로 인식해야 selection과 inline edit가 안전합니다. index key를 쓰면 화면 순서가 바뀔 때 다른 사용자의 행에 편집 상태가 붙을 수 있습니다.</td></tr>
+<tr><td>가상 스크롤에서 접근성은?</td><td>DOM에 일부 row만 존재하므로 screen reader가 전체 행 수, 현재 위치, keyboard navigation을 이해하도록 aria-rowcount, aria-rowindex, focus management를 보완해야 합니다. 중요한 데이터는 export나 non-virtual fallback도 검토합니다.</td></tr>
+<tr><td>inline edit 실패는 어떻게 복구하나요?</td><td>서버 실패 시 원래 값으로 되돌리거나 오류 상태를 cell에 유지하고 재시도·취소를 제공합니다. optimistic update를 했다면 row version과 validation message를 이용해 충돌과 권한 실패를 구분합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -444,9 +445,9 @@ row id contract, grid interaction test, virtualization capture, edit rollback fi
 <p>데스크톱 기준 레이아웃만 줄이면 키보드가 input을 가리고, fixed footer와 주소창 변화로 CTA가 사라집니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>100vh가 모바일에서 위험한 이유는?</td><td>모바일은 작은 화면 문제가 아니라 viewport 변화, 가상 키보드, touch target, 네트워크, 저사양 CPU 문제가 함께 옵니다. 실제 기기 viewport screenshot과 RUM segment로 확인합니다. 이 꼬리질문에서는 &quot;100vh가 모바일에서 위험한 이유는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 mobile viewport screenshot 또는 touch target audit로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>터치 타겟 크기는 어떻게 잡나요?</td><td>모바일은 작은 화면 문제가 아니라 viewport 변화, 가상 키보드, touch target, 네트워크, 저사양 CPU 문제가 함께 옵니다. 실제 기기 viewport screenshot과 RUM segment로 확인합니다. 이 꼬리질문에서는 &quot;터치 타겟 크기는 어떻게 잡나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 mobile viewport screenshot 또는 touch target audit로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>모바일 성능은 데스크톱과 무엇이 다르나요?</td><td>이 꼬리질문은 &quot;모바일 성능은 데스크톱과 무엇이 다르나요&quot;를 묻는 압박 지점입니다. 모바일 웹 대응에서 무엇을 먼저 확인하나요에 답할 때는 viewport, safe area, touch target, virtual keyboard, scroll locking, network quality, reduced data를 봅니다라는 기준을 먼저 말하고, 데스크톱 기준 레이아웃만 줄이면 키보드가 input을 가리고, fixed footer와 주소창 변화로 CTA가 사라집니다라는 실패 조건을 mobile viewport screenshot로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>100vh가 모바일에서 위험한 이유는?</td><td>모바일 브라우저 주소창과 toolbar가 접히고 펼쳐지면서 실제 viewport 높이가 변합니다. 100vh에 fixed CTA를 맞추면 가상 키보드나 safe area에 가려질 수 있어 dvh/svh/lvh와 keyboard overlay를 함께 확인합니다.</td></tr>
+<tr><td>터치 타겟 크기는 어떻게 잡나요?</td><td>손가락 입력 오차와 한 손 사용을 고려해 충분한 hit area와 간격을 둡니다. 시각 아이콘이 작아도 button padding으로 target을 키우고, 가까운 destructive action은 accidental tap 방지를 넣습니다.</td></tr>
+<tr><td>모바일 성능은 데스크톱과 무엇이 다르나요?</td><td>CPU, 메모리, 네트워크, 배터리, thermal throttling이 더 제한적입니다. desktop trace가 좋아도 저사양 Android의 INP, image decode, JS parse time, scroll FPS를 따로 봐야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -460,9 +461,9 @@ mobile viewport screenshot, touch target audit, keyboard overlay test, RUM by de
 <p>마지막으로 도착한 응답을 무조건 반영하면 사용자가 현재 보는 필터와 다른 데이터가 화면에 표시됩니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>AbortController는 서버 작업도 취소하나요?</td><td>이 꼬리질문은 &quot;AbortController는 서버 작업도 취소하나요&quot;를 묻는 압박 지점입니다. 프론트엔드에서 race condition은 어떻게 생기나요에 답할 때는 빠른 입력, route 전환, 중복 요청, 오래된 응답, optimistic update 실패에서 생깁니다라는 기준을 먼저 말하고, 마지막으로 도착한 응답을 무조건 반영하면 사용자가 현재 보는 필터와 다른 데이터가 화면에 표시됩니다라는 실패 조건을 stale response fixture로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>optimistic update 실패는 어떻게 되돌리나요?</td><td>optimistic UI와 undo는 실패 복구가 설계되어 있을 때만 안전합니다. 서버 최종 상태와 reconcile하고, 되돌릴 수 없는 side effect는 compensation API나 명시적 취소 상태로 다룹니다. 이 꼬리질문에서는 &quot;optimistic update 실패는 어떻게 되돌리나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 stale response fixture 또는 AbortController test로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>검색 입력은 debounce만 하면 충분한가요?</td><td>아니요. &quot;검색 입력은 debounce만 하면 충분한가요&quot;라는 질문은 조건부로 답해야 합니다. 빠른 입력, route 전환, 중복 요청, 오래된 응답, optimistic update 실패에서 생깁니다라는 전제가 맞을 때만 안전하고, 마지막으로 도착한 응답을 무조건 반영하면 사용자가 현재 보는 필터와 다른 데이터가 화면에 표시됩니다 따라서 stale response fixture로 깨지는 조건을 재현하고 AbortController test로 변경 후 부작용을 확인해야 합니다.</td></tr>
+<tr><td>AbortController는 서버 작업도 취소하나요?</td><td>브라우저 요청 소비를 중단하고 연결을 끊을 수는 있지만 서버 작업이 이미 시작되었다면 자동으로 롤백되지는 않습니다. 서버가 cancellation signal이나 idempotency key를 지원하는지 확인해야 합니다.</td></tr>
+<tr><td>optimistic update 실패는 어떻게 되돌리나요?</td><td>변경 전 snapshot이나 inverse patch를 저장해 실패 시 cache를 복구하고 사용자에게 원인과 재시도 행동을 보여줍니다. 여러 mutation이 겹치면 queue와 entity version으로 순서를 맞춰야 합니다.</td></tr>
+<tr><td>검색 입력은 debounce만 하면 충분한가요?</td><td>충분하지 않습니다. debounce는 요청 수를 줄일 뿐 오래된 응답이 나중에 도착하는 문제를 막지 못합니다. query key, request id, AbortController, 현재 입력값 비교로 stale response 반영을 막아야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -476,9 +477,9 @@ stale response fixture, AbortController test, mutation log, cache version trace
 <p>과도하게 유연한 API는 사용처마다 접근성과 레이아웃 책임이 흩어져 디자인 시스템 품질을 떨어뜨립니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>compound component는 언제 적합한가요?</td><td>&quot;compound component는 언제 적합한가요&quot;의 판단 기준은 사용자 영향, 변경 빈도, 실패 비용을 컴포넌트 API에서 children과 render prop은 언제 쓰나요의 맥락에 맞게 비교하는 것입니다. 구조를 호출자가 제어해야 하면 children, 내부 상태를 공유하며 렌더링을 위임해야 하면 render prop을 고려합니다 이후 usage examples를 통과 기준으로 둡니다.</td></tr>
-<tr><td>slot API의 위험은?</td><td>&quot;slot API의 위험은&quot;가 중요한 이유는 과도하게 유연한 API는 사용처마다 접근성과 레이아웃 책임이 흩어져 디자인 시스템 품질을 떨어뜨립니다 때문입니다. 단순 구현 설명으로 끝내지 말고 구조를 호출자가 제어해야 하면 children, 내부 상태를 공유하며 렌더링을 위임해야 하면 render prop을 고려합니다라는 선택 기준과 usage examples 기반 검증을 함께 제시해야 합니다.</td></tr>
-<tr><td>유연성과 일관성은 어떻게 균형 잡나요?</td><td>&quot;유연성과 일관성은 어떻게 균형 잡나요&quot;는 먼저 재현 조건을 고정하고, usage examples와 a11y invariant test를 같이 확인합니다. 답변에서는 과도하게 유연한 API는 사용처마다 접근성과 레이아웃 책임이 흩어져 디자인 시스템 품질을 떨어뜨립니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
+<tr><td>compound component는 언제 적합한가요?</td><td>Tabs, Menu, Dialog처럼 여러 하위 요소가 한 상태와 keyboard pattern을 공유할 때 적합합니다. 내부 context로 selection과 focus를 관리하되 role, aria 연결, 필수 child 누락을 개발 모드에서 경고합니다.</td></tr>
+<tr><td>slot API의 위험은?</td><td>slot이 너무 열려 있으면 사용처가 접근성 필수 요소나 layout 제약을 깨기 쉽습니다. header, trigger, item처럼 의미가 분명한 slot만 열고, dangerous escape hatch는 리뷰 기준을 둡니다.</td></tr>
+<tr><td>유연성과 일관성은 어떻게 균형 잡나요?</td><td>스타일 자유도보다 interaction과 접근성 invariant를 먼저 고정합니다. variant와 slot은 제품에서 반복되는 차이를 수용하는 수준으로 제한하고, 임의 DOM 교체가 필요하면 별도 컴포넌트로 분리합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -492,9 +493,9 @@ usage examples, a11y invariant test, API review note, breaking change policy
 <p>화면 캡처만 보고 CSS부터 바꾸면 데이터 race나 API contract 오류를 가릴 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>재현이 안 되는 버그는 어떻게 추적하나요?</td><td>&quot;재현이 안 되는 버그는 어떻게 추적하나요&quot;는 먼저 재현 조건을 고정하고, repro steps와 HAR를 같이 확인합니다. 답변에서는 화면 캡처만 보고 CSS부터 바꾸면 데이터 race나 API contract 오류를 가릴 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>브라우저별 차이는 어디서 확인하나요?</td><td>&quot;브라우저별 차이는 어디서 확인하나요&quot;는 먼저 재현 조건을 고정하고, repro steps와 HAR를 같이 확인합니다. 답변에서는 화면 캡처만 보고 CSS부터 바꾸면 데이터 race나 API contract 오류를 가릴 수 있습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>사용자 세션 로그는 어디까지 봐야 하나요?</td><td>이 꼬리질문은 &quot;사용자 세션 로그는 어디까지 봐야 하나요&quot;를 묻는 압박 지점입니다. 프론트엔드에서 보이는 버그와 실제 원인을 어떻게 연결하나요에 답할 때는 증상을 DOM, network, state, render, backend response, browser compatibility로 분해하고 재현 fixture를 고정합니다라는 기준을 먼저 말하고, 화면 캡처만 보고 CSS부터 바꾸면 데이터 race나 API contract 오류를 가릴 수 있습니다라는 실패 조건을 repro steps로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>재현이 안 되는 버그는 어떻게 추적하나요?</td><td>release version, browser, device, route, feature flag, network status, requestId를 로그에 남겨 조건을 좁힙니다. session replay가 있다면 PII masking 범위 안에서 DOM 변화와 API 실패를 함께 봅니다.</td></tr>
+<tr><td>브라우저별 차이는 어디서 확인하나요?</td><td>browser matrix에 따라 Safari/iOS WebView/Firefox/Chrome에서 같은 fixture를 실행하고, caniuse와 MDN compat로 API 지원을 확인합니다. CSS layout, input, storage, media 정책은 브라우저 차이가 자주 납니다.</td></tr>
+<tr><td>사용자 세션 로그는 어디까지 봐야 하나요?</td><td>문제 해결에 필요한 route, action, error code, timing, requestId까지만 봅니다. 입력 원문, token, 민감한 화면 내용은 redaction하고 접근 권한과 보존 기간을 제한해야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -508,9 +509,9 @@ repro steps, HAR, React Profiler, DOM snapshot, browser matrix
 <p>실패 상태와 검증 증거를 말하지 못하면 외부 검증에서 실제 운영 가능성을 방어하기 어렵습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>경험이 없는 영역은 어떻게 답하나요?</td><td>&quot;경험이 없는 영역은 어떻게 답하나요&quot;는 먼저 재현 조건을 고정하고, FRONTEND QA TRAINING PACKET와 PR evidence를 같이 확인합니다. 답변에서는 실패 상태와 검증 증거를 말하지 못하면 외부 검증에서 실제 운영 가능성을 방어하기 어렵습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>트레이드오프를 어떻게 짧게 말하나요?</td><td>&quot;트레이드오프를 어떻게 짧게 말하나요&quot;는 먼저 재현 조건을 고정하고, FRONTEND QA TRAINING PACKET와 PR evidence를 같이 확인합니다. 답변에서는 실패 상태와 검증 증거를 말하지 못하면 외부 검증에서 실제 운영 가능성을 방어하기 어렵습니다라는 실패 모드가 다시 생기지 않도록 자동화 또는 릴리스 체크에 넣는다고 말해야 합니다.</td></tr>
-<tr><td>검증 증거를 하나만 고르면 무엇인가요?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;검증 증거를 하나만 고르면 무엇인가요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 FRONTEND QA TRAINING PACKET 또는 PR evidence로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>경험이 없는 영역은 어떻게 답하나요?</td><td>직접 운영한 범위와 설계로 아는 범위를 분리해 말합니다. 예를 들어 WebSocket 경험이 적다면 reconnect, cursor replay, auth refresh를 어떤 fixture로 검증할지 설명해 추정과 사실을 구분합니다.</td></tr>
+<tr><td>트레이드오프를 어떻게 짧게 말하나요?</td><td>선택지, 얻는 것, 잃는 것, 검증 방법 순서로 말합니다. 예를 들어 client cache를 늘리면 network는 줄지만 stale 권한 위험이 커지므로 invalidation과 403 fixture가 필요하다고 압축합니다.</td></tr>
+<tr><td>검증 증거를 하나만 고르면 무엇인가요?</td><td>사용자 핵심 흐름을 담은 Playwright trace나 상태별 fixture를 고릅니다. 화면, network, console, timing을 함께 보여주므로 접근성이나 성능 전문 지표가 없을 때도 운영 가능한 근거가 됩니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -524,9 +525,9 @@ FRONTEND QA TRAINING PACKET, PR evidence, release health window, incident note
 <p>최신 Chrome 기준으로만 구현하면 Safari, iOS WebView, 저사양 Android에서 핵심 흐름이 깨질 수 있습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>polyfill은 언제 넣나요?</td><td>브라우저 호환성은 최신 Chrome에서 보이는지보다 지원 matrix에서 핵심 기능이 degrade 가능한지가 중요합니다. polyfill 비용과 fallback을 함께 보고 cross-browser smoke를 남깁니다. 이 꼬리질문에서는 &quot;polyfill은 언제 넣나요&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 browser support matrix 또는 caniuse audit로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>지원 브라우저를 줄이려면?</td><td>이 꼬리질문은 &quot;지원 브라우저를 줄이려면&quot;를 묻는 압박 지점입니다. 브라우저 호환성 이슈는 어떻게 답변하나요에 답할 때는 표준 지원 여부, browser matrix, polyfill, progressive enhancement, fallback을 기준으로 답합니다라는 기준을 먼저 말하고, 최신 Chrome 기준으로만 구현하면 Safari, iOS WebView, 저사양 Android에서 핵심 흐름이 깨질 수 있습니다라는 실패 조건을 browser support matrix로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>progressive enhancement는?</td><td>브라우저 호환성은 최신 Chrome에서 보이는지보다 지원 matrix에서 핵심 기능이 degrade 가능한지가 중요합니다. polyfill 비용과 fallback을 함께 보고 cross-browser smoke를 남깁니다. 이 꼬리질문에서는 &quot;progressive enhancement는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 browser support matrix 또는 caniuse audit로 확인한 증거를 붙입니다.</td></tr>
+<tr><td>polyfill은 언제 넣나요?</td><td>지원 브라우저에서 핵심 사용자 흐름에 필요한 API가 없고 fallback만으로 제품 요구를 만족할 수 없을 때 넣습니다. polyfill의 bundle 비용, 전역 오염, 오래된 브라우저 성능을 확인하고 route별 로딩도 고려합니다.</td></tr>
+<tr><td>지원 브라우저를 줄이려면?</td><td>사용자 비율, 매출·업무 영향, 장애 비용, 대체 접근 가능성을 데이터로 보고 결정합니다. 단순히 개발 편의로 줄이지 않고 browser matrix, RUM segment, 고객 공지와 graceful fallback 계획을 함께 둡니다.</td></tr>
+<tr><td>progressive enhancement는?</td><td>기본 HTML과 form, link, 읽기 가능한 콘텐츠로 핵심 작업을 제공하고 지원 환경에서만 고급 API를 더하는 방식입니다. 예를 들어 Web Share나 View Transition이 없어도 저장, 제출, 탐색은 계속 동작해야 합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -540,9 +541,9 @@ browser support matrix, caniuse audit, cross-browser E2E, fallback screenshot
 <p>모든 오류를 toast로만 처리하면 사용자가 무엇을 고쳐야 하는지, 재시도 가능한지 알 수 없습니다.</p>
 <table>
 <tr><th>꼬리질문</th><th>꼬리질문 답변</th></tr>
-<tr><td>500과 network error는?</td><td>이 꼬리질문은 &quot;500과 network error는&quot;를 묻는 압박 지점입니다. API 오류를 UI 상태로 어떻게 매핑하나요에 답할 때는 HTTP status, domain error code, retryable 여부, field error, global error, auth error를 화면 상태와 연결합니다라는 기준을 먼저 말하고, 모든 오류를 toast로만 처리하면 사용자가 무엇을 고쳐야 하는지, 재시도 가능한지 알 수 없습니다라는 실패 조건을 error contract로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
-<tr><td>field error와 form error는?</td><td>필드 오류는 사용자가 즉시 수정할 수 있는 입력 문제에 붙이고, 전역 오류는 인증 만료·서버 실패·부분 실패처럼 폼 전체 흐름에 영향을 주는 문제에 씁니다. 서버 오류 코드를 UI 상태로 매핑하는 fixture가 필요합니다. 이 꼬리질문에서는 &quot;field error와 form error는&quot;가 실제로 어떤 조건에서 깨지는지까지 말해야 하며, 답변 끝에는 error contract 또는 UI state matrix로 확인한 증거를 붙입니다.</td></tr>
-<tr><td>traceId를 보여줘야 하나요?</td><td>이 꼬리질문은 &quot;traceId를 보여줘야 하나요&quot;를 묻는 압박 지점입니다. API 오류를 UI 상태로 어떻게 매핑하나요에 답할 때는 HTTP status, domain error code, retryable 여부, field error, global error, auth error를 화면 상태와 연결합니다라는 기준을 먼저 말하고, 모든 오류를 toast로만 처리하면 사용자가 무엇을 고쳐야 하는지, 재시도 가능한지 알 수 없습니다라는 실패 조건을 error contract로 재현해 답변의 근거를 닫아야 합니다.</td></tr>
+<tr><td>500과 network error는?</td><td>500은 서버가 응답했지만 처리에 실패한 상태라 traceId와 재시도 또는 문의 경로를 줄 수 있습니다. network error는 응답 자체가 없을 수 있으므로 offline, timeout, CORS 실패를 구분하고 연결 복구나 retry 상태를 보여줘야 합니다.</td></tr>
+<tr><td>field error와 form error는?</td><td>field error는 email 형식, 중복 이름처럼 특정 입력 옆에서 고칠 수 있는 오류입니다. form error는 인증 만료, 결제 승인 실패, 서버 장애처럼 제출 전체에 영향을 주는 오류라 상단 summary와 recovery action이 필요합니다.</td></tr>
+<tr><td>traceId를 보여줘야 하나요?</td><td>사용자에게 문의나 지원 연결이 필요한 오류라면 짧은 오류 코드나 traceId를 보여주는 것이 좋습니다. 다만 내부 stack, token, 원본 payload를 노출하지 말고 client log와 server log를 연결할 식별자만 제공합니다.</td></tr>
 </table>
 <div class="semantic-card">
 <span class="sc-label">TRAINING EVIDENCE</span>
@@ -570,6 +571,19 @@ error contract, UI state matrix, negative fixture, retry event log
 <span class="co-label">외부 검증 대응</span>
 <p>모르는 주제가 나오면 직접 경험처럼 꾸미지 않는다. 대신 어떤 경계에서 문제가 생기는지, 어떤 도구로 재현할지, 어떤 지표와 테스트로 검증할지 구체적으로 답한다.</p>
 </div>
+</section>
+
+
+<section id="qa-strengthening-criteria">
+<div class="ch-head"><span class="ch-code">FE-QA</span><h2>Q&amp;A 보강 기준</h2></div>
+<p class="lede">앞으로 각 문항은 답변 문장만 늘리지 않고 본문 앵커, 기준일, 확인 산출물, 나쁜 답변/좋은 답변 비교를 함께 적용해야 합니다.</p>
+<table>
+<tr><th>항목</th><th>적용 기준</th><th>확인 산출물</th></tr>
+<tr><td>관련 본문 앵커</td><td>각 Q는 프론트엔드 핵심 본문 <code>#fe-ch1</code>, <code>#browser-ch1</code>, <code>#a11y-ch1</code> 중 직접 관련된 본문 앵커를 최소 1개 연결합니다.</td><td>문항별 <code>관련 본문</code> 링크</td></tr>
+<tr><td>기준일/버전 확인</td><td>2026-07-09 기준으로 브라우저, API, 도구, 정책처럼 변동 가능한 항목은 기준일과 확인 위치를 적습니다.</td><td>기준일, 대상 버전, 확인 출처 메모</td></tr>
+<tr><td>확인 산출물</td><td>답변마다 trace, screenshot, 테스트 결과, checklist, release packet 등 제출 가능한 증거를 1개 이상 지정합니다.</td><td>문항별 evidence 슬롯</td></tr>
+<tr><td>나쁜 답변/좋은 답변 비교</td><td>나쁜 답변은 키워드 암기와 단정, 좋은 답변은 전제·실패 모드·검증 증거·완료 기준을 포함하도록 비교합니다.</td><td>각 문항의 bad/good answer pair</td></tr>
+</table>
 </section>
 
 <footer>FRONTEND QA TRAINING PACKET · 프론트엔드 핵심 Q&amp;A · generated for handbook practice</footer>

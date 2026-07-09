@@ -19,9 +19,11 @@ import {
   FRONTEND_HANDBOOKS,
   HANDBOOK_GROUPS,
   HANDBOOK_ITEMS,
+  INFRA_MENU_HANDBOOKS,
   INTERVIEW_HANDBOOKS,
   LLM_HANDBOOKS,
   NETWORK_HANDBOOKS,
+  OPERATIONS_GROUP_HANDBOOKS,
   OPERATIONS_HANDBOOKS,
   PERSONAL_HANDBOOKS,
   PRACTICAL_GUIDES,
@@ -183,6 +185,166 @@ test("core LLM handbooks include concrete API control surfaces", async () => {
   }
 });
 
+test("backend Q&A handbooks do not ship templated filler answers", async () => {
+  const backendQaItems = HANDBOOK_ITEMS.filter((item) => item.kind === "백엔드 Q&A");
+  const forbiddenAnswerPatterns = [
+    /답변에는 선택 기준, 실패 모드, 검증 증거가 함께 있어야 합니다/,
+    /이 주제를 용어 정의나 장점만으로 끝내면 위험합니다/,
+    /실제 답변에서는 동시성, 권한, 배포, 장애 복구 중 어떤 조건에서 깨지는지/,
+    /문제 규모가 작거나 실패 영향이 낮고 팀이 운영 비용을 감당하지 못하면 보류합니다/,
+    /코드 의도만 말하지 말고 테스트 결과, 설정 readback, 로그·지표 샘플/,
+  ];
+
+  assert.equal(backendQaItems.length, 7, "backend Q&A coverage should include every backend QA page");
+
+  for (const item of backendQaItems) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+    const qaSections = [...source.matchAll(/<section id="(qa-\d+)">([\s\S]*?)<\/section>/g)];
+
+    assert.doesNotMatch(
+      source,
+      /이 꼬리질문에서는[^<]+근거로 성공 흐름뿐 아니라 실패했을 때의 상태와 검증 방법까지 답합니다/,
+      `${item.file} should not contain generated fallback follow-up answers`,
+    );
+    assert.doesNotMatch(
+      source,
+      /<h2>[^<]+(?:은|을) 어떻게 설명하나요\?<\/h2>/,
+      `${item.file} should not contain generic coverage-question titles`,
+    );
+    assert.doesNotMatch(
+      source,
+      /<h2>[^<]+: 리뷰에서 어떤 기준으로 판단하나요\?<\/h2>/,
+      `${item.file} should not contain generated review-criteria titles`,
+    );
+
+    for (const pattern of forbiddenAnswerPatterns) {
+      assert.doesNotMatch(source, pattern, `${item.file} should not contain generic fallback answer text`);
+    }
+
+    for (const [, sectionId, section] of qaSections) {
+      const answers = [...section.matchAll(/<tr><td>[\s\S]*?<\/td><td>([\s\S]*?)<\/td><\/tr>/g)].map(([, answer]) =>
+        answer.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      );
+
+      assert.equal(answers.length, 3, `${item.file} ${sectionId} should have exactly 3 follow-up answers`);
+      assert.equal(
+        new Set(answers).size,
+        answers.length,
+        `${item.file} ${sectionId} should not repeat follow-up answers`,
+      );
+    }
+  }
+});
+
+test("frontend Q&A handbooks do not ship templated filler answers", async () => {
+  const frontendQaItems = HANDBOOK_ITEMS.filter((item) => item.kind === "프론트엔드 Q&A");
+  const forbiddenAnswerPatterns = [
+    /묻는 압박 지점/,
+    /먼저 재현 조건을 고정/,
+    /판단 기준은 사용자 영향, 변경 빈도, 실패 비용/,
+    /실제로 어떤 조건에서 깨지는지/,
+    /답변의 근거를 닫아야/,
+    /자동화 또는 릴리스 체크/,
+    /단순 구현 설명으로 끝내지 말고/,
+  ];
+
+  assert.equal(frontendQaItems.length, 7, "frontend Q&A coverage should include every frontend QA page");
+
+  for (const item of frontendQaItems) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+    const qaSections = [...source.matchAll(/<section id="(qa-\d+)">([\s\S]*?)<\/section>/g)];
+
+    assert.doesNotMatch(
+      source,
+      /<h2>[^<]+(?:은|을|를) 어떻게 설명하나요\?<\/h2>/,
+      `${item.file} should not contain generic explanation-question titles`,
+    );
+
+    for (const pattern of forbiddenAnswerPatterns) {
+      assert.doesNotMatch(source, pattern, `${item.file} should not contain frontend generic answer text`);
+    }
+
+    for (const [, sectionId, section] of qaSections) {
+      const answers = [...section.matchAll(/<tr><td>[\s\S]*?<\/td><td>([\s\S]*?)<\/td><\/tr>/g)].map(([, answer]) =>
+        answer.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      );
+
+      assert.equal(answers.length, 3, `${item.file} ${sectionId} should have exactly 3 follow-up answers`);
+      assert.equal(
+        new Set(answers).size,
+        answers.length,
+        `${item.file} ${sectionId} should not repeat follow-up answers`,
+      );
+    }
+  }
+});
+
+test("operations Q&A handbooks cover every operations menu item without generated filler", async () => {
+  const operationsQaItems = HANDBOOK_ITEMS.filter((item) => item.kind === "인프라·운영 Q&A");
+  const generatorSource = await readFile("scripts/generate-operations-qa-handbooks.mjs", "utf8");
+  const forbiddenAnswerPatterns = [
+    /이 꼬리질문에서는/,
+    /선택 기준, 실패 모드, 검증 증거/,
+    /실제로 어떤 조건에서 깨지는지/,
+    /답변의 근거를 닫아야/,
+    /자동화 또는 릴리스 체크/,
+  ];
+
+  assert.equal(operationsQaItems.length, 14, "operations Q&A coverage should include every operations page");
+  assert.doesNotMatch(generatorSource, /function makeQuestion/, "operations Q&A generator should not synthesize questions");
+  assert.doesNotMatch(generatorSource, /\bchecks:\s*\[/, "operations Q&A generator should not use keyword checks as source content");
+  assert.doesNotMatch(generatorSource, /pageSpecs\.map\(buildPage\)/, "operations Q&A generator should render explicit page data");
+
+  const normalizedAnswerSkeletons = new Map();
+
+  for (const item of operationsQaItems) {
+    const source = await readFile(path.join("public", "handbook", item.file), "utf8");
+    const qaSections = [...source.matchAll(/<section id="(qa-\d+)">([\s\S]*?)<\/section>/g)];
+
+    assert.ok(qaSections.length >= 12, `${item.file} should include at least 12 Q&A sections`);
+    assert.doesNotMatch(
+      source,
+      /<h2>[^<]+(?:은|을|를) 어떻게 설명하나요\?<\/h2>/,
+      `${item.file} should not contain generic explanation-question titles`,
+    );
+
+    for (const pattern of forbiddenAnswerPatterns) {
+      assert.doesNotMatch(source, pattern, `${item.file} should not contain generic fallback answer text`);
+    }
+
+    for (const [, sectionId, section] of qaSections) {
+      const answers = [...section.matchAll(/<tr><td>[\s\S]*?<\/td><td>([\s\S]*?)<\/td><\/tr>/g)].map(([, answer]) =>
+        answer.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      );
+
+      assert.equal(answers.length, 3, `${item.file} ${sectionId} should have exactly 3 follow-up answers`);
+      assert.equal(
+        new Set(answers).size,
+        answers.length,
+        `${item.file} ${sectionId} should not repeat follow-up answers`,
+      );
+
+      for (const answer of answers) {
+        const skeleton = answer
+          .replace(/[A-Za-z0-9_.:+/·-]+/g, "X")
+          .replace(/[가-힣]+(?: 항목| 경계| 증거| 로그| 지표| 설정| 상태| 기준| 문제| 장애| 변경| 조치| 답변)/g, "K")
+          .replace(/\s+/g, " ")
+          .trim();
+        const seen = normalizedAnswerSkeletons.get(skeleton) ?? [];
+        seen.push(`${item.file} ${sectionId}`);
+        normalizedAnswerSkeletons.set(skeleton, seen);
+      }
+    }
+  }
+
+  const repeatedSkeletons = [...normalizedAnswerSkeletons.entries()].filter(([, locations]) => locations.length > 2);
+  assert.deepEqual(
+    repeatedSkeletons.map(([skeleton, locations]) => ({ count: locations.length, skeleton: skeleton.slice(0, 120) })),
+    [],
+    "operations Q&A follow-up answers should not repeat the same semantic skeleton across pages",
+  );
+});
+
 test("remaining LLM handbooks include A-grade operational artifacts", async () => {
   const requiredDocs = [
     ["public/handbook/llm-fundamentals-handbook.html", ["countTokens", "token_budget_guard", "cost_per_successful_answer"]],
@@ -204,13 +366,16 @@ test("remaining LLM handbooks include A-grade operational artifacts", async () =
 });
 
 test("operations handbooks include command interpretation and practice labs", async () => {
+  const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
+  const infraAndOperationsItems = [...(infraGroup?.items ?? []), ...(operationsGroup?.items ?? [])];
+  assert.ok(infraGroup, "infra group should exist");
   assert.ok(operationsGroup, "operations group should exist");
 
   for (const item of OPERATIONS_HANDBOOKS.filter((entry) => entry.id !== "operations-ai-llm-operations")) {
     assert.ok(
-      operationsGroup.items.some((groupItem) => groupItem.id === item.id),
-      `${item.id} should be grouped under operations`,
+      infraAndOperationsItems.some((groupItem) => groupItem.id === item.id),
+      `${item.id} should be grouped under infra or operations`,
     );
 
     const source = await readFile(path.join("public", "handbook", item.file), "utf8");
@@ -223,15 +388,21 @@ test("operations handbooks include command interpretation and practice labs", as
   }
 });
 
-test("operations group follows backend and includes engineering context", () => {
+test("infra and operations groups follow backend and include engineering context", () => {
   const groupKeys = HANDBOOK_GROUPS.map((group) => group.key);
   const backendIndex = groupKeys.indexOf("backend");
+  const infraIndex = groupKeys.indexOf("infra");
   const operationsIndex = groupKeys.indexOf("operations");
 
   assert.equal(
-    operationsIndex,
+    infraIndex,
     backendIndex + 1,
-    "operations group should be placed immediately after backend",
+    "infra group should be placed immediately after backend",
+  );
+  assert.equal(
+    operationsIndex,
+    infraIndex + 1,
+    "operations group should be placed immediately after infra",
   );
   assert.equal(
     groupKeys.includes("engineering-context"),
@@ -385,7 +556,7 @@ test("engineering context handbooks include metric anchor packets", async () => 
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["cs-basic", "frontend", "backend", "operations", "llm", "ai-native", "design", "practice", "career"],
+    ["cs-basic", "frontend", "backend", "infra", "operations", "llm", "ai-native", "design", "practice", "career"],
   );
 
   const labels = [
@@ -397,18 +568,22 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const csBasicGroup = HANDBOOK_GROUPS.find((group) => group.key === "cs-basic");
   const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
+  const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
   const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
   const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 100);
+  assert.equal(HANDBOOK_ITEMS.length, 114);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 14);
   assert.equal(backendGroup?.items.length, 14);
+  assert.equal(infraGroup?.items.length, 14);
+  assert.equal(infraGroup?.label, "인프라");
   assert.equal(operationsGroup?.items.length, 22);
+  assert.equal(operationsGroup?.label, "운영");
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 11);
   assert.equal(aiNativeGroup?.label, "AI Native");
@@ -428,9 +603,10 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("CS 기본"));
   assert.ok(labels.includes("프론트엔드"));
   assert.ok(labels.includes("백엔드"));
+  assert.ok(labels.includes("인프라"));
+  assert.ok(labels.includes("운영"));
   assert.ok(labels.includes("LLM"));
   assert.ok(labels.includes("AI Native"));
-  assert.ok(labels.includes("인프라·운영"));
   assert.ok(labels.includes("08 AX 기반·조직 적용"));
   assert.ok(labels.includes("디자인"));
   assert.ok(labels.includes("실무 도구"));
@@ -1424,10 +1600,11 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /학습 순서/);
   assert.match(homeSource, /메뉴별 목적/);
   const menuPurposeSection = homeSource.match(/<section id="ch5">[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(menuPurposeSection, /CS 기본[\s\S]*프론트엔드[\s\S]*백엔드[\s\S]*인프라·운영[\s\S]*LLM[\s\S]*AI Native[\s\S]*디자인[\s\S]*실무 도구[\s\S]*커리어/);
+  assert.match(menuPurposeSection, /CS 기본[\s\S]*프론트엔드[\s\S]*백엔드[\s\S]*인프라[\s\S]*운영[\s\S]*LLM[\s\S]*AI Native[\s\S]*디자인[\s\S]*실무 도구[\s\S]*커리어/);
   assert.match(menuPurposeSection, /프론트엔드 핵심[\s\S]*프론트엔드 인터랙션[\s\S]*프론트엔드 모션·애니메이션[\s\S]*프론트엔드 그래픽·3D·WebGL[\s\S]*프론트엔드 성능·진단[\s\S]*SEO·AEO·GEO·애널리틱스[\s\S]*프론트엔드 품질·릴리스/);
   assert.match(menuPurposeSection, /백엔드 핵심[\s\S]*백엔드 핵심 Q&A[\s\S]*백엔드 인증·보안[\s\S]*백엔드 인증·보안 Q&A[\s\S]*백엔드 아키텍처[\s\S]*데이터 계층·저장소 심화[\s\S]*런타임 품질·장애대응[\s\S]*플랫폼 도구·운영 기본기[\s\S]*Java·Spring·JPA 내부 동작[\s\S]*Q&A/);
-  assert.match(menuPurposeSection, /인프라·운영 로드맵[\s\S]*요청 경로[\s\S]*관측 가능성[\s\S]*장애·복구[\s\S]*엔지니어링 맥락/);
+  assert.match(menuPurposeSection, /인프라·운영 로드맵[\s\S]*서비스 요청 경로[\s\S]*VPC·라우팅[\s\S]*AWS·Azure 실전 시나리오/);
+  assert.match(menuPurposeSection, /CI\/CD·Artifact·Environment[\s\S]*Observability·SLO[\s\S]*Incident Response·Rollback·DR[\s\S]*엔지니어링 맥락/);
   assert.doesNotMatch(menuPurposeSection, /AI Native 훈련|디자인 실무|면접·커리어|DevOps/);
   assert.match(homeSource, /핸드북 사용법/);
   assert.match(homeSource, /실전 루프/);
@@ -1441,7 +1618,8 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /측정/);
   assert.match(homeSource, /LLM/);
   assert.match(homeSource, /AI Native Definition of Done/);
-  assert.match(homeSource, /인프라·운영/);
+  assert.match(homeSource, /인프라/);
+  assert.match(homeSource, /운영/);
   assert.match(homeSource, /AX 실행 루프/);
   assert.match(homeSource, /디자인/);
   assert.match(homeSource, /실무 도구/);
@@ -2918,32 +3096,11 @@ test("java spring backend examples explain JPA and Spring proxy internals", asyn
 });
 
 test("operations handbook follows a service operations lifecycle roadmap", async () => {
+  const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
 
-  assert.deepEqual(operationsGroup?.items.map((item) => item.label), [
-    "00 인프라·운영 로드맵",
-    "01 서비스 요청 경로",
-    "02 VPC·Subnet·Routing·NAT",
-    "03 보안 경계",
-    "04 DNS·TLS·도메인 운영",
-    "05 VPN·Private Connectivity",
-    "06 CI/CD·Artifact·Environment",
-    "07 컨테이너·오케스트레이션·Health Check",
-    "08 IaC·변경관리·Drift",
-    "09 Observability·SLO",
-    "10 Incident Response·Rollback·DR",
-    "11 운영 체크리스트·면접 답변",
-    "12 AWS·Azure 실전 시나리오",
-    "13 AI·LLM 운영 Addendum",
-    "00 엔지니어링 규모 감각",
-    "01 플랫폼 엔지니어링·개발자 생산성",
-    "02 품질 엔지니어링·릴리즈 시스템",
-    "03 성능 측정·지표 해석",
-    "04 라이브러리·패키지·오픈소스 설계",
-    "05 마이그레이션·호환성",
-    "06 프론트엔드 빌드·런타임·생태계",
-    "07 운영 책임·장애 대응 언어",
-  ]);
+  assert.deepEqual(infraGroup?.items.map((item) => item.label), INFRA_MENU_HANDBOOKS.map((item) => item.label));
+  assert.deepEqual(operationsGroup?.items.map((item) => item.label), OPERATIONS_GROUP_HANDBOOKS.map((item) => item.label));
 
   const docs = await Promise.all(
     OPERATIONS_HANDBOOKS.map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
@@ -3026,10 +3183,10 @@ test("operations handbook follows a service operations lifecycle roadmap", async
   assert.doesNotMatch(source, /실제 서비스 경로에서 어떤 책임/);
   assert.doesNotMatch(source, /FORMAT : 개념 → 체크리스트/);
 
-  const requestPathDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-request-path-handbook.html")];
-  const roadmapDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-roadmap-handbook.html")];
-  const observabilityDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-observability-slo-handbook.html")];
-  const cloudDoc = docs[operationsGroup.items.findIndex((item) => item.file === "operations-cloud-scenarios-handbook.html")];
+  const requestPathDoc = docs[OPERATIONS_HANDBOOKS.findIndex((item) => item.file === "operations-request-path-handbook.html")];
+  const roadmapDoc = docs[OPERATIONS_HANDBOOKS.findIndex((item) => item.file === "operations-roadmap-handbook.html")];
+  const observabilityDoc = docs[OPERATIONS_HANDBOOKS.findIndex((item) => item.file === "operations-observability-slo-handbook.html")];
+  const cloudDoc = docs[OPERATIONS_HANDBOOKS.findIndex((item) => item.file === "operations-cloud-scenarios-handbook.html")];
 
   assert.match(roadmapDoc, /로드맵으로 읽는 순서[\s\S]*1주차 · 요청 경로[\s\S]*4주차 · 관측과 복구/);
   assert.match(roadmapDoc, /대상 독자와 학습 계약[\s\S]*미들급 개발자[\s\S]*학습 산출물/);

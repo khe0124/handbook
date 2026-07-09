@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -581,6 +582,17 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
           <li>백업은 있지만 restore drill과 failback 절차가 없다.</li>
           <li>NAT/egress 비용 급증을 운영 incident가 아니라 비용 이슈로만 본다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">운영 로드맵은 서비스 이름 암기가 아니라 기준일과 실행 환경을 고정한 증거 묶음으로 검증한다. 이 섹션의 값이 없으면 SLO, DR, 보안 경계 답변은 초안으로만 취급한다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, 분기별 재확인</td><td>문서 상단 UPDATED, 변경 티켓, 운영 리뷰 날짜</td><td>로드맵·runbook·Q&amp;A의 날짜가 같은 감사 기준으로 맞는다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>AWS ap-northeast-2 또는 us-east-1, Azure Korea Central 또는 East US, EKS/AKS와 관리형 DB는 실제 사용 버전을 명시</td><td>account/subscription id 마스킹본, region 목록, cluster/control plane version, RDS/Azure SQL engine version</td><td>control plane, data plane, managed service 버전 차이를 답변에서 분리한다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>요청 경로, 변경 경로, 복구 경로를 각각 1개 이상 캡처</td><td><code>dig</code>, <code>openssl s_client</code>, LB target health, route table, Flow Logs, SLO burn, restore drill 로그</td><td>정상 출력과 실패 출력이 모두 있고, 실패 시 다음 owner와 rollback 조건이 적혀 있다.</td></tr>
+          <tr><td>완료 기준</td><td>경계, 증거, 완화, 복구, 재발 방지가 한 incident packet에 연결</td><td>dependency map, owner matrix, runbook 링크, drill 결과</td><td>다른 운영자가 같은 region/version에서 같은 명령으로 판단을 재현할 수 있다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

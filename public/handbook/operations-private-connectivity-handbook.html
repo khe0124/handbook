@@ -21,6 +21,7 @@
   <a href="#ch8"><span class="code">TERM</span>용어사전</a>
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
+  <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -205,6 +206,17 @@ curl_status=timeout</code></pre></td><td>VPN 자체보다 고객사 방화벽, r
           <li>Phase 2 traffic selector가 실제 CIDR과 다르다.</li>
           <li>DNS forwarder가 없어 IP로만 임시 테스트하고 끝낸다.</li>
         </ul>
+      </section>
+      <section id="evidence-packet">
+        <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
+        <p class="lede">사설 연결은 cloud와 고객망 양쪽의 물리/논리/BGP/방화벽 증거가 맞아야 완료된다. 한쪽 콘솔의 connected 상태만으로 업무 트래픽 성공을 보장하지 않는다.</p>
+        <table>
+          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
+          <tr><td>기준일</td><td>2026-07-09 감사 기준, VPN/DX/ExpressRoute 변경과 failover drill마다 재확인</td><td>maintenance ticket, tunnel event, BGP session change, firewall rule change</td><td>cloud와 고객망 담당자가 같은 시간창과 prefix 목록을 확인한다.</td></tr>
+          <tr><td>provider/region/version 전제</td><td>AWS Site-to-Site VPN/Direct Connect/Transit Gateway 또는 Azure VPN Gateway/ExpressRoute/Virtual WAN, region, gateway SKU, device firmware를 명시</td><td>tunnel outside IP, ASN, BGP peer, advertised/received prefix, gateway SKU</td><td>provider 제한과 고객 장비 제한을 분리해 원인을 좁힌다.</td></tr>
+          <tr><td>명령 출력 예시 종류</td><td>IKE/IPsec, BGP, route, packet capture, DNS forwarding을 캡처</td><td>tunnel status, BGP neighbor summary, route propagation, firewall hit/drop, pcap filter, <code>dig</code> forwarding 결과</td><td>5-tuple이 source, tunnel, destination 중 어디까지 보였는지 기록된다.</td></tr>
+          <tr><td>완료 기준</td><td>primary/secondary 경로와 failover 기준이 검증됨</td><td>failover drill 로그, asymmetric routing 여부, MTU/MSS 테스트, rollback route</td><td>장애 시 전환 조건, 되돌림 조건, 고객망 승인자가 명확하다.</td></tr>
+        </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

@@ -23,6 +23,7 @@
   <a href="#production"><span class="code">CS-05</span>PRODUCTION ALGORITHM DECISION</a>
   <a href="#benchmark"><span class="code">CS-06</span>BENCHMARK EVIDENCE PACKET</a>
   <a href="#failure"><span class="code">CS-07</span>실패 모드와 운영 방어선</a>
+  <a href="#quality-evidence-packet"><span class="code">CS-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -468,6 +469,19 @@ app.use(express.json({ limit: '1mb' })); // 초과 시 413 Payload Too Large</pr
 <div class="g-row"><div class="g-term"><b>N+1 Query</b><span>루프 안 원격 호출</span></div><div class="g-def">목록 1회 조회 후 각 항목마다 추가 쿼리를 날리는 패턴입니다. 복잡도는 O(n)이지만 상수가 로컬 연산의 10⁵배라 CS-02 비용 모델에서 최우선 리뷰 대상입니다.</div></div>
 </div>
 </section>
+
+<section id="quality-evidence-packet">
+<div class="ch-head"><span class="ch-code">CS-Q</span><h2>품질 보강 패킷</h2></div>
+<p class="lede">복잡도와 알고리즘 판단은 환경별 상수와 입력 분포가 달라지므로, 기준일과 측정 증거를 함께 남겨야 실무 판단으로 쓸 수 있습니다.</p>
+<table>
+<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
+<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, 로컬 CPU·런타임·데이터 크기·p95/p99 입력을 명시하고 기존 비용 모델 표의 가정을 재확인합니다.</td><td>환경 정보, 입력 분포, 시간·메모리 예산 표</td></tr>
+<tr><td>필요 evidence</td><td>동일 fixture에서 naive 구현과 개선 구현을 각각 5회 이상 실행한 wall time, allocation, 오류율을 비교합니다.</td><td>benchmark log, 샘플 결과 표, 실패 입력</td></tr>
+<tr><td>최소 실습/fixture</td><td>정렬된 10만 건, skewed key 10만 건, deep pagination 1회, mutable key 반례 1개를 fixture로 둡니다.</td><td>재현 명령과 fixture 설명</td></tr>
+<tr><td>완료 기준</td><td>Big-O 설명만이 아니라 병목 원인, 상수 비용, 운영 방어선, 회귀 임계값이 함께 제시되면 통과입니다.</td><td>PR 첨부용 CS evidence packet</td></tr>
+</table>
+</section>
+
 <footer>ENGINEERING CS FOUNDATIONS HANDBOOK · V2 · 2026-07</footer>
 </main>
 </div>
