@@ -21,7 +21,8 @@ type HandbookItem = {
   id: string;
   label: string;
   kind: string;
-  file: string;
+  file?: string;
+  pageType?: string;
 };
 
 type HandbookGroup = {

@@ -589,12 +589,28 @@ const renumberMenuItems = (items) =>
   }));
 
 export const ENGINEERING_CS_BASIC_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(0, 4);
-export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems(
-  ENGINEERING_HANDBOOKS.slice(4, 18),
-);
-export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
-  ENGINEERING_HANDBOOKS.slice(18),
-);
+const FRONTEND_ROADMAP_PAGE = {
+  id: "engineering-frontend-roadmap",
+  label: "00 전체 로드맵",
+  kind: "프론트엔드 로드맵",
+  pageType: "react",
+};
+
+const BACKEND_ROADMAP_PAGE = {
+  id: "engineering-backend-roadmap",
+  label: "00 전체 로드맵",
+  kind: "백엔드 로드맵",
+  pageType: "react",
+};
+
+export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
+  FRONTEND_ROADMAP_PAGE,
+  ...ENGINEERING_HANDBOOKS.slice(4, 18),
+]);
+export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems([
+  BACKEND_ROADMAP_PAGE,
+  ...ENGINEERING_HANDBOOKS.slice(18),
+]);
 
 export const LLM_HANDBOOKS = [
   {
@@ -1033,7 +1049,17 @@ const OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS = OPERATIONS_MENU_HANDBOOKS.filte
   (item) => !isMenuItemForBaseIds(INFRA_OPERATIONS_IDS, item),
 );
 
-export const INFRA_MENU_HANDBOOKS = renumberMenuItems(INFRA_MENU_SOURCE_HANDBOOKS);
+const INFRA_ROADMAP_PAGE = {
+  id: "infra-roadmap",
+  label: "00 전체 로드맵",
+  kind: "인프라 로드맵",
+  pageType: "react",
+};
+
+export const INFRA_MENU_HANDBOOKS = renumberMenuItems([
+  INFRA_ROADMAP_PAGE,
+  ...INFRA_MENU_SOURCE_HANDBOOKS,
+]);
 
 export const OPERATIONS_GROUP_HANDBOOKS = renumberMenuItems([
   ...OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS,
@@ -1454,6 +1480,7 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_CS_BASIC_HANDBOOKS,
   ...ENGINEERING_FRONTEND_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
+  INFRA_ROADMAP_PAGE,
   ...OPERATIONS_MENU_HANDBOOKS,
   ...ENGINEERING_CONTEXT_HANDBOOKS,
   ...LLM_HANDBOOKS,
@@ -1508,7 +1535,7 @@ export const ARCHIVE_HANDBOOKS = [
 function buildCatalogDocuments() {
   const byFile = new Map();
 
-  for (const item of markStatus(HANDBOOK_ITEMS, "official")) {
+  for (const item of markStatus(HANDBOOK_ITEMS.filter((item) => item.file), "official")) {
     byFile.set(item.file, item);
   }
 

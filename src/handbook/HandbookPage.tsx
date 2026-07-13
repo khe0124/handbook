@@ -19,6 +19,7 @@ type HandbookItem = {
   id: string;
   label: string;
   kind: string;
+  pageType?: string;
 };
 
 type HandbookPageProps = {
@@ -76,6 +77,12 @@ const srsGradeButtons: Array<{ grade: SrsGrade; label: string }> = [
   { grade: "hard", label: "애매함" },
   { grade: "good", label: "알았음" },
 ];
+
+const hiddenLearningToolKinds = new Set(["프론트엔드 Q&A", "백엔드 Q&A", "인프라·운영 Q&A"]);
+
+function shouldShowLearningTools(item: HandbookItem) {
+  return item.pageType !== "react" && !hiddenLearningToolKinds.has(item.kind);
+}
 
 function toStudyCard(card: BankCard): StudyCard {
   return {
@@ -457,7 +464,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   const practicalExample = PRACTICAL_EXAMPLES[item.id];
   const practicalLens = getPracticalExampleLens(item.id);
   const learningModel = useMemo(
-    () => (document ? createLearningModel(document.mainHtml) : null),
+    () => (document && !document.ReactPage ? createLearningModel(document.mainHtml) : null),
     [document],
   );
   const curatedCards = useMemo(
@@ -466,6 +473,8 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   );
   const personalNotes = useMemo(() => getPersonalNotes(item.id), [item.id]);
   const isHome = item.id === "home";
+  const showLearningTools = shouldShowLearningTools(item);
+  const ReactPage = document?.ReactPage;
 
   useEffect(() => {
     let cancelled = false;
@@ -700,6 +709,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         ref={mainRef}
         className="handbook-main"
       >
+        {ReactPage ? <ReactPage /> : null}
         {learningModel?.heroHtml ? <div dangerouslySetInnerHTML={{ __html: learningModel.heroHtml }} /> : null}
         {isHome ? (
           <div className="handbook-learning-panels" aria-label="학습 현황">
@@ -707,7 +717,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
             <StudyDashboardPanel />
           </div>
         ) : null}
-        {learningModel ? (
+        {showLearningTools && learningModel ? (
           <div className="handbook-learning-panels" aria-label="학습 도구">
             <LearningSearchPanel sections={learningModel.sections} />
             <StudyCardsPanel
@@ -717,7 +727,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
             />
           </div>
         ) : null}
-        <div dangerouslySetInnerHTML={{ __html: learningModel?.bodyHtml ?? document.mainHtml }} />
+        {ReactPage ? null : <div dangerouslySetInnerHTML={{ __html: learningModel?.bodyHtml ?? document.mainHtml }} />}
         {personalNotes.length ? (
           <section className="personal-notes" aria-labelledby="personal-notes-title">
             <div className="ch-head">

@@ -345,6 +345,18 @@ test("operations Q&A handbooks cover every operations menu item without generate
   );
 });
 
+test("Q&A handbooks in frontend backend and infra menus hide learning helper panels", async () => {
+  const source = await readFile("src/handbook/HandbookPage.tsx", "utf8");
+
+  assert.match(source, /const hiddenLearningToolKinds = new Set/);
+  assert.match(source, /"프론트엔드 Q&A"/);
+  assert.match(source, /"백엔드 Q&A"/);
+  assert.match(source, /"인프라·운영 Q&A"/);
+  assert.match(source, /function shouldShowLearningTools/);
+  assert.match(source, /const showLearningTools = shouldShowLearningTools\(item\)/);
+  assert.match(source, /showLearningTools && learningModel/);
+});
+
 test("remaining LLM handbooks include A-grade operational artifacts", async () => {
   const requiredDocs = [
     ["public/handbook/llm-fundamentals-handbook.html", ["countTokens", "token_budget_guard", "cost_per_successful_answer"]],
@@ -425,39 +437,41 @@ test("frontend and backend menu item labels use group-local numbering", () => {
   assert.deepEqual(
     frontendGroup?.items.map((item) => item.label),
     [
-      "00 프론트엔드 핵심",
-      "01 프론트엔드 핵심 Q&A",
-      "02 프론트엔드 인터랙션",
-      "03 프론트엔드 인터랙션 Q&A",
-      "04 프론트엔드 모션·애니메이션",
-      "05 프론트엔드 모션·애니메이션 Q&A",
-      "06 프론트엔드 그래픽·3D·WebGL",
-      "07 프론트엔드 그래픽·3D·WebGL Q&A",
-      "08 프론트엔드 성능·진단",
-      "09 프론트엔드 성능·진단 Q&A",
-      "10 SEO·AEO·GEO·애널리틱스",
-      "11 SEO·AEO·GEO·애널리틱스 Q&A",
-      "12 프론트엔드 품질·릴리스",
-      "13 프론트엔드 품질·릴리스 Q&A",
+      "00 전체 로드맵",
+      "01 프론트엔드 핵심",
+      "02 프론트엔드 핵심 Q&A",
+      "03 프론트엔드 인터랙션",
+      "04 프론트엔드 인터랙션 Q&A",
+      "05 프론트엔드 모션·애니메이션",
+      "06 프론트엔드 모션·애니메이션 Q&A",
+      "07 프론트엔드 그래픽·3D·WebGL",
+      "08 프론트엔드 그래픽·3D·WebGL Q&A",
+      "09 프론트엔드 성능·진단",
+      "10 프론트엔드 성능·진단 Q&A",
+      "11 SEO·AEO·GEO·애널리틱스",
+      "12 SEO·AEO·GEO·애널리틱스 Q&A",
+      "13 프론트엔드 품질·릴리스",
+      "14 프론트엔드 품질·릴리스 Q&A",
     ],
   );
   assert.deepEqual(
     backendGroup?.items.map((item) => item.label),
     [
-      "00 백엔드 핵심",
-      "01 백엔드 핵심 Q&A",
-      "02 백엔드 인증·보안",
-      "03 백엔드 인증·보안 Q&A",
-      "04 백엔드 아키텍처",
-      "05 백엔드 아키텍처 Q&A",
-      "06 데이터 계층·저장소 심화",
-      "07 데이터 계층·저장소 심화 Q&A",
-      "08 런타임 품질·장애대응",
-      "09 런타임 품질·장애대응 Q&A",
-      "10 플랫폼 도구·운영 기본기",
-      "11 플랫폼 도구·운영 기본기 Q&A",
-      "12 Java·Spring·JPA 내부 동작",
-      "13 Java·Spring·JPA 내부 동작 Q&A",
+      "00 전체 로드맵",
+      "01 백엔드 핵심",
+      "02 백엔드 핵심 Q&A",
+      "03 백엔드 인증·보안",
+      "04 백엔드 인증·보안 Q&A",
+      "05 백엔드 아키텍처",
+      "06 백엔드 아키텍처 Q&A",
+      "07 데이터 계층·저장소 심화",
+      "08 데이터 계층·저장소 심화 Q&A",
+      "09 런타임 품질·장애대응",
+      "10 런타임 품질·장애대응 Q&A",
+      "11 플랫폼 도구·운영 기본기",
+      "12 플랫폼 도구·운영 기본기 Q&A",
+      "13 Java·Spring·JPA 내부 동작",
+      "14 Java·Spring·JPA 내부 동작 Q&A",
     ],
   );
 });
@@ -475,7 +489,7 @@ test("frontend menu exposes a paired Q&A handbook for every frontend item", asyn
     ["engineering-frontend-quality", "engineering-frontend-quality-qa"],
   ];
 
-  assert.equal(items.length, expectedPairs.length * 2);
+  assert.equal(items.filter((item) => item.pageType !== "react").length, expectedPairs.length * 2);
 
   for (const [sourceId, qaId] of expectedPairs) {
     const sourceIndex = items.findIndex((item) => item.id === sourceId);
@@ -501,13 +515,13 @@ test("backend menu exposes a paired Q&A handbook for every backend item", async 
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
   const labels = backendGroup?.items.map((item) => item.label) ?? [];
   const expectedPairs = [
-    ["00 백엔드 핵심", "01 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html"],
-    ["02 백엔드 인증·보안", "03 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html"],
-    ["04 백엔드 아키텍처", "05 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html"],
-    ["06 데이터 계층·저장소 심화", "07 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html"],
-    ["08 런타임 품질·장애대응", "09 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html"],
-    ["10 플랫폼 도구·운영 기본기", "11 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html"],
-    ["12 Java·Spring·JPA 내부 동작", "13 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html"],
+    ["01 백엔드 핵심", "02 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html"],
+    ["03 백엔드 인증·보안", "04 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html"],
+    ["05 백엔드 아키텍처", "06 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html"],
+    ["07 데이터 계층·저장소 심화", "08 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html"],
+    ["09 런타임 품질·장애대응", "10 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html"],
+    ["11 플랫폼 도구·운영 기본기", "12 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html"],
+    ["13 Java·Spring·JPA 내부 동작", "14 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html"],
   ];
 
   for (const [sourceLabel, qaLabel, file] of expectedPairs) {
@@ -575,12 +589,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 114);
+  assert.equal(HANDBOOK_ITEMS.length, 117);
   assert.equal(careerGroup?.items.length, 10);
   assert.equal(csBasicGroup?.items.length, 4);
-  assert.equal(frontendGroup?.items.length, 14);
-  assert.equal(backendGroup?.items.length, 14);
-  assert.equal(infraGroup?.items.length, 14);
+  assert.equal(frontendGroup?.items.length, 15);
+  assert.equal(backendGroup?.items.length, 15);
+  assert.equal(infraGroup?.items.length, 15);
   assert.equal(infraGroup?.label, "인프라");
   assert.equal(operationsGroup?.items.length, 22);
   assert.equal(operationsGroup?.label, "운영");
@@ -645,34 +659,35 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
   assert.ok(labels.includes("03 응용 수학·측정·검증"));
-  assert.ok(labels.includes("00 프론트엔드 핵심"));
-  assert.ok(labels.includes("01 프론트엔드 핵심 Q&A"));
-  assert.ok(labels.includes("02 프론트엔드 인터랙션"));
-  assert.ok(labels.includes("03 프론트엔드 인터랙션 Q&A"));
-  assert.ok(labels.includes("04 프론트엔드 모션·애니메이션"));
-  assert.ok(labels.includes("05 프론트엔드 모션·애니메이션 Q&A"));
-  assert.ok(labels.includes("06 프론트엔드 그래픽·3D·WebGL"));
-  assert.ok(labels.includes("07 프론트엔드 그래픽·3D·WebGL Q&A"));
-  assert.ok(labels.includes("08 프론트엔드 성능·진단"));
-  assert.ok(labels.includes("09 프론트엔드 성능·진단 Q&A"));
-  assert.ok(labels.includes("10 SEO·AEO·GEO·애널리틱스"));
-  assert.ok(labels.includes("11 SEO·AEO·GEO·애널리틱스 Q&A"));
-  assert.ok(labels.includes("12 프론트엔드 품질·릴리스"));
-  assert.ok(labels.includes("13 프론트엔드 품질·릴리스 Q&A"));
-  assert.ok(labels.includes("00 백엔드 핵심"));
-  assert.ok(labels.includes("01 백엔드 핵심 Q&A"));
-  assert.ok(labels.includes("02 백엔드 인증·보안"));
-  assert.ok(labels.includes("03 백엔드 인증·보안 Q&A"));
-  assert.ok(labels.includes("04 백엔드 아키텍처"));
-  assert.ok(labels.includes("05 백엔드 아키텍처 Q&A"));
-  assert.ok(labels.includes("06 데이터 계층·저장소 심화"));
-  assert.ok(labels.includes("07 데이터 계층·저장소 심화 Q&A"));
-  assert.ok(labels.includes("08 런타임 품질·장애대응"));
-  assert.ok(labels.includes("09 런타임 품질·장애대응 Q&A"));
-  assert.ok(labels.includes("10 플랫폼 도구·운영 기본기"));
-  assert.ok(labels.includes("11 플랫폼 도구·운영 기본기 Q&A"));
-  assert.ok(labels.includes("12 Java·Spring·JPA 내부 동작"));
-  assert.ok(labels.includes("13 Java·Spring·JPA 내부 동작 Q&A"));
+  assert.ok(labels.includes("00 전체 로드맵"));
+  assert.ok(labels.includes("01 프론트엔드 핵심"));
+  assert.ok(labels.includes("02 프론트엔드 핵심 Q&A"));
+  assert.ok(labels.includes("03 프론트엔드 인터랙션"));
+  assert.ok(labels.includes("04 프론트엔드 인터랙션 Q&A"));
+  assert.ok(labels.includes("05 프론트엔드 모션·애니메이션"));
+  assert.ok(labels.includes("06 프론트엔드 모션·애니메이션 Q&A"));
+  assert.ok(labels.includes("07 프론트엔드 그래픽·3D·WebGL"));
+  assert.ok(labels.includes("08 프론트엔드 그래픽·3D·WebGL Q&A"));
+  assert.ok(labels.includes("09 프론트엔드 성능·진단"));
+  assert.ok(labels.includes("10 프론트엔드 성능·진단 Q&A"));
+  assert.ok(labels.includes("11 SEO·AEO·GEO·애널리틱스"));
+  assert.ok(labels.includes("12 SEO·AEO·GEO·애널리틱스 Q&A"));
+  assert.ok(labels.includes("13 프론트엔드 품질·릴리스"));
+  assert.ok(labels.includes("14 프론트엔드 품질·릴리스 Q&A"));
+  assert.ok(labels.includes("01 백엔드 핵심"));
+  assert.ok(labels.includes("02 백엔드 핵심 Q&A"));
+  assert.ok(labels.includes("03 백엔드 인증·보안"));
+  assert.ok(labels.includes("04 백엔드 인증·보안 Q&A"));
+  assert.ok(labels.includes("05 백엔드 아키텍처"));
+  assert.ok(labels.includes("06 백엔드 아키텍처 Q&A"));
+  assert.ok(labels.includes("07 데이터 계층·저장소 심화"));
+  assert.ok(labels.includes("08 데이터 계층·저장소 심화 Q&A"));
+  assert.ok(labels.includes("09 런타임 품질·장애대응"));
+  assert.ok(labels.includes("10 런타임 품질·장애대응 Q&A"));
+  assert.ok(labels.includes("11 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("12 플랫폼 도구·운영 기본기 Q&A"));
+  assert.ok(labels.includes("13 Java·Spring·JPA 내부 동작"));
+  assert.ok(labels.includes("14 Java·Spring·JPA 내부 동작 Q&A"));
   assert.ok(labels.includes("00 LLM 로드맵·AI Native 개발자 모델"));
   assert.ok(labels.includes("01 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("02 LLM 기초·모델 동작 원리"));
@@ -735,6 +750,127 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
     const searchable = `${item.id}\n${item.file}\n${item.label}\n${item.kind}`;
     assert.doesNotMatch(searchable, /carbon|lca|vcm|탄소|업무현황/i);
   }
+});
+
+test("frontend backend and infra groups start with React roadmap pages", async () => {
+  const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
+  const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
+  const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
+  const loaderSource = await readFile("src/handbook/documentLoaders.ts", "utf8");
+
+  assert.deepEqual(
+    [
+      frontendGroup?.items[0]?.id,
+      backendGroup?.items[0]?.id,
+      infraGroup?.items[0]?.id,
+    ],
+    ["engineering-frontend-roadmap", "engineering-backend-roadmap", "infra-roadmap"],
+  );
+  assert.deepEqual(
+    [
+      frontendGroup?.items[0]?.label,
+      backendGroup?.items[0]?.label,
+      infraGroup?.items[0]?.label,
+    ],
+    ["00 전체 로드맵", "00 전체 로드맵", "00 전체 로드맵"],
+  );
+  assert.ok(
+    [frontendGroup?.items[0], backendGroup?.items[0], infraGroup?.items[0]].every(
+      (item) => item?.pageType === "react",
+    ),
+    "roadmap menu entries should render as React pages",
+  );
+  assert.match(loaderSource, /ROADMAP_PAGE_LOADERS/);
+  assert.match(loaderSource, /"\.\/roadmaps\/\*RoadmapPage\.tsx"/);
+});
+
+test("React roadmap pages contain deep process roadmaps instead of shallow menu summaries", async () => {
+  const [pageSource, frontendSource, backendSource, infraSource, cssSource] = await Promise.all([
+    readFile("src/handbook/roadmaps/RoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/FrontendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/BackendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/InfraRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/handbook.css", "utf8"),
+  ]);
+
+  for (const [prefix, source] of [
+    ["FE", frontendSource],
+    ["BE", backendSource],
+    ["INF", infraSource],
+  ]) {
+    assert.ok((source.match(new RegExp(`id: "${prefix}-`, "g")) ?? []).length >= 40, `${prefix} roadmap should contain at least 40 learning nodes`);
+    assert.match(source, /artifacts:/, `${prefix} roadmap should name practical deliverables`);
+    assert.match(source, /failureSignals:/, `${prefix} roadmap should name failure signals`);
+    assert.match(source, /evidence:/, `${prefix} roadmap should name verification evidence`);
+    assert.match(source, /process:/, `${prefix} roadmap should model the development process`);
+    assert.ok((source.match(/handoff:/g) ?? []).length >= 6, `${prefix} roadmap should explain process handoffs`);
+  }
+
+  assert.match(frontendSource, /브라우저 렌더링|React 아키텍처|SEO·AEO·GEO|접근성|계측/);
+  assert.match(backendSource, /트랜잭션|동시성|메시징|인증·인가|관측성/);
+  assert.match(infraSource, /SLO|IaC|VPC|DNS·TLS|Incident|DR/);
+  assert.match(pageSource, /RoadmapTrack/);
+  assert.match(pageSource, /roadmap-process-table/);
+  assert.match(pageSource, /roadmap-node-evidence/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-track-grid/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-node-table/);
+}
+);
+
+test("React roadmap pages keep diagrams readable and content density compact", async () => {
+  const [pageSource, frontendSource, backendSource, infraSource, cssSource] = await Promise.all([
+    readFile("src/handbook/roadmaps/RoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/FrontendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/BackendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/InfraRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/handbook.css", "utf8"),
+  ]);
+
+  for (const source of [frontendSource, backendSource, infraSource]) {
+    assert.match(source, /flowchart TD/, "roadmap diagram should use a vertical flow for readability");
+    assert.doesNotMatch(source, /subgraph/, "roadmap diagram should not use nested subgraphs that expand the diagram");
+  }
+
+  assert.match(pageSource, /<table className="roadmap-node-table">/);
+  assert.match(pageSource, /<table className="roadmap-process-table">/);
+  assert.match(pageSource, /function RoadmapFlowList/);
+  assert.match(pageSource, /className="roadmap-mobile-flow"/);
+  assert.match(pageSource, /<th scope="col">다음 연결<\/th>/);
+  assert.match(pageSource, /<th scope="col">ID<\/th>/);
+  assert.match(pageSource, /<td className="roadmap-node-proof">/);
+  assert.doesNotMatch(pageSource, /roadmap-mermaid/);
+  assert.doesNotMatch(pageSource, /dangerouslySetInnerHTML/);
+  assert.doesNotMatch(pageSource, /import mermaid/);
+  assert.doesNotMatch(pageSource, /<article className="roadmap-process-step"/);
+  assert.doesNotMatch(pageSource, /function RoadmapNodeCard/);
+  assert.doesNotMatch(pageSource, /<article className="roadmap-node">/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-process-table/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-mobile-flow/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-mobile-flow[\s\S]*display: grid/);
+  assert.doesNotMatch(cssSource, /roadmap-mermaid/);
+  assert.match(cssSource, /font-size: 12px/);
+  assert.match(cssSource, /\.handbook-main \.roadmap-table-wrap/);
+  assert.match(cssSource, /table-layout: fixed/);
+  assert.match(cssSource, /grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(cssSource, /@media \(max-width: 900px\)[\s\S]*grid-template-columns: 1fr/);
+  assert.doesNotMatch(cssSource, /min-width: 780px/);
+  assert.doesNotMatch(cssSource, /min-width: 720px/);
+});
+
+test("React roadmap copy avoids machine-translated labels and stiff honorific wording", async () => {
+  const sources = await Promise.all([
+    readFile("src/handbook/roadmaps/RoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/FrontendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/BackendRoadmapPage.tsx", "utf8"),
+    readFile("src/handbook/roadmaps/InfraRoadmapPage.tsx", "utf8"),
+  ]);
+  const source = sources.join("\n");
+
+  assert.doesNotMatch(source, /실무 증거|검증 증거|키워드 암기표|개발 프로세스 지도/);
+  assert.doesNotMatch(source, /합니다|입니다|습니다/);
+  assert.match(source, />왜 봐야 하나</);
+  assert.match(source, />결과물·체크</);
+  assert.match(source, />프로세스별 결과물</);
 });
 
 test("llm menu covers multimodal, customization, security, governance, output sinks, and feedback", async () => {
@@ -1106,9 +1242,9 @@ test("engineering handbook menu splits backend core and architecture into separa
 
   const engineeringItems = engineeringGroups.flatMap((group) => group?.items ?? []);
 
-  assert.equal(engineeringItems.length, 32);
+  assert.equal(engineeringItems.length, 34);
   assert.deepEqual(
-    engineeringItems.map((item) => item.file),
+    engineeringItems.filter((item) => item.file).map((item) => item.file),
     bundles.map((bundle) => bundle.file),
   );
 
@@ -1442,7 +1578,7 @@ test("catalog documents classify every public handbook file with an explicit sta
   }
 
   const officialFiles = CATALOG_DOCUMENTS.filter((document) => document.status === "official");
-  assert.equal(officialFiles.length, HANDBOOK_ITEMS.length);
+  assert.equal(officialFiles.length, HANDBOOK_ITEMS.filter((item) => item.file).length);
 
   for (const item of [...SOURCE_HANDBOOKS, ...ARCHIVE_HANDBOOKS]) {
     assert.ok(item.statusNote, `${item.file} should explain why it is not official`);
@@ -1503,7 +1639,7 @@ test("each public handbook nav links all main sections", async () => {
     "practice-design-systems-handbook.html",
   ]);
 
-  for (const item of HANDBOOK_ITEMS) {
+  for (const item of HANDBOOK_ITEMS.filter((item) => item.file)) {
     const html = await readFile(path.join("public", "handbook", item.file), "utf8");
     const { navHtml, mainHtml } = extractHandbookDocument(html);
     const navTargets = new Set([...navHtml.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]));
@@ -1527,7 +1663,7 @@ test("each public handbook nav links all main sections", async () => {
 
 test("selected handbook content is positioned as a neutral full-stack growth guide", async () => {
   const sources = await Promise.all(
-    HANDBOOK_ITEMS.filter((item) => item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+    HANDBOOK_ITEMS.filter((item) => item.file && item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
   );
   const source = sources.join("\n");
   const roadmap = await readFile("public/handbook/fullstack-growth-roadmap-handbook.html", "utf8");
@@ -2150,14 +2286,18 @@ test("catalog items have source files, generated modules, and catalog-derived lo
   assert.match(loaderSource, /import\.meta\.glob/);
   assert.doesNotMatch(loaderSource, /"home":\s*\(\)\s*=>\s*import\("\.\/documents\/home"\)/);
 
-  for (const item of HANDBOOK_ITEMS) {
+  for (const item of HANDBOOK_ITEMS.filter((item) => item.pageType !== "react")) {
     await access(path.join("public", "handbook", item.file));
     await access(path.join("src", "handbook", "documents", `${item.id}.ts`));
+  }
+
+  for (const item of HANDBOOK_ITEMS.filter((item) => item.pageType === "react")) {
+    assert.ok(!item.file, `${item.id} should not require a generated HTML source file`);
   }
 });
 
 test("generated document modules match public handbook sources", async () => {
-  for (const item of HANDBOOK_ITEMS) {
+  for (const item of HANDBOOK_ITEMS.filter((item) => item.pageType !== "react")) {
     const html = await readFile(path.join("public", "handbook", item.file), "utf8");
     const extracted = extractHandbookDocument(html);
     const moduleSource = await readFile(path.join("src", "handbook", "documents", `${item.id}.ts`), "utf8");
@@ -2200,7 +2340,7 @@ test("every handbook item has a rendered practical example", async () => {
   assert.match(examplesSource, /failureSignals/);
   assert.match(examplesSource, /reviewQuestions/);
 
-  for (const item of HANDBOOK_ITEMS) {
+  for (const item of HANDBOOK_ITEMS.filter((item) => item.pageType !== "react")) {
     assert.match(
       examplesSource,
       new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*(?:example|trainingExample)\\(`),
@@ -3437,7 +3577,7 @@ test("snippet cards expose lucide-powered copy buttons", async () => {
 
 test("engineering handbook separates code snippets from semantic explanation cards", async () => {
   const engineeringFiles = ["cs-basic", "frontend", "backend"].flatMap(
-    (key) => HANDBOOK_GROUPS.find((group) => group.key === key)?.items.map((item) => item.file) ?? [],
+    (key) => HANDBOOK_GROUPS.find((group) => group.key === key)?.items.filter((item) => item.file).map((item) => item.file) ?? [],
   );
   const sources = await Promise.all(
     engineeringFiles.map(async (file) => ({
