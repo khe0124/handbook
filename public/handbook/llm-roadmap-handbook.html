@@ -8,7 +8,7 @@
 <body>
 <div class="shell">
 <nav aria-label="목차">
-  <div class="nav-title">LLM 로드맵</div>
+<div class="nav-title">LLM 로드맵</div>
   <a href="#ch1"><span class="code">LLM-00</span>역할 경계</a>
   <a href="#ch2"><span class="code">MAP</span>역량 스택</a>
   <a href="#ch3"><span class="code">FAIL</span>실패 모드</a>
@@ -65,6 +65,14 @@ model literacy → prompt contract → structured output → tool use<br>
 <div class="serial-card">
 <span class="sc-label">PROMPT CONTRACT TEMPLATE</span>
 version · owner · task boundary · allowed inputs · invariants · refusal shape · output schema · examples · validation · logging fields
+</div>
+<div class="serial-card" data-marker="model-routing-example">
+<span class="sc-label">MODEL ROUTING — 예시 (모델 ID는 env로, tier로 선택)</span>
+긴 문서 분석·근거 판단 → reasoning(thinking) tier · 깊은 추론, 높은 비용/지연<br>
+RAG 답변 생성(근거 요약·인용) → 표준 tier · 품질/비용 균형<br>
+대량 분류·추출·재작성 → fast/cheap tier · 저비용·낮은 지연<br>
+evaluator/judge → reasoning tier · 낮은 temperature, human label과 상관 검증 후 사용<br>
+context budget: input을 다 넣지 말고 retrieval top-k 뒤 rerank로 3~5 chunk만 넣는다. window의 큰 비율을 넘으면 요약·압축한다 — 불필요한 컨텍스트는 지연·비용·오답을 함께 늘린다.
 </div>
 </section>
 
@@ -140,52 +148,66 @@ week_4_security_ops:
 <div class="ch-head"><span class="ch-code">API</span><h2>Messages API, Tool Use, Eval Control Surface</h2></div>
 <p class="lede">실무 LLM 앱의 중심 코드는 프롬프트 한 줄이 아니라 입력 계약, 도구 schema, tool_use 처리, tool_result 재전송, structured output schema 검증, eval gate 기록을 묶는 제어면입니다.</p>
 <h3>MARKER: artifact-ready — Messages tool loop skeleton</h3>
-<pre class="snippet-card"><code>const response = await client.messages.create({
+<pre class="snippet-card"><code>const system = [
+  "Answer only from approved policy passages.",
+  "Return JSON that matches the structured output schema.",
+  "If evidence is missing, return refusal_reason."
+].join(" ");
+
+const tools = [{
+  name: "lookup_policy",
+  description: "Find approved policy passages by query.",
+  input_schema: {
+    type: "object",
+    properties: {
+      query: { type: "string" },
+      top_k: { type: "integer", minimum: 1, maximum: 8 }
+    },
+    required: ["query"]
+  }
+}];
+
+const messages = [{ role: "user", content: userQuestion }];
+let response = await client.messages.create({
   model: process.env.CLAUDE_MODEL,
   max_tokens: 1200,
-  system: [
-    "Answer only from approved policy passages.",
-    "Return JSON that matches the structured output schema.",
-    "If evidence is missing, return refusal_reason."
-  ].join(" "),
-  messages: [{ role: "user", content: userQuestion }],
-  tools: [{
-    name: "lookup_policy",
-    description: "Find approved policy passages by query.",
-    input_schema: {
-      type: "object",
-      properties: {
-        query: { type: "string" },
-        top_k: { type: "integer", minimum: 1, maximum: 8 }
-      },
-      required: ["query"]
-    }
-  }]
+  system,
+  messages,
+  tools
 });
 
-const toolResults = [];
-for (const block of response.content) {
-  if (block.type === "tool_use" && block.name === "lookup_policy") {
-    const passages = await lookupPolicy(block.input.query, block.input.top_k);
-    toolResults.push({
-      type: "tool_result",
-      tool_use_id: block.id,
-      content: JSON.stringify(passages)
-    });
+// tool_use가 나오는 동안 계속 돈다. 한 번만 처리하면 다음 tool_use를 놓친다.
+while (response.stop_reason === "tool_use") {
+  messages.push({ role: "assistant", content: response.content });
+
+  const toolResults = [];
+  for (const block of response.content) {
+    if (block.type === "tool_use" && block.name === "lookup_policy") {
+      const passages = await lookupPolicy(block.input.query, block.input.top_k);
+      toolResults.push({
+        type: "tool_result",
+        tool_use_id: block.id,
+        content: JSON.stringify(passages)
+      });
+    }
   }
+  messages.push({ role: "user", content: toolResults });
+
+  // system과 tools를 매 호출에 다시 넘겨야 지시를 잃지 않고 도구를 재호출할 수 있다.
+  response = await client.messages.create({
+    model: process.env.CLAUDE_MODEL,
+    max_tokens: 1200,
+    system,
+    messages,
+    tools
+  });
 }
 
-const finalResponse = await client.messages.create({
-  model: process.env.CLAUDE_MODEL,
-  max_tokens: 1200,
-  messages: [
-    { role: "user", content: userQuestion },
-    { role: "assistant", content: response.content },
-    { role: "user", content: toolResults }
-  ]
-});
+// 응답은 content block 배열이다. text block을 꺼내 JSON을 파싱한 뒤 그 값을 검증한다.
+const answerText = response.content.find((b) => b.type === "text")?.text ?? "";
+const answer = JSON.parse(answerText);
+validateAgainstSchema(answer, answerSchema);
 
-validateAgainstSchema(finalResponse, answerSchema);
 recordEvalGate({
   prompt_version: "policy-answer@2026-07-02",
   dataset: "policy-golden-v3",
@@ -193,6 +215,7 @@ recordEvalGate({
   groundedness_min: 0.9,
   release_gate: "pass"
 });</code></pre>
+<div class="callout" data-marker="schema-enforced-note"><span class="co-label">structured output</span><p>JSON은 "그렇게 답해줘"라고 프롬프트로 부탁하지 말고 <strong>schema로 강제</strong>하라. tool의 <code>input_schema</code>나 provider의 structured-output 모드로 구조를 고정하면 schema drift 대부분이 API 계층에서 사라진다. 프롬프트 지시와 repair loop는 그 위에 얹는 2차 방어선이지 1차 방어선이 아니다.</p></div>
 <pre class="snippet-card"><code>{
   "name": "structured output schema",
   "type": "object",
