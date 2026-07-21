@@ -159,6 +159,12 @@ export const CAREER_HANDBOOKS = [
     file: "career-personal-history-handbook.html",
   },
   {
+    id: "career-growth-plan",
+    label: "01R 강점·취약점 진단과 성장 로드맵",
+    kind: "면접·커리어",
+    file: "career-growth-plan-handbook.html",
+  },
+  {
     id: "career-frontend-interview",
     label: "02 프론트엔드·JS/TS 면접",
     kind: "면접·커리어",
