@@ -1,6 +1,6 @@
 import { CheckCircle2, Download, Eye, Upload } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { HANDBOOK_ITEMS } from "./catalog.mjs";
+import { HANDBOOK_ITEMS, NON_STUDY_DOC_IDS } from "./catalog.mjs";
 import { QUESTION_BANK } from "./questionBank.mjs";
 import { gradeReview, isDue } from "./srs.mjs";
 import {
@@ -56,7 +56,7 @@ const docLabelById = new Map(
 );
 
 function buildTodayQueue(todayIso: string): QueueEntry[] {
-  const bankCards = QUESTION_BANK as BankCard[];
+  const bankCards = (QUESTION_BANK as BankCard[]).filter((card) => !NON_STUDY_DOC_IDS.has(card.docId));
   const reviewByKey = new Map(
     loadAllReviews().map(({ itemId, cardId, review }) => [`${itemId}:${cardId}`, review as CardReview]),
   );
@@ -93,7 +93,10 @@ export function StudyQueuePanel() {
   const importInputRef = useRef<HTMLInputElement | null>(null);
 
   const currentEntry = queue[0] ?? null;
-  const bankSize = useMemo(() => (QUESTION_BANK as BankCard[]).length, []);
+  const bankSize = useMemo(
+    () => (QUESTION_BANK as BankCard[]).filter((card) => !NON_STUDY_DOC_IDS.has(card.docId)).length,
+    [],
+  );
 
   const handleGrade = (grade: SrsGrade) => {
     if (!currentEntry) {

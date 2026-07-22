@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { HANDBOOK_GROUPS } from "./catalog.mjs";
+import { HANDBOOK_GROUPS, NON_STUDY_DOC_IDS } from "./catalog.mjs";
 import { PERSONAL_NOTES } from "./personalNotes.mjs";
 import { QUESTION_BANK } from "./questionBank.mjs";
 import { isDue, isSettled } from "./srs.mjs";
@@ -44,7 +44,9 @@ function buildStudyProgress(): StudyProgress {
   let settledCount = 0;
   let dueCount = 0;
 
-  for (const card of QUESTION_BANK as Array<{ id: string; docId: string }>) {
+  for (const card of (QUESTION_BANK as Array<{ id: string; docId: string }>).filter(
+    (card) => !NON_STUDY_DOC_IDS.has(card.docId),
+  )) {
     const review = reviewByKey.get(`${card.docId}:${card.id}`) ?? null;
 
     if (isSettled(review)) {
@@ -60,7 +62,7 @@ function buildStudyProgress(): StudyProgress {
     groups,
     settledCount,
     dueCount,
-    bankSize: (QUESTION_BANK as unknown[]).length,
+    bankSize: (QUESTION_BANK as Array<{ docId: string }>).filter((card) => !NON_STUDY_DOC_IDS.has(card.docId)).length,
     noteCount: PERSONAL_NOTES.length,
   };
 }

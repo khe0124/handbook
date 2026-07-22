@@ -6,6 +6,7 @@ import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
 import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
 import { getPersonalNotes } from "./personalNotes.mjs";
 import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
+import { NON_STUDY_DOC_IDS } from "./catalog.mjs";
 import { getQuestionBankCards } from "./questionBank.mjs";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
 import { gradeReview, isDue, isSettled } from "./srs.mjs";
@@ -79,9 +80,22 @@ const srsGradeButtons: Array<{ grade: SrsGrade; label: string }> = [
 ];
 
 const hiddenLearningToolKinds = new Set(["프론트엔드 Q&A", "백엔드 Q&A", "인프라·운영 Q&A"]);
+// 학습 콘텐츠가 아니라 액션 플랜이라 섹션 검색·암기 카드가 부적절한 문서
+const hiddenLearningToolIds = new Set([
+  "career-personal-history",
+  "career-growth-plan",
+  "career-track-pm-builder",
+  "career-track-product-frontend",
+  "career-market-demand",
+]);
 
 function shouldShowLearningTools(item: HandbookItem) {
-  return item.pageType !== "react" && !hiddenLearningToolKinds.has(item.kind);
+  return (
+    item.pageType !== "react" &&
+    !hiddenLearningToolKinds.has(item.kind) &&
+    !hiddenLearningToolIds.has(item.id) &&
+    !NON_STUDY_DOC_IDS.has(item.id)
+  );
 }
 
 function toStudyCard(card: BankCard): StudyCard {

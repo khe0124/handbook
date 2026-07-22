@@ -165,6 +165,24 @@ export const CAREER_HANDBOOKS = [
     file: "career-growth-plan-handbook.html",
   },
   {
+    id: "career-track-pm-builder",
+    label: "01R-A 노선 · PM 겸 개발자",
+    kind: "면접·커리어",
+    file: "career-track-pm-builder-handbook.html",
+  },
+  {
+    id: "career-track-product-frontend",
+    label: "01R-B 노선 · 제품형 프론트엔드",
+    kind: "면접·커리어",
+    file: "career-track-product-frontend-handbook.html",
+  },
+  {
+    id: "career-market-demand",
+    label: "01R-C 시장 요구 분석·이력 갭 맵",
+    kind: "면접·커리어",
+    file: "career-market-demand-handbook.html",
+  },
+  {
     id: "career-frontend-interview",
     label: "02 프론트엔드·JS/TS 면접",
     kind: "면접·커리어",
@@ -1480,6 +1498,15 @@ export const HANDBOOK_GROUPS = [
   { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
   { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
 ];
+
+export const NON_STUDY_GROUP_KEYS = new Set(["practice", "design"]);
+
+// 실무 도구·디자인 그룹: 페이지 내 검색, 전역 검색, 암기카드(복습 큐·대시보드)에서 제외.
+export const NON_STUDY_DOC_IDS = new Set(
+  HANDBOOK_GROUPS.filter((group) => NON_STUDY_GROUP_KEYS.has(group.key)).flatMap((group) =>
+    group.items.map((item) => item.id),
+  ),
+);
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,

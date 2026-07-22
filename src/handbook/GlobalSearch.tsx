@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { NON_STUDY_DOC_IDS } from "./catalog.mjs";
 
 type SearchIndexEntry = {
   docId: string;
@@ -81,7 +82,7 @@ export function GlobalSearch({ onSelectSection }: GlobalSearchProps) {
     import("./searchIndex.mjs")
       .then((module: SearchIndexModule) => {
         if (!cancelled) {
-          setIndex(module.SEARCH_INDEX);
+          setIndex(module.SEARCH_INDEX.filter((entry) => !NON_STUDY_DOC_IDS.has(entry.docId)));
         }
       })
       .catch(() => {
