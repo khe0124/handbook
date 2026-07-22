@@ -183,6 +183,12 @@ export const CAREER_HANDBOOKS = [
     file: "career-market-demand-handbook.html",
   },
   {
+    id: "career-artifacts",
+    label: "01R-D 산출물 정리 가이드",
+    kind: "면접·커리어",
+    file: "career-artifacts-handbook.html",
+  },
+  {
     id: "career-frontend-interview",
     label: "02 프론트엔드·JS/TS 면접",
     kind: "면접·커리어",

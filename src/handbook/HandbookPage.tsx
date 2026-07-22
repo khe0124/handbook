@@ -87,6 +87,7 @@ const hiddenLearningToolIds = new Set([
   "career-track-pm-builder",
   "career-track-product-frontend",
   "career-market-demand",
+  "career-artifacts",
 ]);
 
 function shouldShowLearningTools(item: HandbookItem) {
