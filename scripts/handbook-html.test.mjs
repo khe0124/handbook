@@ -440,18 +440,25 @@ test("frontend and backend menu item labels use group-local numbering", () => {
       "00 전체 로드맵",
       "01 프론트엔드 핵심",
       "02 프론트엔드 핵심 Q&A",
-      "03 프론트엔드 인터랙션",
-      "04 프론트엔드 인터랙션 Q&A",
-      "05 프론트엔드 모션·애니메이션",
-      "06 프론트엔드 모션·애니메이션 Q&A",
-      "07 프론트엔드 그래픽·3D·WebGL",
-      "08 프론트엔드 그래픽·3D·WebGL Q&A",
-      "09 프론트엔드 성능·진단",
-      "10 프론트엔드 성능·진단 Q&A",
-      "11 SEO·AEO·GEO·애널리틱스",
-      "12 SEO·AEO·GEO·애널리틱스 Q&A",
-      "13 프론트엔드 품질·릴리스",
-      "14 프론트엔드 품질·릴리스 Q&A",
+      "03 프론트엔드 핵심 퀴즈",
+      "04 프론트엔드 인터랙션",
+      "05 프론트엔드 인터랙션 Q&A",
+      "06 프론트엔드 인터랙션 퀴즈",
+      "07 프론트엔드 모션·애니메이션",
+      "08 프론트엔드 모션·애니메이션 Q&A",
+      "09 프론트엔드 모션·애니메이션 퀴즈",
+      "10 프론트엔드 그래픽·3D·WebGL",
+      "11 프론트엔드 그래픽·3D·WebGL Q&A",
+      "12 프론트엔드 그래픽·3D·WebGL 퀴즈",
+      "13 프론트엔드 성능·진단",
+      "14 프론트엔드 성능·진단 Q&A",
+      "15 프론트엔드 성능·진단 퀴즈",
+      "16 SEO·AEO·GEO·애널리틱스",
+      "17 SEO·AEO·GEO·애널리틱스 Q&A",
+      "18 SEO·AEO·GEO·애널리틱스 퀴즈",
+      "19 프론트엔드 품질·릴리스",
+      "20 프론트엔드 품질·릴리스 Q&A",
+      "21 프론트엔드 품질·릴리스 퀴즈",
     ],
   );
   assert.deepEqual(
@@ -460,18 +467,25 @@ test("frontend and backend menu item labels use group-local numbering", () => {
       "00 전체 로드맵",
       "01 백엔드 핵심",
       "02 백엔드 핵심 Q&A",
-      "03 백엔드 인증·보안",
-      "04 백엔드 인증·보안 Q&A",
-      "05 백엔드 아키텍처",
-      "06 백엔드 아키텍처 Q&A",
-      "07 데이터 계층·저장소 심화",
-      "08 데이터 계층·저장소 심화 Q&A",
-      "09 런타임 품질·장애대응",
-      "10 런타임 품질·장애대응 Q&A",
-      "11 플랫폼 도구·운영 기본기",
-      "12 플랫폼 도구·운영 기본기 Q&A",
-      "13 Java·Spring·JPA 내부 동작",
-      "14 Java·Spring·JPA 내부 동작 Q&A",
+      "03 백엔드 핵심 퀴즈",
+      "04 백엔드 인증·보안",
+      "05 백엔드 인증·보안 Q&A",
+      "06 백엔드 인증·보안 퀴즈",
+      "07 백엔드 아키텍처",
+      "08 백엔드 아키텍처 Q&A",
+      "09 백엔드 아키텍처 퀴즈",
+      "10 데이터 계층·저장소 심화",
+      "11 데이터 계층·저장소 심화 Q&A",
+      "12 데이터 계층·저장소 심화 퀴즈",
+      "13 런타임 품질·장애대응",
+      "14 런타임 품질·장애대응 Q&A",
+      "15 런타임 품질·장애대응 퀴즈",
+      "16 플랫폼 도구·운영 기본기",
+      "17 플랫폼 도구·운영 기본기 Q&A",
+      "18 플랫폼 도구·운영 기본기 퀴즈",
+      "19 Java·Spring·JPA 내부 동작",
+      "20 Java·Spring·JPA 내부 동작 Q&A",
+      "21 Java·Spring·JPA 내부 동작 퀴즈",
     ],
   );
 });
@@ -515,17 +529,18 @@ test("backend menu exposes a paired Q&A handbook for every backend item", async 
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
   const labels = backendGroup?.items.map((item) => item.label) ?? [];
   const expectedPairs = [
-    ["01 백엔드 핵심", "02 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html"],
-    ["03 백엔드 인증·보안", "04 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html"],
-    ["05 백엔드 아키텍처", "06 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html"],
-    ["07 데이터 계층·저장소 심화", "08 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html"],
-    ["09 런타임 품질·장애대응", "10 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html"],
-    ["11 플랫폼 도구·운영 기본기", "12 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html"],
-    ["13 Java·Spring·JPA 내부 동작", "14 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html"],
+    ["01 백엔드 핵심", "02 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html", "03 백엔드 핵심 퀴즈"],
+    ["04 백엔드 인증·보안", "05 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html", "06 백엔드 인증·보안 퀴즈"],
+    ["07 백엔드 아키텍처", "08 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html", "09 백엔드 아키텍처 퀴즈"],
+    ["10 데이터 계층·저장소 심화", "11 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html", "12 데이터 계층·저장소 심화 퀴즈"],
+    ["13 런타임 품질·장애대응", "14 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html", "15 런타임 품질·장애대응 퀴즈"],
+    ["16 플랫폼 도구·운영 기본기", "17 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html", "18 플랫폼 도구·운영 기본기 퀴즈"],
+    ["19 Java·Spring·JPA 내부 동작", "20 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html", "21 Java·Spring·JPA 내부 동작 퀴즈"],
   ];
 
-  for (const [sourceLabel, qaLabel, file] of expectedPairs) {
+  for (const [sourceLabel, qaLabel, file, quizLabel] of expectedPairs) {
     assert.equal(labels.indexOf(qaLabel), labels.indexOf(sourceLabel) + 1, `${qaLabel} should follow ${sourceLabel}`);
+    assert.equal(labels.indexOf(quizLabel), labels.indexOf(qaLabel) + 1, `${quizLabel} should follow ${qaLabel}`);
     const source = await readFile(path.join("public", "handbook", file), "utf8");
     const qaTitle = qaLabel.replace(/^[0-9]{2}\s+/, "").replace(/&/g, "&amp;");
     assert.match(source, new RegExp(`<h1>${qaTitle}</h1>`));
@@ -570,7 +585,7 @@ test("engineering context handbooks include metric anchor packets", async () => 
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["cs-basic", "frontend", "backend", "infra", "operations", "llm", "ai-native", "design", "practice", "career"],
+    ["career", "cs-basic", "frontend", "backend", "infra", "operations", "llm", "ai-native", "design", "practice"],
   );
 
   const labels = [
@@ -590,7 +605,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
   assert.equal(HANDBOOK_ITEMS.length, 117);
-  assert.equal(careerGroup?.items.length, 10);
+  assert.equal(careerGroup?.items.length, 16);
   assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 15);
   assert.equal(backendGroup?.items.length, 15);
@@ -1242,7 +1257,7 @@ test("engineering handbook menu splits backend core and architecture into separa
 
   const engineeringItems = engineeringGroups.flatMap((group) => group?.items ?? []);
 
-  assert.equal(engineeringItems.length, 34);
+  assert.equal(engineeringItems.length, 48);
   assert.deepEqual(
     engineeringItems.filter((item) => item.file).map((item) => item.file),
     bundles.map((bundle) => bundle.file),

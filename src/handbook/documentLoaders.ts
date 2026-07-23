@@ -1,6 +1,9 @@
 import { HANDBOOK_ITEMS } from "./catalog.mjs";
+import { getQuiz } from "./quiz/quizBank.mjs";
+import { QuizPage } from "./quiz/QuizPage";
 import type { HandbookDocumentContent } from "./types";
 import type { ComponentType } from "react";
+import { createElement } from "react";
 
 type HandbookItem = {
   id: string;
@@ -18,6 +21,34 @@ type HandbookDocumentLoader = () => Promise<HandbookDocumentModule>;
 
 const documentModules = import.meta.glob<HandbookDocumentModule>("./documents/*.ts");
 const roadmapPageModules = import.meta.glob<HandbookReactPageModule>("./roadmaps/*RoadmapPage.tsx");
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// -quiz 페이지는 QuizPage를 quizId에 바인딩해 렌더한다. 정적 HTML을 만들지 않는 React 전용 페이지다.
+function buildQuizLoader(quizId: string): HandbookDocumentLoader {
+  return () =>
+    Promise.resolve().then(() => {
+      const quiz = getQuiz(quizId);
+      const title = quiz?.title ?? "퀴즈";
+      const navHtml =
+        `<div class="nav-brand">QUIZ</div><div class="nav-title">${escapeHtml(title)}</div>` +
+        '<a href="#top"><span class="code">4지선다</span>문항 풀이</a>';
+
+      return {
+        default: {
+          navHtml,
+          mainHtml: "",
+          ReactPage: () => createElement(QuizPage, { quizId }),
+          hideLearningTools: true,
+        },
+      };
+    });
+}
 
 export const ROADMAP_PAGE_LOADERS: Record<string, HandbookDocumentLoader> = {
   "engineering-frontend-roadmap": () =>
@@ -55,6 +86,10 @@ export const ROADMAP_PAGE_LOADERS: Record<string, HandbookDocumentLoader> = {
 function getDocumentLoader(id: string): HandbookDocumentLoader {
   if (ROADMAP_PAGE_LOADERS[id]) {
     return ROADMAP_PAGE_LOADERS[id];
+  }
+
+  if (id.endsWith("-quiz")) {
+    return buildQuizLoader(id);
   }
 
   const loader = documentModules[`./documents/${id}.ts`];

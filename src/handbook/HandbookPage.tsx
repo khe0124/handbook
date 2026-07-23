@@ -10,8 +10,6 @@ import { NON_STUDY_DOC_IDS } from "./catalog.mjs";
 import { getQuestionBankCards } from "./questionBank.mjs";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
 import { gradeReview, isDue, isSettled } from "./srs.mjs";
-import { StudyDashboardPanel } from "./StudyDashboardPanel";
-import { StudyQueuePanel } from "./StudyQueuePanel";
 import { clearReviewsForItem, getTodayIso, loadReview, saveReview } from "./studyStorage.mjs";
 import type { HandbookDocumentContent } from "./types";
 import "./handbook.css";
@@ -82,12 +80,14 @@ const srsGradeButtons: Array<{ grade: SrsGrade; label: string }> = [
 const hiddenLearningToolKinds = new Set(["프론트엔드 Q&A", "백엔드 Q&A", "인프라·운영 Q&A"]);
 // 학습 콘텐츠가 아니라 액션 플랜이라 섹션 검색·암기 카드가 부적절한 문서
 const hiddenLearningToolIds = new Set([
+  "home",
   "career-personal-history",
   "career-growth-plan",
   "career-track-pm-builder",
   "career-track-product-frontend",
   "career-market-demand",
   "career-artifacts",
+  "career-job-change-playbook",
 ]);
 
 function shouldShowLearningTools(item: HandbookItem) {
@@ -97,6 +97,14 @@ function shouldShowLearningTools(item: HandbookItem) {
     !hiddenLearningToolIds.has(item.id) &&
     !NON_STUDY_DOC_IDS.has(item.id)
   );
+}
+
+// 홈 화면은 남은 기간 계획과 메뉴 바로가기 섹션만 노출한다. 나머지 홈 콘텐츠는 소스에 남겨두고 렌더에서만 제외한다.
+function extractHomeSections(mainHtml: string) {
+  const sections = mainHtml.match(/<section\b[\s\S]*?<\/section>/g) ?? [];
+  const yearPlan = sections.find((section) => section.includes('id="year-plan"')) ?? "";
+  const shortcut = sections.find((section) => section.includes("shortcut-grid")) ?? "";
+  return yearPlan + shortcut;
 }
 
 function toStudyCard(card: BankCard): StudyCard {
@@ -488,6 +496,10 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   );
   const personalNotes = useMemo(() => getPersonalNotes(item.id), [item.id]);
   const isHome = item.id === "home";
+  const homeShortcutHtml = useMemo(
+    () => (isHome && document ? extractHomeSections(document.mainHtml) : ""),
+    [isHome, document],
+  );
   const showLearningTools = shouldShowLearningTools(item);
   const ReactPage = document?.ReactPage;
 
@@ -690,7 +702,9 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   }
 
   return (
-    <div className="handbook-shell">
+    <div className={`handbook-shell${isHome ? " is-home" : ""}`}>
+      {!isHome ? (
+        <>
       <button
         type="button"
         className="handbook-mobile-toc-toggle"
@@ -720,17 +734,15 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         }}
         dangerouslySetInnerHTML={{ __html: document.navHtml }}
       />
+        </>
+      ) : null}
       <main
         ref={mainRef}
         className="handbook-main"
       >
         {ReactPage ? <ReactPage /> : null}
-        {learningModel?.heroHtml ? <div dangerouslySetInnerHTML={{ __html: learningModel.heroHtml }} /> : null}
-        {isHome ? (
-          <div className="handbook-learning-panels" aria-label="학습 현황">
-            <StudyQueuePanel />
-            <StudyDashboardPanel />
-          </div>
+        {!isHome && learningModel?.heroHtml ? (
+          <div dangerouslySetInnerHTML={{ __html: learningModel.heroHtml }} />
         ) : null}
         {showLearningTools && learningModel ? (
           <div className="handbook-learning-panels" aria-label="학습 도구">
@@ -742,8 +754,14 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
             />
           </div>
         ) : null}
-        {ReactPage ? null : <div dangerouslySetInnerHTML={{ __html: learningModel?.bodyHtml ?? document.mainHtml }} />}
-        {personalNotes.length ? (
+        {ReactPage ? null : (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: isHome ? homeShortcutHtml : learningModel?.bodyHtml ?? document.mainHtml,
+            }}
+          />
+        )}
+        {!isHome && personalNotes.length ? (
           <section className="personal-notes" aria-labelledby="personal-notes-title">
             <div className="ch-head">
               <span className="ch-code">MY CASE</span>
@@ -774,7 +792,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
             </div>
           </section>
         ) : null}
-        {practicalExample ? (
+        {!isHome && practicalExample ? (
           <section className="handbook-practical-example" aria-labelledby="practical-example-title">
             <div className="ch-head">
               <span className="ch-code">PRACTICE</span>

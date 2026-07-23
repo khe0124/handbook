@@ -8,6 +8,11 @@
   overflow-x: clip;
 }
 
+/* 홈 화면은 목차 nav 없이 메뉴 바로가기만 노출하므로 단일 컬럼으로 둔다. */
+.handbook-shell.is-home {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .handbook-toc {
   position: sticky;
   top: 72px;
@@ -1755,4 +1760,223 @@
   .handbook-main .study-dashboard-stats {
     grid-template-columns: 1fr;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* 4지선다 퀴즈 (quiz/QuizPage) */
+/* ------------------------------------------------------------------ */
+.handbook-main .quiz {
+  max-width: 780px;
+}
+
+.handbook-main .quiz-head {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+}
+
+.handbook-main .quiz-kicker {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--green);
+}
+
+.handbook-main .quiz-head h1 {
+  margin: 8px 0 6px;
+}
+
+.handbook-main .quiz-sub {
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+}
+
+.handbook-main .quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.handbook-main .quiz-reset {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.handbook-main .quiz-reset:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.handbook-main .quiz-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  background: var(--green-tint);
+  border-radius: 8px;
+  margin-bottom: 28px;
+}
+
+.handbook-main .quiz-result.is-perfect {
+  border-left-color: var(--green-deep);
+}
+
+.handbook-main .quiz-result strong {
+  color: var(--green-deep);
+}
+
+.handbook-main .quiz-result span {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.handbook-main .quiz-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.handbook-main .quiz-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+  background: var(--panel);
+}
+
+.handbook-main .quiz-q {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.handbook-main .quiz-q-num {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--green);
+  flex: none;
+}
+
+.handbook-main .quiz-q h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  border: none;
+  padding: 0;
+}
+
+.handbook-main .quiz-choices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.handbook-main .quiz-choice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.5;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.handbook-main .quiz-choice:not(:disabled):hover {
+  border-color: var(--green);
+  background: var(--green-tint);
+}
+
+.handbook-main .quiz-choice:disabled {
+  cursor: default;
+}
+
+.handbook-main .quiz-choice-label {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  flex: none;
+  width: 18px;
+}
+
+.handbook-main .quiz-choice.is-correct {
+  border-color: var(--green);
+  background: var(--green-tint);
+}
+
+.handbook-main .quiz-choice.is-correct .quiz-choice-label {
+  color: var(--green-deep);
+}
+
+.handbook-main .quiz-choice.is-wrong {
+  border-color: var(--red);
+  background: var(--red-tint);
+}
+
+.handbook-main .quiz-choice.is-wrong .quiz-choice-label {
+  color: var(--red);
+}
+
+.handbook-main .quiz-explain {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border-left: 4px solid var(--line);
+  background: var(--paper);
+}
+
+.handbook-main .quiz-explain.is-correct {
+  border-left-color: var(--green);
+  background: var(--green-tint);
+}
+
+.handbook-main .quiz-explain.is-wrong {
+  border-left-color: var(--red);
+  background: var(--red-tint);
+}
+
+.handbook-main .quiz-verdict {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.handbook-main .quiz-explain.is-correct .quiz-verdict {
+  color: var(--green-deep);
+}
+
+.handbook-main .quiz-explain.is-wrong .quiz-verdict {
+  color: var(--red);
+}
+
+.handbook-main .quiz-explain p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--ink-soft);
 }

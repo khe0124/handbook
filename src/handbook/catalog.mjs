@@ -189,6 +189,12 @@ export const CAREER_HANDBOOKS = [
     file: "career-artifacts-handbook.html",
   },
   {
+    id: "career-job-change-playbook",
+    label: "01R-E 이직 실행 플레이북",
+    kind: "면접·커리어",
+    file: "career-job-change-playbook-handbook.html",
+  },
+  {
     id: "career-frontend-interview",
     label: "02 프론트엔드·JS/TS 면접",
     kind: "면접·커리어",
@@ -618,6 +624,19 @@ const renumberMenuItems = (items) =>
     label: item.label.replace(/^\d{2}\s+/, `${String(index).padStart(2, "0")} `),
   }));
 
+// -qa 문서 바로 뒤에 대응하는 4지선다 퀴즈 페이지(React 전용)를 끼워 넣는다.
+const toQuizItem = (qaItem) => ({
+  id: qaItem.id.replace(/-qa$/, "-quiz"),
+  label: qaItem.label.replace(/Q&A/g, "퀴즈"),
+  kind: qaItem.kind.replace(/Q&A/g, "퀴즈"),
+  pageType: "react",
+});
+
+const withQuizzes = (items) =>
+  items.flatMap((item) =>
+    item.id.endsWith("-qa") ? [item, toQuizItem(item)] : [item],
+  );
+
 export const ENGINEERING_CS_BASIC_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(0, 4);
 const FRONTEND_ROADMAP_PAGE = {
   id: "engineering-frontend-roadmap",
@@ -633,14 +652,12 @@ const BACKEND_ROADMAP_PAGE = {
   pageType: "react",
 };
 
-export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
-  FRONTEND_ROADMAP_PAGE,
-  ...ENGINEERING_HANDBOOKS.slice(4, 18),
-]);
-export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems([
-  BACKEND_ROADMAP_PAGE,
-  ...ENGINEERING_HANDBOOKS.slice(18),
-]);
+export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems(
+  withQuizzes([FRONTEND_ROADMAP_PAGE, ...ENGINEERING_HANDBOOKS.slice(4, 18)]),
+);
+export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
+  withQuizzes([BACKEND_ROADMAP_PAGE, ...ENGINEERING_HANDBOOKS.slice(18)]),
+);
 
 export const LLM_HANDBOOKS = [
   {
@@ -1054,6 +1071,7 @@ export const OPERATIONS_QA_HANDBOOKS = OPERATIONS_HANDBOOKS.map((item) => ({
 export const OPERATIONS_MENU_HANDBOOKS = OPERATIONS_HANDBOOKS.flatMap((item, index) => [
   item,
   OPERATIONS_QA_HANDBOOKS[index],
+  toQuizItem(OPERATIONS_QA_HANDBOOKS[index]),
 ]);
 
 const INFRA_OPERATIONS_IDS = new Set([
@@ -1067,7 +1085,7 @@ const INFRA_OPERATIONS_IDS = new Set([
 ]);
 
 const isMenuItemForBaseIds = (baseIds, item) => {
-  const baseId = item.id.endsWith("-qa") ? item.id.replace(/-qa$/, "") : item.id;
+  const baseId = item.id.replace(/-(qa|quiz)$/, "");
   return baseIds.has(baseId);
 };
 
@@ -1477,6 +1495,7 @@ export const PRACTICE_HANDBOOKS = [
 ];
 
 export const HANDBOOK_GROUPS = [
+  { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
   { key: "cs-basic", label: "CS 기본", items: ENGINEERING_CS_BASIC_HANDBOOKS },
   {
     key: "frontend",
@@ -1502,7 +1521,6 @@ export const HANDBOOK_GROUPS = [
   },
   { key: "design", label: "디자인", items: DESIGN_PRACTICE_HANDBOOKS },
   { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
-  { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
 ];
 
 export const NON_STUDY_GROUP_KEYS = new Set(["practice", "design"]);
