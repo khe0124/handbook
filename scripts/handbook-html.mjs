@@ -171,6 +171,7 @@ const isDirectRun = process.argv[1] === fileURLToPath(import.meta.url);
 if (isDirectRun) {
   const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const { HANDBOOK_GROUPS, HANDBOOK_ITEMS } = await import("../src/handbook/catalog.mjs");
-  await generateHandbookDocuments({ rootDir, documents: HANDBOOK_ITEMS });
-  await generateSearchIndex({ rootDir, documents: HANDBOOK_ITEMS, groups: HANDBOOK_GROUPS });
+  const fileBackedItems = HANDBOOK_ITEMS.filter((item) => item.file);
+  await generateHandbookDocuments({ rootDir, documents: fileBackedItems });
+  await generateSearchIndex({ rootDir, documents: fileBackedItems, groups: HANDBOOK_GROUPS });
 }
