@@ -423,6 +423,110 @@ const quiz = {
       explanation:
         "보안 테스트는 정상 허용보다 forbidden actor, foreign tenant, expired token, replay, malformed input, excessive request 같은 negative fixture가 핵심이다. foreign tenant fixture는 목록과 상세 API 모두에 필요하고 expired token 테스트는 clock skew 허용 범위도 함께 명시해야 한다.",
     },
+    {
+      id: "q33",
+      question: "로그인 후 자격증명 저장에 대한 설명으로 옳은 것은?",
+      choices: [
+        "아이디·비밀번호를 암호화만 하면 로컬 스토리지에 저장해도 안전하다",
+        "원본 자격증명 대신 서버가 발급한 세션 ID/토큰만 저장해야 하며, 로컬 스토리지는 JS 접근이 가능해 XSS에 취약하다",
+        "쿠키 저장은 로컬 스토리지보다 항상 무조건 안전하다",
+        "비밀번호를 저장해야 자동 로그인이 가능하다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "원본 자격증명은 탈취 시 타 환경 로그인·재사용으로 피해가 커진다. 로그인 후엔 서버 발급 세션 ID/토큰만 저장하고, 로컬 스토리지는 JS 접근이 가능해 XSS에 취약하다.",
+    },
+    {
+      id: "q34",
+      question: "쿠키 값을 암호화해 인증 수단으로 쓰면 세션보다 안전한가?",
+      choices: [
+        "그렇다. 암호화하면 replay 공격도 막고 즉시 폐기도 가능하다",
+        "아니다. 유효 쿠키 재전송(replay)이 가능하고 서버 대조 저장소가 없으면 즉시 폐기가 어렵다",
+        "그렇다. 암호화된 쿠키는 XSS로 탈취되지 않는다",
+        "세션과 완전히 동일해 차이가 없다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "암호화된 쿠키 자체가 인증 수단이면 탈취된 쿠키 재전송(replay)이 가능하고, 서버 저장소가 없으면 즉시 폐기가 어렵다. 세션은 서버 저장소에서 삭제하면 즉시 차단된다. XSS 탈취는 HttpOnly/Secure/SameSite 문제라 암호화로 사라지지 않는다.",
+    },
+    {
+      id: "q35",
+      question: "세션 방식의 단점과 해결로 옳지 않은 것은?",
+      choices: [
+        "서버 확장성 문제는 Redis/Memcached 중앙 저장소나 Sticky Session으로 해결한다",
+        "저장소 부담은 만료시간·세션 수 제한으로 완화한다",
+        "CSRF 위험은 CSRF Token·SameSite·Origin/Referer 검증으로 대응한다",
+        "세션은 무상태라 서버 확장이 자동으로 쉽고 CSRF와도 무관하다",
+      ],
+      answerIndex: 3,
+      explanation:
+        "세션은 서버 상태를 가져 확장성(중앙 저장소·Sticky Session), 저장소 부담(만료·수 제한), CSRF(Token·SameSite·Origin 검증)를 고려해야 한다. 무상태가 아니며 CSRF와 관련이 있다.",
+    },
+    {
+      id: "q36",
+      question: "API 인증 방식 선택에 대한 설명으로 옳은 것은?",
+      choices: [
+        "JWT는 탈취돼도 만료 전 무효화가 쉬워 재발급 정책이 필요 없다",
+        "웹/모바일은 JWT, 서버 간 단순 연동은 API Key, 외부 권한 위임은 OAuth 2.0, 양쪽 강한 신원 검증은 mTLS로 용도에 맞춰 고른다",
+        "API Key만으로 세밀한 사용자 권한 제어가 완성된다",
+        "모든 상황에서 mTLS 하나만 쓰면 된다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "용도별로 고른다 — 웹/모바일 JWT Bearer, 서버 간 API Key(권한·IP 제한·주기 교체), 외부 위임 OAuth 2.0, 위변조 방지 HMAC, 양쪽 강한 검증 mTLS. JWT는 탈취 시 만료 전 악용될 수 있어 만료·재발급 정책이 중요하다.",
+    },
+    {
+      id: "q37",
+      question: "다기기 동시 로그인을 통제하려 할 때 옳은 것은?",
+      choices: [
+        "순수 무상태 JWT만으로 특정 기기를 강제 로그아웃할 수 있다",
+        "JWT로도 통제하려면 서버 상태가 필요해 deviceId/jti를 넣고 활성 목록/블랙리스트를 관리한다",
+        "이중 로그인은 어떤 방식으로도 통제할 수 없다",
+        "세션 방식은 다기기 로그인을 전혀 다룰 수 없다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "단일 세션 정책은 새 로그인 시 기존 세션/리프레시 토큰을 폐기하고, 다기기 허용은 활성 세션 목록을 관리한다. JWT로 통제하려면 deviceId/jti를 넣고 서버가 활성 목록/블랙리스트를 관리해야 하며, 이는 무상태 장점 일부를 포기하는 것이다.",
+    },
+    {
+      id: "q38",
+      question: "WAF에 대한 설명으로 옳은 것은?",
+      choices: [
+        "WAF만 있으면 애플리케이션 내부 보안은 필요 없다",
+        "HTTP 요청·응답의 URL·헤더·쿠키·본문을 앱 계층에서 분석해 SQL Injection·XSS 등을 막지만, 앱 보안을 대체하지 않는 앞단 방어 계층이다",
+        "WAF는 IP·포트만 보는 일반 방화벽과 동일하다",
+        "WAF는 오탐·미탐이 전혀 없다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "WAF는 앱 계층(URL·헤더·쿠키·쿼리·본문)을 분석해 OWASP Top 10류 공격을 탐지·차단한다. 하지만 오탐·미탐·우회가 있어 앱 보안을 대체하지 않고, Prepared Statement·출력 인코딩·인증인가가 기본이며 WAF는 그 앞단 계층이다.",
+    },
+    {
+      id: "q39",
+      question: "XSS 방어에 대한 설명으로 옳은 것은?",
+      choices: [
+        "React를 쓰면 XSS가 자동으로 완전히 막힌다",
+        "기본 방어는 문맥별 출력 인코딩이며, dangerouslySetInnerHTML로 HTML을 직접 삽입하면 다시 위험해지고 쿠키엔 HttpOnly·CSP를 병행한다",
+        "입력 검증만 하면 XSS는 완전히 막힌다",
+        "XSS는 서버에서만 발생해 브라우저와 무관하다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "XSS는 악성 스크립트를 삽입해 타 사용자 브라우저에서 실행하는 공격이다. 기본 방어는 문맥별 출력 인코딩이고, React도 dangerouslySetInnerHTML를 쓰면 위험해진다. HTML 허용 시 sanitizer로 허용 태그만, 쿠키엔 HttpOnly, CSP를 병행한다.",
+    },
+    {
+      id: "q40",
+      question: "SQL Injection의 가장 핵심적인 방어는?",
+      choices: [
+        "입력값 검증과 WAF만으로 근본적으로 막는다",
+        "Prepared Statement·파라미터 바인딩으로 쿼리 구조와 데이터를 분리해 입력값이 값으로만 처리되게 한다",
+        "ORM만 쓰면 자동으로 완전히 안전하다",
+        "에러 메시지에 SQL 구조를 자세히 노출한다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "가장 중요한 방어는 Prepared Statement·파라미터 바인딩으로 구조와 데이터를 분리하는 것이다. ORM/쿼리 빌더도 내부 바인딩 여부를 확인하고, 동적 테이블·정렬 컬럼은 허용 목록으로 제한, DB 계정 최소 권한, 에러에 SQL 구조 노출 금지를 병행한다.",
+    },
   ],
 };
 

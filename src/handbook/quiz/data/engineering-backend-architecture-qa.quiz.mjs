@@ -423,6 +423,97 @@ const quiz = {
       explanation:
         "본문은 architecture debt를 의식적으로 기록하고 만료 조건·위험·상환 trigger를 둬야 한다고 한다. 버그는 현재 동작을 깨는 문제이고 debt는 동작하지만 변경 비용과 장애 위험을 키우는 구조라 판단 기준이 다르다.",
     },
+    {
+      id: "q33",
+      question: "GraphQL이 REST보다 적합한 경우와 그 대가로 옳은 것은?",
+      choices: [
+        "GraphQL은 항상 REST보다 우수하며 단점이 없다",
+        "화면마다 필요 데이터가 다르거나 여러 리소스를 조합할 때 over/under-fetching을 줄여 적합하지만, HTTP 캐시 활용이 어렵고 depth·복잡도 제한 같은 보호가 필요하다",
+        "GraphQL은 REST처럼 여러 엔드포인트를 사용한다",
+        "GraphQL은 HTTP 캐시를 REST보다 쉽게 활용한다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "REST는 단순·캐시 친화적 리소스 API에 적합하고, GraphQL은 단일 엔드포인트에서 필드를 지정해 over/under-fetching을 줄인다. 대신 HTTP 캐시가 어렵고 depth·복잡도·timeout 보호가 필요하다.",
+    },
+    {
+      id: "q34",
+      question: "gRPC의 보안 메커니즘으로 옳은 것은?",
+      choices: [
+        "gRPC는 자체 독립 보안 프로토콜을 새로 정의한다",
+        "HTTP/2 위에서 TLS로 전송 구간을 보호하고, 메타데이터에 JWT·OAuth 토큰을 담아 인증하며, 강한 검증이 필요하면 mTLS를 쓴다",
+        "gRPC는 암호화를 지원하지 않는다",
+        "인증 토큰은 본문에만 담을 수 있다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "gRPC 보안은 TLS 기반 암호화(gRPC over TLS), 메타데이터 기반 토큰(JWT·OAuth 2.0) 인증, mTLS 기반 상호 인증으로 구성된다. 별도 보안 프로토콜을 새로 만드는 것이 아니다.",
+    },
+    {
+      id: "q35",
+      question: "gRPC가 Protocol Buffers를 쓰는 이유와 주의점으로 옳은 것은?",
+      choices: [
+        "텍스트 포맷이라 사람이 읽기 쉬운 것이 장점이다",
+        "이진 포맷이라 크기가 작고 파싱이 빠르며 언어 무관 계약을 주지만, 필드 번호를 재사용/삭제하면 하위 호환성이 깨져 번호·버전 관리가 중요하다",
+        "필드 이름을 매번 문자열로 전송해 가독성을 높인다",
+        "필드 번호를 재사용해도 호환성에 안전하다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "proto 파일로 다언어 코드 생성·동일 계약을 얻고, 이진 포맷(필드 번호·타입)이라 JSON보다 작고 빠르다. 단 사람이 읽기 어렵고 필드 번호 재사용/삭제 시 호환성이 깨져 번호·버전 관리가 중요하다.",
+    },
+    {
+      id: "q36",
+      question: "Polling, SSE, WebSocket 선택 기준으로 옳은 것은?",
+      choices: [
+        "실시간이면 무조건 WebSocket이 최선이다",
+        "이벤트가 드물고 단순하면 Polling, 서버→클라 단방향 푸시면 SSE, 양방향·고빈도면 WebSocket이 적합하다",
+        "SSE는 양방향 통신을 지원한다",
+        "Polling은 서버가 클라이언트로 즉시 푸시한다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "이벤트가 드물고 구현 단순성이 중요하면 Polling, 서버→클라 단방향이면 SSE(HTTP 기반·자동 재연결), 양방향·고빈도면 WebSocket이 적합하다. WebSocket은 연결 유지·인증·스케일아웃·장애복구를 따로 고려해야 한다.",
+    },
+    {
+      id: "q37",
+      question: "WebSocket 서버를 여러 대로 늘릴 때 생기는 문제와 해결로 옳은 것은?",
+      choices: [
+        "Sticky Session만 쓰면 서버 간 메시지 전파 문제가 해결된다",
+        "연결이 특정 인스턴스에 고정돼 다른 인스턴스 사용자에게 메시지가 안 가므로, Redis Pub/Sub·Kafka 같은 공용 브로커로 전파한다",
+        "서버를 늘리면 메시지가 자동으로 모든 인스턴스에 공유된다",
+        "WebSocket은 여러 대로 확장할 수 없다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "각 서버가 자기 메모리에만 연결·구독 정보를 가져 한 인스턴스의 메시지가 다른 인스턴스 사용자에게 안 간다. Redis Pub/Sub·Kafka·RabbitMQ 같은 공용 브로커로 전파한다. Sticky Session은 연결 관리만 단순화할 뿐 전파는 해결하지 못한다.",
+    },
+    {
+      id: "q38",
+      question: "브라우저 WebSocket에서 인증을 처리하는 방법으로 옳은 것은?",
+      choices: [
+        "WebSocket API에 Authorization 헤더를 자유롭게 붙여 보낸다",
+        "최초 HTTP Upgrade 핸드셰이크 시 쿠키(Origin 검증·SameSite 필요)나 연결 직후 첫 메시지의 JWT로 인증하고, wss(TLS)를 쓴다",
+        "토큰을 URL 쿼리에 넣는 것이 가장 안전하다",
+        "ws로 평문 전송해도 무방하다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "브라우저 WebSocket은 임의 Authorization 헤더를 붙이기 어려워 보통 쿠키(자동 전송, Origin·SameSite·CSRF 방어 필요)나 연결 직후 첫 메시지의 토큰으로 인증한다. URL 쿼리는 로그 노출 위험이 있고 전송은 wss(TLS)를 쓴다.",
+    },
+    {
+      id: "q39",
+      question: "SSE 연결을 서버 메모리로만 관리할 때 스케일아웃·재시작에서 생기는 문제는?",
+      choices: [
+        "브라우저 자동 재연결만 있으면 끊긴 동안 이벤트 유실이 전혀 없다",
+        "A 인스턴스 연결 사용자에게 B에서 발생한 이벤트가 안 가고 재시작 시 연결이 끊겨, 공용 브로커와 Last-Event-ID 기반 복구가 필요하다",
+        "SSE는 스케일아웃과 무관해 문제가 없다",
+        "재시작해도 메모리 연결이 그대로 유지된다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "인스턴스 A 연결 사용자에게 B의 이벤트가 전달되지 않아 외부 브로커·공용 저장소가 필요하고, 재시작 시 메모리 연결이 전부 끊겨 이벤트 ID를 관리하고 Last-Event-ID로 누락 이벤트를 복구해야 한다.",
+    },
   ],
 };
 

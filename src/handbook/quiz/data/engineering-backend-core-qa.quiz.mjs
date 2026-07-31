@@ -462,6 +462,84 @@ const quiz = {
       explanation:
         "본문은 null, absent, empty string, empty array는 의미가 다를 수 있으므로 의미가 같다면 일관된 표현을 정하고, 의미가 다르면 schema와 client fixture에 명시해야 한다고 한다.",
     },
+    {
+      id: "q36",
+      question: "HTTP 메시지 구성으로 옳은 것은?",
+      choices: [
+        "시작줄, 헤더, 빈 줄, 본문의 네 부분으로 구성되며 GET처럼 본문 없는 요청도 있다",
+        "모든 요청과 응답은 반드시 본문을 포함한다",
+        "빈 줄은 구성요소가 아니라 무시되는 공백이다",
+        "헤더 없이 시작줄과 본문만으로 구성된다",
+      ],
+      answerIndex: 0,
+      explanation:
+        "HTTP 메시지는 시작줄(메서드·URI·버전 또는 버전·상태코드·상태문구), 헤더, 빈 줄, 본문으로 구성된다. GET처럼 본문 없는 요청도 있다.",
+    },
+    {
+      id: "q37",
+      question: "서버가 HTTP 요청을 처리하는 순서로 옳은 것은?",
+      choices: [
+        "요청 수신 → 메시지 파싱 → 라우팅 → 인증/검증 → 비즈니스 로직 → 응답 생성",
+        "요청 수신 → 비즈니스 로직 → 인증/검증 → 라우팅 → 응답 생성",
+        "라우팅 → 요청 수신 → 파싱 → 응답 생성 → 인증/검증",
+        "인증/검증 → 파싱 → 라우팅 → 요청 수신 → 응답 생성",
+      ],
+      answerIndex: 0,
+      explanation:
+        "요청 수신 후 메시지 파싱, 라우팅, 인증/검증을 거쳐 비즈니스 로직을 실행하고 응답을 생성한다. 인증/검증은 비즈니스 로직 앞에 온다.",
+    },
+    {
+      id: "q38",
+      question: "HTTP 헤더 Content-Type과 Accept에 대한 설명으로 옳은 것은?",
+      choices: [
+        "둘은 같은 역할이라 아무거나 써도 된다",
+        "Content-Type은 본문의 형식이고, Accept는 클라이언트가 받을 수 있는 형식이라 역할이 다르다",
+        "Accept가 요청 본문의 실제 형식을 지정한다",
+        "헤더는 처리에 영향을 주지 않는 단순 부가 정보다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "헤더는 메시지 해석·처리 방식을 알려주는 메타데이터다. Content-Type은 본문의 형식, Accept는 클라이언트가 받을 수 있는 형식으로 역할이 다르다.",
+    },
+    {
+      id: "q39",
+      question: "HTTP/3가 TCP 대신 UDP 기반 QUIC을 쓰는 핵심 이유는?",
+      choices: [
+        "UDP라서 신뢰성·흐름 제어를 포기하고 단순히 빠르기 때문",
+        "TCP의 Head-of-Line Blocking을 해결하고, QUIC이 스트림 독립성·빠른 핸드셰이크·연결 이동성을 제공하기 때문",
+        "QUIC이 연결을 IP·포트로만 식별해 단순하기 때문",
+        "HTTP/3는 암호화를 하지 않아 오버헤드가 없기 때문",
+      ],
+      answerIndex: 1,
+      explanation:
+        "핵심은 UDP 자체가 아니라 QUIC이다. QUIC은 TCP의 Head-of-Line Blocking을 해결하고 스트림 단위 독립성, TLS 1.3 통합·0-RTT의 빠른 핸드셰이크, Connection ID 기반 연결 이동성을 제공한다.",
+    },
+    {
+      id: "q40",
+      question: "PUT과 POST의 차이로 옳은 것은?",
+      choices: [
+        "POST는 멱등이고 PUT은 비멱등이다",
+        "POST는 새 리소스 생성/작업 실행이라 비멱등이고, PUT은 아는 URI에 전체 교체/생성이라 멱등이다",
+        "PUT은 리소스의 부분 수정 전용이다",
+        "둘 다 항상 멱등하다",
+      ],
+      answerIndex: 1,
+      explanation:
+        "POST는 같은 요청을 여러 번 보내면 여러 번 생성될 수 있어 비멱등이고, PUT은 같은 URI에 같은 본문을 반복해도 최종 상태가 같아 멱등이다. PUT은 부분 수정이 아니라 전체 교체다.",
+    },
+    {
+      id: "q41",
+      question: "HEAD와 OPTIONS 메서드에 대한 설명으로 옳은 것은?",
+      choices: [
+        "HEAD는 본문 없이 헤더만 받아 존재·크기·캐시 유효성을 확인하고, OPTIONS는 지원 메서드·통신 옵션을 확인하며 CORS Preflight에 쓰인다",
+        "HEAD는 GET처럼 본문까지 모두 받는다",
+        "OPTIONS는 실제 리소스를 변경하는 메서드다",
+        "HEAD는 리소스를 삭제하는 데 쓰인다",
+      ],
+      answerIndex: 0,
+      explanation:
+        "HEAD는 본문 없이 헤더만 받아 존재·Content-Length·Last-Modified·ETag를 확인하고, OPTIONS는 Allow 헤더로 지원 메서드·통신 옵션을 확인하며 CORS Preflight에 쓰인다.",
+    },
   ],
 };
 
