@@ -605,7 +605,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
   assert.equal(HANDBOOK_ITEMS.length, 117);
-  assert.equal(careerGroup?.items.length, 16);
+  assert.equal(careerGroup?.items.length, 17);
   assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 15);
   assert.equal(backendGroup?.items.length, 15);
@@ -1061,7 +1061,7 @@ test("career bundles include interview readiness gates and topic evidence", asyn
 });
 
 test("career bundles avoid repeated generic answer packet boilerplate", async () => {
-  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
+  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio" && item.id !== "career-linkedin-resume").map((item) => item.file);
 
   for (const file of careerFiles) {
     const source = await readFile(path.join("public", "handbook", file), "utf8");

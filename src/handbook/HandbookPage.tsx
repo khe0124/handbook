@@ -82,6 +82,7 @@ const hiddenLearningToolKinds = new Set(["프론트엔드 Q&A", "백엔드 Q&A",
 const hiddenLearningToolIds = new Set([
   "home",
   "career-personal-history",
+  "career-linkedin-resume",
   "career-growth-plan",
   "career-track-pm-builder",
   "career-track-product-frontend",

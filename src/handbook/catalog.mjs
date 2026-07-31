@@ -159,6 +159,12 @@ export const CAREER_HANDBOOKS = [
     file: "career-personal-history-handbook.html",
   },
   {
+    id: "career-linkedin-resume",
+    label: "01L LinkedIn 이력서",
+    kind: "면접·커리어",
+    file: "career-linkedin-resume-handbook.html",
+  },
+  {
     id: "career-growth-plan",
     label: "01R 강점·취약점 진단과 성장 로드맵",
     kind: "면접·커리어",
