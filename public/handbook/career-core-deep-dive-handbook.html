@@ -12,6 +12,7 @@
   <a href="#doc-cs"><span class="code">DOC</span>CS 기본기 면접</a>
   <a href="#doc-dbdeep"><span class="code">DOC</span>DB 심화 면접</a>
   <a href="#doc-security"><span class="code">DOC</span>보안 심화 면접</a>
+  <a href="#doc-network"><span class="code">DOC</span>네트워크 심화 면접</a>
   <a href="#doc-cs"><span class="code">PART</span>CS 기본기 면접</a>
 <a href="#cs-q1"><span class="code">CS-01</span>Big-O</a>
   <a href="#cs-q2"><span class="code">CS-02</span>자료구조</a>
@@ -44,6 +45,14 @@
   <a href="#dbdeep-q14"><span class="code">DBD-14</span>MVCC Index Plan Deep Dive</a>
   <a href="#dbdeep-q15"><span class="code">DBD-15</span>개념 인과관계</a>
   <a href="#dbdeep-q16"><span class="code">DBD-16</span>실행계획 실전 해석</a>
+  <a href="#dbdeep-q17"><span class="code">DBD-17</span>NoSQL·Polyglot Persistence</a>
+  <a href="#dbdeep-q18"><span class="code">DBD-18</span>검색 엔진과 역색인</a>
+  <a href="#dbdeep-q19"><span class="code">DBD-19</span>캐싱 전략과 무효화</a>
+  <a href="#dbdeep-q20"><span class="code">DBD-20</span>분산 락과 동시성 실무</a>
+  <a href="#dbdeep-q21"><span class="code">DBD-21</span>Connection Pool 운영 실무</a>
+  <a href="#dbdeep-q22"><span class="code">DBD-22</span>JPA 실전 함정과 대량 데이터</a>
+  <a href="#dbdeep-q23"><span class="code">DBD-23</span>쿼리 안티패턴과 SQL 실무</a>
+  <a href="#dbdeep-q24"><span class="code">DBD-24</span>운영 도구와 변경 관리</a>
   <a href="#doc-security"><span class="code">PART</span>보안 심화 면접</a>
 <a href="#security-q1"><span class="code">SEC-01</span>보안 답변 프레임</a>
   <a href="#security-q2"><span class="code">SEC-02</span>Threat Modeling·OWASP Top 10</a>
@@ -62,6 +71,19 @@
   <a href="#security-q15"><span class="code">SEC-15</span>Attack Path 답변</a>
   <a href="#security-q16"><span class="code">SEC-16</span>Exploit Chain Validation</a>
   <a href="#security-q17"><span class="code">SEC-17</span>개념 인과관계</a>
+  <a href="#doc-network"><span class="code">PART</span>네트워크 심화 면접</a>
+  <a href="#net-q1"><span class="code">NET-01</span>요청 흐름의 계층 구조</a>
+  <a href="#net-q2"><span class="code">NET-02</span>TCP 연결 관리와 신뢰성</a>
+  <a href="#net-q3"><span class="code">NET-03</span>TCP 혼잡 제어와 QoS</a>
+  <a href="#net-q4"><span class="code">NET-04</span>DNS와 이름 해석</a>
+  <a href="#net-q5"><span class="code">NET-05</span>HTTP 메시지와 프로토콜 진화</a>
+  <a href="#net-q6"><span class="code">NET-06</span>TLS/HTTPS와 인증서 신뢰 체인</a>
+  <a href="#net-q7"><span class="code">NET-07</span>API 프로토콜 선택</a>
+  <a href="#net-q8"><span class="code">NET-08</span>인증 상태 관리 실전</a>
+  <a href="#net-q9"><span class="code">NET-09</span>실시간 통신 아키텍처</a>
+  <a href="#net-q10"><span class="code">NET-10</span>트래픽 진입 계층</a>
+  <a href="#net-q11"><span class="code">NET-11</span>CDN·캐시와 트래픽 방어</a>
+  <a href="#net-q12"><span class="code">NET-12</span>핵심 질문 20선</a>
   <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
 </nav>
 <main>
@@ -79,7 +101,7 @@
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>학습 로드맵</h2></div>
 <p class="lede">이 문서는 아래 원문을 면접 학습 흐름에 맞게 이어 읽도록 구성했습니다. 각 파트는 개념 이해, 압박 질문, 답변 근거를 확인하는 기준점으로 사용합니다.</p>
-<ul><li>CS 기본기 면접</li><li>DB 심화 면접</li><li>보안 심화 면접</li></ul>
+<ul><li>CS 기본기 면접</li><li>DB 심화 면접</li><li>보안 심화 면접</li><li>네트워크 심화 면접</li></ul>
 </section>
 
 <section id="career-readiness-gate">
@@ -652,6 +674,150 @@ PostgreSQL은 row version마다 xmin/xmax로 생성·삭제 transaction 정보�
 </div>
 </section>
 
+<section id="dbdeep-q17">
+<div class="ch-head"><span class="ch-code">DBD-17</span><h2>Q. NoSQL은 언제 선택하고 RDBMS와 어떻게 병행하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>NoSQL은 느슨한 스키마와 수평 확장(Scale-Out)으로 RDBMS의 스키마 경직성과 확장 한계를 보완하는 모델이며, CAP만이 아니라 PACELC로 정상 상황의 트레이드오프까지 봐야 선택이 정확해집니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Redis(키-값, 캐시·세션), MongoDB(문서, 유연한 스키마), Cassandra(컬럼형, 쓰기 성능·AP), DynamoDB(관리형 키-값·문서), Neo4j(그래프)처럼 유형마다 최적 사용처가 다릅니다. PACELC는 파티션(P) 발생 시 가용성(A)과 일관성(C) 중 무엇을 포기할지뿐 아니라, 평상시(E, Else)에도 지연시간(L)과 일관성(C) 중 하나를 선택해야 한다고 봅니다. 즉 장애가 없어도 시스템은 이미 트레이드오프 중입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">트래픽이 크고 스키마가 자주 바뀌는 서비스는 NoSQL이 유리합니다. 유연한 스키마로 변경에 대응하고 Scale-Out으로 트래픽을 처리하기 때문입니다. 다만 결제·재고처럼 강한 정합성이 필요한 도메인은 RDBMS를 병행하는 Polyglot Persistence 전략을 씁니다. MySQL의 JSON 컬럼은 저장은 되지만 인덱싱과 중첩 쿼리가 제한적이므로, 비정형 데이터가 핵심이면 MongoDB 같은 네이티브 문서 DB가 더 맞습니다.</div>
+<h3>90초 답변</h3>
+<p>CAP은 파티션 상황에서의 C vs A만 다루지만, PACELC는 정상 상황에서도 시스템이 지연시간과 일관성 사이에서 선택하고 있다는 점을 드러냅니다. 예를 들어 노드 간 데이터 검증을 거쳐 응답하면 일관성은 높아지지만 지연이 늘고(PC/EC), 검증 없이 즉시 응답하면 빠르지만 오래된 값을 돌려줄 수 있습니다(PA/EL). 실무 판단은 이 도메인이 잠깐의 정합성 지연을 감내할 수 있는가로 귀결됩니다. 주문 상태나 재고 차감처럼 감내할 수 없는 도메인은 RDBMS로 남기고, 게시글 요약·활동 로그·추천 피드처럼 감내 가능한 도메인만 NoSQL로 분리하는 것이 Polyglot Persistence의 실제 적용 기준입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>MongoDB에도 트랜잭션이 있는데 RDBMS와 뭐가 다른가요?</td><td>멀티도큐먼트 트랜잭션은 있지만 스키마 강제가 없고 조인 대신 비정규화·임베딩을 전제로 설계된다는 점이 다릅니다.</td></tr><tr><td>PACELC에서 EL을 선택한 시스템의 예는?</td><td>Cassandra처럼 AP 성향 시스템이 평상시에도 지연을 낮추기 위해 강한 일관성을 포기하는 경우입니다.</td></tr><tr><td>RDB JSON 컬럼은 언제 충분한가요?</td><td>대부분 정형 데이터인데 일부 속성만 유동적일 때는 별도 DB 도입 없이 JSON 컬럼으로 충분합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"NoSQL이 더 빠르다"는 얕은 답변입니다. NoSQL은 빠른 게 아니라 확장 방식과 일관성 보장 수준이 다른 것이며, 어떤 anomaly를 감내할 도메인인지 먼저 규정해야 선택 근거가 됩니다.</p></div>
+</section>
+
+<section id="dbdeep-q18">
+<div class="ch-head"><span class="ch-code">DBD-18</span><h2>Q. 검색 성능이 한계에 부딪히면 왜 Elasticsearch를 검토하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>Elasticsearch는 Lucene 기반 분산 검색 엔진으로, 역색인 구조 덕분에 %LIKE% 풀스캔과 달리 데이터가 늘어도 검색 속도 저하가 미미합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>RDBMS의 %LIKE%는 모든 행을 풀스캔하므로 데이터량에 선형적으로 느려지지만, ES는 저장 시점에 텍스트를 토큰화해 term 사전을 만들어두므로 검색 시 term을 O(1)에 가깝게 찾고 연결된 document ID만 조회합니다. 다만 ES는 인메모리 버퍼에 있는 동안 세그먼트가 생성되기 전까지는 검색되지 않아 완전한 실시간은 아니며, 트랜잭션을 지원하지 않고 삭제·수정도 soft-delete 후 새 세그먼트를 만드는 방식이라 RDBMS와 저장 모델 자체가 다릅니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">역색인은 문서 텍스트를 토큰화해 term 사전을 만들고, 검색어도 같은 전처리를 거쳐 term으로 변환한 뒤 역색인에서 매칭해 연결된 document ID로 원본을 즉시 조회하는 방식입니다. RDBMS는 엄격한 스키마와 B-Tree 인덱스를 가진 트랜잭션 저장소이고 ES는 스키마 프리(Schema Free) 검색 엔진이므로, 실무에서는 RDBMS를 원본 저장소로 두고 ES는 검색 전용으로 병행하는 구성이 일반적입니다.</div>
+<h3>90초 답변</h3>
+<p>ES는 트랜잭션을 지원하지 않으므로 RDB 쓰기와 ES 색인을 하나의 트랜잭션으로 묶을 수 없습니다. 이 정합성 문제는 RDB 트랜잭션이 커밋된 후에만 이벤트를 발행하는 방식으로 풉니다. Spring의 <code>@TransactionalEventListener</code>를 쓰면 트랜잭션이 실제로 커밋된 시점에만 이벤트가 발행되고, 이 이벤트를 메시지 큐로 전달해 ES의 bulk API로 반영하면 RDB가 원본, ES가 최종적으로 일관된 파생 인덱스가 되는 구조를 만들 수 있습니다. %LIKE%가 느려서 도입을 검토하는 경우라면 MySQL Full-Text 인덱스로도 부분적으로 해결되지만, 형태소 분석·동의어 처리·다중 필드 랭킹이 필요하면 ES가 적합합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>ES 색인이 RDB보다 늦게 반영되면 어떻게 하나요?</td><td>최종적 일관성을 전제로 설계하고, 검색 결과와 원본 상태가 다를 수 있는 화면에는 이를 반영합니다.</td></tr><tr><td>MySQL Full-Text와 ES 중 언제 Full-Text로 충분한가요?</td><td>단일 필드 자연어 검색 정도면 MATCH AGAINST로 충분하고, 복합 랭킹·집계·로그 검색이 필요하면 ES가 낫습니다.</td></tr><tr><td>ES 삭제가 왜 진짜 삭제가 아닌가요?</td><td>세그먼트는 불변이라 삭제·수정은 soft-delete 표시 후 새 세그먼트를 만들고, 이후 병합(merge) 시점에 실제로 제거됩니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"ES를 메인 저장소로 쓰면 된다"는 위험한 답변입니다. 트랜잭션 미지원과 지연된 실시간성 때문에 정합성이 중요한 원본 데이터는 RDBMS에 두어야 합니다.</p></div>
+</section>
+
+<section id="dbdeep-q19">
+<div class="ch-head"><span class="ch-code">DBD-19</span><h2>Q. 캐싱 대상과 만료 전략은 어떤 기준으로 정하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>캐시는 읽기 빈도가 높고 쓰기 빈도가 낮은 데이터, 또는 만드는 데 비용이 큰 연산 결과에 적합하며, 만료 전략은 정합성과 인프라 복잡도의 트레이드오프입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>구독 정보, 사용자 프로필, 인기 게시물 목록처럼 자주 읽히고 드물게 바뀌는 데이터, 또는 복잡한 조인이나 집계 쿼리의 결과가 좋은 캐싱 대상입니다. 반대로 자주 변경되는 데이터는 캐시 무효화가 빈번해 캐싱 자체가 오버헤드가 됩니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">만료 전략은 세 가지입니다. TTL 기반은 일정 시간 후 자동 만료되며 변경 빈도에 따라 TTL 길이를 조절합니다. 이벤트 기반은 원본 데이터가 바뀌는 순간 즉시 캐시를 무효화해 정합성이 좋지만 무효화 이벤트를 전파하는 인프라가 필요합니다. 실무에서는 TTL로 기본 만료를 걸고 변경 이벤트로 즉시 무효화하는 혼합 방식을 가장 많이 씁니다.</div>
+<h3>90초 답변</h3>
+<p>TTL만 쓰면 원본이 바뀐 뒤에도 TTL이 끝날 때까지 오래된 값이 노출되는 구간이 생기고, 이벤트 기반만 쓰면 무효화 이벤트가 유실됐을 때 캐시가 영원히 stale 상태로 남을 위험이 있습니다. 혼합 전략은 이벤트로 즉시 무효화를 시도하되, 이벤트가 실패하거나 누락되더라도 TTL이 상한선 역할을 해 일정 시간 안에는 반드시 정합성이 회복되도록 만드는 안전망입니다. 어떤 데이터를 캐싱할지 정할 때도 같은 논리가 적용됩니다. 자주 바뀌는 재고 수량 같은 값을 캐싱하면 무효화 비용이 캐싱 이득을 상쇄하므로, 캐싱 여부는 항상 읽기/쓰기 비율과 무효화 인프라 유무를 함께 봐야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TTL을 얼마나 짧게 잡아야 하나요?</td><td>변경 빈도와 허용 가능한 stale 시간을 기준으로 정하며, 절대적인 기본값은 없습니다.</td></tr><tr><td>이벤트 기반 무효화가 실패하면?</td><td>TTL을 상한으로 병행해 무효화 실패가 영구 장애로 이어지지 않게 합니다.</td></tr><tr><td>캐시 워밍업은 왜 필요한가요?</td><td>TTL 만료 직후 다수 요청이 동시에 원본을 때리는 캐시 스탬피드를 막기 위해서입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"모든 조회를 캐싱하면 빠르다"는 얕은 답변입니다. 쓰기 빈도가 높은 데이터를 캐싱하면 무효화 비용과 정합성 위험이 이득보다 커질 수 있습니다.</p></div>
+</section>
+
+<section id="dbdeep-q20">
+<div class="ch-head"><span class="ch-code">DBD-20</span><h2>Q. 분산 환경에서 비관적 락이 무너지는 지점과 대안은 무엇인가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>비관적 락(SELECT FOR UPDATE)은 데이터의 최신 복사본이 하나라는 전제 위에서 동작하므로, 쓰기 DB가 여러 대인 분산 환경에서는 정합성이 깨질 수 있습니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>클러스터링은 스토리지가 1개이므로 비관적 락이 그대로 동작하고, 샤딩은 애초에 같은 데이터가 다른 DB에 없으므로 락 충돌 자체가 발생하지 않습니다. 반면 쓰기 DB가 여러 대로 나뉜 구조에서는 한쪽에서 건 잠금이 다른 쪽에 반영되지 않아, 서로 다른 노드가 같은 데이터를 동시에 수정할 수 있습니다. 이때는 Redis SETNX 기반 분산 락(TTL로 데드락 방지)이나, 클러스터 환경에서는 N개 노드 중 과반수 획득을 요구하는 Redlock 알고리즘으로 단일 노드 장애에도 안전한 락을 구성합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">쓰기 스큐(Write Skew)는 두 트랜잭션이 같은 조건을 읽고 각자 다른 로우를 수정해 로우 레벨 충돌 없이 둘 다 커밋되지만 비즈니스 불변식이 깨지는 현상입니다. 당직 의사 최소 1명 규칙에서 Alice와 Bob이 각자 2명이니 빠져도 된다고 판단해 동시에 자신을 해제하면, 서로 다른 로우를 고쳤으므로 충돌이 감지되지 않고 둘 다 성공해 당직자 0명이 됩니다. SERIALIZABLE 격리 수준이나 SELECT FOR UPDATE 같은 명시적 잠금 없이는 막을 수 없습니다.</div>
+<h3>90초 답변</h3>
+<p>맥북 100대 한정 판매를 설계한다면 비관적 락은 재고 로우 하나에 모든 요청이 직렬화되어 10만 요청 앞에서 DB 병목이 심각해집니다. 대안으로 Redis에 재고 100을 세팅하고 DECR 원자 연산으로 0 이하이면 거부한 뒤, 통과한 요청만 DB에 주문을 생성하는 방식을 씁니다. 인메모리라 응답이 빠르고 DB 부하가 없어 실무에서 가장 널리 쓰는 패턴입니다. Lock timeout과 Connection timeout은 원인이 다릅니다. Connection timeout은 TCP 연결 자체를 못 맺는 인프라 문제(서버 다운, 커넥션 풀 고갈)이고, Lock timeout은 연결은 맺었지만 다른 트랜잭션이 점유한 락을 못 얻는 경합 문제입니다(InnoDB <code>innodb_lock_wait_timeout</code> 기본 50초). SELECT FOR UPDATE도 Tx1이 row A를 잠그고 row B를 요청하는 동시에 Tx2가 row B를 잠그고 row A를 요청하면 데드락이 나며, InnoDB는 이를 자동 감지해 비용이 적은 트랜잭션을 rollback합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Redis 분산 락의 TTL은 왜 필요한가요?</td><td>락을 쥔 프로세스가 죽어도 락이 영원히 남지 않도록 자동 해제 시점을 보장하기 위해서입니다.</td></tr><tr><td>낙관적 락 버전 관리를 DB 트리거로 할 수 있나요?</td><td>가능하지만 디버깅이 어렵고 재시도 로직 제어가 힘들어 JPA @Version 같은 애플리케이션 레벨 관리가 일반적입니다.</td></tr><tr><td>REPEATABLE READ에서 pessimistic lock을 쓰면 왜 SERIALIZABLE보다 나은가요?</td><td>MVCC로 일반 읽기는 논블로킹으로 유지하면서 FOR UPDATE로 잠근 행만 대기시켜 동시성과 정합성의 균형을 잡을 수 있기 때문입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"분산 환경에서도 SELECT FOR UPDATE를 걸면 된다"는 틀린 답변입니다. 쓰기 DB가 여러 대면 한쪽의 잠금이 다른 쪽에 전파되지 않아 정합성이 깨집니다.</p></div>
+</section>
+
+<section id="dbdeep-q21">
+<div class="ch-head"><span class="ch-code">DBD-21</span><h2>Q. Connection Pool 설정값은 어떤 기준으로 잡고, 무엇을 신호로 보나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>HikariCP의 maximumPoolSize·connectionTimeout·idleTimeout·maxLifetime은 각자 다른 실패 모드를 막는 값이므로, 하나라도 근거 없이 정하면 풀이 고갈되거나 DB가 과부하됩니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>maximumPoolSize는 흔히 (CPU 코어 수 * 2) + 디스크 수 공식을 시작점으로 삼고, connectionTimeout은 풀에서 커넥션을 못 받았을 때 대기 상한(기본 30초), idleTimeout은 유휴 커넥션 정리 시점, maxLifetime은 DB의 wait_timeout보다 짧게 잡아야 DB가 먼저 끊어버려 애플리케이션이 죽은 커넥션을 잡는 상황을 피할 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">커넥션 수를 무제한에 가깝게 늘리면 메모리보다 먼저 DB 서버의 스레드 수가 문제가 됩니다. DB는 커넥션마다 전용 스레드를 할당하므로 커넥션이 늘수록 컨텍스트 스위칭 오버헤드가 커지고, 여러 스레드가 동시에 디스크에 접근하면 I/O 경합이 심해집니다. 특히 HDD는 한 번에 하나의 I/O만 처리하므로 특정 시점부터는 커넥션을 늘려도 처리량이 늘지 않고 오히려 떨어집니다.</div>
+<h3>90초 답변</h3>
+<p>이 값들은 부하 테스트로 검증하고 운영 중에는 Micrometer 같은 메트릭으로 실시간 관찰해야 실제 신호가 보입니다. connectionTimeout 초과가 늘면 풀 크기 부족이나 장시간 트랜잭션으로 인한 고갈을 의심하고, DB 쪽 스레드/커넥션 수가 애플리케이션 인스턴스 수 × maximumPoolSize보다 커지면 DB의 max_connections를 초과할 위험 신호입니다. maxLifetime을 DB wait_timeout보다 길게 두면 DB가 이미 닫은 커넥션을 풀이 살아있다고 착각해 재사용을 시도하다 실패하는 상황이 생기므로, 두 값의 순서를 항상 맞춰야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>풀 크기를 무작정 늘리면 안 되는 이유는?</td><td>DB 서버의 스레드·디스크 I/O가 한계에 부딪히면 커넥션을 늘려도 처리량이 늘지 않고 컨텍스트 스위칭만 커집니다.</td></tr><tr><td>인스턴스를 여러 대로 늘리면 뭐가 달라지나요?</td><td>인스턴스 수만큼 풀 크기가 곱해지므로 DB max_connections 초과 위험이 커져 인스턴스별 풀 크기를 재계산해야 합니다.</td></tr><tr><td>idleTimeout과 maxLifetime의 역할 차이는?</td><td>idleTimeout은 안 쓰는 커넥션 정리, maxLifetime은 커넥션 자체의 최대 수명 제한으로 목적이 다릅니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"풀 크기는 크게 잡을수록 안전하다"는 오해입니다. DB 서버의 스레드·디스크 I/O 한계를 넘는 순간부터는 오히려 성능이 저하됩니다.</p></div>
+</section>
+
+<section id="dbdeep-q22">
+<div class="ch-head"><span class="ch-code">DBD-22</span><h2>Q. JPA에서 N+1과 대량 데이터 처리는 어떻게 다루나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>N+1은 연관 데이터를 지연 로딩하며 엔티티마다 추가 쿼리가 발생하는 문제이고, 대량 데이터 처리는 ORM의 편의 기능이 오히려 메모리와 네트워크 비용을 키우지 않도록 별도 전략이 필요합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>N+1 해결책은 세 가지입니다. Fetch Join(<code>JOIN FETCH</code>)은 한 번의 쿼리로 연관 데이터를 함께 가져오고, <code>@BatchSize(size=100)</code>는 N번의 쿼리를 IN 절로 묶어 N/100번으로 줄이며, <code>@EntityGraph</code>는 특정 조회에서만 즉시 로딩을 적용합니다. 기본은 Lazy로 두고 필요한 조회에서만 Fetch Join을 쓰는 것이 실무 기준입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">OneToMany 페치 조인은 부모 1건과 자식 3건을 조인하면 3행이 되는 카테시안 곱을 만들어 DB의 LIMIT/OFFSET이 의도대로 동작하지 않습니다. Hibernate는 이를 감지하면 전체 데이터를 메모리에 올린 뒤 애플리케이션에서 페이지네이션을 수행하므로 데이터가 많으면 OOM 위험이 있습니다. Batch Size를 쓰거나 ManyToOne 방향에서 페치 조인하는 방식으로 피합니다.</div>
+<h3>90초 답변</h3>
+<p>대량 데이터를 다룰 때는 <code>saveAll()</code>과 <code>hibernate.jdbc.batch_size</code>로 여러 INSERT를 하나의 네트워크 왕복으로 묶는 배치 INSERT를 씁니다. 다만 MySQL은 JDBC URL에 <code>rewriteBatchedStatements=true</code>를 추가해야 실제 multi-row INSERT로 변환되므로, 이 옵션이 빠지면 배치 설정을 해도 여전히 건건이 INSERT가 나갑니다. 대량 조회는 <code>@QueryHints</code>로 읽기 전용을 걸어 변경 감지를 끄고, 커서 기반 조회(<code>Stream</code>)나 페이징으로 메모리를 절약합니다. JPA와 JOOQ의 선택은 이 지점에서 갈립니다. JPA는 영속성 컨텍스트의 1차 캐시·변경 감지로 객체 중심 개발에 유리하지만 복잡한 쿼리 튜닝이 어렵고, JOOQ는 타입 안전한 SQL 빌더로 복잡한 조인·서브쿼리와 컴파일 타임 오류 검출에 강한 대신 변경 감지·캐싱을 직접 구현해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>LazyInitializationException은 언제 나나요?</td><td>영속성 컨텍스트가 닫힌 뒤 Lazy 연관 데이터에 접근할 때 프록시가 세션을 못 찾아 발생합니다.</td></tr><tr><td>Batch Size는 몇으로 잡아야 하나요?</td><td>IN 절 파라미터 한도와 DB 부하를 함께 보고 100 안팎에서 시작해 조정합니다.</td></tr><tr><td>rewriteBatchedStatements을 빼먹으면 어떻게 되나요?</td><td>batch_size 설정과 무관하게 실제로는 건건이 INSERT가 나가 배치 효과가 없습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"Eager로 바꾸면 N+1이 해결된다"는 위험한 답변입니다. Eager는 불필요한 데이터까지 항상 가져와 오히려 성능이 나빠질 수 있고, N+1의 근본 해결은 조회 시점별로 Fetch 전략을 다르게 가져가는 것입니다.</p></div>
+</section>
+
+<section id="dbdeep-q23">
+<div class="ch-head"><span class="ch-code">DBD-23</span><h2>Q. B-Tree를 채택한 이유와 SQL 안티패턴은 어떻게 설명하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>B-Tree는 디스크 I/O 최소화라는 단일 목적 때문에 배열이나 레드블랙트리 대신 채택됐고, SQL 안티패턴 상당수는 이 디스크 I/O 특성을 무시할 때 발생합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>정렬된 배열은 이진 탐색으로 읽기는 O(log N)이지만 삽입·삭제 시 데이터 이동이 O(N)이라 쓰기가 잦은 DB에 맞지 않고, 레드블랙트리 같은 이진 트리 계열은 노드당 키 1개만 저장해 트리 높이가 높아 디스크 I/O가 많이 발생합니다(인메모리 Java TreeMap에는 유리). B-Tree는 노드 하나에 여러 키를 저장해 한 번의 디스크 I/O(보통 4KB 페이지 단위)로 많은 키를 비교할 수 있어 트리 높이가 3~4 수준으로 낮고, 4억 건도 디스크 3~4번만 읽으면 찾을 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">순차 IO(연속된 디스크 위치를 읽는 풀 스캔)는 디스크 헤드 이동이 적어 빠르고, 랜덤 IO(흩어진 위치를 읽는 인덱스 레인지 스캔)는 매번 헤드를 이동해야 해 느립니다. SSD에서는 랜덤 IO 페널티가 HDD보다 작지만 순차 IO가 여전히 더 빠릅니다. SQL Injection은 PreparedStatement로 값과 쿼리 구조를 분리하는 것이 핵심 방어이며, ORM은 내부적으로 이를 사용하므로 문자열 연결로 직접 SQL을 조립하는 코드만 없애면 됩니다.</div>
+<h3>90초 답변</h3>
+<p>페이지네이션이 뒤로 갈수록 느려지는 이유도 같은 원리입니다. <code>OFFSET 100000</code>은 그만큼의 행을 읽고 버려야 하므로, 마지막 조회 PK 이후만 가져오는 No Offset 방식(<code>WHERE id < ? ORDER BY id DESC LIMIT 20</code>)으로 바꾸면 InnoDB 클러스터링 인덱스 특성상 PK 기반 조회가 가장 빠릅니다. 다만 No Offset은 마지막 조회 ID를 알아야 하고 데이터 생성·삭제로 범위가 깨질 수 있어, 정렬 기준 컬럼과 PK의 복합 인덱스나 커버링 인덱스로 보완합니다. 결과 집합 비교도 자주 나옵니다. EXISTS, INTERSECT, IN은 모두 두 테이블의 교집합에 해당하는 결과를 반환하지만, RIGHT OUTER JOIN은 오른쪽 테이블의 모든 행을 포함해 교집합에 없는 행도 NULL과 함께 나오므로 이 넷 중 RIGHT OUTER JOIN만 결과가 다릅니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>SSD면 랜덤 IO 걱정을 안 해도 되나요?</td><td>페널티가 줄었을 뿐 순차 IO보다 느린 것은 여전하므로 인덱스 설계 원칙은 유지됩니다.</td></tr><tr><td>No Offset이 항상 정답인가요?</td><td>임의 페이지 점프(예: 50페이지로 바로 이동)가 필요하면 커버링 인덱스로 PK만 먼저 조회하는 절충안을 씁니다.</td></tr><tr><td>ORM을 쓰면 SQL Injection에서 완전히 자유로운가요?</td><td>동적 정렬 컬럼이나 테이블명처럼 바인딩이 안 되는 부분은 허용 목록(allowlist)으로 별도 검증해야 합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"인덱스는 아무 컬럼에나 걸수록 좋다"는 이 섹션의 핵심을 놓친 답변입니다. 인덱스도 B-Tree 구조를 갖는 이상 쓰기·저장 비용이 있고, 랜덤 IO 특성상 무분별한 인덱스가 오히려 페이지네이션과 쓰기 성능을 해칠 수 있습니다.</p></div>
+</section>
+
+<section id="dbdeep-q24">
+<div class="ch-head"><span class="ch-code">DBD-24</span><h2>Q. Replication 구현체와 변경 관리 도구는 실제로 어떻게 동작하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>PostgreSQL은 WAL 파일 단위 Log Shipping과 레코드 단위 Streaming Replication을 병행해 지연과 유실 위험을 함께 관리하고, 애플리케이션은 AbstractRoutingDataSource로 이 복제 구조를 코드 변경 없이 활용합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Log Shipping은 WAL 파일이 가득 차야 전송되므로 파일 생성까지 복제 지연(gap)이 있고, Streaming Replication은 레코드 단위 실시간 전송이라 지연은 적지만 Slave 장기 장애 시 Master가 오래된 WAL을 덮어써 유실 위험이 있습니다. 그래서 실무는 Streaming을 기본으로 하고 Log Shipping을 유실 방지용으로 병행합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Spring에서는 AbstractRoutingDataSource를 구현해 <code>@Transactional(readOnly=true)</code>면 Slave로, 쓰기 트랜잭션이면 Master로 라우팅합니다. ThreadLocal에 현재 트랜잭션의 readOnly 여부를 저장해두고 DataSource 선택 시 참조하는 방식이라, 코드 변경 없이 어노테이션만으로 읽기/쓰기가 자동 분리됩니다. Master-Slave는 비동기 복제이므로 쓰기 직후 Slave에서 읽으면 반영 전 데이터가 조회될 수 있어, 결제 직후 주문 상태 확인처럼 정합성이 중요한 읽기는 Master로 직접 보냅니다.</div>
+<h3>90초 답변</h3>
+<p>WAL과 Binlog는 목적이 다릅니다. WAL(InnoDB의 redo log)은 데이터를 변경하기 전에 먼저 순차 기록해 장애 복구(crash recovery)를 위한 것이고, Binlog 같은 Logging은 변경 후 기록되며 리플리케이션과 감사(audit), 특정 시점 복구가 목적입니다. InnoDB는 redo log로 커밋된 변경을 복원하고 undo log로 미커밋 변경을 롤백합니다. 운영 도구 쪽에서는 변경 이력을 남겨야 하는 테이블에 원본 컬럼과 동일한 구조에 변경일시·변경유형·변경자 컬럼을 추가한 이력 테이블을 두고 대용량이면 날짜 기반 파티셔닝을 적용합니다. 스키마 변경은 Flyway가 <code>flyway_schema_history</code> 테이블과 마이그레이션 파일(V1__, V2__)을 비교해 미적용 버전만 순서대로 실행하고, 이미 적용된 파일을 수정하면 체크섬 불일치로 에러를 냅니다. 테스트는 H2가 MySQL과 GROUP BY 규칙·JSON 함수 등에서 동작이 달라 Testcontainers로 실제 MySQL 컨테이너를 띄워 검증해야 신뢰할 수 있습니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>동기 복제를 쓰면 무엇이 희생되나요?</td><td>Slave 반영까지 응답을 보류하므로 정합성은 보장되지만 쓰기 지연이 늘어납니다.</td></tr><tr><td>Flyway 마이그레이션 파일을 실수로 수정하면?</td><td>체크섬이 달라져 다음 배포에서 에러가 나므로, 수정이 필요하면 새 버전 파일을 추가해야 합니다.</td></tr><tr><td>이력 테이블을 트리거로 채우는 것과 애플리케이션에서 채우는 것의 차이는?</td><td>트리거는 누락 없이 모든 변경을 잡지만 디버깅이 어렵고, 애플리케이션 레벨은 제어가 쉽지만 우회 경로(직접 SQL)를 놓칠 수 있습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>"Replica가 있으니 백업은 필요 없다"는 오해입니다. Replica는 가용성을 위한 것이고, 실수로 삭제한 데이터도 그대로 복제되므로 별도의 백업·복구 절차(DBD-11)가 필요합니다.</p></div>
+</section>
+
 <section id="doc-security">
 <div class="ch-head"><span class="ch-code">PART</span><h2>보안 심화 면접</h2></div>
 </section>
@@ -978,6 +1144,240 @@ PostgreSQL은 row version마다 xmin/xmax로 생성·삭제 transaction 정보�
 <p>“XSS는 script 삽입입니다”에서 멈추지 말고 “입력 위치에 따라 HTML, attribute, URL, JS context escaping이 다르고, React 기본 escaping으로 막히지 않는 dangerouslySetInnerHTML이나 third-party HTML renderer는 별도 sanitization이 필요합니다”까지 이어가야 합니다.</p>
 </div>
 </section>
+
+<section id="doc-network">
+<div class="ch-head"><span class="ch-code">PART</span><h2>네트워크 심화 면접</h2></div>
+</section>
+
+<section id="net-q1">
+<div class="ch-head"><span class="ch-code">NET-01</span><h2>Q. 브라우저에서 HTTPS 요청 하나는 어떤 주소 체계와 단계를 거쳐 서버까지 도달하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>IP는 최종 목적지를 찾기 위한 논리 주소이고 MAC은 같은 링크 안에서 실제로 프레임을 넘기기 위한 주소이며, 포트는 4-tuple로 여러 연결을 구분합니다. 요청 하나는 DNS 조회부터 TLS handshake, 렌더링까지 여러 계층을 순서대로 통과합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>목적지 IP는 경로 전체에서 유지되지만, MAC은 홉마다 바뀝니다. 목적지가 같은 네트워크면 ARP로 그 장비의 MAC을 바로 찾고, 다른 네트워크면 MAC은 링크 로컬이라 최종 서버까지 직접 도달할 수 없으므로 ARP로 기본 게이트웨이의 MAC을 찾아 우선 그쪽으로 넘깁니다. 라우터는 프레임을 벗겨 IP를 보고 다음 구간의 새 프레임을 만듭니다. 포트는 IP만으로 구분되지 않는, 한 호스트 안의 여러 소켓을 식별하는 계층입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Google 검색을 예로 들면, 먼저 DNS로 IP를 얻고 443 포트로 TCP 3-way handshake를 맺습니다. 그 위에서 TLS handshake가 진행되어 ClientHello/ServerHello, 인증서 검증, ECDHE 키 교환으로 세션 키를 만들고, 이후 요청/응답은 그 세션 키로 암호화됩니다. 응답을 받으면 브라우저가 파싱해 렌더링합니다.</div>
+<h3>90초 답변</h3>
+<p>계층을 나눠 보면 IP는 목적지 호스트를 찾는 역할, MAC은 지금 링크에서 다음 장비로 넘기는 역할, 포트는 그 호스트 안의 어느 소켓인지 구분하는 역할로 나뉩니다. ARP는 이 세 계층을 잇는 역할을 합니다 — 목적지가 같은 네트워크가 아니면 브라우저는 최종 서버의 MAC을 찾지 않고 항상 기본 게이트웨이의 MAC만 ARP로 조회합니다. TCP 연결이 열리면 TLS handshake는 비대칭 키로 서버를 인증하고 키를 교환한 뒤 대칭 키로 전환합니다. 연결은 매 요청마다 새로 맺지 않고 HTTP Keep-Alive나 HTTP/2로 재사용되며, 더 필요 없거나 유휴 시간이 지나면 TCP 종료 과정으로 닫힙니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>같은 네트워크인지는 어떻게 판단하나요?</td><td>IP와 서브넷 마스크로 목적지가 같은 네트워크 대역인지 계산해 판단합니다.</td></tr><tr><td>ARP 캐시는 왜 필요한가요?</td><td>매 패킷마다 ARP 브로드캐스트를 반복하지 않도록 MAC 매핑을 잠시 캐시합니다.</td></tr><tr><td>포트 없이 IP만으로 통신이 안 되는 이유는?</td><td>한 호스트에서 여러 프로세스·소켓이 동시에 통신하므로 IP만으로는 응답을 어디로 돌려줄지 특정할 수 없습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“다른 네트워크로 갈 때도 서버 MAC을 찾는다”는 흔한 오해입니다. MAC은 링크 로컬이라 게이트웨이까지만 유효합니다.</p></div>
+</section>
+
+<section id="net-q2">
+<div class="ch-head"><span class="ch-code">NET-02</span><h2>Q. Connection Timeout과 Read Timeout은 왜 다르게 다뤄야 하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>TCP Connection은 4-tuple로 식별되는 양방향 논리 경로이며, 연결 자체를 못 맺는 Connection Timeout과 연결 후 응답이 늦는 Read Timeout은 원인과 대응이 다른 별개의 실패입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>Connection Timeout은 서버 다운, 방화벽 차단, 네트워크 경로 문제로 SYN-ACK가 오지 않는 인프라성 실패이고, Read Timeout은 연결은 성공했지만 서버 내부 처리 지연으로 응답이 늦는 애플리케이션성 실패입니다. 둘 다 무한 대기를 막아 스레드·소켓·커넥션 풀 자원 고갈을 방지하는 목적은 같지만, 실패 원인을 진단할 때는 구분해야 합니다. TCP Keep Alive는 이 둘과 다른 개념으로, 유휴 연결이 살아있는지 운영체제가 주기적으로 확인하는 전송 계층 기능입니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">Connection Timeout은 TCP 연결 자체를 맺는 단계의 최대 대기 시간이고, Read Timeout은 연결 이후 응답 데이터를 기다리는 최대 시간입니다. 전자는 서버·네트워크 장애를, 후자는 서버 내부 처리 지연을 의심하게 만듭니다. TCP Keep Alive는 유휴 상태의 좀비 연결을 정리하기 위한 별도의 probe 메커니즘입니다.</div>
+<h3>90초 답변</h3>
+<p>두 타임아웃을 하나로 뭉뚱그리면 장애 대응이 느려집니다. Connection Timeout이 자주 발생하면 서버 헬스, 네트워크 경로, 커넥션 풀 고갈을 먼저 봐야 하고, Read Timeout이 자주 발생하면 서버 내부의 느린 쿼리·외부 API·GC 정지를 봐야 합니다. TCP Connection은 출발지 IP·포트, 목적지 IP·포트로 이루어진 4-tuple로 식별되므로, 같은 서버·같은 포트라도 클라이언트 출발지 포트가 다르면 별개 연결로 관리됩니다. HTTP Keep-Alive(애플리케이션 계층의 연결 재사용)와 TCP Keep Alive(전송 계층의 생존 확인)는 이름이 비슷하지만 하는 일이 다릅니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>타임아웃이 왜 필요한가요?</td><td>응답 없는 연결을 계속 붙잡으면 스레드·소켓·풀이 반환되지 않아 자원이 고갈됩니다.</td></tr><tr><td>Read Timeout을 너무 짧게 잡으면?</td><td>정상적으로 느린 응답까지 실패로 처리해 불필요한 재시도·장애 오탐이 늘어납니다.</td></tr><tr><td>Keep Alive probe에 응답이 없으면?</td><td>연결이 죽었다고 판단하고 정리 대상으로 처리합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“타임아웃이니까 같은 문제”라는 답은 얕습니다. 두 타임아웃은 발생 단계가 다르므로 원인 진단 경로도 달라야 합니다.</p></div>
+</section>
+
+<section id="net-q3">
+<div class="ch-head"><span class="ch-code">NET-03</span><h2>Q. TCP 혼잡 제어와 UDP의 오류 처리는 어떻게 동작하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>UDP는 checksum으로 오류를 검출만 하고 복구하지 않으며, TCP는 혼잡 윈도우(cwnd)를 조절해 네트워크가 감당할 수 있는 범위에서 송신량을 스스로 제어합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>UDP는 헤더의 checksum으로 손상된 데이터그램을 폐기하지만, 재전송이나 순서 보장은 하지 않으므로 신뢰성이 필요하면 애플리케이션 계층에서 메시지 번호·ACK·재전송을 직접 구현해야 합니다. TCP 혼잡 제어는 Slow Start로 cwnd를 빠르게 키우다가 임계점부터 Congestion Avoidance로 증가 폭을 줄이고, 손실 시 cwnd를 낮춥니다. 중복 ACK가 3번 오면 타임아웃을 기다리지 않고 즉시 재전송하는 Fast Retransmit, 그 후 Slow Start로 완전히 되돌아가지 않는 Fast Recovery가 있으며, 리눅스의 CUBIC이나 지연·대역폭을 함께 추정하는 BBR 같은 구현체가 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">UDP는 checksum으로 오류만 검출하고 복구는 하지 않으므로, 신뢰성이 필요하면 애플리케이션에서 직접 처리해야 합니다. TCP는 cwnd를 Slow Start로 키우다가 Congestion Avoidance로 넘어가고, 손실 감지 시 Fast Retransmit·Fast Recovery로 대응하며, CUBIC·BBR 같은 알고리즘으로 구체적인 증감 방식이 달라집니다.</div>
+<h3>90초 답변</h3>
+<p>TCP 혼잡 제어는 송신 호스트가 ACK, 손실, RTT 신호를 보고 스스로 전송량을 조절하는 엔드포인트 자율 메커니즘입니다. 이는 네트워크 장비가 트래픽 종류별로 우선순위를 부여하는 QoS와는 다른 층위입니다 — 예를 들어 음성·영상 같은 실시간 트래픽은 라우터·스위치가 우선순위 큐나 대역폭 보장으로 처리하는 정책 기반 제어이고, TCP 혼잡 제어는 각 연결의 송신 측이 손실·ACK를 보고 반응하는 자율 제어입니다. 둘 다 혼잡과 품질을 다루지만 책임 주체와 제어 위치가 다릅니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>UDP 위에서 신뢰성을 어떻게 구현하나요?</td><td>메시지 번호를 붙이고 ACK를 받아 일정 시간 안에 응답이 없으면 재전송하는 방식으로 보완합니다.</td></tr><tr><td>Slow Start가 계속되면 어떻게 되나요?</td><td>혼잡을 유발할 수 있어 임계점(ssthresh)부터 증가 폭을 줄이는 Congestion Avoidance로 전환합니다.</td></tr><tr><td>QoS만으로 혼잡 제어를 대체할 수 있나요?</td><td>QoS는 네트워크 장비의 우선순위 정책일 뿐, 엔드포인트의 전송량 자체를 줄이지는 않습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“UDP는 오류 검출도 안 한다”는 틀린 답입니다. checksum으로 검출은 하되 복구를 하지 않는다는 점이 핵심입니다.</p></div>
+</section>
+
+<section id="net-q4">
+<div class="ch-head"><span class="ch-code">NET-04</span><h2>Q. DNS TTL은 왜 변경 반영을 늦추고, DNS로 로드밸런싱이 가능한가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>TTL은 DNS 응답을 캐시에 보관하는 시간이며, 로컬 DNS와 클라이언트가 TTL 동안 캐시를 재사용하기 때문에 레코드를 바꿔도 모든 사용자에게 즉시 반영되지 않습니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>흔히 말하는 DNS 전파 지연은 레코드가 전 세계로 복사되는 시간이 아니라, 여러 캐시가 만료되기를 기다리는 시간에 가깝습니다. 그래서 배포나 서버 이전 전에는 TTL을 미리 짧게 낮추고, 안정화되면 다시 올립니다. DNS Round-robin은 하나의 도메인에 여러 A/AAAA 레코드를 등록해 트래픽을 분산하는 가장 단순한 방법이지만, 캐시 때문에 변경이 느리게 반영되고 서버 장애를 감지하지 못해 죽은 IP가 캐시에 남아 있으면 일부 사용자가 계속 실패할 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">TTL 동안 로컬 DNS와 클라이언트가 이전 응답을 캐시해 재사용하므로, 레코드 변경은 TTL이 끝나야 모든 사용자에게 반영됩니다. DNS Round-robin으로 로드밸런싱은 가능하지만, 캐시로 인한 느린 반영과 장애 서버 미감지 문제가 있어 실무에서는 헬스체크 기반 DNS나 GeoDNS를 쓰거나 L4/L7 로드밸런서와 병행합니다.</div>
+<h3>90초 답변</h3>
+<p>TTL이 너무 길면 장애 대응이나 IP 변경 반영이 늦고, 너무 짧으면 DNS 질의가 늘어 권한 DNS와 로컬 DNS에 부담이 커지는 트레이드오프가 있습니다. DNS 로드밸런싱의 근본 한계는 DNS 자체가 헬스 상태를 실시간으로 반영하는 계층이 아니라는 점입니다. 그래서 가중치 기반 응답이나 지역 기반 라우팅(GeoDNS)으로 보완하더라도, 실제 요청 분산과 장애 감지의 정교한 제어는 L4/L7 로드밸런서가 맡고 DNS는 1차 트래픽 분산이나 지역 선택 용도로 쓰는 조합이 일반적입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>TTL을 낮추면 무엇이 희생되나요?</td><td>DNS 질의 빈도가 늘어 권한 DNS·로컬 DNS 부하가 커집니다.</td></tr><tr><td>DNS Round-robin이 실패를 못 막는 이유는?</td><td>DNS는 응답 시점의 서버 상태를 확인하지 않고 등록된 레코드를 그대로 돌려주기 때문입니다.</td></tr><tr><td>배포 전 TTL을 낮추는 이유는?</td><td>변경 사항이 캐시 만료를 기다리지 않고 더 빨리 반영되게 하기 위해서입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“DNS를 바꾸면 즉시 반영된다”는 틀린 전제입니다. TTL이 남아있는 캐시는 그 시간만큼 이전 값을 계속 돌려줍니다.</p></div>
+</section>
+
+<section id="net-q5">
+<div class="ch-head"><span class="ch-code">NET-05</span><h2>Q. HTTP 메시지는 어떻게 구성되고, HTTP/3는 왜 UDP 기반 QUIC을 쓰나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>HTTP 메시지는 시작줄·헤더·빈 줄·본문으로 구성되며 서버는 파싱→라우팅→인증/검증→로직→응답 순으로 처리하고, HTTP/3는 TCP의 Head-of-Line Blocking을 해결하기 위해 UDP 위에 QUIC이라는 별도의 신뢰성 계층을 직접 구현합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>요청 시작줄은 메서드·URI·버전, 응답 시작줄은 버전·상태코드·문구를 담습니다. HTTP/2는 하나의 TCP 연결에서 여러 요청을 멀티플렉싱하지만, 아래 TCP 계층에서 패킷 하나가 유실되면 순서 보장 때문에 뒤에 도착한 데이터도 애플리케이션에 전달되지 못하는 Head-of-Line Blocking이 있습니다. QUIC은 여러 스트림을 독립적으로 다뤄 한 스트림의 유실이 다른 스트림에 영향을 주지 않고, TLS 1.3을 통합해 핸드셰이크를 줄이며, IP·포트가 아닌 Connection ID로 연결을 식별해 네트워크가 바뀌어도 연결을 유지할 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">HTTP 메시지는 시작줄·헤더·본문으로 구성되고, 헤더는 Content-Type·Authorization·Cache-Control 같은 메타데이터를 담습니다. HTTP/3가 UDP 기반인 이유는 UDP가 빨라서가 아니라, QUIC이 스트림 단위 독립성으로 TCP의 Head-of-Line Blocking을 없애고 TLS 1.3 통합과 Connection ID로 빠른 재연결·연결 이동성을 제공하기 때문입니다.</div>
+<h3>90초 답변</h3>
+<p>서버 내부 처리는 연결 수신 → 메시지 파싱(메서드·경로·Host·쿠키·인증 헤더 확인) → 라우팅 → 인증/인가·검증 → 비즈니스 로직 → 상태 코드·헤더·본문 생성 순서를 따릅니다. PUT과 POST의 차이는 리소스 식별 주체와 멱등성입니다 — POST는 서버가 ID를 정하거나 작업을 실행해 반복 호출 시 여러 번 처리될 수 있고, PUT은 클라이언트가 정확한 URI에 전체 상태를 지정해 반복해도 결과가 같은 멱등 연산입니다. HEAD는 GET과 같지만 본문 없이 헤더만 받아 존재 확인·캐시 유효성 검사에 쓰고, OPTIONS는 지원 메서드 확인과 CORS Preflight에 쓰입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Head-of-Line Blocking은 어느 계층 문제인가요?</td><td>TCP는 순서 보장을 위해 유실된 패킷 뒤 데이터를 계속 대기시키는 전송 계층 문제입니다.</td></tr><tr><td>QUIC의 0-RTT는 무엇인가요?</td><td>이전에 연결한 적 있는 서버에는 핸드셰이크를 줄여 더 빠르게 재연결하는 기능입니다.</td></tr><tr><td>Accept와 Content-Type의 차이는?</td><td>Accept는 클라이언트가 받을 수 있는 응답 형식, Content-Type은 보내는 본문의 실제 형식입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“HTTP/3는 UDP라서 빠르다”는 얕은 답입니다. UDP 자체가 아니라 QUIC이 제공하는 스트림 독립성과 빠른 핸드셰이크가 핵심입니다.</p></div>
+</section>
+
+<section id="net-q6">
+<div class="ch-head"><span class="ch-code">NET-06</span><h2>Q. TLS handshake는 왜 비대칭 키와 대칭 키를 함께 쓰고, 인증서는 무엇을 검증하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>TLS는 비대칭 키로 서버를 인증하고 키를 교환한 뒤, 비용이 큰 비대칭 연산을 피하기 위해 실제 데이터는 대칭 키로 암호화하는 하이브리드 구조이며, 브라우저는 도메인 일치·CA 체인·유효기간·폐기 여부를 함께 검증합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>SSL은 초기 프로토콜이고 TLS가 이를 표준화·보완한 후속 프로토콜로, 현재 SSL 2.0/3.0은 취약점 때문에 쓰면 안 되고 HTTPS는 사실상 TLS 1.2/1.3 기반입니다. ECDHE 같은 키 교환으로 세션 키 자체를 네트워크에 노출하지 않고 양측이 같은 공유 비밀값을 만들 수 있고, 이후 AES-GCM이나 ChaCha20-Poly1305 같은 대칭 암호로 실제 트래픽을 암호화합니다. 인증서 검증은 SAN에 등록된 도메인이 접속 호스트와 일치하는지, 중간 CA를 거쳐 신뢰된 루트 CA로 체인이 이어지는지, 유효기간·용도·OCSP/CRL 기준 폐기 여부를 함께 봅니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">TLS는 비대칭 키로 서버 신원을 확인하고 키 교환을 안전하게 합의한 뒤, 비용이 큰 비대칭 연산을 피하려고 이후 데이터는 대칭 키로 암호화하는 하이브리드 구조입니다. 브라우저는 인증서의 도메인 일치, CA 체인이 신뢰된 루트로 이어지는지, 유효기간과 폐기 여부를 확인해 신뢰 가능한 인증서인지 판단합니다.</div>
+<h3>90초 답변</h3>
+<p>왜 굳이 두 방식을 섞는가는 비용 문제로 설명할 수 있습니다. 비대칭 키는 공개키/개인키가 분리되어 서버 신원 확인에 적합하지만 연산 비용이 커서 매 요청 전체를 암호화하기엔 비효율적이므로, 핸드셰이크에서만 쓰고 이후 통신은 대칭 키로 전환합니다. 자가 서명 인증서는 스스로 서명한 것이라 신뢰 저장소의 루트 CA로 이어지는 객관적 체인이 없어 개발 환경에서는 쓸 수 있어도 운영 환경에서는 브라우저 경고가 발생합니다. TLS와 SSL을 혼용해 부르는 관행은 있지만(“SSL 인증서”), 실제 운영에서 쓰는 것은 TLS입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>ECDHE는 왜 쓰나요?</td><td>세션 키를 네트워크로 직접 전송하지 않고도 양측이 같은 공유 비밀을 계산할 수 있게 합니다.</td></tr><tr><td>중간 CA가 손상되면 어떻게 되나요?</td><td>그 CA가 서명한 모든 인증서의 신뢰 체인이 무효화될 수 있습니다.</td></tr><tr><td>OCSP와 CRL의 차이는?</td><td>OCSP는 개별 인증서 상태를 실시간 조회, CRL은 폐기 목록 전체를 내려받아 확인하는 방식입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“HTTPS면 SSL을 쓴다”는 부정확한 표현입니다. 현재 안전한 HTTPS 통신은 TLS 기반이고 SSL은 폐기된 구버전입니다.</p></div>
+</section>
+
+<section id="net-q7">
+<div class="ch-head"><span class="ch-code">NET-07</span><h2>Q. REST 대신 GraphQL이나 gRPC를 고르는 기준은 무엇인가요?</h2></div>
+<h3>핵심 개념</h3>
+<p>REST는 리소스·URI 기반으로 캐시 친화적이고, GraphQL은 클라이언트가 필요한 필드만 조회해 과다·과소 조회를 줄이지만 캐시가 어렵고, gRPC는 Protocol Buffers와 HTTP/2 기반으로 내부 서비스 간 고성능 통신에 적합합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>REST는 서버가 엔드포인트별 응답 구조를 정하고 클라이언트가 여러 엔드포인트를 호출하는 구조라 HTTP 캐시 활용이 쉽고 구조가 단순합니다. GraphQL은 화면마다 필요한 데이터가 다르거나 여러 리소스를 조합해야 할 때 유리하지만, 대부분 같은 URL로 요청이 들어와 캐시가 단순하지 않고 복잡한 쿼리가 서버 부하를 키울 수 있어 쿼리 복잡도·depth 제한이 필요합니다. gRPC는 HTTP/2 위에서 TLS로 전송을 보호하고 메타데이터로 JWT/OAuth 토큰을 전달하며, 서버 간 통신에는 양쪽 다 인증서를 검증하는 mTLS를 쓸 수 있습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">REST는 단순하고 캐시 친화적인 리소스 API에 적합하고, GraphQL은 클라이언트마다 필요한 데이터 모양이 다를 때 over/under-fetching을 줄여줍니다. gRPC는 내부 서비스 간 고성능 통신에 쓰며 Protocol Buffers로 이진 직렬화해 크기와 파싱 비용을 줄이는 대신 가독성과 디버깅 편의를 일부 포기합니다.</div>
+<h3>90초 답변</h3>
+<p>Protocol Buffers는 .proto 파일에 메시지·서비스를 정의해 여러 언어의 클라이언트/서버 코드를 생성할 수 있어 언어가 다른 서비스 간에도 같은 계약으로 통신할 수 있게 합니다. JSON보다 이진 포맷이라 크기가 작고 파싱이 빠르지만, 필드를 삭제하거나 번호를 재사용하면 하위 호환성이 깨질 수 있어 필드 번호 관리와 스키마 버전 관리가 중요합니다. 결국 REST/GraphQL/gRPC 선택은 “무엇이 더 좋은가”가 아니라 클라이언트 다양성, 캐시 필요성, 내부·외부 통신 여부, 성능 요구를 놓고 트레이드오프를 고르는 문제입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>GraphQL의 캐시 문제를 어떻게 완화하나요?</td><td>persisted query나 응답 단위 캐시 레이어를 별도로 두는 방식으로 보완합니다.</td></tr><tr><td>gRPC를 브라우저에서 바로 쓸 수 있나요?</td><td>브라우저 제약 때문에 grpc-web 같은 프록시 계층을 거쳐야 하는 경우가 많습니다.</td></tr><tr><td>필드 번호를 재사용하면 왜 위험한가요?</td><td>이전 버전 클라이언트가 다른 의미의 필드로 잘못 해석할 수 있습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“GraphQL이 REST보다 항상 좋다”는 근거 없는 일반화입니다. 캐시 활용성과 서버 부하 통제라는 트레이드오프를 함께 말해야 합니다.</p></div>
+</section>
+
+<section id="net-q8">
+<div class="ch-head"><span class="ch-code">NET-08</span><h2>Q. 로그인 상태는 어디에 저장하고, API 인증 방식은 어떤 기준으로 고르나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>아이디·비밀번호를 로컬 스토리지나 쿠키에 직접 저장하면 안 되며, API 인증은 JWT·API Key·OAuth2.0·HMAC·mTLS 중 클라이언트 종류와 보안 요구에 맞는 방식을 골라야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>로컬 스토리지는 JavaScript로 접근 가능해 XSS에 취약하므로 로그인 이후에는 원본 비밀번호가 아니라 세션ID·토큰만 저장하고 쿠키라면 HttpOnly·Secure·SameSite로 보호해야 합니다. 쿠키를 암호화해도 유효한 문자열을 그대로 재전송하는 replay 공격이 가능하고 서버측 즉시 무효화가 어려우므로, 암호화만으로 세션보다 항상 안전해지는 것은 아닙니다. 세션은 서버 확장성(중앙 세션 저장소·Sticky Session), 저장소 비용(TTL·정책), CSRF 위험(SameSite·CSRF Token)을 함께 관리해야 합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">비밀번호는 검증 순간에만 쓰고 저장하지 않으며, 로그인 후에는 제한된 세션ID나 토큰만 HttpOnly/Secure/SameSite로 보호해 저장합니다. API 인증은 일반 웹·모바일은 JWT Bearer, 서버 간 단순 연동은 API Key, 외부 권한 위임은 OAuth2.0, 요청 위변조 방지는 HMAC 서명, 강한 상호 인증이 필요하면 mTLS를 씁니다.</div>
+<h3>90초 답변</h3>
+<p>이중 로그인 처리는 서비스 정책에 따라 달라집니다. 보안이 중요하면 새 로그인 성공 시 기존 세션·리프레시 토큰을 폐기하는 단일 세션 정책을, 여러 기기 사용을 허용하면 Redis 등에 사용자별 활성 세션 목록을 두고 초과 시 가장 오래된 세션을 만료시키는 방식을 씁니다. JWT처럼 무상태 토큰에서도 기기별 강제 로그아웃이 필요하면 deviceId나 jti를 토큰에 넣고 서버가 활성 목록·블랙리스트를 관리해야 하는데, 이는 순수 무상태 검증의 장점 일부를 포기하는 대신 제어력을 얻는 선택입니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>세션 확장성 문제는 어떻게 푸나요?</td><td>Redis 같은 중앙 세션 저장소나 로드밸런서의 Sticky Session으로 해결합니다.</td></tr><tr><td>API Key만으로 충분하지 않은 이유는?</td><td>키가 노출되면 누구나 호출할 수 있어 IP 제한·권한 범위·주기적 교체가 필요합니다.</td></tr><tr><td>HttpOnly 쿠키도 CSRF에 취약한가요?</td><td>네, HttpOnly는 XSS 탈취만 막을 뿐 브라우저가 자동 전송하는 특성 자체는 막지 못해 SameSite·CSRF Token이 별도로 필요합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“쿠키를 암호화했으니 안전하다”는 반쪽 답변입니다. replay 공격과 즉시 무효화 불가 문제는 암호화만으로 해결되지 않습니다.</p></div>
+</section>
+
+<section id="net-q9">
+<div class="ch-head"><span class="ch-code">NET-09</span><h2>Q. 실시간 기능은 Polling·SSE·WebSocket 중 무엇을 고르고, 서버를 늘리면 무엇이 깨지나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>선택 기준은 이벤트 빈도와 양방향 필요 여부이며, 어떤 방식이든 서버를 여러 대로 늘리면 인스턴스별로 흩어진 연결 정보를 공용 브로커로 다시 묶어줘야 합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>이벤트가 드물면 구현이 단순한 Polling으로 충분하고, 서버에서 클라이언트로만 밀어주면 되면 SSE, 양방향·고빈도 통신이 필요하면 WebSocket이 적합합니다. WebSocket 서버를 늘리면 사용자 A와 B가 서로 다른 인스턴스에 연결되어, 한 인스턴스가 받은 메시지를 다른 인스턴스의 클라이언트에게 전달하지 못하는 문제가 생기므로 Redis Pub/Sub·Kafka 같은 공용 브로커로 인스턴스 간 메시지를 전파해야 합니다. Sticky Session은 연결 관리만 단순하게 할 뿐, 여러 서버에 걸친 구독자 문제 자체는 해결하지 못합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">이벤트가 드물면 Polling, 서버→클라이언트 단방향이면 SSE, 양방향·고빈도면 WebSocket을 씁니다. WebSocket·SSE 모두 서버가 여러 대면 인스턴스 밖의 공용 브로커(Redis Pub/Sub, Kafka)로 메시지를 전파해야 하고, 인증은 HTTP Upgrade 시점 쿠키나 첫 메시지의 토큰으로 처리하며 반드시 wss://를 씁니다.</div>
+<h3>90초 답변</h3>
+<p>SSE는 서버가 응답 스트림을 열어둔 채 연결 객체를 관리하는데, 단일 서버에서는 메모리에 두기 쉽지만 여러 대가 되면 이벤트를 발생시킨 인스턴스와 연결을 쥔 인스턴스가 달라 브로커가 필요하고, 재시작 시 연결이 끊기므로 Last-Event-ID 기반 재연결·누락 이벤트 복구를 설계해야 합니다. WebSocket 인증은 브라우저 WebSocket API로 임의 헤더를 붙이기 어려워 보통 쿠키 자동 전송이나 연결 직후 첫 메시지로 토큰을 보내는 방식을 쓰며, 토큰을 URL 쿼리에 넣는 방식은 로그에 남기 쉬워 피해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>Sticky Session만으로 부족한 이유는?</td><td>채팅방처럼 여러 서버에 걸친 구독자가 있으면 서버 간 메시지 전파 자체가 필요하기 때문입니다.</td></tr><tr><td>SSE 재연결은 어떻게 복구되나요?</td><td>브라우저 EventSource가 자동 재연결하고, 서버가 Last-Event-ID 기준으로 이후 이벤트를 다시 보냅니다.</td></tr><tr><td>WebSocket에서 인증 토큰을 URL에 넣으면 왜 위험한가요?</td><td>서버·프록시 로그에 토큰이 그대로 남을 수 있습니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“WebSocket 서버만 늘리면 확장된다”는 틀렸습니다. 브로커 없이는 서버 간 메시지 전파가 안 돼 일부 사용자가 이벤트를 못 받습니다.</p></div>
+</section>
+
+<section id="net-q10">
+<div class="ch-head"><span class="ch-code">NET-10</span><h2>Q. 웹 서버·WAS·프록시·API Gateway·로드밸런서는 각각 무슨 역할을 나눠 맡나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>웹 서버는 정적 리소스와 앞단 HTTP 처리를, WAS는 동적 로직 실행을 맡고, 리버스 프록시·API Gateway·로드밸런서는 그 앞에서 각각 대리·정책·분산이라는 다른 역할을 겹겹이 담당합니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>웹 서버(Nginx/Apache/IIS/Caddy/LiteSpeed)는 정적 파일 제공과 TLS 종료·압축·접근 제어 같은 앞단 처리를 맡고, WAS(Tomcat 등)는 비즈니스 로직 실행을 맡습니다. 포워드 프록시는 클라이언트를 대신하고 리버스 프록시는 서버를 대신합니다. API Gateway는 단순 전달을 넘어 인증·인가·Rate Limiting·요청 변환·버전 관리를 API 단위로 중앙화한다는 점에서 로드밸런서·리버스프록시와 다릅니다. L4는 IP·포트·TCP/UDP 정보만 보고 분산해 빠르고, L7은 HTTP의 Host·Path·Header를 보고 세밀하게 라우팅합니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">웹 서버는 정적 리소스와 TLS 종료 등 앞단을, WAS는 동적 로직 실행을 맡아 역할을 분리하고 보안·확장성을 얻습니다. 리버스 프록시는 서버를 대신해 요청을 받고, API Gateway는 여기에 인증·Rate Limiting 같은 API 정책을 더한 것이며, 로드밸런서는 L4(전송 계층)와 L7(애플리케이션 계층)로 나눠 트래픽을 분산하고 헬스체크로 장애 서버를 제외합니다.</div>
+<h3>90초 답변</h3>
+<p>이 구성 요소들을 겹겹이 두는 이유는 셋으로 요약됩니다 — 역할 분리(WAS는 로직에만 집중), 보안(WAS를 내부망에 두고 웹 서버만 노출), 확장성(여러 WAS 인스턴스로 분산·배포 유연성). 로드밸런싱 알고리즘은 Round Robin, Least Connections, Weighted Round Robin, 세션 친화성이 필요하면 IP Hash/Consistent Hashing을 쓰며, 헬스체크는 단순 TCP 포트 확인보다 <code>/health</code> 엔드포인트에서 애플리케이션·의존성 상태까지 확인하는 편이 정확하지만 너무 민감하면 일시적 지연에도 서버를 자주 빼내는 부작용이 있어 실패 횟수·복구 기준을 함께 설계해야 합니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>L4와 L7 중 지연이 더 낮은 쪽은?</td><td>애플리케이션 정보를 해석하지 않는 L4가 처리 비용이 낮아 더 빠릅니다.</td></tr><tr><td>API Gateway가 병목이 되면?</td><td>Gateway 자체의 수평 확장과 단일 장애 지점 방지 설계가 필요합니다.</td></tr><tr><td>Consistent Hashing을 쓰는 이유는?</td><td>서버 추가·삭제 시에도 재배치되는 키의 비율을 최소화하기 위해서입니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“로드밸런서와 API Gateway는 같은 것”이라는 답은 부정확합니다. Gateway는 API 단위 정책 중앙화가 핵심이지 분산 자체가 핵심이 아닙니다.</p></div>
+</section>
+
+<section id="net-q11">
+<div class="ch-head"><span class="ch-code">NET-11</span><h2>Q. CDN·캐시·Rate Limiting·WAF는 트래픽을 각각 어떻게 방어하나요?</h2></div>
+<h3>핵심 개념</h3>
+<p>CDN·HTTP 캐시는 응답 속도와 원본 부하를, Rate Limiting은 과다 요청을, WAF는 애플리케이션 계층 공격 패턴을 각자 다른 층위에서 막는 방어선입니다.</p>
+<div class="callout">
+<span class="co-label">개념 해부</span>
+<p>CDN은 엣지 서버에 콘텐츠를 캐싱해 응답 속도를 높이고 원본 트래픽과 일부 DDoS를 흡수하지만, 캐시 무효화는 여러 지역 엣지에 즉시 반영되지 않아 파일명에 콘텐츠 해시를 넣는 방식이 가장 안정적입니다. HTTP 캐시는 Cache-Control(max-age/public/private/no-store/no-cache)과 ETag/Last-Modified 기반 304 재검증으로 동작하며, 사용자별 민감 정보나 인증 응답은 공유 캐시에 저장하면 안 됩니다. Rate Limiting은 Fixed Window(경계에서 순간적으로 2배 통과 가능)의 한계를 Sliding Window나 burst를 허용하는 Token Bucket, 평탄화하는 Leaky Bucket으로 보완하며, 분산 환경에서는 Redis 원자적 연산이나 Lua 스크립트로 카운터를 관리합니다. WAF는 URL·헤더·쿠키·본문 같은 애플리케이션 계층 정보를 검사해 OWASP Top 10 공격을 방어하는 계층이지만, Prepared Statement나 출력 인코딩 같은 애플리케이션 내부 방어를 대체하지 않습니다.</p>
+</div>
+<h3>30초 답변</h3>
+<div class="serial-card">CDN과 HTTP 캐시는 응답 속도와 원본 부하를 줄이되 캐시 무효화 지연과 민감 정보 캐싱을 주의해야 합니다. Rate Limiting은 Fixed/Sliding Window, Token Bucket, Leaky Bucket 중 burst 허용 여부에 맞게 고르고 분산 환경에서는 Redis로 원자적으로 처리합니다. WAF는 애플리케이션 계층에서 XSS·SQLi 같은 패턴을 앞단에서 걸러내는 방어선이지 코드 내부 방어의 대체재가 아닙니다.</div>
+<h3>90초 답변</h3>
+<p>DDoS는 대역폭·연결 테이블을 고갈시키는 네트워크 계층 공격과, 정상 요청처럼 보이지만 비용이 큰 엔드포인트를 반복 호출하는 애플리케이션 계층 공격으로 나뉘어 후자는 트래픽 양만으로 판단하기 어렵습니다. 방어는 CDN·Anycast로 대량 트래픽을 흡수하고, WAF·Rate Limiting으로 비정상 패턴을 제한하고, 캐시·큐로 원본 부담을 줄이고, 애플리케이션에서는 타임아웃·백프레셔·서킷 브레이커로 장애 전파를 막는 다층 구조가 기본입니다. XSS·SQL Injection 자체의 방어(출력 인코딩·CSP, Prepared Statement)는 이미 다룬 별개 주제이므로, 여기서는 WAF가 그 방어들을 대체하지 않는 “앞단 계층”이라는 위치만 정확히 짚으면 됩니다.</p>
+<h3>꼬리질문</h3>
+<table><tr><th>질문</th><th>답변 방향</th></tr><tr><td>캐시 무효화가 느린 근본 이유는?</td><td>여러 지역 엣지 서버에 TTL이 남아있는 캐시가 각각 만료되어야 하기 때문입니다.</td></tr><tr><td>fail-open과 fail-closed의 차이는?</td><td>Rate Limiter 장애 시 요청을 허용할지(fail-open) 차단할지(fail-closed) 정하는 정책입니다.</td></tr><tr><td>WAF가 못 막는 것은?</td><td>정상 요청과 공격의 경계가 모호한 경우 오탐·미탐이 생기고 우회 기법도 존재합니다.</td></tr></table>
+<h3>오답/주의점</h3>
+<div class="callout warn"><span class="co-label">주의</span><p>“WAF만 있으면 애플리케이션 보안은 신경 안 써도 된다”는 위험한 답입니다. WAF는 앞단 방어선일 뿐 Prepared Statement·출력 인코딩 같은 내부 방어를 대체하지 않습니다.</p></div>
+</section>
+
+<section id="net-q12">
+<div class="ch-head"><span class="ch-code">NET-12</span><h2>핵심 질문 20선</h2></div>
+<p class="lede">네트워크 심화 면접은 “요청 하나가 계층을 통과하며 어떤 비용과 실패 지점을 만드는가”와 “트래픽이 커질 때 무엇이 먼저 무너지는가”를 묻습니다.</p>
+<table>
+<tr><th>축</th><th>핵심 질문</th><th>확장 포인트</th></tr>
+<tr><td>계층/주소</td><td>IP·MAC·ARP·포트, 요청 흐름 전체 순서</td><td>왜 MAC은 홉마다 바뀌고 IP는 유지되는가</td></tr>
+<tr><td>TCP/UDP</td><td>Connection·Timeout 구분, 혼잡 제어, UDP 신뢰성</td><td>어떤 실패가 인프라 문제이고 어떤 실패가 애플리케이션 문제인가</td></tr>
+<tr><td>DNS</td><td>TTL·캐시, DNS 로드밸런싱의 한계</td><td>왜 DNS 변경은 즉시 반영되지 않는가</td></tr>
+<tr><td>HTTP/TLS</td><td>메시지 구조, HTTP/3·QUIC, TLS handshake, 인증서 검증</td><td>왜 비대칭 키와 대칭 키를 함께 쓰는가</td></tr>
+<tr><td>API 프로토콜</td><td>REST vs GraphQL vs gRPC 선택 기준</td><td>캐시 친화성과 클라이언트 다양성의 트레이드오프</td></tr>
+<tr><td>인증·실시간·인프라</td><td>세션/토큰 설계, WebSocket 스케일아웃, 로드밸런싱·CDN·Rate Limiting</td><td>서버가 여러 대일 때 무엇이 깨지는가</td></tr>
+</table>
+<h3>구체 질문 12선</h3>
+<table>
+<tr><th>번호</th><th>구체 질문</th><th>답변 방향</th></tr>
+<tr><td>1</td><td>다른 네트워크의 서버로 요청을 보낼 때 왜 서버의 MAC 주소를 직접 찾지 않나요?</td><td>MAC은 링크 로컬이라 게이트웨이까지만 유효하다는 점을 설명합니다.</td></tr>
+<tr><td>2</td><td>Connection Timeout이 늘고 있다면 무엇을 먼저 의심하나요?</td><td>서버 다운, 방화벽, 네트워크 경로, 커넥션 풀 고갈 같은 인프라 원인을 봅니다.</td></tr>
+<tr><td>3</td><td>UDP로 신뢰성 있는 통신을 만들려면 무엇을 직접 구현해야 하나요?</td><td>메시지 번호, ACK, 재전송 로직을 애플리케이션 계층에서 구현해야 합니다.</td></tr>
+<tr><td>4</td><td>배포 직전에 DNS TTL을 낮추는 이유는 무엇인가요?</td><td>레코드 변경이 캐시 만료를 기다리지 않고 더 빨리 반영되게 하기 위해서입니다.</td></tr>
+<tr><td>5</td><td>HTTP/2에서 멀티플렉싱을 지원하는데도 Head-of-Line Blocking이 생기는 이유는?</td><td>아래 TCP 계층의 순서 보장 때문에 패킷 유실이 다른 스트림까지 지연시킨다고 설명합니다.</td></tr>
+<tr><td>6</td><td>자가 서명 인증서가 브라우저 경고를 띄우는 이유는 무엇인가요?</td><td>신뢰 저장소의 루트 CA로 이어지는 체인이 없기 때문입니다.</td></tr>
+<tr><td>7</td><td>GraphQL을 도입했는데 캐시 히트율이 떨어졌다면 왜 그런가요?</td><td>대부분의 요청이 같은 엔드포인트로 몰려 URL 기반 HTTP 캐시를 활용하기 어렵다는 점을 봅니다.</td></tr>
+<tr><td>8</td><td>로컬 스토리지에 로그인 토큰을 저장하면 안 되는 이유는?</td><td>JavaScript로 접근 가능해 XSS 공격에 그대로 탈취될 수 있습니다.</td></tr>
+<tr><td>9</td><td>WebSocket 서버를 2대로 늘렸는데 일부 사용자에게 메시지가 전달되지 않는다면?</td><td>인스턴스 간 메시지 전파를 위한 공용 브로커가 빠졌을 가능성을 봅니다.</td></tr>
+<tr><td>10</td><td>API Gateway 없이 로드밸런서만 있으면 무엇이 부족한가요?</td><td>API 단위의 인증·Rate Limiting·버전 관리 같은 정책 중앙화가 빠집니다.</td></tr>
+<tr><td>11</td><td>CDN 캐시를 무효화했는데 일부 사용자가 여전히 예전 콘텐츠를 본다면?</td><td>지역별 엣지 캐시의 TTL이 아직 남아있어 각자 만료를 기다려야 한다는 점을 설명합니다.</td></tr>
+<tr><td>12</td><td>Rate Limiter가 죽었을 때 fail-open과 fail-closed 중 무엇을 고르나요?</td><td>서비스 가용성과 보안 요구 중 어느 쪽이 더 중요한 도메인인지로 판단합니다.</td></tr>
+</table>
+<div class="callout risk"><span class="co-label">압박 꼬리질문</span><p>“DNS만 바꾸면 되는데 왜 배포가 늦게 반영되나요?”, “HTTP/3는 UDP인데 왜 신뢰성이 있다고 하나요?”, “WAF가 있는데 왜 또 SQL Injection 방어 코드를 짜야 하나요?”, “로드밸런서가 있는데 왜 API Gateway가 또 필요한가요?”에 구체적 근거로 답할 수 있어야 합니다.</p></div>
+</section>
+
 <section id="career-evidence-anti-exaggeration">
 <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
 <p class="lede">커리어 답변은 강하게 말하되 증거가 받쳐 주는 범위 안에서만 말한다. 수치, 역할, 성과, 장애 대응 경험은 원천 증거와 공개 가능 범위를 먼저 정한 뒤 답변에 넣는다.</p>
