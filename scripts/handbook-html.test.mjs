@@ -439,26 +439,12 @@ test("frontend and backend menu item labels use group-local numbering", () => {
     [
       "00 전체 로드맵",
       "01 프론트엔드 핵심",
-      "02 프론트엔드 핵심 Q&A",
-      "03 프론트엔드 핵심 퀴즈",
-      "04 프론트엔드 인터랙션",
-      "05 프론트엔드 인터랙션 Q&A",
-      "06 프론트엔드 인터랙션 퀴즈",
-      "07 프론트엔드 모션·애니메이션",
-      "08 프론트엔드 모션·애니메이션 Q&A",
-      "09 프론트엔드 모션·애니메이션 퀴즈",
-      "10 프론트엔드 그래픽·3D·WebGL",
-      "11 프론트엔드 그래픽·3D·WebGL Q&A",
-      "12 프론트엔드 그래픽·3D·WebGL 퀴즈",
-      "13 프론트엔드 성능·진단",
-      "14 프론트엔드 성능·진단 Q&A",
-      "15 프론트엔드 성능·진단 퀴즈",
-      "16 SEO·AEO·GEO·애널리틱스",
-      "17 SEO·AEO·GEO·애널리틱스 Q&A",
-      "18 SEO·AEO·GEO·애널리틱스 퀴즈",
-      "19 프론트엔드 품질·릴리스",
-      "20 프론트엔드 품질·릴리스 Q&A",
-      "21 프론트엔드 품질·릴리스 퀴즈",
+      "02 프론트엔드 인터랙션",
+      "03 프론트엔드 모션·애니메이션",
+      "04 프론트엔드 그래픽·3D·WebGL",
+      "05 프론트엔드 성능·진단",
+      "06 SEO·AEO·GEO·애널리틱스",
+      "07 프론트엔드 품질·릴리스",
     ],
   );
   assert.deepEqual(
@@ -466,33 +452,20 @@ test("frontend and backend menu item labels use group-local numbering", () => {
     [
       "00 전체 로드맵",
       "01 백엔드 핵심",
-      "02 백엔드 핵심 Q&A",
-      "03 백엔드 핵심 퀴즈",
-      "04 백엔드 인증·보안",
-      "05 백엔드 인증·보안 Q&A",
-      "06 백엔드 인증·보안 퀴즈",
-      "07 백엔드 아키텍처",
-      "08 백엔드 아키텍처 Q&A",
-      "09 백엔드 아키텍처 퀴즈",
-      "10 데이터 계층·저장소 심화",
-      "11 데이터 계층·저장소 심화 Q&A",
-      "12 데이터 계층·저장소 심화 퀴즈",
-      "13 런타임 품질·장애대응",
-      "14 런타임 품질·장애대응 Q&A",
-      "15 런타임 품질·장애대응 퀴즈",
-      "16 플랫폼 도구·운영 기본기",
-      "17 플랫폼 도구·운영 기본기 Q&A",
-      "18 플랫폼 도구·운영 기본기 퀴즈",
-      "19 Java·Spring·JPA 내부 동작",
-      "20 Java·Spring·JPA 내부 동작 Q&A",
-      "21 Java·Spring·JPA 내부 동작 퀴즈",
+      "02 백엔드 인증·보안",
+      "03 백엔드 아키텍처",
+      "04 데이터 계층·저장소 심화",
+      "05 런타임 품질·장애대응",
+      "06 플랫폼 도구·운영 기본기",
+      "07 Java·Spring·JPA 내부 동작",
     ],
   );
 });
 
-test("frontend menu exposes a paired Q&A handbook for every frontend item", async () => {
+test("frontend Q&A/quiz pairs live in the quiz menu with a paired handbook", async () => {
+  const quizGroup = HANDBOOK_GROUPS.find((group) => group.key === "quiz");
+  const items = quizGroup?.items ?? [];
   const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
-  const items = frontendGroup?.items ?? [];
   const expectedPairs = [
     ["engineering-frontend-core", "engineering-frontend-core-qa"],
     ["engineering-frontend-interaction", "engineering-frontend-interaction-qa"],
@@ -503,14 +476,20 @@ test("frontend menu exposes a paired Q&A handbook for every frontend item", asyn
     ["engineering-frontend-quality", "engineering-frontend-quality-qa"],
   ];
 
-  assert.equal(items.filter((item) => item.pageType !== "react").length, expectedPairs.length * 2);
-
   for (const [sourceId, qaId] of expectedPairs) {
-    const sourceIndex = items.findIndex((item) => item.id === sourceId);
-    const qaIndex = items.findIndex((item) => item.id === qaId);
+    assert.ok(
+      !(frontendGroup?.items ?? []).some((item) => item.id === qaId),
+      `${qaId} should no longer be in the frontend menu`,
+    );
 
-    assert.ok(sourceIndex >= 0, `${sourceId} should be in the frontend menu`);
-    assert.equal(qaIndex, sourceIndex + 1, `${qaId} should immediately follow ${sourceId}`);
+    const sourceIndex = (frontendGroup?.items ?? []).findIndex((item) => item.id === sourceId);
+    assert.ok(sourceIndex >= 0, `${sourceId} should stay in the frontend menu`);
+
+    const qaIndex = items.findIndex((item) => item.id === qaId);
+    const quizIndex = items.findIndex((item) => item.id === qaId.replace(/-qa$/, "-quiz"));
+
+    assert.ok(qaIndex >= 0, `${qaId} should be in the quiz menu`);
+    assert.equal(quizIndex, qaIndex + 1, `${qaId} quiz should immediately follow ${qaId} in the quiz menu`);
 
     const qaItem = items[qaIndex];
     const file = path.join("public", "handbook", qaItem.file);
@@ -525,24 +504,37 @@ test("frontend menu exposes a paired Q&A handbook for every frontend item", asyn
   }
 });
 
-test("backend menu exposes a paired Q&A handbook for every backend item", async () => {
+test("backend Q&A/quiz pairs live in the quiz menu with a paired handbook", async () => {
+  const quizGroup = HANDBOOK_GROUPS.find((group) => group.key === "quiz");
+  const items = quizGroup?.items ?? [];
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
-  const labels = backendGroup?.items.map((item) => item.label) ?? [];
   const expectedPairs = [
-    ["01 백엔드 핵심", "02 백엔드 핵심 Q&A", "engineering-backend-core-qa-handbook.html", "03 백엔드 핵심 퀴즈"],
-    ["04 백엔드 인증·보안", "05 백엔드 인증·보안 Q&A", "engineering-backend-auth-security-qa-handbook.html", "06 백엔드 인증·보안 퀴즈"],
-    ["07 백엔드 아키텍처", "08 백엔드 아키텍처 Q&A", "engineering-backend-architecture-qa-handbook.html", "09 백엔드 아키텍처 퀴즈"],
-    ["10 데이터 계층·저장소 심화", "11 데이터 계층·저장소 심화 Q&A", "engineering-data-qa-handbook.html", "12 데이터 계층·저장소 심화 퀴즈"],
-    ["13 런타임 품질·장애대응", "14 런타임 품질·장애대응 Q&A", "engineering-runtime-quality-qa-handbook.html", "15 런타임 품질·장애대응 퀴즈"],
-    ["16 플랫폼 도구·운영 기본기", "17 플랫폼 도구·운영 기본기 Q&A", "engineering-platform-tools-qa-handbook.html", "18 플랫폼 도구·운영 기본기 퀴즈"],
-    ["19 Java·Spring·JPA 내부 동작", "20 Java·Spring·JPA 내부 동작 Q&A", "engineering-java-spring-qa-handbook.html", "21 Java·Spring·JPA 내부 동작 퀴즈"],
+    ["engineering-backend-core", "engineering-backend-core-qa", "engineering-backend-core-qa-handbook.html"],
+    ["engineering-backend-auth-security", "engineering-backend-auth-security-qa", "engineering-backend-auth-security-qa-handbook.html"],
+    ["engineering-backend-architecture", "engineering-backend-architecture-qa", "engineering-backend-architecture-qa-handbook.html"],
+    ["engineering-data", "engineering-data-qa", "engineering-data-qa-handbook.html"],
+    ["engineering-runtime-quality", "engineering-runtime-quality-qa", "engineering-runtime-quality-qa-handbook.html"],
+    ["engineering-platform-tools", "engineering-platform-tools-qa", "engineering-platform-tools-qa-handbook.html"],
+    ["engineering-java-spring", "engineering-java-spring-qa", "engineering-java-spring-qa-handbook.html"],
   ];
 
-  for (const [sourceLabel, qaLabel, file, quizLabel] of expectedPairs) {
-    assert.equal(labels.indexOf(qaLabel), labels.indexOf(sourceLabel) + 1, `${qaLabel} should follow ${sourceLabel}`);
-    assert.equal(labels.indexOf(quizLabel), labels.indexOf(qaLabel) + 1, `${quizLabel} should follow ${qaLabel}`);
+  for (const [sourceId, qaId, file] of expectedPairs) {
+    assert.ok(
+      !(backendGroup?.items ?? []).some((item) => item.id === qaId),
+      `${qaId} should no longer be in the backend menu`,
+    );
+
+    const sourceIndex = (backendGroup?.items ?? []).findIndex((item) => item.id === sourceId);
+    assert.ok(sourceIndex >= 0, `${sourceId} should stay in the backend menu`);
+
+    const qaIndex = items.findIndex((item) => item.id === qaId);
+    const quizIndex = items.findIndex((item) => item.id === qaId.replace(/-qa$/, "-quiz"));
+
+    assert.ok(qaIndex >= 0, `${qaId} should be in the quiz menu`);
+    assert.equal(quizIndex, qaIndex + 1, `${qaId} quiz should immediately follow ${qaId} in the quiz menu`);
+
+    const qaTitle = items[qaIndex].label.replace(/^[0-9]{2}\s+/, "").replace(/&/g, "&amp;");
     const source = await readFile(path.join("public", "handbook", file), "utf8");
-    const qaTitle = qaLabel.replace(/^[0-9]{2}\s+/, "").replace(/&/g, "&amp;");
     assert.match(source, new RegExp(`<h1>${qaTitle}</h1>`));
     assert.ok((source.match(/<span class="ch-code">Q\d{2}<\/span>/g) ?? []).length >= 25, `${file} should include at least 25 Q&A drills`);
     assert.match(source, /꼬리질문/);
@@ -605,16 +597,16 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 117);
+  assert.equal(HANDBOOK_ITEMS.length, 154);
   assert.equal(careerGroup?.items.length, 17);
   assert.equal(csBasicGroup?.items.length, 4);
-  assert.equal(frontendGroup?.items.length, 15);
-  assert.equal(backendGroup?.items.length, 15);
-  assert.equal(infraGroup?.items.length, 15);
+  assert.equal(frontendGroup?.items.length, 8);
+  assert.equal(backendGroup?.items.length, 8);
+  assert.equal(infraGroup?.items.length, 8);
   assert.equal(infraGroup?.label, "인프라");
-  assert.equal(operationsGroup?.items.length, 22);
+  assert.equal(operationsGroup?.items.length, 15);
   assert.equal(operationsGroup?.label, "운영");
-  assert.equal(quizGroup?.items.length, 2);
+  assert.equal(quizGroup?.items.length, 58);
   assert.equal(quizGroup?.label, "퀴즈");
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 11);
@@ -659,14 +651,14 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
       "context-operational-ownership",
     ],
   );
-  assert.ok(labels.includes("00 엔지니어링 규모 감각"));
-  assert.ok(labels.includes("01 플랫폼 엔지니어링·개발자 생산성"));
-  assert.ok(labels.includes("02 품질 엔지니어링·릴리즈 시스템"));
-  assert.ok(labels.includes("03 성능 측정·지표 해석"));
-  assert.ok(labels.includes("04 라이브러리·패키지·오픈소스 설계"));
-  assert.ok(labels.includes("05 마이그레이션·호환성"));
-  assert.ok(labels.includes("06 프론트엔드 빌드·런타임·생태계"));
-  assert.ok(labels.includes("07 운영 책임·장애 대응 언어"));
+  assert.ok(labels.includes("07 엔지니어링 규모 감각"));
+  assert.ok(labels.includes("08 플랫폼 엔지니어링·개발자 생산성"));
+  assert.ok(labels.includes("09 품질 엔지니어링·릴리즈 시스템"));
+  assert.ok(labels.includes("10 성능 측정·지표 해석"));
+  assert.ok(labels.includes("11 라이브러리·패키지·오픈소스 설계"));
+  assert.ok(labels.includes("12 마이그레이션·호환성"));
+  assert.ok(labels.includes("13 프론트엔드 빌드·런타임·생태계"));
+  assert.ok(labels.includes("14 운영 책임·장애 대응 언어"));
   assert.ok(labels.includes("04 CS·DB·보안 심화 면접"));
   assert.ok(labels.includes("05 인프라·분산·클라우드 면접"));
   assert.ok(labels.includes("06 시스템 설계·프로젝트 심층"));
@@ -679,33 +671,23 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("03 응용 수학·측정·검증"));
   assert.ok(labels.includes("00 전체 로드맵"));
   assert.ok(labels.includes("01 프론트엔드 핵심"));
-  assert.ok(labels.includes("02 프론트엔드 핵심 Q&A"));
-  assert.ok(labels.includes("03 프론트엔드 인터랙션"));
-  assert.ok(labels.includes("04 프론트엔드 인터랙션 Q&A"));
-  assert.ok(labels.includes("05 프론트엔드 모션·애니메이션"));
-  assert.ok(labels.includes("06 프론트엔드 모션·애니메이션 Q&A"));
-  assert.ok(labels.includes("07 프론트엔드 그래픽·3D·WebGL"));
-  assert.ok(labels.includes("08 프론트엔드 그래픽·3D·WebGL Q&A"));
-  assert.ok(labels.includes("09 프론트엔드 성능·진단"));
-  assert.ok(labels.includes("10 프론트엔드 성능·진단 Q&A"));
-  assert.ok(labels.includes("11 SEO·AEO·GEO·애널리틱스"));
-  assert.ok(labels.includes("12 SEO·AEO·GEO·애널리틱스 Q&A"));
-  assert.ok(labels.includes("13 프론트엔드 품질·릴리스"));
-  assert.ok(labels.includes("14 프론트엔드 품질·릴리스 Q&A"));
+  assert.ok(labels.includes("02 프론트엔드 인터랙션"));
+  assert.ok(labels.includes("03 프론트엔드 모션·애니메이션"));
+  assert.ok(labels.includes("04 프론트엔드 그래픽·3D·WebGL"));
+  assert.ok(labels.includes("05 프론트엔드 성능·진단"));
+  assert.ok(labels.includes("06 SEO·AEO·GEO·애널리틱스"));
+  assert.ok(labels.includes("07 프론트엔드 품질·릴리스"));
   assert.ok(labels.includes("01 백엔드 핵심"));
-  assert.ok(labels.includes("02 백엔드 핵심 Q&A"));
-  assert.ok(labels.includes("03 백엔드 인증·보안"));
-  assert.ok(labels.includes("04 백엔드 인증·보안 Q&A"));
-  assert.ok(labels.includes("05 백엔드 아키텍처"));
-  assert.ok(labels.includes("06 백엔드 아키텍처 Q&A"));
-  assert.ok(labels.includes("07 데이터 계층·저장소 심화"));
-  assert.ok(labels.includes("08 데이터 계층·저장소 심화 Q&A"));
-  assert.ok(labels.includes("09 런타임 품질·장애대응"));
-  assert.ok(labels.includes("10 런타임 품질·장애대응 Q&A"));
-  assert.ok(labels.includes("11 플랫폼 도구·운영 기본기"));
-  assert.ok(labels.includes("12 플랫폼 도구·운영 기본기 Q&A"));
-  assert.ok(labels.includes("13 Java·Spring·JPA 내부 동작"));
-  assert.ok(labels.includes("14 Java·Spring·JPA 내부 동작 Q&A"));
+  assert.ok(labels.includes("02 백엔드 인증·보안"));
+  assert.ok(labels.includes("03 백엔드 아키텍처"));
+  assert.ok(labels.includes("04 데이터 계층·저장소 심화"));
+  assert.ok(labels.includes("05 런타임 품질·장애대응"));
+  assert.ok(labels.includes("06 플랫폼 도구·운영 기본기"));
+  assert.ok(labels.includes("07 Java·Spring·JPA 내부 동작"));
+  assert.ok(labels.includes("00 퀴즈 허브"));
+  assert.ok(labels.includes("01 통합 랜덤 퀴즈"));
+  assert.ok(labels.includes("02 프론트엔드 핵심 Q&A"));
+  assert.ok(labels.includes("03 프론트엔드 핵심 퀴즈"));
   assert.ok(labels.includes("00 LLM 로드맵·AI Native 개발자 모델"));
   assert.ok(labels.includes("01 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("02 LLM 기초·모델 동작 원리"));
@@ -726,8 +708,8 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("05 프론트엔드 구현 루프"));
   assert.ok(labels.includes("06 백엔드·DB·API 설계 루프"));
   assert.ok(labels.includes("07 테스트·리뷰·릴리스 자동화"));
-  assert.ok(labels.includes("00 인프라·운영 로드맵"));
-  assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
+  assert.ok(labels.includes("01 인프라·운영 로드맵"));
+  assert.ok(labels.includes("00 CI/CD·Artifact·Environment"));
   assert.ok(labels.includes("08 AX 기반·조직 적용"));
   assert.ok(labels.includes("09 AX 실행 루프·자동화"));
   assert.ok(labels.includes("10 AX 확장·거버넌스"));
@@ -743,20 +725,20 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("00 실무 치트시트 모음"));
   assert.ok(labels.includes("01 실무 준비·작업 루프"));
   assert.ok(labels.includes("02 빌드·설정·릴리스 운영"));
-  assert.ok(labels.includes("00 인프라·운영 로드맵"));
-  assert.ok(labels.includes("01 서비스 요청 경로"));
-  assert.ok(labels.includes("02 VPC·Subnet·Routing·NAT"));
-  assert.ok(labels.includes("03 보안 경계"));
-  assert.ok(labels.includes("04 DNS·TLS·도메인 운영"));
-  assert.ok(labels.includes("05 VPN·Private Connectivity"));
-  assert.ok(labels.includes("06 CI/CD·Artifact·Environment"));
-  assert.ok(labels.includes("07 컨테이너·오케스트레이션·Health Check"));
-  assert.ok(labels.includes("08 IaC·변경관리·Drift"));
-  assert.ok(labels.includes("09 Observability·SLO"));
-  assert.ok(labels.includes("10 Incident Response·Rollback·DR"));
-  assert.ok(labels.includes("11 운영 체크리스트·면접 답변"));
-  assert.ok(labels.includes("12 AWS·Azure 실전 시나리오"));
-  assert.ok(labels.includes("13 AI·LLM 운영 Addendum"));
+  assert.ok(labels.includes("01 인프라·운영 로드맵"));
+  assert.ok(labels.includes("02 서비스 요청 경로"));
+  assert.ok(labels.includes("03 VPC·Subnet·Routing·NAT"));
+  assert.ok(labels.includes("04 보안 경계"));
+  assert.ok(labels.includes("05 DNS·TLS·도메인 운영"));
+  assert.ok(labels.includes("06 VPN·Private Connectivity"));
+  assert.ok(labels.includes("00 CI/CD·Artifact·Environment"));
+  assert.ok(labels.includes("01 컨테이너·오케스트레이션·Health Check"));
+  assert.ok(labels.includes("02 IaC·변경관리·Drift"));
+  assert.ok(labels.includes("03 Observability·SLO"));
+  assert.ok(labels.includes("04 Incident Response·Rollback·DR"));
+  assert.ok(labels.includes("05 운영 체크리스트·면접 답변"));
+  assert.ok(labels.includes("07 AWS·Azure 실전 시나리오"));
+  assert.ok(labels.includes("06 AI·LLM 운영 Addendum"));
   assert.ok(!HANDBOOK_GROUPS.some((group) => group.key === "examples" || group.label === "예시 사례"));
   assert.ok(!labels.includes("개발핸드북"));
   assert.ok(!labels.includes("업무현황"));
@@ -1077,9 +1059,6 @@ test("career bundles avoid repeated generic answer packet boilerplate", async ()
 });
 
 test("engineering handbook menu splits backend core and architecture into separate items", async () => {
-  const engineeringGroups = ["cs-basic", "frontend", "backend"]
-    .map((key) => HANDBOOK_GROUPS.find((group) => group.key === key))
-    .filter(Boolean);
   const bundles = [
     {
       file: "engineering-cs-foundations-handbook.html",
@@ -1258,13 +1237,11 @@ test("engineering handbook menu splits backend core and architecture into separa
     },
   ];
 
-  const engineeringItems = engineeringGroups.flatMap((group) => group?.items ?? []);
+  const catalogFiles = new Set(HANDBOOK_ITEMS.filter((item) => item.file).map((item) => item.file));
 
-  assert.equal(engineeringItems.length, 48);
-  assert.deepEqual(
-    engineeringItems.filter((item) => item.file).map((item) => item.file),
-    bundles.map((bundle) => bundle.file),
-  );
+  for (const bundle of bundles) {
+    assert.ok(catalogFiles.has(bundle.file), `${bundle.file} should be registered in the catalog`);
+  }
 
   for (const bundle of bundles) {
     const source = await readFile(path.join("public", "handbook", bundle.file), "utf8");

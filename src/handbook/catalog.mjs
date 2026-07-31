@@ -643,6 +643,14 @@ const withQuizzes = (items) =>
     item.id.endsWith("-qa") ? [item, toQuizItem(item)] : [item],
   );
 
+// Q&A 문서 + 퀴즈는 도메인 메뉴에 남기지 않고 "퀴즈" 메뉴로 옮긴다. 핵심 개념 문서만 도메인 메뉴에 남는다.
+const isQaOrQuizItem = (item) => item.id.endsWith("-qa") || item.id.endsWith("-quiz");
+const splitCoreFromQaQuiz = (items) => {
+  const qaAndQuiz = withQuizzes(items).filter(isQaOrQuizItem);
+  const core = items.filter((item) => !item.id.endsWith("-qa"));
+  return { core, qaAndQuiz };
+};
+
 export const ENGINEERING_CS_BASIC_HANDBOOKS = ENGINEERING_HANDBOOKS.slice(0, 4);
 const FRONTEND_ROADMAP_PAGE = {
   id: "engineering-frontend-roadmap",
@@ -658,18 +666,21 @@ const BACKEND_ROADMAP_PAGE = {
   pageType: "react",
 };
 
-export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems(
-  withQuizzes([FRONTEND_ROADMAP_PAGE, ...ENGINEERING_HANDBOOKS.slice(4, 18)]),
+const { core: FRONTEND_CORE_HANDBOOKS, qaAndQuiz: FRONTEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
+  ENGINEERING_HANDBOOKS.slice(4, 18),
 );
-export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
-  withQuizzes([BACKEND_ROADMAP_PAGE, ...ENGINEERING_HANDBOOKS.slice(18)]),
+const { core: BACKEND_CORE_HANDBOOKS, qaAndQuiz: BACKEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
+  ENGINEERING_HANDBOOKS.slice(18),
 );
 
-// 프론트·백엔드·인프라·운영에 흩어진 기존 퀴즈를 한 곳에서 찾고, 도메인을 섞어 랜덤으로 풀 수 있는 진입점.
-export const QUIZ_TOOL_HANDBOOKS = [
-  { id: "quiz-hub", label: "00 퀴즈 허브", kind: "퀴즈", pageType: "react" },
-  { id: "quiz-mixed", label: "01 통합 랜덤 퀴즈", kind: "퀴즈", pageType: "react" },
-];
+export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
+  FRONTEND_ROADMAP_PAGE,
+  ...FRONTEND_CORE_HANDBOOKS,
+]);
+export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems([
+  BACKEND_ROADMAP_PAGE,
+  ...BACKEND_CORE_HANDBOOKS,
+]);
 
 export const LLM_HANDBOOKS = [
   {
@@ -1116,14 +1127,35 @@ const INFRA_ROADMAP_PAGE = {
   pageType: "react",
 };
 
+const INFRA_CORE_HANDBOOKS = INFRA_MENU_SOURCE_HANDBOOKS.filter((item) => !isQaOrQuizItem(item));
+const INFRA_QA_QUIZ_HANDBOOKS = INFRA_MENU_SOURCE_HANDBOOKS.filter(isQaOrQuizItem);
+
+const OPERATIONS_CORE_HANDBOOKS = OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS.filter(
+  (item) => !isQaOrQuizItem(item),
+);
+const OPERATIONS_QA_QUIZ_HANDBOOKS = OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS.filter(isQaOrQuizItem);
+
 export const INFRA_MENU_HANDBOOKS = renumberMenuItems([
   INFRA_ROADMAP_PAGE,
-  ...INFRA_MENU_SOURCE_HANDBOOKS,
+  ...INFRA_CORE_HANDBOOKS,
 ]);
 
 export const OPERATIONS_GROUP_HANDBOOKS = renumberMenuItems([
-  ...OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS,
+  ...OPERATIONS_CORE_HANDBOOKS,
   ...ENGINEERING_CONTEXT_HANDBOOKS,
+]);
+
+// 도메인별 Q&A + 퀴즈 원본 목록. quizDomains.mjs가 퀴즈 허브/통합 랜덤 퀴즈의 도메인 묶음을 만들 때 재사용한다.
+export { FRONTEND_QA_QUIZ_HANDBOOKS, BACKEND_QA_QUIZ_HANDBOOKS, INFRA_QA_QUIZ_HANDBOOKS, OPERATIONS_QA_QUIZ_HANDBOOKS };
+
+// 프론트·백엔드·인프라·운영에서 빠져나온 Q&A 문서 + 퀴즈를 도메인별로 묶어 모아둔다.
+export const QUIZ_TOOL_HANDBOOKS = renumberMenuItems([
+  { id: "quiz-hub", label: "00 퀴즈 허브", kind: "퀴즈", pageType: "react" },
+  { id: "quiz-mixed", label: "01 통합 랜덤 퀴즈", kind: "퀴즈", pageType: "react" },
+  ...FRONTEND_QA_QUIZ_HANDBOOKS,
+  ...BACKEND_QA_QUIZ_HANDBOOKS,
+  ...INFRA_QA_QUIZ_HANDBOOKS,
+  ...OPERATIONS_QA_QUIZ_HANDBOOKS,
 ]);
 
 export const AX_HANDBOOKS = [
@@ -1550,9 +1582,8 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_CS_BASIC_HANDBOOKS,
   ...ENGINEERING_FRONTEND_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
-  INFRA_ROADMAP_PAGE,
-  ...OPERATIONS_MENU_HANDBOOKS,
-  ...ENGINEERING_CONTEXT_HANDBOOKS,
+  ...INFRA_MENU_HANDBOOKS,
+  ...OPERATIONS_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
