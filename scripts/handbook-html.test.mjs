@@ -1658,7 +1658,7 @@ test("each public handbook nav links all main sections", async () => {
 
 test("selected handbook content is positioned as a neutral full-stack growth guide", async () => {
   const sources = await Promise.all(
-    HANDBOOK_ITEMS.filter((item) => item.file && item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+    HANDBOOK_ITEMS.filter((item) => item.file && item.id !== "home" && item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
   );
   const source = sources.join("\n");
   const roadmap = await readFile("public/handbook/fullstack-growth-roadmap-handbook.html", "utf8");

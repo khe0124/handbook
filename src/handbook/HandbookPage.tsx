@@ -104,8 +104,9 @@ function shouldShowLearningTools(item: HandbookItem) {
 function extractHomeSections(mainHtml: string) {
   const sections = mainHtml.match(/<section\b[\s\S]*?<\/section>/g) ?? [];
   const yearPlan = sections.find((section) => section.includes('id="year-plan"')) ?? "";
+  const standard = sections.find((section) => section.includes('id="standard"')) ?? "";
   const shortcut = sections.find((section) => section.includes("shortcut-grid")) ?? "";
-  return yearPlan + shortcut;
+  return yearPlan + standard + shortcut;
 }
 
 function toStudyCard(card: BankCard): StudyCard {
