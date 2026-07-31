@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
 
 import { HANDBOOK_ITEMS } from "../src/handbook/catalog.mjs";
+import { buildMixedQuiz } from "../src/handbook/quiz/mixedQuiz.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(here, "..", "src", "handbook", "quiz", "data");
@@ -106,5 +107,90 @@ test("each quiz has a valid shape and enough questions", () => {
         `${file}:${question.id} needs an explanation`,
       );
     }
+  }
+});
+
+// buildMixedQuiz용 4개 도메인 픽스처. 실제 quizDomains.mjs와 같은 도메인 4개로,
+// 각 도메인에 퀴즈 2개씩만 배정해 도메인 간 풀 크기 차이를 단순화한다.
+function quizzesByFile(...names) {
+  return names.map((name) => quizzes.find(({ file }) => file === name)?.quiz).filter(Boolean);
+}
+
+const domainFixture = [
+  {
+    label: "프론트엔드",
+    items: quizzesByFile("engineering-frontend-core-qa.quiz.mjs", "engineering-frontend-quality-qa.quiz.mjs").map(
+      (quiz) => ({ id: quiz.id }),
+    ),
+  },
+  {
+    label: "백엔드",
+    items: quizzesByFile("engineering-backend-core-qa.quiz.mjs", "engineering-data-qa.quiz.mjs").map((quiz) => ({
+      id: quiz.id,
+    })),
+  },
+  {
+    label: "인프라",
+    items: quizzesByFile("operations-dns-tls-qa.quiz.mjs", "operations-vpc-routing-qa.quiz.mjs").map((quiz) => ({
+      id: quiz.id,
+    })),
+  },
+  {
+    label: "운영",
+    items: quizzesByFile("operations-incident-dr-qa.quiz.mjs", "operations-observability-slo-qa.quiz.mjs").map(
+      (quiz) => ({ id: quiz.id }),
+    ),
+  },
+];
+
+function fixtureGetQuiz(quizId) {
+  return quizzes.find(({ quiz }) => quiz.id === quizId)?.quiz ?? null;
+}
+
+test("domain fixture actually resolves to real quiz data", () => {
+  for (const domain of domainFixture) {
+    assert.ok(domain.items.length === 2, `${domain.label} fixture should have 2 quizzes`);
+    for (const item of domain.items) {
+      assert.ok(fixtureGetQuiz(item.id), `${item.id} should resolve via fixtureGetQuiz`);
+    }
+  }
+});
+
+test("buildMixedQuiz returns exactly targetCount questions distributed evenly across selected domains", () => {
+  for (const domainCount of [1, 2, 3, 4]) {
+    const selectedLabels = domainFixture.slice(0, domainCount).map((domain) => domain.label);
+    const mixed = buildMixedQuiz(domainFixture, selectedLabels, fixtureGetQuiz, 20);
+
+    assert.equal(mixed.questions.length, 20, `${domainCount} domain(s) should yield 20 questions`);
+
+    const ids = mixed.questions.map((question) => question.id);
+    assert.equal(new Set(ids).size, ids.length, `${domainCount} domain(s) should have no duplicate question ids`);
+  }
+});
+
+test("buildMixedQuiz splits the remainder across the first domains", () => {
+  const selectedLabels = domainFixture.slice(0, 3).map((domain) => domain.label);
+  const mixed = buildMixedQuiz(domainFixture, selectedLabels, fixtureGetQuiz, 20);
+
+  // 20 / 3 = base 6, remainder 2 → 앞 두 도메인은 7개, 마지막은 6개씩 나와야 한다.
+  const perDomainCount = domainFixture.slice(0, 3).map((domain) => {
+    const domainQuizIds = new Set(domain.items.map((item) => item.id));
+    return mixed.questions.filter((question) => domainQuizIds.has(question.id.split(":")[0])).length;
+  });
+
+  assert.deepEqual(perDomainCount, [7, 7, 6]);
+});
+
+test("buildMixedQuiz returns an empty question list when no domain is selected", () => {
+  const mixed = buildMixedQuiz(domainFixture, [], fixtureGetQuiz, 20);
+  assert.deepEqual(mixed.questions, []);
+});
+
+test("buildMixedQuiz namespaces question ids by source quiz to avoid collisions", () => {
+  const selectedLabels = domainFixture.map((domain) => domain.label);
+  const mixed = buildMixedQuiz(domainFixture, selectedLabels, fixtureGetQuiz, 20);
+
+  for (const question of mixed.questions) {
+    assert.match(question.id, /^.+-quiz:.+$/, `question id ${question.id} should be namespaced as <quizId>:<originalId>`);
   }
 });

@@ -665,6 +665,12 @@ export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems(
   withQuizzes([BACKEND_ROADMAP_PAGE, ...ENGINEERING_HANDBOOKS.slice(18)]),
 );
 
+// 프론트·백엔드·인프라·운영에 흩어진 기존 퀴즈를 한 곳에서 찾고, 도메인을 섞어 랜덤으로 풀 수 있는 진입점.
+export const QUIZ_TOOL_HANDBOOKS = [
+  { id: "quiz-hub", label: "00 퀴즈 허브", kind: "퀴즈", pageType: "react" },
+  { id: "quiz-mixed", label: "01 통합 랜덤 퀴즈", kind: "퀴즈", pageType: "react" },
+];
+
 export const LLM_HANDBOOKS = [
   {
     id: "llm-roadmap",
@@ -1519,6 +1525,7 @@ export const HANDBOOK_GROUPS = [
     label: "운영",
     items: OPERATIONS_GROUP_HANDBOOKS,
   },
+  { key: "quiz", label: "퀴즈", items: QUIZ_TOOL_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   {
     key: "ai-native",
@@ -1546,6 +1553,7 @@ export const HANDBOOK_ITEMS = [
   INFRA_ROADMAP_PAGE,
   ...OPERATIONS_MENU_HANDBOOKS,
   ...ENGINEERING_CONTEXT_HANDBOOKS,
+  ...QUIZ_TOOL_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,

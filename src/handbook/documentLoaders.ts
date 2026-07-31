@@ -1,6 +1,8 @@
 import { HANDBOOK_ITEMS } from "./catalog.mjs";
 import { getQuiz } from "./quiz/quizBank.mjs";
 import { QuizPage } from "./quiz/QuizPage";
+import { QuizHubPage } from "./quiz/QuizHubPage";
+import { MixedQuizPage } from "./quiz/MixedQuizPage";
 import type { HandbookDocumentContent } from "./types";
 import type { ComponentType } from "react";
 import { createElement } from "react";
@@ -83,9 +85,36 @@ export const ROADMAP_PAGE_LOADERS: Record<string, HandbookDocumentLoader> = {
     })),
 };
 
+// 도메인에 흩어진 기존 퀴즈를 모아 보여주는 허브와, 도메인을 섞어 무작위로 푸는 통합 모드.
+// 둘 다 public/handbook/*.html 원본 없이 React 컴포넌트만으로 렌더한다.
+export const QUIZ_TOOL_PAGE_LOADERS: Record<string, HandbookDocumentLoader> = {
+  "quiz-hub": () =>
+    Promise.resolve({
+      default: {
+        navHtml: '<div class="nav-brand">QUIZ</div><div class="nav-title">퀴즈 허브</div><a href="#top"><span class="code">HUB</span>전체 보기</a>',
+        mainHtml: "",
+        ReactPage: QuizHubPage,
+        hideLearningTools: true,
+      },
+    }),
+  "quiz-mixed": () =>
+    Promise.resolve({
+      default: {
+        navHtml: '<div class="nav-brand">QUIZ</div><div class="nav-title">통합 랜덤 퀴즈</div><a href="#top"><span class="code">MIX</span>도메인 섞어 풀기</a>',
+        mainHtml: "",
+        ReactPage: MixedQuizPage,
+        hideLearningTools: true,
+      },
+    }),
+};
+
 function getDocumentLoader(id: string): HandbookDocumentLoader {
   if (ROADMAP_PAGE_LOADERS[id]) {
     return ROADMAP_PAGE_LOADERS[id];
+  }
+
+  if (QUIZ_TOOL_PAGE_LOADERS[id]) {
+    return QUIZ_TOOL_PAGE_LOADERS[id];
   }
 
   if (id.endsWith("-quiz")) {

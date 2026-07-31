@@ -585,7 +585,7 @@ test("engineering context handbooks include metric anchor packets", async () => 
 test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
-    ["career", "cs-basic", "frontend", "backend", "infra", "operations", "llm", "ai-native", "design", "practice"],
+    ["career", "cs-basic", "frontend", "backend", "infra", "operations", "quiz", "llm", "ai-native", "design", "practice"],
   );
 
   const labels = [
@@ -599,6 +599,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
   const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
+  const quizGroup = HANDBOOK_GROUPS.find((group) => group.key === "quiz");
   const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
   const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
@@ -613,6 +614,8 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.equal(infraGroup?.label, "인프라");
   assert.equal(operationsGroup?.items.length, 22);
   assert.equal(operationsGroup?.label, "운영");
+  assert.equal(quizGroup?.items.length, 2);
+  assert.equal(quizGroup?.label, "퀴즈");
   assert.equal(llmGroup?.items.length, 12);
   assert.equal(aiNativeGroup?.items.length, 11);
   assert.equal(aiNativeGroup?.label, "AI Native");

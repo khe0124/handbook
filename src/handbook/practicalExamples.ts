@@ -140,6 +140,8 @@ const LENSES: Record<string, PracticalExampleLens> = {
 
 const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   home: "home",
+  "quiz-hub": "practical",
+  "quiz-mixed": "practical",
   "career-strategy-foundation": "interview",
   "career-personal-history": "personal",
   "career-frontend-interview": "interview",
@@ -374,6 +376,8 @@ export const getPracticalExampleLens = (itemId: string): PracticalExampleLens =>
   LENSES[LENS_BY_ITEM_ID[itemId]] ?? DEFAULT_LENS;
 
 export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
+  "quiz-hub": example("도메인별로 흩어진 퀴즈를 다시 찾아 헤매지 않고 한 곳에서 고른다.", ["복습할 도메인(프론트엔드/백엔드/인프라/운영)을 정한다.", "허브에서 해당 도메인 목록을 펼쳐 문항 수를 보고 퀴즈를 고른다.", "여러 도메인을 섞고 싶으면 통합 랜덤 퀴즈로 넘어간다."], "메뉴를 뒤지는 대신 퀴즈 허브 하나로 복습 시작 지점을 고정한다."),
+  "quiz-mixed": example("여러 도메인 지식을 한 세션에서 섞어 리콜 연습한다.", ["오늘 점검할 도메인을 1개 이상 체크한다.", "20문제 시작을 눌러 선택한 도메인에서 균등 배분된 문제를 무작위로 받는다.", "다 풀면 다시 풀기로 같은 도메인에서 새로운 20문제를 재추출한다."], "읽기로 전체를 다시 훑지 않고, 도메인을 섞은 무작위 출제로 약점을 빠르게 확인한다."),
   home: example("새 프로젝트를 맡았을 때 핸드북을 읽는 순서를 정한다.", ["홈의 로드맵에서 현재 약한 영역을 표시한다.", "이번 스프린트 작업과 연결되는 메뉴 2개를 고른다.", "작업 전 수용 기준과 검증 명령을 노트로 남긴다."], "학습이 독서로 끝나지 않고 실제 작업의 체크리스트가 된다."),
   "career-strategy-foundation": example("지원 회사와 직무에 맞춰 면접 답변의 기본 전략을 잡는다.", ["기술면접 개요의 답변 프레임으로 30초/90초 답변 구조를 만든다.", "회사·직무별 전략에서 지원 조직의 평가 기준을 표시한다.", "개인화 개요로 대표 프로젝트와 경험 경계 문장을 연결한다."], "범용 답변이 아니라 지원 직무의 문제와 본인 증거가 연결된 면접 전략이 된다."),
   "career-personal-history": example("개인 이력을 포지션별 면접 답변 카드로 정리한다.", ["대표 프로젝트 맵에서 포지션별 1순위 증거를 고른다.", "직접 구현, 일부 참여, 학습 확장 범위를 경험 경계 문장으로 분리한다.", "30초 결론과 압박 꼬리질문 대응을 같은 증거에서 출발하게 만든다."], "면접 답변이 추상 자기소개가 아니라 실제 프로젝트 증거와 역할 경계에서 출발한다."),
