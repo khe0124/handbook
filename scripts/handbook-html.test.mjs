@@ -964,8 +964,8 @@ test("career menu consolidates interview, personalized career, and AI Native por
     },
     {
       file: "career-core-deep-dive-handbook.html",
-      sources: ["CS 기본기 면접", "DB 심화 면접", "보안 심화 면접"],
-      evidence: ["Big-O", "MVCC", "OWASP"],
+      sources: ["CS 기본기 면접", "DB 심화 면접", "보안 심화 면접", "네트워크 심화 면접"],
+      evidence: ["Big-O", "MVCC", "OWASP", "QUIC"],
     },
     {
       file: "career-infra-distributed-cloud-handbook.html",
