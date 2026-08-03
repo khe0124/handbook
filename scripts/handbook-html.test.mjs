@@ -1559,6 +1559,26 @@ test("design system directing document has the full 10-section skeleton with mat
   assert.deepEqual(navHrefIds, expectedIds);
 });
 
+test("design system directing document covers governance, stakeholder, and rollout markers", async () => {
+  const html = await readFile(
+    "public/handbook/design-system-directing-handbook.html",
+    "utf8",
+  );
+
+  const markers = [
+    "디렉팅",
+    "DECISION RIGHTS",
+    "RFC",
+    "federated|연합형",
+    "SPONSOR|후원자",
+    "ROI",
+  ];
+
+  for (const marker of markers) {
+    assert.match(html, new RegExp(marker, "i"), `should contain ${marker}`);
+  }
+});
+
 test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {
   const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
