@@ -151,6 +151,7 @@
 <section id="team-structure">
 <div class="ch-head"><span class="ch-code">TEAM</span><h2>팀 구조·역할</h2></div>
 <p class="lede">디자인 시스템 조직은 크게 두 모델로 갈린다. <strong>federated model</strong>은 전담 인원이 없거나 최소이고, 각 프로덕트 팀의 디자이너·엔지니어가 파트타임으로 디자인 시스템 작업을 겸한다. <strong>dedicated team</strong>은 디자인 시스템만 전담하는 상근 인원(디자이너, 엔지니어, 대개 PM)으로 구성된 별도 팀이다. 조직 규모와 성숙도에 따라 유리한 쪽이 갈린다.</p>
+<p>거버넌스 모델(GOV 섹션의 중앙집중형·연합형·하이브리드)이 결정권을 어떻게 나누는지의 문제라면, 여기서 말하는 팀 구조는 누가 상근으로 이 일을 하는지의 문제다. 둘은 독립된 축이라 중앙집중형 거버넌스를 federated 팀 구조로 운영하는 조합도, 그 반대 조합도 가능하다 — GOV 섹션의 "연합형(federated)"과 이 섹션의 "federated model"은 이름만 같을 뿐 서로 다른 축을 가리킨다.</p>
 <table>
 <tr><th>기준</th><th>federated model</th><th>dedicated team</th></tr>
 <tr><td>속도</td><td>초기 셋업은 빠르다 — 이미 있는 팀원이 겸임</td><td>초기 셋업은 느리다 — 채용·팀 구성이 선행돼야 함</td></tr>
@@ -192,7 +193,7 @@
 <div class="ch-head"><span class="ch-code">RISK</span><h2>흔한 실패 패턴과 리스크</h2></div>
 <p class="lede">디자인 시스템이 무너지는 방식은 몇 가지로 반복된다. 초기에 잡지 못하면 뒤늦게 되돌리는 비용이 처음 만드는 비용보다 크다.</p>
 <p><strong>섀도 UI</strong> 확산 — 팀이 필요한 컴포넌트나 variant가 시스템에 없는데 요청해도 몇 주째 응답이 없으면, 팀은 대기하지 않고 자기 폴더 안에 비슷하게 생긴 컴포넌트를 직접 만든다. 처음엔 한 팀, 한 컴포넌트지만 이게 반복되면 프로덕트 전체에 "디자인 시스템과 닮았지만 다른" 그림자 컴포넌트가 퍼진다. 겉보기엔 비슷해서 QA에서도 잘 안 걸리고, 리브랜딩이나 접근성 일괄 수정 때 시스템 컴포넌트만 고치면 섀도 UI는 그대로 남아 불일치가 드러난다.</p>
-<p><strong>오너십 공백</strong> — 런칭 초기엔 만든 사람이 곧 오너라서 문제가 없다. 그 사람이 다른 팀으로 옮기거나 회사를 떠나거나, 초기 열정이 식고 다른 우선순위에 밀리면 디자인 시스템에는 아무도 "이건 내가 책임진다"고 말하는 사람이 없는 상태가 된다. RFC를 올려도 검토할 사람이 없고, deprecation 공지도 안 나가고, 신규 컴포넌트 요청은 쌓이기만 한다. 이 상태가 몇 달 지속되면 시스템은 문서상으로만 존재하고 실질적으로는 각 팀이 알아서 운영하는 상태로 되돌아간다 — 정확히 이 문서 도입 전 상태로 회귀하는 것이다.</p>
+<p><strong>오너십 공백</strong> — 론칭 초기엔 만든 사람이 곧 오너라서 문제가 없다. 그 사람이 다른 팀으로 옮기거나 회사를 떠나거나, 초기 열정이 식고 다른 우선순위에 밀리면 디자인 시스템에는 아무도 "이건 내가 책임진다"고 말하는 사람이 없는 상태가 된다. RFC를 올려도 검토할 사람이 없고, deprecation 공지도 안 나가고, 신규 컴포넌트 요청은 쌓이기만 한다. 이 상태가 몇 달 지속되면 시스템은 문서상으로만 존재하고 실질적으로는 각 팀이 알아서 운영하는 상태로 되돌아간다 — 정확히 이 문서 도입 전 상태로 회귀하는 것이다.</p>
 <p>거버넌스는 스펙트럼 양 끝 모두에서 실패한다. 한쪽 끝은 <strong>거버넌스 부재로 인한 파편화</strong> — 결정권이 아무 데도 없어서 팀마다 각자 결정하고 각자 포크한다. 반대쪽 끝은 <strong>과도한 프로세스로 인한 채택 저항</strong> — 컴포넌트 하나 요청에 RFC, 3단계 리뷰, 2주 대기가 필요하면 팀들은 시스템을 우회하는 게 더 빠르다고 판단하고 다시 섀도 UI로 간다. GOV 섹션의 DECISION RIGHTS MATRIX는 이 두 실패 사이에서 결정 속도와 결정 권한을 동시에 지키기 위한 장치다.</p>
 <table>
 <tr><th>실패 패턴</th><th>조기 경고 신호</th><th>개입</th></tr>
@@ -209,22 +210,23 @@
 
 <section id="glossary">
 <div class="ch-head"><span class="ch-code">GLOSSARY</span><h2>용어집</h2></div>
-<table>
-<tr><th>용어</th><th>이 문서에서의 뜻</th></tr>
-<tr><td>디렉팅</td><td>컴포넌트를 직접 만드는 대신 조직의 채택·거버넌스·수명 주기를 이끄는 역할. 이 문서 전체가 다루는 주제</td></tr>
-<tr><td>RFC</td><td>신규 컴포넌트·토큰 변경을 제안하는 통일된 통로. 제안-리뷰-트라이얼-채택/반려 4단계를 거친다</td></tr>
-<tr><td>federated model</td><td>전담 인원 없이 각 프로덕트 팀 디자이너·엔지니어가 파트타임으로 디자인 시스템을 겸임하는 팀 구조</td></tr>
-<tr><td>dedicated team</td><td>디자인 시스템만 전담하는 상근 인원으로 구성된 별도 팀 구조</td></tr>
-<tr><td>ADOPTION LADDER</td><td>무채택 → 인지 → 파일럿 → 채택 → 표준화 → 감사로 이어지는 6단계 채택 로드맵. 단계를 건너뛰면 신뢰를 잃는다</td></tr>
-<tr><td>DECISION RIGHTS MATRIX</td><td>결정 유형별로 최종 결정권자와 협의 대상을 명시한 표. 합의 만능주의로 결정이 미뤄지는 걸 막는 장치</td></tr>
-<tr><td>HANDOFF SLA</td><td>디자이너가 제공할 것과 엔지니어가 검토할 것, 각각의 기한을 명시한 디자인-개발 핸드오프 계약</td></tr>
-<tr><td>SYSTEM HEALTH SCORECARD</td><td>adoption rate, component coverage, drift, 만족도 서베이 결과로 구성된 분기별 건강도 측정 세트</td></tr>
-<tr><td>drift</td><td>토큰·컴포넌트 대신 하드코딩된 값을 쓰는 UI의 비율. SYSTEM HEALTH SCORECARD의 핵심 지표이자 섀도 UI의 조기 경고 신호</td></tr>
-<tr><td>섀도 UI</td><td>시스템이 필요를 못 채워서 팀이 자체적으로 만들어 쓰는, 시스템 컴포넌트와 겉모습은 비슷하지만 별개인 컴포넌트</td></tr>
-<tr><td>오너십 공백</td><td>초기 런칭 열정이 식은 뒤 디자인 시스템을 책임지는 사람이 조직에 아무도 없는 상태</td></tr>
-<tr><td>SPONSOR</td><td>헤드카운트를 배정하고 우선순위 충돌 시 디자인 시스템에 힘을 실어주는 시니어 후원자</td></tr>
-<tr><td>Code Connect</td><td>Figma 컴포넌트와 실제 코드 컴포넌트를 명시적으로 매핑하는 장치. 디자이너가 Figma에서 대응 코드를 바로 확인할 수 있게 한다</td></tr>
-</table>
+<p class="lede">이 문서에서 쓴 핵심 용어를 정리한다. 특히 "federated"는 GOV 섹션과 TEAM 섹션에서 서로 다른 축을 가리키므로 두 항목으로 나눠 뜻을 구분해 둔다.</p>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>디렉팅</b><span>directing</span></div><div class="g-def">컴포넌트를 직접 만드는 대신 조직의 채택·거버넌스·수명 주기를 이끄는 역할. 이 문서 전체가 다루는 주제</div></div>
+<div class="g-row"><div class="g-term"><b>RFC</b><span>제안 프로세스</span></div><div class="g-def">신규 컴포넌트·토큰 변경을 제안하는 통일된 통로. 제안-리뷰-트라이얼-채택/반려 4단계를 거친다</div></div>
+<div class="g-row"><div class="g-term"><b>연합형(federated)</b><span>거버넌스 모델 · GOV</span></div><div class="g-def">코어 팀이 표준과 검토 프로세스만 정하고 각 프로덕트 팀이 자기 도메인 컴포넌트를 만들고 기여하는 거버넌스 모델 — 결정권을 어떻게 나누는가의 문제. TEAM 섹션의 federated model과는 다른 축이다</div></div>
+<div class="g-row"><div class="g-term"><b>federated model</b><span>팀 구조 · TEAM</span></div><div class="g-def">전담 인원 없이 각 프로덕트 팀 디자이너·엔지니어가 파트타임으로 디자인 시스템을 겸임하는 팀 구조 — 누가 상근으로 일하는가의 문제. GOV 섹션의 연합형 거버넌스와는 다른 축이다</div></div>
+<div class="g-row"><div class="g-term"><b>dedicated team</b><span>팀 구조 · TEAM</span></div><div class="g-def">디자인 시스템만 전담하는 상근 인원으로 구성된 별도 팀 구조</div></div>
+<div class="g-row"><div class="g-term"><b>ADOPTION LADDER</b><span>채택 단계</span></div><div class="g-def">무채택 → 인지 → 파일럿 → 채택 → 표준화 → 감사로 이어지는 6단계 채택 로드맵. 단계를 건너뛰면 신뢰를 잃는다</div></div>
+<div class="g-row"><div class="g-term"><b>DECISION RIGHTS MATRIX</b><span>결정권 표</span></div><div class="g-def">결정 유형별로 최종 결정권자와 협의 대상을 명시한 표. 합의 만능주의로 결정이 미뤄지는 걸 막는 장치</div></div>
+<div class="g-row"><div class="g-term"><b>HANDOFF SLA</b><span>핸드오프 계약</span></div><div class="g-def">디자이너가 제공할 것과 엔지니어가 검토할 것, 각각의 기한을 명시한 디자인-개발 핸드오프 계약</div></div>
+<div class="g-row"><div class="g-term"><b>SYSTEM HEALTH SCORECARD</b><span>건강도 지표</span></div><div class="g-def">adoption rate, component coverage, drift, 만족도 서베이 결과로 구성된 분기별 건강도 측정 세트</div></div>
+<div class="g-row"><div class="g-term"><b>drift</b><span>하드코딩 비율</span></div><div class="g-def">토큰·컴포넌트 대신 하드코딩된 값을 쓰는 UI의 비율. SYSTEM HEALTH SCORECARD의 핵심 지표이자 섀도 UI의 조기 경고 신호</div></div>
+<div class="g-row"><div class="g-term"><b>섀도 UI</b><span>shadow UI</span></div><div class="g-def">시스템이 필요를 못 채워서 팀이 자체적으로 만들어 쓰는, 시스템 컴포넌트와 겉모습은 비슷하지만 별개인 컴포넌트</div></div>
+<div class="g-row"><div class="g-term"><b>오너십 공백</b><span>ownership gap</span></div><div class="g-def">초기 론칭 열정이 식은 뒤 디자인 시스템을 책임지는 사람이 조직에 아무도 없는 상태</div></div>
+<div class="g-row"><div class="g-term"><b>SPONSOR</b><span>후원자</span></div><div class="g-def">헤드카운트를 배정하고 우선순위 충돌 시 디자인 시스템에 힘을 실어주는 시니어 후원자</div></div>
+<div class="g-row"><div class="g-term"><b>Code Connect</b><span>디자인-코드 매핑</span></div><div class="g-def">Figma 컴포넌트와 실제 코드 컴포넌트를 명시적으로 매핑하는 장치. 디자이너가 Figma에서 대응 코드를 바로 확인할 수 있게 한다</div></div>
+</div>
 </section>
 
 <section id="output-verification-standards">
