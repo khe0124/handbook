@@ -318,6 +318,7 @@ const LENS_BY_ITEM_ID: Record<string, keyof typeof LENSES> = {
   "practice-motion-animation": "design",
   "practice-photography-image-literacy": "design",
   "design-ai-product-ux": "design",
+  "design-system-directing": "design",
   "practice-cheat-sheets": "practical",
   "practice-workflow-setup": "practical",
   "practice-build-release": "practical",
@@ -622,6 +623,15 @@ export const PRACTICAL_EXAMPLES: Record<string, PracticalExample> = {
     artifactsToSubmit: ["uncertainty-state-matrix.md", "citation-ux-flow.md", "handoff-packet.md"],
     passCriteria: ["근거 부족 상태가 happy path와 다른 UI로 표현된다.", "사용자가 생성 결과를 검토/수정/거부할 수 있다.", "보안/평가 정책이 화면 흐름에 반영된다."],
   }),
+  "design-system-directing": example(
+    "10명 규모 프로덕트 조직에 디자인 시스템 도입을 디렉팅한다.",
+    [
+      "중앙집중형/연합형/하이브리드 중 조직 규모에 맞는 거버넌스 모델을 정하고 DECISION RIGHTS MATRIX를 만든다.",
+      "경영진에게는 ROI, 엔지니어링 리더에게는 유지보수 비용 절감으로 각각 다른 pitch를 준비한다.",
+      "파일럿 팀 하나를 골라 ADOPTION LADDER 1단계부터 시작하고, 확산 전 adoption rate와 drift를 측정한다.",
+    ],
+    "디자인 시스템 도입이 컴포넌트 라이브러리 배포가 아니라, 거버넌스·설득·확산을 갖춘 조직 변화 관리로 다뤄진다.",
+  ),
   "practice-cheat-sheets": example("리뷰 전 빠른 점검표로 변경 위험을 훑는다.", ["변경 범위에 맞는 Frontend, Backend, DB, Network, DevOps 치트시트를 고른다.", "Review Gate와 Failure Playbook 항목을 PR 체크리스트로 옮긴다.", "차단 기준에 걸리는 항목은 수정 또는 명시적 리스크로 남긴다."], "치트시트가 암기장이 아니라 리뷰 품질과 장애 예방 도구가 된다."),
   "practice-workflow-setup": example("새 프로젝트 시작 전 작업 환경과 실행 루프를 만든다.", ["풀스택 로드맵에서 이번 프로젝트의 약한 축을 고른다.", "FAQ, 새 PC 설정, 실무 플레이북을 따라 재현 가능한 환경을 만든다.", "작업 전 수용 기준과 검증 명령을 기록한다."], "프로젝트 시작이 즉흥 설정이 아니라 재현 가능한 작업 루프로 정리된다."),
   "practice-build-release": example("릴리스 전 빌드·설정·DB·CI/CD 위험을 점검한다.", ["Gradle과 패키지 버전을 잠그고 CI와 로컬 명령을 맞춘다.", "환경변수, DB migration/seed, 배포 파이프라인, 로그 확인 명령을 정리한다.", "배포 후 검증과 rollback 기준을 문서화한다."], "빌드와 배포가 한 번 성공한 명령이 아니라 반복 가능한 운영 절차가 된다."),
