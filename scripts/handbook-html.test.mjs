@@ -1577,6 +1577,11 @@ test("design system directing document covers governance, stakeholder, and rollo
     "Code Connect",
     "HANDOFF SLA",
     "federated model|dedicated team",
+    "adoption rate",
+    "drift",
+    "SYSTEM HEALTH SCORECARD",
+    "섀도 UI",
+    "오너십 공백",
   ];
 
   for (const marker of markers) {
