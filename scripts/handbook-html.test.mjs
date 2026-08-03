@@ -597,7 +597,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 154);
+  assert.equal(HANDBOOK_ITEMS.length, 155);
   assert.equal(careerGroup?.items.length, 17);
   assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 8);
@@ -1505,6 +1505,7 @@ test("design practice includes specialist visual design, typography, and photogr
       "06 모션·애니메이션 원리",
       "07 사진학·이미지 리터러시",
       "08 AI 제품 UX·신뢰 설계",
+      "09 디자인시스템 거버넌스·디렉팅",
     ],
   );
 
@@ -1525,6 +1526,37 @@ test("design practice includes specialist visual design, typography, and photogr
       assert.match(source, new RegExp(marker, "i"), `${sourcePath} should include ${marker}`);
     }
   }
+});
+
+test("design system directing document has the full 10-section skeleton with matching nav anchors", async () => {
+  const html = await readFile(
+    "public/handbook/design-system-directing-handbook.html",
+    "utf8",
+  );
+  const { navHtml, mainHtml } = extractHandbookDocument(html);
+
+  const expectedIds = [
+    "system-directing-map",
+    "governance",
+    "stakeholder-buyin",
+    "rollout-strategy",
+    "design-eng-collab",
+    "team-structure",
+    "health-metrics",
+    "failure-patterns",
+    "glossary",
+    "output-verification-standards",
+  ];
+
+  const sectionIds = [...mainHtml.matchAll(/<section id="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(sectionIds, expectedIds);
+
+  const navHrefIds = [...navHtml.matchAll(/href="#([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(navHrefIds, expectedIds);
 });
 
 test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {

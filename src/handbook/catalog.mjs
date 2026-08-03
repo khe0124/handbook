@@ -1515,6 +1515,12 @@ export const DESIGN_PRACTICE_HANDBOOKS = [
     kind: "디자인",
     file: "design-ai-product-ux-handbook.html",
   },
+  {
+    id: "design-system-directing",
+    label: "09 디자인시스템 거버넌스·디렉팅",
+    kind: "디자인",
+    file: "design-system-directing-handbook.html",
+  },
 ];
 
 export const PRACTICE_HANDBOOKS = [
