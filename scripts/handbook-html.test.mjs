@@ -1572,6 +1572,11 @@ test("design system directing document covers governance, stakeholder, and rollo
     "federated|연합형",
     "SPONSOR|후원자",
     "ROI",
+    "ADOPTION LADDER",
+    "파일럿",
+    "Code Connect",
+    "HANDOFF SLA",
+    "federated model|dedicated team",
   ];
 
   for (const marker of markers) {
