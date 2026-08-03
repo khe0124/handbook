@@ -29,8 +29,8 @@
     <span>LANG : KO</span>
   </div>
   <h1>디자인시스템 거버넌스·디렉팅</h1>
-  <p class="hero-sub">TODO_HERO_SUB</p>
-  <div class="hero-meta">TODO_HERO_META · MARKER: artifact-ready · UPDATED 2026-08</div>
+  <p class="hero-sub">디자인 시스템을 디렉팅한다는 건 컴포넌트를 잘 만드는 일이 아니라, 조직이 그 컴포넌트를 신뢰하고 계속 쓰게 만드는 일이다. 결정권을 명시하는 거버넌스, 예산과 헤드카운트를 얻어내는 이해관계자 설득, 무리 없이 신뢰를 쌓는 론칭·전파 전략, 디자이너와 엔지니어 사이의 어긋남을 줄이는 협업 체계 — 이 네 축이 순서대로 맞물려야 시스템이 조직 전체의 기본값이 된다. 이 문서는 컴포넌트 라이브러리를 만드는 법이 아니라, 만들어진 시스템을 조직이 실제로 쓰게 이끄는 법을 다룬다.</p>
+  <div class="hero-meta">거버넌스·조직·전파·협업의 디렉팅 실무 설계 · MARKER: artifact-ready · UPDATED 2026-08</div>
 </header>
 
 <section id="system-directing-map">
@@ -229,10 +229,22 @@
 
 <section id="output-verification-standards">
 <div class="ch-head"><span class="ch-code">VERIFY</span><h2>산출물·검증 기준</h2></div>
+<p class="lede">디렉팅은 회의에서 의견을 내는 일이 아니라 조직이 실제로 실행할 수 있는 산출물을 남기는 일이다. 아래 네 산출물이 모두 존재해야 "디렉팅했다"고 말할 수 있다. 하나라도 없으면 방향에 대한 의견을 말한 것이지, 조직을 이끈 게 아니다.</p>
+<table>
+<tr><th>항목</th><th>필수 포함</th><th>완료 기준</th></tr>
+<tr><td>governance doc</td><td>거버넌스 모델(중앙집중형/연합형/하이브리드) 선택과 근거, DECISION RIGHTS MATRIX, breaking change·deprecation 정책</td><td>결정 유형별 최종 결정권자와 협의 대상이 표로 명시돼 있고, 새 팀원이 문서만 읽고 "이 변경은 누구 승인이 필요한가"에 답할 수 있다</td></tr>
+<tr><td>RFC template</td><td>문제 정의·대안·영향받는 팀을 적는 제안 양식, 제안-리뷰-트라이얼-채택/반려 4단계 프로세스 정의</td><td>실제 제안 하나를 이 템플릿으로 끝까지 통과시켜 본 기록이 있다 — 양식만 있고 실사용 사례가 없으면 미완성으로 취급한다</td></tr>
+<tr><td>adoption dashboard</td><td>adoption rate·component coverage·drift·만족도 서베이 결과를 분기별로 추적하는 SYSTEM HEALTH SCORECARD</td><td>최소 한 분기치 실측값이 채워져 있고, 각 지표마다 측정 방법(스크립트/린트 룰/설문)이 재현 가능하게 적혀 있다</td></tr>
+<tr><td>rollout plan</td><td>ADOPTION LADDER 단계별 목표, 파일럿 팀 선정 기준과 실제 선정 근거, 토큰 감사부터 채택 단계 공지까지의 실행 순서</td><td>현재 조직이 6단계 중 몇 단계에 있는지 명시돼 있고, 다음 단계로 넘어가기 위한 조건이 숫자나 체크리스트로 검증 가능하다</td></tr>
+</table>
+<div class="callout">
+<span class="co-label">완료 기준</span>
+<p>네 산출물 중 하나라도 비어 있으면 디렉팅이 아니라 의견 제시로 취급한다. governance doc 없이 RFC를 운영하면 결정권 없는 프로세스만 남고, adoption dashboard 없이 rollout plan을 세우면 진행 상황을 증명할 방법이 없다. 네 산출물은 서로를 검증하는 짝이다 — 하나가 없으면 나머지 셋의 신뢰도도 같이 떨어진다.</p>
+</div>
 </section>
 
 <footer>디자인시스템 거버넌스·디렉팅 · V1 · 2026-08<br>
-PRINCIPLE : TODO_PRINCIPLE</footer>
+PRINCIPLE : 디자인시스템을 만드는 것과 조직이 쓰게 만드는 것은 다른 일이고, 후자가 디렉팅이다.</footer>
 </main>
 </div>
 </body>

@@ -1582,11 +1582,16 @@ test("design system directing document covers governance, stakeholder, and rollo
     "SYSTEM HEALTH SCORECARD",
     "섀도 UI",
     "오너십 공백",
+    "governance doc",
+    "RFC template",
+    "adoption dashboard",
   ];
 
   for (const marker of markers) {
     assert.match(html, new RegExp(marker, "i"), `should contain ${marker}`);
   }
+
+  assert.doesNotMatch(html, /TODO_/);
 });
 
 test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {
