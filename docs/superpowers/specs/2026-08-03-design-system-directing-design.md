@@ -1,0 +1,75 @@
+# Design System Directing for Design Leads
+
+## Goal
+
+Add one document under the `디자인` menu (`DESIGN_PRACTICE_HANDBOOKS`) covering how a **design lead directs** the implementation of a design system — governance, stakeholder buy-in, rollout, and cross-functional collaboration — as distinct from the individual-contributor "build the system" content already covered by `01 디자인 실행·시스템 품질`. Written as a future-role reference, not a record of a specific project.
+
+## Menu Structure
+
+Append one entry to `DESIGN_PRACTICE_HANDBOOKS` after the existing eight:
+
+`09 디자인시스템 거버넌스·디렉팅`
+
+## Document: Design System Directing
+
+File target:
+`src/handbook/documents/design-system-directing.ts`
+
+Public output:
+`public/handbook/design-system-directing-handbook.html`
+
+Catalog entry (`src/handbook/catalog.mjs`, appended to `DESIGN_PRACTICE_HANDBOOKS`):
+
+```js
+{
+  id: "design-system-directing",
+  label: "09 디자인시스템 거버넌스·디렉팅",
+  kind: "디자인",
+  file: "design-system-directing-handbook.html",
+},
+```
+
+Follows the existing leaf-document format (see `design-ai-product-ux.ts`): `navHtml` with a section anchor per topic, `mainHtml` sections using `ch-head`/`h2`/`lede`/`table`/`callout`/`flow` markup, closing with a `VERIFY` section and a `footer` (version + date + one-line PRINCIPLE).
+
+### Section outline (10 sections)
+
+| # | anchor / code | Title | Core coverage |
+|---|---|---|---|
+| 1 | `system-directing-map` / MAP | 디렉팅이란 무엇이 다른가 | IC로서 시스템을 만드는 것과 조직 차원에서 이끄는 것의 역할 전환. 문서 전체의 뼈대. |
+| 2 | `governance` / GOV | 거버넌스·의사결정 구조 | 중앙집중형/연합형/하이브리드 모델, 의사결정권자 매트릭스, RFC/제안 프로세스, 버저닝·deprecation 정책, contribution model |
+| 3 | `stakeholder-buyin` / STAKE | 조직·이해관계자 설득 | 경영진 대상 ROI 논리, PM/엔지니어링 리더 설득, 예산·헤드카운트 확보, 후원자(sponsor) 확보, 저항 다루기 |
+| 4 | `rollout-strategy` / ROLLOUT | 론칭·전파 전략 | 0→1 마이그레이션 계획, 파일럿 팀 선정, 채택 단계별 전술, 확산 로드맵 |
+| 5 | `design-eng-collab` / COLLAB | 디자이너-엔지니어 협업 체계 | Design Tokens/Code Connect 동기화, 크로스펑셔널 QA 책임 분담, single source of truth |
+| 6 | `team-structure` / TEAM | 팀 구조·역할 | dedicated team vs federated model, 역할별 책임(system designer/engineer/PM), 성장 경로 |
+| 7 | `health-metrics` / METRICS | 성공 지표·건강도 측정 | adoption rate, component coverage, drift 측정, 만족도 서베이 |
+| 8 | `failure-patterns` / RISK | 흔한 실패 패턴과 리스크 | 섀도 UI 확산, 거버넌스 부재로 인한 파편화, 오너십 공백, 과도한 프로세스로 인한 채택 저항 |
+| 9 | `glossary` / GLOSSARY | 용어집 | 문서에서 쓴 핵심 용어 정리 |
+| 10 | `output-verification-standards` / VERIFY | 산출물·검증 기준 | governance doc, RFC template, adoption dashboard, rollout plan 등 디렉팅 산출물의 완료 기준 |
+
+Target length: comparable to `design-ai-product-ux.ts` (~20K chars, 12 sections) — this doc has 10 sections, similar density expected.
+
+## Integration
+
+Update these areas:
+
+- `src/handbook/catalog.mjs`: append the entry above to `DESIGN_PRACTICE_HANDBOOKS`.
+- `src/handbook/practicalExamples.ts`:
+  - add `"design-system-directing": "design"` to the design-lens id→lens map (near `"design-ai-product-ux": "design"`).
+  - add one `example`/`trainingExample` entry keyed by `"design-system-directing"`, in the style of the existing `design-ai-product-ux` entry.
+- `scripts/handbook-html.test.mjs`:
+  - add `"09 디자인시스템 거버넌스·디렉팅"` to the `DESIGN_PRACTICE_HANDBOOKS.map((item) => item.label)` `deepEqual` list (~line 1497).
+  - add a `sourceMarkers` entry for `src/handbook/documents/design-system-directing.ts` with 3-5 distinctive terms drawn from the actual written content (e.g. governance model names, RFC, adoption metric terms) — pick markers after the content is written, not before.
+- Generate the public HTML snapshot via `npm run generate:handbook` (`scripts/handbook-html.mjs`), which produces `public/handbook/design-system-directing-handbook.html` from the new document module.
+
+No changes needed to search indexing or study/quiz tooling — the `디자인` group is already in `NON_STUDY_GROUP_KEYS` (`src/handbook/catalog.mjs`), which excludes it from `NON_STUDY_DOC_IDS`'s complement (in-scope search/SRS docs).
+
+## Testing
+
+- `npm test`
+- `npm run build`
+- `npm run generate:handbook`, then confirm `public/handbook/design-system-directing-handbook.html` renders the new sections
+- Staged diff review to confirm only this document's addition is included
+
+## Scope Boundaries
+
+This adds one new leaf document to the `디자인` menu. It does not touch `DESIGN_HANDBOOKS` (the merged/archived source set), does not modify the existing `01 디자인 실행·시스템 품질` bundle's `디자인 시스템과 토큰` section (which covers tokens/components hands-on, not directing), and does not add a quiz.
