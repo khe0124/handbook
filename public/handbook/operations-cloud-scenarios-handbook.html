@@ -10,6 +10,7 @@
 <nav aria-label="목차">
 <div class="nav-brand">OPERATIONS · AWS</div>
   <div class="nav-title">AWS·Azure 실전 시나리오</div>
+  <a href="#flow-overview"><span class="code">FLOW</span>전체 흐름</a>
   <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
   <a href="#ch1"><span class="code">CLD-00</span>웹 서비스 기본 구성</a>
   <a href="#ch2"><span class="code">CLD-01</span>사설 네트워크와 데이터 경계</a>
@@ -34,6 +35,23 @@
   <p class="hero-sub">실제 클라우드 서비스를 조합해 웹 서비스, 내부 API, 데이터, 관측, 복구 사례를 설계한다</p>
   <div class="hero-meta">FORMAT : 개념 → 증거 → 플레이북 → 장애 시나리오 → 면접 답변 · UPDATED 2026-06</div>
 </header>
+
+<section id="flow-overview">
+<div class="ch-head"><span class="ch-code">FLOW</span><h2>이 시나리오집을 관통하는 흐름</h2></div>
+<p class="lede">이 문서는 AWS와 Azure 서비스명을 나란히 외우게 하려고 쓰이지 않았다. CloudFront와 Front Door, ALB와 Application Gateway, RDS와 Azure SQL을 1:1로 맞춰 외우는 순간부터 장애 판단은 틀리기 시작한다. 이 시나리오집이 훈련시키는 것은 edge, regional ingress, runtime, data, identity, observability, cost라는 책임 경계로 두 클라우드를 동시에 읽는 눈이다. 앞의 네 장은 그 경계를 구성 요소별로 세우고, 뒤의 여섯 절은 그 경계가 실제 장애·비용 사례에서 어떻게 무너지고 어떤 증거로 되돌아오는지 보여준다.</p>
+<p>맨 앞 INDEX 절은 이 문서를 어떻게 읽을지 먼저 선언한다. 핵심 개념, 주제별 운영 증거, 실무 플레이북, 용어사전, incident packet, 주제별 답변 구조라는 여섯 축을 나열해, 이 문서가 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 쓰였다는 것을 못 박는다.</p>
+<p>본문은 CLD-00 웹 서비스 기본 구성에서 시작한다. Route 53/Azure DNS, CloudFront/Azure Front Door, ALB/Application Gateway, ECS·EKS·AKS·App Service, RDS/Azure SQL을 edge, regional ingress, runtime, data 네 계층으로 나눠 그리고, edge 403과 origin 5xx를 같은 오류로 묶지 않는 것부터 훈련한다. 이 계층 구분이 이후 모든 장의 판단 기준이 된다.</p>
+<p>CLD-01 사설 네트워크와 데이터 경계는 그 구분을 네트워크 안쪽으로 옮긴다. AWS의 VPC·subnet·NAT Gateway·Security Group·PrivateLink와 Azure의 VNet·NSG·Private Endpoint·Private DNS Zone을 나열한 뒤, Private Endpoint를 만들어도 DNS가 public endpoint를 반환하면 사설 경로가 아니라는 정상/비정상 출력 비교로 마무리한다. 만들었다는 것과 증명했다는 것은 다르다.</p>
+<p>CLD-02 Secret과 배포는 경계를 identity와 credential 쪽으로 옮긴다. IAM role/Managed Identity, Secrets Manager/Key Vault, ECR/ACR, CodePipeline·Azure DevOps·GitHub Actions를 다루며, secret이 build artifact나 이미지, 프런트엔드 번들, 로그에 남는 순간 이미 그 경계가 깨진 것이라고 규정한다.</p>
+<p>CLD-03 장애와 비용 사례는 앞의 세 장을 하나의 timeline으로 합친다. CloudFront/Front Door 캐시 오류, NAT Gateway 비용 폭증, RDS/Azure SQL connection pool 고갈, ALB/App Gateway health probe 실패, AKS/EKS rollout 실패를 나열하며, 비용 급증도 retry storm이나 잘못된 egress route 같은 운영 장애 신호로 다뤄야 한다고 못 박는다.</p>
+<p>CHECK 실무 체크리스트는 이 네 장에서 나온 판단을 설계·변경·복구 세 단계의 필수 산출물과 차단 기준으로 압축한다. 서비스 매핑을 외우는 대신 edge, network, runtime, data, identity, observability 책임으로 다시 정렬하라는 요구가 여기서 반복된다.</p>
+<p>PLAYBOOK 실무 플레이북은 그 체크리스트를 실행 순서로 바꾼다. AWS AZURE OPERATIONS PLAYBOOK이라는 serial-card는 symptom → scope → recent change → evidence → mitigation → verification → runbook diff 순서를 못 박고, Edge/Ingress, Runtime/Data, Identity/Cost 세 운영 표면으로 나눠 AWS·Azure 경로의 확인 명령을 배치한다. CloudFront/Front Door 403, ALB/App Gateway 502, RDS/Azure SQL pressure, NAT/Egress cost spike 네 심화 패턴은 계층은 같아도 판정 기준이 다르다는 걸 다시 보여준다.</p>
+<p>PRACTICE 출력 판독 훈련은 그 판정 기준을 실제 출력값으로 손에 익힌다. PRACTICE LAB 01 · Azure private connectivity 판독은 App Service가 Azure SQL Private Endpoint에 간헐적으로 연결하지 못하는 상황에서 test-connectivity 명령의 정상/비정상 출력을 비교하고, 즉시 완화와 영구 수정을 나눠 실행하는 순서까지 요구한다.</p>
+<p>TERM 용어사전은 여기까지 반복된 edge layer, regional L7 ingress, managed identity, PrivateLink/Private Endpoint, NAT Gateway 다섯 개념을 정의·운영 증거·오해·관련 항목으로 재정리해, 용어 자체가 아니라 그 용어가 어떤 로그와 설정에 연결되는지를 기억하게 한다.</p>
+<p>CASE 장애/운영 시나리오는 이 모든 걸 하나의 배포안으로 합친다. B2B SaaS 관리자 서비스를 AWS안(Route 53 → CloudFront/WAF → ALB → ECS Fargate → RDS Multi-AZ·ElastiCache)과 Azure안(Azure DNS → Front Door/WAF → Application Gateway → AKS·App Service → Azure SQL zone redundant·Cache for Redis)으로 나란히 설계하고, Triage frame으로 증상부터 재발 방지까지의 순서를 고정한 뒤 incident packet에 증상·완화·사후 세 항목을 남기게 한다.</p>
+<p>RISK 자주 틀리는 판단은 이 흐름에서 실무자가 실제로 놓치는 지점을 짚는다. 서비스명 단순 번역, WAF·cache policy 변경 이력 누락, NAT·egress 비용 방치, 백업은 켜져 있어도 restore drill이 없는 상태가 반복되는 실패 패턴이다. EVIDENCE 검증 기준·증거 패킷이 전체를 닫는다. region과 quota, managed service 제약은 시점에 따라 바뀌므로, 기준일과 확인 출처가 없는 서비스 매핑이나 비용 판단은 이 문서 기준으로는 아직 확정된 게 아니다.</p>
+<p>그러니 이 문서는 위에서 아래로 한 번 읽고 덮는 자료가 아니다. 실제 장애나 설계 리뷰에서는 CLD-00~CLD-03 표에서 반복되는 세 질문 — 서비스명이 아니라 책임 경계로 설명할 수 있는가, 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가, 임시 완화와 영구 수정은 어떻게 나누는가 — 로 되돌아와 PLAYBOOK과 CASE, EVIDENCE를 다시 펼치게 되어 있다. 문서 순서는 처음 읽을 때의 안내일 뿐, 실무에서는 이 세 질문이 매번 입구가 된다.</p>
+</section>
 
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
@@ -63,6 +81,7 @@
           <tr><td>사설 네트워크와 데이터 경계를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>route table readback, private DNS resolution, flow log ACCEPT/REJECT, DB public access setting</td><td>private endpoint를 만들었어도 DNS가 public endpoint를 가리키면 사설 경로가 아니다.</td></tr>
           <tr><td>사설 네트워크와 데이터 경계 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>private subnet 앱이 DB 또는 storage 접근 실패, 또는 public egress 비용 급증</td><td>DNS override, endpoint policy, route table, NSG/Security Group, egress path를 순서대로 본다.</td></tr>
         </table>
+        <p>Private Endpoint를 만들어도 DNS 설정에 따라 정상 경로와 비정상 경로가 어떻게 다르게 보이는지 예시로 비교한다.</p>
         <table>
           <tr><th>예시 신호</th><th>관찰값</th><th>해석</th></tr>
           <tr><td>정상</td><td>Private DNS가 사설 IP를 반환하고 flow log가 private endpoint 경로를 기록</td><td>인터넷을 거치지 않는 경로로 판단한다.</td></tr>
@@ -126,12 +145,14 @@
           <tr><td>Identity / Cost</td><td>IAM/Managed Identity, Secrets Manager/Key Vault, NAT/egress, monitor cost</td><td>보안과 비용도 운영 장애 신호다.</td></tr>
         </table>
 
+        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>AWS 경로</td><td>Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics</td><td>CloudFront 403과 ALB 5xx를 분리한다.</td></tr>
           <tr><td>Azure 경로</td><td>Azure DNS, Front Door health, Application Gateway probe, AKS/App Service, Azure SQL metrics</td><td>Front Door와 App Gateway의 책임 경계를 본다.</td></tr>
           <tr><td>비용/egress</td><td>NAT Gateway bytes, data transfer, log ingestion, managed service autoscale</td><td>비용 급증도 최근 변경과 같은 timeline에 놓는다.</td></tr>
         </table>
+        <p>같은 계층이라도 장애 패턴에 따라 판정 기준이 달라진다. 계층별로 자주 나오는 실패 신호를 따로 정리한다.</p>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>CloudFront / Front Door 403</td><td>WAF rule, origin policy, signed URL/cookie, geo rule</td><td>edge 차단과 origin 차단을 분리한다.</td></tr>
@@ -151,6 +172,7 @@
             <tr><th>Command / Query</th><th>목적</th></tr>
             <tr><td><pre><code>az network watcher test-connectivity --source-resource app-service-id --dest-address db.privatelink.database.windows.net --dest-port 1433</code></pre></td><td>DNS, NSG, Private Endpoint 경로가 실제로 연결 가능한지 확인한다.</td></tr>
           </table>
+          <p>위 명령을 실행했을 때 정상 연결과 비정상 연결의 출력이 어떻게 다른지 비교한다.</p>
           <table>
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>ConnectionStatus: Reachable
@@ -159,6 +181,7 @@ Hops: PrivateEndpoint</code></pre></td><td><pre><code>ConnectionStatus: Unreacha
 Hops: Internet
 Issue: DNS resolved public endpoint</code></pre></td><td>Private Endpoint는 있어도 DNS가 public endpoint를 반환하면 사설 경로가 아니다.</td></tr>
           </table>
+          <p>비정상 출력을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
             <tr><td>Private DNS zone link와 resolver rule을 수정한다.</td><td>Private Endpoint 생성 runbook에 DNS resolution 검증과 public access disabled 확인을 추가한다.</td><td>test-connectivity Reachable, nslookup 사설 IP 반환, Azure SQL public access disabled.</td></tr>
@@ -186,10 +209,12 @@ Issue: DNS resolved public endpoint</code></pre></td><td>Private Endpoint는 있
           <span class="co-label">Triage frame</span>
           <p>AWS·Azure 실전 시나리오 장애는 증상 → 영향 범위 → 최근 변경 → Edge / Ingress 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
+        <p>이 triage frame을 시간 구간별 행동으로 풀면 다음과 같다.</p>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
           <tr><td>Route 53/Azure DNS, CloudFront/Front Door, WAF, ALB/App Gateway 기준으로 영향 범위를 고정한다.</td><td>Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics 항목에서 증거를 모아 완화책을 실행한다.</td><td>서비스명 암기가 아니라 책임 경계로 정리한다.</td></tr>
         </table>
+        <p>장애가 종료된 뒤에는 다음 세 항목을 incident packet에 남겨 재발 방지에 쓴다.</p>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
           <tr><td>증상</td><td>edge 403 증가 또는 NAT 비용 4배 증가</td><td>WAF rule, origin policy, egress route, retry storm을 본다.</td></tr>

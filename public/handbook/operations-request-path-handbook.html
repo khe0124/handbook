@@ -10,6 +10,7 @@
 <nav aria-label="목차">
 <div class="nav-brand">OPERATIONS · 서비스 요청 경로</div>
   <div class="nav-title">서비스 요청 경로</div>
+  <a href="#flow-overview"><span class="code">FLOW</span>전체 흐름</a>
   <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
   <a href="#ch1"><span class="code">REQ-00</span>기준 경로</a>
   <a href="#ch2"><span class="code">REQ-01</span>DNS와 TLS</a>
@@ -34,6 +35,20 @@
   <p class="hero-sub">브라우저에서 애플리케이션과 데이터 저장소까지 요청이 지나가는 hop을 분해한다</p>
   <div class="hero-meta">FORMAT : 개념 → 증거 → 플레이북 → 장애 시나리오 → 면접 답변 · UPDATED 2026-06</div>
 </header>
+
+<section id="flow-overview">
+<div class="ch-head"><span class="ch-code">FLOW</span><h2>이 문서를 관통하는 흐름</h2></div>
+<p class="lede">이 문서는 브라우저에서 발생한 요청이 DNS, TLS, CDN/WAF, Load Balancer, App, DB를 차례로 지나 응답으로 돌아오기까지의 경로를 하나의 흐름으로 읽게 만들려고 쓰였다. 대표 경로는 DNS → CDN/WAF → Load Balancer → App → DB이고, 이 문서의 모든 절은 이 다섯 hop 중 어느 지점에서 요청이 멈췄는지, 그 증거를 어떤 로그와 명령으로 확인하는지, 확인 결과가 어떤 판단으로 이어지는지를 순서대로 좁혀간다. 아래 문단은 그 순서를 그대로 따라간다.</p>
+<p>맨 앞 INDEX 절은 본문이 아니라 이 문서를 어떻게 읽을지 정하는 계약서다. 이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북이며, 각 항목을 "무엇을 아는가"가 아니라 "장애 때 어떤 증거를 보고 어떤 가설을 버리는가" 기준으로 읽으라고 못박는다. 이어지는 본문은 핵심 개념, 주제별 운영 증거, 실무 플레이북, 용어사전, incident packet, 주제별 답변 구조라는 여섯 갈래로 나뉘고, 뒤에 오는 모든 절은 이 여섯 갈래 중 하나로 다시 분류된다.</p>
+<p>본문은 REQ-00 기준 경로에서 시작한다. 대표 경로 DNS → CDN/WAF → Load Balancer → App → DB를 먼저 세우고, 장애가 나면 사용자 증상, DNS 해석, TLS handshake, CDN cache, WAF 차단, Load Balancer target health, 애플리케이션 로그, DB connection pool을 같은 시간축 위에 올리라고 요구한다. 핵심은 요청이 멈춘 가장 앞 hop을 먼저 찾는 것이고, 그 뒤 계층의 로그 공백을 성급하게 원인으로 오해하지 않는 것이다.</p>
+<p>REQ-01 DNS와 TLS는 이 기준 경로의 가장 앞단을 파고든다. DNS가 잘못되면 애플리케이션 로그 자체가 비어 있을 수 있고, 인증서 만료·SNI 불일치·intermediate chain 누락은 네트워크 연결은 되는데 HTTPS만 실패하는 전형적인 패턴이다. dig, curl -v, openssl s_client 결과를 함께 남겨 권한 DNS와 public resolver, SAN/SNI/chain을 분리해야 일부 사용자만 실패하는 케이스를 설명할 수 있다. 이어지는 REQ-02 Load Balancer와 health check는 그 다음 hop을 다룬다. Load Balancer는 단순 분산 장치가 아니라 장애 격리 장치이며, health check path가 의존성을 너무 깊이 보거나 얕게 보면 정상 target이 빠지거나 죽은 앱이 살아있는 것처럼 보인다. 502는 upstream 연결 실패, 503은 capacity/health, 504는 timeout으로 먼저 나누고 target health와 listener rule을 함께 확인한다.</p>
+<p>REQ-03 앱과 DB 경계는 기준 경로의 마지막 구간이다. connection pool, timeout, transaction lock, migration, secret rotation이 얽히는 지점이라 프론트 증상만 보고 API 문제로 단정하지 말라고 강조하고, traceId로 request log, slow query, DB wait event를 이어 보라고 한다. pool pending과 lock wait가 늘고 app timeout이 뒤따르는 패턴과, pool pending이 낮고 slow query·lock wait가 없는 정상 패턴을 나란히 대조해, DB 병목과 upstream/app 로직 문제를 가르는 기준을 세운다.</p>
+<p>CHECK 실무 체크리스트는 이 네 개 REQ 절에서 나온 판단을 리뷰, 배포 승인, 운영 인수라는 세 시점에서 같은 증거로 다시 확인하게 만드는 검토표다. PLAYBOOK 실무 플레이북은 그 판단을 REQUEST PATH TRIAGE PLAYBOOK이라는 하나의 흐름으로 통합한다 — symptom → scope → recent change → evidence → mitigation → verification → runbook diff 순서다. DNS, TLS/Edge, LB/App/DB 세 표면별로 볼 증거와 판단 기준을 나열한 뒤, dig·curl -v·openssl s_client 같은 실제 확인 명령과 DNS fail·TLS fail·LB fail·App/DB fail 네 가지 심화 장애 패턴까지 이어 붙여, 명령어 암기가 아니라 가설을 버리는 순서를 훈련시킨다.</p>
+<p>PRACTICE 출력 판독 훈련은 그 흐름을 실제 명령 출력으로 손에 익힌다. PRACTICE LAB 01 · ALB target health 502 판독은 배포 직후 로그인 API 502와 흔들리는 target health를 놓고 describe-target-health 출력에서 healthy와 unhealthy(Target.ResponseCodeMismatch)를 구분한 뒤, target drain과 health check path 분리를 즉시 완화와 영구 수정으로 나눈다. PRACTICE LAB 02 · DNS NXDOMAIN vs cache 판독은 일부 지역 접속 실패를 dig +trace와 dig @8.8.8.8로 좁혀 NOERROR와 NXDOMAIN 출력 차이를 읽고, record 복구와 TTL 사전 조정을 구분한다.</p>
+<p>TERM 용어사전은 DNS, TLS, CDN/WAF request id, target health, connection pool 다섯 용어를 정의·운영 증거·자주 하는 오해·관련 항목으로 정리해, 장애 중에 용어 자체가 아니라 그 용어가 걸린 로그와 책임 경계를 바로 찾게 한다. CASE 장애/운영 시나리오는 특정 시간대 로그인 API 간헐적 504를 예시로 이 모든 절을 하나로 엮는다. DNS/TLS를 먼저 배제하고 CDN/WAF 차단 로그와 target health를 본 뒤 request latency와 DB connection pool 대기로 timeout 시작점을 좁히는 과정을 Triage frame으로 제시하고, 처음 10분·다음 30분·종료 조건이라는 시간 구간과 증상·완화·사후로 나뉜 incident packet으로 마무리한다.</p>
+<p>RISK 자주 틀리는 판단은 이 경로에서 반복되는 오판 네 가지 — 프론트 오류만 보고 API 코드부터 고치기, health check 통과를 애플리케이션 정상과 동일시하기, TLS 문제를 네트워크 장애로 오해하기, DB lock wait와 API timeout을 별개 사건으로 보기 — 를 짚어 앞선 REQ 절들의 책임 경계를 다시 확인시킨다. EVIDENCE 검증 기준·증거 패킷이 전체를 닫는다 — 기준일(2026-07-09)과 provider/region/runtime version 전제, DNS·TLS·LB·app·DB 증거를 traceId 또는 5-tuple로 잇는 명령 출력 예시, 그리고 앱 배포 rollback과 인프라 rollback 중 어느 쪽이 필요한지 증거로 결정하는 완료 기준까지 요구한다.</p>
+<p>그러니 이 문서는 위에서 아래로 한 번 읽고 덮는 자료가 아니라, 장애가 날 때마다 요청이 멈춘 hop이 어디인지, 그 hop에서 어떤 증거가 나와야 원인 후보에서 배제되는지, 임시 완화와 영구 수정을 어떻게 나눌지를 되짚는 순환 참조용 자료로 쓰여야 한다. 어느 절에서 시작하든 결국 같은 질문으로 수렴한다 — 요청은 어느 hop까지 도달했는가, 그 hop이 원인 후보에서 배제되려면 어떤 증거가 필요한가, 지금 완화할 것과 영구히 고칠 것은 어떻게 나뉘는가.</p>
+</section>
 
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
@@ -87,6 +102,7 @@
           <tr><td>앱과 DB 경계를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>APM trace waterfall, app access log, DB slow query log, pg_stat_activity 또는 provider DB performance insight</td><td>pool pending과 lock wait가 늘고 app timeout이 뒤따르면 DB 경계 병목 후보가 강하다.</td></tr>
           <tr><td>앱과 DB 경계 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>로그인 API 504와 동시에 DB connection pool 대기가 급증</td><td>pool 보호, slow query 차단, migration lock 해소를 임시 완화와 영구 수정으로 나눠 기록한다.</td></tr>
         </table>
+        <p>connection pool 지표가 정상일 때와 비정상일 때 어떻게 다르게 읽히는지 아래 예시로 비교한다.</p>
         <table>
           <tr><th>예시 신호</th><th>관찰값</th><th>해석</th></tr>
           <tr><td>정상</td><td>pool pending 낮음, slow query 없음, lock wait 없음</td><td>DB보다 upstream 또는 app 로직을 다시 본다.</td></tr>
@@ -126,12 +142,14 @@
           <tr><td>LB / App / DB</td><td>target health, 502/503/504, traceId, pool pending, slow query</td><td>timeout이 어느 hop에서 시작됐는지 시간축으로 연결한다.</td></tr>
         </table>
 
+        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>DNS 확인</td><td>dig +trace app.example.com, dig app.example.com @8.8.8.8</td><td>권한 서버 응답과 public resolver cache 차이를 구분한다.</td></tr>
           <tr><td>TLS 확인</td><td>curl -v https://app.example.com/health, openssl s_client -servername app.example.com -connect app.example.com:443</td><td>SNI, certificate chain, expiry, ALPN, handshake error를 본다.</td></tr>
           <tr><td>경로 확인</td><td>LB target health, WAF log, app access log, trace waterfall, DB pool metric</td><td>502는 upstream 연결, 504는 timeout, 503은 capacity/health 후보로 나눈다.</td></tr>
         </table>
+        <p>같은 계층이라도 장애 패턴에 따라 판정 기준이 달라진다. 계층별로 자주 나오는 실패 신호를 따로 정리한다.</p>
         <table>
           <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
           <tr><td>DNS fail</td><td>NXDOMAIN, wrong CNAME, resolver cache, split-horizon mismatch</td><td>app log가 비어 있으면 DNS/edge에서 요청이 멈췄을 가능성이 높다.</td></tr>
@@ -151,6 +169,7 @@
             <tr><th>Command / Query</th><th>목적</th></tr>
             <tr><td><pre><code>aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing:region:acct:targetgroup/app-login/abc</code></pre></td><td>ALB가 upstream target을 정상으로 보고 있는지 확인한다.</td></tr>
           </table>
+          <p>위 명령을 실행했을 때 정상 target과 비정상 target의 출력이 어떻게 다른지 비교한다.</p>
           <table>
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>TargetHealth.State: healthy
@@ -159,6 +178,7 @@ Target.ResponseCode: 200</code></pre></td><td><pre><code>TargetHealth.State: unh
 TargetHealth.Reason: Target.ResponseCodeMismatch
 Description: Health checks failed with these codes: [500]</code></pre></td><td>ALB 502가 앱 코드 전체 문제가 아니라 target health check path 또는 새 버전 readiness 문제일 수 있다.</td></tr>
           </table>
+          <p>비정상 출력을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
             <tr><td>신규 target drain, rollout pause, 이전 artifact rollback.</td><td>health check path를 실제 readiness와 분리하고 배포 smoke test에 target health gate를 추가한다.</td><td>unhealthy target 0, ALB 5xx 정상화, app access log와 traceId가 다시 연결됨.</td></tr>
@@ -173,12 +193,14 @@ Description: Health checks failed with these codes: [500]</code></pre></td><td>A
 
 dig app.example.com @8.8.8.8</code></pre></td><td>권한 DNS와 public resolver cache 차이를 분리한다.</td></tr>
           </table>
+          <p>같은 도메인을 조회해도 권한 DNS가 정상 응답할 때와 레코드가 사라졌을 때 출력이 다르다.</p>
           <table>
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>app.example.com. 60 IN A 203.0.113.10
 status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
 ;; no servers could be reached from delegated zone</code></pre></td><td>앱 장애가 아니라 record 삭제, zone delegation, resolver cache 문제일 수 있다.</td></tr>
           </table>
+          <p>NXDOMAIN을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
             <tr><td>이전 record 복구, TTL 전파 모니터링, CDN origin fallback 확인.</td><td>DNS change ticket에 TTL 사전 조정, rollback record, 권한 DNS 검증을 필수화한다.</td><td>authoritative resolver와 public resolver 모두 NOERROR, CDN/WAF request id 재등장.</td></tr>
@@ -206,10 +228,12 @@ status: NOERROR</code></pre></td><td><pre><code>status: NXDOMAIN
           <span class="co-label">Triage frame</span>
           <p>서비스 요청 경로 장애는 증상 → 영향 범위 → 최근 변경 → DNS 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
+        <p>이 triage frame을 시간 구간별 행동으로 풀면 다음과 같다.</p>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
           <tr><td>authoritative answer, resolver 차이, TTL, CNAME/ALIAS chain 기준으로 영향 범위를 고정한다.</td><td>dig +trace app.example.com, dig app.example.com @8.8.8.8 항목에서 증거를 모아 완화책을 실행한다.</td><td>다음 장애에서 같은 탐색을 반복하지 않게 한다.</td></tr>
         </table>
+        <p>장애가 종료된 뒤에는 다음 세 항목을 incident packet에 남겨 재발 방지에 쓴다.</p>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
           <tr><td>증상</td><td>특정 지역 로그인 504, app log 일부 누락</td><td>DNS/edge/LB/app 중 어디까지 요청이 도달했는지 먼저 확인한다.</td></tr>

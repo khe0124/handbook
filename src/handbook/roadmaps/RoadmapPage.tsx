@@ -166,6 +166,11 @@ export function RoadmapPage({ serial, title, subtitle, meta, diagram: _diagram, 
           <span className="ch-code">PROC</span>
           <h2>프로세스별 결과물</h2>
         </div>
+        <p className="lede">
+          위 흐름을 실행 단계로 풀면 각 단계가 무엇을 산출하고, 무엇을 검토하며, 다음 단계로 무엇을
+          넘기는지로 나뉜다. 단계 이름을 아는 것보다 다음 단계가 이 결과물 없이는 시작될 수 없다는
+          점이 중요하다.
+        </p>
         <RoadmapProcessTable process={process} />
       </section>
 

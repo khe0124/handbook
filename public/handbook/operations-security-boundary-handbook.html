@@ -10,6 +10,7 @@
 <nav aria-label="목차">
 <div class="nav-brand">OPERATIONS · 보안 경계</div>
   <div class="nav-title">보안 경계</div>
+  <a href="#flow-overview"><span class="code">FLOW</span>전체 흐름</a>
   <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
   <a href="#ch1"><span class="code">SEC-00</span>공개면 줄이기</a>
   <a href="#ch2"><span class="code">SEC-01</span>WAF와 방화벽</a>
@@ -34,6 +35,19 @@
   <p class="hero-sub">외부 공개면, 내부 신뢰 경계, 권한, 비밀 정보를 계층별로 통제한다</p>
   <div class="hero-meta">FORMAT : 개념 → 증거 → 플레이북 → 장애 시나리오 → 면접 답변 · UPDATED 2026-06</div>
 </header>
+
+<section id="flow-overview">
+<div class="ch-head"><span class="ch-code">FLOW</span><h2>이 문서를 관통하는 흐름</h2></div>
+<p class="lede">이 문서는 보안 경계를 규칙 목록이 아니라, 요청이 인터넷에서 들어와 App과 데이터에 닿기까지 거치는 세 겹의 경계 — 공개면(edge), 신뢰 경계(WAF·방화벽), 권한 경계(IAM·secret) — 로 겹쳐 읽게 만들려고 쓰였다. 세 경계는 각자 다른 계층에서 다른 증거를 요구하고, 그 증거를 뒤섞으면 장애 때 원인 후보를 제대로 배제하지 못한다. 아래 절들은 이 세 경계를 개념에서 증거로, 증거에서 실행 가능한 플레이북과 시나리오로 좁혀가는 순서로 이어진다.</p>
+<p>맨 앞 INDEX 절은 본문이 아니라 이 문서를 어떻게 읽을지 정하는 계약이다. 이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북이며, 각 항목을 "무엇을 아는가"가 아니라 "장애 때 어떤 증거를 보고 어떤 가설을 버리는가" 기준으로 읽으라고 명시한다. 핵심 개념, 주제별 운영 증거, 실무 플레이북, 용어사전, incident packet, 주제별 답변 구조라는 여섯 축이 이후 절 구성을 그대로 예고한다.</p>
+<p>본문은 SEC-00 공개면 줄이기에서 시작한다. 공개 표면을 DNS record, CDN, WAF, Load Balancer 정도로 제한하고 App·DB·cache·queue는 private subnet 뒤에 두며 관리 접근은 VPN·bastion·SSO·short-lived credential로만 열라는 것이 첫 원칙이다. SEC-01 WAF와 방화벽은 그 edge 안쪽에서 계층별 책임을 나눈다 — WAF는 L7의 악성 패턴을, security group은 stateful L4 허용 목록을, NACL은 stateless subnet 경계를 맡는다. 차단 로그가 남지 않는 규칙은 나중에 원인 분석을 막으므로, 정상 요청이 WAF rule에 차단됐을 땐 rollback과 exception expiry를 구분해 기록한다. SEC-02 IAM과 secret은 경계를 물리적 네트워크에서 권한과 비밀로 옮긴다. 사람·서비스·pipeline identity를 분리하고 secret이 repo·image·log에 남지 않게 하며, 장기 key와 wildcard 권한은 예외 승인과 만료 조건이 있어야 통과다. SEC-03 검증 질문은 이 세 층을 위협 모델링 언어로 다시 묶어 public ingress·인증 우회·권한 상승·secret 노출·egress 악용·로그 공백이라는 여섯 축으로 "공격 경로는 어디이고 침해 시 무엇으로 추적하는가"를 답하게 만든다.</p>
+<p>CHECK 실무 체크리스트는 이 네 절의 판단을 변경 전에 미리 드러내는 검토표로 압축한다. public ingress를 DNS·CDN/WAF·Load Balancer로 제한했는지, IAM이 사람·workload·pipeline 권한을 분리했는지, secret이 노출 경로에 남지 않는지, 위협 모델링으로 인증 우회·권한 상승·egress 악용을 점검했는지를 설계·변경·복구 세 단계의 필수 산출물과 차단 기준으로 다시 확인한다. 설계 단계는 목적·영향 범위·비목표·owner가, 변경 단계는 diff·승인 기록·검증 명령이, 복구 단계는 rollback 또는 forward fix와 담당자·예상 시간이 빠지면 그대로 통과시키지 않는다.</p>
+<p>PLAYBOOK 실무 플레이북은 SECURITY BOUNDARY OPERATIONS PLAYBOOK이라는 하나의 serial-card로 이 판단을 실행 순서로 굳힌다 — symptom → scope → recent change → evidence → mitigation → verification → runbook diff. Public ingress, Identity/Secret, Auditability 세 운영 표면마다 볼 증거와 판단 기준을 표로 못박고, 공개면 점검(DNS record·LB listener·WAF rule·security group ingress 목록화), 권한 점검(IAM policy diff·last-used·access review·break-glass ticket), 비밀 점검(secret manager version·rotation date·deploy consumer·log redaction) 각각에 실제로 무엇을 확인하고 어떻게 해석할지까지 이어 붙인다.</p>
+<p>PRACTICE 출력 판독 훈련은 그 플레이북을 손에 익히는 실습이다. PRACTICE LAB 01 · IAM 권한 확대 diff 판독은 배포 pipeline role의 권한이 s3:GetObject 하나에서 s3:*·kms:Decrypt *로 확대되고 exceptionExpiry가 비어 있는 policy diff를 그대로 보여준 뒤, 정상 출력과 비정상 출력을 나란히 대조하고, 즉시 완화(wildcard 권한을 되돌리고 필요한 read 권한만 한정)와 영구 수정(diff review gate, last-used review, exception expiry alert)을 분리해 훈련시킨다.</p>
+<p>TERM 용어사전은 public ingress, WAF, security group, IAM principal, secret rotation 다섯 용어를 정의·운영 증거·자주 하는 오해·관련 항목으로 정리해 "WAF가 있으면 내부 앱 노출도 괜찮다" 같은 흔한 착각을 미리 차단한다. CASE 장애/운영 시나리오는 외부 공개 API 신규 오픈이라는 단일 사례로 앞의 개념을 다시 묶는다. WAF rule과 rate limit을 먼저 적용하고 App은 private subnet에 두며 배포 권한과 운영 조회 권한을 분리한 뒤, Triage frame — 증상 → 영향 범위 → 최근 변경 → Public ingress 증거 → 완화책 → 복구 검증 → 재발 방지 — 을 처음 10분·다음 30분·종료 조건으로 나누고, 증상·완화·사후 세 칸으로 된 incident packet에 기록한다.</p>
+<p>RISK 자주 틀리는 판단은 이 흐름에서 가장 자주 무너지는 지점 네 개를 짚는다 — security group을 0.0.0.0/0으로 열고 WAF만 믿는 것, admin 권한을 장기 access key로 운영하는 것, secret rotation을 배포 절차와 연결하지 않는 것, 차단 로그가 없어 false positive와 공격을 구분하지 못하는 것. EVIDENCE 검증 기준·증거 패킷은 이 리스크들을 마지막으로 통제 가능한 형태로 닫는다. 감사 기준일과 provider·region·계정 전제, 노출·권한·secret·audit 명령 출력 예시, least privilege diff와 rollback rule, containment owner까지 갖춰야 허용 규칙 하나를 "증명됐다"고 부를 수 있다.</p>
+<p>그러니 이 문서는 위에서 아래로 한 번 읽고 덮는 자료가 아니라, 장애가 나거나 새 서비스를 열 때마다 다시 펼쳐 보는 참조 자료로 쓰여야 한다. 공개면을 줄이는 설계 단계에는 SEC-00과 CHECK를, 장애가 났을 때는 PLAYBOOK과 CASE를, 명령 출력이 애매할 때는 PRACTICE와 TERM을, 통제를 증명해야 할 때는 EVIDENCE를 다시 펼치는 순환 구조다. 결국 이 문서가 반복해서 묻는 질문은 세 가지로 수렴한다 — 이 서비스의 public ingress는 어디인가, 이 권한과 secret은 누가 언제까지 왜 가지고 있는가, 침해가 의심될 때 어떤 로그로 행위를 추적할 수 있는가.</p>
+</section>
 
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
@@ -122,6 +136,7 @@
           <tr><td>Auditability</td><td>WAF log, auth failure, admin action, egress log, exception expiry</td><td>차단과 허용의 근거가 나중에 조사 가능해야 한다.</td></tr>
         </table>
 
+        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>공개면 점검</td><td>DNS record, LB listener, WAF rule, security group ingress 목록화</td><td>인터넷에서 접근 가능한 표면을 실제로 열거한다.</td></tr>
@@ -146,6 +161,7 @@
 lastUsed=never
 exceptionExpiry=missing</code></pre></td><td>권한 확대가 최소 권한 원칙과 예외 만료 기준을 만족하는지 확인한다.</td></tr>
           </table>
+          <p>위 policy diff를 실행했을 때 정상 권한 구성과 비정상 권한 확대 출력이 어떻게 다른지 비교한다.</p>
           <table>
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>Action: s3:GetObject
@@ -157,6 +173,7 @@ Action: kms:Decrypt
 Resource: *
 exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를 넘어섰고 만료 없는 예외라 침해 반경이 커진다.</td></tr>
           </table>
+          <p>비정상 출력을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
             <tr><td>wildcard 권한을 즉시 되돌리고 필요한 read 권한만 한정한다.</td><td>IAM diff review gate, last-used review, exception expiry alert를 추가한다.</td><td>wildcard action/resource 0, break-glass ticket 만료일 존재, audit log에서 사용 권한 확인.</td></tr>
@@ -184,10 +201,12 @@ exceptionExpiry=missing</code></pre></td><td>pipeline 권한이 배포 범위를
           <span class="co-label">Triage frame</span>
           <p>보안 경계 장애는 증상 → 영향 범위 → 최근 변경 → Public ingress 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
+        <p>이 triage frame을 시간 구간별 행동으로 풀면 다음과 같다.</p>
         <table>
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
           <tr><td>DNS, CDN/WAF, LB listener, allowed path, rate limit 기준으로 영향 범위를 고정한다.</td><td>DNS record, LB listener, WAF rule, security group ingress 목록화 항목에서 증거를 모아 완화책을 실행한다.</td><td>보안 조치가 운영 절차로 남아야 한다.</td></tr>
         </table>
+        <p>장애가 종료된 뒤에는 다음 세 항목을 incident packet에 남겨 재발 방지에 쓴다.</p>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
           <tr><td>증상</td><td>비정상 admin export 또는 외부 스캔 급증</td><td>actor, source IP, action, resource, WAF/auth log를 묶는다.</td></tr>

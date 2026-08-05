@@ -10,6 +10,7 @@
 <nav aria-label="목차">
 <div class="nav-brand">OPERATIONS · DNS</div>
   <div class="nav-title">DNS·TLS·도메인 운영</div>
+  <a href="#flow-overview"><span class="code">FLOW</span>전체 흐름</a>
   <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
   <a href="#ch1"><span class="code">DNS-00</span>DNS record와 TTL</a>
   <a href="#ch2"><span class="code">DNS-01</span>split-horizon DNS</a>
@@ -34,6 +35,18 @@
   <p class="hero-sub">이름 해석, 인증서, 전파, 만료를 변경 관리 대상으로 다룬다</p>
   <div class="hero-meta">FORMAT : 개념 → 증거 → 플레이북 → 장애 시나리오 → 면접 답변 · UPDATED 2026-06</div>
 </header>
+
+<section id="flow-overview">
+<div class="ch-head"><span class="ch-code">FLOW</span><h2>이 문서를 관통하는 흐름</h2></div>
+<p class="lede">이 문서는 DNS·TLS·도메인 운영을 개별 명령어 모음이 아니라 하나의 변경 관리 흐름으로 읽게 하려고 쓰였다. 이름이 어떤 IP로 해석되는지 결정하는 DNS 계층, 그 연결이 신뢰할 수 있는지 증명하는 TLS 계층, 그리고 그 둘을 실제로 바꾸는 도메인 변경 절차 — 이 세 겹이 한 장에서 만나야 운영을 안다고 말할 수 있다. 아래 절들은 개념을 증거로, 증거를 실행 가능한 플레이북과 incident packet으로 좁혀가는 순서로 이어진다.</p>
+<p>맨 앞 INDEX 절(문서 구조)은 본문이 아니라 이 문서를 어떻게 읽을지 정하는 계약서다. 핵심 개념, 주제별 운영 증거, 실무 플레이북, 용어사전, incident packet, 주제별 답변 구조라는 여섯 항목을 미리 걸어두고, 이후 모든 절이 "무엇을 아는가"가 아니라 "장애 때 어떤 증거를 보고 어떤 가설을 버리는가"를 기준으로 읽히도록 방향을 잡는다.</p>
+<p>본문은 DNS-00 DNS record와 TTL에서 시작한다. A, AAAA, CNAME, ALIAS, TXT, CAA record의 목적을 구분하고, TTL을 장애 대응 속도와 resolver 부하 사이의 트레이드오프로 다루며 작업 전 낮추고 안정화 후 다시 올리는 원칙을 세운다. DNS-01 split-horizon DNS는 여기에 한 겹을 더한다 — 같은 이름이 내부와 외부에서 다른 IP로 해석될 수 있다는 전제를 깔고, 장애 분석 전에 사용자가 어느 resolver를 쓰는지부터 확인해야 한다고 못박는다. DNS-02 TLS 인증서는 발급 성공과 handshake 성공을 분리한다. SAN, wildcard 범위, SNI, intermediate chain, OCSP, 자동 갱신, CAA 정책까지 함께 보지 않으면 인증서는 있지만 작동하지 않는 상태로 남는다. DNS-03 도메인 변경 절차는 앞의 세 절을 하나의 변경으로 합친다. 사전 TTL 조정, record diff, 인증서 준비, CDN/WAF 연결, smoke test, 전파 모니터링, rollback record까지 — 새 경로와 이전 경로가 전파 기간 동안 모두 안전해야 한다는 기준으로 닫는다.</p>
+<p>CHECK 실무 체크리스트는 이 네 개 절에서 나온 위험을 리뷰·배포 승인·운영 인수 세 단계로 다시 접어, 설계에서 영향 범위가 사용자·시스템·비용 기준으로 설명되는지, 변경에서 diff와 검증 명령이 남는지, 복구에서 rollback 또는 forward fix와 담당자·예상 시간이 사전에 정해졌는지를 차단 기준으로 건다. PLAYBOOK 실무 플레이북은 DNS TLS CHANGE PLAYBOOK이라는 하나의 흐름 — symptom → scope → recent change → evidence → mitigation → verification → runbook diff — 으로 DNS record, TLS chain, rollback 세 표면을 연결하고, 권한 DNS(dig +trace, dig NS, dig CAA)와 인증서(openssl s_client -servername -showcerts), 사용자 경로(curl -v --resolve)를 실제로 어떤 순서로 확인하는지까지 명령 단위로 내려간다.</p>
+<p>PRACTICE 출력 판독 훈련은 그 흐름을 손에 익힌다. PRACTICE LAB 01 · TLS chain/SNI 판독은 모바일 브라우저 일부에서만 인증서 오류가 나는 상황을 놓고, openssl s_client 출력에서 정상(Verify return code: 0)과 비정상(unable to verify the first certificate, SAN이 old.example.com으로 남은 상태)을 나란히 대조한 뒤, CDN/LB 인증서 binding rollback 같은 즉시 완화와 certificate inventory·renewal alert·SNI smoke test를 배포 gate에 넣는 영구 수정을 구분해서 실행하게 한다.</p>
+<p>TERM 용어사전은 TTL, CNAME/ALIAS, CAA, split-horizon DNS, SNI 다섯 개 용어를 정의·운영 증거·자주 하는 오해·관련 항목으로 정리해, 장애 중에는 용어 자체보다 그 용어가 어떤 로그·설정·책임 경계와 연결되는지를 확인하게 만든다. CASE 장애/운영 시나리오는 이 용어들을 실제 사건으로 묶는다 — 도메인을 새 CDN으로 이전하며 24~48시간 전 TTL을 낮추고 인증서를 미리 붙인 뒤 일부 트래픽으로 smoke test를 하는 시나리오를 Triage frame(증상 → 영향 범위 → 최근 변경 → DNS record 증거 → 완화책 → 복구 검증 → 재발 방지)에 태우고, 처음 10분/다음 30분/종료 조건과 incident packet(증상·완화·사후)까지 같은 표에 담아 담당자가 바뀌어도 같은 결론에 도달하게 한다.</p>
+<p>RISK 자주 틀리는 판단은 TTL을 작업 직전에 낮추는 습관, 인증서가 발급됐다는 이유로 SNI·chain 검증을 생략하는 습관, 내부/외부 resolver 결과 차이를 놓치는 습관, CNAME flattening이나 ALIAS 동작이 provider마다 같다고 가정하는 습관 네 가지로 좁혀 설계와 runbook을 다시 점검하게 한다. EVIDENCE 검증 기준·증거 패킷이 전체를 닫는다 — 전파 지연과 resolver cache, client 호환성 때문에 기준일과 관측 위치를 분리해서 기록하고, provider·region·TLS policy 전제를 명시하며, dig·openssl·curl 출력과 rollback record를 같은 표에 남기지 않으면 브라우저 성공만으로 배포 완료를 선언한 것과 다르지 않다고 못박는다.</p>
+<p>그러니 이 문서는 위에서 아래로 한 번 읽고 끝내는 자료가 아니다. 장애가 나면 CASE와 PLAYBOOK으로 먼저 가고, 명령 출력이 애매하면 PRACTICE와 TERM으로 돌아가고, 변경을 설계할 때는 CHECK와 DNS-00~03을 다시 펼치는 순환 참조용 자료다. 결국 모든 절은 같은 질문 두 개로 수렴한다 — 이 이름은 지금 어떤 IP로, 어느 resolver 기준으로 해석되는가, 그리고 이 연결은 handshake까지 실제로 신뢰할 수 있는가.</p>
+</section>
 
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
@@ -122,6 +135,7 @@
           <tr><td>Rollback</td><td>previous record, previous certificate, CDN/WAF binding, smoke result</td><td>도메인 변경도 되돌릴 수 있는 변경으로 다룬다.</td></tr>
         </table>
 
+        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
         <table>
           <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
           <tr><td>권한 DNS</td><td>dig +trace app.example.com, dig NS example.com, dig CAA example.com</td><td>권한 서버와 resolver cache를 분리한다.</td></tr>
@@ -141,6 +155,7 @@
             <tr><th>Command / Query</th><th>목적</th></tr>
             <tr><td><pre><code>openssl s_client -servername app.example.com -connect app.example.com:443 -showcerts</code></pre></td><td>SNI, SAN, 만료일, intermediate chain 누락을 확인한다.</td></tr>
           </table>
+          <p>위 명령을 실행했을 때 정상 target과 비정상 target의 출력이 어떻게 다른지 비교한다.</p>
           <table>
             <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
             <tr><td><pre><code>Verify return code: 0 (ok)
@@ -148,6 +163,7 @@ subjectAltName = DNS:app.example.com
 notAfter=Sep 20 12:00:00 2026 GMT</code></pre></td><td><pre><code>Verify return code: 21 (unable to verify the first certificate)
 subjectAltName = DNS:old.example.com</code></pre></td><td>서버 연결은 되지만 인증서 체인 또는 SNI binding이 잘못된 상태다.</td></tr>
           </table>
+          <p>비정상 출력을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
           <table>
             <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
             <tr><td>CDN/LB 인증서 binding rollback 또는 올바른 certificate chain 재배포.</td><td>certificate inventory, renewal alert, SNI smoke test를 배포 gate에 추가한다.</td><td>openssl verify ok, curl -v handshake 성공, 브라우저 오류 재현 중단.</td></tr>
@@ -179,6 +195,7 @@ subjectAltName = DNS:old.example.com</code></pre></td><td>서버 연결은 되�
           <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
           <tr><td>record type, authoritative answer, TTL, resolver cache, CAA 기준으로 영향 범위를 고정한다.</td><td>dig +trace app.example.com, dig NS example.com, dig CAA example.com 항목에서 증거를 모아 완화책을 실행한다.</td><td>갱신 실패가 장애가 되기 전에 알림이 와야 한다.</td></tr>
         </table>
+        <p>초기 대응 시간표와 별도로, 사후 리뷰에서 남길 incident packet 항목을 증상·완화·재발 방지 기준으로 정리한다.</p>
         <table>
           <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
           <tr><td>증상</td><td>일부 고객만 인증서 오류 또는 구버전 IP 접속</td><td>resolver, TTL, chain, CDN binding을 먼저 본다.</td></tr>
