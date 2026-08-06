@@ -37,20 +37,11 @@
 </header>
 
 <section id="flow-overview">
-<div class="ch-head"><span class="ch-code">FLOW</span><h2>이 시나리오집을 관통하는 흐름</h2></div>
-<p class="lede">이 문서는 AWS와 Azure 서비스명을 나란히 외우게 하려고 쓰이지 않았다. CloudFront와 Front Door, ALB와 Application Gateway, RDS와 Azure SQL을 1:1로 맞춰 외우는 순간부터 장애 판단은 틀리기 시작한다. 이 시나리오집이 훈련시키는 것은 edge, regional ingress, runtime, data, identity, observability, cost라는 책임 경계로 두 클라우드를 동시에 읽는 눈이다. 앞의 네 장은 그 경계를 구성 요소별로 세우고, 뒤의 여섯 절은 그 경계가 실제 장애·비용 사례에서 어떻게 무너지고 어떤 증거로 되돌아오는지 보여준다.</p>
-<p>맨 앞 INDEX 절은 이 문서를 어떻게 읽을지 먼저 선언한다. 핵심 개념, 주제별 운영 증거, 실무 플레이북, 용어사전, incident packet, 주제별 답변 구조라는 여섯 축을 나열해, 이 문서가 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 쓰였다는 것을 못 박는다.</p>
-<p>본문은 CLD-00 웹 서비스 기본 구성에서 시작한다. Route 53/Azure DNS, CloudFront/Azure Front Door, ALB/Application Gateway, ECS·EKS·AKS·App Service, RDS/Azure SQL을 edge, regional ingress, runtime, data 네 계층으로 나눠 그리고, edge 403과 origin 5xx를 같은 오류로 묶지 않는 것부터 훈련한다. 이 계층 구분이 이후 모든 장의 판단 기준이 된다.</p>
-<p>CLD-01 사설 네트워크와 데이터 경계는 그 구분을 네트워크 안쪽으로 옮긴다. AWS의 VPC·subnet·NAT Gateway·Security Group·PrivateLink와 Azure의 VNet·NSG·Private Endpoint·Private DNS Zone을 나열한 뒤, Private Endpoint를 만들어도 DNS가 public endpoint를 반환하면 사설 경로가 아니라는 정상/비정상 출력 비교로 마무리한다. 만들었다는 것과 증명했다는 것은 다르다.</p>
-<p>CLD-02 Secret과 배포는 경계를 identity와 credential 쪽으로 옮긴다. IAM role/Managed Identity, Secrets Manager/Key Vault, ECR/ACR, CodePipeline·Azure DevOps·GitHub Actions를 다루며, secret이 build artifact나 이미지, 프런트엔드 번들, 로그에 남는 순간 이미 그 경계가 깨진 것이라고 규정한다.</p>
-<p>CLD-03 장애와 비용 사례는 앞의 세 장을 하나의 timeline으로 합친다. CloudFront/Front Door 캐시 오류, NAT Gateway 비용 폭증, RDS/Azure SQL connection pool 고갈, ALB/App Gateway health probe 실패, AKS/EKS rollout 실패를 나열하며, 비용 급증도 retry storm이나 잘못된 egress route 같은 운영 장애 신호로 다뤄야 한다고 못 박는다.</p>
-<p>CHECK 실무 체크리스트는 이 네 장에서 나온 판단을 설계·변경·복구 세 단계의 필수 산출물과 차단 기준으로 압축한다. 서비스 매핑을 외우는 대신 edge, network, runtime, data, identity, observability 책임으로 다시 정렬하라는 요구가 여기서 반복된다.</p>
-<p>PLAYBOOK 실무 플레이북은 그 체크리스트를 실행 순서로 바꾼다. AWS AZURE OPERATIONS PLAYBOOK이라는 serial-card는 symptom → scope → recent change → evidence → mitigation → verification → runbook diff 순서를 못 박고, Edge/Ingress, Runtime/Data, Identity/Cost 세 운영 표면으로 나눠 AWS·Azure 경로의 확인 명령을 배치한다. CloudFront/Front Door 403, ALB/App Gateway 502, RDS/Azure SQL pressure, NAT/Egress cost spike 네 심화 패턴은 계층은 같아도 판정 기준이 다르다는 걸 다시 보여준다.</p>
-<p>PRACTICE 출력 판독 훈련은 그 판정 기준을 실제 출력값으로 손에 익힌다. PRACTICE LAB 01 · Azure private connectivity 판독은 App Service가 Azure SQL Private Endpoint에 간헐적으로 연결하지 못하는 상황에서 test-connectivity 명령의 정상/비정상 출력을 비교하고, 즉시 완화와 영구 수정을 나눠 실행하는 순서까지 요구한다.</p>
-<p>TERM 용어사전은 여기까지 반복된 edge layer, regional L7 ingress, managed identity, PrivateLink/Private Endpoint, NAT Gateway 다섯 개념을 정의·운영 증거·오해·관련 항목으로 재정리해, 용어 자체가 아니라 그 용어가 어떤 로그와 설정에 연결되는지를 기억하게 한다.</p>
-<p>CASE 장애/운영 시나리오는 이 모든 걸 하나의 배포안으로 합친다. B2B SaaS 관리자 서비스를 AWS안(Route 53 → CloudFront/WAF → ALB → ECS Fargate → RDS Multi-AZ·ElastiCache)과 Azure안(Azure DNS → Front Door/WAF → Application Gateway → AKS·App Service → Azure SQL zone redundant·Cache for Redis)으로 나란히 설계하고, Triage frame으로 증상부터 재발 방지까지의 순서를 고정한 뒤 incident packet에 증상·완화·사후 세 항목을 남기게 한다.</p>
-<p>RISK 자주 틀리는 판단은 이 흐름에서 실무자가 실제로 놓치는 지점을 짚는다. 서비스명 단순 번역, WAF·cache policy 변경 이력 누락, NAT·egress 비용 방치, 백업은 켜져 있어도 restore drill이 없는 상태가 반복되는 실패 패턴이다. EVIDENCE 검증 기준·증거 패킷이 전체를 닫는다. region과 quota, managed service 제약은 시점에 따라 바뀌므로, 기준일과 확인 출처가 없는 서비스 매핑이나 비용 판단은 이 문서 기준으로는 아직 확정된 게 아니다.</p>
-<p>그러니 이 문서는 위에서 아래로 한 번 읽고 덮는 자료가 아니다. 실제 장애나 설계 리뷰에서는 CLD-00~CLD-03 표에서 반복되는 세 질문 — 서비스명이 아니라 책임 경계로 설명할 수 있는가, 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가, 임시 완화와 영구 수정은 어떻게 나누는가 — 로 되돌아와 PLAYBOOK과 CASE, EVIDENCE를 다시 펼치게 되어 있다. 문서 순서는 처음 읽을 때의 안내일 뿐, 실무에서는 이 세 질문이 매번 입구가 된다.</p>
+<div class="ch-head"><span class="ch-code">FLOW</span><h2>서비스명이 아니라 책임 경계로</h2></div>
+<p class="lede">CloudFront와 Front Door, ALB와 Application Gateway, RDS와 Azure SQL을 1:1로 외우는 순간부터 장애 판단은 틀리기 시작한다. 이름이 비슷하다고 장애 특성까지 같지는 않다. 필요한 건 서비스명이 아니라 edge, network, runtime, data, identity, cost라는 책임 경계로 두 클라우드를 동시에 읽는 눈이다.</p>
+<p>edge 계층에서는 403(edge 차단)과 5xx(origin 장애)를 같은 오류로 묶지 않는 게 출발점이다. 그 안쪽 네트워크 경계로 들어가면 AWS의 VPC·PrivateLink와 Azure의 VNet·Private Endpoint가 같은 역할을 하는데, 가장 흔한 함정은 endpoint를 만든 것과 실제로 사설 경로가 된 것을 혼동하는 것이다 — DNS가 여전히 public endpoint를 반환하면 endpoint는 있으나 마나다. identity 쪽 경계도 마찬가지 원리다. IAM role이든 Managed Identity든, secret이 build artifact나 이미지, 프런트엔드 번들, 로그에 남는 순간 그 경계는 이미 깨진 것이다.</p>
+<p>이 모든 경계가 실제로 무너지는 지점은 장애와 비용이 겹치는 순간에 드러난다. CDN 캐시 설정 오류는 stale content를 만들고, NAT Gateway 비용 폭증은 종종 private subnet의 egress 설계 문제라는 신호다 — 비용 급증도 retry storm 같은 운영 장애로 다뤄야지 FinOps 문제로만 넘기면 안 된다. AWS AZURE OPERATIONS PLAYBOOK은 이 판단을 symptom → scope → evidence 순서로 굳히고, Azure private connectivity 판독 실습은 App Service가 Azure SQL Private Endpoint에 간헐적으로 연결하지 못하는 상황에서 test-connectivity 출력이 Reachable과 Unreachable(DNS resolved public endpoint)로 갈리는 걸 직접 비교시킨다.</p>
+<p>여기서 자주 틀리는 판단은 서비스명을 단순 번역해서 같은 장애 특성을 가정하는 것, WAF·cache policy 변경 이력을 남기지 않는 것, 백업은 켜져 있지만 restore drill은 해본 적 없는 것이다. region, quota, managed service 제약은 시점마다 바뀌므로, 기준일과 확인 출처 없는 서비스 매핑이나 비용 판단은 여전히 초안일 뿐이다. 결국 매번 돌아가는 질문은 하나다 — 이 판단을 서비스명이 아니라 책임 경계로 설명할 수 있는가.</p>
 </section>
 
 <section id="chindex">

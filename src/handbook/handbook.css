@@ -931,6 +931,24 @@
   padding-bottom: 24px;
 }
 
+.handbook-main .roadmap-map-figure {
+  margin: 0 0 16px;
+}
+
+.handbook-main .roadmap-map-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+}
+
+.handbook-main .roadmap-map-figure figcaption {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
 .handbook-main .roadmap-diagram-frame {
   border: 1px solid var(--line);
   background: var(--panel);

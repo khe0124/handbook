@@ -156,6 +156,12 @@ export default function InfraRoadmapPage() {
       subtitle="서비스 목표, 네트워크, DNS·TLS, VPC, 런타임 플랫폼, CI/CD, IaC, 관측성, Incident, DR, 비용·용량을 하나의 운영 시스템으로 연결한다."
       meta="PROCESS : SLO -> NETWORK -> EDGE -> VPC/SECURITY -> RUNTIME -> CI/CD/IAC -> OBSERVABILITY -> INCIDENT/DR/COST"
       diagram={diagram}
+      diagramImage={{
+        src: "/images/infra-roadmap-map.png",
+        alt: "인프라 문서 8개가 서비스 요청 경로를 중심으로 어떻게 연결되는지 보여주는 지도. 인프라·운영 로드맵이 전체를 감싸고, DNS·TLS·VPC·Subnet·Routing·NAT·보안 경계가 서비스 요청 경로로 통합되며, VPN·Private Connectivity를 거쳐 AWS·Azure 실전 시나리오로 이어진다.",
+        caption:
+          "인프라·운영 로드맵이 전체 학습 순서와 판단 프레임을 감싸고, DNS·TLS·VPC 라우팅·보안 경계 세 문서가 서비스 요청 경로로 통합된다. 거기서 VPN·Private Connectivity로 네트워크 경계를 확장하고, AWS·Azure 실전 시나리오에서 실제 설계로 종합한다.",
+      }}
       tracks={tracks}
       process={process}
       gates={gates}

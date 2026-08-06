@@ -21,12 +21,19 @@ export type RoadmapProcessStep = {
   handoff: string;
 };
 
+type RoadmapDiagramImage = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
 type RoadmapPageProps = {
   serial: string;
   title: string;
   subtitle: string;
   meta: string;
   diagram: string;
+  diagramImage?: RoadmapDiagramImage;
   tracks: RoadmapTrack[];
   process: RoadmapProcessStep[];
   gates: Array<{ title: string; checks: string[] }>;
@@ -125,7 +132,17 @@ function RoadmapProcessTable({ process }: { process: RoadmapProcessStep[] }) {
   );
 }
 
-export function RoadmapPage({ serial, title, subtitle, meta, diagram: _diagram, tracks, process, gates }: RoadmapPageProps) {
+export function RoadmapPage({
+  serial,
+  title,
+  subtitle,
+  meta,
+  diagram: _diagram,
+  diagramImage,
+  tracks,
+  process,
+  gates,
+}: RoadmapPageProps) {
   const nodeCount = tracks.reduce((sum, track) => sum + track.nodes.length, 0);
 
   return (
@@ -158,6 +175,12 @@ export function RoadmapPage({ serial, title, subtitle, meta, diagram: _diagram, 
           <span className="ch-code">FLOW</span>
           <h2>전체 흐름 다이어그램</h2>
         </div>
+        {diagramImage ? (
+          <figure className="roadmap-map-figure">
+            <img src={diagramImage.src} alt={diagramImage.alt} loading="lazy" />
+            <figcaption>{diagramImage.caption}</figcaption>
+          </figure>
+        ) : null}
         <RoadmapFlowList tracks={tracks} />
       </section>
 
