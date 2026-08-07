@@ -22,6 +22,7 @@
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
   <a href="#runtime-evidence-packet"><span class="code">EVIDENCE</span>운영 증거 패킷</a>
+  <a href="#ch-summary"><span class="code">SUMMARY</span>총정리</a>
 </nav>
 <main>
 <header class="hero">
@@ -45,48 +46,36 @@
       <section id="ch1">
         <div class="ch-head"><span class="ch-code">RUN-00</span><h2>컨테이너 런타임</h2></div>
         <p class="lede">컨테이너는 프로세스, filesystem, network namespace, cgroup 제한을 묶은 실행 단위다. CPU, memory, file descriptor, ephemeral storage 제한을 모르고 운영하면 OOM, throttling, log 폭증을 놓친다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>컨테이너 제한이 실제 장애 신호와 연결되어 있는가?</td><td>CPU throttling, memory working set, OOMKilled, file descriptor, ephemeral storage, restart reason</td><td>컨테이너는 이미지가 아니라 제한된 프로세스라는 관점으로 봐야 한다.</td></tr>
-          <tr><td>컨테이너 런타임을 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>kubectl describe, logs --previous, cgroup metric, container exit code</td><td>재시작이 회복인지 장애 반복인지 exit reason으로 구분한다.</td></tr>
-          <tr><td>컨테이너 런타임 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>트래픽 증가 후 OOMKilled 반복</td><td>request/limit, memory leak, graceful degradation을 분리해 조치한다.</td></tr>
-        </table>
+        <p>컨테이너를 그냥 "작은 서버" 정도로 생각하면 CPU와 memory 제한이 왜 중요한지 놓치기 쉽다. 실제로 컨테이너는 cgroup으로 리소스가 강하게 제한된 프로세스이고, 이 제한을 넘는 순간 OOMKilled나 throttling 같은 형태로 즉시 대가를 치른다. 그래서 컨테이너 제한이 실제 장애 신호와 연결되어 있는지 확인하려면 CPU throttling, memory working set, OOMKilled, file descriptor, ephemeral storage, restart reason을 함께 봐야 한다. 컨테이너를 이미지가 아니라 제한된 프로세스로 보는 관점이 여기서부터 시작된다.</p>
+        <p>이 관점이 맞는지 검증하려면 kubectl describe, logs --previous, cgroup metric, container exit code를 확인한다. 여기서 중요한 것은 재시작 자체가 아니라 재시작의 이유다. 같은 "재시작 8번"이라도 정상적으로 종료 후 재기동한 것인지, 계속 OOMKilled로 죽어나가는 것인지는 exit reason으로만 구분할 수 있다.</p>
+        <p>트래픽이 늘어난 뒤 OOMKilled가 반복되는 상황을 생각해보자. 이때 먼저 해야 할 것은 request/limit 값이 실제 사용량과 맞는지, memory leak이 있는지, 부하가 몰릴 때 graceful degradation이 동작하는지를 나눠서 보는 것이다. 이 세 가지를 뭉뚱그려서 "메모리가 부족하니 limit을 올리자"고만 하면, 진짜 원인이 leak이었을 경우 문제는 조금 늦게 다시 터질 뿐이다.</p>
 
       </section>
 
       <section id="ch2">
         <div class="ch-head"><span class="ch-code">RUN-01</span><h2>오케스트레이션 객체</h2></div>
         <p class="lede">Kubernetes 기준으로 Deployment는 desired state, ReplicaSet은 replica 유지, Pod는 실행 단위, Service는 안정된 discovery, Ingress는 외부 HTTP 진입점이다. label과 selector가 어긋나면 정상 pod도 traffic을 받지 못한다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>오케스트레이션 객체 연결이 traffic routing까지 일치하는가?</td><td>Deployment, ReplicaSet, Pod, Service, selector, endpoint, Ingress rule, target group</td><td>label/selector가 어긋나면 정상 pod도 트래픽을 받지 못한다.</td></tr>
-          <tr><td>오케스트레이션 객체를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>kubectl get endpoints, describe service/ingress, target health, event log</td><td>desired state와 실제 traffic endpoint를 대조해야 한다.</td></tr>
-          <tr><td>오케스트레이션 객체 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>pod는 Running이나 서비스 503</td><td>selector, endpoint, ingress rule을 수정하고 smoke test한다.</td></tr>
-        </table>
+        <p>Kubernetes에서 Deployment, ReplicaSet, Pod, Service, Ingress는 각자 다른 역할을 하지만, 실제 장애는 이 객체들이 서로 정확히 연결되지 않을 때 생긴다. 오케스트레이션 객체 연결이 traffic routing까지 일치하는지는 Deployment, ReplicaSet, Pod, Service, selector, endpoint, Ingress rule, target group을 하나씩 따라가며 확인한다. 특히 label과 selector가 어긋나면 pod 자체는 정상으로 떠 있어도 Service가 그 pod를 찾지 못해 트래픽을 아예 받지 못하는 상황이 생긴다.</p>
+        <p>이걸 원인 후보에서 배제하려면 kubectl get endpoints, describe service/ingress, target health, event log를 본다. 핵심은 desired state, 즉 내가 의도한 상태와 실제 traffic이 흐르는 endpoint를 나란히 놓고 비교하는 것이다. Deployment가 정상이라고 나와도 그게 실제로 트래픽을 받고 있다는 뜻은 아니다.</p>
+        <p>pod는 분명 Running 상태인데 서비스는 503을 반환하는 상황이 대표적인 예다. 이럴 때는 코드를 의심하기 전에 selector, endpoint, ingress rule부터 확인해야 한다. 문제가 selector 설정에 있었다면 그걸 고치고 smoke test로 실제 트래픽이 다시 흐르는지 확인하는 것이 영구적인 해결책이다.</p>
 
       </section>
 
       <section id="ch3">
         <div class="ch-head"><span class="ch-code">RUN-02</span><h2>health check</h2></div>
         <p class="lede">readiness는 트래픽을 받아도 되는지, liveness는 재시작이 필요한지, startup probe는 느린 부팅을 보호하는지 판단한다. health check가 DB까지 강하게 묶이면 DB 지연 때 전체 pod가 빠질 수 있다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>readiness/liveness/startup probe가 각 목적에 맞게 분리되어 있는가?</td><td>readiness status, liveness restart, startup probe, probe path dependency, failure threshold</td><td>liveness가 DB 지연까지 재시작하면 장애를 키울 수 있다.</td></tr>
-          <tr><td>health check를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>kubectl describe pod, probe event, readiness endpoint, dependency status</td><td>traffic 수신 가능 여부와 재시작 필요 여부를 분리한다.</td></tr>
-          <tr><td>health check 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>DB 지연 때 모든 pod가 liveness 실패로 재시작</td><td>probe path를 얕게 조정하고 dependency 상태는 readiness/metric으로 분리한다.</td></tr>
-        </table>
+        <p>readiness, liveness, startup probe는 이름은 비슷하지만 완전히 다른 질문에 답한다. readiness는 지금 이 pod가 트래픽을 받아도 되는가, liveness는 이 pod를 재시작해야 하는가, startup probe는 아직 부팅 중이니 좀 더 기다려줘야 하는가를 묻는다. 이 셋이 각자 목적에 맞게 분리되어 있는지는 readiness status, liveness restart, startup probe, probe path dependency, failure threshold로 확인한다. 특히 liveness가 DB 상태까지 검사하도록 설계하면, DB가 잠깐 느려졌을 뿐인데 멀쩡한 pod까지 전부 재시작시켜서 장애를 오히려 키울 수 있다.</p>
+        <p>이 설계가 잘못됐는지 확인하려면 kubectl describe pod, probe event, readiness endpoint, dependency status를 본다. 여기서 나누어야 할 질문은 두 가지다. 지금 트래픽을 받아도 되는가, 그리고 재시작이 필요한가. 이 둘을 같은 probe로 뭉쳐서 판단하면 안 된다.</p>
+        <p>실제로 DB 지연이 발생했을 때 모든 pod가 liveness 실패로 동시에 재시작되는 사고가 일어난다. 이걸 막으려면 liveness probe의 검사 범위를 얕게, 프로세스가 살아있는지 정도로 좁히고, dependency 상태는 readiness나 별도 metric으로 분리해서 봐야 한다. 그래야 DB가 느려져도 pod는 살아있으면서 readiness만 내려가고, DB가 회복되면 자연스럽게 다시 트래픽을 받는다.</p>
 
       </section>
 
       <section id="ch4">
         <div class="ch-head"><span class="ch-code">RUN-03</span><h2>배포 안정성</h2></div>
         <p class="lede">rolling update는 maxUnavailable, maxSurge, pod disruption budget, connection draining, graceful shutdown이 함께 맞아야 무중단에 가까워진다. HPA는 CPU만이 아니라 queue lag, request rate 같은 업무 지표도 후보가 된다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>rolling update가 drain, PDB, graceful shutdown까지 포함하는가?</td><td>maxUnavailable, maxSurge, PDB, terminationGracePeriod, preStop, target deregistration delay</td><td>새 pod 준비와 기존 pod 종료가 traffic 흐름과 맞아야 한다.</td></tr>
-          <tr><td>배포 안정성을 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>rollout status, pod events, LB target draining, connection error rate</td><td>무중단은 replica 수가 아니라 연결 종료와 readiness 타이밍으로 결정된다.</td></tr>
-          <tr><td>배포 안정성 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>배포 중 일부 요청 502</td><td>rollout pause/undo, drain 조정, graceful shutdown 보강을 수행한다.</td></tr>
-        </table>
+        <p>무중단 배포는 replica를 여러 개 띄운다고 저절로 되는 게 아니다. rolling update가 실제로 안전하려면 maxUnavailable, maxSurge, PDB, terminationGracePeriod, preStop, target deregistration delay가 모두 맞물려야 한다. 새 pod가 준비되는 타이밍과 기존 pod가 종료되는 타이밍이 실제 traffic 흐름과 맞아야 사용자가 끊김을 느끼지 않는다.</p>
+        <p>이게 실제로 지켜지는지는 rollout status, pod events, LB target draining, connection error rate로 확인한다. 여기서 흔한 오해가 "replica가 3개 있으니 무중단이겠지"라는 생각이다. 하지만 무중단 여부를 결정하는 건 replica 개수가 아니라 연결이 정리되는 타이밍과 readiness가 맞아떨어지는지다.</p>
+        <p>배포 도중 일부 요청이 502로 실패하는 상황을 만나면 순서대로 확인한다. 먼저 rollout을 pause하거나 undo해서 확산을 막고, drain 설정을 조정하고, graceful shutdown 로직을 보강한다. 이 세 가지를 순서 없이 아무거나 먼저 건드리면 원인 파악이 더 늦어진다.</p>
 
       </section>
 
@@ -99,12 +88,9 @@
           <li>service selector, ingress rule, connection draining을 점검한다.</li>
           <li>graceful shutdown과 rolling update 조건을 부하 상황에서 검증한다.</li>
         </ul>
-        <table>
-          <tr><th>작업 단계</th><th>필수 산출물</th><th>차단 기준</th></tr>
-          <tr><td>설계</td><td>목적, 영향 범위, 비목표, owner</td><td>영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음</td></tr>
-          <tr><td>변경</td><td>diff, 승인 기록, 검증 명령</td><td>production 변경과 staging 검증의 차이가 설명되지 않음</td></tr>
-          <tr><td>복구</td><td>rollback 또는 forward fix, 담당자, 예상 시간</td><td>실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음</td></tr>
-        </table>
+        <p>이 체크리스트에서 특히 자주 놓치는 지점이 세 군데다. 설계 단계에서는 readiness/liveness 목적 분리나 resource 설정처럼 눈에 보이는 것만 챙기고, 정작 이 변경이 다른 서비스나 비용에 어떤 영향을 주는지는 문서로 남기지 않는 경우가 많다. 목적, 영향 범위, 비목표, owner가 산출물로 남아 있지 않고 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
+        <p>변경 단계에서는 diff와 승인 기록, 검증 명령이 함께 있어야 한다. probe 설정이나 rollout 전략처럼 부하 상황에서만 문제가 드러나는 변경은 특히, production 변경과 staging 검증이 어떻게 다른지 설명하지 못하면 배포해서는 안 된다.</p>
+        <p>복구 단계는 배포가 끝난 뒤에야 신경 쓰기 쉬운데 사실 배포 전에 정해둬야 한다. rollback 또는 forward fix 중 무엇을 쓸지, 담당자가 누구인지, 얼마나 걸릴지가 미리 정해져 있지 않고 실패 시 되돌릴 수도 없는데 사전 승인과 공지가 없다면, 배포를 보류해야 한다.</p>
       </section>
 
       <section id="ch6">
@@ -115,19 +101,8 @@
           symptom → scope → recent change → evidence<br>
           → mitigation → verification → runbook diff
         </div>
-        <table>
-          <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
-          <tr><td>Pod / Task health</td><td>readiness, liveness, startup probe, restart reason, exit code</td><td>재시작이 회복인지 증상 악화인지 구분한다.</td></tr>
-          <tr><td>Traffic</td><td>service selector, target group, ingress rule, connection draining</td><td>정상 pod가 traffic을 받는 경로를 확인한다.</td></tr>
-          <tr><td>Capacity</td><td>request/limit, throttling, OOM, HPA signal, queue lag</td><td>CPU 평균보다 saturation과 tail latency를 본다.</td></tr>
-        </table>
-
-        <table>
-          <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
-          <tr><td>상태</td><td>kubectl get pods, describe pod, logs --previous, rollout status</td><td>CrashLoop, OOMKilled, probe failure를 분리한다.</td></tr>
-          <tr><td>네트워크</td><td>service endpoints, ingress events, target health, connection draining</td><td>selector mismatch와 readiness 누락을 찾는다.</td></tr>
-          <tr><td>리소스</td><td>CPU throttling, memory working set, ephemeral storage, file descriptor</td><td>limit만 올리기 전에 원인 지표를 확인한다.</td></tr>
-        </table>
+        <p>장애가 컨테이너·오케스트레이션 계층에서 터졌을 때는 세 가지 표면을 순서대로 훑는다. 먼저 Pod / Task health 표면에서 readiness, liveness, startup probe, restart reason, exit code를 본다. 여기서 판단할 것은 재시작이 회복 과정인지, 아니면 증상이 계속 악화되고 있다는 신호인지다. 다음으로 Traffic 표면에서 service selector, target group, ingress rule, connection draining을 본다. 목적은 정상적으로 떠 있는 pod가 실제로 traffic을 받는 경로에 있는지 확인하는 것이다. 마지막으로 Capacity 표면에서 request/limit, throttling, OOM, HPA signal, queue lag를 본다. CPU 평균만 보면 정상처럼 보이는 경우가 많으니, saturation과 tail latency를 함께 봐야 진짜 압박 상황을 잡아낼 수 있다.</p>
+        <p>이 세 표면을 실제로 조사하는 순서도 있다. 먼저 상태 확인 단계에서 kubectl get pods, describe pod, logs --previous, rollout status로 CrashLoop, OOMKilled, probe failure 중 무엇인지 분리한다. 그다음 네트워크 확인 단계에서 service endpoints, ingress events, target health, connection draining을 보면서 selector mismatch나 readiness 누락을 찾는다. 마지막으로 리소스 확인 단계에서 CPU throttling, memory working set, ephemeral storage, file descriptor를 본다. limit부터 무작정 올리기 전에 원인 지표를 먼저 확인해야, 같은 문제가 limit을 올린 뒤에도 반복되는 걸 막을 수 있다.</p>
 
       </section>
 
@@ -137,59 +112,48 @@
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 01 · OOMKilled 판독</span>
           <p>배포 후 일부 pod가 재시작되고 p99 latency가 증가한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>kubectl describe pod api-7d9f -n production
+          <p>재시작 원인이 liveness 실패인지 OOMKilled인지는 겉보기 증상만으로는 구분되지 않는다. 이걸 가려내려면 다음 명령으로 pod의 종료 이력을 직접 확인해야 한다.</p>
+          <pre><code>kubectl describe pod api-7d9f -n production
 
-kubectl logs api-7d9f -n production --previous</code></pre></td><td>재시작 원인이 liveness 실패인지 OOMKilled인지 구분한다.</td></tr>
-          </table>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>Last State: Terminated
+kubectl logs api-7d9f -n production --previous</code></pre>
+          <p>정상적인 경우라면 pod가 Completed 상태로 종료되고 재시작 횟수가 0이다.</p>
+          <pre><code>Last State: Terminated
 Reason: Completed
-Restart Count: 0</code></pre></td><td><pre><code>Last State: Terminated
+Restart Count: 0</code></pre>
+          <p>비정상적인 경우에는 다음처럼 OOMKilled와 반복 재시작이 나타난다.</p>
+          <pre><code>Last State: Terminated
 Reason: OOMKilled
 Exit Code: 137
-Restart Count: 8</code></pre></td><td>앱 오류가 아니라 memory limit 또는 leak, traffic spike로 인한 OOM 후보가 강하다.</td></tr>
-          </table>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>rollout pause, replica scale-out, memory limit 임시 상향, heavy endpoint rate limit.</td><td>memory profile, request/limit 재조정, load test, alert에 OOMKilled count 추가.</td><td>restart count 안정화, p99 회복, memory working set이 limit 아래 유지.</td></tr>
-          </table>
+Restart Count: 8</code></pre>
+          <p>이 출력에서 Reason이 OOMKilled이고 Exit Code가 137이라는 것은, 애플리케이션 코드 자체의 버그가 아니라 memory 관련 문제라는 강한 신호다. memory limit이 실제 필요량보다 낮게 잡혀 있거나, memory leak이 있거나, 갑작스러운 traffic spike로 순간 사용량이 튀었을 가능성이 크다. 즉시 완화는 rollout을 pause하고 replica를 늘려 개별 pod가 받는 부하를 줄이면서, memory limit을 임시로 올리고 무거운 endpoint에는 rate limit을 거는 것이다. 영구 수정은 memory profile을 분석해서 진짜 원인을 찾고, request/limit을 다시 산정하고, load test로 검증한 뒤, alert에 OOMKilled count를 추가해 다음에는 더 빨리 알아채도록 만드는 것이다. restart count가 안정되고 p99가 회복되고 memory working set이 limit 아래로 유지되면 이 완화와 수정이 제대로 먹힌 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 02 · Service selector mismatch 판독</span>
           <p>pod는 Running인데 서비스가 503을 반환한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>kubectl get endpoints api -n production
+          <p>런타임 자체는 멀쩡한데 트래픽이 도달하지 못하는 상황이라면, 가장 먼저 의심할 곳은 코드가 아니라 Service selector다. 실제 pod label과 selector가 일치하는지 다음으로 확인한다.</p>
+          <pre><code>kubectl get endpoints api -n production
 
-kubectl get svc api -o yaml</code></pre></td><td>Service selector가 실제 pod label과 연결되는지 확인한다.</td></tr>
-          </table>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>ENDPOINTS: 10.0.12.4:8080,10.0.13.8:8080
-selector: app=api</code></pre></td><td><pre><code>ENDPOINTS: &lt;none&gt;
-selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 traffic target을 찾지 못한다.</td></tr>
-          </table>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>selector rollback 또는 pod label hotfix.</td><td>deployment/service label contract test와 rollout smoke test를 추가한다.</td><td>endpoints populated, target health healthy, 503 감소.</td></tr>
-          </table>
+kubectl get svc api -o yaml</code></pre>
+          <p>정상적인 경우라면 endpoints에 pod IP가 채워져 있다.</p>
+          <pre><code>ENDPOINTS: 10.0.12.4:8080,10.0.13.8:8080
+selector: app=api</code></pre>
+          <p>비정상적인 경우에는 selector가 바뀌어 endpoint가 비어 있다.</p>
+          <pre><code>ENDPOINTS: &lt;none&gt;
+selector: app=api-v2</code></pre>
+          <p>endpoints가 비어 있다는 것은 pod가 죽은 게 아니라 Service가 어떤 pod를 대상으로 삼아야 할지 모른다는 뜻이다. 즉시 완화는 selector를 이전 값으로 rollback하거나 pod label에 hotfix를 적용해 다시 매칭시키는 것이다. 영구 수정은 deployment와 service의 label이 서로 어긋나지 않도록 contract test를 추가하고, rollout 뒤에 자동으로 도는 smoke test를 넣는 것이다. endpoints가 다시 채워지고 target health가 healthy로 돌아오고 503이 줄어들면 이 조치가 제대로 작동한 것이다.</p>
         </div>
       </section>
 
       <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">컨테이너·오케스트레이션·Health Check에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
-        <table>
-          <tr><th>용어</th><th>정의</th><th>운영 증거</th><th>자주 하는 오해</th><th>관련 항목</th></tr>
-          <tr><td>cgroup limit</td><td>컨테이너 CPU, memory 등 리소스 사용 제한.</td><td>CPU throttling, memory working set, OOMKilled</td><td>컨테이너는 VM처럼 독립 리소스를 자동 보장한다.</td><td>request/limit, OOM, throttling</td></tr>
-          <tr><td>Deployment</td><td>Kubernetes에서 원하는 replica 상태와 rollout을 관리하는 객체.</td><td>desired state, rollout status, ReplicaSet</td><td>Deployment가 정상이면 트래픽도 정상이다.</td><td>ReplicaSet, Pod, Service</td></tr>
-          <tr><td>selector</td><td>Service가 traffic을 보낼 Pod를 label로 고르는 조건.</td><td>service selector, endpoints, pod label</td><td>pod Running이면 Service endpoint에 자동 포함된다.</td><td>label, endpoint, Service</td></tr>
-          <tr><td>readiness</td><td>Pod가 트래픽을 받을 준비가 됐는지 판단하는 probe.</td><td>readiness status, endpoint population</td><td>liveness와 같은 endpoint를 쓰면 된다.</td><td>liveness, startup probe, target health</td></tr>
-          <tr><td>liveness</td><td>Pod 재시작이 필요한지를 판단하는 probe.</td><td>liveness restart, probe event</td><td>DB 지연까지 liveness에 넣어야 안전하다.</td><td>restart, dependency status, probe path</td></tr>
-        </table>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>cgroup limit</b></div><div class="g-def">컨테이너의 CPU, memory 같은 리소스 사용량을 커널 수준에서 강제로 제한하는 기능이다. CPU throttling, memory working set, OOMKilled 지표로 실제 제한이 걸리고 있는지 확인한다. 컨테이너가 VM처럼 독립된 리소스를 자동으로 보장받는다고 생각하기 쉽지만, 실제로는 host의 리소스를 나눠 쓰는 프로세스일 뿐이라 request/limit 설정과 OOM, throttling 여부를 직접 챙겨야 한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>Deployment</b></div><div class="g-def">Kubernetes에서 원하는 replica 개수와 rollout 방식을 선언적으로 관리하는 객체다. desired state, rollout status, ReplicaSet으로 실제 상태를 확인한다. Deployment 상태가 정상이면 트래픽도 정상일 거라고 생각하기 쉽지만, Deployment는 어디까지나 원하는 상태를 선언할 뿐이고 실제 트래픽이 흐르려면 ReplicaSet, Pod, Service까지 이어지는 경로가 전부 맞아야 한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>selector</b></div><div class="g-def">Service가 어떤 Pod에게 트래픽을 보낼지 label로 골라내는 조건이다. service selector, endpoints, pod label을 대조해서 확인한다. pod가 Running 상태이기만 하면 자동으로 Service의 대상이 된다고 생각하기 쉽지만, 실제로는 label이 selector와 정확히 일치해야만 endpoint 목록에 들어간다. 하나라도 어긋나면 그 pod는 존재해도 트래픽을 받지 못한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>readiness</b></div><div class="g-def">Pod가 지금 당장 트래픽을 받아도 되는 상태인지를 판단하는 probe다. readiness status와 endpoint population으로 확인한다. liveness와 같은 endpoint를 재사용해도 된다고 생각하기 쉽지만, 이 둘은 목적이 다르다. readiness는 지금 받아도 되는가, liveness는 재시작이 필요한가를 묻는 서로 다른 질문이라서 같은 기준으로 섞으면 장애 대응이 꼬인다.</div></div>
+          <div class="g-row"><div class="g-term"><b>liveness</b></div><div class="g-def">Pod를 재시작해야 하는지를 판단하는 probe다. liveness restart 횟수와 probe event로 확인한다. DB 연결 상태까지 liveness에 포함시켜야 더 안전할 거라고 생각하기 쉽지만, 그렇게 하면 DB가 잠깐 느려졌을 뿐인데 정상적으로 떠 있던 pod까지 전부 재시작되어 장애를 오히려 키운다. 재시작 여부와 dependency 상태는 서로 다른 채널로 분리해서 설계해야 한다.</div></div>
+        </div>
       </section>
 
       <section id="ch9">
@@ -199,16 +163,8 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
           <span class="co-label">Triage frame</span>
           <p>컨테이너·오케스트레이션·Health Check 장애는 증상 → 영향 범위 → 최근 변경 → Pod / Task health 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
-        <table>
-          <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>readiness, liveness, startup probe, restart reason, exit code 기준으로 영향 범위를 고정한다.</td><td>kubectl get pods, describe pod, logs --previous, rollout status 항목에서 증거를 모아 완화책을 실행한다.</td><td>다음 배포에서 자동으로 깨지는지 확인한다.</td></tr>
-        </table>
-        <table>
-          <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
-          <tr><td>증상</td><td>rolling update 중 일부 요청 502</td><td>readiness, drain, terminationGracePeriod, target deregistration delay를 본다.</td></tr>
-          <tr><td>완화</td><td>rollout pause/undo, scale out, bad pod drain</td><td>새 버전의 폭발 반경을 즉시 줄인다.</td></tr>
-          <tr><td>사후</td><td>probe와 graceful shutdown을 실제 요청으로 검증</td><td>다음 배포에서 자동으로 깨지는지 확인한다.</td></tr>
-        </table>
+        <p>처음 10분은 원인을 찾기보다 영향 범위부터 좁힌다. readiness, liveness, startup probe, restart reason, exit code를 기준으로 지금 벌어지고 있는 일의 경계를 확정하는 데 쓴다. 다음 30분은 kubectl get pods, describe pod, logs --previous, rollout status에서 구체적인 증거를 모으고, 그 증거로 완화책을 실행한다. 이 사이클은 다음 배포에서 같은 문제가 사람이 알아채기 전에 자동으로 걸러지는지 확인하고 나서야 끝난 것으로 본다.</p>
+        <p>Incident packet에는 증상, 완화, 사후 조치를 남긴다. 증상은 rolling update 중 일부 요청이 502로 실패했다는 관찰 사실이고, readiness, drain, terminationGracePeriod, target deregistration delay를 대조해서 정확히 어디가 문제인지 판정한다. 완화는 rollout pause/undo, scale out, bad pod drain 중에서 새 버전이 만드는 폭발 반경을 가장 빨리 줄일 수 있는 조치를 고른다. 사후 조치에서는 probe 설정과 graceful shutdown 로직을 실제 요청으로 다시 검증해서, 다음 배포에서도 같은 문제가 자동으로 걸리는지 확인한다.</p>
 
       </section>
 
@@ -229,13 +185,10 @@ selector: app=api-v2</code></pre></td><td>runtime은 정상이나 Service가 tra
 kubectl get nodes -o wide
 kubectl api-resources | grep -E 'deployments|poddisruptionbudgets'
 kubectl rollout status deploy/api -n production --timeout=120s</code></pre>
-<table>
-<tr><th>증거 종류</th><th>예시</th><th>판정 기준</th></tr>
-<tr><td>기준 버전·도구</td><td>Kubernetes server/client version, CNI, ingress controller, metrics-server, HPA controller, kubectl version</td><td>client/server skew가 크거나 PDB API가 policy/v1이 아니면 실습 결과를 그대로 production 기준으로 쓰지 않는다.</td></tr>
-<tr><td>명령 출력</td><td><code>kubectl describe pod</code>, <code>events --sort-by=.lastTimestamp</code>, <code>logs --previous</code>, <code>rollout history/status</code></td><td>event와 app log timestamp가 맞지 않으면 원인 선언을 보류하고 raw output을 보존한다.</td></tr>
-<tr><td>dashboard/query</td><td>restart count, OOMKilled, probe failure, endpoint count, rollout available replicas, p95/p99 latency</td><td>rollout 성공과 사용자 path 성공을 별도 지표로 닫는다.</td></tr>
-<tr><td>severity·rollback·승인</td><td>SEV1: endpoint 0 또는 auth/payment 5xx, SEV2: 한 zone/tenant degradation, SEV3: rollout 지연</td><td>SEV1/2는 rollout pause 또는 undo를 먼저 검토하고, PDB/selector/probe 변경은 service owner 승인을 요구한다.</td></tr>
-</table>
+<p>기준 버전·도구는 Kubernetes server/client version, CNI, ingress controller, metrics-server, HPA controller, kubectl version을 남긴다. client와 server 사이 버전 차이가 크거나 PDB API가 policy/v1이 아니라면, 이번 실습에서 확인한 결과를 그대로 production 기준으로 믿어서는 안 된다.</p>
+<p>명령 출력은 <code>kubectl describe pod</code>, <code>events --sort-by=.lastTimestamp</code>, <code>logs --previous</code>, <code>rollout history/status</code>를 남긴다. event 기록과 애플리케이션 로그의 timestamp가 서로 맞지 않는다면, 성급하게 원인을 확정하지 말고 raw output을 그대로 보존해야 나중에 다시 검토할 수 있다.</p>
+<p>한 번의 배포만 보지 말고 대시보드·쿼리로 추세를 본다. restart count, OOMKilled, probe failure, endpoint count, rollout available replicas, p95/p99 latency가 그 지표다. rollout 자체의 성공과 실제 사용자 경로의 성공을 별개의 지표로 나눠서 닫는 것이 중요하다. rollout이 끝났다고 해서 사용자에게 문제가 없다는 뜻은 아니기 때문이다.</p>
+<p>마지막으로 severity와 rollback, 승인 절차를 함께 정한다. endpoint가 0이 되거나 인증·결제 경로에서 5xx가 나면 SEV1, 특정 zone이나 tenant만 저하되면 SEV2, rollout이 단순히 지연되는 정도면 SEV3다. SEV1이나 SEV2 상황이면 rollout pause나 undo를 가장 먼저 검토하고, PDB, selector, probe 설정을 바꾸는 변경은 반드시 service owner의 승인을 거치도록 한다.</p>
 <h3>Probe/PDB manifest 기준</h3>
 <pre class="snippet-card"><code>apiVersion: apps/v1
 kind: Deployment
@@ -282,11 +235,21 @@ spec:
     matchLabels:
       app: api</code></pre>
 <h3>Rollout 실패 실습</h3>
+<p>readiness path를 잘못 배포하면 <code>kubectl describe pod</code>, <code>kubectl get endpoints api</code>로 확인했을 때 pod는 Running이나 endpoint 수가 줄고 readiness event가 반복된다. <code>kubectl rollout pause</code> 후 probe path를 수정하거나 <code>kubectl rollout undo</code>로 복구한다.</p>
+<p>PDB minAvailable을 replica 수와 같게 두면 <code>kubectl get pdb</code>와 drain dry-run event에서 <code>disruptionsAllowed=0</code>으로 node drain이 막힌다. replica를 늘리거나 PDB를 완화하고 maintenance window를 다시 승인받아 복구한다.</p>
+<p>새 image가 CrashLoop를 만들면 <code>kubectl logs --previous</code>, <code>rollout history</code>에서 새 revision label에서만 restart와 5xx가 증가한다. rollout undo, image digest 고정, failing revision incident packet 작성으로 복구한다.</p>
+</section>
+<section id="ch-summary">
+<div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+<p class="lede">위에서 다룬 판단을 한 표로 모았다. 실제 판단은 표가 아니라 앞에서 설명한 맥락과 증거로 한다.</p>
 <table>
-<tr><th>실습</th><th>확인 명령</th><th>기대 판독</th><th>복구</th></tr>
-<tr><td>readiness path를 잘못 배포한다.</td><td><code>kubectl describe pod</code>, <code>kubectl get endpoints api</code></td><td>pod는 Running이나 endpoint 수가 줄고 readiness event가 반복된다.</td><td><code>kubectl rollout pause</code> 후 probe path 수정 또는 <code>kubectl rollout undo</code>.</td></tr>
-<tr><td>PDB minAvailable을 replica 수와 같게 둔다.</td><td><code>kubectl get pdb</code>, drain dry-run event</td><td><code>disruptionsAllowed=0</code>으로 node drain이 막힌다.</td><td>replica 확대, PDB 완화, maintenance window 재승인.</td></tr>
-<tr><td>새 image가 CrashLoop를 만든다.</td><td><code>kubectl logs --previous</code>, <code>rollout history</code></td><td>새 revision label에서만 restart와 5xx가 증가한다.</td><td>rollout undo, image digest 고정, failing revision incident packet 작성.</td></tr>
+<tr><th>영역</th><th>핵심 판단 기준</th><th>확인할 증거</th></tr>
+<tr><td>컨테이너 런타임</td><td>재시작이 회복인지 장애 반복인지 exit reason으로 구분한다</td><td>CPU throttling, memory working set, OOMKilled, exit code</td></tr>
+<tr><td>오케스트레이션 객체</td><td>label/selector가 어긋나면 정상 pod도 트래픽을 못 받는다</td><td>endpoints, target health, ingress rule, event log</td></tr>
+<tr><td>Health check</td><td>liveness가 DB 지연까지 재시작하면 장애를 키운다</td><td>readiness/liveness/startup probe, probe event, dependency status</td></tr>
+<tr><td>배포 안정성</td><td>무중단은 replica 수가 아니라 drain·readiness 타이밍이 결정한다</td><td>rollout status, pod events, LB target draining</td></tr>
+<tr><td>Incident 대응</td><td>새 버전의 폭발 반경을 가장 빠르게 줄이는 조치를 고른다</td><td>rollout pause/undo, bad pod drain, probe/graceful shutdown 검증</td></tr>
+<tr><td>운영 증거 패킷</td><td>cluster 기준 버전과 manifest 의도를 실제 상태와 대조한다</td><td>kubectl version, rollout history, restart/probe failure count</td></tr>
 </table>
 </section>
 <footer>

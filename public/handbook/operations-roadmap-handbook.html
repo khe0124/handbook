@@ -23,6 +23,7 @@
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
   <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
+  <a href="#ch-summary"><span class="code">SUMMARY</span>총정리</a>
 </nav>
 <main>
 <header class="hero">
@@ -49,190 +50,69 @@
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
 <ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
       <h3>대상 독자와 학습 계약</h3>
-        <table>
-          <tr><th>항목</th><th>내용</th><th>완료 기준</th></tr>
-          <tr><td>대상 독자</td><td>미들급 개발자. API, DB, 배포 경험은 있으나 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람</td><td>서비스 장애를 계층별 증거로 좁히고 운영 인수 산출물을 만들 수 있어야 한다.</td></tr>
-          <tr><td>선행 지식</td><td>HTTP, TLS 기초, Linux process/log, DB connection, CI/CD 기본, container 기본</td><td>이 지식이 없으면 도구명을 외우는 학습으로 흐르므로 먼저 보완한다.</td></tr>
-          <tr><td>학습 산출물</td><td>request path diagram, deploy timeline, incident packet, rollback/restore drill report, service readiness score</td><td>말로 아는 것이 아니라 다른 담당자가 재현 가능한 문서와 증거를 제출해야 한다.</td></tr>
-          <tr><td>강연 목표</td><td>청중이 장애 상황에서 어떤 계층을 먼저 확인하고 어떤 증거로 배제할지 말할 수 있게 한다.</td><td>서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남긴다.</td></tr>
-        </table>
+        <p>이 로드맵의 대상 독자는 미들급 개발자다. API, DB, 배포 경험은 있지만 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람을 염두에 두고 썼다. 완료 기준은 서비스 장애를 계층별 증거로 좁히고 운영 인수 산출물을 만들 수 있는 것이다.</p>
+        <p>선행 지식으로는 HTTP, TLS 기초, Linux process/log, DB connection, CI/CD 기본, container 기본을 전제한다. 이 지식이 없으면 도구명을 외우는 학습으로 흐르기 쉬우므로 먼저 보완해야 한다.</p>
+        <p>학습 산출물은 request path diagram, deploy timeline, incident packet, rollback/restore drill report, service readiness score다. 말로 아는 것이 아니라 다른 담당자가 재현 가능한 문서와 증거로 제출해야 한다.</p>
+        <p>강연 목표는 청중이 장애 상황에서 어떤 계층을 먼저 확인하고 어떤 증거로 배제할지 말할 수 있게 하는 것이다. 서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남기는 게 목표다.</p>
       <h3>로드맵으로 읽는 순서</h3>
-        <table>
-          <tr><th>단계</th><th>읽을 문서</th><th>완료 산출물</th></tr>
-          <tr><td>1주차 · 요청 경로</td><td>서비스 요청 경로 → DNS/TLS → LB/App/DB 경계</td><td>request path diagram, dig/curl/openssl 결과, target health 판독</td></tr>
-          <tr><td>2주차 · 네트워크 경계</td><td>VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity</td><td>route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증</td></tr>
-          <tr><td>3주차 · 변경과 런타임</td><td>CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리</td><td>release note, artifact digest, health check gate, terraform plan review</td></tr>
-          <tr><td>4주차 · 관측과 복구</td><td>Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오</td><td>SLO burn alert, incident packet, rollback/restore drill, postmortem action</td></tr>
-        </table>
+        <p>로드맵은 네 단계로 읽는다. 1주차 · 요청 경로에서는 서비스 요청 경로 → DNS/TLS → LB/App/DB 경계를 읽고 request path diagram, dig/curl/openssl 결과, target health 판독을 산출물로 남긴다. 2주차 · 네트워크 경계에서는 VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity를 읽고 route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증을 만든다. 3주차 · 변경과 런타임에서는 CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리를 읽고 release note, artifact digest, health check gate, terraform plan review를 남긴다. 4주차 · 관측과 복구에서는 Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오를 읽고 SLO burn alert, incident packet, rollback/restore drill, postmortem action을 완성한다.</p>
       <h3>60분 강연 흐름</h3>
-        <table>
-          <tr><th>시간</th><th>주제</th><th>핵심 메시지</th></tr>
-          <tr><td>0-5분</td><td>왜 운영은 아키텍처 그림만으로 부족한가</td><td>요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다.</td></tr>
-          <tr><td>5-15분</td><td>전체 운영 지도</td><td>DNS → Edge → LB → Runtime → Data store와 CI/CD → artifact → runtime → metric gate를 겹쳐 설명한다.</td></tr>
-          <tr><td>15-30분</td><td>장애 triage 실전</td><td>5xx 증가 케이스로 사용자 영향, 최근 변경, 계층별 증거, rollback 판단을 연습한다.</td></tr>
-          <tr><td>30-42분</td><td>네트워크·보안 경계</td><td>VPC, subnet, route, SG/NACL, Private Endpoint, DNS override의 대표 오판을 짚는다.</td></tr>
-          <tr><td>42-52분</td><td>SLO·Incident·DR</td><td>burn rate, IC/scribe/comms, RPO/RTO, restore drill을 운영 성숙도 기준으로 연결한다.</td></tr>
-          <tr><td>52-60분</td><td>체크리스트와 면접 답변</td><td>운영 인수 packet과 30초/90초 답변 구조로 마무리한다.</td></tr>
-        </table>
+        <p>60분 강연은 여섯 구간으로 나눈다. 0-5분은 왜 운영은 아키텍처 그림만으로 부족한가를 다루며 요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다. 5-15분은 전체 운영 지도로 DNS → Edge → LB → Runtime → Data store와 CI/CD → artifact → runtime → metric gate를 겹쳐 설명한다. 15-30분은 장애 triage 실전으로 5xx 증가 케이스를 통해 사용자 영향, 최근 변경, 계층별 증거, rollback 판단을 연습한다. 30-42분은 네트워크·보안 경계로 VPC, subnet, route, SG/NACL, Private Endpoint, DNS override의 대표 오판을 짚는다. 42-52분은 SLO·Incident·DR로 burn rate, IC/scribe/comms, RPO/RTO, restore drill을 운영 성숙도 기준으로 연결한다. 52-60분은 체크리스트와 면접 답변으로 운영 인수 packet과 30초/90초 답변 구조로 마무리한다.</p>
       <h3>계층별 실패 모드</h3>
-        <table>
-          <tr><th>계층</th><th>대표 실패</th><th>첫 확인 증거</th></tr>
-          <tr><td>DNS/TLS</td><td>NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락</td><td>dig +trace, resolver 비교, openssl s_client, curl -v</td></tr>
-          <tr><td>Edge/CDN/WAF</td><td>WAF false positive, stale cache, origin policy mismatch</td><td>edge request id, WAF log, cache policy, origin status</td></tr>
-          <tr><td>Load Balancer</td><td>502 upstream fail, 503 no healthy target, 504 timeout</td><td>target health, listener rule, deregistration delay, idle timeout</td></tr>
-          <tr><td>Runtime</td><td>OOMKilled, readiness 실패, selector mismatch, graceful shutdown 누락</td><td>kubectl describe/logs --previous, endpoints, rollout status</td></tr>
-          <tr><td>Data store</td><td>connection pool 고갈, lock wait, slow query, migration lock</td><td>pool pending, DB wait event, slow query, migration version</td></tr>
-          <tr><td>Network policy</td><td>route miss, SG/NACL block, NAT saturation, private DNS 누락</td><td>route table, flow log ACCEPT/REJECT, NAT metric, DNS query log</td></tr>
-          <tr><td>Change path</td><td>잘못된 artifact/config/secret/migration 배포</td><td>commit SHA, image digest, config diff, secret version, deploy marker</td></tr>
-          <tr><td>Recovery path</td><td>rollback 불가, restore 미검증, failback 누락</td><td>rollback command, backup age, restore duration, reconciliation result</td></tr>
-        </table>
+        <p>계층별로 대표 실패와 첫 확인 증거가 다르다. DNS/TLS는 NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락으로 나타나며 dig +trace, resolver 비교, openssl s_client, curl -v로 확인한다. Edge/CDN/WAF는 WAF false positive, stale cache, origin policy mismatch로 나타나며 edge request id, WAF log, cache policy, origin status로 확인한다. Load Balancer는 502 upstream fail, 503 no healthy target, 504 timeout으로 나타나며 target health, listener rule, deregistration delay, idle timeout으로 확인한다. Runtime은 OOMKilled, readiness 실패, selector mismatch, graceful shutdown 누락으로 나타나며 kubectl describe/logs --previous, endpoints, rollout status로 확인한다. Data store는 connection pool 고갈, lock wait, slow query, migration lock으로 나타나며 pool pending, DB wait event, slow query, migration version으로 확인한다. Network policy는 route miss, SG/NACL block, NAT saturation, private DNS 누락으로 나타나며 route table, flow log ACCEPT/REJECT, NAT metric, DNS query log로 확인한다. Change path는 잘못된 artifact/config/secret/migration 배포로 나타나며 commit SHA, image digest, config diff, secret version, deploy marker로 확인한다. Recovery path는 rollback 불가, restore 미검증, failback 누락으로 나타나며 rollback command, backup age, restore duration, reconciliation result로 확인한다.</p>
       <h3>AWS/Azure 증거 비교</h3>
-        <table>
-          <tr><th>영역</th><th>AWS 증거</th><th>Azure 증거</th><th>판단 기준</th></tr>
-          <tr><td>DNS/Edge</td><td>Route 53, CloudFront, AWS WAF, ACM, ALB access log</td><td>Azure DNS, Front Door, WAF Policy, Managed Certificate, Application Gateway log</td><td>edge request id와 origin status를 분리해 WAF 차단과 origin 장애를 나눈다.</td></tr>
-          <tr><td>Network</td><td>VPC, subnet route table, Security Group, NACL, NAT Gateway, VPC Flow Logs, PrivateLink</td><td>VNet, subnet route table, NSG, NAT Gateway, Network Watcher flow log, Private Endpoint</td><td>route miss, policy reject, DNS public resolution, NAT saturation을 각각 다른 원인으로 본다.</td></tr>
-          <tr><td>Runtime</td><td>ECS/EKS, target group health, CloudWatch Container Insights, ECR image digest</td><td>AKS/App Service, backend health, Azure Monitor, ACR digest</td><td>readiness, rollout, image/config mismatch, connection draining을 배포 timeline에 연결한다.</td></tr>
-          <tr><td>Data/DR</td><td>RDS/Aurora metrics, Performance Insights, snapshots, PITR, replica lag</td><td>Azure SQL metrics, Query Performance Insight, backups, PITR, geo-replica lag</td><td>백업 존재가 아니라 restore duration, backup age, missing rows, failback 결과로 판단한다.</td></tr>
-        </table>
+        <p>AWS와 Azure의 증거는 영역별로 짝을 지어 비교해야 한다. DNS/Edge 영역에서 AWS는 Route 53, CloudFront, AWS WAF, ACM, ALB access log를 보고 Azure는 Azure DNS, Front Door, WAF Policy, Managed Certificate, Application Gateway log를 본다. edge request id와 origin status를 분리해 WAF 차단과 origin 장애를 나눈다. Network 영역에서 AWS는 VPC, subnet route table, Security Group, NACL, NAT Gateway, VPC Flow Logs, PrivateLink를 보고 Azure는 VNet, subnet route table, NSG, NAT Gateway, Network Watcher flow log, Private Endpoint를 본다. route miss, policy reject, DNS public resolution, NAT saturation을 각각 다른 원인으로 본다. Runtime 영역에서 AWS는 ECS/EKS, target group health, CloudWatch Container Insights, ECR image digest를 보고 Azure는 AKS/App Service, backend health, Azure Monitor, ACR digest를 본다. readiness, rollout, image/config mismatch, connection draining을 배포 timeline에 연결한다. Data/DR 영역에서 AWS는 RDS/Aurora metrics, Performance Insights, snapshots, PITR, replica lag를 보고 Azure는 Azure SQL metrics, Query Performance Insight, backups, PITR, geo-replica lag를 본다. 백업 존재가 아니라 restore duration, backup age, missing rows, failback 결과로 판단한다.</p>
       <h3>운영 의사결정 트리</h3>
-        <table>
-          <tr><th>질문</th><th>확인 증거</th><th>다음 선택</th></tr>
-          <tr><td>1. 사용자가 실제로 영향을 받는가?</td><td>SLI, support ticket, synthetic check, region/device 분포</td><td>영향이 없으면 ticket으로 낮추고, 영향이 있으면 incident channel과 IC를 세운다.</td></tr>
-          <tr><td>2. 최근 변경과 같은 시간축인가?</td><td>deploy marker, image digest, config diff, migration version, feature flag audit</td><td>같은 시간축이면 rollback/flag off 후보를 먼저 준비한다. 아니면 요청 경로와 의존성 장애를 본다.</td></tr>
-          <tr><td>3. 요청이 어디까지 도달했는가?</td><td>DNS answer, WAF request id, LB target health, app access log, trace span, DB wait event</td><td>도달하지 못한 첫 계층이 현재의 가장 강한 원인 후보가 된다.</td></tr>
-          <tr><td>4. 원인 확정 전 완화가 가능한가?</td><td>rollback command, traffic shift, circuit breaker, rate limit, queue pause, read-only mode</td><td>사용자 영향을 줄이는 조치가 있으면 원인 분석과 병행한다.</td></tr>
-          <tr><td>5. 복구가 검증됐는가?</td><td>SLI 회복, error budget burn 정상화, data reconciliation, customer comms, runbook diff</td><td>지표 회복만으로 종료하지 말고 데이터·공지·문서 갱신까지 확인한다.</td></tr>
-        </table>
+        <p>운영 의사결정은 다섯 질문을 순서대로 던지면서 좁혀간다. 첫째, 사용자가 실제로 영향을 받는가? SLI, support ticket, synthetic check, region/device 분포로 확인하고, 영향이 없으면 ticket으로 낮추고 영향이 있으면 incident channel과 IC를 세운다. 둘째, 최근 변경과 같은 시간축인가? deploy marker, image digest, config diff, migration version, feature flag audit로 확인하고, 같은 시간축이면 rollback/flag off 후보를 먼저 준비하고 아니면 요청 경로와 의존성 장애를 본다. 셋째, 요청이 어디까지 도달했는가? DNS answer, WAF request id, LB target health, app access log, trace span, DB wait event로 확인하고, 도달하지 못한 첫 계층이 현재의 가장 강한 원인 후보가 된다. 넷째, 원인 확정 전 완화가 가능한가? rollback command, traffic shift, circuit breaker, rate limit, queue pause, read-only mode를 확인하고, 사용자 영향을 줄이는 조치가 있으면 원인 분석과 병행한다. 다섯째, 복구가 검증됐는가? SLI 회복, error budget burn 정상화, data reconciliation, customer comms, runbook diff로 확인하고, 지표 회복만으로 종료하지 말고 데이터·공지·문서 갱신까지 확인한다.</p>
       <h3>운영 준비도 점수표</h3>
-        <table>
-          <tr><th>점수</th><th>상태</th><th>판정</th></tr>
-          <tr><td>0점</td><td>문서 없음 또는 개인 기억에 의존</td><td>런칭/인수 차단</td></tr>
-          <tr><td>1점</td><td>다이어그램과 담당자만 있음</td><td>장애 때 실행 불가. owner, dashboard, runbook 보강 필요</td></tr>
-          <tr><td>2점</td><td>dashboard, alert, runbook, rollback plan이 있음</td><td>기본 운영 가능. drill 증거가 없으면 위험</td></tr>
-          <tr><td>3점</td><td>rollback/restore drill, SLO, incident packet, cost/access owner까지 있음</td><td>독립 운영 가능</td></tr>
-          <tr><td>4점</td><td>game day, failback, runbook diff, error budget policy가 반복 운영됨</td><td>팀 표준화 가능</td></tr>
-        </table>
+        <p>운영 준비도는 점수로 판정한다. 0점은 문서 없음 또는 개인 기억에 의존하는 상태로 런칭/인수 차단 대상이다. 1점은 다이어그램과 담당자만 있는 상태로 장애 때 실행이 불가능하니 owner, dashboard, runbook 보강이 필요하다. 2점은 dashboard, alert, runbook, rollback plan이 있는 상태로 기본 운영은 가능하지만 drill 증거가 없으면 위험하다. 3점은 rollback/restore drill, SLO, incident packet, cost/access owner까지 있는 상태로 독립 운영이 가능하다. 4점은 game day, failback, runbook diff, error budget policy가 반복 운영되는 상태로 팀 표준화가 가능하다.</p>
       <h3>강연 데모 스크립트</h3>
-        <table>
-          <tr><th>데모</th><th>주제</th><th>진행 방식</th><th>확인 질문</th></tr>
-          <tr><td>데모 1</td><td>정상 요청 경로 그리기</td><td>브라우저에서 DB까지 6개 hop을 그리고 각 hop의 증거를 하나씩 붙인다.</td><td>청중이 app log 이전 계층의 증거를 말할 수 있어야 한다.</td></tr>
-          <tr><td>데모 2</td><td>5xx fast burn triage</td><td>incident snapshot을 보여주고 rollback, scale-out, DB restart 중 무엇을 먼저 할지 투표시킨다.</td><td>최근 변경과 DB baseline을 근거로 rollback 후보를 고르는지 확인한다.</td></tr>
-          <tr><td>데모 3</td><td>private subnet egress 오판</td><td>flow log ACCEPT와 NAT bytes 4x를 함께 보여준다.</td><td>네트워크 차단이 아니라 retry storm/외부 API 지연을 의심하는지 본다.</td></tr>
-          <tr><td>데모 4</td><td>restore drill 채점</td><td>backup_age, restore_duration, missing_rows를 보여주고 RPO/RTO 판정을 시킨다.</td><td>복구 성공과 목표 충족을 구분하는지 확인한다.</td></tr>
-        </table>
+        <p>강연 데모는 네 개로 구성한다. 데모 1은 정상 요청 경로 그리기로, 브라우저에서 DB까지 6개 hop을 그리고 각 hop의 증거를 하나씩 붙인다. 청중이 app log 이전 계층의 증거를 말할 수 있어야 한다. 데모 2는 5xx fast burn triage로, incident snapshot을 보여주고 rollback, scale-out, DB restart 중 무엇을 먼저 할지 투표시킨다. 최근 변경과 DB baseline을 근거로 rollback 후보를 고르는지 확인한다. 데모 3은 private subnet egress 오판으로, flow log ACCEPT와 NAT bytes 4x를 함께 보여준다. 네트워크 차단이 아니라 retry storm/외부 API 지연을 의심하는지 본다. 데모 4는 restore drill 채점으로, backup_age, restore_duration, missing_rows를 보여주고 RPO/RTO 판정을 시킨다. 복구 성공과 목표 충족을 구분하는지 확인한다.</p>
       <h3>실습 채점 루브릭</h3>
-        <table>
-          <tr><th>수준</th><th>답변 특징</th><th>증거 사용</th><th>판정</th></tr>
-          <tr><td>초급</td><td>도구 이름과 서비스명을 나열한다.</td><td>장애 때 앱 로그나 콘솔 화면 하나에 의존한다.</td><td>불합격. 운영 판단 순서와 증거 연결이 없다.</td></tr>
-          <tr><td>중급</td><td>요청 경로와 변경 경로를 그리고 주요 증거를 확인한다.</td><td>rollback 후보와 owner를 말하지만 drill 증거가 약하다.</td><td>내부 운영 참여 가능. 공개 강연/출판용 설명으로는 보강 필요.</td></tr>
-          <tr><td>상급</td><td>사용자 영향, 최근 변경, 계층별 증거, 완화, 사후 개선을 incident packet으로 닫는다.</td><td>SLO burn, 비용, 보안, DR까지 같은 timeline에서 설명한다.</td><td>강연/출판 사례의 기준점으로 삼을 수 있다.</td></tr>
-          <tr><td>리뷰어</td><td>청중/독자가 같은 결론에 도달하도록 출력 샘플, 오판 사례, 채점 기준을 제공한다.</td><td>클라우드별 차이와 조직 운영 체계의 한계를 명시한다.</td><td>외부 공개 전 기술 리뷰를 맡길 수 있는 수준.</td></tr>
-        </table>
+        <p>실습은 네 수준으로 채점한다. 초급은 도구 이름과 서비스명을 나열하는 수준으로, 장애 때 앱 로그나 콘솔 화면 하나에 의존한다면 불합격이다 — 운영 판단 순서와 증거 연결이 없기 때문이다. 중급은 요청 경로와 변경 경로를 그리고 주요 증거를 확인하는 수준으로, rollback 후보와 owner를 말하지만 drill 증거가 약하면 내부 운영 참여는 가능해도 공개 강연/출판용 설명으로는 보강이 필요하다. 상급은 사용자 영향, 최근 변경, 계층별 증거, 완화, 사후 개선을 incident packet으로 닫는 수준으로, SLO burn, 비용, 보안, DR까지 같은 timeline에서 설명하면 강연/출판 사례의 기준점으로 삼을 수 있다. 리뷰어 수준은 청중/독자가 같은 결론에 도달하도록 출력 샘플, 오판 사례, 채점 기준을 제공하고 클라우드별 차이와 조직 운영 체계의 한계를 명시하는 수준으로, 외부 공개 전 기술 리뷰를 맡길 수 있다.</p>
       <h3>전문가 리뷰 질문</h3>
-        <table>
-          <tr><th>리뷰 영역</th><th>확인 질문</th><th>보강 기준</th></tr>
-          <tr><td>SRE 리뷰</td><td>SLO, burn rate, incident role, postmortem action이 실제 운영 정책으로 이어지는가?</td><td>알림 피로, error budget 정책, paging 기준이 빠져 있으면 보강한다.</td></tr>
-          <tr><td>Cloud network 리뷰</td><td>route table, SG/NACL/NSG, DNS override, private endpoint, NAT 비용 설명이 provider별로 정확한가?</td><td>AWS/Azure 차이를 서비스명 치환으로 처리한 부분을 수정한다.</td></tr>
-          <tr><td>Kubernetes/runtime 리뷰</td><td>readiness/liveness/startup, graceful shutdown, rollout, target health가 정확히 분리되어 있는가?</td><td>무중단 배포와 health check를 섞어 설명한 부분을 수정한다.</td></tr>
-          <tr><td>DB/DR 리뷰</td><td>connection pool, lock wait, migration lock, PITR, replica lag, failback 설명이 실제 복구 절차와 맞는가?</td><td>백업 존재와 복구 가능성을 혼동한 표현을 제거한다.</td></tr>
-          <tr><td>보안 리뷰</td><td>IAM/Managed Identity, secret rotation, audit log, incident comms가 과도하게 단순화되지 않았는가?</td><td>장기 키, broad permission, secret leakage 대응을 명확히 한다.</td></tr>
-        </table>
+        <p>출판 전에는 다섯 관점에서 전문가 리뷰를 받는다. SRE 리뷰는 SLO, burn rate, incident role, postmortem action이 실제 운영 정책으로 이어지는지 확인하고, 알림 피로, error budget 정책, paging 기준이 빠져 있으면 보강한다. Cloud network 리뷰는 route table, SG/NACL/NSG, DNS override, private endpoint, NAT 비용 설명이 provider별로 정확한지 확인하고, AWS/Azure 차이를 서비스명 치환으로 처리한 부분을 수정한다. Kubernetes/runtime 리뷰는 readiness/liveness/startup, graceful shutdown, rollout, target health가 정확히 분리되어 있는지 확인하고, 무중단 배포와 health check를 섞어 설명한 부분을 수정한다. DB/DR 리뷰는 connection pool, lock wait, migration lock, PITR, replica lag, failback 설명이 실제 복구 절차와 맞는지 확인하고, 백업 존재와 복구 가능성을 혼동한 표현을 제거한다. 보안 리뷰는 IAM/Managed Identity, secret rotation, audit log, incident comms가 과도하게 단순화되지 않았는지 확인하고, 장기 키, broad permission, secret leakage 대응을 명확히 한다.</p>
       <h3>공식 근거 맵</h3>
-        <table>
-          <tr><th>영역</th><th>공식 문서</th><th>URL</th><th>반영 기준</th></tr>
-          <tr><td>SLO/Burn rate</td><td>Google SRE Workbook · Alerting on SLOs</td><td>https://sre.google/workbook/alerting-on-slos/</td><td>burn rate, error budget, multi-window alert는 서비스별 baseline과 page load에 맞춰 조정해야 한다.</td></tr>
-          <tr><td>Kubernetes probes</td><td>Kubernetes Docs · Liveness, Readiness, and Startup Probes</td><td>https://kubernetes.io/docs/concepts/workloads/pods/probes/</td><td>liveness는 재시작, readiness는 traffic 수신 여부, startup은 느린 시작 보호로 분리한다.</td></tr>
-          <tr><td>AWS VPC Flow Logs</td><td>AWS Docs · Flow log records</td><td>https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html</td><td>ACCEPT/REJECT는 aggregation interval과 log-status를 함께 봐야 하며 delivery delay가 있을 수 있다.</td></tr>
-          <tr><td>AWS PrivateLink</td><td>AWS Docs · AWS PrivateLink concepts</td><td>https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html</td><td>endpoint 생성만으로 충분하지 않고 DNS, endpoint policy, route/security 경계를 함께 확인한다.</td></tr>
-          <tr><td>Azure Private Endpoint</td><td>Microsoft Learn · Private endpoint overview</td><td>https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview</td><td>private endpoint는 private IP로 Azure service에 연결하므로 Private DNS Zone 연결과 public access 정책을 같이 본다.</td></tr>
-          <tr><td>AWS ALB health</td><td>AWS Docs · Target group health checks</td><td>https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html</td><td>target health는 health check path, matcher, timeout, deregistration/draining과 함께 해석한다.</td></tr>
-          <tr><td>AWS RDS PITR</td><td>AWS Docs · Restoring a DB instance to a specified time</td><td>https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html</td><td>PITR은 새 DB instance를 만들며 latest restorable time, parameter/security group, engine 제약을 확인해야 한다.</td></tr>
-          <tr><td>Azure SQL restore</td><td>Microsoft Learn · Restore a database from a backup</td><td>https://learn.microsoft.com/en-us/azure/azure-sql/database/recovery-using-backups</td><td>restore 가능성과 RPO/RTO 충족은 다르므로 restore duration과 data reconciliation을 따로 측정한다.</td></tr>
-        </table>
+        <p>공식 근거는 영역별로 다음 문서를 참고한다. SLO/Burn rate는 Google SRE Workbook · Alerting on SLOs(https://sre.google/workbook/alerting-on-slos/)를 따르며, burn rate, error budget, multi-window alert는 서비스별 baseline과 page load에 맞춰 조정해야 한다. Kubernetes probes는 Kubernetes Docs · Liveness, Readiness, and Startup Probes(https://kubernetes.io/docs/concepts/workloads/pods/probes/)를 따르며, liveness는 재시작, readiness는 traffic 수신 여부, startup은 느린 시작 보호로 분리한다. AWS VPC Flow Logs는 AWS Docs · Flow log records(https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html)를 따르며, ACCEPT/REJECT는 aggregation interval과 log-status를 함께 봐야 하며 delivery delay가 있을 수 있다. AWS PrivateLink는 AWS Docs · AWS PrivateLink concepts(https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html)를 따르며, endpoint 생성만으로 충분하지 않고 DNS, endpoint policy, route/security 경계를 함께 확인한다. Azure Private Endpoint는 Microsoft Learn · Private endpoint overview(https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview)를 따르며, private endpoint는 private IP로 Azure service에 연결하므로 Private DNS Zone 연결과 public access 정책을 같이 본다. AWS ALB health는 AWS Docs · Target group health checks(https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html)를 따르며, target health는 health check path, matcher, timeout, deregistration/draining과 함께 해석한다. AWS RDS PITR은 AWS Docs · Restoring a DB instance to a specified time(https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html)을 따르며, PITR은 새 DB instance를 만들며 latest restorable time, parameter/security group, engine 제약을 확인해야 한다. Azure SQL restore는 Microsoft Learn · Restore a database from a backup(https://learn.microsoft.com/en-us/azure/azure-sql/database/recovery-using-backups)을 따르며, restore 가능성과 RPO/RTO 충족은 다르므로 restore duration과 data reconciliation을 따로 측정한다.</p>
       <h3>정확도 한계와 공개 시 주의 문구</h3>
-        <table>
-          <tr><th>영역</th><th>공격받기 쉬운 지점</th><th>문서의 안전한 표현</th></tr>
-          <tr><td>클라우드 서비스명</td><td>AWS/Azure 서비스명은 계속 바뀌고 기능도 region/sku에 따라 다르다.</td><td>문서의 서비스 매핑은 책임 경계 학습용이며, 실제 설계 전 공식 문서와 현재 계정 설정을 확인한다.</td></tr>
-          <tr><td>SLO 임계값</td><td>14.4x, 6x 같은 burn rate 예시는 출발점이지 절대값이 아니다.</td><td>트래픽 규모, on-call 부담, error budget policy에 맞춰 page/ticket 기준을 재산정한다.</td></tr>
-          <tr><td>Flow log 판독</td><td>flow log는 aggregation과 delivery delay가 있고 일부 metadata는 best effort다.</td><td>패킷 단위 진실로 단정하지 말고 app log, target health, DNS query log와 교차 검증한다.</td></tr>
-          <tr><td>Kubernetes probe</td><td>probe 설정은 runtime, startup 특성, downstream 의존성에 따라 달라진다.</td><td>liveness에 DB 등 외부 의존성을 넣어 전체 재시작 루프를 만들지 않도록 리뷰한다.</td></tr>
-          <tr><td>DR/RPO/RTO</td><td>백업이 존재해도 복구 목표를 만족한다는 뜻은 아니다.</td><td>restore drill, reconciliation, failback, customer communication을 따로 검증한다.</td></tr>
-          <tr><td>보안/IAM</td><td>권한과 secret 운영은 조직의 identity, audit, compliance 정책에 종속된다.</td><td>예시는 최소 기준이며 실제 운영 전 security owner review를 필수로 둔다.</td></tr>
-        </table>
+        <p>이 문서는 시점에 따라 달라지는 정보를 다루므로 공개할 때 몇 가지 한계를 밝혀야 한다. 클라우드 서비스명은 AWS/Azure 서비스명이 계속 바뀌고 기능도 region/sku에 따라 다르므로, 문서의 서비스 매핑은 책임 경계 학습용이며 실제 설계 전 공식 문서와 현재 계정 설정을 확인해야 한다고 밝힌다. SLO 임계값은 14.4x, 6x 같은 burn rate 예시가 출발점이지 절대값이 아니므로, 트래픽 규모, on-call 부담, error budget policy에 맞춰 page/ticket 기준을 재산정해야 한다고 밝힌다. Flow log 판독은 flow log에 aggregation과 delivery delay가 있고 일부 metadata가 best effort이므로, 패킷 단위 진실로 단정하지 말고 app log, target health, DNS query log와 교차 검증해야 한다고 밝힌다. Kubernetes probe는 probe 설정이 runtime, startup 특성, downstream 의존성에 따라 달라지므로, liveness에 DB 등 외부 의존성을 넣어 전체 재시작 루프를 만들지 않도록 리뷰해야 한다고 밝힌다. DR/RPO/RTO는 백업이 존재해도 복구 목표를 만족한다는 뜻은 아니므로, restore drill, reconciliation, failback, customer communication을 따로 검증해야 한다고 밝힌다. 보안/IAM은 권한과 secret 운영이 조직의 identity, audit, compliance 정책에 종속되므로, 예시는 최소 기준이며 실제 운영 전 security owner review를 필수로 둬야 한다고 밝힌다.</p>
       <h3>벤더별 세부 함정</h3>
-        <table>
-          <tr><th>영역</th><th>함정</th><th>검증 방식</th></tr>
-          <tr><td>Route 53 / Azure DNS</td><td>record가 맞아도 resolver cache, delegation, split-horizon/private DNS가 다르면 사용자는 실패할 수 있다.</td><td>authoritative answer, public resolver, private resolver를 분리해 기록한다.</td></tr>
-          <tr><td>CloudFront / Front Door</td><td>edge 403, stale cache, origin 5xx는 같은 화면 오류로 보일 수 있다.</td><td>edge request id, cache status, WAF log, origin status를 같은 request timeline에 붙인다.</td></tr>
-          <tr><td>ALB / Application Gateway</td><td>health check 성공은 business readiness 보장이 아니다.</td><td>health path가 dependency-free인지, matcher/timeout/draining이 배포 전략과 맞는지 확인한다.</td></tr>
-          <tr><td>PrivateLink / Private Endpoint</td><td>endpoint를 만들어도 DNS가 public endpoint를 반환하면 사설 경로가 아니다.</td><td>private DNS, endpoint policy, route/security rule, public access setting을 함께 검증한다.</td></tr>
-          <tr><td>EKS/AKS/App Service</td><td>새 버전이 뜬 것과 traffic을 받아도 되는 것은 다르다.</td><td>readiness, startup, rollout status, target/backend health, image digest를 연결한다.</td></tr>
-          <tr><td>RDS / Azure SQL</td><td>PITR 가능과 실제 업무 복구 가능은 다르다.</td><td>latest restorable time, restore duration, schema/app compatibility, missing rows reconciliation을 기록한다.</td></tr>
-        </table>
+        <p>벤더별로 자주 걸리는 함정도 따로 정리한다. Route 53 / Azure DNS는 record가 맞아도 resolver cache, delegation, split-horizon/private DNS가 다르면 사용자는 실패할 수 있으므로, authoritative answer, public resolver, private resolver를 분리해 기록해야 한다. CloudFront / Front Door는 edge 403, stale cache, origin 5xx가 같은 화면 오류로 보일 수 있으므로, edge request id, cache status, WAF log, origin status를 같은 request timeline에 붙여야 한다. ALB / Application Gateway는 health check 성공이 business readiness 보장이 아니므로, health path가 dependency-free인지, matcher/timeout/draining이 배포 전략과 맞는지 확인해야 한다. PrivateLink / Private Endpoint는 endpoint를 만들어도 DNS가 public endpoint를 반환하면 사설 경로가 아니므로, private DNS, endpoint policy, route/security rule, public access setting을 함께 검증해야 한다. EKS/AKS/App Service는 새 버전이 뜬 것과 traffic을 받아도 되는 것이 다르므로, readiness, startup, rollout status, target/backend health, image digest를 연결해야 한다. RDS / Azure SQL은 PITR 가능과 실제 업무 복구 가능이 다르므로, latest restorable time, restore duration, schema/app compatibility, missing rows reconciliation을 기록해야 한다.</p>
       <h3>재현 실습 패킷</h3>
-        <table>
-          <tr><th>항목</th><th>내용</th><th>채점/운영 기준</th></tr>
-          <tr><td>입력 데이터</td><td>incident snapshot, edge evidence, egress evidence, restore drill output</td><td>각 lab은 정상/비정상 출력과 판단 기준을 같이 제공한다.</td></tr>
-          <tr><td>학습자 제출물</td><td>원인 후보 3개, 배제한 증거, 즉시 완화 1개, 영구 수정 2개, 종료 조건</td><td>원인 정답보다 증거 기반 의사결정 과정을 채점한다.</td></tr>
-          <tr><td>채점 방식</td><td>증거 연결 40%, 완화 선택 25%, 영구 수정 20%, 커뮤니케이션/owner 15%</td><td>서비스명 암기와 단일 로그 의존 답변은 감점한다.</td></tr>
-          <tr><td>재현 범위</td><td>실제 cloud 계정 없이도 읽을 수 있는 synthetic packet</td><td>실제 실습으로 확장할 때는 sandbox 계정, 비용 한도, 삭제 스크립트, IAM boundary를 추가한다.</td></tr>
-        </table>
+        <p>재현 실습 패킷은 네 요소로 구성한다. 입력 데이터는 incident snapshot, edge evidence, egress evidence, restore drill output이며, 각 lab은 정상/비정상 출력과 판단 기준을 같이 제공한다. 학습자 제출물은 원인 후보 3개, 배제한 증거, 즉시 완화 1개, 영구 수정 2개, 종료 조건이며, 원인 정답보다 증거 기반 의사결정 과정을 채점한다. 채점 방식은 증거 연결 40%, 완화 선택 25%, 영구 수정 20%, 커뮤니케이션/owner 15%로 나누며, 서비스명 암기와 단일 로그 의존 답변은 감점한다. 재현 범위는 실제 cloud 계정 없이도 읽을 수 있는 synthetic packet이며, 실제 실습으로 확장할 때는 sandbox 계정, 비용 한도, 삭제 스크립트, IAM boundary를 추가한다.</p>
       <h3>출판 전 검수 기준</h3>
-        <table>
-          <tr><th>검수 영역</th><th>확인 질문</th><th>탈락 기준</th></tr>
-          <tr><td>개념 정확성</td><td>DNS/TLS, LB, VPC, runtime, DB, SLO, DR 용어가 책임 경계와 함께 설명되는가?</td><td>서비스명 번역이나 벤더 마케팅 문구로 대체하지 않는다.</td></tr>
-          <tr><td>사례 완결성</td><td>각 케이스가 증상, timeline, 증거, 완화, 영구 수정, 종료 조건을 포함하는가?</td><td>장애 원인만 맞히는 퍼즐이 아니라 운영 판단 훈련이어야 한다.</td></tr>
-          <tr><td>실습 재현성</td><td>정상/비정상 출력, 해석, mitigation, verification이 모두 있는가?</td><td>명령어만 던지고 정답 기준을 생략하지 않는다.</td></tr>
-          <tr><td>강연 가능성</td><td>60분 흐름, 청중 수준, 데모 지점, Q&amp;A 답변 구조가 있는가?</td><td>슬라이드로 옮겼을 때 메시지가 순서대로 쌓여야 한다.</td></tr>
-          <tr><td>전문 리뷰</td><td>SRE/클라우드 네트워크/Kubernetes/IaC/DB 운영 관점의 리뷰를 받을 지점이 표시되는가?</td><td>출판 전 최소 1회 이상 실제 운영자 리뷰를 거친다.</td></tr>
-        </table>
+        <p>출판 전에는 다섯 영역을 검수한다. 개념 정확성은 DNS/TLS, LB, VPC, runtime, DB, SLO, DR 용어가 책임 경계와 함께 설명되는지 확인하며, 서비스명 번역이나 벤더 마케팅 문구로 대체하지 않는다. 사례 완결성은 각 케이스가 증상, timeline, 증거, 완화, 영구 수정, 종료 조건을 포함하는지 확인하며, 장애 원인만 맞히는 퍼즐이 아니라 운영 판단 훈련이어야 한다. 실습 재현성은 정상/비정상 출력, 해석, mitigation, verification이 모두 있는지 확인하며, 명령어만 던지고 정답 기준을 생략하지 않는다. 강연 가능성은 60분 흐름, 청중 수준, 데모 지점, Q&amp;A 답변 구조가 있는지 확인하며, 슬라이드로 옮겼을 때 메시지가 순서대로 쌓여야 한다. 전문 리뷰는 SRE/클라우드 네트워크/Kubernetes/IaC/DB 운영 관점의 리뷰를 받을 지점이 표시되는지 확인하며, 출판 전 최소 1회 이상 실제 운영자 리뷰를 거쳐야 한다.</p>
 </section>
 
       <section id="ch1">
         <div class="ch-head"><span class="ch-code">OP-00</span><h2>운영 전체 지도</h2></div>
         <p class="lede">인프라·운영은 네트워크, 배포, 모니터링을 따로 외우는 영역이 아니다. 운영자는 request path, change path, control plane, data plane, recovery path를 한 장으로 연결해야 한다. 사용자의 요청은 DNS → CDN/WAF → Load Balancer → Runtime → Data store를 지나고, 변경은 CI/CD → artifact → config → runtime → metric gate → rollback 또는 incident response로 검증된다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>요청 경로, 변경 경로, 복구 경로가 같은 운영 지도에 연결되어 있는가?</td><td>request path map, deploy marker, service catalog, dependency map, SLO, rollback/restore owner</td><td>사용자 영향과 최근 변경, 완화 후보를 한 timeline에서 설명할 수 있어야 한다.</td></tr>
-          <tr><td>운영 전체 지도를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>service catalog, dependency map, release note, SLO dashboard, incident runbook, rollback drill record</td><td>어느 계층이 사용자 영향과 연결되는지 15분 안에 찾고, 원인 확정 전 완화책을 고를 수 있어야 한다.</td></tr>
-          <tr><td>운영 전체 지도 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>요청 실패, deploy marker, SLO burn이 같은 시간대에 발생</td><td>요청 경로와 변경 경로를 동시에 좁히고 rollback, feature off, traffic shift 중 사용자 영향을 가장 빨리 줄이는 조치를 먼저 선택한다.</td></tr>
-        </table>
+        <p>신입 때는 인프라 그림을 아무리 잘 그려도 실제 장애 앞에서는 손이 안 움직였다. 그림에는 DNS도 있고 LB도 있고 DB도 있었지만, 정작 "지금 이 5xx가 어디서 시작됐는지" 15분 안에 짚어내지 못했다. 문제는 그 그림이 정적이었다는 데 있었다. request path map은 있는데 그 위에 deploy marker나 SLO 상태를 얹어서 볼 방법이 없었던 것이다.</p>
+        <p>어느 순간부터 접근을 바꿨다. service catalog, dependency map, SLO dashboard, incident runbook을 한 화면에 모아두고, 장애가 나면 이걸 먼저 열게 했다. 요청 실패, deploy marker, SLO burn이 같은 시간대에 몰려 있는 걸 발견하면, 그 순간부터는 원인을 정확히 확정하기 전이라도 움직일 수 있다. rollback, feature off, traffic shift 중에서 사용자 영향을 가장 빨리 줄이는 조치부터 고르는 것이다. 원인 분석은 그 다음에 천천히 해도 늦지 않는다 — 담당자가 바뀌어도 같은 결론에 도달할 수 있을 만큼, 이 판단 근거가 timeline 위에 남아 있기만 하면 된다.</p>
 
       </section>
 
       <section id="ch2">
         <div class="ch-head"><span class="ch-code">OP-01</span><h2>4주 학습 순서</h2></div>
         <p class="lede">학습 순서는 서비스 장애를 좁히는 순서와 같아야 한다. 1주차에는 브라우저에서 DB까지 요청 경로를 그리고, 2주차에는 VPC, subnet, route table, NAT, ingress, egress, private endpoint를 붙인다. 3주차에는 CI/CD, artifact, runtime, health check, IaC 변경을 배포 경로로 묶고, 4주차에는 Observability, SLO, Incident Response, Rollback, Restore, DR drill로 운영 루프를 닫는다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>학습 순서가 실제 장애 triage와 운영 인수 순서로 이어지는가?</td><td>request path diagram, VPC route table readback, deploy pipeline stage, SLO dashboard, rollback/restore drill record</td><td>개념 이름을 외운 순서가 아니라 장애 때 배제할 계층과 산출물 순서로 정리되어야 한다.</td></tr>
-          <tr><td>4주 학습 순서를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>draw request path, list ingress/egress, check deploy pipeline, run smoke/rollback drill, review SLO burn alert</td><td>각 단계가 확인 명령, 판독 기준, 제출 산출물로 이어지면 실무 학습 경로로 본다.</td></tr>
-          <tr><td>4주 학습 순서 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>네트워크는 설명하지만 배포 marker, SLO burn, rollback 가능성을 함께 설명하지 못함</td><td>다음 학습 항목을 runbook, dashboard, drill packet으로 연결해 운영 증거를 만든다.</td></tr>
-        </table>
+        <p>이 순서를 이렇게 잡은 이유가 있다. 예전에 신입 엔지니어를 온보딩할 때, DNS나 VPC 같은 개념부터 하나씩 가르쳤더니 정작 실전 장애 앞에서는 여전히 얼어붙었다. 개념은 아는데 그 개념들을 실제 triage 순서로 옮기는 훈련이 없었던 것이다. 그래서 순서를 바꿨다. 1주차는 요청 경로를 실제로 그려보게 하고, 2주차부터는 그 위에 VPC와 네트워크 경계를 하나씩 얹고, 3주차에는 배포 경로를, 4주차에는 SLO와 복구까지 연결한다.</p>
+        <p>이 방식으로 배운 사람과 개념 순서로 배운 사람의 차이는 면접이 아니라 실전에서 드러난다. 네트워크는 줄줄 설명하는데 정작 배포 marker나 SLO burn, rollback 가능성은 하나도 못 짚는 경우를 자주 본다. 이럴 때는 다음 학습 항목을 실제 runbook과 dashboard, drill packet에 손으로 연결해보게 한다. 말로 아는 것과 산출물로 증명하는 것 사이의 간극이 여기서 드러난다.</p>
 
       </section>
 
       <section id="ch3">
         <div class="ch-head"><span class="ch-code">OP-02</span><h2>계층별 실패 모드</h2></div>
         <p class="lede">운영 실력은 장애 때 어떤 계층을 먼저 의심하고 어떤 증거로 배제하는지에서 드러난다. DNS/TLS, CDN/WAF, Load Balancer, runtime, DB, network policy, deploy pipeline, observability, incident process마다 대표 실패 모드와 첫 확인 증거가 다르다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>각 계층의 실패 모드와 첫 확인 증거를 구분할 수 있는가?</td><td>DNS answer, TLS chain, WAF log, target health, trace waterfall, DB wait event, flow log, deploy marker, burn-rate alert</td><td>앱 로그만 보거나 클라우드 서비스명만 나열하면 운영 판단으로 부족하다.</td></tr>
-          <tr><td>계층별 실패 모드를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>dig/curl/openssl, LB target health, kubectl describe/logs, DB performance insight, flow log, CI release note</td><td>증거는 같은 timestamp, traceId, version, environment로 연결되어야 한다.</td></tr>
-          <tr><td>계층별 실패 모드 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>프론트 화면 오류 하나를 보고 API 코드 문제로 단정</td><td>가장 앞단 계층부터 요청이 도달한 지점을 찾고, 최근 변경과 SLO burn을 함께 본다.</td></tr>
-        </table>
+        <p>주니어 때 제일 많이 했던 실수가 프론트 화면에 뜬 에러 메시지 하나만 보고 곧바로 API 코드부터 고치려 든 것이다. 그런데 열에 아홉은 API 코드가 문제가 아니었다. 요청이 지나가는 순서 그대로 증거를 겹쳐봐야 진짜 원인이 보인다 — 이름과 신뢰가 살아 있는지는 DNS answer와 TLS chain으로, edge와 LB가 제대로 받아줬는지는 WAF log와 target health로, 그 뒤 처리 과정은 trace waterfall과 DB wait event로 본다. 그리고 이게 최근 배포나 SLO 저하와 겹치는지도 함께 봐야 한다. 앱 로그만 보거나 "AWS라서 그렇다"는 식으로 클라우드 서비스명만 나열하는 건 운영 판단이라고 부르기엔 부족하다.</p>
+        <p>이 증거들을 모을 때 가장 중요한 건 같은 timestamp, traceId, version, environment로 서로 연결하는 것이다. 이걸 놓치면 사실은 무관한 두 사건을 하나로 잘못 엮어서 엉뚱한 곳을 고치게 된다. 가장 앞단 계층부터 요청이 실제로 도달한 지점을 찾고, 그 지점을 최근 변경·SLO burn과 나란히 놓고서야 비로소 "이게 진짜 원인이다"라고 말할 수 있다.</p>
 
       </section>
 
       <section id="ch4">
         <div class="ch-head"><span class="ch-code">OP-03</span><h2>운영 산출물과 답변 구조</h2></div>
         <p class="lede">운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. owner, escalation, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 비용 owner, access owner, 마지막 drill 날짜가 있어야 다음 사람이 같은 판단을 반복할 수 있다. 면접에서도 도구 이름보다 경로, 경계, 실패 모드, 증거, 완화, 후속 개선 순서로 말해야 한다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>운영 산출물과 면접 답변이 실행 가능한 증거로 닫히는가?</td><td>owner matrix, service catalog, SLO, dashboard, alert, runbook, rollback command, restore drill date, incident packet</td><td>담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야 한다.</td></tr>
-          <tr><td>운영 산출물과 답변 구조를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>service catalog, alert route, dashboard link, rollback command, restore drill report, postmortem, runbook diff</td><td>문서 링크만 있고 권한, owner, 마지막 drill 날짜가 없으면 운영 인수 미완료다.</td></tr>
-          <tr><td>운영 산출물과 답변 구조 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>장애 중 dashboard, alert owner, rollback owner를 찾지 못함</td><td>인수 체크리스트에 owner, 권한, 마지막 drill, incident packet, runbook diff를 필수 항목으로 추가한다.</td></tr>
-        </table>
+        <p>운영을 인수받았는데 정작 새벽에 장애가 터지니 dashboard도, alert owner도, rollback 권한을 가진 사람도 아무도 못 찾는 상황을 겪은 적이 있다. 인수 문서에는 분명 아키텍처 다이어그램이 예쁘게 그려져 있었다. 문제는 그 문서에 owner, 권한, 마지막 drill 날짜가 하나도 안 적혀 있었다는 것이다. 문서 링크만 있는 인수는 사실 인수가 아니라 아직 마무리 안 된 숙제였다.</p>
+        <p>그 사고 이후로 인수 체크리스트에 owner matrix, SLO, dashboard, alert, runbook, rollback command, restore drill date, incident packet을 전부 필수 항목으로 넣었다. 담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야만 그 산출물이 진짜로 "인수됐다"고 부를 수 있다는 걸 그때 배웠다. 면접에서 도구 이름을 줄줄 외워 말하는 것보다, 경로·경계·실패 모드·증거·완화·후속 개선 순서로 말할 수 있는지가 훨씬 더 정확한 실력 판단 기준이 되는 것도 같은 이유다.</p>
 
       </section>
 
@@ -246,12 +126,9 @@
           <li>운영 인수 전에 rollback drill, restore drill, traffic shift drill 중 최소 하나를 실행한다.</li>
           <li>비용 owner와 access owner를 서비스 카탈로그에 포함한다.</li>
         </ul>
-        <table>
-          <tr><th>작업 단계</th><th>필수 산출물</th><th>차단 기준</th></tr>
-          <tr><td>설계</td><td>목적, 영향 범위, 비목표, owner</td><td>영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음</td></tr>
-          <tr><td>변경</td><td>diff, 승인 기록, 검증 명령</td><td>production 변경과 staging 검증의 차이가 설명되지 않음</td></tr>
-          <tr><td>복구</td><td>rollback 또는 forward fix, 담당자, 예상 시간</td><td>실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음</td></tr>
-        </table>
+        <p>이 체크리스트의 세 관문은 인프라·운영 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
+        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. dependency map이나 SLO gate처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
+        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
       </section>
 
       <section id="ch6">
@@ -262,16 +139,11 @@
           symptom → scope → recent change → evidence<br>
           → mitigation → verification → runbook diff
         </div>
-        <table>
-          <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
-          <tr><td>서비스 카탈로그</td><td>owner, tier, dependency map, SLO, cost owner, access owner</td><td>15분 안에 현재 상태와 담당자를 찾을 수 있어야 한다.</td></tr>
-          <tr><td>변경 경로</td><td>commit SHA, image digest, migration version, config diff, deploy marker</td><td>장애 시 어떤 변경을 의심할지 시간축으로 좁힌다.</td></tr>
-          <tr><td>복구 경로</td><td>rollback command, feature flag, traffic shift, restore drill, RTO/RPO</td><td>복구가 구두 지시가 아니라 실행 가능한 절차여야 한다.</td></tr>
-        </table>
+        <p>새벽 장애 콜을 받으면 결국 세 가지를 순서대로 알아내야 한다. 이 서비스는 누구 책임이고 지금 얼마나 중요한가, 최근에 뭐가 바뀌었길래 이런 일이 생겼는가, 그리고 지금 당장 되돌릴 수단이 정말 있는가. 첫 번째는 owner, tier, dependency map, SLO, cost owner로 확인하는데, 15분 안에 담당자를 못 찾으면 이 정보 자체가 없는 것과 같다. 두 번째는 commit SHA, image digest, migration version, config diff, deploy marker를 시간축에 놓고 어떤 변경을 의심할지 좁히는 것이다. 세 번째가 의외로 제일 자주 빠진다 — rollback command, feature flag, traffic shift, restore drill이 실제로 실행 가능한 절차로 준비돼 있는지, 아니면 그냥 "누군가 알아서 하겠지" 하는 구두 지시로만 남아 있는지다.</p>
         <h3>운영 산출물 템플릿</h3>
-        <table>
-          <tr><th>Readiness packet</th><th>Incident packet</th></tr>
-          <tr><td><pre><code>service: checkout-api
+        <p>런칭 전에 채우는 Readiness packet과 장애 중에 채우는 Incident packet은 각각 다음처럼 구성한다.</p>
+        <p><strong>Readiness packet</strong></p>
+        <pre><code>service: checkout-api
 tier: customer-critical
 owner: payments-platform
 oncall: payments-primary
@@ -286,7 +158,9 @@ restore: PITR drill pass 2026-06-21, RPO 5m, RTO 30m
 cost_owner: platform-finops
 access_owner: security-platform
 last_game_day: 2026-06-25
-launch_gate: blocked if owner, rollback, restore, alert route, or SLO is missing</code></pre></td><td><pre><code>incident: INC-2026-0715-checkout-fast-burn
+launch_gate: blocked if owner, rollback, restore, alert route, or SLO is missing</code></pre>
+        <p><strong>Incident packet</strong></p>
+        <pre><code>incident: INC-2026-0715-checkout-fast-burn
 severity: SEV1
 started_at: 2026-07-15T10:04+09:00
 customer_impact: checkout success down from 99.94% to 91.2%, KR/JP mobile users
@@ -308,23 +182,9 @@ verification:
   - customer update sent
 runbook_diff:
   - add metric gate for checkout_success burn
-  - add target health canary stop rule</code></pre></td></tr>
-        </table>
-        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
-        <table>
-          <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
-          <tr><td>현재 상태</td><td>dashboard, alert, recent deploy, support ticket trend를 한 화면에서 확인</td><td>사용자 영향과 최근 변경을 먼저 고정한다.</td></tr>
-          <tr><td>운영 인수</td><td>서비스별 owner matrix와 runbook 링크를 대조</td><td>문서가 있어도 owner와 권한이 없으면 운영 준비가 아니다.</td></tr>
-          <tr><td>리허설</td><td>rollback drill, restore drill, traffic shift drill 기록 확인</td><td>마지막 성공 시간이 오래됐으면 실제 복구 가능성을 신뢰하지 않는다.</td></tr>
-        </table>
-        <p>같은 계층이라도 장애 패턴에 따라 판정 기준이 달라진다. 계층별로 자주 나오는 실패 신호를 따로 정리한다.</p>
-        <table>
-          <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
-          <tr><td>SLO / Burn-rate evidence</td><td>fast burn, slow burn, error budget policy, release freeze</td><td>장애와 단순 오류를 사용자 영향 기준으로 구분한다.</td></tr>
-          <tr><td>DR DRILL / FAILBACK CHECKLIST</td><td>backup age, replica lag, traffic shift, data reconciliation, failback</td><td>백업 존재가 아니라 복구와 원복 성공이 증거다.</td></tr>
-          <tr><td>IAM/Network 증거</td><td>IAM diff, access review, flow log, exception ticket, expiry</td><td>정책 선언이 아니라 실제 접근 경로와 감사 로그로 증명한다.</td></tr>
-          <tr><td>Game Day 운영 훈련</td><td>배포 rollback, region degradation, alert fatigue, cost spike</td><td>GAME DAY REVIEW PACKET으로 runbook diff와 follow-up owner/date를 남긴다.</td></tr>
-        </table>
+  - add target health canary stop rule</code></pre>
+        <p>운영 표면별로 실제 실행할 확인 단계를 정리하면 다음과 같다. 명령·확인 위치와 해석 기준을 함께 본다. 현재 상태 확인은 dashboard, alert, recent deploy, support ticket trend를 한 화면에서 보고 사용자 영향과 최근 변경을 먼저 고정한다. 운영 인수 확인은 서비스별 owner matrix와 runbook 링크를 대조하는데, 문서가 있어도 owner와 권한이 없으면 운영 준비가 아니다. 리허설 확인은 rollback drill, restore drill, traffic shift drill 기록을 보는데, 마지막 성공 시간이 오래됐으면 실제 복구 가능성을 신뢰하지 않는다.</p>
+        <p>같은 계층이라도 심화 장애 패턴에 따라 판정 기준이 달라진다. SLO / Burn-rate evidence는 fast burn, slow burn, error budget policy, release freeze로 나타나는데, 장애와 단순 오류를 사용자 영향 기준으로 구분해야 한다. DR DRILL / FAILBACK CHECKLIST는 backup age, replica lag, traffic shift, data reconciliation, failback으로 나타나는데, 백업 존재가 아니라 복구와 원복 성공이 증거다. IAM/Network 증거는 IAM diff, access review, flow log, exception ticket, expiry로 나타나는데, 정책 선언이 아니라 실제 접근 경로와 감사 로그로 증명해야 한다. Game Day 운영 훈련은 배포 rollback, region degradation, alert fatigue, cost spike로 나타나는데, GAME DAY REVIEW PACKET으로 runbook diff와 follow-up owner/date를 남긴다.</p>
       </section>
 
       <section id="ch7">
@@ -333,199 +193,156 @@ runbook_diff:
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 01 · 운영 준비도 packet 판독</span>
           <p>신규 서비스를 production에 올리기 전 운영 준비도 리뷰를 진행한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>readiness packet
+          <p>런칭 전 차단해야 할 운영 공백을 찾으려면 다음 readiness packet을 본다.</p>
+          <pre><code>readiness packet
 owner=team-payments
 slo=checkout_success 99.9
 rollback=artifact sha-prev
 restore_drill=not_run
-alert_owner=empty</code></pre></td><td>런칭 전 차단해야 할 운영 공백을 찾는다.</td></tr>
-          </table>
-          <p>같은 readiness packet을 조회해도 owner와 restore drill 값이 채워졌을 때와 비어 있을 때 판정이 달라진다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>owner=team-payments
+alert_owner=empty</code></pre>
+          <p>정상적인 경우라면 owner와 restore drill 값이 모두 채워져 있다.</p>
+          <pre><code>owner=team-payments
 slo=checkout_success 99.9
 rollback=validated
 restore_drill=2026-06-20 pass
-alert_owner=oncall-payments</code></pre></td><td><pre><code>restore_drill=not_run
+alert_owner=oncall-payments</code></pre>
+          <p>비정상적인 경우에는 restore drill과 alert owner가 비어 있다.</p>
+          <pre><code>restore_drill=not_run
 alert_owner=empty
 runbook=diagram-only
-cost_owner=unknown</code></pre></td><td>아키텍처는 있어도 복구 검증과 알림 owner가 없으면 운영 준비가 끝난 것이 아니다.</td></tr>
-          </table>
-          <p>운영 공백을 확인했다면 런칭을 막을 조치와 재발을 막을 조치를 구분해 실행한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>런칭 gate를 보류하고 alert owner, rollback command, restore drill 일정을 확정한다.</td><td>운영 인수 체크리스트에 owner, SLO, rollback, restore drill, cost owner를 필수 항목으로 둔다.</td><td>readiness packet의 모든 owner와 마지막 drill 시간이 채워지고 smoke/rollback 검증이 통과한다.</td></tr>
-          </table>
+cost_owner=unknown</code></pre>
+          <p>아키텍처는 있어도 복구 검증과 알림 owner가 없으면 운영 준비가 끝난 것이 아니다. 즉시 완화는 런칭 gate를 보류하고 alert owner, rollback command, restore drill 일정을 확정하는 것이다. 영구 수정은 운영 인수 체크리스트에 owner, SLO, rollback, restore drill, cost owner를 필수 항목으로 두는 것이다. readiness packet의 모든 owner와 마지막 drill 시간이 채워지고 smoke/rollback 검증이 통과하면 이 조치가 끝난 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 02 · 배포 직후 5xx 증가 triage</span>
           <p>새 artifact 배포 8분 뒤 checkout 5xx와 p95 latency가 동시에 증가한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>incident snapshot
+          <p>사용자 영향과 최근 변경을 같은 시간축에 두고 rollback 후보를 판단하려면 다음 incident snapshot을 본다.</p>
+          <pre><code>incident snapshot
 sli=checkout_success burn=14x
 deploy_marker=api:sha-9f31 at T-8m
 alb_5xx=up
 app_error=up
 db_pool_pending=flat
-rollback=available</code></pre></td><td>사용자 영향과 최근 변경을 같은 시간축에 두고 rollback 후보를 판단한다.</td></tr>
-          </table>
-          <p>같은 incident snapshot이라도 배포 marker와 burn rate가 baseline일 때와 급증했을 때 판단이 달라진다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>burn=0.7x
+rollback=available</code></pre>
+          <p>정상적인 경우라면 burn rate가 baseline이고 최근 배포도 없다.</p>
+          <pre><code>burn=0.7x
 deploy_marker=none
 alb_5xx=baseline
-rollback=not_needed</code></pre></td><td><pre><code>burn=14x
+rollback=not_needed</code></pre>
+          <p>비정상적인 경우에는 burn rate가 급증하고 최근 배포 marker와 함께 5xx, app error가 동시에 오른다.</p>
+          <pre><code>burn=14x
 deploy_marker=api:sha-9f31
 alb_5xx=up
 app_error=up
-rollback=available</code></pre></td><td>최근 배포와 사용자 영향이 강하게 연결되어 원인 확정 전 rollback 또는 feature flag off를 검토해야 한다.</td></tr>
-          </table>
-          <p>burn rate 급증을 확인했다면 지금 실행할 완화책과 재발을 막을 조치를 구분한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>canary stop, feature flag off, previous artifact rollback 중 폭발 반경이 가장 작은 조치를 실행한다.</td><td>metric gate에 checkout_success burn rate와 app 5xx를 추가하고 rollback decision log를 release runbook에 넣는다.</td><td>burn rate 1x 이하, 5xx baseline 복귀, rollback artifact와 config version 기록 완료.</td></tr>
-          </table>
+rollback=available</code></pre>
+          <p>최근 배포와 사용자 영향이 강하게 연결돼 있으므로 원인 확정 전이라도 rollback 또는 feature flag off를 검토해야 한다. 즉시 완화는 canary stop, feature flag off, previous artifact rollback 중 폭발 반경이 가장 작은 조치를 실행하는 것이다. 영구 수정은 metric gate에 checkout_success burn rate와 app 5xx를 추가하고 rollback decision log를 release runbook에 넣는 것이다. burn rate가 1x 이하로 내려오고 5xx가 baseline으로 복귀하며 rollback artifact와 config version이 기록되면 이 조치가 끝난 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 03 · DNS/TLS edge 장애 판독</span>
           <p>일부 지역 사용자만 접속 실패를 보고하고 앱 로그에는 요청이 없다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>edge evidence
+          <p>앱 장애와 edge 이전 장애를 분리하려면 다음 edge evidence를 본다.</p>
+          <pre><code>edge evidence
 dig_public=NXDOMAIN
 dig_authoritative=NOERROR ttl=60
 openssl_verify=ok
 waf_request_id=missing
-app_log=missing</code></pre></td><td>앱 장애와 edge 이전 장애를 분리한다.</td></tr>
-          </table>
-          <p>같은 도메인을 조회해도 public resolver가 정상 응답할 때와 NXDOMAIN을 반환할 때 출력이 다르다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>dig_public=NOERROR
+app_log=missing</code></pre>
+          <p>정상적인 경우라면 public resolver와 authoritative 응답이 모두 NOERROR고 WAF request id와 app log도 남아 있다.</p>
+          <pre><code>dig_public=NOERROR
 dig_authoritative=NOERROR
 waf_request_id=present
-app_log=present</code></pre></td><td><pre><code>dig_public=NXDOMAIN
+app_log=present</code></pre>
+          <p>비정상적인 경우에는 public resolver가 NXDOMAIN을 반환하고 WAF request id와 app log가 비어 있다.</p>
+          <pre><code>dig_public=NXDOMAIN
 waf_request_id=missing
 app_log=missing
-resolver_region=ap-northeast</code></pre></td><td>요청이 edge/app까지 도달하지 않았으므로 DNS resolver cache, delegation, record 변경을 먼저 의심한다.</td></tr>
-          </table>
-          <p>NXDOMAIN을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>이전 record 복구, TTL 전파 모니터링, status update, affected resolver 확인.</td><td>DNS 변경 티켓에 TTL 사전 조정, authoritative/public resolver 검증, rollback record를 필수화한다.</td><td>public resolver와 authoritative resolver 모두 NOERROR, WAF request id와 app access log 재등장.</td></tr>
-          </table>
+resolver_region=ap-northeast</code></pre>
+          <p>요청이 edge/app까지 도달하지 않았으므로 DNS resolver cache, delegation, record 변경을 먼저 의심해야 한다. 즉시 완화는 이전 record 복구, TTL 전파 모니터링, status update, affected resolver 확인이다. 영구 수정은 DNS 변경 티켓에 TTL 사전 조정, authoritative/public resolver 검증, rollback record를 필수화하는 것이다. public resolver와 authoritative resolver가 모두 NOERROR를 반환하고 WAF request id와 app access log가 재등장하면 이 조치가 끝난 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 04 · Private subnet egress 장애 판독</span>
           <p>private subnet의 배치 작업이 외부 결제 API timeout을 반복하고 NAT 비용도 증가한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>egress evidence
+          <p>라우팅 성공, 정책 허용, retry storm, 비용 신호를 한 incident로 묶으려면 다음 egress evidence를 본다.</p>
+          <pre><code>egress evidence
 route_0_0_0_0=nat-123
 flow_log=ACCEPT
 nat_bytes=4x
 retry_rate=9x
-api_timeout=up</code></pre></td><td>라우팅 성공, 정책 허용, retry storm, 비용 신호를 한 incident로 묶는다.</td></tr>
-          </table>
-          <p>같은 egress 경로라도 NAT bytes와 retry rate가 baseline일 때와 급증했을 때 원인 해석이 다르다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>nat_bytes=baseline
+api_timeout=up</code></pre>
+          <p>정상적인 경우라면 NAT bytes와 retry rate가 baseline이고 api timeout도 없다.</p>
+          <pre><code>nat_bytes=baseline
 retry_rate=baseline
 api_timeout=0
-flow_log=ACCEPT</code></pre></td><td><pre><code>nat_bytes=4x
+flow_log=ACCEPT</code></pre>
+          <p>비정상적인 경우에는 NAT bytes와 retry rate가 급증하고 provider 429까지 함께 올라간다.</p>
+          <pre><code>nat_bytes=4x
 retry_rate=9x
 api_timeout=up
-provider_429=up</code></pre></td><td>네트워크가 막힌 것이 아니라 외부 API 지연/429와 재시도가 NAT 비용과 timeout을 키우는 상황일 수 있다.</td></tr>
-          </table>
-          <p>retry storm 징후를 확인했다면 지금 실행할 완화책과 재발을 막을 구조 개선을 구분한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>retry backoff 강화, batch concurrency 축소, circuit breaker 또는 queue pause.</td><td>egress dependency map, retry budget, NAT cost anomaly alert, external API SLO를 추가한다.</td><td>retry rate baseline, NAT bytes 정상화, batch success 회복, provider 429 감소.</td></tr>
-          </table>
+provider_429=up</code></pre>
+          <p>네트워크가 막힌 것이 아니라 외부 API 지연/429와 재시도가 NAT 비용과 timeout을 키우는 상황일 수 있다. 즉시 완화는 retry backoff 강화, batch concurrency 축소, circuit breaker 또는 queue pause다. 영구 수정은 egress dependency map, retry budget, NAT cost anomaly alert, external API SLO를 추가하는 것이다. retry rate가 baseline으로 돌아오고 NAT bytes가 정상화되며 batch success가 회복되고 provider 429가 줄면 이 조치가 끝난 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 05 · SLO burn과 incident 역할 판독</span>
           <p>결제 성공률 fast burn이 발생했는데 장애 채널에서 여러 명이 동시에 명령한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>incident channel
+          <p>기술 신호와 incident command 실패를 동시에 판정하려면 다음 incident channel을 본다.</p>
+          <pre><code>incident channel
 burn_5m=18x
 IC=missing
 scribe=missing
 commands=rollback,scale-out,db-restart
-customer_comms=missing</code></pre></td><td>기술 신호와 incident command 실패를 동시에 판정한다.</td></tr>
-          </table>
-          <p>같은 incident channel이라도 IC와 scribe가 지정됐을 때와 비어 있을 때 대응 품질이 달라진다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>burn_5m=0.8x
+customer_comms=missing</code></pre>
+          <p>정상적인 경우라면 IC와 scribe가 지정돼 있고 명령권도 단일화돼 있다.</p>
+          <pre><code>burn_5m=0.8x
 IC=assigned
 scribe=assigned
 commands=single_owner
-customer_comms=ready</code></pre></td><td><pre><code>burn_5m=18x
+customer_comms=ready</code></pre>
+          <p>비정상적인 경우에는 IC가 비어 있고 여러 명이 동시에 다른 명령을 내린다.</p>
+          <pre><code>burn_5m=18x
 IC=missing
 multiple_commands=true
-customer_comms=missing</code></pre></td><td>fast burn 자체도 문제지만 역할과 의사결정 기록이 없어 완화 품질이 떨어지는 상태다.</td></tr>
-          </table>
-          <p>역할 공백을 확인했다면 지금 정리할 조치와 재발을 막을 절차 개선을 구분한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>IC 지정, 명령권 단일화, scribe와 comms owner 지정, 완화 후보 하나를 선택한다.</td><td>incident role checklist, decision log template, fast burn paging runbook을 추가한다.</td><td>timeline, decision owner, customer update, recovery signal, runbook diff가 postmortem에 남음.</td></tr>
-          </table>
+customer_comms=missing</code></pre>
+          <p>fast burn 자체도 문제지만 역할과 의사결정 기록이 없어 완화 품질이 떨어지는 상태다. 즉시 완화는 IC 지정, 명령권 단일화, scribe와 comms owner 지정, 완화 후보 하나를 선택하는 것이다. 영구 수정은 incident role checklist, decision log template, fast burn paging runbook을 추가하는 것이다. timeline, decision owner, customer update, recovery signal, runbook diff가 postmortem에 남으면 이 조치가 끝난 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 06 · Restore drill RPO/RTO 판독</span>
           <p>DB 장애 대비 restore drill을 수행했지만 목표 시간을 초과했다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>restore drill
+          <p>백업 존재와 복구 가능성을 구분하고 RPO/RTO 위반을 판정하려면 다음 restore drill 결과를 본다.</p>
+          <pre><code>restore drill
 backup_age=17m
 restore_duration=42m
 replica_lag=11m
 missing_rows=128
 RPO=5m
-RTO=30m</code></pre></td><td>백업 존재와 복구 가능성을 구분하고 RPO/RTO 위반을 판정한다.</td></tr>
-          </table>
-          <p>같은 restore drill이라도 RPO/RTO를 지켰을 때와 위반했을 때 후속 조치가 달라진다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>backup_age=4m
+RTO=30m</code></pre>
+          <p>정상적인 경우라면 backup age와 restore duration이 목표 안에 들고 missing rows도 없다.</p>
+          <pre><code>backup_age=4m
 restore_duration=18m
 replica_lag=30s
 missing_rows=0
 RPO=met
-RTO=met</code></pre></td><td><pre><code>backup_age=17m
+RTO=met</code></pre>
+          <p>비정상적인 경우에는 restore duration과 replica lag가 목표를 넘고 missing rows도 남는다.</p>
+          <pre><code>backup_age=17m
 restore_duration=42m
 replica_lag=11m
 missing_rows=128
 RPO=breach
-RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 복구 시간 목표를 모두 넘었고 reconciliation이 필요하다.</td></tr>
-          </table>
-          <p>RPO/RTO 위반을 확인했다면 지금 실행할 완화책과 재발을 막을 개선을 구분한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>write freeze, 영향 고객 범위 산정, reconciliation job 실행, failback 계획 고정.</td><td>backup frequency, replica lag alert, restore automation, failback drill을 개선한다.</td><td>다음 drill에서 RPO/RTO met, missing rows 0, failback 절차 완료.</td></tr>
-          </table>
+RTO=breach</code></pre>
+          <p>복구는 됐지만 허용 데이터 손실과 복구 시간 목표를 모두 넘었고 reconciliation이 필요하다는 뜻이다. 즉시 완화는 write freeze, 영향 고객 범위 산정, reconciliation job 실행, failback 계획 고정이다. 영구 수정은 backup frequency, replica lag alert, restore automation, failback drill을 개선하는 것이다. 다음 drill에서 RPO/RTO met, missing rows 0, failback 절차 완료가 확인되면 이 조치가 끝난 것이다.</p>
         </div>
       </section>
 
       <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">인프라·운영 로드맵에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
-        <table>
-          <tr><th>용어</th><th>정의</th><th>운영 증거</th><th>자주 하는 오해</th><th>관련 항목</th></tr>
-          <tr><td>request path</td><td>사용자 요청이 DNS에서 DB까지 통과하는 운영 경로.</td><td>DNS/CDN/WAF/LB/App/DB dependency map, traceId, app log</td><td>앱 로그가 없으면 앱 문제가 없다는 뜻이다.</td><td>DNS, CDN/WAF, Load Balancer, DB pool</td></tr>
-          <tr><td>change path</td><td>코드 변경이 CI/CD에서 runtime과 incident response까지 검증되는 흐름.</td><td>CI run, artifact digest, deploy marker, SLO dashboard</td><td>CI green이면 운영 성공이다.</td><td>artifact, environment, metric gate, rollback</td></tr>
-          <tr><td>SLO</td><td>사용자 경험 기준의 내부 신뢰성 목표.</td><td>SLO dashboard, error budget, alert owner</td><td>모든 오류를 같은 우선순위로 처리하면 된다.</td><td>SLI, error budget, paging</td></tr>
-          <tr><td>runbook</td><td>장애나 변경 시 반복 실행 가능한 절차 문서.</td><td>runbook owner, rollback command, restore drill date</td><td>문서 링크만 있으면 운영 인수 완료다.</td><td>owner, drill, incident packet</td></tr>
-          <tr><td>RPO/RTO</td><td>허용 가능한 데이터 손실과 복구 시간 목표.</td><td>DR plan, restore drill, replica lag, failover result</td><td>백업이 있으면 DR 준비가 끝난다.</td><td>backup, restore, DR</td></tr>
-        </table>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>request path</b></div><div class="g-def">사용자 요청이 DNS에서 DB까지 통과하는 운영 경로다. DNS/CDN/WAF/LB/App/DB dependency map, traceId, app log로 확인한다. 앱 로그가 비어 있으면 앱은 잘못이 없다고 넘겨짚기 쉬운데, 대개는 요청이 그 이전 계층에서 이미 막혀서 앱까지 갈 일 자체가 없었던 것이다.</div></div>
+          <div class="g-row"><div class="g-term"><b>change path</b></div><div class="g-def">코드 변경이 CI/CD를 거쳐 runtime과 incident response까지 검증되는 흐름 전체다. CI run, artifact digest, deploy marker, SLO dashboard로 확인한다. CI가 초록불이면 운영도 성공한 거라 믿기 쉬운데, CI green은 빌드와 테스트를 통과했다는 뜻일 뿐 production에서 실제로 잘 돌아간다는 보장은 아니다.</div></div>
+          <div class="g-row"><div class="g-term"><b>SLO</b></div><div class="g-def">사용자 경험을 기준으로 잡는 내부 신뢰성 목표다. SLO dashboard, error budget, alert owner로 확인한다. 오류는 다 똑같이 급하게 처리하면 된다고 생각하기 쉬운데, SLO가 있어야 사용자 영향으로 이어지는 진짜 장애와 무시해도 되는 단순 오류를 구분할 수 있다.</div></div>
+          <div class="g-row"><div class="g-term"><b>runbook</b></div><div class="g-def">장애나 변경이 있을 때 반복해서 실행할 수 있는 절차 문서다. runbook owner, rollback command, restore drill date로 확인한다. 문서 링크 하나만 던져주면 인수가 끝난다고 생각하기 쉬운데, owner와 권한, 마지막 drill 날짜가 없는 runbook은 장애 때 실행할 수 없는 그냥 그림일 뿐이다.</div></div>
+          <div class="g-row"><div class="g-term"><b>RPO/RTO</b></div><div class="g-def">허용할 수 있는 데이터 손실 범위와 복구까지 걸리는 시간 목표다. DR plan, restore drill, replica lag, failover result로 확인한다. 백업만 돌아가고 있으면 DR 준비는 끝났다고 여기기 쉬운데, 실제 restore drill로 소요 시간과 누락 데이터를 검증해보기 전까지는 RPO/RTO를 정말 지킬 수 있는지 아무도 모른다.</div></div>
+        </div>
       </section>
 
       <section id="ch9">
@@ -535,67 +352,26 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
           <span class="co-label">Triage frame</span>
           <p>인프라·운영 로드맵 장애는 증상 → 영향 범위 → 최근 변경 → 서비스 카탈로그 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
-        <p>이 triage frame을 시간 구간별 행동으로 풀면 다음과 같다.</p>
-        <table>
-          <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>owner, tier, dependency map, SLO, cost owner, access owner 기준으로 영향 범위를 고정한다.</td><td>dashboard, alert, recent deploy, support ticket trend를 한 화면에서 확인 항목에서 증거를 모아 완화책을 실행한다.</td><td>회고가 시스템 변경으로 닫히지 않으면 반복된다.</td></tr>
-        </table>
-        <p>incident packet에 시간대별로 무엇을 기록하고 어떤 기준으로 판정할지 정리하면 다음과 같다.</p>
-        <table>
-          <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
-          <tr><td>T+00</td><td>알림, SLI 값, 영향 서비스, 최근 배포를 기록</td><td>원인 추측 전에 사용자 영향과 변경 후보를 고정한다.</td></tr>
-          <tr><td>T+15</td><td>완화책과 rollback 후보를 비교</td><td>원인 확정 전이라도 영향 완화가 가능하면 실행한다.</td></tr>
-          <tr><td>T+60</td><td>postmortem owner/date와 runbook diff를 남김</td><td>회고가 시스템 변경으로 닫히지 않으면 반복된다.</td></tr>
-        </table>
+        <p>처음 10분은 원인을 찾기보다 영향 범위부터 좁힌다. owner, tier, dependency map, SLO, cost owner, access owner 기준으로 어느 서비스, 어느 담당자가 관련됐는지부터 고정한다. 다음 30분은 dashboard, alert, recent deploy, support ticket trend를 한 화면에서 확인한 항목에서 증거를 모아 완화책을 실행한다. 회고가 시스템 변경으로 닫히지 않으면 같은 장애가 반복되므로, 그 전까지는 종료로 보지 않는다.</p>
+        <p>incident packet에는 시간대별로 기록을 남긴다. T+00에는 알림, SLI 값, 영향 서비스, 최근 배포를 기록하고, 원인 추측 전에 사용자 영향과 변경 후보부터 고정한다. T+15에는 완화책과 rollback 후보를 비교하고, 원인 확정 전이라도 영향 완화가 가능하면 실행한다. T+60에는 postmortem owner/date와 runbook diff를 남기는데, 회고가 시스템 변경으로 닫히지 않으면 반복된다.</p>
         <h3>강연/출판용 실전 케이스</h3>
         <div class="practice-lab">
           <span class="sc-label">Case 1 · 배포 후 checkout 5xx fast burn</span>
           <p>결제 API 신규 artifact 배포 8분 뒤 checkout_success SLO가 14x fast burn을 보이고 ALB 5xx와 app error가 동시에 증가한다.</p>
-          <table>
-            <tr><th>시점</th><th>판단/행동</th><th>해석 기준</th></tr>
-          <tr><td>T+00</td><td>burn alert 수신, incident channel 생성, IC/scribe 지정</td><td>사용자 영향과 의사결정권을 먼저 고정한다.</td></tr>
-          <tr><td>T+05</td><td>deploy marker, image digest, config diff, DB migration version 확인</td><td>최근 변경이 사용자 영향과 같은 시간축인지 확인한다.</td></tr>
-          <tr><td>T+10</td><td>target health, app log, DB wait event, feature flag 상태 확인</td><td>DB 압박이 아니라 새 runtime 오류와 연결되면 rollback 후보가 강해진다.</td></tr>
-          <tr><td>T+15</td><td>canary stop 또는 previous artifact rollback</td><td>원인 확정 전이라도 사용자 영향을 줄인다.</td></tr>
-          <tr><td>T+45</td><td>postmortem에 metric gate, rollback decision log, runbook diff 추가</td><td>재발 방지가 운영 산출물로 닫혀야 한다.</td></tr>
-          </table>
-          <p>이 case에서 흔히 저지르는 오판과 장애를 종료할 수 있는 기준을 짝지어 정리한다.</p>
-          <table>
-            <tr><th>대표 오판</th><th>종료 조건</th></tr>
-            <tr><td>앱 로그 stack trace만 보고 디버깅을 계속하면서 rollback 결정을 늦추는 것.</td><td>burn rate가 baseline으로 회복되고 rollback artifact, config version, 의사결정 시간이 incident packet에 남으면 종료한다.</td></tr>
-          </table>
+          <p>T+00에는 burn alert를 받고 incident channel을 생성하고 IC/scribe를 지정한다. 사용자 영향과 의사결정권을 먼저 고정하는 게 목적이다. T+05에는 deploy marker, image digest, config diff, DB migration version을 확인해서 최근 변경이 사용자 영향과 같은 시간축인지 본다. T+10에는 target health, app log, DB wait event, feature flag 상태를 확인하는데, DB 압박이 아니라 새 runtime 오류와 연결되면 rollback 후보가 강해진다. T+15에는 canary stop 또는 previous artifact rollback을 실행해서 원인 확정 전이라도 사용자 영향을 줄인다. T+45에는 postmortem에 metric gate, rollback decision log, runbook diff를 추가해서 재발 방지가 운영 산출물로 닫히게 한다.</p>
+          <p>이 case에서 흔히 저지르는 대표 오판은 앱 로그 stack trace만 보고 디버깅을 계속하면서 rollback 결정을 늦추는 것이다. 종료 조건은 burn rate가 baseline으로 회복되고 rollback artifact, config version, 의사결정 시간이 incident packet에 남는 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">Case 2 · Private subnet egress와 NAT 비용 급증</span>
           <p>private subnet batch가 외부 결제사 API timeout을 반복하고 NAT bytes가 4배 증가한다.</p>
-          <table>
-            <tr><th>시점</th><th>판단/행동</th><th>해석 기준</th></tr>
-          <tr><td>T+00</td><td>route table, SG/NACL, DNS resolution, flow log를 확인</td><td>네트워크가 막힌 것인지, 통신은 되지만 retry storm인지 분리한다.</td></tr>
-          <tr><td>T+10</td><td>provider 429/timeout, app retry rate, batch concurrency 확인</td><td>flow log ACCEPT와 NAT bytes 증가는 차단이 아니라 과도한 재시도일 수 있다.</td></tr>
-          <tr><td>T+20</td><td>batch concurrency 축소, retry backoff, circuit breaker 적용</td><td>비용과 장애 영향을 동시에 줄이는 완화책을 선택한다.</td></tr>
-          <tr><td>T+60</td><td>egress dependency map, retry budget, NAT cost anomaly alert 추가</td><td>비용 신호를 운영 incident 신호로 편입한다.</td></tr>
-          </table>
-          <p>이 case에서 흔히 저지르는 오판과 장애를 종료할 수 있는 기준을 짝지어 정리한다.</p>
-          <table>
-            <tr><th>대표 오판</th><th>종료 조건</th></tr>
-            <tr><td>flow log ACCEPT만 보고 네트워크는 정상이라고 끝내거나, NAT 비용을 FinOps 문제로만 분리하는 것.</td><td>retry rate, NAT bytes, batch success, 외부 API 오류율이 baseline으로 돌아오면 종료한다.</td></tr>
-          </table>
+          <p>T+00에는 route table, SG/NACL, DNS resolution, flow log를 확인해서 네트워크가 막힌 것인지, 통신은 되지만 retry storm인지 분리한다. T+10에는 provider 429/timeout, app retry rate, batch concurrency를 확인하는데, flow log ACCEPT와 NAT bytes 증가는 차단이 아니라 과도한 재시도일 수 있다. T+20에는 batch concurrency 축소, retry backoff, circuit breaker를 적용해서 비용과 장애 영향을 동시에 줄이는 완화책을 선택한다. T+60에는 egress dependency map, retry budget, NAT cost anomaly alert를 추가해서 비용 신호를 운영 incident 신호로 편입한다.</p>
+          <p>이 case에서 흔히 저지르는 대표 오판은 flow log ACCEPT만 보고 네트워크는 정상이라고 끝내거나, NAT 비용을 FinOps 문제로만 분리하는 것이다. 종료 조건은 retry rate, NAT bytes, batch success, 외부 API 오류율이 baseline으로 돌아오는 것이다.</p>
         </div>
         <div class="practice-lab">
           <span class="sc-label">Case 3 · Restore drill RPO/RTO 실패</span>
           <p>DB restore drill에서 backup_age 17분, restore_duration 42분, missing_rows 128건으로 RPO 5분/RTO 30분을 모두 위반한다.</p>
-          <table>
-            <tr><th>시점</th><th>판단/행동</th><th>해석 기준</th></tr>
-          <tr><td>T+00</td><td>backup age, replica lag, restore duration, reconciliation 범위 기록</td><td>복구 성공 여부보다 목표 위반을 먼저 판정한다.</td></tr>
-          <tr><td>T+20</td><td>write freeze, 영향 고객 산정, reconciliation job 실행</td><td>데이터 정합성 회복을 장애 완화와 분리해 관리한다.</td></tr>
-          <tr><td>T+60</td><td>backup frequency, replica lag alert, restore automation 개선</td><td>다음 drill에서 같은 목표로 재검증할 수 있어야 한다.</td></tr>
-          <tr><td>T+N</td><td>failback drill과 runbook diff 수행</td><td>복구 후 원래 경로로 돌아오는 절차까지 검증한다.</td></tr>
-          </table>
-          <p>이 case에서 흔히 저지르는 오판과 장애를 종료할 수 있는 기준을 짝지어 정리한다.</p>
-          <table>
-            <tr><th>대표 오판</th><th>종료 조건</th></tr>
-            <tr><td>복구가 됐다는 사실만 보고 RPO/RTO 위반과 누락 데이터 reconciliation을 덮는 것.</td><td>다음 drill에서 RPO/RTO met, missing rows 0, failback 완료가 증거로 남아야 한다.</td></tr>
-          </table>
+          <p>T+00에는 backup age, replica lag, restore duration, reconciliation 범위를 기록해서 복구 성공 여부보다 목표 위반을 먼저 판정한다. T+20에는 write freeze, 영향 고객 산정, reconciliation job을 실행해서 데이터 정합성 회복을 장애 완화와 분리해 관리한다. T+60에는 backup frequency, replica lag alert, restore automation을 개선해서 다음 drill에서 같은 목표로 재검증할 수 있게 한다. T+N에는 failback drill과 runbook diff를 수행해서 복구 후 원래 경로로 돌아오는 절차까지 검증한다.</p>
+          <p>이 case에서 흔히 저지르는 대표 오판은 복구가 됐다는 사실만 보고 RPO/RTO 위반과 누락 데이터 reconciliation을 덮는 것이다. 종료 조건은 다음 drill에서 RPO/RTO met, missing rows 0, failback 완료가 증거로 남는 것이다.</p>
         </div>
       </section>
 
@@ -614,13 +390,23 @@ RTO=breach</code></pre></td><td>복구는 됐지만 허용 데이터 손실과 �
       <section id="evidence-packet">
         <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
         <p class="lede">운영 로드맵은 서비스 이름 암기가 아니라 기준일과 실행 환경을 고정한 증거 묶음으로 검증한다. 이 섹션의 값이 없으면 SLO, DR, 보안 경계 답변은 초안으로만 취급한다.</p>
-        <table>
-          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
-          <tr><td>기준일</td><td>2026-07-09 감사 기준, 분기별 재확인</td><td>문서 상단 UPDATED, 변경 티켓, 운영 리뷰 날짜</td><td>로드맵·runbook·Q&amp;A의 날짜가 같은 감사 기준으로 맞는다.</td></tr>
-          <tr><td>provider/region/version 전제</td><td>AWS ap-northeast-2 또는 us-east-1, Azure Korea Central 또는 East US, EKS/AKS와 관리형 DB는 실제 사용 버전을 명시</td><td>account/subscription id 마스킹본, region 목록, cluster/control plane version, RDS/Azure SQL engine version</td><td>control plane, data plane, managed service 버전 차이를 답변에서 분리한다.</td></tr>
-          <tr><td>명령 출력 예시 종류</td><td>요청 경로, 변경 경로, 복구 경로를 각각 1개 이상 캡처</td><td><code>dig</code>, <code>openssl s_client</code>, LB target health, route table, Flow Logs, SLO burn, restore drill 로그</td><td>정상 출력과 실패 출력이 모두 있고, 실패 시 다음 owner와 rollback 조건이 적혀 있다.</td></tr>
-          <tr><td>완료 기준</td><td>경계, 증거, 완화, 복구, 재발 방지가 한 incident packet에 연결</td><td>dependency map, owner matrix, runbook 링크, drill 결과</td><td>다른 운영자가 같은 region/version에서 같은 명령으로 판단을 재현할 수 있다.</td></tr>
-        </table>
+        <p>기준일은 2026-07-09 감사를 기준으로 삼고, 분기별로 재확인한다. 문서 상단 UPDATED, 변경 티켓, 운영 리뷰 날짜를 남겨서 로드맵·runbook·Q&A의 날짜가 같은 감사 기준으로 맞는지 확인한다.</p>
+        <p>provider/region/version 전제도 명시해야 한다. AWS ap-northeast-2 또는 us-east-1, Azure Korea Central 또는 East US, EKS/AKS와 관리형 DB는 실제 사용 버전을 적어두고 account/subscription id 마스킹본, region 목록, cluster/control plane version, RDS/Azure SQL engine version을 함께 남긴다. control plane, data plane, managed service 버전 차이를 답변에서 분리해야 한다.</p>
+        <p>명령 출력 예시는 요청 경로, 변경 경로, 복구 경로를 각각 1개 이상 캡처한다. <code>dig</code>, <code>openssl s_client</code>, LB target health, route table, Flow Logs, SLO burn, restore drill 로그를 남기면 정상 출력과 실패 출력이 모두 있고, 실패 시 다음 owner와 rollback 조건이 적혀 있게 된다.</p>
+        <p>완료 기준은 경계, 증거, 완화, 복구, 재발 방지가 한 incident packet에 연결되는 것이다. dependency map, owner matrix, runbook 링크, drill 결과를 근거로, 다른 운영자가 같은 region/version에서 같은 명령으로 판단을 재현할 수 있는지 확인한다.</p>
+      </section>
+      <section id="ch-summary">
+      <div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+      <p class="lede">위에서 다룬 판단을 한 표로 모았다. 실제 판단은 표가 아니라 앞에서 설명한 맥락과 증거로 한다.</p>
+      <table>
+      <tr><th>영역</th><th>핵심 판단 기준</th><th>확인할 증거</th></tr>
+      <tr><td>운영 전체 지도</td><td>사용자 영향과 최근 변경, 완화 후보를 한 timeline에서 설명할 수 있어야 한다</td><td>request path map, deploy marker, service catalog, SLO</td></tr>
+      <tr><td>4주 학습 순서</td><td>장애 때 배제할 계층과 산출물 순서로 정리되어야 한다</td><td>request path diagram, route table readback, deploy pipeline stage</td></tr>
+      <tr><td>계층별 실패 모드</td><td>증거는 같은 timestamp, traceId, version, environment로 연결되어야 한다</td><td>DNS answer, TLS chain, target health, DB wait event, flow log</td></tr>
+      <tr><td>운영 산출물과 답변 구조</td><td>담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야 한다</td><td>owner matrix, SLO, dashboard, rollback command, restore drill date</td></tr>
+      <tr><td>Incident 대응</td><td>원인 확정 전이라도 영향 완화가 가능하면 실행한다</td><td>SLI, 영향 서비스, 최근 배포, postmortem owner/date</td></tr>
+      <tr><td>검증 기준·증거 패킷</td><td>다른 운영자가 같은 region/version에서 같은 명령으로 재현할 수 있어야 한다</td><td>dig, openssl s_client, LB target health, route table, restore drill 로그</td></tr>
+      </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

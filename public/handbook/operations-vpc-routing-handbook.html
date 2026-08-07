@@ -23,6 +23,7 @@
   <a href="#ch9"><span class="code">CASE</span>장애/운영 시나리오</a>
   <a href="#ch10"><span class="code">RISK</span>자주 틀리는 판단</a>
   <a href="#evidence-packet"><span class="code">EVIDENCE</span>검증 기준·증거 패킷</a>
+  <a href="#ch-summary"><span class="code">SUMMARY</span>총정리</a>
 </nav>
 <main>
 <header class="hero">
@@ -54,48 +55,32 @@
       <section id="ch1">
         <div class="ch-head"><span class="ch-code">NET-00</span><h2>CIDR과 subnet</h2></div>
         <p class="lede">VPC CIDR은 RFC 1918 대역을 쓰더라도 사내망, 고객사망, peering, VPN, Private Endpoint와 겹치면 나중에 막힌다. subnet은 public, private, data 계층으로 나누고 AZ 확장과 reserved IP를 고려한다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>CIDR과 subnet 설계가 미래 연결을 막지 않는다는 것을 어떻게 검증하는가?</td><td>VPC CIDR, subnet mask, AZ allocation, reserved IP, peering/VPN/PrivateLink overlap check</td><td>사내망·고객사망·확장 예정 대역과 겹치지 않아야 한다.</td></tr>
-          <tr><td>CIDR과 subnet를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>CIDR registry, route plan, IPAM, cloud subnet readback</td><td>주소 계획이 문서와 실제 cloud subnet에서 일치해야 한다.</td></tr>
-          <tr><td>CIDR과 subnet 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>고객사 VPN 연결 시 CIDR overlap 발견</td><td>NAT 또는 재주소화 같은 임시 우회와 장기 CIDR 재설계를 분리한다.</td></tr>
-        </table>
+        <p>VPC를 처음 만들 때는 다들 "10.0.0.0/16 정도면 충분하겠지" 하고 대충 잡고 넘어간다. RFC 1918 사설 대역이니 당장은 아무 문제도 없어 보인다. 문제는 몇 달, 몇 년 뒤에 터진다. 사내망과 겹치고, 고객사망과 겹치고, 나중에 붙이려던 peering이 안 되는 식으로.</p>
+        <p>실제로 이런 일을 겪었다. B2B 서비스를 하다 보니 고객사와 VPN을 새로 뚫을 일이 계속 생겼는데, 어느 날 한 고객사의 사내망 대역이 우리 VPC CIDR과 정확히 겹친다는 걸 그제서야 알았다. "사설 대역만 쓰면 안전하다"는 생각이 얼마나 순진한 가정이었는지 그때 깨달았다. 같은 사설 대역이라도 내가 연결하려는 상대방 네트워크와 겹치면 그 순간부터 라우팅이 모호해진다. 당장은 NAT나 재주소화로 우회해서 그 고객사와의 연결은 살렸지만, 그건 임시방편일 뿐이었다. 진짜 해법은 VPC CIDR을 처음부터 다시 설계하는 것이었고, 그 작업은 당장의 우회와는 별개로 장기 과제로 따로 잡아야 했다. 우회로 급한 불을 껐다고 다음 고객사와 연결할 때 또 같은 일이 안 생기는 게 아니기 때문이다.</p>
 
       </section>
 
       <section id="ch2">
         <div class="ch-head"><span class="ch-code">NET-01</span><h2>route table</h2></div>
         <p class="lede">route table은 패킷의 다음 hop을 정한다. 0.0.0.0/0이 Internet Gateway인지 NAT Gateway인지, 고객사 CIDR이 VPN Gateway로 가는지, 더 구체적인 prefix가 Longest Prefix Match로 우선되는지 확인한다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>패킷의 다음 hop이 의도한 route table로 결정되는가?</td><td>destination prefix, target, propagated route, NAT/IGW/TGW/VGW, longest prefix match</td><td>0.0.0.0/0보다 구체적인 prefix가 올바른 target으로 가야 한다.</td></tr>
-          <tr><td>route table를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>route table readback, effective route, propagated route, packet path diagram</td><td>선언한 경로와 실제 effective route가 같아야 한다.</td></tr>
-          <tr><td>route table 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>private subnet 서버가 외부 API timeout</td><td>route target, NAT 상태, return path를 나누어 수정한다.</td></tr>
-        </table>
+        <p>route table을 읽을 때 흔히 하는 실수가 0.0.0.0/0 하나만 보고 "이 정도면 다 나가겠지" 하고 넘기는 것이다. 실제로는 더 구체적인 prefix가 있으면 그쪽이 항상 이긴다. terraform 모듈 하나를 잘못 붙이면서 특정 대역만 조용히 다른 target으로 빠지는 route가 몰래 추가된 적이 있는데, 트래픽의 극히 일부만 이상하게 새는 바람에 원인을 찾는 데 한참 걸렸다. 콘솔에 선언한 경로와 provider가 실제로 계산해서 쓰는 effective route가 다를 수 있다는 걸 그때 체감했다 — peering이나 VPN이 얽히면 이 둘이 어긋나는 일이 생각보다 자주 있다.</p>
+        <p>private subnet 서버가 외부 API를 호출하다 timeout이 나면 다들 "네트워크 문제"라고 뭉뚱그려 적고 넘어가고 싶어진다. 하지만 그 안에는 세 가지 서로 다른 가능성이 섞여 있다. route target 자체가 틀렸는지, NAT가 죽었는지, 아니면 나가는 길은 멀쩡한데 돌아오는 return path가 막혔는지. 이 셋을 구분하지 않고 "네트워크 문제"로만 기록해두면, 다음에 비슷한 timeout이 났을 때 처음부터 다시 이 셋을 하나하나 훑어야 한다.</p>
 
       </section>
 
       <section id="ch3">
         <div class="ch-head"><span class="ch-code">NET-02</span><h2>ingress와 egress</h2></div>
         <p class="lede">ingress는 외부에서 들어오는 경로이고 egress는 내부에서 나가는 경로다. private subnet의 서버가 외부 API를 호출하려면 NAT, DNS, outbound security group, NACL, return path가 모두 맞아야 한다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>ingress와 egress가 source/destination/port 기준으로 분리 검증되는가?</td><td>source IP, destination IP, port, protocol, SG inbound/outbound, NACL ephemeral port, return path</td><td>outbound 허용만으로 성공이 아니며 응답 경로까지 맞아야 한다.</td></tr>
-          <tr><td>ingress와 egress를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>flow log, firewall decision, SG/NACL rule, NAT metric, DNS query log</td><td>REJECT 위치가 route인지 policy인지 DNS인지 구분한다.</td></tr>
-          <tr><td>ingress와 egress 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>외부 결제 API 호출 timeout과 NAT bytes 급증</td><td>egress allowlist, retry 제한, NAT route 조정을 임시 완화로 검토한다.</td></tr>
-        </table>
+        <p>"outbound를 열었으니 통신은 될 것이다"는 생각으로 SG 규칙을 짜면 꼭 한 번은 발등을 찍힌다. SG는 stateful이라 나간 요청의 응답은 자동으로 들어오지만, NACL은 stateless라서 그 응답이 쓸 ephemeral port를 따로 열어줘야 한다. outbound만 확인하고 return path를 확인 안 하면 딱 이 지점에서 걸린다. flow log에 REJECT가 찍혔을 때도 그게 route 문제인지, policy 문제인지, DNS 문제인지부터 구분해야지, 무작정 규칙부터 늘리면 나중에 왜 이 규칙이 있는지 아무도 설명 못 하는 방화벽이 된다.</p>
+        <p>외부 결제 API 호출이 timeout 나면서 동시에 NAT bytes가 급증하는 걸 본 적이 있다. 다들 "API 쪽이 막혔나"라고 먼저 의심했는데, flow log를 열어보니 ACCEPT만 찍혀 있었다 — 정책 문제가 아니었다. 진짜 원인은 그 결제 API 쪽에서 응답이 느려지자 우리 애플리케이션이 계속 재시도를 날리고 있었던 것이었고, 그 재시도량 자체가 NAT bytes를 밀어올리고 있었다. 즉시 완화는 egress allowlist를 점검하고 retry를 제한하는 것이었고, policy 문제인지 retry storm인지는 flow log와 NAT metric을 나란히 놓고서야 가려졌다.</p>
 
       </section>
 
       <section id="ch4">
         <div class="ch-head"><span class="ch-code">NET-03</span><h2>Private Endpoint</h2></div>
         <p class="lede">DB, object storage, managed API를 인터넷으로 나가지 않고 호출해야 할 때 Private Endpoint 또는 PrivateLink 계열을 검토한다. 이때 DNS override와 endpoint policy까지 함께 봐야 트래픽이 의도한 사설 경로로 흐른다.</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>Private Endpoint가 실제로 사설 경로를 강제하는가?</td><td>private DNS override, endpoint policy, route table, public access disabled, flow log</td><td>endpoint 생성만으로 충분하지 않고 DNS가 사설 IP를 반환해야 한다.</td></tr>
-          <tr><td>Private Endpoint를 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?</td><td>nslookup/dig, endpoint connection status, flow log, storage/DB network setting</td><td>public endpoint로 해석되면 Private Endpoint 설계가 동작하지 않는다.</td></tr>
-          <tr><td>Private Endpoint 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?</td><td>Private Endpoint 생성 후에도 public egress 비용 발생</td><td>DNS override와 endpoint policy를 수정하고 public access 차단을 검증한다.</td></tr>
-        </table>
+        <p>Private Endpoint를 만들고 나서 "이제 이 트래픽은 인터넷을 안 거치겠지"라고 마음을 놓는 팀을 여럿 봤다. 실제로 비용 대시보드에서 public egress가 줄지 않아서 확인해보면, 원인은 거의 항상 같다. endpoint는 만들어졌는데 DNS가 여전히 public IP를 돌려주고 있는 것이다. 애플리케이션은 이름을 그대로 조회해서 나가기 때문에, endpoint가 있든 없든 DNS가 public을 가리키면 트래픽은 예전 그대로 인터넷을 거쳐 나간다. endpoint를 만드는 것과 DNS override를 적용하는 건 완전히 별개의 단계라는 걸 이 비용 청구서를 받고 나서야 깨닫는 경우가 많다.</p>
+        <p>이걸 확인하는 방법은 간단하다. nslookup이나 dig로 그 이름을 조회했을 때 사설 IP가 나오는지, public IP가 나오는지 보면 된다. public endpoint로 해석된다면 Private Endpoint를 아무리 잘 만들어놨어도 그 설계는 지금 그냥 죽어 있는 것과 같다. 즉시 할 일은 DNS override와 endpoint policy를 바로잡는 것이고, 그 다음에는 public access 자체를 차단해서 이 우회 경로가 다시는 조용히 열리지 않게 검증까지 해야 한다.</p>
 
       </section>
 
@@ -108,12 +93,9 @@
           <li>ingress와 egress를 각각 source, destination, port, policy로 검증한다.</li>
           <li>Private Endpoint 사용 시 DNS override와 endpoint policy를 같이 본다.</li>
         </ul>
-        <table>
-          <tr><th>작업 단계</th><th>필수 산출물</th><th>차단 기준</th></tr>
-          <tr><td>설계</td><td>목적, 영향 범위, 비목표, owner</td><td>영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음</td></tr>
-          <tr><td>변경</td><td>diff, 승인 기록, 검증 명령</td><td>production 변경과 staging 검증의 차이가 설명되지 않음</td></tr>
-          <tr><td>복구</td><td>rollback 또는 forward fix, 담당자, 예상 시간</td><td>실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음</td></tr>
-        </table>
+        <p>이 체크리스트의 세 관문은 네트워크 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
+        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. route table이나 SG 규칙처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
+        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
       </section>
 
       <section id="ch6">
@@ -124,28 +106,9 @@
           symptom → scope → recent change → evidence<br>
           → mitigation → verification → runbook diff
         </div>
-        <table>
-          <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
-          <tr><td>CIDR / Subnet</td><td>VPC CIDR, subnet route table, AZ, reserved IP, overlap check</td><td>나중에 peering/VPN/PrivateLink가 막히는 CIDR을 초기에 제거한다.</td></tr>
-          <tr><td>Ingress / Egress</td><td>source, destination, port, protocol, SG, NACL, route target</td><td>outbound와 return path를 함께 검증한다.</td></tr>
-          <tr><td>Flow evidence</td><td>VPC Flow Logs, firewall log, NAT metric, DNS resolution</td><td>허용했다고 믿는 경로와 실제 패킷 경로가 일치해야 한다.</td></tr>
-        </table>
-
-        <p>운영 표면별로 실제 실행할 확인 명령과 그 결과를 어떻게 해석할지 정리하면 다음과 같다.</p>
-        <table>
-          <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
-          <tr><td>라우팅</td><td>route table destination/target, longest prefix match, propagated route 확인</td><td>0.0.0.0/0와 더 구체적인 prefix의 우선순위를 본다.</td></tr>
-          <tr><td>정책</td><td>security group outbound/inbound, NACL ephemeral port, firewall rule</td><td>SG는 stateful, NACL은 stateless라는 차이를 반영한다.</td></tr>
-          <tr><td>패킷 증거</td><td>flow log ACCEPT/REJECT, NAT bytes, DNS query log</td><td>막힌 위치가 route인지 policy인지 DNS인지 분리한다.</td></tr>
-        </table>
-        <p>같은 계층이라도 장애 패턴에 따라 판정 기준이 달라진다. 계층별로 자주 나오는 실패 신호를 따로 정리한다.</p>
-        <table>
-          <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
-          <tr><td>Route miss</td><td>destination route 없음, 잘못된 NAT/IGW/TGW target, 더 구체적인 route 우선</td><td>패킷이 어느 next hop으로 가는지부터 확인한다.</td></tr>
-          <tr><td>Policy block</td><td>SG outbound, SG inbound, NACL inbound/outbound, firewall deny</td><td>stateful과 stateless 정책을 구분한다.</td></tr>
-          <tr><td>DNS path</td><td>private DNS override 누락, public endpoint 해석, resolver rule 불일치</td><td>네트워크가 맞아도 이름이 다른 경로를 가리키면 실패한다.</td></tr>
-          <tr><td>Return path</td><td>peer route 누락, asymmetric routing, ephemeral port 차단</td><td>요청 경로와 응답 경로가 모두 열려야 한다.</td></tr>
-        </table>
+        <p>VPC 라우팅 장애를 다룰 때도 "패킷이 왜 안 가는지" 하나의 질문을 세 층위로 쪼개서 본다. CIDR/Subnet 표면은 "애초에 주소 설계가 미래 연결을 막지 않는가"를 VPC CIDR, subnet route table, AZ, reserved IP, overlap check로 확인한다. 나중에 peering, VPN, PrivateLink를 붙일 때 막히는 CIDR을 여기서 미리 제거해야 한다. Ingress/Egress 표면은 "그 주소로 실제 트래픽이 오갈 수 있는가"를 source, destination, port, protocol, SG, NACL, route target으로 확인한다. outbound 허용과 return path를 함께 검증하는 게 이 표면의 핵심이다. Flow evidence 표면은 "허용했다고 믿는 경로와 실제 패킷 경로가 같은가"를 VPC Flow Logs, firewall log, NAT metric, DNS resolution으로 확인한다.</p>
+        <p>이 세 표면을 실제로 조사하는 순서도 있다. 라우팅 단계에서는 route table destination/target, longest prefix match, propagated route를 확인해 0.0.0.0/0과 더 구체적인 prefix 중 무엇이 우선되는지 본다. 정책 단계에서는 security group outbound/inbound, NACL ephemeral port, firewall rule을 보는데, SG는 stateful이고 NACL은 stateless라는 차이를 항상 반영해야 한다. 패킷 증거 단계에서는 flow log ACCEPT/REJECT, NAT bytes, DNS query log를 봐서 막힌 위치가 route인지 policy인지 DNS인지 분리한다.</p>
+        <p>같은 "연결 안 됨"이라도 어느 계층에서 막혔느냐에 따라 확인할 증거가 완전히 달라진다. Route miss는 애초에 갈 곳 자체가 없는 문제라 destination route가 아예 없거나 잘못된 NAT/IGW/TGW target을 가리키는 경우로 나타나는데, 패킷이 어느 next hop으로 가는지부터 확인해야 한다. Policy block은 갈 곳은 있는데 규칙이 막는 문제라 SG outbound, SG inbound, NACL inbound/outbound, firewall deny로 나타나므로 stateful과 stateless 정책을 구분해서 봐야 한다. DNS path 문제는 경로는 맞는데 애초에 잘못된 곳을 가리키는 문제라 private DNS override 누락, public endpoint 해석, resolver rule 불일치로 나타나는데, 네트워크 자체는 맞아도 이름이 다른 경로를 가리키면 요청은 실패한다. Return path 문제는 요청은 갔는데 응답이 못 돌아오는 문제라 peer route 누락, asymmetric routing, ephemeral port 차단으로 나타나므로 요청 경로뿐 아니라 응답 경로도 모두 열려 있는지 확인해야 한다.</p>
       </section>
 
       <section id="ch7">
@@ -154,39 +117,31 @@
         <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB 01 · Route table egress 판독</span>
           <p>private subnet batch가 외부 결제 API를 호출하지 못한다.</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td><pre><code>aws ec2 describe-route-tables --filters Name=association.subnet-id,Values=subnet-private-a</code></pre></td><td>0.0.0.0/0가 NAT로 향하는지, 더 구체적인 prefix가 잘못 잡히지 않았는지 확인한다.</td></tr>
-          </table>
-          <p>위 명령을 실행했을 때 정상 target과 비정상 target의 출력이 어떻게 다른지 비교한다.</p>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td><pre><code>DestinationCidrBlock: 0.0.0.0/0
+          <p>0.0.0.0/0이 NAT로 향하는지, 더 구체적인 prefix가 잘못 잡히지 않았는지 확인하려면 다음을 실행한다.</p>
+          <pre><code>aws ec2 describe-route-tables --filters Name=association.subnet-id,Values=subnet-private-a</code></pre>
+          <p>정상적인 경우라면 0.0.0.0/0이 NAT Gateway를 가리킨다.</p>
+          <pre><code>DestinationCidrBlock: 0.0.0.0/0
 NatGatewayId: nat-12345
-State: active</code></pre></td><td><pre><code>DestinationCidrBlock: 10.0.0.0/16
+State: active</code></pre>
+          <p>비정상적인 경우에는 VPC CIDR을 향하는 local 라우트만 있고 0.0.0.0/0 default route가 아예 없다.</p>
+          <pre><code>DestinationCidrBlock: 10.0.0.0/16
 GatewayId: local
 State: active
-# 0.0.0.0/0 라우트 없음</code></pre></td><td>비정상에는 VPC CIDR을 향하는 local 라우트만 있고 0.0.0.0/0 default route가 없다. egress next hop이 정의되지 않아 외부 API 호출이 실패한다. local 라우트는 VPC CIDR 대상이며 0.0.0.0/0에는 붙지 않는다.</td></tr>
-          </table>
-          <p>비정상 출력을 확인했다면 지금 당장 할 조치와 재발을 막을 조치를 구분해 실행한다.</p>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>임시로 올바른 NAT route를 연결하고 결제 API allowlist 영향도 확인한다.</td><td>subnet별 route table review와 egress dependency map을 release checklist에 추가한다.</td><td>flow log ACCEPT, NAT bytes 증가, 결제 API synthetic check 성공.</td></tr>
-          </table>
+# 0.0.0.0/0 라우트 없음</code></pre>
+          <p>local 라우트는 VPC CIDR 대상일 뿐 0.0.0.0/0에는 붙지 않는다. 이 상태에서는 egress next hop이 아예 정의되지 않아 외부 API 호출이 실패한다. 즉시 완화는 임시로 올바른 NAT route를 연결하고 결제 API allowlist 영향도 함께 확인하는 것이다. 영구 수정은 subnet별 route table review와 egress dependency map을 release checklist에 추가하는 것이다. flow log에서 ACCEPT가 찍히고 NAT bytes가 늘고 결제 API synthetic check가 성공하면 이 조치가 끝난 것이다.</p>
         </div>
       </section>
 
       <section id="ch8">
         <div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
         <p class="lede">VPC·Subnet·Routing·NAT에서 반복적으로 등장하는 운영 용어를 정의, 증거, 오해, 관련 항목 기준으로 정리한다. 장애 중에는 용어 자체보다 해당 용어가 어떤 로그, 지표, 설정, 책임 경계와 연결되는지를 확인한다.</p>
-        <table>
-          <tr><th>용어</th><th>정의</th><th>운영 증거</th><th>자주 하는 오해</th><th>관련 항목</th></tr>
-          <tr><td>CIDR</td><td>VPC와 subnet의 IP 주소 범위 표기.</td><td>VPC CIDR, subnet mask, overlap check</td><td>RFC1918 대역이면 언제나 안전하다.</td><td>subnet, peering, VPN</td></tr>
-          <tr><td>route table</td><td>패킷의 다음 hop을 결정하는 라우팅 규칙.</td><td>destination prefix, target, effective route</td><td>subnet 이름이 private면 인터넷 경로가 없다.</td><td>NAT Gateway, IGW, longest prefix match</td></tr>
-          <tr><td>ingress</td><td>외부에서 서비스 안으로 들어오는 경로.</td><td>source IP, destination port, SG inbound, WAF log</td><td>LB만 있으면 ingress 통제는 끝난다.</td><td>egress, security group, WAF</td></tr>
-          <tr><td>egress</td><td>서비스 내부에서 외부로 나가는 경로.</td><td>NAT metric, SG outbound, DNS query log, flow log</td><td>outbound rule만 열면 응답도 보장된다.</td><td>return path, NACL, NAT Gateway</td></tr>
-          <tr><td>Private Endpoint</td><td>관리형 서비스를 public internet 없이 사설 경로로 접근하게 하는 연결.</td><td>private DNS, endpoint policy, public access disabled</td><td>endpoint 생성만으로 트래픽이 사설화된다.</td><td>PrivateLink, DNS override, flow log</td></tr>
-        </table>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>CIDR</b></div><div class="g-def">VPC와 subnet의 IP 주소 범위를 적는 표기법이다. VPC CIDR, subnet mask, overlap check로 확인한다. RFC1918 사설 대역만 쓰면 무조건 안전할 거라고 믿기 쉬운데, 그 사설 대역이 나중에 연결할 사내망이나 고객사망과 겹치는 순간 확장은 그 자리에서 막혀버린다.</div></div>
+          <div class="g-row"><div class="g-term"><b>route table</b></div><div class="g-def">패킷이 다음에 어디로 갈지 정하는 라우팅 규칙이다. destination prefix, target, effective route로 확인한다. subnet 이름 앞에 private가 붙어 있으면 인터넷 경로가 아예 없을 거라 넘겨짚기 쉽지만, 실제로 인터넷이 열려 있는지 아닌지는 route table에 어떤 target이 걸려 있느냐로만 결정된다.</div></div>
+          <div class="g-row"><div class="g-term"><b>ingress</b></div><div class="g-def">외부에서 서비스 안으로 들어오는 경로다. source IP, destination port, SG inbound, WAF log로 확인한다. LB 하나만 세워두면 ingress 통제는 끝났다고 생각하기 쉽지만, 그 뒤에 있는 SG와 NACL, WAF 규칙까지 다 같이 봐야 실제로 어떤 트래픽이 통과하는지가 보인다.</div></div>
+          <div class="g-row"><div class="g-term"><b>egress</b></div><div class="g-def">서비스 안에서 밖으로 나가는 경로다. NAT metric, SG outbound, DNS query log, flow log로 확인한다. outbound rule 하나만 열면 응답도 알아서 돌아올 거라 생각하기 쉬운데, NACL은 stateless라서 돌아오는 응답이 쓸 ephemeral port를 따로 열어줘야 한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>Private Endpoint</b></div><div class="g-def">관리형 서비스를 public internet 없이 사설 경로로만 접근하게 만드는 연결이다. private DNS, endpoint policy, public access disabled로 확인한다. endpoint를 만드는 순간 트래픽이 저절로 사설화된다고 믿기 쉽지만, DNS가 여전히 public IP를 돌려주고 있다면 실제 트래픽은 그대로 인터넷을 거쳐 나간다.</div></div>
+        </div>
       </section>
 
       <section id="ch9">
@@ -196,18 +151,8 @@ State: active
           <span class="co-label">Triage frame</span>
           <p>VPC·Subnet·Routing·NAT 장애는 증상 → 영향 범위 → 최근 변경 → CIDR / Subnet 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
         </div>
-        <p>이 triage frame을 시간 구간별 행동으로 풀면 다음과 같다.</p>
-        <table>
-          <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>VPC CIDR, subnet route table, AZ, reserved IP, overlap check 기준으로 영향 범위를 고정한다.</td><td>route table destination/target, longest prefix match, propagated route 확인 항목에서 증거를 모아 완화책을 실행한다.</td><td>다음 외부 연동 전에 경로와 비용을 사전 리뷰한다.</td></tr>
-        </table>
-        <p>장애가 종료된 뒤에는 다음 세 항목을 incident packet에 남겨 재발 방지에 쓴다.</p>
-        <table>
-          <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
-          <tr><td>증상</td><td>private subnet batch가 외부 결제 API timeout</td><td>route, SG, NACL, DNS, NAT saturation을 순서대로 확인한다.</td></tr>
-          <tr><td>완화</td><td>NAT 장애면 대체 AZ NAT route, provider allowlist 문제면 egress IP 고정</td><td>임시 개방은 만료 조건과 audit ticket을 남긴다.</td></tr>
-          <tr><td>사후</td><td>egress dependency map과 비용 alert를 추가</td><td>다음 외부 연동 전에 경로와 비용을 사전 리뷰한다.</td></tr>
-        </table>
+        <p>처음 10분은 원인을 찾기보다 영향 범위부터 좁힌다. VPC CIDR, subnet route table, AZ, reserved IP, overlap check 기준으로 어느 subnet, 어느 워크로드가 영향을 받는지부터 고정한다. 다음 30분은 route table destination/target, longest prefix match, propagated route를 확인해 증거를 모으고 완화책을 실행한다. 다음 외부 연동 전에 경로와 비용을 미리 리뷰하는 게 종료 조건이다.</p>
+        <p>장애가 종료된 뒤에는 세 항목을 incident packet에 남긴다. 증상은 private subnet batch가 외부 결제 API에서 timeout이 난 것이고, route, SG, NACL, DNS, NAT saturation을 순서대로 확인해서 판정한다. 완화는 NAT 장애라면 대체 AZ NAT route로, provider allowlist 문제라면 egress IP 고정으로 대응하는데, 임시로 개방한 규칙은 만료 조건과 audit ticket을 반드시 남겨야 한다. 사후에는 egress dependency map과 비용 alert를 추가해서 다음 외부 연동 전에 경로와 비용을 사전 리뷰할 수 있게 한다.</p>
 
       </section>
 
@@ -224,13 +169,23 @@ State: active
       <section id="evidence-packet">
         <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>검증 기준·증거 패킷</h2></div>
         <p class="lede">VPC 라우팅 판단은 사람이 그린 경로와 provider가 계산한 경로가 같은지 확인해야 한다. CIDR, subnet, route, security rule은 region과 account 경계를 고정한 뒤 비교한다.</p>
-        <table>
-          <tr><th>항목</th><th>기준</th><th>증거 예시</th><th>완료 기준</th></tr>
-          <tr><td>기준일</td><td>2026-07-09 감사 기준, VPC/route/SG 변경마다 재확인</td><td>change ticket, route table diff, SG/NACL diff</td><td>변경 전후 route association과 return path 증거가 남아 있다.</td></tr>
-          <tr><td>provider/region/version 전제</td><td>AWS VPC/Transit Gateway/PrivateLink 또는 Azure VNet/Route Table/Private Endpoint, region과 account/subscription을 명시</td><td>VPC/VNet id, subnet id, TGW/peering id, endpoint id, route target</td><td>같은 CIDR이라도 provider별 route precedence와 endpoint DNS 제한을 구분한다.</td></tr>
-          <tr><td>명령 출력 예시 종류</td><td>route, DNS, reachability, packet path를 함께 캡처</td><td>route table export, Reachability Analyzer/Network Watcher 결과, Flow Logs, <code>dig</code>, <code>traceroute</code>, <code>nc -vz</code></td><td>source, destination, protocol, port가 실제 실패 요청과 일치한다.</td></tr>
-          <tr><td>완료 기준</td><td>ingress, egress, return path, DNS view 중 실패 지점을 하나로 좁힘</td><td>blocking component, denied log, endpoint policy, analyzer path</td><td>수정할 owner와 rollback route가 명확하고, 변경 후 같은 조건으로 재실행된다.</td></tr>
-        </table>
+        <p>기준일은 2026-07-09 감사를 기준으로 삼고, VPC/route/SG가 바뀔 때마다 재확인한다. change ticket, route table diff, SG/NACL diff를 남겨서 변경 전후 route association과 return path 증거가 함께 있는지 확인한다.</p>
+        <p>provider/region/version 전제도 명시해야 한다. AWS VPC/Transit Gateway/PrivateLink 또는 Azure VNet/Route Table/Private Endpoint, region과 account/subscription을 적어두고 VPC/VNet id, subnet id, TGW/peering id, endpoint id, route target을 함께 남긴다. 같은 CIDR이라도 provider마다 route precedence와 endpoint DNS 제한이 다르므로 이 전제를 분리해서 봐야 한다.</p>
+        <p>명령 출력 예시는 route, DNS, reachability, packet path를 함께 캡처한다. route table export, Reachability Analyzer/Network Watcher 결과, Flow Logs, <code>dig</code>, <code>traceroute</code>, <code>nc -vz</code>를 남기면 source, destination, protocol, port가 실제 실패 요청과 일치하는지 확인할 수 있다.</p>
+        <p>완료 기준은 ingress, egress, return path, DNS view 중 실패 지점을 하나로 좁히는 것이다. blocking component, denied log, endpoint policy, analyzer path를 근거로 수정할 owner와 rollback route를 명확히 하고, 변경 후 같은 조건으로 재실행해서 검증한다.</p>
+      </section>
+      <section id="ch-summary">
+      <div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+      <p class="lede">위에서 다룬 판단을 한 표로 모았다. 실제 판단은 표가 아니라 앞에서 설명한 맥락과 증거로 한다.</p>
+      <table>
+      <tr><th>영역</th><th>핵심 판단 기준</th><th>확인할 증거</th></tr>
+      <tr><td>CIDR과 subnet</td><td>사내망·고객사망·확장 예정 대역과 겹치지 않아야 한다</td><td>VPC CIDR, subnet mask, AZ allocation, overlap check</td></tr>
+      <tr><td>route table</td><td>선언한 경로와 provider가 계산한 effective route가 같아야 한다</td><td>route table readback, effective route, propagated route</td></tr>
+      <tr><td>ingress와 egress</td><td>outbound 허용만으로 성공이 아니며 return path까지 맞아야 한다</td><td>SG inbound/outbound, NACL ephemeral port, flow log</td></tr>
+      <tr><td>Private Endpoint</td><td>endpoint 생성만으로 부족하고 DNS가 사설 IP를 반환해야 한다</td><td>private DNS override, endpoint policy, public access disabled</td></tr>
+      <tr><td>Incident 대응</td><td>route, SG, NACL, DNS, NAT saturation을 순서대로 확인해 판정한다</td><td>route table diff, flow log, NAT metric, egress dependency map</td></tr>
+      <tr><td>검증 기준·증거 패킷</td><td>실패 지점을 ingress·egress·return path·DNS view 중 하나로 좁힌다</td><td>route table export, Reachability Analyzer, Flow Logs, dig/traceroute</td></tr>
+      </table>
       </section>
 <footer>
 OPERATIONS HANDBOOK · 2026-06<br>

@@ -23,6 +23,7 @@
   <a href="#metric-anchor"><span class="code">METRIC</span>수치 앵커</a>
   <a href="#case"><span class="code">CASE</span>실무 상황 예시</a>
   <a href="#practical-output-criteria"><span class="code">OUTPUT</span>실무 산출물 보강 기준</a>
+  <a href="#ch-summary"><span class="code">SUMMARY</span>총정리</a>
 </nav>
 <main>
 <header class="hero">
@@ -44,67 +45,37 @@
 <section id="plat-01">
 <div class="ch-head"><span class="ch-code">PLAT-01</span><h2>플랫폼은 공통 책임을 제품화한 것이다</h2></div>
 <p class="lede">플랫폼 엔지니어링은 팀마다 반복하던 배포, 권한, 관측, 템플릿, 테스트 환경을 공통 제품으로 만드는 일이다. 핵심 고객은 내부 개발자이고, 성공 기준은 사용 팀의 속도와 안전성이다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>공통 문제</td><td>배포</td><td>팀마다 다른 스크립트를 표준 pipeline으로</td></tr>
-<tr><td>공통 문제</td><td>권한</td><td>수동 계정 발급을 self-service + audit로</td></tr>
-<tr><td>공통 문제</td><td>관측</td><td>로그/메트릭/트레이스 기본값 제공</td></tr>
-</table>
+<p>팀마다 반복하는 문제를 각자 따로 풀면 조직 전체로는 같은 실수가 계속 반복된다. 배포는 팀마다 다른 스크립트를 표준 pipeline으로 바꾸는 공통 문제이고, 권한은 수동 계정 발급을 self-service와 audit로 바꾸는 공통 문제다. 관측은 로그, 메트릭, 트레이스 기본값을 팀마다 다시 만들지 않고 미리 제공하는 공통 문제다. 이 세 가지를 개별 팀이 아니라 플랫폼이 대신 풀어주는 게 플랫폼 엔지니어링의 핵심이다.</p>
 </section>
 
 <section id="plat-02">
 <div class="ch-head"><span class="ch-code">PLAT-02</span><h2>Golden path</h2></div>
 <p class="lede">Golden path는 조직이 권장하는 안전한 기본 경로다. 모든 선택지를 금지하는 것이 아니라, 대부분의 팀이 빠르게 시작하고 안전하게 운영할 수 있는 기본 조합을 제공한다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>요소</td><td>template</td><td>프로젝트 생성, lint, test, CI 기본값</td></tr>
-<tr><td>요소</td><td>guardrail</td><td>보안 스캔, 배포 승인, secret 차단</td></tr>
-<tr><td>요소</td><td>escape hatch</td><td>특수 요구를 위한 예외 경로와 승인 기준</td></tr>
-</table>
+<p>Golden path를 제대로 이해하려면 그 안의 세 요소를 구분해야 한다. template은 프로젝트 생성, lint, test, CI 기본값을 제공하는 요소이고, guardrail은 보안 스캔, 배포 승인, secret 차단을 담당하는 요소다. 이 둘만 있으면 특수한 요구가 있는 팀은 오히려 막히게 되므로, escape hatch라는 예외 경로와 승인 기준도 함께 있어야 한다. 이 세 요소가 갖춰져야 대부분의 팀은 빠르게 시작하면서도 예외가 필요한 팀은 정당한 절차로 벗어날 수 있다.</p>
 </section>
 
 <section id="plat-03">
 <div class="ch-head"><span class="ch-code">PLAT-03</span><h2>개발자 생산성 지표</h2></div>
 <p class="lede">생산성은 커밋 수가 아니라 대기 시간, 반복 작업, 실패 후 복구 시간, 변경 리드타임으로 본다. 좋은 플랫폼 글은 도구 기능보다 개발자가 덜 기다리고 덜 실수하게 된 구조를 설명한다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>지표</td><td>lead time</td><td>작업 시작부터 production 반영까지 시간</td></tr>
-<tr><td>지표</td><td>review latency</td><td>리뷰 요청부터 승인까지 대기</td></tr>
-<tr><td>지표</td><td>self-service rate</td><td>플랫폼 팀 개입 없이 완료된 작업 비율</td></tr>
-</table>
+<p>생산성 지표를 고를 때도 무엇을 측정하느냐가 중요하다. lead time은 작업을 시작해서 production에 반영되기까지 걸리는 시간을 보는 지표이고, review latency는 리뷰를 요청하고 승인받기까지의 대기 시간을 보는 지표다. self-service rate는 플랫폼 팀의 개입 없이 완료된 작업의 비율을 보는 지표다. 이 세 지표를 함께 보면 개발자가 어디서 얼마나 기다리고 있는지가 커밋 수보다 훨씬 선명하게 드러난다.</p>
 </section>
 
 <section id="plat-04">
 <div class="ch-head"><span class="ch-code">PLAT-04</span><h2>사내 도구의 함정</h2></div>
 <p class="lede">사내 도구는 만들기보다 유지가 어렵다. 문서, 권한, 장애 대응, 호환성, 지원 채널이 없으면 도구가 생산성을 높이는 대신 또 다른 병목이 된다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>위험</td><td>도구 owner 없음</td><td>문의와 장애가 방치된다</td></tr>
-<tr><td>위험</td><td>강제 표준화</td><td>특수 케이스가 편법으로 빠진다</td></tr>
-<tr><td>위험</td><td>측정 없음</td><td>좋아졌는지 감으로만 판단한다</td></tr>
-</table>
+<p>사내 도구는 만드는 것보다 계속 유지하는 게 더 어렵다. 도구 owner가 없으면 문의와 장애가 방치되는 위험으로 이어지고, 예외 없이 강제로 표준화하면 특수한 케이스가 편법으로 빠져나가는 위험으로 이어진다. 측정 없이 도구를 운영하면 실제로 좋아졌는지 감으로만 판단하는 위험으로 이어진다. 이 세 위험 중 하나라도 방치되면 도구가 생산성을 높이기는커녕 또 다른 병목이 된다.</p>
 </section>
 
 <section id="plat-05">
 <div class="ch-head"><span class="ch-code">PLAT-05</span><h2>플랫폼과 제품팀의 계약</h2></div>
 <p class="lede">플랫폼은 제품팀의 책임을 없애지 않는다. 공통 기반은 안전한 기본값을 제공하고, 제품팀은 도메인 요구, 사용자 영향, 출시 판단을 책임진다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>책임</td><td>플랫폼 팀</td><td>기본 경로, guardrail, 운영 지원</td></tr>
-<tr><td>책임</td><td>제품 팀</td><td>사용자 가치, 도메인 테스트, 출시 결정</td></tr>
-<tr><td>책임</td><td>공동</td><td>장애 대응, migration, adoption plan</td></tr>
-</table>
+<p>플랫폼이 있다고 제품팀의 책임이 사라지는 건 아니다. 플랫폼 팀은 기본 경로, guardrail, 운영 지원을 책임지고, 제품 팀은 사용자 가치, 도메인 테스트, 출시 결정을 책임진다. 그 사이에 걸쳐 있는 장애 대응, migration, adoption plan은 두 팀이 함께 책임진다. 이 경계가 명확해야 플랫폼 팀이 모든 것을 대신해줄 거라는 잘못된 기대가 생기지 않는다.</p>
 </section>
 
 <section id="plat-06">
 <div class="ch-head"><span class="ch-code">PLAT-06</span><h2>읽히는 신호</h2></div>
 <p class="lede">플랫폼 글을 읽을 때는 ‘무엇을 만들었나’보다 ‘누구의 반복 문제를 줄였나’를 본다. 내부 고객, adoption, migration, support cost, guardrail이 함께 나오면 플랫폼 맥락이 있는 글이다.</p>
-<table>
-<tr><th>분류</th><th>개념</th><th>해석 기준</th></tr>
-<tr><td>신호</td><td>내부 고객</td><td>사용 팀과 사용 시나리오가 명확하다</td></tr>
-<tr><td>신호</td><td>adoption path</td><td>기존 팀이 어떻게 옮겨오는지 설명한다</td></tr>
-<tr><td>신호</td><td>운영 모델</td><td>문의, 장애, 예외 승인 방식이 있다</td></tr>
-</table>
+<p>플랫폼 관련 글을 읽을 때는 무엇을 만들었나보다 누구의 반복 문제를 줄였나를 본다. 내부 고객 신호는 사용 팀과 사용 시나리오가 명확한지로 읽고, adoption path 신호는 기존 팀이 어떻게 옮겨오는지 구체적으로 설명하는지로 읽는다. 운영 모델 신호는 문의, 장애, 예외 승인 방식이 실제로 정해져 있는지로 읽는다. 이 세 신호가 함께 보이면 그 글은 도구 자랑이 아니라 실제 플랫폼 운영 경험에서 나온 글이다.</p>
 </section>
 
 <section id="metric-anchor">
@@ -143,13 +114,20 @@
 <section id="practical-output-criteria">
 <div class="ch-head"><span class="ch-code">OUTPUT</span><h2>실무 산출물 보강 기준</h2></div>
 <p class="lede">이 문서는 맥락 설명에서 끝내지 않고 실무자가 제출할 수 있는 산출물로 닫아야 한다. 짧은 글이라도 기준선, 입력 데이터, 판단 기준, 실패 시 조치를 한 표로 남긴다.</p>
+<p>기준일·범위는 2026-07-09 기준으로 플랫폼 엔지니어링·개발자 생산성 문서에서 다루는 판단 범위와 제외 범위를 명시한다. 필수 산출물은 golden path, DX 지표, 플랫폼 SLO, 지원 범위, 비용 배분이다.</p>
+<p>증거 예시는 온보딩 lead time, build 실패율, 셀프서비스 성공률, support ticket SLA를 owner와 연결하는 것이다. 통과 기준은 숫자나 체크리스트가 의사결정, 승인자, rollback/abort 조건 중 하나와 연결되는 것이다. 나쁜 산출물은 개념 설명만 있고 기준선, 비교 대상, 책임자, 다음 조치가 없는 문서다.</p>
+</section>
+<section id="ch-summary">
+<div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+<p class="lede">위에서 다룬 개념을 한 표로 모았다. 실제 판단은 표가 아니라 앞에서 설명한 맥락과 사례로 한다.</p>
 <table>
-<tr><th>보강 항목</th><th>기준</th></tr>
-<tr><td>기준일·범위</td><td>2026-07-09 기준. 플랫폼 엔지니어링·개발자 생산성 문서에서 다루는 판단 범위와 제외 범위를 명시한다.</td></tr>
-<tr><td>필수 산출물</td><td>golden path, DX 지표, 플랫폼 SLO, 지원 범위, 비용 배분</td></tr>
-<tr><td>증거 예시</td><td>온보딩 lead time, build 실패율, 셀프서비스 성공률, support ticket SLA를 owner와 연결한다.</td></tr>
-<tr><td>통과 기준</td><td>숫자나 체크리스트가 의사결정, 승인자, rollback/abort 조건 중 하나와 연결되어야 한다.</td></tr>
-<tr><td>나쁜 산출물</td><td>개념 설명만 있고 기준선, 비교 대상, 책임자, 다음 조치가 없는 문서.</td></tr>
+<tr><th>주제</th><th>핵심 개념</th><th>해석 기준</th></tr>
+<tr><td>플랫폼 정의</td><td>배포, 권한, 관측을 공통 제품으로 만든다</td><td>내부 개발자가 고객, 속도와 안전성이 성공 기준</td></tr>
+<tr><td>Golden path</td><td>template, guardrail, escape hatch</td><td>기본 경로를 안전하게, 예외는 승인 경로로</td></tr>
+<tr><td>생산성 지표</td><td>lead time, review latency, self-service rate</td><td>커밋 수가 아니라 대기·복구 시간으로 본다</td></tr>
+<tr><td>사내 도구 함정</td><td>owner 없음, 강제 표준화, 측정 없음</td><td>문서·권한·지원 채널 없이는 병목이 된다</td></tr>
+<tr><td>플랫폼·제품팀 계약</td><td>플랫폼 팀, 제품 팀, 공동 책임</td><td>플랫폼이 제품팀 책임을 대신하지 않는다</td></tr>
+<tr><td>읽히는 신호</td><td>내부 고객, adoption path, 운영 모델</td><td>무엇을 만들었나보다 누구의 문제를 줄였나</td></tr>
 </table>
 </section>
 <footer>

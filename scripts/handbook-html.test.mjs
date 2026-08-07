@@ -53,6 +53,84 @@ function extractGeneratedDocument(moduleSource) {
   };
 }
 
+// 2026-08 표→줄글 전환: 운영 코어 7개 문서는 챕터별 표 대신 줄글로 같은 판단 근거를 설명하고,
+// 문서 끝에 총정리 표 1개만 남긴다. 아래 헬퍼는 그 형식에 맞는 내용 기준 검증을 담당한다.
+const PROSE_OPERATIONS_IDS = new Set([
+  "operations-request-path",
+  "operations-vpc-routing",
+  "operations-security-boundary",
+  "operations-dns-tls",
+  "operations-private-connectivity",
+  "operations-cloud-scenarios",
+  "operations-roadmap",
+  "operations-delivery-pipeline",
+  "operations-runtime-orchestration",
+  "operations-iac-change",
+  "operations-observability-slo",
+  "operations-incident-dr",
+  "operations-checklist-interview",
+  "operations-ai-llm-operations",
+]);
+
+function extractSectionByChCode(source, code) {
+  const marker = `<span class="ch-code">${code}</span>`;
+  const start = source.indexOf(marker);
+
+  if (start === -1) {
+    return null;
+  }
+
+  const end = source.indexOf("</section>", start);
+
+  return end === -1 ? source.slice(start) : source.slice(start, end);
+}
+
+function assertProsePlaybook(file, source) {
+  const section = extractSectionByChCode(source, "PLAYBOOK");
+
+  assert.ok(section, `${file} should include a PLAYBOOK section`);
+  assert.doesNotMatch(section, /<table/, `${file} playbook should explain evidence in prose, not a table`);
+}
+
+function assertProseGlossary(file, termSection) {
+  assert.match(termSection, /<div class="glossary">/, `${file} should render the TERM section as a prose glossary, not a table`);
+
+  const defs = [...termSection.matchAll(/<div class="g-def">([\s\S]*?)<\/div>/g)].map(([, def]) =>
+    def.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+  );
+
+  assert.ok(defs.length >= 4, `${file} glossary should define at least 4 terms`);
+
+  for (const def of defs) {
+    assert.ok(
+      def.length >= 60,
+      `${file} each glossary term should be explained in a full sentence covering evidence and misconceptions, not a short label`,
+    );
+  }
+}
+
+function assertProsePracticeLab(file, labBlock) {
+  assert.doesNotMatch(labBlock, /<table/, `${file} practice lab should explain output interpretation in prose, not a table`);
+  assert.match(labBlock, /<pre><code>/, `${file} practice lab should include a concrete command/output sample`);
+  assert.match(labBlock, /정상[\s\S]*비정상/, `${file} practice lab should contrast normal and abnormal output`);
+  assert.match(
+    labBlock,
+    /즉시 완화[\s\S]*영구 수정/,
+    `${file} practice lab should separate immediate mitigation from a permanent fix`,
+  );
+}
+
+function assertSingleTrailingSummaryTable(file, source) {
+  const tableCount = (source.match(/<table\b/g) ?? []).length;
+
+  assert.equal(tableCount, 1, `${file} should keep exactly one consolidated summary table near the end`);
+  assert.match(
+    source,
+    /<span class="ch-code">SUMMARY<\/span>[\s\S]*<table\b/,
+    `${file} the single remaining table should be the final summary table`,
+  );
+}
+
 test("extractHandbookDocument pulls nav and main markup without page chrome", () => {
   const html = `<!doctype html>
 <html lang="ko">
@@ -393,10 +471,18 @@ test("operations handbooks include command interpretation and practice labs", as
     const source = await readFile(path.join("public", "handbook", item.file), "utf8");
 
     assert.match(source, /실무 플레이북/, `${item.file} should include a practical playbook`);
-    assert.match(source, /확인 단계[\s\S]*명령·확인 위치[\s\S]*해석 기준/, `${item.file} should include command interpretation rows`);
     assert.match(source, /PRACTICE LAB/, `${item.file} should include practice labs`);
-    assert.match(source, /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/, `${item.file} should include normal and abnormal interpretation`);
-    assert.match(source, /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/, `${item.file} should include mitigation and permanent fix guidance`);
+
+    if (PROSE_OPERATIONS_IDS.has(item.id)) {
+      assertProsePlaybook(item.file, source);
+
+      const labBlock = source.match(/<div class="practice-lab">[\s\S]*?<\/div>/)?.[0] ?? "";
+      assertProsePracticeLab(item.file, labBlock);
+    } else {
+      assert.match(source, /확인 단계[\s\S]*명령·확인 위치[\s\S]*해석 기준/, `${item.file} should include command interpretation rows`);
+      assert.match(source, /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/, `${item.file} should include normal and abnormal interpretation`);
+      assert.match(source, /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/, `${item.file} should include mitigation and permanent fix guidance`);
+    }
   }
 });
 
@@ -3328,22 +3414,29 @@ test("operations handbook follows a service operations lifecycle roadmap", async
     assert.doesNotMatch(doc, /<span class="ch-code">Q&A<\/span>/, `${item.file} should not repeat generic interview answer templates`);
     const termSections = doc.match(/<section\b[^>]*>[\s\S]*?(?:<span class="ch-code">TERM<\/span>|<h2>[^<]*TERM[^<]*<\/h2>)[\s\S]*?<\/section>/g) ?? [];
     assert.ok(termSections.length >= 1, `${item.file} should include a TERM glossary section`);
-    assert.ok(
-      termSections.some((section) => /<(?:table|div)\b[\s\S]*?용어[\s\S]*?정의[\s\S]*?운영 증거[\s\S]*?자주 하는 오해[\s\S]*?관련 항목[\s\S]*?<\/(?:table|div)>/.test(section)),
-      `${item.file} should include a TERM glossary table or block with term, definition, evidence, misconception, and related-item labels`,
-    );
     const practiceLabBlocks = doc.match(/<div class="practice-lab">[\s\S]*?<\/div>/g) ?? [];
     assert.ok(practiceLabBlocks.length >= 1, `${item.file} should include at least one concrete practice lab`);
-    assert.ok(
-      practiceLabBlocks.some(
-        (block) =>
-          /PRACTICE LAB/.test(block) &&
-          /Command \/ Query/.test(block) &&
-          /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/.test(block) &&
-          /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/.test(block),
-      ),
-      `${item.file} should include a complete practice lab block with command, outputs, interpretation, mitigation, fix, and verification`,
-    );
+
+    if (PROSE_OPERATIONS_IDS.has(item.id)) {
+      assertProseGlossary(item.file, termSections[0] ?? "");
+      assertProsePracticeLab(item.file, practiceLabBlocks[0] ?? "");
+      assertSingleTrailingSummaryTable(item.file, doc);
+    } else {
+      assert.ok(
+        termSections.some((section) => /<(?:table|div)\b[\s\S]*?용어[\s\S]*?정의[\s\S]*?운영 증거[\s\S]*?자주 하는 오해[\s\S]*?관련 항목[\s\S]*?<\/(?:table|div)>/.test(section)),
+        `${item.file} should include a TERM glossary table or block with term, definition, evidence, misconception, and related-item labels`,
+      );
+      assert.ok(
+        practiceLabBlocks.some(
+          (block) =>
+            /PRACTICE LAB/.test(block) &&
+            /Command \/ Query/.test(block) &&
+            /정상 출력[\s\S]*비정상 출력[\s\S]*판단 훈련/.test(block) &&
+            /즉시 완화[\s\S]*영구 수정[\s\S]*검증 기준/.test(block),
+        ),
+        `${item.file} should include a complete practice lab block with command, outputs, interpretation, mitigation, fix, and verification`,
+      );
+    }
   }
 
   assert.match(source, /DNS → CDN\/WAF → Load Balancer → App → DB/);
