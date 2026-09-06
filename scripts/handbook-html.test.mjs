@@ -423,18 +423,6 @@ test("operations Q&A handbooks cover every operations menu item without generate
   );
 });
 
-test("Q&A handbooks in frontend backend and infra menus hide learning helper panels", async () => {
-  const source = await readFile("src/handbook/HandbookPage.tsx", "utf8");
-
-  assert.match(source, /const hiddenLearningToolKinds = new Set/);
-  assert.match(source, /"프론트엔드 Q&A"/);
-  assert.match(source, /"백엔드 Q&A"/);
-  assert.match(source, /"인프라·운영 Q&A"/);
-  assert.match(source, /function shouldShowLearningTools/);
-  assert.match(source, /const showLearningTools = shouldShowLearningTools\(item\)/);
-  assert.match(source, /showLearningTools && learningModel/);
-});
-
 test("remaining LLM handbooks include A-grade operational artifacts", async () => {
   const requiredDocs = [
     ["public/handbook/llm-fundamentals-handbook.html", ["countTokens", "token_budget_guard", "cost_per_successful_answer"]],
@@ -2761,29 +2749,17 @@ test("handbook layout includes mobile responsive reading refinements", async () 
   assert.match(cssSource, /@media \(max-width: 380px\)[\s\S]*\.handbook-main h1\s*\{[\s\S]*font-size: 27px/s);
 });
 
-test("handbook page exposes mobile learning tools for recall and section search", async () => {
+test("handbook page keeps mobile table and collapsible card affordances", async () => {
   const [pageSource, copyButtonSource, cssSource] = await Promise.all([
     readFile("src/handbook/HandbookPage.tsx", "utf8"),
     readFile("src/handbook/SerialCardCopyButton.tsx", "utf8"),
     readFile("src/handbook/handbook.css", "utf8"),
   ]);
 
-  assert.match(pageSource, /from "\.\/srs\.mjs"/);
-  assert.match(pageSource, /from "\.\/studyStorage\.mjs"/);
-  assert.match(pageSource, /function LearningSearchPanel/);
-  assert.match(pageSource, /function StudyCardsPanel/);
-  assert.match(pageSource, /learningFilters[\s\S]*개념[\s\S]*실무 체크리스트|learningFilters[\s\S]*체크리스트/s);
-  assert.match(pageSource, /면접 답변/);
-  assert.match(pageSource, /실패 신호/);
-  assert.match(pageSource, /산출물/);
-  assert.match(pageSource, /href=\{`#\$\{section\.id\}`\}/);
-  assert.match(pageSource, /className="handbook-learning-panels"/);
   assert.match(pageSource, /classList\.add\("mobile-card-table"\)/);
   assert.match(pageSource, /cell\.dataset\.label = header/);
   assert.match(pageSource, /learning-card-collapse-toggle/);
   assert.match(copyButtonSource, /learning-card-collapse-toggle/);
-  assert.match(cssSource, /\.handbook-main \.handbook-learning-panels/);
-  assert.match(cssSource, /\.handbook-main \.study-card/);
   assert.match(cssSource, /@media \(max-width: 700px\)[\s\S]*table\.mobile-card-table/s);
   assert.match(cssSource, /td::before\s*\{[\s\S]*content: attr\(data-label\)/s);
   assert.match(cssSource, /\.learning-collapsible-card\.is-collapsed/);

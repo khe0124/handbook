@@ -14,7 +14,6 @@ import {
 } from "./handbook/catalog.mjs";
 import { GlobalSearch } from "./handbook/GlobalSearch";
 import { HandbookPage } from "./handbook/HandbookPage";
-import { markVisited } from "./handbook/studyStorage.mjs";
 import "./App.css";
 
 type HandbookItem = {
@@ -173,7 +172,6 @@ export default function App() {
   useEffect(() => {
     activeIdRef.current = activeItem.id;
     saveActiveId(activeItem.id);
-    markVisited(activeItem.id);
   }, [activeItem.id]);
 
   useEffect(() => {

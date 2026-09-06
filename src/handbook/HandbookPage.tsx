@@ -1,16 +1,12 @@
 import { createRoot, type Root } from "react-dom/client";
-import { Eye, Menu, RotateCcw, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChecklistCard, type ChecklistItem } from "./ChecklistCard";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
 import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
 import { getPersonalNotes } from "./personalNotes.mjs";
 import { PRACTICAL_EXAMPLES, getPracticalExampleLens } from "./practicalExamples";
-import { NON_STUDY_DOC_IDS } from "./catalog.mjs";
-import { getQuestionBankCards } from "./questionBank.mjs";
 import { SerialCardCopyButton } from "./SerialCardCopyButton";
-import { gradeReview, isDue, isSettled } from "./srs.mjs";
-import { clearReviewsForItem, getTodayIso, loadReview, saveReview } from "./studyStorage.mjs";
 import type { HandbookDocumentContent } from "./types";
 import "./handbook.css";
 
@@ -27,79 +23,6 @@ type HandbookPageProps = {
   onSelectHandbook?: (itemId: string) => void;
 };
 
-type LearningFilter = "all" | "concept" | "checklist" | "interview" | "failure" | "artifact";
-
-type LearningSection = {
-  id: string;
-  code: string;
-  title: string;
-  summary: string;
-  text: string;
-  filters: LearningFilter[];
-};
-
-type StudyCard = {
-  id: string;
-  sectionId: string;
-  label: string;
-  question: string;
-  answer: string;
-};
-
-type BankCard = {
-  id: string;
-  docId: string;
-  sectionId: string | null;
-  question: string;
-  answer: string;
-  type: "recall" | "judgment" | "critique";
-  tier: "must" | "good";
-};
-
-type CardReview = {
-  lastReviewedAt: string;
-  intervalDays: number;
-  ease: number;
-  lapses: number;
-};
-
-type SrsGrade = "again" | "hard" | "good";
-
-const bankCardTypeLabels: Record<BankCard["type"], string> = {
-  recall: "회상",
-  judgment: "판단",
-  critique: "크리틱",
-};
-
-const srsGradeButtons: Array<{ grade: SrsGrade; label: string }> = [
-  { grade: "again", label: "모름" },
-  { grade: "hard", label: "애매함" },
-  { grade: "good", label: "알았음" },
-];
-
-const hiddenLearningToolKinds = new Set(["프론트엔드 Q&A", "백엔드 Q&A", "인프라·운영 Q&A"]);
-// 학습 콘텐츠가 아니라 액션 플랜이라 섹션 검색·암기 카드가 부적절한 문서
-const hiddenLearningToolIds = new Set([
-  "home",
-  "career-personal-history",
-  "career-linkedin-resume",
-  "career-growth-plan",
-  "career-track-pm-builder",
-  "career-track-product-frontend",
-  "career-market-demand",
-  "career-artifacts",
-  "career-job-change-playbook",
-]);
-
-function shouldShowLearningTools(item: HandbookItem) {
-  return (
-    item.pageType !== "react" &&
-    !hiddenLearningToolKinds.has(item.kind) &&
-    !hiddenLearningToolIds.has(item.id) &&
-    !NON_STUDY_DOC_IDS.has(item.id)
-  );
-}
-
 // 홈 화면은 남은 기간 계획과 메뉴 바로가기 섹션만 노출한다. 나머지 홈 콘텐츠는 소스에 남겨두고 렌더에서만 제외한다.
 function extractHomeSections(mainHtml: string) {
   const sections = mainHtml.match(/<section\b[\s\S]*?<\/section>/g) ?? [];
@@ -109,116 +32,8 @@ function extractHomeSections(mainHtml: string) {
   return yearPlan + standard + shortcut;
 }
 
-function toStudyCard(card: BankCard): StudyCard {
-  return {
-    id: card.id,
-    sectionId: card.sectionId ?? "",
-    label: `${card.tier === "must" ? "MUST" : "GOOD"} · ${bankCardTypeLabels[card.type]}`,
-    question: card.question,
-    answer: card.answer,
-  };
-}
-
-const learningFilters: Array<{ id: LearningFilter; label: string }> = [
-  { id: "all", label: "전체" },
-  { id: "concept", label: "개념" },
-  { id: "checklist", label: "체크리스트" },
-  { id: "interview", label: "면접 답변" },
-  { id: "failure", label: "실패 신호" },
-  { id: "artifact", label: "산출물" },
-];
-
-function loadCardReviews(itemId: string, cards: StudyCard[]) {
-  const reviews = new Map<string, CardReview | null>();
-
-  for (const card of cards) {
-    reviews.set(card.id, loadReview(itemId, card.id) as CardReview | null);
-  }
-
-  return reviews;
-}
-
 function getPlainText(element: Element | null) {
   return element?.textContent?.replace(/\s+/g, " ").trim() ?? "";
-}
-
-function buildLearningFilters(section: Element, text: string, title: string, code: string) {
-  const haystack = `${code} ${title} ${text}`.toLowerCase();
-  const filters = new Set<LearningFilter>();
-
-  if (/개념|원리|정의|모델|핵심|foundation|principle|model/.test(haystack)) filters.add("concept");
-  if (/checklist|체크리스트|gate|rubric|audit|drill|loop|점검|기준/.test(haystack)) filters.add("checklist");
-  if (/면접|답변|꼬리질문|30초|90초|interview|answer/.test(haystack)) filters.add("interview");
-  if (/실패|위험|주의|미달|오답|반례|dangerous|risk|warn|failure/.test(haystack)) filters.add("failure");
-  if (/산출물|증거|제출|packet|artifact|template|evidence|deliverable/.test(haystack)) filters.add("artifact");
-
-  if (section.querySelector(".callout.warn, .callout.risk")) filters.add("failure");
-  if (section.querySelector(".serial-card, .semantic-card, table")) filters.add("artifact");
-
-  return Array.from(filters);
-}
-
-function createLearningModel(mainHtml: string) {
-  if (typeof window === "undefined") {
-    return { sections: [] as LearningSection[], studyCards: [] as StudyCard[], heroHtml: "", bodyHtml: mainHtml };
-  }
-
-  const parser = new window.DOMParser();
-  const parsedDocument = parser.parseFromString(mainHtml, "text/html");
-  const sections = Array.from(parsedDocument.body.querySelectorAll("section"))
-    .map((section, index): LearningSection | null => {
-      const title = getPlainText(section.querySelector("h2")) || `섹션 ${index + 1}`;
-      const code = getPlainText(section.querySelector(".ch-code"));
-      const summary =
-        getPlainText(section.querySelector(".lede")) ||
-        getPlainText(section.querySelector("p")) ||
-        getPlainText(section.querySelector(".serial-card, .semantic-card, .callout"));
-      const text = getPlainText(section);
-      const id = section.id || `learning-section-${index + 1}`;
-
-      if (!text) return null;
-
-      if (!section.id) section.id = id;
-
-      return {
-        id,
-        code,
-        title,
-        summary,
-        text,
-        filters: buildLearningFilters(section, text, title, code),
-      };
-    })
-    .filter((section): section is LearningSection => Boolean(section));
-
-  const studyCards = sections
-    .filter((section) => section.title && section.summary)
-    .slice(0, 8)
-    .map((section) => {
-      const label = section.code || "RECALL";
-      const question = section.title.endsWith("?")
-        ? section.title
-        : `${section.title}의 핵심 판단 기준은 무엇인가?`;
-
-      return {
-        id: section.id,
-        sectionId: section.id,
-        label,
-        question,
-        answer: section.summary,
-      };
-    });
-
-  const hero = parsedDocument.body.querySelector("header.hero");
-  const heroHtml = hero?.outerHTML ?? "";
-  hero?.remove();
-
-  return {
-    sections,
-    studyCards,
-    heroHtml,
-    bodyHtml: heroHtml ? parsedDocument.body.innerHTML : mainHtml,
-  };
 }
 
 function shouldAttachInlineCodeCopy(itemId: string, code: HTMLElement) {
@@ -260,172 +75,6 @@ function getDifficultyLabel(difficulty: string) {
   };
 
   return labels[difficulty] ?? difficulty;
-}
-
-function LearningSearchPanel({ sections }: { sections: LearningSection[] }) {
-  const [query, setQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<LearningFilter>("all");
-  const normalizedQuery = query.trim().toLowerCase();
-  const results = sections
-    .filter((section) => activeFilter === "all" || section.filters.includes(activeFilter))
-    .filter((section) => {
-      if (!normalizedQuery) return true;
-      return `${section.code} ${section.title} ${section.summary} ${section.text}`.toLowerCase().includes(normalizedQuery);
-    })
-    .slice(0, 8);
-
-  return (
-    <section className="handbook-learning-search" aria-labelledby="handbook-learning-search-title">
-      <div className="learning-panel-head">
-        <div>
-          <span className="learning-kicker">LEARNING SEARCH</span>
-          <h2 id="handbook-learning-search-title">섹션 단위 검색</h2>
-        </div>
-        <span className="learning-count">{results.length}개 결과</span>
-      </div>
-      <label className="learning-search-input">
-        <Search size={16} aria-hidden />
-        <span className="sr-only">문서 안에서 검색</span>
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="개념, 산출물, 실패 신호를 검색"
-        />
-      </label>
-      <div className="learning-filter-row" aria-label="학습 검색 필터">
-        {learningFilters.map((filter) => (
-          <button
-            key={filter.id}
-            type="button"
-            className="learning-filter-button"
-            aria-pressed={activeFilter === filter.id}
-            onClick={() => setActiveFilter(filter.id)}
-          >
-            {filter.label}
-          </button>
-        ))}
-      </div>
-      <div className="learning-search-results">
-        {results.length ? (
-          results.map((section) => (
-            <a key={section.id} className="learning-search-result" href={`#${section.id}`}>
-              <span className="learning-result-code">{section.code || "SECTION"}</span>
-              <strong>{section.title}</strong>
-              <span>{section.summary || section.text}</span>
-            </a>
-          ))
-        ) : (
-          <p className="learning-empty">해당 조건에 맞는 섹션이 없습니다.</p>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function getCardDueLabel(review: CardReview | null, todayIso: string) {
-  if (!review) return "새 카드";
-  if (isDue(review, todayIso)) return "오늘 복습";
-  return `${review.intervalDays}일 간격`;
-}
-
-function StudyCardsPanel({ itemId, cards, isCurated }: { itemId: string; cards: StudyCard[]; isCurated: boolean }) {
-  const todayIso = getTodayIso();
-  const [openCardIds, setOpenCardIds] = useState<Set<string>>(() => new Set());
-  const [reviews, setReviews] = useState<Map<string, CardReview | null>>(() => loadCardReviews(itemId, cards));
-
-  useEffect(() => {
-    setOpenCardIds(new Set());
-    setReviews(loadCardReviews(itemId, cards));
-  }, [cards, itemId]);
-
-  const settledCount = cards.filter((card) => isSettled(reviews.get(card.id) ?? null)).length;
-  const dueCount = cards.filter((card) => {
-    const review = reviews.get(card.id) ?? null;
-    return review && isDue(review, todayIso);
-  }).length;
-
-  const toggleAnswer = (cardId: string) => {
-    setOpenCardIds((currentIds) => {
-      const nextIds = new Set(currentIds);
-      if (nextIds.has(cardId)) nextIds.delete(cardId);
-      else nextIds.add(cardId);
-      return nextIds;
-    });
-  };
-
-  const handleGrade = (cardId: string, grade: SrsGrade) => {
-    const nextReview = gradeReview(reviews.get(cardId) ?? null, grade, todayIso) as CardReview;
-
-    saveReview(itemId, cardId, nextReview);
-    setReviews((currentReviews) => new Map(currentReviews).set(cardId, nextReview));
-    setOpenCardIds((currentIds) => {
-      const nextIds = new Set(currentIds);
-      nextIds.delete(cardId);
-      return nextIds;
-    });
-  };
-
-  const resetReviews = () => {
-    clearReviewsForItem(
-      itemId,
-      cards.map((card) => card.id),
-    );
-    setReviews(loadCardReviews(itemId, cards));
-  };
-
-  if (!cards.length) return null;
-
-  return (
-    <section className="handbook-study-cards" aria-labelledby="handbook-study-cards-title">
-      <div className="learning-panel-head">
-        <div>
-          <span className="learning-kicker">{isCurated ? "CURATED CARDS" : "RECALL CARDS"}</span>
-          <h2 id="handbook-study-cards-title">암기 카드</h2>
-        </div>
-        <button type="button" className="learning-reset-button" onClick={resetReviews}>
-          <RotateCcw size={14} aria-hidden />
-          초기화
-        </button>
-      </div>
-      <p className="learning-progress">
-        정착 {settledCount} / 전체 {cards.length}
-        {dueCount ? ` · 오늘 복습 ${dueCount}개` : ""}
-      </p>
-      <div className="study-card-list">
-        {cards.map((card) => {
-          const isOpen = openCardIds.has(card.id);
-          const review = reviews.get(card.id) ?? null;
-
-          return (
-            <article key={card.id} className="study-card" data-mastered={isSettled(review) ? "true" : undefined}>
-              <div className="study-card-meta">
-                <span>
-                  {card.label} · {getCardDueLabel(review, todayIso)}
-                </span>
-                {card.sectionId ? <a href={`#${card.sectionId}`}>원문 보기</a> : null}
-              </div>
-              <h3>{card.question}</h3>
-              {isOpen ? <p className="study-card-answer">{card.answer}</p> : null}
-              <div className="study-card-actions">
-                <button type="button" onClick={() => toggleAnswer(card.id)} aria-expanded={isOpen}>
-                  <Eye size={14} aria-hidden />
-                  {isOpen ? "답 숨기기" : "답 보기"}
-                </button>
-                {isOpen
-                  ? srsGradeButtons.map(({ grade, label }) => (
-                      <button key={grade} type="button" data-grade={grade} onClick={() => handleGrade(card.id, grade)}>
-                        {label}
-                      </button>
-                    ))
-                  : null}
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
-  );
 }
 
 function shouldUpgradeChecklistCard(card: HTMLElement) {
@@ -488,21 +137,12 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   const mainRef = useRef<HTMLElement | null>(null);
   const practicalExample = PRACTICAL_EXAMPLES[item.id];
   const practicalLens = getPracticalExampleLens(item.id);
-  const learningModel = useMemo(
-    () => (document && !document.ReactPage ? createLearningModel(document.mainHtml) : null),
-    [document],
-  );
-  const curatedCards = useMemo(
-    () => (getQuestionBankCards(item.id) as BankCard[]).map(toStudyCard),
-    [item.id],
-  );
   const personalNotes = useMemo(() => getPersonalNotes(item.id), [item.id]);
   const isHome = item.id === "home";
   const homeShortcutHtml = useMemo(
     () => (isHome && document ? extractHomeSections(document.mainHtml) : ""),
     [isHome, document],
   );
-  const showLearningTools = shouldShowLearningTools(item);
   const ReactPage = document?.ReactPage;
 
   useEffect(() => {
@@ -743,23 +383,10 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         className="handbook-main"
       >
         {ReactPage ? <ReactPage /> : null}
-        {!isHome && learningModel?.heroHtml ? (
-          <div dangerouslySetInnerHTML={{ __html: learningModel.heroHtml }} />
-        ) : null}
-        {showLearningTools && learningModel ? (
-          <div className="handbook-learning-panels" aria-label="학습 도구">
-            <LearningSearchPanel sections={learningModel.sections} />
-            <StudyCardsPanel
-              itemId={item.id}
-              cards={curatedCards.length ? curatedCards : learningModel.studyCards}
-              isCurated={curatedCards.length > 0}
-            />
-          </div>
-        ) : null}
         {ReactPage ? null : (
           <div
             dangerouslySetInnerHTML={{
-              __html: isHome ? homeShortcutHtml : learningModel?.bodyHtml ?? document.mainHtml,
+              __html: isHome ? homeShortcutHtml : document.mainHtml,
             }}
           />
         )}
