@@ -3004,7 +3004,7 @@ test("backend handbook includes practical senior-level backend guidance with exp
   assert.match(source, /OPERABILITY METHOD/);
   assert.match(source, /BACKEND PRACTICE LAB/);
   assert.match(source, /BACKEND EVIDENCE PACKET TEMPLATE/);
-  assert.match(source, /언어·프레임워크 선택 → 요청 생명주기 → API 계약/);
+  assert.match(source, /2 언어·프레임워크 선택[\s\S]*3 요청 생명주기[\s\S]*4 API 계약/);
   assert.match(source, /transaction boundary/);
   assert.match(source, /EXPLAIN ANALYZE/);
   assert.match(source, /expand-contract/);

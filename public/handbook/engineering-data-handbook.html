@@ -685,10 +685,24 @@ Fix later: transaction timeout, batch size limit, lock order 문서화, retry po
 </table>
 <div class="semantic-card evidence-card">
 <span class="sc-label">DB INCIDENT REVIEW PACKET</span><br>
-symptom window · affected endpoint · query fingerprint<br>
-before/after plan · wait event · pool state · lock blocker<br>
-temporary mitigation · permanent fix · rollback condition<br>
-verification query · follow-up owner/date
+1 symptom window · 2 affected endpoint · 3 query fingerprint<br>
+4 before/after plan · 5 wait event · 6 pool state · 7 lock blocker<br>
+8 temporary mitigation · 9 permanent fix · 10 rollback condition<br>
+11 verification query · 12 follow-up owner/date
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 증상 구간</b><span>symptom window</span></div><div class="g-def">언제부터 언제까지 문제가 있었나. 배포·트래픽 변화와 겹쳐 보기 위한 기준 시간</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 영향 엔드포인트</b><span>affected endpoint</span></div><div class="g-def">어떤 API·화면·배치가 느려지거나 실패했나. 사용자 영향의 범위다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 쿼리 지문</b><span>query fingerprint</span></div><div class="g-def">파라미터를 지운 쿼리 형태. 같은 문제를 같은 이름으로 부르기 위한 식별자</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 전후 실행계획</b><span>before/after plan</span></div><div class="g-def">고치기 전과 후의 EXPLAIN. 개선을 주장이 아니라 계획 차이로 보여준다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 대기 이벤트</b><span>wait event</span></div><div class="g-def">DB가 무엇을 기다렸나 — 락, IO, 버퍼. CPU가 아니라 대기가 원인인 경우가 많다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 커넥션 풀 상태</b><span>pool state</span></div><div class="g-def">active/idle/pending과 획득 대기 시간. 앱이 DB를 기다리고 있었는지 판단한다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 락 블로커</b><span>lock blocker</span></div><div class="g-def">누구를 막고 있던 트랜잭션. 피해자가 아니라 가해자를 찾는 항목이다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 임시 완화</b><span>temporary mitigation</span></div><div class="g-def">원인을 몰라도 영향을 멈춘 조치 — 쿼리 차단, 트래픽 제한, 롤백</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 영구 수정</b><span>permanent fix</span></div><div class="g-def">인덱스, 쿼리 재작성, 트랜잭션 경계 변경처럼 재발을 막는 변경</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 롤백 조건</b><span>rollback condition</span></div><div class="g-def">수정이 더 나쁠 때 되돌릴 기준을 미리 정해 둔다</div></div>
+<div class="g-row"><div class="g-term"><b>11 · 검증 쿼리</b><span>verification query</span></div><div class="g-def">고쳐졌음을 확인하는 SQL. 재현 절차와 한 쌍으로 남긴다</div></div>
+<div class="g-row"><div class="g-term"><b>12 · 후속 담당·기한</b><span>follow-up owner/date</span></div><div class="g-def">남은 일이 있으면 누가 언제까지. 없으면 없다고 적는다</div></div>
 </div>
 <div class="callout gm">
 <span class="co-label">랩의 완성 조건</span>

@@ -124,9 +124,21 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <p class="lede">좋은 아키텍처 문서는 다이어그램이 아니라 결정을 설명합니다. 무엇을 같은 모듈에 둘지, 어떤 데이터가 어느 경계에 속하는지, 실패를 어디서 끊을지, 나중에 어떤 지표가 나오면 분리할지까지 남겨야 합니다.</p>
 <div class="semantic-card decision-card">
 <span class="sc-label">ARCHITECTURE DECISION MAP</span><br>
-domain language → bounded context → module boundary<br>
-→ data ownership → transaction boundary → integration style<br>
-→ failure isolation → observability → migration path → ADR
+1 domain language → 2 bounded context → 3 module boundary<br>
+→ 4 data ownership → 5 transaction boundary → 6 integration style<br>
+→ 7 failure isolation → 8 observability → 9 migration path → 10 ADR
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 도메인 언어</b><span>domain language</span></div><div class="g-def">팀과 코드가 같은 단어를 같은 뜻으로 쓰는 상태. 경계를 나누기 전에 말부터 맞춘다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 경계 컨텍스트</b><span>bounded context</span></div><div class="g-def">그 단어의 뜻이 일관되게 유지되는 범위. 뜻이 갈리는 지점이 곧 경계 후보다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 모듈 경계</b><span>module boundary</span></div><div class="g-def">컨텍스트를 코드에서 강제하는 선. 의존 방향이 한쪽으로만 흐르는지로 검증한다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 데이터 소유권</b><span>data ownership</span></div><div class="g-def">어느 모듈이 그 테이블을 쓰고 나머지는 무엇을 읽는지. 쓰는 주체가 둘이면 경계가 없는 것이다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 트랜잭션 경계</b><span>transaction boundary</span></div><div class="g-def">한 커밋으로 묶을 수 있는 범위. 경계를 자르는 순간 분산 트랜잭션 비용이 생긴다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 통합 방식</b><span>integration style</span></div><div class="g-def">동기 호출로 붙일지 이벤트로 붙일지. 응답이 필요한가, 통보로 충분한가로 가른다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 장애 격리</b><span>failure isolation</span></div><div class="g-def">한 경계의 장애가 어디까지 번져도 되는지. timeout·서킷브레이커·폴백이 여기서 정해진다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 관측</b><span>observability</span></div><div class="g-def">경계를 넘는 호출을 추적하고 측정할 수 있는가. 보이지 않으면 분리는 부채가 된다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 전환 경로</b><span>migration path</span></div><div class="g-def">지금 구조에서 목표 구조로 가는 중간 단계. 한 번에 바꾸지 않기 위한 계획이다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 결정 기록</b><span>ADR</span></div><div class="g-def">무엇을, 왜, 어떤 대안 대신 골랐는지 남긴 문서. 나중에 되돌릴 근거가 된다</div></div>
 </div>
 <table>
 <thead><tr><th>판단 축</th><th>핵심 질문</th><th>증거 산출물</th></tr></thead>

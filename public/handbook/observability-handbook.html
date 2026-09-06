@@ -319,18 +319,18 @@ SLO 99.9% (30일 기준)<br>
 <div class="ch-head"><span class="ch-code">OBS-10</span><h2>장애 대응</h2></div>
 <p class="lede">장애가 터지면 본능은 "왜 이렇게 됐지?"를 파고드는 것입니다. 그건 나중 일입니다. 인시던트 대응의 첫 계명은 <em>원인 분석보다 복구가 먼저</em>입니다 — 피를 멈추는 게 먼저, 부검은 나중에.</p>
 <div class="flow">
-<span class="step hl">감지 detect</span><span class="arr">→</span>
-<span class="step">분류 triage</span><span class="arr">→</span>
-<span class="step hl">완화·롤백 mitigate</span><span class="arr">→</span>
-<span class="step">복구 recover</span><span class="arr">→</span>
-<span class="step">커뮤니케이션 communicate</span>
+<span class="step hl">1 감지 detect</span><span class="arr">→</span>
+<span class="step">2 분류 triage</span><span class="arr">→</span>
+<span class="step hl">3 완화·롤백 mitigate</span><span class="arr">→</span>
+<span class="step">4 복구 recover</span><span class="arr">→</span>
+<span class="step">5 커뮤니케이션 communicate</span>
 </div>
 <p>단계별 핵심:</p>
 <ul>
-<li><strong>감지(detect)</strong> — 알림이나 제보로 인지. 인지 시각을 기록해야 나중에 MTTR을 잴 수 있습니다.</li>
-<li><strong>분류(triage)</strong> — 심각도와 영향 범위를 빠르게 판단. 사용자 몇 %가, 무엇을 못 하나. 인시던트 지휘자(incident commander)를 정합니다.</li>
-<li><strong>완화·롤백(mitigate)</strong> — <em>가장 중요한 단계</em>. 원인을 몰라도 영향을 멈출 수 있습니다 — 직전 배포 롤백, 트래픽 차단, 기능 플래그 끄기, 스케일 아웃. "왜?"는 잠시 미룹니다.</li>
-<li><strong>복구(recover)</strong> — 정상 상태로 되돌리고 안정화 확인.</li>
+<li><strong>1 감지(detect)</strong> — 알림이나 제보로 인지. 인지 시각을 기록해야 나중에 MTTR을 잴 수 있습니다.</li>
+<li><strong>2 분류(triage)</strong> — 심각도와 영향 범위를 빠르게 판단. 사용자 몇 %가, 무엇을 못 하나. 인시던트 지휘자(incident commander)를 정합니다.</li>
+<li><strong>3 완화·롤백(mitigate)</strong> — <em>가장 중요한 단계</em>. 원인을 몰라도 영향을 멈출 수 있습니다 — 직전 배포 롤백, 트래픽 차단, 기능 플래그 끄기, 스케일 아웃. "왜?"는 잠시 미룹니다.</li>
+<li><strong>4 복구(recover)</strong> — 정상 상태로 되돌리고 안정화 확인.</li>
 <li><strong>커뮤니케이션(communicate)</strong> — 전 단계에 걸쳐 계속. 이해관계자·사용자에게 상태를 알립니다. 공공 B2B 시스템에서는 특히 중요합니다.</li>
 </ul>
 <table>

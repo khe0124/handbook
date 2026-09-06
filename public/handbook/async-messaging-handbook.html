@@ -219,10 +219,10 @@ broker ──타임아웃──▶ <span class="seg2">같은 메시지 재전송
 <h3><span class="h3-tag">5.1</span>멱등성 키와 dedup</h3>
 <p>각 메시지에 <strong>안정적인 고유 키</strong>(메시지 ID, 또는 "주문 12345의 결제"처럼 비즈니스적으로 유일한 식별자)를 부여하고, 소비자는 처리 전에 "이 키를 이미 봤나?"를 검사합니다. 핵심은 키가 <em>재전송돼도 같아야</em> 한다는 것 — 그래야 중복을 인식합니다.</p>
 <div class="flow">
-<span class="step">메시지 수신</span><span class="arr">→</span><span class="step hl">dedup 테이블에 key 있나?</span><span class="arr">→ 있음</span><span class="step">skip (이미 처리)</span>
+<span class="step">1 메시지 수신</span><span class="arr">→</span><span class="step hl">2 dedup 테이블에 key 있나?</span><span class="arr">→ 있음</span><span class="step">3a skip (이미 처리)</span>
 </div>
 <div class="flow">
-<span class="arr">↓ 없음</span><span class="step">비즈니스 처리 + key INSERT</span><span class="arr">→</span><span class="step">같은 트랜잭션 commit</span><span class="arr">→</span><span class="step">ack</span>
+<span class="arr">↓ 없음</span><span class="step">3b 비즈니스 처리 + key INSERT</span><span class="arr">→</span><span class="step">4 같은 트랜잭션 commit</span><span class="arr">→</span><span class="step">5 ack</span>
 </div>
 <h3><span class="h3-tag">5.2</span>두 가지 구현 — dedup 테이블 vs 유니크 제약</h3>
 <table>
@@ -272,7 +272,14 @@ broker.publish(event) <span class="dim">→ 실행 안 됨</span><br>
 <h3><span class="h3-tag">7.1</span>Outbox 패턴 — 한 트랜잭션으로 묶는다</h3>
 <p>해법은 영리하게 단순합니다: 메시지를 브로커에 직접 보내지 말고, <strong>같은 DB의 <code>outbox</code> 테이블에 비즈니스 데이터와 함께 한 트랜잭션으로</strong> 씁니다. DB 트랜잭션은 원자적이니 "주문 저장 + outbox 기록"은 전부 되거나 전부 안 됩니다. 그다음 별도 프로세스가 outbox를 읽어 브로커로 발행합니다.</p>
 <div class="flow">
-<span class="step hl">TX: order INSERT + outbox INSERT</span><span class="arr">→ commit (원자적)</span><span class="step">relay가 outbox polling / CDC</span><span class="arr">→</span><span class="step">broker 발행</span><span class="arr">→</span><span class="step">outbox 행 표시·삭제</span>
+<span class="step hl">1 TX: order INSERT + outbox INSERT</span><span class="arr">→ 2 commit (원자적)</span><span class="step">3 relay가 outbox polling / CDC</span><span class="arr">→</span><span class="step">4 broker 발행</span><span class="arr">→</span><span class="step">5 outbox 행 표시·삭제</span>
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 같은 트랜잭션에 함께 기록</b><span>order + outbox INSERT</span></div><div class="g-def">업무 데이터와 보낼 메시지를 한 트랜잭션에서 같이 넣는다. 저장과 발행이 갈라지는 이중 쓰기를 없애는 핵심</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 원자적 커밋</b><span>commit</span></div><div class="g-def">둘 다 남거나 둘 다 없다. 주문만 저장되고 메시지는 사라지는 상태가 생기지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 릴레이 수집</b><span>polling / CDC</span></div><div class="g-def">별도 프로세스가 outbox 테이블을 주기적으로 읽거나 변경 로그(CDC)로 따라간다. 앱 요청 경로 밖에서 돈다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 브로커 발행</b><span>publish</span></div><div class="g-def">수집한 행을 실제 메시지로 내보낸다. 여기서 죽으면 같은 행을 다시 보내므로 중복이 생긴다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 발행 표시·삭제</b><span>mark / delete</span></div><div class="g-def">보낸 행을 처리됨으로 표시하거나 지운다. 4와 5 사이의 중단이 곧 at-least-once의 원인이다</div></div>
 </div>
 <div class="callout warn">
 <span class="co-label">Outbox는 at-least-once를 만든다 — 멱등성과 한 세트</span>

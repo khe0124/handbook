@@ -135,11 +135,24 @@ footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--line);font-fa
 <p class="lede">백엔드 핵심은 기능 구현 목록이 아니라 요청이 계약, 상태, 실패, 증거를 남기며 통과하는 경로를 설명하는 능력입니다. 아래 순서로 읽으면 API, DB, 트랜잭션, 테스트, 운영, 아키텍처가 따로 놀지 않습니다.</p>
 <div class="semantic-card model">
 <span class="sc-label">BACKEND ROADMAP OVERVIEW</span>
-request lifecycle → API contract → Java/Spring runtime<br>
-→ transaction/data model → ORM/JPA boundary<br>
-→ concurrency/idempotency → cache/async<br>
-→ testing → deployment/observability<br>
-→ architecture boundary → operability evidence
+1 request lifecycle → 2 API contract → 3 Java/Spring runtime<br>
+→ 4 transaction/data model → 5 ORM/JPA boundary<br>
+→ 6 concurrency/idempotency → 7 cache/async<br>
+→ 8 testing → 9 deployment/observability<br>
+→ 10 architecture boundary → 11 operability evidence
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 요청 생명주기</b><span>request lifecycle</span></div><div class="g-def">요청 하나가 진입점에서 응답과 로그까지 지나는 경로. 이 경로를 그리지 못하면 나머지 결정이 어디에 놓이는지 말할 수 없다 (→ BE-02)</div></div>
+<div class="g-row"><div class="g-term"><b>2 · API 계약</b><span>API contract</span></div><div class="g-def">클라이언트가 무엇을 보내면 무엇을 받는지의 공개 약속. 요청·응답·에러·권한·멱등성까지 포함한다 (→ BE-03)</div></div>
+<div class="g-row"><div class="g-term"><b>3 · Java·Spring 실행 모델</b><span>runtime</span></div><div class="g-def">계약을 코드로 옮길 때 프레임워크가 대신 하는 일 — 빈 생명주기, 프록시, 예외 변환 (→ BE-04)</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 트랜잭션·데이터 모델</b><span>transaction/data model</span></div><div class="g-def">무엇이 함께 성공하고 함께 취소되는지의 경계. 정합성은 여기서 결정된다 (→ BE-05)</div></div>
+<div class="g-row"><div class="g-term"><b>5 · ORM·JPA 경계</b><span>ORM/JPA boundary</span></div><div class="g-def">객체와 테이블 사이의 번역 계층. 언제 DB를 치는지 모르면 성능과 정합성이 함께 샌다 (→ BE-06)</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 동시성·멱등성</b><span>concurrency/idempotency</span></div><div class="g-def">동시 갱신과 중복 요청을 예외가 아니라 정상 입력으로 다루는 규칙 (→ BE-07)</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 캐시·비동기</b><span>cache/async</span></div><div class="g-def">응답을 빠르게, 작업을 나중으로. 둘 다 정합성을 담보로 성능을 사는 선택이다 (→ BE-09, BE-10)</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 테스트</b><span>testing</span></div><div class="g-def">변경이 계약과 불변식을 깼는지 배포 전에 드러내는 장치 (→ BE-11)</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 배포·관측</b><span>deployment/observability</span></div><div class="g-def">배포 후 무슨 일이 일어났는지 말할 수 있게 하는 로그·지표·추적 (→ BE-12, BE-13)</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 아키텍처 경계</b><span>architecture boundary</span></div><div class="g-def">어디까지 한 덩어리로 두고 어디서 자를지의 결정. 앞 단계의 비용이 쌓인 뒤에 판단한다 (→ BE-14)</div></div>
+<div class="g-row"><div class="g-term"><b>11 · 운영 증거</b><span>operability evidence</span></div><div class="g-def">맞게 동작한다는 말을 제출 가능한 산출물로 바꾸는 마지막 단계 (→ BE-17)</div></div>
 </div>
 <table>
 <thead><tr><th>축</th><th>핵심 질문</th><th>증거 산출물</th></tr></thead>
@@ -158,11 +171,25 @@ request lifecycle → API contract → Java/Spring runtime<br>
 <p class="lede">좋은 백엔드 설명은 controller에서 끝나지 않습니다. 요청 하나가 저장소, 외부 의존성, 큐, 로그와 지표까지 어떻게 이어지는지 따라가야 합니다.</p>
 <div class="semantic-card flow">
 <span class="sc-label">REQUEST TO OPERATIONS MAP</span>
-client → controller → validation → request context<br>
-→ application service → transaction boundary<br>
-→ domain invariant → repository / external client<br>
-→ commit / rollback → outbox / cache invalidation<br>
-→ response → structured log / metric / trace / alert
+1 client → 2 controller → 3 validation → 4 request context<br>
+→ 5 application service → 6 transaction boundary<br>
+→ 7 domain invariant → 8 repository / external client<br>
+→ 9 commit / rollback → 10 outbox / cache invalidation<br>
+→ 11 response → 12 structured log / metric / trace / alert
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 호출자</b><span>client</span></div><div class="g-def">요청을 보내는 브라우저·앱·다른 서비스. 신뢰할 수 없는 입력의 출처다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 컨트롤러</b><span>controller</span></div><div class="g-def">HTTP를 애플리케이션 언어로 옮기는 진입점. 비즈니스 규칙을 두는 자리가 아니다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 입력 검증</b><span>validation</span></div><div class="g-def">형식·범위·필수값을 여기서 끊는다. 통과하지 못한 요청은 4xx와 error contract로 돌려보낸다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 요청 컨텍스트</b><span>request context</span></div><div class="g-def">누가(actor·tenant) 어떤 권한으로 호출했는지를 아래 계층까지 넘기는 값. 여기서 끊기면 권한 검사가 컨트롤러에만 남는다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 애플리케이션 서비스</b><span>application service</span></div><div class="g-def">유스케이스를 조립하는 계층. 무엇을 어떤 순서로 할지 정하되 어떻게 저장할지는 모른다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 트랜잭션 경계</b><span>transaction boundary</span></div><div class="g-def">함께 commit되어야 할 범위의 시작과 끝. 외부 API 대기를 이 안에 두지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 도메인 불변식</b><span>domain invariant</span></div><div class="g-def">어떤 경우에도 깨지면 안 되는 규칙(재고 음수 금지 등). 애플리케이션과 DB 제약 양쪽에 둔다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 저장소·외부 호출</b><span>repository / external client</span></div><div class="g-def">상태를 실제로 읽고 쓰는 지점, 그리고 통제 밖 시스템을 부르는 지점. timeout과 재시도 정책이 필요한 곳</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 커밋·롤백</b><span>commit / rollback</span></div><div class="g-def">상태 변경을 확정하거나 되돌린다. 롤백 이후에 무엇이 남는지가 설계의 핵심이다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 아웃박스·캐시 무효화</b><span>outbox / cache invalidation</span></div><div class="g-def">커밋된 사실을 밖으로 내보내고 낡은 캐시를 지운다. 이중 쓰기 문제를 피하는 자리</div></div>
+<div class="g-row"><div class="g-term"><b>11 · 응답</b><span>response</span></div><div class="g-def">계약대로 결과를 돌려준다. 성공 모양뿐 아니라 에러 모양도 계약이다</div></div>
+<div class="g-row"><div class="g-term"><b>12 · 운영 증거</b><span>structured log / metric / trace / alert</span></div><div class="g-def">이 요청이 무슨 일을 했는지 나중에 재구성할 수 있게 남기는 기록</div></div>
 </div>
 <div class="callout">
 <span class="co-label">리뷰 기준</span>
@@ -206,12 +233,21 @@ quality floor · backend core evidence packet
 <p class="lede">실무형 백엔드 엔지니어는 더 많은 기능을 짜는 사람이 아니라, 모든 선택에 대해 <em>"이 결정의 비용은 무엇인가"</em>와 <em>"어떤 증거로 맞게 동작한다고 말할 수 있는가"</em>를 묻는 사람입니다. 코드가 도는 것은 시작점일 뿐입니다.</p>
 <div class="semantic-card">
 <span class="sc-label">BACKEND ROADMAP OVERVIEW</span>
-HTTP·DNS·TLS·Linux·Git<br>
-→ 언어·프레임워크 선택 → 요청 생명주기 → API 계약<br>
-→ Java·Spring 실행 모델 → DB 스키마·트랜잭션·마이그레이션<br>
-→ ORM·JPA → 동시성·멱등성 → 캐시·정합성<br>
-→ 비동기·이벤트 → 테스트·부하 검증 → 배포·클라우드·운영<br>
-→ 관측가능성·장애 대응 → 아키텍처 경계 → 운영 증거
+1 HTTP·DNS·TLS·Linux·Git — 요청이 서버에 닿기까지의 바닥<br>
+→ 2 언어·프레임워크 선택 — 이후 관례와 제약이 여기서 갈린다<br>
+→ 3 요청 생명주기 — 요청 하나가 지나는 경로를 그린다<br>
+→ 4 API 계약 — 클라이언트와의 공개 약속을 고정한다<br>
+→ 5 Java·Spring 실행 모델 — 프레임워크가 대신 하는 일을 안다<br>
+→ 6 DB 스키마·트랜잭션·마이그레이션 — 상태를 어떻게 저장하고 바꿀지<br>
+→ 7 ORM·JPA — 객체와 테이블 사이 번역 비용을 통제한다<br>
+→ 8 동시성·멱등성 — 동시 갱신과 중복 요청을 정상 입력으로 다룬다<br>
+→ 9 캐시·정합성 — 속도를 사는 대신 무엇이 낡을 수 있는지 정한다<br>
+→ 10 비동기·이벤트 — 지금 하지 않아도 되는 일을 뒤로 넘긴다<br>
+→ 11 테스트·부하 검증 — 변경과 한계를 배포 전에 드러낸다<br>
+→ 12 배포·클라우드·운영 — 만든 것을 안전하게 올리고 되돌린다<br>
+→ 13 관측가능성·장애 대응 — 무슨 일이 났는지 말할 수 있게 한다<br>
+→ 14 아키텍처 경계 — 어디서 자를지를 비용이 쌓인 뒤 판단한다<br>
+→ 15 운영 증거 — 안다는 말을 산출물로 바꾼다
 </div>
 <table>
 <tr><th>단계</th><th>배울 것</th><th>실무에서 증명할 것</th><th>부실한 이해의 신호</th></tr>
@@ -312,17 +348,36 @@ HTTP·DNS·TLS·Linux·Git<br>
 <p class="lede">백엔드 학습은 기술 이름을 나열하는 순서가 아니라 요청 하나가 시스템을 통과하며 어떤 계약, 상태, 실패, 증거를 남기는지 따라가는 순서여야 합니다. 이 모델을 먼저 잡으면 API, DB, 검증, 테스트, 운영이 따로 놀지 않습니다.</p>
 <div class="semantic-card">
 <span class="sc-label">REQUEST TO OPERATIONS MAP</span>
-client → controller → validation → principal/scope handoff<br>
-→ application service → transaction boundary<br>
-→ domain rule → repository / external client<br>
-→ commit / rollback → response → log / metric / trace
+1 client — 신뢰할 수 없는 입력의 출처<br>
+→ 2 controller — HTTP를 애플리케이션 언어로 옮기는 진입점<br>
+→ 3 validation — 형식·범위·필수값을 여기서 끊는다<br>
+→ 4 principal/scope handoff — 누가 어떤 권한으로 부르는지를 아래로 넘긴다<br>
+→ 5 application service — 유스케이스를 조립한다<br>
+→ 6 transaction boundary — 함께 커밋될 범위를 연다<br>
+→ 7 domain rule — 깨지면 안 되는 규칙을 확인한다<br>
+→ 8 repository / external client — 상태를 읽고 쓰거나 통제 밖 시스템을 부른다<br>
+→ 9 commit / rollback — 변경을 확정하거나 되돌린다<br>
+→ 10 response — 성공과 에러 모양을 계약대로 돌려준다<br>
+→ 11 log / metric / trace — 이 요청을 나중에 재구성할 증거를 남긴다
 </div>
 <div class="semantic-card">
 <span class="sc-label">REQUEST TO STATE CHANGE MODEL</span>
-input trust boundary → principal and scope → command object<br>
-→ invariant check → transaction decision → state transition<br>
-→ constraint enforcement → side-effect scheduling → response contract<br>
-→ audit/log/metric evidence
+1 input trust boundary → 2 principal and scope → 3 command object<br>
+→ 4 invariant check → 5 transaction decision → 6 state transition<br>
+→ 7 constraint enforcement → 8 side-effect scheduling → 9 response contract<br>
+→ 10 audit/log/metric evidence
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 입력 신뢰 경계</b><span>input trust boundary</span></div><div class="g-def">바깥에서 온 값이 내부 값으로 바뀌는 선. 이 선을 넘기 전에 형식과 범위를 끊는다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 주체와 범위</b><span>principal and scope</span></div><div class="g-def">누가 어떤 자원 범위에 대해 요청했는가. 이후 모든 조회·수정 쿼리에 함께 실려야 한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 명령 객체</b><span>command object</span></div><div class="g-def">하려는 일을 도메인 언어로 표현한 입력 묶음. HTTP 요청 모양이 아니라 유스케이스 모양이다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 불변식 검사</b><span>invariant check</span></div><div class="g-def">지금 상태에서 이 명령이 허용되는가. 상태를 바꾸기 전에 확인한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 트랜잭션 결정</b><span>transaction decision</span></div><div class="g-def">무엇까지 한 커밋에 넣을지 정한다. 외부 호출과 오래 걸리는 작업은 밖으로 뺀다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 상태 전이</b><span>state transition</span></div><div class="g-def">값이 실제로 바뀌는 지점. 무엇이 어떤 값에서 어떤 값으로 가는지 한 문장으로 말할 수 있어야 한다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 제약 강제</b><span>constraint enforcement</span></div><div class="g-def">마지막 방어선은 애플리케이션 if문이 아니라 DB 제약(unique, FK, check)이다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 부작용 예약</b><span>side-effect scheduling</span></div><div class="g-def">메일·알림·외부 연동처럼 커밋 이후에 일어나야 할 일을 큐나 아웃박스로 미룬다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 응답 계약</b><span>response contract</span></div><div class="g-def">성공과 실패 각각의 응답 모양. 클라이언트는 이것만 보고 분기한다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 감사·로그·지표 증거</b><span>audit/log/metric evidence</span></div><div class="g-def">이 변경이 언제, 누구에 의해, 왜 일어났는지 나중에 재구성할 수 있게 남긴다</div></div>
 </div>
 <table>
 <tr><th>상태 변경 질문</th><th>좋은 답</th><th>위험 신호</th></tr>
@@ -530,10 +585,19 @@ HTTP request → servlet filter / interceptor → DispatcherServlet<br>
 </table>
 <div class="semantic-card">
 <span class="sc-label">SPRING EXCEPTION CONTRACT FLOW</span>
-domain/application exception → error code mapping<br>
-→ HTTP status decision → stable response body<br>
-→ structured log with traceId → metric label<br>
-→ client-safe message, server-only detail
+1 domain/application exception → 2 error code mapping<br>
+→ 3 HTTP status decision → 4 stable response body<br>
+→ 5 structured log with traceId → 6 metric label<br>
+→ 7 client-safe message, server-only detail
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 도메인·애플리케이션 예외</b><span>domain exception</span></div><div class="g-def">규칙 위반을 프레임워크 예외가 아니라 도메인 언어로 던진다 — 재고 부족, 권한 없음처럼</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 에러 코드 매핑</b><span>error code mapping</span></div><div class="g-def">예외를 클라이언트가 분기할 수 있는 안정된 코드로 옮긴다. 코드는 계약이므로 함부로 바뀌지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · HTTP 상태 결정</b><span>status decision</span></div><div class="g-def">코드에 맞는 상태를 고른다. 입력 잘못은 4xx, 서버 잘못은 5xx — 전부 200으로 감싸지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 안정된 응답 본문</b><span>stable response body</span></div><div class="g-def">에러 응답에도 스키마가 있다. 필드 이름과 구조가 성공 응답만큼 고정되어야 한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · traceId 구조화 로그</b><span>structured log</span></div><div class="g-def">사용자에게 감춘 상세를 서버 로그에 남기고 traceId로 요청과 잇는다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 메트릭 라벨</b><span>metric label</span></div><div class="g-def">어떤 에러가 얼마나 나는지 코드별로 센다. 알림과 SLO의 입력이 된다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 노출 경계</b><span>client-safe / server-only</span></div><div class="g-def">밖에는 행동 가능한 문장만, 스택트레이스와 내부 식별자는 서버에만 남긴다</div></div>
 </div>
 <div class="callout">
 <span class="co-label">실무 기준</span>
@@ -1186,11 +1250,11 @@ post-deploy check: p95 latency, error rate, saturation, business event count
 
 <h3><span class="h3-tag">8.2</span>외부 호출의 3종 안전장치</h3>
 <div class="flow">
-<span class="step">타임아웃<br>Timeout</span><span class="arr">→</span>
-<span class="step">재시도<br>Retry+백오프</span><span class="arr">→</span>
-<span class="step hl">서킷브레이커<br>Circuit Breaker</span>
+<span class="step">1 타임아웃<br>Timeout</span><span class="arr">→</span>
+<span class="step">2 재시도<br>Retry+백오프</span><span class="arr">→</span>
+<span class="step hl">3 서킷브레이커<br>Circuit Breaker</span>
 </div>
-<p>다른 서비스를 호출할 때 대부분 먼저 검토해야 할 셋입니다. <strong>타임아웃</strong> — 무한 대기는 스레드·커넥션을 고갈시켜 <em>한 서비스의 느림이 전체 장애로 번지게</em> 합니다(연결·읽기 타임아웃 둘 다). <strong>재시도</strong> — 일시적 실패엔 효과적이지만, 즉시·고정 간격 재시도는 죽어가는 서버를 더 때립니다 → 지수 백오프 + 지터, 그리고 멱등한 요청만. <strong>서킷브레이커</strong> — 연속 실패가 임계를 넘으면 회로를 열어 한동안 호출 자체를 차단하고 빠르게 실패시켜, 회복할 시간을 줍니다.</p>
+<p>다른 서비스를 호출할 때 대부분 먼저 검토해야 할 셋입니다. <strong>1 타임아웃</strong> — 무한 대기는 스레드·커넥션을 고갈시켜 <em>한 서비스의 느림이 전체 장애로 번지게</em> 합니다(연결·읽기 타임아웃 둘 다). <strong>2 재시도</strong> — 일시적 실패엔 효과적이지만, 즉시·고정 간격 재시도는 죽어가는 서버를 더 때립니다 → 지수 백오프 + 지터, 그리고 멱등한 요청만. <strong>3 서킷브레이커</strong> — 연속 실패가 임계를 넘으면 회로를 열어 한동안 호출 자체를 차단하고 빠르게 실패시켜, 회복할 시간을 줍니다.</p>
 <div class="callout risk">
 <span class="co-label">FAILURE MODE — 캐스케이딩 장애</span>
 <p>타임아웃 없는 호출 하나가 전체를 무너뜨리는 전형: A가 느려진 B를 무한 대기 → A의 스레드풀 고갈 → A도 응답 불능 → A를 호출하던 C도... 한 군데의 느림이 도미노로 번집니다. <strong>타임아웃과 격벽(bulkhead)은 선택이 아니라 분산 시스템의 기본 위생</strong>입니다.</p>
