@@ -358,6 +358,24 @@ RTO=breach</code></pre>
           <div class="g-row"><div class="g-term"><b>SLO</b></div><div class="g-def">사용자 경험을 기준으로 잡는 내부 신뢰성 목표다. SLO dashboard, error budget, alert owner로 확인한다. 오류는 다 똑같이 급하게 처리하면 된다고 생각하기 쉬운데, SLO가 있어야 사용자 영향으로 이어지는 진짜 장애와 무시해도 되는 단순 오류를 구분할 수 있다.</div></div>
           <div class="g-row"><div class="g-term"><b>runbook</b></div><div class="g-def">장애나 변경이 있을 때 반복해서 실행할 수 있는 절차 문서다. runbook owner, rollback command, restore drill date로 확인한다. 문서 링크 하나만 던져주면 인수가 끝난다고 생각하기 쉬운데, owner와 권한, 마지막 drill 날짜가 없는 runbook은 장애 때 실행할 수 없는 그냥 그림일 뿐이다.</div></div>
           <div class="g-row"><div class="g-term"><b>RPO/RTO</b></div><div class="g-def">허용할 수 있는 데이터 손실 범위와 복구까지 걸리는 시간 목표다. DR plan, restore drill, replica lag, failover result로 확인한다. 백업만 돌아가고 있으면 DR 준비는 끝났다고 여기기 쉬운데, 실제 restore drill로 소요 시간과 누락 데이터를 검증해보기 전까지는 RPO/RTO를 정말 지킬 수 있는지 아무도 모른다.</div></div>
+          <div class="g-row"><div class="g-term"><b>recovery path</b></div><div class="g-def">문제가 났을 때 되돌리거나 복구하는 경로다. rollback 명령, 백업 시점, 복구 소요 시간으로 확인한다. 배포 경로만 잘 만들면 된다고 보기 쉬운데, 되돌릴 방법이 검증되지 않으면 배포 속도는 그대로 위험이 된다.</div></div>
+          <div class="g-row"><div class="g-term"><b>readiness packet</b></div><div class="g-def">서비스를 열기 전에 채우는 준비도 기록이다. owner, SLO, dashboard, runbook, rollback plan, RPO/RTO, 마지막 drill 날짜로 확인한다. 아키텍처 다이어그램으로 대신하기 쉬운데, 담당자가 바뀌면 그림만으로는 아무 판단도 재현되지 않는다.</div></div>
+          <div class="g-row"><div class="g-term"><b>incident packet</b></div><div class="g-def">장애 중에 채우는 기록이다. 증상, 영향 범위, 최근 변경, 계층별 증거, 완화, 검증, 후속 조치로 확인한다. 상황이 끝나고 정리하면 된다고 보기 쉬운데, 그때 쓰면 시각과 근거가 이미 흐려져 있다.</div></div>
+          <div class="g-row"><div class="g-term"><b>SLI</b></div><div class="g-def">사용자 경험을 숫자로 표현한 측정값이다. 성공률, 지연, 신선도 같은 항목으로 확인한다. 서버 지표를 SLI로 쓰기 쉬운데, CPU가 높다고 사용자가 불편한 것은 아니고 그 반대도 마찬가지다.</div></div>
+          <div class="g-row"><div class="g-term"><b>error budget</b></div><div class="g-def">SLO가 허용하는 실패의 총량이다. 목표치와 실제 SLI의 차이로 확인한다. 목표를 100%로 잡고 싶어지기 쉬운데, 허용 실패가 없으면 배포도 실험도 할 수 없다는 뜻이 된다.</div></div>
+          <div class="g-row"><div class="g-term"><b>burn rate</b></div><div class="g-def">error budget이 소진되는 속도다. 짧은 창과 긴 창을 함께 보고 확인한다. 단순 임계값 알림으로 대신하기 쉬운데, 속도로 보지 않으면 잠깐의 튐과 지속되는 장애를 구분하지 못한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>incident commander</b></div><div class="g-def">장애 대응의 판단과 진행을 책임지는 역할이다. 지휘자, 기록자, 공지 담당이 지정됐는지로 확인한다. 다 같이 붙으면 빨리 끝난다고 보기 쉬운데, 역할이 없으면 같은 확인을 여럿이 반복하고 결정은 아무도 내리지 않는다.</div></div>
+          <div class="g-row"><div class="g-term"><b>blast radius</b></div><div class="g-def">장애나 변경이 영향을 미치는 범위다. endpoint, tenant, region, 배치 작업 단위로 확인한다. 전체 아니면 정상으로 나누기 쉬운데, 범위를 먼저 좁히는 것이 원인 찾기보다 빠르게 사용자 영향을 줄인다.</div></div>
+          <div class="g-row"><div class="g-term"><b>deploy marker</b></div><div class="g-def">배포 시각을 지표와 로그에 남기는 표시다. 대시보드에서 지표 변화와 겹쳐 확인한다. 배포 기록은 릴리스 노트에 있으니 됐다고 보기 쉬운데, 같은 시간축에 없으면 지표 변화와 배포를 잇지 못한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>artifact digest</b></div><div class="g-def">배포된 산출물의 내용 해시다. 이미지 digest와 commit SHA로 확인한다. 태그나 브랜치명으로 충분하다고 보기 쉬운데, 같은 태그가 다른 내용을 가리킬 수 있어 무엇이 떠 있는지 증명하지 못한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>target health</b></div><div class="g-def">LB가 각 서버를 정상으로 보는지의 판정이다. health check 응답과 등록 상태로 확인한다. 통과하면 애플리케이션도 정상이라 단정하기 쉬운데, 확인 범위가 얕으면 죽은 앱도 통과하고 깊으면 정상 서버까지 빠진다.</div></div>
+          <div class="g-row"><div class="g-term"><b>connection pool 고갈</b></div><div class="g-def">앱이 DB 연결을 얻지 못하고 대기하는 상태다. active·idle·pending 수와 획득 대기 시간으로 확인한다. DB가 느린 탓으로 넘기기 쉬운데, 느린 쿼리나 긴 트랜잭션이 연결을 오래 쥐고 있는 경우가 많다.</div></div>
+          <div class="g-row"><div class="g-term"><b>lock wait</b></div><div class="g-def">다른 트랜잭션이 잡은 잠금을 기다리는 시간이다. 대기 중인 세션과 잠금을 쥔 세션을 함께 확인한다. 대기가 보이면 그 쿼리를 고치기 쉬운데, 봐야 할 것은 피해자가 아니라 잠금을 오래 쥔 쪽이다.</div></div>
+          <div class="g-row"><div class="g-term"><b>migration lock</b></div><div class="g-def">스키마 변경이 테이블을 잠가 다른 요청을 막는 상태다. 변경 시각과 지연 시작 시각을 겹쳐 확인한다. 배포와 무관한 DB 이슈로 보기 쉬운데, 배포 직후 지연이 시작됐다면 대개 여기서 출발한다.</div></div>
+          <div class="g-row"><div class="g-term"><b>NAT saturation</b></div><div class="g-def">NAT의 처리 한도나 포트가 모자라 외부 호출이 실패하는 상태다. NAT metric의 bytes와 연결 수, 오류로 확인한다. 대역폭 문제로 보기 쉬운데, 재시도 폭주나 사설 경로 누락이 원인인 경우가 더 많다.</div></div>
+          <div class="g-row"><div class="g-term"><b>graceful shutdown</b></div><div class="g-def">새 요청을 받지 않고 처리 중인 요청만 끝낸 뒤 종료하는 방식이다. 종료 순서와 in-flight 요청 완료로 확인한다. 프로세스를 바로 내려도 된다고 보기 쉬운데, 배포마다 소수의 요청이 조용히 실패하는 원인이 된다.</div></div>
+          <div class="g-row"><div class="g-term"><b>failback</b></div><div class="g-def">복구 후 원래 구성으로 되돌리는 절차다. 전환 조건과 되돌린 뒤 검증 결과로 확인한다. 장애만 넘기면 끝이라 보기 쉬운데, 임시 구성으로 오래 버티면 그 자체가 다음 장애의 원인이 된다.</div></div>
+          <div class="g-row"><div class="g-term"><b>reconciliation</b></div><div class="g-def">장애 중에 어긋난 데이터를 다시 맞추는 작업이다. 비교 쿼리와 처리 결과로 확인한다. 서비스가 정상으로 돌아오면 끝났다고 보기 쉬운데, 중복 처리나 누락은 복구 이후에도 남아 있다.</div></div>
         </div>
       </section>
 
