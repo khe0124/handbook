@@ -62,15 +62,46 @@
         <p>학습 산출물은 request path diagram, deploy timeline, incident packet, rollback/restore drill report, service readiness score다. 말로 아는 것이 아니라 다른 담당자가 재현 가능한 문서와 증거로 제출해야 한다.</p>
         <p>강연 목표는 청중이 장애 상황에서 어떤 계층을 먼저 확인하고 어떤 증거로 배제할지 말할 수 있게 하는 것이다. 서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남기는 게 목표다.</p>
       <h3>로드맵으로 읽는 순서</h3>
-        <p>로드맵은 네 단계로 읽는다. 1주차 · 요청 경로에서는 서비스 요청 경로 → DNS/TLS → LB/App/DB 경계를 읽고 request path diagram, dig/curl/openssl 결과, target health 판독을 산출물로 남긴다. 2주차 · 네트워크 경계에서는 VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity를 읽고 route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증을 만든다. 3주차 · 변경과 런타임에서는 CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리를 읽고 release note, artifact digest, health check gate, terraform plan review를 남긴다. 4주차 · 관측과 복구에서는 Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오를 읽고 SLO burn alert, incident packet, rollback/restore drill, postmortem action을 완성한다.</p>
+        <p>로드맵은 네 단계로 읽는다.</p>
+        <ol>
+          <li><b>1주차 · 요청 경로</b> — 서비스 요청 경로 → DNS/TLS → LB/App/DB 경계를 읽고 request path diagram, dig/curl/openssl 결과, target health 판독을 산출물로 남긴다.</li>
+          <li><b>2주차 · 네트워크 경계</b> — VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity를 읽고 route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증을 만든다.</li>
+          <li><b>3주차 · 변경과 런타임</b> — CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리를 읽고 release note, artifact digest, health check gate, terraform plan review를 남긴다.</li>
+          <li><b>4주차 · 관측과 복구</b> — Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오를 읽고 SLO burn alert, incident packet, rollback/restore drill, postmortem action을 완성한다.</li>
+        </ol>
       <h3>60분 강연 흐름</h3>
-        <p>60분 강연은 여섯 구간으로 나눈다. 0-5분은 왜 운영은 아키텍처 그림만으로 부족한가를 다루며 요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다. 5-15분은 전체 운영 지도로 DNS → Edge → LB → Runtime → Data store와 CI/CD → artifact → runtime → metric gate를 겹쳐 설명한다. 15-30분은 장애 triage 실전으로 5xx 증가 케이스를 통해 사용자 영향, 최근 변경, 계층별 증거, rollback 판단을 연습한다. 30-42분은 네트워크·보안 경계로 VPC, subnet, route, SG/NACL, Private Endpoint, DNS override의 대표 오판을 짚는다. 42-52분은 SLO·Incident·DR로 burn rate, IC/scribe/comms, RPO/RTO, restore drill을 운영 성숙도 기준으로 연결한다. 52-60분은 체크리스트와 면접 답변으로 운영 인수 packet과 30초/90초 답변 구조로 마무리한다.</p>
+        <p>60분 강연은 여섯 구간으로 나눈다.</p>
+        <ol>
+          <li><b>0-5분</b> — 왜 운영은 아키텍처 그림만으로 부족한가를 다루며 요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다.</li>
+          <li><b>5-15분</b> — 전체 운영 지도로 DNS → Edge → LB → Runtime → Data store와 CI/CD → artifact → runtime → metric gate를 겹쳐 설명한다.</li>
+          <li><b>15-30분</b> — 장애 triage 실전으로 5xx 증가 케이스를 통해 사용자 영향, 최근 변경, 계층별 증거, rollback 판단을 연습한다.</li>
+          <li><b>30-42분</b> — 네트워크·보안 경계로 VPC, subnet, route, SG/NACL, Private Endpoint, DNS override의 대표 오판을 짚는다.</li>
+          <li><b>42-52분</b> — SLO·Incident·DR로 burn rate, IC/scribe/comms, RPO/RTO, restore drill을 운영 성숙도 기준으로 연결한다.</li>
+          <li><b>52-60분</b> — 체크리스트와 면접 답변으로 운영 인수 packet과 30초/90초 답변 구조로 마무리한다.</li>
+        </ol>
       <h3>계층별 실패 모드</h3>
-        <p>계층별로 대표 실패와 첫 확인 증거가 다르다. DNS/TLS는 NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락으로 나타나며 dig +trace, resolver 비교, openssl s_client, curl -v로 확인한다. Edge/CDN/WAF는 WAF false positive, stale cache, origin policy mismatch로 나타나며 edge request id, WAF log, cache policy, origin status로 확인한다. Load Balancer는 502 upstream fail, 503 no healthy target, 504 timeout으로 나타나며 target health, listener rule, deregistration delay, idle timeout으로 확인한다. Runtime은 OOMKilled, readiness 실패, selector mismatch, graceful shutdown 누락으로 나타나며 kubectl describe/logs --previous, endpoints, rollout status로 확인한다. Data store는 connection pool 고갈, lock wait, slow query, migration lock으로 나타나며 pool pending, DB wait event, slow query, migration version으로 확인한다. Network policy는 route miss, SG/NACL block, NAT saturation, private DNS 누락으로 나타나며 route table, flow log ACCEPT/REJECT, NAT metric, DNS query log로 확인한다. Change path는 잘못된 artifact/config/secret/migration 배포로 나타나며 commit SHA, image digest, config diff, secret version, deploy marker로 확인한다. Recovery path는 rollback 불가, restore 미검증, failback 누락으로 나타나며 rollback command, backup age, restore duration, reconciliation result로 확인한다.</p>
+        <p>계층별로 대표 실패와 첫 확인 증거가 다르다. 요청이 지나는 순서대로 본다.</p>
+        <ol>
+          <li><b>DNS/TLS</b> — NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락으로 나타나며 <code>dig +trace</code>, resolver 비교, <code>openssl s_client</code>, <code>curl -v</code>로 확인한다.</li>
+          <li><b>Edge/CDN/WAF</b> — WAF false positive, stale cache, origin policy mismatch로 나타나며 edge request id, WAF log, cache policy, origin status로 확인한다.</li>
+          <li><b>Load Balancer</b> — 502 upstream fail, 503 no healthy target, 504 timeout으로 나타나며 target health, listener rule, deregistration delay, idle timeout으로 확인한다.</li>
+          <li><b>Runtime</b> — OOMKilled, readiness 실패, selector mismatch, graceful shutdown 누락으로 나타나며 <code>kubectl describe</code>/<code>logs --previous</code>, endpoints, rollout status로 확인한다.</li>
+          <li><b>Data store</b> — connection pool 고갈, lock wait, slow query, migration lock으로 나타나며 pool pending, DB wait event, slow query, migration version으로 확인한다.</li>
+          <li><b>Network policy</b> — route miss, SG/NACL block, NAT saturation, private DNS 누락으로 나타나며 route table, flow log ACCEPT/REJECT, NAT metric, DNS query log로 확인한다.</li>
+          <li><b>Change path</b> — 잘못된 artifact/config/secret/migration 배포로 나타나며 commit SHA, image digest, config diff, secret version, deploy marker로 확인한다.</li>
+          <li><b>Recovery path</b> — rollback 불가, restore 미검증, failback 누락으로 나타나며 rollback command, backup age, restore duration, reconciliation result로 확인한다.</li>
+        </ol>
       <h3>AWS/Azure 증거 비교</h3>
         <p>AWS와 Azure의 증거는 영역별로 짝을 지어 비교해야 한다. DNS/Edge 영역에서 AWS는 Route 53, CloudFront, AWS WAF, ACM, ALB access log를 보고 Azure는 Azure DNS, Front Door, WAF Policy, Managed Certificate, Application Gateway log를 본다. edge request id와 origin status를 분리해 WAF 차단과 origin 장애를 나눈다. Network 영역에서 AWS는 VPC, subnet route table, Security Group, NACL, NAT Gateway, VPC Flow Logs, PrivateLink를 보고 Azure는 VNet, subnet route table, NSG, NAT Gateway, Network Watcher flow log, Private Endpoint를 본다. route miss, policy reject, DNS public resolution, NAT saturation을 각각 다른 원인으로 본다. Runtime 영역에서 AWS는 ECS/EKS, target group health, CloudWatch Container Insights, ECR image digest를 보고 Azure는 AKS/App Service, backend health, Azure Monitor, ACR digest를 본다. readiness, rollout, image/config mismatch, connection draining을 배포 timeline에 연결한다. Data/DR 영역에서 AWS는 RDS/Aurora metrics, Performance Insights, snapshots, PITR, replica lag를 보고 Azure는 Azure SQL metrics, Query Performance Insight, backups, PITR, geo-replica lag를 본다. 백업 존재가 아니라 restore duration, backup age, missing rows, failback 결과로 판단한다.</p>
       <h3>운영 의사결정 트리</h3>
-        <p>운영 의사결정은 다섯 질문을 순서대로 던지면서 좁혀간다. 첫째, 사용자가 실제로 영향을 받는가? SLI, support ticket, synthetic check, region/device 분포로 확인하고, 영향이 없으면 ticket으로 낮추고 영향이 있으면 incident channel과 IC를 세운다. 둘째, 최근 변경과 같은 시간축인가? deploy marker, image digest, config diff, migration version, feature flag audit로 확인하고, 같은 시간축이면 rollback/flag off 후보를 먼저 준비하고 아니면 요청 경로와 의존성 장애를 본다. 셋째, 요청이 어디까지 도달했는가? DNS answer, WAF request id, LB target health, app access log, trace span, DB wait event로 확인하고, 도달하지 못한 첫 계층이 현재의 가장 강한 원인 후보가 된다. 넷째, 원인 확정 전 완화가 가능한가? rollback command, traffic shift, circuit breaker, rate limit, queue pause, read-only mode를 확인하고, 사용자 영향을 줄이는 조치가 있으면 원인 분석과 병행한다. 다섯째, 복구가 검증됐는가? SLI 회복, error budget burn 정상화, data reconciliation, customer comms, runbook diff로 확인하고, 지표 회복만으로 종료하지 말고 데이터·공지·문서 갱신까지 확인한다.</p>
+        <p>운영 의사결정은 다섯 질문을 순서대로 던지면서 좁혀간다.</p>
+        <ol>
+          <li><b>사용자가 실제로 영향을 받는가?</b> — SLI, support ticket, synthetic check, region/device 분포로 확인하고, 영향이 없으면 ticket으로 낮추고 영향이 있으면 incident channel과 IC를 세운다.</li>
+          <li><b>최근 변경과 같은 시간축인가?</b> — deploy marker, image digest, config diff, migration version, feature flag audit로 확인하고, 같은 시간축이면 rollback/flag off 후보를 먼저 준비하고 아니면 요청 경로와 의존성 장애를 본다.</li>
+          <li><b>요청이 어디까지 도달했는가?</b> — DNS answer, WAF request id, LB target health, app access log, trace span, DB wait event로 확인하고, 도달하지 못한 첫 계층이 현재의 가장 강한 원인 후보가 된다.</li>
+          <li><b>원인 확정 전 완화가 가능한가?</b> — rollback command, traffic shift, circuit breaker, rate limit, queue pause, read-only mode를 확인하고, 사용자 영향을 줄이는 조치가 있으면 원인 분석과 병행한다.</li>
+          <li><b>복구가 검증됐는가?</b> — SLI 회복, error budget burn 정상화, data reconciliation, customer comms, runbook diff로 확인하고, 지표 회복만으로 종료하지 말고 데이터·공지·문서 갱신까지 확인한다.</li>
+        </ol>
       <h3>운영 준비도 점수표</h3>
         <p>운영 준비도는 점수로 판정한다. 0점은 문서 없음 또는 개인 기억에 의존하는 상태로 런칭/인수 차단 대상이다. 1점은 다이어그램과 담당자만 있는 상태로 장애 때 실행이 불가능하니 owner, dashboard, runbook 보강이 필요하다. 2점은 dashboard, alert, runbook, rollback plan이 있는 상태로 기본 운영은 가능하지만 drill 증거가 없으면 위험하다. 3점은 rollback/restore drill, SLO, incident packet, cost/access owner까지 있는 상태로 독립 운영이 가능하다. 4점은 game day, failback, runbook diff, error budget policy가 반복 운영되는 상태로 팀 표준화가 가능하다.</p>
       <h3>강연 데모 스크립트</h3>
@@ -133,9 +164,12 @@
           <li>운영 인수 전에 rollback drill, restore drill, traffic shift drill 중 최소 하나를 실행한다.</li>
           <li>비용 owner와 access owner를 서비스 카탈로그에 포함한다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 인프라·운영 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. dependency map이나 SLO gate처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 인프라·운영 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. dependency map이나 SLO gate처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">

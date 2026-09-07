@@ -100,9 +100,12 @@
           <li>ingress와 egress를 각각 source, destination, port, policy로 검증한다.</li>
           <li>Private Endpoint 사용 시 DNS override와 endpoint policy를 같이 본다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 네트워크 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. route table이나 SG 규칙처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 네트워크 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. route table이나 SG 규칙처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -123,7 +126,12 @@
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>VPC 라우팅 장애를 다룰 때도 "패킷이 왜 안 가는지" 하나의 질문을 세 층위로 쪼개서 본다. CIDR/Subnet 표면은 "애초에 주소 설계가 미래 연결을 막지 않는가"를 VPC CIDR, subnet route table, AZ, reserved IP, overlap check로 확인한다. 나중에 peering, VPN, PrivateLink를 붙일 때 막히는 CIDR을 여기서 미리 제거해야 한다. Ingress/Egress 표면은 "그 주소로 실제 트래픽이 오갈 수 있는가"를 source, destination, port, protocol, SG, NACL, route target으로 확인한다. outbound 허용과 return path를 함께 검증하는 게 이 표면의 핵심이다. Flow evidence 표면은 "허용했다고 믿는 경로와 실제 패킷 경로가 같은가"를 VPC Flow Logs, firewall log, NAT metric, DNS resolution으로 확인한다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. 라우팅 단계에서는 route table destination/target, longest prefix match, propagated route를 확인해 0.0.0.0/0과 더 구체적인 prefix 중 무엇이 우선되는지 본다. 정책 단계에서는 security group outbound/inbound, NACL ephemeral port, firewall rule을 보는데, SG는 stateful이고 NACL은 stateless라는 차이를 항상 반영해야 한다. 패킷 증거 단계에서는 flow log ACCEPT/REJECT, NAT bytes, DNS query log를 봐서 막힌 위치가 route인지 policy인지 DNS인지 분리한다.</p>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>라우팅</b> — route table destination/target, longest prefix match, propagated route를 확인해 0.0.0.0/0과 더 구체적인 prefix 중 무엇이 우선되는지 본다.</li>
+          <li><b>정책</b> — security group outbound/inbound, NACL ephemeral port, firewall rule을 보는데, SG는 stateful이고 NACL은 stateless라는 차이를 항상 반영해야 한다.</li>
+          <li><b>패킷 증거</b> — flow log ACCEPT/REJECT, NAT bytes, DNS query log를 봐서 막힌 위치가 route인지 policy인지 DNS인지 분리한다.</li>
+        </ol>
         <p>같은 "연결 안 됨"이라도 어느 계층에서 막혔느냐에 따라 확인할 증거가 완전히 달라진다. Route miss는 애초에 갈 곳 자체가 없는 문제라 destination route가 아예 없거나 잘못된 NAT/IGW/TGW target을 가리키는 경우로 나타나는데, 패킷이 어느 next hop으로 가는지부터 확인해야 한다. Policy block은 갈 곳은 있는데 규칙이 막는 문제라 SG outbound, SG inbound, NACL inbound/outbound, firewall deny로 나타나므로 stateful과 stateless 정책을 구분해서 봐야 한다. DNS path 문제는 경로는 맞는데 애초에 잘못된 곳을 가리키는 문제라 private DNS override 누락, public endpoint 해석, resolver rule 불일치로 나타나는데, 네트워크 자체는 맞아도 이름이 다른 경로를 가리키면 요청은 실패한다. Return path 문제는 요청은 갔는데 응답이 못 돌아오는 문제라 peer route 누락, asymmetric routing, ephemeral port 차단으로 나타나므로 요청 경로뿐 아니라 응답 경로도 모두 열려 있는지 확인해야 한다.</p>
       </section>
 

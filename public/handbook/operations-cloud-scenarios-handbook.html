@@ -71,7 +71,15 @@
         <div class="ch-head"><span class="ch-code">CLD-01</span><h2>사설 네트워크와 데이터 경계</h2></div>
         <p class="lede">AWS는 VPC, public/private subnet, NAT Gateway, Security Group, VPC Endpoint, AWS PrivateLink로 경계를 만든다. Azure는 VNet, subnet, NAT Gateway, Network Security Group, Private Endpoint, Private Link, Private DNS Zone을 조합한다. 핵심은 DB와 관리형 서비스가 인터넷을 거치지 않게 하는 것이다.</p>
         <p>Private Endpoint를 만들어놓고 비용 대시보드에서 public egress가 하나도 안 줄어서 당황한 적이 있다. 콘솔에는 분명히 endpoint가 떠 있는데, 실제 트래픽은 여전히 인터넷을 거쳐 나가고 있었다. 원인은 DNS였다 — endpoint는 만들어졌지만 그 이름을 조회하면 여전히 public IP가 나오고 있었던 것이다. route, policy, flow log가 다 사설 경로를 가리켜야 진짜 "사설화됐다"고 말할 수 있는데, DNS 하나가 빠지면 나머지가 다 맞아도 소용없다.</p>
-        <p>private subnet 앱이 DB나 storage 접근에 실패하거나 public egress 비용이 급증하는 상황을 겪으면, DNS override, endpoint policy, route table, NSG/Security Group, egress path를 이 순서로 하나씩 확인해야 한다. 순서를 뒤섞어서 route table부터 뒤지면, 정작 원인이었던 DNS는 한참 뒤에나 들여다보게 된다.</p>
+        <p>private subnet 앱이 DB나 storage 접근에 실패하거나 public egress 비용이 급증하는 상황을 겪으면, 다음 순서로 하나씩 확인한다.</p>
+        <ol>
+          <li><b>DNS override</b> — 그 이름이 사설 IP로 응답하는지 먼저 본다. 원인의 대부분이 여기다.</li>
+          <li><b>endpoint policy</b> — 경로는 맞는데 정책이 요청만 거부하고 있지는 않은지 본다.</li>
+          <li><b>route table</b> — 해당 대역이 의도한 target으로 향하는지 확인한다.</li>
+          <li><b>NSG / Security Group</b> — 양방향 허용 규칙이 실제 요청의 port와 맞는지 본다.</li>
+          <li><b>egress path</b> — 최종적으로 트래픽이 인터넷을 거치는지 사설 경로로 흐르는지 확인한다.</li>
+        </ol>
+        <p>순서를 뒤섞어서 route table부터 뒤지면, 정작 원인이었던 DNS는 한참 뒤에나 들여다보게 된다.</p>
         <p>정상적인 경우라면 Private DNS가 사설 IP를 반환하고 flow log가 private endpoint 경로를 기록한다. 이럴 때는 인터넷을 거치지 않는 경로로 판단해도 된다. 비정상적인 경우에는 Private Endpoint는 있지만 DNS가 public endpoint를 반환한다. 이때는 endpoint 자체보다 DNS override나 resolver rule을 먼저 의심하고 수정해야 한다.</p>
       </section>
 
@@ -100,9 +108,12 @@
           <li>Secrets Manager 또는 Key Vault, IAM role 또는 Managed Identity, PrivateLink 또는 Private Endpoint를 보안 경계에 포함한다.</li>
           <li>CloudWatch 또는 Azure Monitor에서 RED 지표, DB connection, health probe, deployment version을 같은 대시보드에 둔다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 AWS·Azure 구성 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. WAF rule이나 cache policy처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 AWS·Azure 구성 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. WAF rule이나 cache policy처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -123,7 +134,12 @@
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>AWS·Azure 장애를 다룰 때도 클라우드 이름은 잠시 잊고 "이게 어느 책임 경계의 문제인가"로 표면을 나눠서 본다. Edge/Ingress 표면은 "사용자와 가장 가까운 곳에서 걸러졌는가"를 Route 53/Azure DNS, CloudFront/Front Door, WAF, ALB/App Gateway로 본다. edge와 origin의 장애를 분리하는 게 이 표면의 핵심이다. Runtime/Data 표면은 "요청을 받은 뒤 처리 과정에서 무너졌는가"를 ECS/EKS/AKS/App Service, RDS/Azure SQL, Redis, storage로 본다. runtime health와 data dependency를 같은 release 단위로 묶어서 봐야 한다. Identity/Cost 표면은 "겉으로는 안 보이지만 권한이나 비용으로 새고 있는가"를 IAM/Managed Identity, Secrets Manager/Key Vault, NAT/egress, monitor cost로 본다. 보안과 비용도 그 자체로 운영 장애 신호라는 걸 여기서 다시 확인한다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. AWS 경로에서는 Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics를 보고 CloudFront 403과 ALB 5xx를 분리한다. Azure 경로에서는 Azure DNS, Front Door health, Application Gateway probe, AKS/App Service, Azure SQL metrics를 보고 Front Door와 App Gateway의 책임 경계를 확인한다. 비용/egress 확인에서는 NAT Gateway bytes, data transfer, log ingestion, managed service autoscale을 보고 비용 급증도 최근 변경과 같은 timeline에 놓는다.</p>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>AWS 경로</b> — Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics를 보고 CloudFront 403과 ALB 5xx를 분리한다.</li>
+          <li><b>Azure 경로</b> — Azure DNS, Front Door health, Application Gateway probe, AKS/App Service, Azure SQL metrics를 보고 Front Door와 App Gateway의 책임 경계를 확인한다.</li>
+          <li><b>비용/egress 확인</b> — NAT Gateway bytes, data transfer, log ingestion, managed service autoscale을 보고 비용 급증도 최근 변경과 같은 timeline에 놓는다.</li>
+        </ol>
         <p>같은 계층이라도 장애 패턴에 따라 판정 기준이 달라진다. CloudFront / Front Door 403은 WAF rule, origin policy, signed URL/cookie, geo rule로 나타나는데, edge 차단과 origin 차단을 분리해서 봐야 한다. ALB/App Gateway 502는 target health, backend protocol, TLS to origin, idle timeout으로 나타나므로, edge가 정상이어도 origin 연결이 실패할 수 있다는 걸 염두에 둔다. RDS/Azure SQL pressure는 connection count, CPU, lock wait, storage IOPS, replica lag로 나타나는데, DB 병목과 app pool 설정을 함께 봐야 한다. NAT/Egress cost spike는 NAT bytes, retry storm, log export, cross-AZ traffic으로 나타나므로, 비용 급증을 그 자체로 운영 incident로 취급해야 한다.</p>
       </section>
 

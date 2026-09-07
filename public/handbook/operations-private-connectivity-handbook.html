@@ -100,9 +100,12 @@
           <li>route table, 방화벽, return path, DNS를 양쪽에서 확인한다.</li>
           <li>장애 시 전달할 packet evidence 양식을 미리 정한다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 사설 연결 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. Phase 1/2 proposal 값처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 사설 연결 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. Phase 1/2 proposal 값처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -123,7 +126,12 @@
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>사설 연결 장애를 다룰 때도 "터널은 살아 있는데 왜 통신이 안 되는가"를 세 단계로 나눠서 좁힌다. Tunnel 표면은 "협상 자체가 살아 있는가"를 IKE/Phase 2 status, lifetime, proposal, rekey log, packet counter로 확인한다. 터널 UP과 서비스 통신 성공은 서로 다른 명제이므로 분리해서 확인해야 한다. Routing/Firewall 표면은 "협상된 터널 위로 실제 경로가 열려 있는가"를 local CIDR, peer CIDR, route table, firewall, return path로 확인한다. 이 표면의 핵심은 양쪽 네트워크가 같은 증거를 보고 있는지 확인하는 것이다. Application path 표면은 "경로가 열려 있어도 업무 포트까지 응답이 오는가"를 source IP, destination IP, port, DNS, tcpdump, nc/curl result로 확인한다. ICMP 성공만으로 API 성공을 판단하면 안 된다는 원칙이 여기서도 적용된다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. 협상 단계에서는 VPN tunnel status, IKE log, Phase 1/2 proposal을 비교해서 encryption, DH group, PFS, lifetime mismatch를 찾는다. 포트 단계에서는 nc -vz host port, curl -v internal-api, tcpdump host peer-ip로 터널이 아니라 실제 업무 포트를 직접 검증한다. 증거 공유 단계에서는 timestamp, src/dst, port, packet capture, firewall decision을 정리해서 고객사와 같은 시간대 증거를 맞춘다.</p>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>협상</b> — VPN tunnel status, IKE log, Phase 1/2 proposal을 비교해서 encryption, DH group, PFS, lifetime mismatch를 찾는다.</li>
+          <li><b>포트</b> — nc -vz host port, curl -v internal-api, tcpdump host peer-ip로 터널이 아니라 실제 업무 포트를 직접 검증한다.</li>
+          <li><b>증거 공유</b> — timestamp, src/dst, port, packet capture, firewall decision을 정리해서 고객사와 같은 시간대 증거를 맞춘다.</li>
+        </ol>
 
       </section>
 

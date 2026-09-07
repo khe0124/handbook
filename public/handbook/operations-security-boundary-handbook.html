@@ -41,7 +41,14 @@
 <div class="ch-head"><span class="ch-code">FLOW</span><h2>세 겹의 경계</h2></div>
 <p class="lede">보안 경계는 규칙 목록이 아니라 요청이 인터넷에서 들어와 App과 데이터에 닿기까지 통과하는 세 겹의 관문이다. 첫 번째는 무엇을 아예 공개할지 정하는 공개면 — DNS record, CDN, WAF, Load Balancer 정도만 열고 App, DB, cache, queue는 private subnet 뒤에 두는 것. 두 번째는 그 edge 안쪽에서 무엇을 걸러낼지 정하는 신뢰 경계다. WAF는 L7의 악성 패턴을 줄이고, security group은 stateful L4 허용 목록이고, NACL은 stateless subnet 경계인데, 이 셋을 섞어서 생각하면 정상 요청이 차단됐을 때도 원인을 못 찾는다. 세 번째는 누가 무엇에 접근할 수 있는지 정하는 권한 경계다. 사람·서비스·pipeline identity를 분리하고, secret이 repo나 image, log에 남지 않게 하고, 장기 key와 wildcard 권한은 예외 승인과 만료 조건이 있어야만 통과시킨다.</p>
 <p>이 세 겹을 따로 보는 이유는 각자 요구하는 증거가 다르기 때문이다. 공개면 문제는 external scan과 DNS inventory로, 신뢰 경계 문제는 WAF log와 rule diff로, 권한 문제는 IAM policy diff와 secret rotation 기록으로 확인해야 한다. 증거를 뒤섞으면 장애 때 원인 후보를 제대로 배제하지 못한다. SECURITY BOUNDARY OPERATIONS PLAYBOOK은 이 세 표면을 symptom → scope → recent change → evidence 순서로 연결하고, IAM 권한 확대 diff 판독 실습은 배포 pipeline role이 s3:GetObject 하나에서 s3:*로 확대되고 만료 조건까지 비어 있는 실제 policy diff를 놓고 무엇을 되돌려야 하는지 훈련시킨다.</p>
-<p>외부 공개 API를 새로 열 때도 순서는 같다. WAF rule과 rate limit을 먼저 걸고, App은 private subnet에 두고, 배포 권한과 운영 조회 권한을 나눈 다음, 침해가 의심될 때 추적할 로그가 실제로 남는지 확인한다. 이 마지막 확인을 건너뛰는 게 가장 흔한 실패다 — security group을 0.0.0.0/0으로 열고 WAF만 믿거나, admin 권한을 장기 access key로 운영하거나, 차단 로그가 없어서 false positive와 진짜 공격을 구분 못 하는 경우다.</p>
+<p>외부 공개 API를 새로 열 때도 순서는 같다.</p>
+<ol>
+  <li><b>차단부터 건다</b> — WAF rule과 rate limit을 먼저 적용한다.</li>
+  <li><b>앱을 숨긴다</b> — App은 private subnet에 두고 인터넷에서 직접 닿지 못하게 한다.</li>
+  <li><b>권한을 나눈다</b> — 배포 권한과 운영 조회 권한을 분리한다.</li>
+  <li><b>추적할 로그를 확인한다</b> — 침해가 의심될 때 추적할 로그가 실제로 남는지 확인한다.</li>
+</ol>
+<p>이 마지막 확인을 건너뛰는 게 가장 흔한 실패다 — security group을 0.0.0.0/0으로 열고 WAF만 믿거나, admin 권한을 장기 access key로 운영하거나, 차단 로그가 없어서 false positive와 진짜 공격을 구분 못 하는 경우다.</p>
 <p>결국 이 문서가 매번 되묻는 건 세 질문이다. 이 서비스의 public ingress는 어디인가, 이 권한과 secret은 누가 언제까지 왜 가지고 있는가, 침해가 의심될 때 어떤 로그로 추적하는가.</p>
 </section>
 
@@ -100,9 +107,12 @@
           <li>secret은 repo, image, log, frontend bundle에 남지 않게 한다.</li>
           <li>위협 모델링으로 인증 우회, 권한 상승, egress 악용을 점검한다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 보안 경계 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. IAM policy나 WAF rule처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 보안 경계 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. IAM policy나 WAF rule처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -123,7 +133,12 @@
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>보안 경계 장애를 다룰 때도 "어디가 뚫렸는가"라는 하나의 질문을 세 층위로 나눠서 본다. Public ingress 표면은 "노출되지 말아야 할 것이 노출됐는가"를 DNS, CDN/WAF, LB listener, allowed path, rate limit으로 확인한다. 공개면은 의도한 edge 계층으로만 제한돼야 한다. Identity/Secret 표면은 "노출된 적 없어도 권한 자체가 새어나갈 수 있는가"를 IAM principal, role assumption, secret location, rotation record로 확인한다. 장기 key와 wildcard 권한은 예외로만 관리하는 게 원칙이다. Auditability 표면은 "무슨 일이 있었는지 나중에 재구성할 수 있는가"를 WAF log, auth failure, admin action, egress log, exception expiry로 확인한다. 앞의 두 표면이 아무리 견고해도, 이 세 번째 표면이 비어 있으면 침해가 나도 무엇이 뚫렸는지 알 방법이 없다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. 공개면 점검 단계에서는 DNS record, LB listener, WAF rule, security group ingress를 목록화해서 인터넷에서 접근 가능한 표면을 실제로 열거한다. 권한 점검 단계에서는 IAM policy diff, last-used, access review, break-glass ticket을 보고 필요 권한과 실제 사용된 권한의 차이를 확인한다. 비밀 점검 단계에서는 secret manager version, rotation date, deploy consumer, log redaction을 봐서 secret이 repo/image/log/frontend bundle 어디에도 남지 않았는지 확인한다.</p>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>공개면 점검</b> — DNS record, LB listener, WAF rule, security group ingress를 목록화해서 인터넷에서 접근 가능한 표면을 실제로 열거한다.</li>
+          <li><b>권한 점검</b> — IAM policy diff, last-used, access review, break-glass ticket을 보고 필요 권한과 실제 사용된 권한의 차이를 확인한다.</li>
+          <li><b>비밀 점검</b> — secret manager version, rotation date, deploy consumer, log redaction을 봐서 secret이 repo/image/log/frontend bundle 어디에도 남지 않았는지 확인한다.</li>
+        </ol>
 
       </section>
 

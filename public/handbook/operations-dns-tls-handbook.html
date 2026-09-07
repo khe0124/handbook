@@ -100,9 +100,12 @@
           <li>인증서 만료 알림과 자동 갱신 실패 알림을 둔다.</li>
           <li>도메인 변경 전후 dig, curl, openssl 결과를 기록한다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 DNS·TLS 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. TTL이나 인증서 chain처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 DNS·TLS 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. TTL이나 인증서 chain처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -123,7 +126,12 @@
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>DNS·TLS 장애를 다룰 때도 "왜 연결이 안 되는가"를 이름 문제인지 신뢰 문제인지 되돌릴 수 있는 문제인지로 나눠서 본다. DNS record 표면은 "이름이 아직 안 퍼진 것인지, 애초에 틀린 것인지"를 record type, authoritative answer, TTL, resolver cache, CAA로 구분한다. 전파 지연 때문에 아직 안 퍼진 것과 권한 서버가 처음부터 잘못된 값을 돌려주는 것은 완전히 다른 문제이므로 여기서 갈라야 한다. TLS chain 표면은 "이름은 맞았는데 그 연결을 신뢰할 수 있는가"를 SAN, issuer, expiry, intermediate, SNI, OCSP로 확인한다. 인증서 발급 성공과 사용자 handshake 성공이 다르다는 걸 여기서도 다시 확인한다. Rollback 표면은 "지금 조치를 되돌릴 수 있는가"를 previous record, previous certificate, CDN/WAF binding, smoke result로 확인한다. 도메인 변경도 언제든 되돌릴 수 있는 변경으로 다뤄야 한다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. 권한 DNS 확인 단계에서는 dig +trace app.example.com, dig NS example.com, dig CAA example.com을 실행해서 권한 서버와 resolver cache를 분리한다. 인증서 확인 단계에서는 openssl s_client -servername app.example.com -connect app.example.com:443 -showcerts로 SNI와 chain 누락을 확인한다. 사용자 경로 확인 단계에서는 curl -v --resolve app.example.com:443:IP https://app.example.com/health로 DNS 변경 전후 edge와 origin을 분리해서 테스트한다.</p>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>권한 DNS 확인</b> — dig +trace app.example.com, dig NS example.com, dig CAA example.com을 실행해서 권한 서버와 resolver cache를 분리한다.</li>
+          <li><b>인증서 확인</b> — openssl s_client -servername app.example.com -connect app.example.com:443 -showcerts로 SNI와 chain 누락을 확인한다.</li>
+          <li><b>사용자 경로 확인</b> — curl -v --resolve app.example.com:443:IP https://app.example.com/health로 DNS 변경 전후 edge와 origin을 분리해서 테스트한다.</li>
+        </ol>
 
       </section>
 

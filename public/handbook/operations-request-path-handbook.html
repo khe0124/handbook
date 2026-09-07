@@ -102,9 +102,12 @@
           <li>502, 503, 504, timeout, TLS error를 분리한다.</li>
           <li>traceId로 프론트, API, DB 관측 신호를 연결한다.</li>
         </ul>
-        <p>이 체크리스트의 세 관문은 서비스 요청 경로 변경에서도 똑같이 적용된다. 설계 단계에서는 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</p>
-        <p>변경 단계에서는 diff, 승인 기록, 검증 명령이 함께 있어야 한다. DNS TTL이나 health check 설정처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</p>
-        <p>복구 단계에서는 rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</p>
+        <p>이 체크리스트의 세 관문은 서비스 요청 경로 변경에서도 똑같이 적용된다.</p>
+        <ol>
+          <li><b>설계</b> — 목적, 영향 범위, 비목표, owner가 산출물로 남아 있어야 한다. 영향 범위가 사용자·시스템·비용 기준으로 설명되지 않는다면, 이 단계에서 진행을 막아야 한다.</li>
+          <li><b>변경</b> — diff, 승인 기록, 검증 명령이 함께 있어야 한다. DNS TTL이나 health check 설정처럼 눈에 잘 안 띄는 조건이 다를 수 있으니, production 변경과 staging 검증의 차이가 설명되지 않으면 배포해서는 안 된다.</li>
+          <li><b>복구</b> — rollback 또는 forward fix, 담당자, 예상 시간이 미리 정해져 있어야 한다. 실패 시 되돌릴 수 없는데 사전 승인과 공지가 없다면 배포를 보류해야 한다.</li>
+        </ol>
       </section>
 
       <section id="ch6">
@@ -124,8 +127,18 @@
           <div class="g-row"><div class="g-term"><b>6 · 복구 검증</b><span>verification</span></div><div class="g-def">완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다</div></div>
           <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
-        <p>실제로 장애가 터지면 앞서 나눈 세 hop 묶음을 그대로 따라가면 된다. 먼저 이름이 제대로 풀렸는지부터 본다 — authoritative answer와 resolver 차이, TTL·CNAME/ALIAS chain 같은 전파 조건이다. 앱 로그가 비어 있으면 여기서부터 의심해야 한다. 이름이 맞았다면 다음은 그 이름으로의 연결을 신뢰할 수 있는지다. SNI·SAN·expiry·intermediate chain 같은 인증서 조건과 WAF/CDN request id를 본다. HTTPS 실패와 WAF 차단을 앱 장애로 오판하지 않는 게 이 단계의 핵심이다. 이름도, 연결도 문제없다면 마지막으로 받은 요청을 제대로 처리했는지를 본다. target health와 502/503/504, traceId로 시작해서 pool pending·slow query까지 이어서 확인한다. timeout이 어느 hop에서 시작됐는지를 시간축으로 연결하는 게 이 마지막 단계의 목표다.</p>
-        <p>이 세 표면을 실제로 조사하는 순서도 있다. DNS 확인 단계에서는 dig +trace app.example.com, dig app.example.com @8.8.8.8을 실행해서 권한 서버 응답과 public resolver cache 차이를 구분한다. TLS 확인 단계에서는 curl -v https://app.example.com/health, openssl s_client -servername app.example.com -connect app.example.com:443으로 SNI, certificate chain, expiry, ALPN, handshake error를 본다. 경로 확인 단계에서는 LB target health, WAF log, app access log, trace waterfall, DB pool metric을 확인해 502는 upstream 연결, 504는 timeout, 503은 capacity/health 후보로 나눈다.</p>
+        <p>실제로 장애가 터지면 앞서 나눈 세 hop 묶음을 그대로 따라가면 된다.</p>
+        <ol>
+          <li><b>이름이 제대로 풀렸는가</b> — authoritative answer와 resolver 차이, TTL·CNAME/ALIAS chain 같은 전파 조건을 본다. 앱 로그가 비어 있으면 여기서부터 의심해야 한다.</li>
+          <li><b>그 이름으로의 연결을 신뢰할 수 있는가</b> — SNI·SAN·expiry·intermediate chain 같은 인증서 조건과 WAF/CDN request id를 본다. HTTPS 실패와 WAF 차단을 앱 장애로 오판하지 않는 게 이 단계의 핵심이다.</li>
+          <li><b>받은 요청을 제대로 처리했는가</b> — target health와 502/503/504, traceId로 시작해 pool pending·slow query까지 이어서 확인한다. timeout이 어느 hop에서 시작됐는지를 시간축으로 연결하는 게 목표다.</li>
+        </ol>
+        <p>이 세 표면은 조사하는 순서까지 정해져 있다.</p>
+        <ol>
+          <li><b>DNS 확인</b> — dig +trace app.example.com, dig app.example.com @8.8.8.8을 실행해서 권한 서버 응답과 public resolver cache 차이를 구분한다.</li>
+          <li><b>TLS 확인</b> — curl -v https://app.example.com/health, openssl s_client -servername app.example.com -connect app.example.com:443으로 SNI, certificate chain, expiry, ALPN, handshake error를 본다.</li>
+          <li><b>경로 확인</b> — LB target health, WAF log, app access log, trace waterfall, DB pool metric을 확인해 502는 upstream 연결, 504는 timeout, 503은 capacity/health 후보로 나눈다.</li>
+        </ol>
         <p>같은 "접속 실패"라도 계층마다 실패의 결이 다르다. DNS fail은 이름 자체가 잘못 풀리는 문제라 NXDOMAIN, wrong CNAME, resolver cache, split-horizon mismatch로 나타나는데, app log가 비어 있으면 DNS/edge에서 요청이 멈췄을 가능성이 높다. TLS fail은 이름은 맞았는데 그 연결을 신뢰할 수 없는 문제라 certificate expired, SAN mismatch, missing intermediate, SNI mismatch로 나타나므로 curl과 openssl 결과를 같이 보고 브라우저 오류 문구만 믿어서는 안 된다. LB fail은 연결까지는 됐는데 받아줄 곳이 없거나 늦는 문제라 unhealthy target, no healthy upstream, idle timeout, deregistration delay로 나타나는데, 502/503/504를 같은 서버 오류로 묶으면 원인을 놓친다. App/DB fail은 받기는 받았는데 처리가 밀리는 문제라 pool pending, lock wait, slow query, downstream timeout으로 나타나므로 trace waterfall에서 가장 먼저 늘어난 구간을 찾는 것이 우선이다.</p>
       </section>
 
