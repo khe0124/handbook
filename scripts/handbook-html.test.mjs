@@ -3388,7 +3388,11 @@ test("operations handbook follows a service operations lifecycle roadmap", async
     assert.match(doc, /자주 틀리는 판단/, `${item.file} should include common failure signals`);
     assert.doesNotMatch(doc, /<span class="ch-code">MODEL<\/span>/, `${item.file} should not repeat section bodies in a generated concept model`);
     assert.doesNotMatch(doc, /<span class="ch-code">Q&A<\/span>/, `${item.file} should not repeat generic interview answer templates`);
-    const termSections = doc.match(/<section\b[^>]*>[\s\S]*?(?:<span class="ch-code">TERM<\/span>|<h2>[^<]*TERM[^<]*<\/h2>)[\s\S]*?<\/section>/g) ?? [];
+    // 섹션 경계를 넘어 매칭되면 앞 섹션의 용어집까지 함께 잡히므로 <section 시작을 넘지 않게 고정한다.
+    const termSections =
+      doc.match(
+        /<section\b(?:(?!<section\b)[\s\S])*?(?:<span class="ch-code">TERM<\/span>|<h2>[^<]*TERM[^<]*<\/h2>)[\s\S]*?<\/section>/g,
+      ) ?? [];
     assert.ok(termSections.length >= 1, `${item.file} should include a TERM glossary section`);
     const practiceLabBlocks = doc.match(/<div class="practice-lab">[\s\S]*?<\/div>/g) ?? [];
     assert.ok(practiceLabBlocks.length >= 1, `${item.file} should include at least one concrete practice lab`);

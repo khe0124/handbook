@@ -48,7 +48,14 @@
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
-<ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
+  <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>
+  <div class="g-row"><div class="g-term"><b>3 · 실무 플레이북</b><span>PLAYBOOK</span></div><div class="g-def">장애 상황에서 증상부터 런북 갱신까지 따라갈 순서</div></div>
+  <div class="g-row"><div class="g-term"><b>4 · 용어사전</b><span>TERM</span></div><div class="g-def">장애 중 오해가 잦은 용어를 정의·증거·오해 기준으로 정리</div></div>
+  <div class="g-row"><div class="g-term"><b>5 · Incident packet</b><span>CASE</span></div><div class="g-def">사고를 재구성하고 인수인계하는 데 필요한 기록 묶음</div></div>
+  <div class="g-row"><div class="g-term"><b>6 · 주제별 답변 구조</b><span>ANSWER</span></div><div class="g-def">면접이나 리뷰에서 이 주제를 설명할 때 쓰는 답변 뼈대</div></div>
+</div>
 
 </section>
 
@@ -103,8 +110,17 @@
         <p class="lede">DNS·TLS·도메인 운영 플레이북은 <strong>DNS TLS CHANGE PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">DNS TLS CHANGE PLAYBOOK</span>
-          symptom → scope → recent change → evidence<br>
-          → mitigation → verification → runbook diff
+          1 symptom → 2 scope → 3 recent change → 4 evidence<br>
+          → 5 mitigation → 6 verification → 7 runbook diff
+        </div>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>1 · 증상</b><span>symptom</span></div><div class="g-def">무엇이 안 되는가를 사용자 관점 한 문장으로. "느리다"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다</div></div>
+          <div class="g-row"><div class="g-term"><b>2 · 영향 범위</b><span>scope</span></div><div class="g-def">전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다</div></div>
+          <div class="g-row"><div class="g-term"><b>3 · 최근 변경</b><span>recent change</span></div><div class="g-def">직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다</div></div>
+          <div class="g-row"><div class="g-term"><b>4 · 증거</b><span>evidence</span></div><div class="g-def">권한 DNS(<code>dig +trace</code>), 인증서 체인과 SNI(<code>openssl s_client -showcerts</code>), 사용자 경로(<code>curl -v --resolve</code>)를 이 순서로 확인한다</div></div>
+          <div class="g-row"><div class="g-term"><b>5 · 완화</b><span>mitigation</span></div><div class="g-def">이전 record와 이전 인증서로 되돌린다. TTL이 높으면 되돌려도 즉시 반영되지 않는다는 것을 전제로 공지한다</div></div>
+          <div class="g-row"><div class="g-term"><b>6 · 복구 검증</b><span>verification</span></div><div class="g-def">완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다</div></div>
+          <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>DNS·TLS 장애를 다룰 때도 "왜 연결이 안 되는가"를 이름 문제인지 신뢰 문제인지 되돌릴 수 있는 문제인지로 나눠서 본다. DNS record 표면은 "이름이 아직 안 퍼진 것인지, 애초에 틀린 것인지"를 record type, authoritative answer, TTL, resolver cache, CAA로 구분한다. 전파 지연 때문에 아직 안 퍼진 것과 권한 서버가 처음부터 잘못된 값을 돌려주는 것은 완전히 다른 문제이므로 여기서 갈라야 한다. TLS chain 표면은 "이름은 맞았는데 그 연결을 신뢰할 수 있는가"를 SAN, issuer, expiry, intermediate, SNI, OCSP로 확인한다. 인증서 발급 성공과 사용자 handshake 성공이 다르다는 걸 여기서도 다시 확인한다. Rollback 표면은 "지금 조치를 되돌릴 수 있는가"를 previous record, previous certificate, CDN/WAF binding, smoke result로 확인한다. 도메인 변경도 언제든 되돌릴 수 있는 변경으로 다뤄야 한다.</p>
         <p>이 세 표면을 실제로 조사하는 순서도 있다. 권한 DNS 확인 단계에서는 dig +trace app.example.com, dig NS example.com, dig CAA example.com을 실행해서 권한 서버와 resolver cache를 분리한다. 인증서 확인 단계에서는 openssl s_client -servername app.example.com -connect app.example.com:443 -showcerts로 SNI와 chain 누락을 확인한다. 사용자 경로 확인 단계에서는 curl -v --resolve app.example.com:443:IP https://app.example.com/health로 DNS 변경 전후 edge와 origin을 분리해서 테스트한다.</p>

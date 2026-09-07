@@ -48,7 +48,14 @@
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
-<ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
+  <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>
+  <div class="g-row"><div class="g-term"><b>3 · 실무 플레이북</b><span>PLAYBOOK</span></div><div class="g-def">장애 상황에서 증상부터 런북 갱신까지 따라갈 순서</div></div>
+  <div class="g-row"><div class="g-term"><b>4 · 용어사전</b><span>TERM</span></div><div class="g-def">장애 중 오해가 잦은 용어를 정의·증거·오해 기준으로 정리</div></div>
+  <div class="g-row"><div class="g-term"><b>5 · Incident packet</b><span>CASE</span></div><div class="g-def">사고를 재구성하고 인수인계하는 데 필요한 기록 묶음</div></div>
+  <div class="g-row"><div class="g-term"><b>6 · 주제별 답변 구조</b><span>ANSWER</span></div><div class="g-def">면접이나 리뷰에서 이 주제를 설명할 때 쓰는 답변 뼈대</div></div>
+</div>
 
 </section>
 
@@ -103,8 +110,17 @@
         <p class="lede">AWS·Azure 실전 시나리오 플레이북은 <strong>AWS AZURE OPERATIONS PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">AWS AZURE OPERATIONS PLAYBOOK</span>
-          symptom → scope → recent change → evidence<br>
-          → mitigation → verification → runbook diff
+          1 symptom → 2 scope → 3 recent change → 4 evidence<br>
+          → 5 mitigation → 6 verification → 7 runbook diff
+        </div>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>1 · 증상</b><span>symptom</span></div><div class="g-def">무엇이 안 되는가를 사용자 관점 한 문장으로. "느리다"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다</div></div>
+          <div class="g-row"><div class="g-term"><b>2 · 영향 범위</b><span>scope</span></div><div class="g-def">전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다</div></div>
+          <div class="g-row"><div class="g-term"><b>3 · 최근 변경</b><span>recent change</span></div><div class="g-def">직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다</div></div>
+          <div class="g-row"><div class="g-term"><b>4 · 증거</b><span>evidence</span></div><div class="g-def">provider, region, account/subscription 전제를 먼저 고정하고 그 조건의 콘솔·CLI 출력을 남긴다. 이름이 같은 기능도 provider마다 동작이 다르다</div></div>
+          <div class="g-row"><div class="g-term"><b>5 · 완화</b><span>mitigation</span></div><div class="g-def">provider가 제공하는 되돌리기 수단(이전 버전, snapshot, traffic shift)이 지금 쓸 수 있는지부터 확인한다</div></div>
+          <div class="g-row"><div class="g-term"><b>6 · 복구 검증</b><span>verification</span></div><div class="g-def">완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다</div></div>
+          <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>AWS·Azure 장애를 다룰 때도 클라우드 이름은 잠시 잊고 "이게 어느 책임 경계의 문제인가"로 표면을 나눠서 본다. Edge/Ingress 표면은 "사용자와 가장 가까운 곳에서 걸러졌는가"를 Route 53/Azure DNS, CloudFront/Front Door, WAF, ALB/App Gateway로 본다. edge와 origin의 장애를 분리하는 게 이 표면의 핵심이다. Runtime/Data 표면은 "요청을 받은 뒤 처리 과정에서 무너졌는가"를 ECS/EKS/AKS/App Service, RDS/Azure SQL, Redis, storage로 본다. runtime health와 data dependency를 같은 release 단위로 묶어서 봐야 한다. Identity/Cost 표면은 "겉으로는 안 보이지만 권한이나 비용으로 새고 있는가"를 IAM/Managed Identity, Secrets Manager/Key Vault, NAT/egress, monitor cost로 본다. 보안과 비용도 그 자체로 운영 장애 신호라는 걸 여기서 다시 확인한다.</p>
         <p>이 세 표면을 실제로 조사하는 순서도 있다. AWS 경로에서는 Route 53 answer, CloudFront cache/WAF log, ALB target health, ECS task/RDS metrics를 보고 CloudFront 403과 ALB 5xx를 분리한다. Azure 경로에서는 Azure DNS, Front Door health, Application Gateway probe, AKS/App Service, Azure SQL metrics를 보고 Front Door와 App Gateway의 책임 경계를 확인한다. 비용/egress 확인에서는 NAT Gateway bytes, data transfer, log ingestion, managed service autoscale을 보고 비용 급증도 최근 변경과 같은 timeline에 놓는다.</p>

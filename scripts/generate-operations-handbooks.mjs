@@ -1014,6 +1014,15 @@ const defaultEvidenceRows = [
 const playbooksByFile = {
   "operations-roadmap-handbook.html": {
     marker: "OPERATIONS READINESS PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "대시보드의 SLI, 최근 배포 마커, 알림 이력을 같은 시간축에 올린다. 서비스 카탈로그에서 owner와 의존성을 함께 본다"],
+      [5, "완화", "mitigation", "rollback, feature flag, traffic shift 중 지금 실행 가능한 것을 고른다. 원인을 확정하기 전에도 영향은 멈출 수 있다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["서비스 카탈로그", "owner, tier, dependency map, SLO, cost owner, access owner", "15분 안에 현재 상태와 담당자를 찾을 수 있어야 한다."],
       ["변경 경로", "commit SHA, image digest, migration version, config diff, deploy marker", "장애 시 어떤 변경을 의심할지 시간축으로 좁힌다."],
@@ -1033,6 +1042,15 @@ const playbooksByFile = {
   },
   "operations-request-path-handbook.html": {
     marker: "REQUEST PATH TRIAGE PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "hop 순서로 배제한다 — DNS 응답 → CDN/WAF 차단 로그 → LB target health → app latency → DB pool 대기"],
+      [5, "완화", "mitigation", "문제 hop을 우회하거나 끊는다. 캐시 우회, LB에서 비정상 target 제외, 직전 배포 rollback이 먼저다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["DNS", "authoritative answer, resolver 차이, TTL, CNAME/ALIAS chain", "앱 로그가 비어 있으면 먼저 이름 해석과 edge 진입을 본다."],
       ["TLS / Edge", "SNI, SAN, expiry, intermediate chain, WAF/CDN request id", "HTTPS 실패와 WAF 차단을 앱 장애로 오판하지 않는다."],
@@ -1052,6 +1070,15 @@ const playbooksByFile = {
   },
   "operations-vpc-routing-handbook.html": {
     marker: "VPC ROUTING EVIDENCE PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "선언한 route가 아니라 provider가 계산한 effective route를 본다. SG·NACL은 양방향으로, flow log는 REJECT 기준으로 확인한다"],
+      [5, "완화", "mitigation", "잘못된 route나 규칙을 이전 상태로 되돌린다. 임시로 여는 허용 규칙에는 만료 시각을 함께 건다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["CIDR / Subnet", "VPC CIDR, subnet route table, AZ, reserved IP, overlap check", "나중에 peering/VPN/PrivateLink가 막히는 CIDR을 초기에 제거한다."],
       ["Ingress / Egress", "source, destination, port, protocol, SG, NACL, route target", "outbound와 return path를 함께 검증한다."],
@@ -1071,6 +1098,15 @@ const playbooksByFile = {
   },
   "operations-security-boundary-handbook.html": {
     marker: "SECURITY BOUNDARY OPERATIONS PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "어느 경계에서 끊겼는지 deny 로그로 확인한다. SG·NACL·WAF 규칙과 IAM 권한을 실제 요청의 source·destination·port로 대조한다"],
+      [5, "완화", "mitigation", "오탐이면 좁은 예외를 시한부로 열고, 공격이면 범위를 넓혀 차단한다. 넓게 여는 조치일수록 만료를 먼저 정한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Public ingress", "DNS, CDN/WAF, LB listener, allowed path, rate limit", "공개면은 의도한 edge 계층으로 제한한다."],
       ["Identity / Secret", "IAM principal, role assumption, secret location, rotation record", "장기 key와 wildcard 권한은 예외로 관리한다."],
@@ -1090,6 +1126,15 @@ const playbooksByFile = {
   },
   "operations-dns-tls-handbook.html": {
     marker: "DNS TLS CHANGE PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "권한 DNS(<code>dig +trace</code>), 인증서 체인과 SNI(<code>openssl s_client -showcerts</code>), 사용자 경로(<code>curl -v --resolve</code>)를 이 순서로 확인한다"],
+      [5, "완화", "mitigation", "이전 record와 이전 인증서로 되돌린다. TTL이 높으면 되돌려도 즉시 반영되지 않는다는 것을 전제로 공지한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["DNS record", "record type, authoritative answer, TTL, resolver cache, CAA", "전파 지연과 잘못된 권한 서버를 구분한다."],
       ["TLS chain", "SAN, issuer, expiry, intermediate, SNI, OCSP", "인증서 발급 성공과 사용자 handshake 성공은 다르다."],
@@ -1109,6 +1154,15 @@ const playbooksByFile = {
   },
   "operations-private-connectivity-handbook.html": {
     marker: "PRIVATE CONNECTIVITY DEBUG PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "tunnel·peering 상태, route 전파 여부, private DNS가 사설 IP를 돌려주는지, endpoint policy 순으로 본다"],
+      [5, "완화", "mitigation", "이전 route·정책으로 되돌리거나 우회 경로로 전환한다. tunnel 재협상은 영향 범위를 공지한 뒤에 실행한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Tunnel", "IKE/Phase 2 status, lifetime, proposal, rekey log, packet counter", "터널 UP과 서비스 통신 성공을 분리한다."],
       ["Routing / Firewall", "local CIDR, peer CIDR, route table, firewall, return path", "양쪽 네트워크가 같은 증거를 보고 있어야 한다."],
@@ -1242,6 +1296,15 @@ const playbooksByFile = {
   },
   "operations-cloud-scenarios-handbook.html": {
     marker: "AWS AZURE OPERATIONS PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "provider, region, account/subscription 전제를 먼저 고정하고 그 조건의 콘솔·CLI 출력을 남긴다. 이름이 같은 기능도 provider마다 동작이 다르다"],
+      [5, "완화", "mitigation", "provider가 제공하는 되돌리기 수단(이전 버전, snapshot, traffic shift)이 지금 쓸 수 있는지부터 확인한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Edge / Ingress", "Route 53/Azure DNS, CloudFront/Front Door, WAF, ALB/App Gateway", "edge와 origin의 장애를 분리한다."],
       ["Runtime / Data", "ECS/EKS/AKS/App Service, RDS/Azure SQL, Redis, storage", "runtime health와 data dependency를 같은 release 단위로 본다."],
@@ -1714,6 +1777,20 @@ ${items.map((item) => `          <li>${escapeHtml(item)}</li>`).join("\n")}
 const renderRows = (rows) =>
   rows.map((row) => `          <tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("\n");
 
+const renderStepGlossary = (rows) => {
+  if (!rows?.length) return "";
+
+  return `
+        <div class="glossary">
+${rows
+  .map(
+    ([step, term, english, definition]) =>
+      `          <div class="g-row"><div class="g-term"><b>${step} · ${term}</b><span>${english}</span></div><div class="g-def">${definition}</div></div>`,
+  )
+  .join("\n")}
+        </div>`;
+};
+
 const renderCodeBlock = (value) => `<pre><code>${escapeHtml(value)}</code></pre>`;
 
 const renderOptionalTable = ({ rows, headers }) => {
@@ -1938,9 +2015,9 @@ ${renderRows(section.examples)}
         <p class="lede">${escapeHtml(doc.title)} 플레이북은 <strong>${escapeHtml(playbook.marker)}</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">${escapeHtml(playbook.marker)}</span>
-          symptom → scope → recent change → evidence<br>
-          → mitigation → verification → runbook diff
-        </div>
+          1 symptom → 2 scope → 3 recent change → 4 evidence<br>
+          → 5 mitigation → 6 verification → 7 runbook diff
+        </div>${renderStepGlossary(playbook.stepGlossary)}
         <table>
           <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
 ${renderRows(playbook.evidenceRows)}
@@ -2026,7 +2103,14 @@ ${nav}
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
-<ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
+  <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>
+  <div class="g-row"><div class="g-term"><b>3 · 실무 플레이북</b><span>PLAYBOOK</span></div><div class="g-def">장애 상황에서 증상부터 런북 갱신까지 따라갈 순서</div></div>
+  <div class="g-row"><div class="g-term"><b>4 · 용어사전</b><span>TERM</span></div><div class="g-def">장애 중 오해가 잦은 용어를 정의·증거·오해 기준으로 정리</div></div>
+  <div class="g-row"><div class="g-term"><b>5 · Incident packet</b><span>CASE</span></div><div class="g-def">사고를 재구성하고 인수인계하는 데 필요한 기록 묶음</div></div>
+  <div class="g-row"><div class="g-term"><b>6 · 주제별 답변 구조</b><span>ANSWER</span></div><div class="g-def">면접이나 리뷰에서 이 주제를 설명할 때 쓰는 답변 뼈대</div></div>
+</div>
 ${indexExtras}
 </section>
 ${sections}

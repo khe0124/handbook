@@ -48,7 +48,14 @@
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
-<ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
+  <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>
+  <div class="g-row"><div class="g-term"><b>3 · 실무 플레이북</b><span>PLAYBOOK</span></div><div class="g-def">장애 상황에서 증상부터 런북 갱신까지 따라갈 순서</div></div>
+  <div class="g-row"><div class="g-term"><b>4 · 용어사전</b><span>TERM</span></div><div class="g-def">장애 중 오해가 잦은 용어를 정의·증거·오해 기준으로 정리</div></div>
+  <div class="g-row"><div class="g-term"><b>5 · Incident packet</b><span>CASE</span></div><div class="g-def">사고를 재구성하고 인수인계하는 데 필요한 기록 묶음</div></div>
+  <div class="g-row"><div class="g-term"><b>6 · 주제별 답변 구조</b><span>ANSWER</span></div><div class="g-def">면접이나 리뷰에서 이 주제를 설명할 때 쓰는 답변 뼈대</div></div>
+</div>
       <h3>대상 독자와 학습 계약</h3>
         <p>이 로드맵의 대상 독자는 미들급 개발자다. API, DB, 배포 경험은 있지만 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람을 염두에 두고 썼다. 완료 기준은 서비스 장애를 계층별 증거로 좁히고 운영 인수 산출물을 만들 수 있는 것이다.</p>
         <p>선행 지식으로는 HTTP, TLS 기초, Linux process/log, DB connection, CI/CD 기본, container 기본을 전제한다. 이 지식이 없으면 도구명을 외우는 학습으로 흐르기 쉬우므로 먼저 보완해야 한다.</p>
@@ -136,8 +143,17 @@
         <p class="lede">인프라·운영 로드맵 플레이북은 <strong>OPERATIONS READINESS PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">OPERATIONS READINESS PLAYBOOK</span>
-          symptom → scope → recent change → evidence<br>
-          → mitigation → verification → runbook diff
+          1 symptom → 2 scope → 3 recent change → 4 evidence<br>
+          → 5 mitigation → 6 verification → 7 runbook diff
+        </div>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>1 · 증상</b><span>symptom</span></div><div class="g-def">무엇이 안 되는가를 사용자 관점 한 문장으로. "느리다"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다</div></div>
+          <div class="g-row"><div class="g-term"><b>2 · 영향 범위</b><span>scope</span></div><div class="g-def">전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다</div></div>
+          <div class="g-row"><div class="g-term"><b>3 · 최근 변경</b><span>recent change</span></div><div class="g-def">직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다</div></div>
+          <div class="g-row"><div class="g-term"><b>4 · 증거</b><span>evidence</span></div><div class="g-def">대시보드의 SLI, 최근 배포 마커, 알림 이력을 같은 시간축에 올린다. 서비스 카탈로그에서 owner와 의존성을 함께 본다</div></div>
+          <div class="g-row"><div class="g-term"><b>5 · 완화</b><span>mitigation</span></div><div class="g-def">rollback, feature flag, traffic shift 중 지금 실행 가능한 것을 고른다. 원인을 확정하기 전에도 영향은 멈출 수 있다</div></div>
+          <div class="g-row"><div class="g-term"><b>6 · 복구 검증</b><span>verification</span></div><div class="g-def">완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다</div></div>
+          <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>새벽 장애 콜을 받으면 결국 세 가지를 순서대로 알아내야 한다. 이 서비스는 누구 책임이고 지금 얼마나 중요한가, 최근에 뭐가 바뀌었길래 이런 일이 생겼는가, 그리고 지금 당장 되돌릴 수단이 정말 있는가. 첫 번째는 owner, tier, dependency map, SLO, cost owner로 확인하는데, 15분 안에 담당자를 못 찾으면 이 정보 자체가 없는 것과 같다. 두 번째는 commit SHA, image digest, migration version, config diff, deploy marker를 시간축에 놓고 어떤 변경을 의심할지 좁히는 것이다. 세 번째가 의외로 제일 자주 빠진다 — rollback command, feature flag, traffic shift, restore drill이 실제로 실행 가능한 절차로 준비돼 있는지, 아니면 그냥 "누군가 알아서 하겠지" 하는 구두 지시로만 남아 있는지다.</p>
         <h3>운영 산출물 템플릿</h3>
