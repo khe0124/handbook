@@ -139,7 +139,16 @@
 <section id="ch7">
 <div class="ch-head"><span class="ch-code">FTEST-07</span><h2>테스트 방법론: 위험을 가장 싼 위치에서 막기</h2></div>
 <p class="lede">프론트엔드 테스트의 목적은 테스트 개수를 늘리는 것이 아니라 변경 위험을 가장 빠르고 안정적인 계층에서 차단하는 것입니다. 좋은 테스트 전략은 “무엇을 테스트할까”보다 “이 변경이 실패하면 사용자는 어떤 행동을 완료하지 못하고, 그 실패를 어느 계층에서 가장 싸게 잡을 수 있는가”를 먼저 묻습니다.</p>
-<div class="serial-card"><span class="sc-label">TEST STRATEGY AS RISK DESIGN</span>change risk → user failure mode → cheapest reliable test layer → fixture contract<br>→ CI evidence → release health signal → regression ownership</div>
+<div class="serial-card"><span class="sc-label">TEST STRATEGY AS RISK DESIGN</span>1 change risk → 2 user failure mode → 3 cheapest reliable test layer → 4 fixture contract<br>→ 5 CI evidence → 6 release health signal → 7 regression ownership</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 변경 위험</b><span>change risk</span></div><div class="g-def">이 변경이 깨지면 무엇을 잃는가. 커버리지가 아니라 위험이 테스트의 출발점이다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 사용자 실패 모드</b><span>user failure mode</span></div><div class="g-def">사용자에게 어떤 모습으로 실패하는가. 내부 함수가 아니라 이 모습을 고정한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 가장 싼 신뢰 층</b><span>cheapest reliable test layer</span></div><div class="g-def">그 실패를 잡을 수 있는 가장 싸고 안정적인 층을 고른다. E2E로 다 덮으려 하면 느리고 잘 깨진다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 픽스처 계약</b><span>fixture contract</span></div><div class="g-def">테스트가 기대하는 데이터 모양을 고정한다. 실제 응답과 어긋나면 초록불이 거짓말을 한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · CI 증거</b><span>CI evidence</span></div><div class="g-def">무엇을 검증했는지 PR에서 보이게 남긴다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 릴리스 건강 신호</b><span>release health signal</span></div><div class="g-def">배포 후 오류율·Web Vitals·핵심 전환을 본다. 테스트가 끝이 아니라 여기까지가 검증이다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 회귀 소유권</b><span>regression ownership</span></div><div class="g-def">깨진 테스트를 누가 고치는가. 주인 없는 실패는 곧 무시되는 실패가 된다</div></div>
+</div>
 <table>
 <tr><th>위험</th><th>대표 실패</th><th>우선 테스트</th><th>보조 증거</th></tr>
 <tr><td>순수 계산·format</td><td>가격, 날짜, 권한 label이 틀림</td><td>unit</td><td>edge case table</td></tr>

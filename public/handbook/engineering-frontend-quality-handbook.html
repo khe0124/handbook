@@ -59,11 +59,23 @@
 <p class="lede">프론트엔드 품질은 테스트 개수나 배포 성공 로그가 아니라 사용자의 브라우저에서 새 버전이 안전하게 작동한다는 증거입니다. 이 모델은 변경이 들어온 순간부터 release health window가 끝날 때까지의 판단 순서를 고정합니다.</p>
 <div class="semantic-card model">
 <span class="sc-label">FRONTEND RELEASE QUALITY OPERATING MODEL</span>
-change risk classification → security review gate → risk based test matrix<br>
-→ preview deployment → CI quality gate → release notes<br>
-→ canary or staged rollout → release health window<br>
-→ Web Vitals regression / error spike / API failure review<br>
-→ rollback, feature flag kill switch, or forward fix decision
+1 change risk classification → 2 security review gate → 3 risk based test matrix<br>
+→ 4 preview deployment → 5 CI quality gate → 6 release notes<br>
+→ 7 canary or staged rollout → 8 release health window<br>
+→ 9 Web Vitals regression / error spike / API failure review<br>
+→ 10 rollback, feature flag kill switch, or forward fix decision
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 변경 위험 분류</b><span>change risk classification</span></div><div class="g-def">이 변경이 깨지면 무엇을 잃는지로 등급을 나눈다. 뒤의 게이트 강도가 여기서 정해진다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 보안 리뷰 게이트</b><span>security review gate</span></div><div class="g-def">입력 처리, 인증, 서드파티, 권한이 걸린 변경인지 먼저 거른다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 위험 기반 테스트 행렬</b><span>risk based test matrix</span></div><div class="g-def">위험마다 가장 싸고 안정적인 테스트 층을 배정한다. 모든 변경에 같은 테스트를 요구하지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 프리뷰 배포</b><span>preview deployment</span></div><div class="g-def">머지 전에 실제 URL로 확인한다. 스크린샷 대신 만져볼 수 있는 것을 리뷰에 붙인다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · CI 품질 게이트</b><span>CI quality gate</span></div><div class="g-def">타입, 린트, 테스트, 번들 예산을 자동으로 막는다. 사람이 기억해야 하는 규칙은 지켜지지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 릴리스 노트</b><span>release notes</span></div><div class="g-def">무엇이 바뀌고 무엇이 위험한지 남긴다. 장애 때 가장 먼저 열리는 문서다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 카나리·단계 배포</b><span>canary or staged rollout</span></div><div class="g-def">일부 트래픽에 먼저 낸다. 전량 배포는 되돌릴 비용이 가장 큰 선택이다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 릴리스 관찰 창</b><span>release health window</span></div><div class="g-def">배포 후 지켜보는 시간. 이 창이 없으면 배포는 끝난 것이 아니라 방치된 것이다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 회귀 검토</b><span>Web Vitals / error / API review</span></div><div class="g-def">성능 지표, 오류 급증, API 실패를 배포 전후로 비교한다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 복구 결정</b><span>rollback / kill switch / forward fix</span></div><div class="g-def">되돌릴지, 기능만 끌지, 고쳐서 나갈지. 셋 중 무엇을 쓸지 배포 전에 정해 둔다</div></div>
 </div>
 <table>
 <tr><th>단계</th><th>품질 질문</th><th>통과 증거</th></tr>
@@ -220,7 +232,22 @@ change risk classification → security review gate → risk based test matrix<b
 <section id="fesec-ch7">
 <div class="ch-head"><span class="ch-code">FSEC-07</span><h2>보안 방법론: 신뢰 경계와 데이터 흐름</h2></div>
 <p class="lede">프론트엔드 보안의 출발점은 “브라우저는 신뢰할 수 없는 실행 환경”이라는 관점입니다. 사용자가 보는 UI는 권한 판단의 근거가 될 수 없고, 클라이언트 상태는 변조 가능하며, 브라우저에 도착한 secret은 이미 노출 가능한 값입니다. 따라서 보안 리뷰는 컴포넌트 이름이 아니라 데이터가 어디서 들어와 어디로 흘러가고 어떤 권한으로 실행되는지를 추적해야 합니다.</p>
-<div class="semantic-card decision-card"><span class="sc-label">BROWSER TRUST BOUNDARY MODEL</span><br>untrusted input → parse/normalize → validate/allowlist → encode or sanitize → render/use<br>identity signal → session boundary → authorization check → UI affordance<br>third-party code → CSP boundary → data exfiltration review → monitoring</div>
+<div class="semantic-card decision-card"><span class="sc-label">BROWSER TRUST BOUNDARY MODEL</span><br>1 untrusted input → 2 parse/normalize → 3 validate/allowlist → 4 encode or sanitize → 5 render/use<br>6 identity signal → 7 session boundary → 8 authorization check → 9 UI affordance<br>10 third-party code → 11 CSP boundary → 12 data exfiltration review → 13 monitoring</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 신뢰할 수 없는 입력</b><span>untrusted input</span></div><div class="g-def">URL, 폼, 메시지, 서버 응답까지 바깥에서 온 모든 값. 우리 서버가 준 값도 사용자가 만든 것일 수 있다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 파싱·정규화</b><span>parse/normalize</span></div><div class="g-def">같은 값의 여러 표기를 하나로 모은다. 정규화 전에 검사하면 우회당한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 검증·허용목록</b><span>validate/allowlist</span></div><div class="g-def">허용할 것을 정한다. 금지 목록은 언제나 새는 쪽이다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 인코딩·새니타이즈</b><span>encode or sanitize</span></div><div class="g-def">쓰는 자리에 맞게 처리한다. HTML, 속성, URL, 스크립트 문맥이 각각 다르다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 렌더·사용</b><span>render/use</span></div><div class="g-def">여기서 값이 실행 문맥에 들어간다. innerHTML과 링크 href가 대표적인 사고 지점이다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 신원 신호</b><span>identity signal</span></div><div class="g-def">누가 로그인했는지 알려주는 값. 클라이언트가 들고 있는 것은 표시용이지 근거가 아니다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 세션 경계</b><span>session boundary</span></div><div class="g-def">쿠키 속성, 만료, 갱신, 로그아웃. 탭·기기 간에 세션이 어떻게 공유되는지까지 포함한다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 권한 검사</b><span>authorization check</span></div><div class="g-def">서버에서 매 요청 확인한다. 화면이 감췄다는 것은 방어가 아니다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · UI 노출 결정</b><span>UI affordance</span></div><div class="g-def">권한에 따라 보여줄지 비활성할지. 서버 검사와 어긋나지 않게 맞춘다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 서드파티 코드</b><span>third-party code</span></div><div class="g-def">태그 매니저, 분석, 위젯. 우리 페이지에서 우리 권한으로 돈다는 사실이 핵심이다</div></div>
+<div class="g-row"><div class="g-term"><b>11 · CSP 경계</b><span>CSP boundary</span></div><div class="g-def">무엇을 불러오고 실행할 수 있는지 선언한다. 인라인 스크립트 허용은 대부분의 보호를 무력화한다</div></div>
+<div class="g-row"><div class="g-term"><b>12 · 유출 경로 검토</b><span>data exfiltration review</span></div><div class="g-def">서드파티가 어떤 데이터를 어디로 보내는지 본다. 폼 입력과 URL 파라미터가 새는 통로다</div></div>
+<div class="g-row"><div class="g-term"><b>13 · 모니터링</b><span>monitoring</span></div><div class="g-def">CSP 위반 보고와 오류를 수집한다. 막은 것이 아니라 막히고 있는 것을 보는 단계다</div></div>
+</div>
 <table>
 <tr><th>경계</th><th>핵심 관점</th><th>잘못된 판단</th><th>좋은 증거</th></tr>
 <tr><td>DOM</td><td>HTML, URL, style, markdown은 실행 표면이다</td><td>React라서 XSS가 자동으로 전부 막힌다고 생각</td><td>sanitizer 설정, payload negative test, CSP report</td></tr>
@@ -387,7 +414,16 @@ change risk classification → security review gate → risk based test matrix<b
 <section id="fetest-ch7">
 <div class="ch-head"><span class="ch-code">FTEST-07</span><h2>테스트 방법론: 위험을 가장 싼 위치에서 막기</h2></div>
 <p class="lede">프론트엔드 테스트의 목적은 테스트 개수를 늘리는 것이 아니라 변경 위험을 가장 빠르고 안정적인 계층에서 차단하는 것입니다. 좋은 테스트 전략은 “무엇을 테스트할까”보다 “이 변경이 실패하면 사용자는 어떤 행동을 완료하지 못하고, 그 실패를 어느 계층에서 가장 싸게 잡을 수 있는가”를 먼저 묻습니다.</p>
-<div class="semantic-card evidence-card"><span class="sc-label">TEST STRATEGY AS RISK DESIGN</span><br>change risk → user failure mode → cheapest reliable test layer → fixture contract<br>→ CI evidence → release health signal → regression ownership</div>
+<div class="semantic-card evidence-card"><span class="sc-label">TEST STRATEGY AS RISK DESIGN</span><br>1 change risk → 2 user failure mode → 3 cheapest reliable test layer → 4 fixture contract<br>→ 5 CI evidence → 6 release health signal → 7 regression ownership</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 변경 위험</b><span>change risk</span></div><div class="g-def">이 변경이 깨지면 무엇을 잃는가. 커버리지가 아니라 위험이 테스트의 출발점이다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 사용자 실패 모드</b><span>user failure mode</span></div><div class="g-def">사용자에게 어떤 모습으로 실패하는가. 내부 함수가 아니라 이 모습을 고정한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 가장 싼 신뢰 층</b><span>cheapest reliable test layer</span></div><div class="g-def">그 실패를 잡을 수 있는 가장 싸고 안정적인 층을 고른다. E2E로 다 덮으려 하면 느리고 잘 깨진다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 픽스처 계약</b><span>fixture contract</span></div><div class="g-def">테스트가 기대하는 데이터 모양을 고정한다. 실제 응답과 어긋나면 초록불이 거짓말을 한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · CI 증거</b><span>CI evidence</span></div><div class="g-def">무엇을 검증했는지 PR에서 보이게 남긴다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 릴리스 건강 신호</b><span>release health signal</span></div><div class="g-def">배포 후 오류율·Web Vitals·핵심 전환을 본다. 테스트가 끝이 아니라 여기까지가 검증이다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 회귀 소유권</b><span>regression ownership</span></div><div class="g-def">깨진 테스트를 누가 고치는가. 주인 없는 실패는 곧 무시되는 실패가 된다</div></div>
+</div>
 <table>
 <tr><th>위험</th><th>대표 실패</th><th>우선 테스트</th><th>보조 증거</th></tr>
 <tr><td>순수 계산·format</td><td>가격, 날짜, 권한 label이 틀림</td><td>unit</td><td>edge case table</td></tr>
@@ -579,7 +615,17 @@ change risk classification → security review gate → risk based test matrix<b
 <div class="semantic-card decision-card"><span class="sc-label">OBSERVABILITY RELEASE GATE</span><br>release_id is injected into bundle and error events<br>sourcemap upload matches release_id and commit SHA<br>Web Vitals dashboard is filtered by route and release<br>API spans carry request id or normalized endpoint<br>analytics events include schema version and consent state<br>alert owner and rollback decision window are documented</div>
 <h3>INCIDENT FEEDBACK LOOP</h3>
 <p>프론트엔드 사고의 후속 조치는 hotfix로 끝나면 안 됩니다. 원인을 회귀 테스트, 릴리스 게이트, 관측 신호, 디자인 시스템 정책 중 하나 이상으로 되돌려야 같은 사고가 반복되지 않습니다.</p>
-<div class="semantic-card answer-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span><br>incident symptom → affected route and release<br>→ user impact and rollback decision<br>→ root cause category: state, API, render, cache, security, design system<br>→ missing test or missing signal<br>→ new regression case<br>→ release gate update<br>→ owner and review date</div>
+<div class="semantic-card answer-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span><br>1 incident symptom → 2 affected route and release<br>→ 3 user impact and rollback decision<br>→ 4 root cause category: state, API, render, cache, security, design system<br>→ 5 missing test or missing signal<br>→ 6 new regression case<br>→ 7 release gate update<br>→ 8 owner and review date</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 장애 증상</b><span>incident symptom</span></div><div class="g-def">사용자가 겪은 것을 그대로 적는다. 원인 추정을 증상 자리에 쓰지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 영향 라우트·릴리스</b><span>affected route and release</span></div><div class="g-def">어느 화면이 어느 배포부터 깨졌는가. 시간축을 배포와 맞춘다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 영향과 롤백 판단</b><span>user impact and rollback</span></div><div class="g-def">얼마나 많은 사용자가 무엇을 못 하는가. 원인을 모르더라도 되돌릴지 여기서 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 원인 범주</b><span>root cause category</span></div><div class="g-def">상태, API, 렌더, 캐시, 보안, 디자인 시스템 중 어디인가. 범주가 다음에 볼 곳을 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 빠진 테스트·신호</b><span>missing test or signal</span></div><div class="g-def">왜 미리 못 잡았는가. 테스트가 없었는지, 지표가 없었는지를 구분한다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 회귀 케이스 추가</b><span>new regression case</span></div><div class="g-def">이 사고를 재현하는 테스트를 남긴다. 여기까지 해야 같은 장애가 반복되지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 릴리스 게이트 갱신</b><span>release gate update</span></div><div class="g-def">배포 전에 무엇을 더 확인할지 절차에 반영한다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 담당자와 점검일</b><span>owner and review date</span></div><div class="g-def">누가 언제까지 확인하는가. 날짜 없는 후속 조치는 닫히지 않는다</div></div>
+</div>
 </section>
 
 <section id="quality-evidence-packet">

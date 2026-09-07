@@ -377,7 +377,19 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="fe-ch15">
 <div class="ch-head"><span class="ch-code">FE-15</span><h2>프론트엔드 애플리케이션 아키텍처</h2></div>
 <p class="lede">시니어 프론트엔드 아키텍처는 폴더 구조를 예쁘게 나누는 일이 아니라 변경이 어디까지 전파되는지 제한하는 일입니다. route, feature, entity, shared layer, design system, platform adapter가 서로 무엇을 알고 무엇을 몰라야 하는지 규칙으로 남겨야 합니다.</p>
-<div class="semantic-card evidence-card"><span class="sc-label">FRONTEND APPLICATION ARCHITECTURE DECISION MODEL</span><br>product capability → route boundary → feature owner → server state owner<br>→ UI state owner → shared component contract → platform adapter<br>→ dependency rule → public API → test and release evidence</div>
+<div class="semantic-card evidence-card"><span class="sc-label">FRONTEND APPLICATION ARCHITECTURE DECISION MODEL</span><br>1 product capability → 2 route boundary → 3 feature owner → 4 server state owner<br>→ 5 UI state owner → 6 shared component contract → 7 platform adapter<br>→ 8 dependency rule → 9 public API → 10 test and release evidence</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 제품 능력</b><span>product capability</span></div><div class="g-def">사용자가 끝내야 하는 작업 단위. 폴더 구조가 아니라 이것이 경계의 출발점이다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 라우트 경계</b><span>route boundary</span></div><div class="g-def">그 작업 하나가 한 URL과 한 데이터 로딩 단위에 대응하는가</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 기능 소유자</b><span>feature owner</span></div><div class="g-def">도메인 행동·UI 상태·mutation을 한 곳이 책임진다. 소유자가 없으면 shared 폴더가 쓰레기통이 된다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 서버 상태 소유자</b><span>server state owner</span></div><div class="g-def">서버가 진실인 데이터를 누가 가져오고 누가 무효화하는지 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · UI 상태 소유자</b><span>UI state owner</span></div><div class="g-def">서버와 무관한 열림·선택·입력 상태를 어느 계층에 둘지 정한다. 서버 상태와 섞으면 둘 다 망가진다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 공용 컴포넌트 계약</b><span>shared component contract</span></div><div class="g-def">여러 기능이 함께 쓰는 컴포넌트의 props와 합성 규칙을 제품 의미 기준으로 고정한다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 플랫폼 어댑터</b><span>platform adapter</span></div><div class="g-def">라우터, 스토리지, 분석, 결제처럼 교체 가능성이 있는 바깥을 감싸는 얇은 층</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 의존 규칙</b><span>dependency rule</span></div><div class="g-def">어느 방향의 import를 금지할지. 자동 검사되지 않는 규칙은 문서일 뿐이다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 공개 API</b><span>public API</span></div><div class="g-def">모듈이 밖에 노출하는 진입점. 나머지는 내부 구현으로 잠근다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 테스트·릴리스 증거</b><span>test and release evidence</span></div><div class="g-def">경계가 지켜졌음을 무엇으로 보이는가. 위반이 CI에서 잡혀야 경계가 유지된다</div></div>
+</div>
 <table>
 <tr><th>경계</th><th>좋은 기준</th><th>실패 신호</th><th>필수 증거</th></tr>
 <tr><td>Route</td><td>사용자 작업 단위와 데이터 로딩 단위가 맞는다</td><td>한 route가 unrelated feature의 loader, modal, store를 모두 안다</td><td>route map, loader contract, error boundary</td></tr>
@@ -403,7 +415,19 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="fe-ch16">
 <div class="ch-head"><span class="ch-code">FE-16</span><h2>서버 상태·캐시 일관성</h2></div>
 <p class="lede">서버 상태는 클라이언트가 소유한 데이터가 아니라 특정 시점의 복사본입니다. 고급 프론트엔드는 데이터를 “가져왔다”에서 멈추지 않고 stale, invalidation, optimistic rollback, conflict, multi-tab drift, URL 복원까지 하나의 일관성 모델로 다룹니다.</p>
-<div class="semantic-card decision-card"><span class="sc-label">SERVER STATE CONSISTENCY MODEL</span><br>query key → fetch policy → stale time → mutation scope<br>→ optimistic patch → rollback snapshot → invalidation target<br>→ conflict resolution → multi-tab sync → release telemetry</div>
+<div class="semantic-card decision-card"><span class="sc-label">SERVER STATE CONSISTENCY MODEL</span><br>1 query key → 2 fetch policy → 3 stale time → 4 mutation scope<br>→ 5 optimistic patch → 6 rollback snapshot → 7 invalidation target<br>→ 8 conflict resolution → 9 multi-tab sync → 10 release telemetry</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 쿼리 키</b><span>query key</span></div><div class="g-def">무엇이 데이터의 정체성을 바꾸는가. route params, 필터, auth scope, locale을 키에 명시한다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 조회 정책</b><span>fetch policy</span></div><div class="g-def">언제 가져오는가 — mount, focus, 재연결, polling 중 무엇을 켤지 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 허용 낡음</b><span>stale time</span></div><div class="g-def">얼마나 낡아도 안전한가. 가격·권한은 짧게, 문서·코드는 길게 잡는다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 변경 범위</b><span>mutation scope</span></div><div class="g-def">이 쓰기가 어떤 키의 데이터를 바꾸는가. 여기서 무효화 대상이 결정된다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 낙관적 패치</b><span>optimistic patch</span></div><div class="g-def">서버 응답 전에 화면을 먼저 바꾼다. 되돌릴 방법이 없으면 쓰지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 롤백 스냅샷</b><span>rollback snapshot</span></div><div class="g-def">실패했을 때 되돌릴 이전 값. 낙관적 패치와 반드시 한 세트다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 무효화 대상</b><span>invalidation target</span></div><div class="g-def">성공 후 다시 읽을 키. 전부 무효화는 쉬운 대신 비싸다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 충돌 해결</b><span>conflict resolution</span></div><div class="g-def">내 변경과 남의 변경이 겹칠 때 무엇을 이기게 할지. last-write-wins는 선택이지 기본값이 아니다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 멀티탭 동기화</b><span>multi-tab sync</span></div><div class="g-def">같은 사용자의 다른 탭이 낡은 화면을 들고 있을 때 어떻게 맞출지</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 릴리스 텔레메트리</b><span>release telemetry</span></div><div class="g-def">캐시 정책 변경이 실제 요청 수와 오류율을 어떻게 바꿨는지 본다</div></div>
+</div>
 <table>
 <tr><th>결정</th><th>질문</th><th>좋은 기준</th><th>실패 모드</th></tr>
 <tr><td>Query key</td><td>어떤 입력이 데이터 정체성을 바꾸는가</td><td>route params, filter, auth scope, locale을 명시</td><td>필터가 바뀌어도 같은 cache를 재사용</td></tr>
@@ -443,7 +467,17 @@ serverError <span class="dim">서버가 거절한 이유</span>
 </table>
 <h3>PERMISSION AWARE UI MODEL</h3>
 <p>권한형 UI는 버튼을 숨기는 문제가 아닙니다. 사용자가 할 수 없는 일을 왜 할 수 없는지, 권한 요청 경로가 있는지, 서버 403과 UI 상태가 일치하는지를 설계해야 합니다.</p>
-<div class="semantic-card decision-card"><span class="sc-label">PERMISSION AWARE UI MODEL</span><br>server authorization → route availability → action affordance<br>→ disabled or hidden decision → explanation → request access path<br>→ 401/403 negative test → audit event</div>
+<div class="semantic-card decision-card"><span class="sc-label">PERMISSION AWARE UI MODEL</span><br>1 server authorization → 2 route availability → 3 action affordance<br>→ 4 disabled or hidden decision → 5 explanation → 6 request access path<br>→ 7 401/403 negative test → 8 audit event</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 서버 권한</b><span>server authorization</span></div><div class="g-def">진짜 방어선. UI가 무엇을 하든 서버 검사는 그대로 남는다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 라우트 접근성</b><span>route availability</span></div><div class="g-def">그 화면에 들어갈 수 있는가. 진입에서 막을지 들어온 뒤 막을지 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 행동 노출</b><span>action affordance</span></div><div class="g-def">버튼을 보여줄지 말지. 보여준다는 것은 할 수 있다는 약속이다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 비활성 vs 숨김</b><span>disabled or hidden</span></div><div class="g-def">역할상 영구히 불가능하면 숨기고, 조건부로 가능하면 비활성으로 남긴다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 이유 설명</b><span>explanation</span></div><div class="g-def">왜 못 하는지 한 줄. 이유 없는 disabled는 사용자를 막다른 길에 세운다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 권한 요청 경로</b><span>request access path</span></div><div class="g-def">막았으면 다음 행동을 준다 — 요청 CTA나 담당자 안내</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 거부 경로 테스트</b><span>401/403 negative test</span></div><div class="g-def">권한 없는 사용자로도 테스트한다. 성공 경로만 검증하면 UI가 서버보다 관대해진다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 감사 이벤트</b><span>audit event</span></div><div class="g-def">누가 무엇을 시도했고 왜 거부됐는지 남긴다</div></div>
+</div>
 <table>
 <tr><th>상황</th><th>UI 선택</th><th>이유</th><th>주의</th></tr>
 <tr><td>역할상 절대 불가능</td><td>숨김 또는 읽기 전용</td><td>불필요한 노이즈 제거</td><td>서버 권한 검사는 반드시 유지</td></tr>
@@ -456,7 +490,17 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="fe-ch18">
 <div class="ch-head"><span class="ch-code">FE-18</span><h2>디자인 시스템 운영</h2></div>
 <p class="lede">디자인 시스템은 컴포넌트 라이브러리가 아니라 제품 UI의 변경 관리 시스템입니다. 시니어 수준에서는 token, component API, Storybook, 접근성, visual regression, deprecation, Figma-code drift를 하나의 운영 루프로 관리합니다.</p>
-<div class="semantic-card evidence-card"><span class="sc-label">DESIGN SYSTEM OPERATING MODEL</span><br>design token source → component contract → usage guideline<br>→ story and fixture coverage → visual/a11y regression<br>→ release note → migration path → deprecation and adoption metric</div>
+<div class="semantic-card evidence-card"><span class="sc-label">DESIGN SYSTEM OPERATING MODEL</span><br>1 design token source → 2 component contract → 3 usage guideline<br>→ 4 story and fixture coverage → 5 visual/a11y regression<br>→ 6 release note → 7 migration path → 8 deprecation and adoption metric</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 토큰 출처</b><span>design token source</span></div><div class="g-def">색·간격·타이포를 의미 이름으로 한 곳에서 관리한다. 화면마다 raw hex가 늘면 시스템이 아니다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 컴포넌트 계약</b><span>component contract</span></div><div class="g-def">props와 합성 규칙을 제품 의미 기준으로 고정한다. boolean prop 폭증은 계약이 무너진 신호다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 사용 가이드</b><span>usage guideline</span></div><div class="g-def">언제 쓰고 언제 쓰지 않는지. 쓰지 말아야 할 경우가 적힌 문서가 실제로 읽힌다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 스토리·픽스처 커버리지</b><span>story and fixture coverage</span></div><div class="g-def">각 변형을 눈으로 확인할 수 있는 상태로 고정한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 시각·접근성 회귀</b><span>visual/a11y regression</span></div><div class="g-def">변경이 다른 화면을 깨지 않았는지 스냅샷과 대비 검사로 잡는다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 릴리스 노트</b><span>release note</span></div><div class="g-def">무엇이 바뀌었고 무엇이 깨지는지 사용하는 팀에 알린다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 전환 경로</b><span>migration path</span></div><div class="g-def">옛 API에서 새 API로 가는 단계. codemod나 공존 기간을 함께 준다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 폐기·채택 지표</b><span>deprecation and adoption metric</span></div><div class="g-def">언제 지울지와 얼마나 쓰이는지를 숫자로 본다. 채택률 없이 폐기하면 팀이 갈라진다</div></div>
+</div>
 <table>
 <tr><th>층</th><th>운영 기준</th><th>실패 신호</th><th>증거</th></tr>
 <tr><td>Token</td><td>color, spacing, radius, typography가 의미 이름으로 관리됨</td><td>화면마다 raw hex와 임의 px 증가</td><td>token diff, contrast audit, theme snapshot</td></tr>
@@ -516,7 +560,13 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <section id="browser-ch2">
 <div class="ch-head"><span class="ch-code">BR-02</span><h2>이벤트 루프와 태스크 큐</h2></div>
 <p class="lede">이벤트 루프는 JS 실행, Promise callback, timer, 사용자 입력, 렌더링을 순서대로 조율합니다.</p>
-<div class="semantic-card answer-card"><span class="sc-label">EVENT LOOP ORDER</span><br>task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 다음 task 선택</div>
+<div class="semantic-card answer-card"><span class="sc-label">EVENT LOOP ORDER</span><br>1 task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> 2 microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 3 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 4 다음 task 선택</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 태스크 실행</b><span>task</span></div><div class="g-def">큐에서 콜백 하나를 꺼내 끝까지 실행한다. 실행이 끝나기 전에는 렌더링도 다른 태스크도 끼어들지 못한다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 마이크로태스크 비우기</b><span>microtask</span></div><div class="g-def">태스크가 끝나면 Promise 후속 처리를 남김없이 실행한다. 여기서 또 microtask를 만들면 렌더링이 계속 미뤄진다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 렌더링</b><span>style/layout/paint</span></div><div class="g-def">필요할 때만 화면을 갱신한다. 앞의 태스크가 길면 이 단계가 오지 못해 화면이 멈춘 것처럼 보인다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 다음 태스크 선택</b><span>next task</span></div><div class="g-def">그다음 큐에서 하나를 꺼낸다. 긴 작업을 잘게 쪼개야 하는 이유가 여기 있다</div></div>
+</div>
 <table>
 <tr><th>도구</th><th>특징</th><th>사용 기준</th></tr>
 <tr><td><code>Promise.then</code></td><td>microtask. 렌더링 전에 몰아서 실행</td><td>짧은 후속 처리</td></tr>

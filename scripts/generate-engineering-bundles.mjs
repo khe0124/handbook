@@ -238,11 +238,23 @@ const BUNDLES = [
 <p class="lede">프론트엔드 품질은 테스트 개수나 배포 성공 로그가 아니라 사용자의 브라우저에서 새 버전이 안전하게 작동한다는 증거입니다. 이 모델은 변경이 들어온 순간부터 release health window가 끝날 때까지의 판단 순서를 고정합니다.</p>
 <div class="semantic-card model">
 <span class="sc-label">FRONTEND RELEASE QUALITY OPERATING MODEL</span>
-change risk classification → security review gate → risk based test matrix<br>
-→ preview deployment → CI quality gate → release notes<br>
-→ canary or staged rollout → release health window<br>
-→ Web Vitals regression / error spike / API failure review<br>
-→ rollback, feature flag kill switch, or forward fix decision
+1 change risk classification → 2 security review gate → 3 risk based test matrix<br>
+→ 4 preview deployment → 5 CI quality gate → 6 release notes<br>
+→ 7 canary or staged rollout → 8 release health window<br>
+→ 9 Web Vitals regression / error spike / API failure review<br>
+→ 10 rollback, feature flag kill switch, or forward fix decision
+</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 변경 위험 분류</b><span>change risk classification</span></div><div class="g-def">이 변경이 깨지면 무엇을 잃는지로 등급을 나눈다. 뒤의 게이트 강도가 여기서 정해진다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 보안 리뷰 게이트</b><span>security review gate</span></div><div class="g-def">입력 처리, 인증, 서드파티, 권한이 걸린 변경인지 먼저 거른다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 위험 기반 테스트 행렬</b><span>risk based test matrix</span></div><div class="g-def">위험마다 가장 싸고 안정적인 테스트 층을 배정한다. 모든 변경에 같은 테스트를 요구하지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 프리뷰 배포</b><span>preview deployment</span></div><div class="g-def">머지 전에 실제 URL로 확인한다. 스크린샷 대신 만져볼 수 있는 것을 리뷰에 붙인다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · CI 품질 게이트</b><span>CI quality gate</span></div><div class="g-def">타입, 린트, 테스트, 번들 예산을 자동으로 막는다. 사람이 기억해야 하는 규칙은 지켜지지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 릴리스 노트</b><span>release notes</span></div><div class="g-def">무엇이 바뀌고 무엇이 위험한지 남긴다. 장애 때 가장 먼저 열리는 문서다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 카나리·단계 배포</b><span>canary or staged rollout</span></div><div class="g-def">일부 트래픽에 먼저 낸다. 전량 배포는 되돌릴 비용이 가장 큰 선택이다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 릴리스 관찰 창</b><span>release health window</span></div><div class="g-def">배포 후 지켜보는 시간. 이 창이 없으면 배포는 끝난 것이 아니라 방치된 것이다</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 회귀 검토</b><span>Web Vitals / error / API review</span></div><div class="g-def">성능 지표, 오류 급증, API 실패를 배포 전후로 비교한다</div></div>
+<div class="g-row"><div class="g-term"><b>10 · 복구 결정</b><span>rollback / kill switch / forward fix</span></div><div class="g-def">되돌릴지, 기능만 끌지, 고쳐서 나갈지. 셋 중 무엇을 쓸지 배포 전에 정해 둔다</div></div>
 </div>
 <table>
 <tr><th>단계</th><th>품질 질문</th><th>통과 증거</th></tr>

@@ -396,7 +396,18 @@
 <section id="ch17">
 <div class="ch-head"><span class="ch-code">MOTION-17</span><h2>모션 시스템 운영 모델</h2></div>
 <p class="lede">모션은 컴포넌트마다 감으로 붙이는 효과가 아니라 제품 시스템의 일부입니다. 상태 변화, 공간 관계, interrupt, unmount, reduced motion, 회귀 자동화까지 한 계약으로 운영해야 화면 전환이 늘어나도 품질이 무너지지 않습니다.</p>
-<div class="serial-card"><span class="sc-label">MOTION SYSTEM DECISION MODEL</span>state change purpose → information hierarchy → duration tier<br>→ easing token → property budget → interrupt policy<br>→ reduced motion variant → regression evidence → adoption metric</div>
+<div class="serial-card"><span class="sc-label">MOTION SYSTEM DECISION MODEL</span>1 state change purpose → 2 information hierarchy → 3 duration tier<br>→ 4 easing token → 5 property budget → 6 interrupt policy<br>→ 7 reduced motion variant → 8 regression evidence → 9 adoption metric</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 상태 변화 목적</b><span>state change purpose</span></div><div class="g-def">이 모션이 무엇을 알리는가. 알릴 것이 없으면 장식이고, 여기서 멈춰야 한다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 정보 위계</b><span>information hierarchy</span></div><div class="g-def">무엇을 먼저 보게 할지. 모션은 시선 순서를 바꾸는 도구다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 지속 시간 등급</b><span>duration tier</span></div><div class="g-def">작은 피드백은 짧게, 화면 전환은 길게. 임의의 ms가 아니라 등급으로 관리한다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 이징 토큰</b><span>easing token</span></div><div class="g-def">가속·감속 곡선을 이름으로 고정한다. 곡선이 제각각이면 제품이 따로 논다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 속성 예산</b><span>property budget</span></div><div class="g-def">무엇을 애니메이션할지. transform·opacity 밖으로 나가면 레이아웃 비용을 낸다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 중단 정책</b><span>interrupt policy</span></div><div class="g-def">진행 중에 새 입력이 오면 어떻게 할지 — 되감기, 이어가기, 즉시 종료 중 하나를 정해 둔다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 모션 축소 변형</b><span>reduced motion variant</span></div><div class="g-def">prefers-reduced-motion에서 무엇을 끄고 무엇을 남길지. 전부 끄면 상태 변화가 안 보인다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 회귀 증거</b><span>regression evidence</span></div><div class="g-def">변경이 다른 화면의 모션을 깨지 않았는지 확인한 기록</div></div>
+<div class="g-row"><div class="g-term"><b>9 · 채택 지표</b><span>adoption metric</span></div><div class="g-def">토큰이 실제로 얼마나 쓰이는지. 안 쓰이면 시스템이 아니라 제안서다</div></div>
+</div>
 <table>
 <tr><th>결정 축</th><th>질문</th><th>좋은 기준</th><th>차단 신호</th></tr>
 <tr><td>목적</td><td>이 모션이 어떤 정보를 설명하는가?</td><td>원인과 결과, 공간 관계, 상태 변화를 하나로 분류</td><td>“예뻐 보여서” 외 근거 없음</td></tr>
@@ -414,7 +425,17 @@
 <tr><td>unmount</td><td>timer, WAAPI, rAF, listener cancel</td><td>console error, memory leak, stale setState</td><td>route leave 중 animation</td></tr>
 <tr><td>reduce</td><td>duration 축소 또는 transform 제거</td><td>사용자 접근성 설정 무시</td><td>reduced motion emulation</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">FLIP SPRING INTERRUPTIBILITY MODEL</span>FLIP: First rect → Last rect → Invert transform → Play<br>Spring: current value → target value → stiffness/damping → settled<br>Interrupt policy: current visual value를 source of truth로 삼아 새 target으로 retarget<br>Rollback policy: 실패 시 inverse layout 또는 canonical state로 수렴</div>
+<div class="serial-card"><span class="sc-label">FLIP SPRING INTERRUPTIBILITY MODEL</span>FLIP: 1 First rect → 2 Last rect → 3 Invert transform → 4 Play<br>Spring: 1 current value → 2 target value → 3 stiffness/damping → 4 settled<br>Interrupt policy: current visual value를 source of truth로 삼아 새 target으로 retarget<br>Rollback policy: 실패 시 inverse layout 또는 canonical state로 수렴</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>FLIP 1 · First rect</b><span>변화 전 위치</span></div><div class="g-def">요소가 움직이기 전의 위치와 크기를 잰다</div></div>
+<div class="g-row"><div class="g-term"><b>FLIP 2 · Last rect</b><span>변화 후 위치</span></div><div class="g-def">DOM을 최종 상태로 바꾼 뒤 위치와 크기를 잰다. 이 시점에 화면은 이미 최종 상태다</div></div>
+<div class="g-row"><div class="g-term"><b>FLIP 3 · Invert transform</b><span>되돌리는 변환</span></div><div class="g-def">최종 상태에 시작 위치로 되돌리는 transform을 걸어, 사용자 눈에는 아직 안 움직인 것처럼 만든다</div></div>
+<div class="g-row"><div class="g-term"><b>FLIP 4 · Play</b><span>재생</span></div><div class="g-def">걸어둔 transform을 0으로 풀며 애니메이션한다. layout이 아니라 transform만 바뀌므로 싸다</div></div>
+<div class="g-row"><div class="g-term"><b>Spring 1 · current value</b><span>현재 값</span></div><div class="g-def">스프링은 경과 시간이 아니라 지금 화면에 있는 값에서 출발한다. 중단에 강한 이유다</div></div>
+<div class="g-row"><div class="g-term"><b>Spring 2 · target value</b><span>목표 값</span></div><div class="g-def">도달할 값. 진행 중에 바뀌면 멈추지 않고 새 목표로 다시 당긴다</div></div>
+<div class="g-row"><div class="g-term"><b>Spring 3 · stiffness/damping</b><span>탄성·감쇠</span></div><div class="g-def">얼마나 세게 당기고 얼마나 빨리 잦아드는지. duration 대신 이 둘로 감각을 만든다</div></div>
+<div class="g-row"><div class="g-term"><b>Spring 4 · settled</b><span>정지</span></div><div class="g-def">속도와 남은 거리가 임계 아래로 떨어져 멈춘 상태. 뒷정리는 여기서 한다</div></div>
+</div>
 <table>
 <tr><th>패턴</th><th>적합한 상황</th><th>interrupt 기준</th><th>회귀 테스트</th></tr>
 <tr><td>FLIP list reorder</td><td>목록 위치가 바뀌고 사용자가 변화 위치를 알아야 함</td><td>새 reorder가 오면 현재 transform에서 다시 계산</td><td>100개 item, scroll offset, rapid reorder</td></tr>

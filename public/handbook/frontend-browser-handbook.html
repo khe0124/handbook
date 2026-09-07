@@ -39,7 +39,13 @@
 <section id="ch2">
 <div class="ch-head"><span class="ch-code">BR-02</span><h2>이벤트 루프와 태스크 큐</h2></div>
 <p class="lede">이벤트 루프는 JS 실행, Promise callback, timer, 사용자 입력, 렌더링을 순서대로 조율합니다.</p>
-<div class="serial-card"><span class="sc-label">EVENT LOOP ORDER</span>task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 다음 task 선택</div>
+<div class="serial-card"><span class="sc-label">EVENT LOOP ORDER</span>1 task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> 2 microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 3 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 4 다음 task 선택</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 태스크 실행</b><span>task</span></div><div class="g-def">큐에서 콜백 하나를 꺼내 끝까지 실행한다. 실행이 끝나기 전에는 렌더링도 다른 태스크도 끼어들지 못한다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 마이크로태스크 비우기</b><span>microtask</span></div><div class="g-def">태스크가 끝나면 Promise 후속 처리를 남김없이 실행한다. 여기서 또 microtask를 만들면 렌더링이 계속 미뤄진다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 렌더링</b><span>style/layout/paint</span></div><div class="g-def">필요할 때만 화면을 갱신한다. 앞의 태스크가 길면 이 단계가 오지 못해 화면이 멈춘 것처럼 보인다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 다음 태스크 선택</b><span>next task</span></div><div class="g-def">그다음 큐에서 하나를 꺼낸다. 긴 작업을 잘게 쪼개야 하는 이유가 여기 있다</div></div>
+</div>
 <table>
 <tr><th>도구</th><th>특징</th><th>사용 기준</th></tr>
 <tr><td><code>Promise.then</code></td><td>microtask. 렌더링 전에 몰아서 실행</td><td>짧은 후속 처리</td></tr>

@@ -326,7 +326,7 @@
 <tr><td>popover vs focus blur</td><td>pointerdown, click, blur 순서 차이</td><td>pointerdown에서 의도 기록, focusout은 relatedTarget 기준 지연 처리</td><td>마우스 클릭, Tab 이동, screen reader activation</td></tr>
 <tr><td>text selection vs drag</td><td>드래그 가능한 카드 안에 텍스트와 input이 존재</td><td>drag handle 분리, editable target 제외, selection threshold</td><td>텍스트 선택, input focus, 카드 이동</td></tr>
 </table>
-<div class="semantic-card evidence-card"><span class="sc-label">POINTER DEBUG PACKET</span><br>inputType: mouse, touch, pen, keyboard<br>event order: pointerdown → focus → pointermove → pointerup → click 순서 기록<br>capture: set/release 여부와 pointerId<br>default action: preventDefault 사용 이유와 touch-action 값<br>threshold: click, drag, long press, swipe 판정 기준<br>fallback: keyboard와 visible button 대체 경로</div>
+<div class="semantic-card evidence-card"><span class="sc-label">POINTER DEBUG PACKET</span><br>1 inputType: mouse, touch, pen, keyboard<br>2 event order: pointerdown → focus → pointermove → pointerup → click 순서 기록<br>3 capture: set/release 여부와 pointerId<br>4 default action: preventDefault 사용 이유와 touch-action 값<br>5 threshold: click, drag, long press, swipe 판정 기준<br>6 fallback: keyboard와 visible button 대체 경로</div>
 <div class="callout risk">
 <span class="co-label">IMPLEMENTATION BAR</span>
 <p>드래그가 마우스로만 잘 되는 것은 완성 기준이 아닙니다. 터치 스크롤과 충돌하지 않고, 키보드로 대체 가능하며, 포인터가 창 밖으로 나가거나 route가 바뀌어도 상태가 복구되어야 인터랙션 구현으로 볼 수 있습니다.</p>
@@ -460,14 +460,14 @@
 <section id="interaction-ch16">
 <div class="ch-head"><span class="ch-code">INT-16</span><h2>상태 기계와 조작 계약</h2></div>
 <p class="lede">고급 인터랙션은 이벤트 핸들러 묶음이 아니라 상태 기계입니다. 사용자가 시작한 조작이 어떤 상태를 거쳐 성공, 실패, 취소, 되돌리기로 수렴하는지 명시해야 빠른 반복 입력, 느린 네트워크, 포커스 이동, undo까지 안정적으로 다룰 수 있습니다.</p>
-<div class="semantic-card decision-card"><span class="sc-label">INTERACTION STATE MACHINE MODEL</span><br>idle → armed → active → committing → committed<br>idle → armed → active → cancelling → cancelled<br>committing → failed → recoverable 또는 rolled_back<br>모든 전이는 event, guard, side effect, focus target, announcement를 가진다</div>
+<div class="semantic-card decision-card"><span class="sc-label">INTERACTION STATE MACHINE MODEL</span><br>상태: 1 idle · 2 armed · 3 active · 4 committing · 5 committed · 6 cancelling · 7 cancelled · 8 failed<br>성공: 1 → 2 → 3 → 4 → 5<br>취소: 1 → 2 → 3 → 6 → 7<br>실패: 4 → 8 → recoverable 또는 rolled_back<br>모든 전이는 event, guard, side effect, focus target, announcement를 가진다</div>
 <table>
 <tr><th>상태</th><th>들어오는 이벤트</th><th>허용되는 다음 상태</th><th>UI 책임</th><th>테스트 증거</th></tr>
-<tr><td>idle</td><td>focus, pointerdown, keydown</td><td>armed, active</td><td>가능한 행동과 disabled reason을 노출</td><td>keyboard와 pointer 진입 경로</td></tr>
-<tr><td>armed</td><td>threshold passed, Escape, blur</td><td>active, cancelled</td><td>조작 시작 전 preview와 취소 가능성 표시</td><td>drag threshold, long press, menu open</td></tr>
-<tr><td>active</td><td>move, key repeat, pointercancel</td><td>active, committing, cancelling</td><td>시각 preview와 실제 데이터 mutation을 분리</td><td>빠른 이동, pointer capture, scroll 충돌</td></tr>
-<tr><td>committing</td><td>server success, server fail, stale response</td><td>committed, failed, rolled_back</td><td>중복 실행을 잠그고 늦은 응답을 무시</td><td>slow network, double submit, out-of-order response</td></tr>
-<tr><td>failed</td><td>retry, edit, cancel</td><td>active, committing, rolled_back</td><td>입력값과 focus를 보존하고 복구 경로 제공</td><td>오류 필드 focus, retry, rollback</td></tr>
+<tr><td>1 idle</td><td>focus, pointerdown, keydown</td><td>armed, active</td><td>가능한 행동과 disabled reason을 노출</td><td>keyboard와 pointer 진입 경로</td></tr>
+<tr><td>2 armed</td><td>threshold passed, Escape, blur</td><td>active, cancelled</td><td>조작 시작 전 preview와 취소 가능성 표시</td><td>drag threshold, long press, menu open</td></tr>
+<tr><td>3 active</td><td>move, key repeat, pointercancel</td><td>active, committing, cancelling</td><td>시각 preview와 실제 데이터 mutation을 분리</td><td>빠른 이동, pointer capture, scroll 충돌</td></tr>
+<tr><td>4 committing</td><td>server success, server fail, stale response</td><td>committed, failed, rolled_back</td><td>중복 실행을 잠그고 늦은 응답을 무시</td><td>slow network, double submit, out-of-order response</td></tr>
+<tr><td>8 failed</td><td>retry, edit, cancel</td><td>active, committing, rolled_back</td><td>입력값과 focus를 보존하고 복구 경로 제공</td><td>오류 필드 focus, retry, rollback</td></tr>
 </table>
 <div class="semantic-card decision-card"><span class="sc-label">POINTER LIFECYCLE CONTRACT</span><br>pointerdown: pointerId 저장 + setPointerCapture + 시작 좌표 기록<br>pointermove: 같은 pointerId만 처리 + rAF batch + hit target 갱신<br>pointerup: commit 또는 snap + releasePointerCapture + session cleanup<br>pointercancel/blur/unmount: cancel + release 시도 + focus/announcement 정리<br>lost capture: 안전 취소 또는 마지막 유효 상태로 복구</div>
 <table>
@@ -477,7 +477,17 @@
 <tr><td>Bulk action</td><td>applyToSelection(action, ids)</td><td>대상 id와 이전 상태 map</td><td>job id와 progress event</td><td>실패 id만 재시도 가능</td></tr>
 <tr><td>Workflow editor</td><td>connectNode(source, target)</td><td>edge 생성/삭제 command</td><td>schema validation 결과</td><td>invalid edge announcement와 visual marker</td></tr>
 </table>
-<div class="semantic-card decision-card"><span class="sc-label">COMMAND AND UNDO MODEL</span><br>user intent → command object → optimistic preview<br>→ validation guard → commit effect → canonical state merge<br>→ inverse command 또는 rollback snapshot → audit event<br>undo는 UI 효과가 아니라 domain command의 역연산이어야 한다</div>
+<div class="semantic-card decision-card"><span class="sc-label">COMMAND AND UNDO MODEL</span><br>1 user intent → 2 command object → 3 optimistic preview<br>→ 4 validation guard → 5 commit effect → 6 canonical state merge<br>→ 7 inverse command 또는 rollback snapshot → 8 audit event<br>undo는 UI 효과가 아니라 domain command의 역연산이어야 한다</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 사용자 의도</b><span>user intent</span></div><div class="g-def">무엇을 하려는지. 클릭이 아니라 "항목을 3번 위치로 옮긴다" 같은 의미 단위로 잡는다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 명령 객체</b><span>command object</span></div><div class="g-def">그 의도를 데이터로 만든 것. 실행·되돌리기·재실행이 모두 이 객체 위에서 돈다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 낙관적 미리보기</b><span>optimistic preview</span></div><div class="g-def">응답 전에 결과를 먼저 보여준다. 되돌릴 값을 쥐고 있을 때만 쓴다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 검증 가드</b><span>validation guard</span></div><div class="g-def">지금 상태에서 이 명령이 허용되는가. 통과하지 못하면 미리보기도 만들지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 커밋 효과</b><span>commit effect</span></div><div class="g-def">서버나 저장소에 실제로 반영한다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 정본 상태 병합</b><span>canonical state merge</span></div><div class="g-def">서버가 돌려준 값으로 화면을 맞춘다. 낙관적 값과 다르면 정본이 이긴다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 역명령·롤백 스냅샷</b><span>inverse command</span></div><div class="g-def">되돌리는 방법. undo는 화면 효과가 아니라 도메인 명령의 역연산이어야 한다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 감사 이벤트</b><span>audit event</span></div><div class="g-def">무엇이 언제 실행되고 취소됐는지 남긴다</div></div>
+</div>
 <table>
 <tr><th>ACCESSIBLE INTERACTION ACCEPTANCE MATRIX</th><th>pointer</th><th>keyboard</th><th>screen reader</th><th>reduced motion</th></tr>
 <tr><td>Drag reorder</td><td>pointer capture와 drop target</td><td>Space로 집기, Arrow 이동, Space로 놓기</td><td>현재 위치와 이동 결과 announce</td><td>위치 변화는 텍스트와 highlight로 전달</td></tr>

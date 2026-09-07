@@ -153,7 +153,17 @@
 <div class="serial-card"><span class="sc-label">OBSERVABILITY RELEASE GATE</span>release_id is injected into bundle and error events<br>sourcemap upload matches release_id and commit SHA<br>Web Vitals dashboard is filtered by route and release<br>API spans carry request id or normalized endpoint<br>analytics events include schema version and consent state<br>alert owner and rollback decision window are documented</div>
 <h3>INCIDENT FEEDBACK LOOP</h3>
 <p>프론트엔드 사고의 후속 조치는 hotfix로 끝나면 안 됩니다. 원인을 회귀 테스트, 릴리스 게이트, 관측 신호, 디자인 시스템 정책 중 하나 이상으로 되돌려야 같은 사고가 반복되지 않습니다.</p>
-<div class="serial-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span>incident symptom → affected route and release<br>→ user impact and rollback decision<br>→ root cause category: state, API, render, cache, security, design system<br>→ missing test or missing signal<br>→ new regression case<br>→ release gate update<br>→ owner and review date</div>
+<div class="serial-card"><span class="sc-label">INCIDENT FEEDBACK LOOP</span>1 incident symptom → 2 affected route and release<br>→ 3 user impact and rollback decision<br>→ 4 root cause category: state, API, render, cache, security, design system<br>→ 5 missing test or missing signal<br>→ 6 new regression case<br>→ 7 release gate update<br>→ 8 owner and review date</div>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>1 · 장애 증상</b><span>incident symptom</span></div><div class="g-def">사용자가 겪은 것을 그대로 적는다. 원인 추정을 증상 자리에 쓰지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>2 · 영향 라우트·릴리스</b><span>affected route and release</span></div><div class="g-def">어느 화면이 어느 배포부터 깨졌는가. 시간축을 배포와 맞춘다</div></div>
+<div class="g-row"><div class="g-term"><b>3 · 영향과 롤백 판단</b><span>user impact and rollback</span></div><div class="g-def">얼마나 많은 사용자가 무엇을 못 하는가. 원인을 모르더라도 되돌릴지 여기서 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>4 · 원인 범주</b><span>root cause category</span></div><div class="g-def">상태, API, 렌더, 캐시, 보안, 디자인 시스템 중 어디인가. 범주가 다음에 볼 곳을 정한다</div></div>
+<div class="g-row"><div class="g-term"><b>5 · 빠진 테스트·신호</b><span>missing test or signal</span></div><div class="g-def">왜 미리 못 잡았는가. 테스트가 없었는지, 지표가 없었는지를 구분한다</div></div>
+<div class="g-row"><div class="g-term"><b>6 · 회귀 케이스 추가</b><span>new regression case</span></div><div class="g-def">이 사고를 재현하는 테스트를 남긴다. 여기까지 해야 같은 장애가 반복되지 않는다</div></div>
+<div class="g-row"><div class="g-term"><b>7 · 릴리스 게이트 갱신</b><span>release gate update</span></div><div class="g-def">배포 전에 무엇을 더 확인할지 절차에 반영한다</div></div>
+<div class="g-row"><div class="g-term"><b>8 · 담당자와 점검일</b><span>owner and review date</span></div><div class="g-def">누가 언제까지 확인하는가. 날짜 없는 후속 조치는 닫히지 않는다</div></div>
+</div>
 </section>
 <footer>FRONTEND DEPLOYMENT HANDBOOK · V1 · 2026-06</footer>
 </main></div></body></html>
