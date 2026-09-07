@@ -39,7 +39,14 @@
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
 <p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
-<ul><li>핵심 개념</li><li>주제별 운영 증거</li><li>실무 플레이북</li><li>용어사전</li><li>Incident packet</li><li>주제별 답변 구조</li></ul>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
+  <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>
+  <div class="g-row"><div class="g-term"><b>3 · 실무 플레이북</b><span>PLAYBOOK</span></div><div class="g-def">장애 상황에서 증상부터 런북 갱신까지 따라갈 순서</div></div>
+  <div class="g-row"><div class="g-term"><b>4 · 용어사전</b><span>TERM</span></div><div class="g-def">장애 중 오해가 잦은 용어를 정의·증거·오해 기준으로 정리</div></div>
+  <div class="g-row"><div class="g-term"><b>5 · Incident packet</b><span>CASE</span></div><div class="g-def">사고를 재구성하고 인수인계하는 데 필요한 기록 묶음</div></div>
+  <div class="g-row"><div class="g-term"><b>6 · 주제별 답변 구조</b><span>ANSWER</span></div><div class="g-def">면접이나 리뷰에서 이 주제를 설명할 때 쓰는 답변 뼈대</div></div>
+</div>
 
 </section>
 
@@ -98,8 +105,17 @@
         <p class="lede">IaC·변경관리·Drift 플레이북은 <strong>IAC CHANGE REVIEW PLAYBOOK</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">IAC CHANGE REVIEW PLAYBOOK</span>
-          symptom → scope → recent change → evidence<br>
-          → mitigation → verification → runbook diff
+          1 symptom → 2 scope → 3 recent change → 4 evidence<br>
+          → 5 mitigation → 6 verification → 7 runbook diff
+        </div>
+        <div class="glossary">
+          <div class="g-row"><div class="g-term"><b>1 · 증상</b><span>symptom</span></div><div class="g-def">무엇이 안 되는가를 사용자 관점 한 문장으로. "느리다"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다</div></div>
+          <div class="g-row"><div class="g-term"><b>2 · 영향 범위</b><span>scope</span></div><div class="g-def">전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다</div></div>
+          <div class="g-row"><div class="g-term"><b>3 · 최근 변경</b><span>recent change</span></div><div class="g-def">직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다</div></div>
+          <div class="g-row"><div class="g-term"><b>4 · 증거</b><span>evidence</span></div><div class="g-def">plan diff에서 create/update/replace/delete와 IAM·network 변경을 먼저 읽고, state lock·workspace·provider version을 확인한 뒤 실제 리소스를 readback한다</div></div>
+          <div class="g-row"><div class="g-term"><b>5 · 완화</b><span>mitigation</span></div><div class="g-def">되돌릴 수 있는 변경이면 이전 코드로 apply하고, replace/delete가 섞였으면 forward fix를 고른다. 콘솔 수동 수정은 drift로 남으므로 마지막 수단이다</div></div>
+          <div class="g-row"><div class="g-term"><b>6 · 복구 검증</b><span>verification</span></div><div class="g-def">완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다</div></div>
+          <div class="g-row"><div class="g-term"><b>7 · 런북 갱신</b><span>runbook diff</span></div><div class="g-def">이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계</div></div>
         </div>
         <p>IaC 변경으로 인한 장애를 다룰 때도 표면을 나눠서 본다. 먼저 Plan diff 표면에서 create/update/replace/delete, IAM diff, network diff, downtime risk를 본다. replace와 delete는 단순 수정과 무게가 다르므로 별도의 승인 기준이 필요하다. 다음 State / Drift 표면에서는 state lock, workspace, provider version, import/moved block을 본다. 여기서 지켜야 할 원칙은 drift를 발견했다고 무조건 덮어쓰지 않는 것이다. 마지막 Apply proof 표면에서는 apply output, post-check command, rollback/forward-fix, audit ticket을 본다. apply 명령이 에러 없이 끝났다는 것보다 의도한 상태가 실제로 만들어졌는지가 중요하다.</p>
         <p>이 세 표면을 실제로 조사하는 순서도 있다. 리뷰 단계에서는 terraform plan -out, terraform show, provider/module version diff로 리소스 교체와 권한 확대를 먼저 확인한다. 상태 단계에서는 state lock, workspace, drift detection, import 대상을 확인하는데, state를 직접 조작해야 한다면 반드시 변경 티켓과 백업이 함께 있어야 한다. 검증 단계에서는 cloud resource readback으로 route, listener, SG, IAM의 실제 상태를 확인한다. plan이 말한 결과와 실제 리소스가 정말 일치하는지 대조하는 것이 이 단계의 목적이다.</p>

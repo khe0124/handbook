@@ -1182,6 +1182,15 @@ const playbooksByFile = {
   },
   "operations-delivery-pipeline-handbook.html": {
     marker: "RELEASE SAFETY PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "무엇이 배포됐는지부터 고정한다 — commit SHA, image digest, migration version, config diff. 그다음 smoke·canary 지표와 error budget 소진을 본다"],
+      [5, "완화", "mitigation", "같은 artifact로 이전 버전에 되돌리거나 feature flag를 끈다. migration이 끼어 있으면 되돌릴 수 있는 변경인지부터 확인한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Artifact", "commit SHA, image digest, SBOM/provenance, migration version", "branch가 아니라 불변 artifact가 운영 단위다."],
       ["Environment", "config diff, secret source, feature flag, approval gate", "같은 artifact가 환경 설정만 바꿔 승격되어야 한다."],
@@ -1201,6 +1210,15 @@ const playbooksByFile = {
   },
   "operations-runtime-orchestration-handbook.html": {
     marker: "RUNTIME ORCHESTRATION PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "probe와 재시작 이유부터 본다 — readiness/liveness, restart reason, exit code, 이전 컨테이너 로그. 그다음 service endpoint와 request/limit·OOM·throttling을 확인한다"],
+      [5, "완화", "mitigation", "이전 revision으로 rollout을 되돌리거나 비정상 pod를 endpoint에서 뺀다. resource limit 조정은 원인을 확인한 뒤에 한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Pod / Task health", "readiness, liveness, startup probe, restart reason, exit code", "재시작이 회복인지 증상 악화인지 구분한다."],
       ["Traffic", "service selector, target group, ingress rule, connection draining", "정상 pod가 traffic을 받는 경로를 확인한다."],
@@ -1220,6 +1238,15 @@ const playbooksByFile = {
   },
   "operations-iac-change-handbook.html": {
     marker: "IAC CHANGE REVIEW PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "plan diff에서 create/update/replace/delete와 IAM·network 변경을 먼저 읽고, state lock·workspace·provider version을 확인한 뒤 실제 리소스를 readback한다"],
+      [5, "완화", "mitigation", "되돌릴 수 있는 변경이면 이전 코드로 apply하고, replace/delete가 섞였으면 forward fix를 고른다. 콘솔 수동 수정은 drift로 남으므로 마지막 수단이다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Plan diff", "create/update/replace/delete, IAM diff, network diff, downtime risk", "replace와 delete는 별도 승인 기준이 필요하다."],
       ["State / Drift", "state lock, workspace, provider version, import/moved block", "drift를 무조건 덮어쓰지 않는다."],
@@ -1239,6 +1266,15 @@ const playbooksByFile = {
   },
   "operations-observability-slo-handbook.html": {
     marker: "SLO OBSERVABILITY DESIGN PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "사용자 영향을 SLI로 먼저 읽는다 — 성공률, latency, freshness. 그다음 trace_id로 로그와 트레이스를 잇고 deploy marker와 같은 시간축에 올린다"],
+      [5, "완화", "mitigation", "burn rate가 빠른 구간을 먼저 끊는다. 배포 rollback, 트래픽 축소, 기능 차단 중 error budget을 덜 태우는 쪽을 고른다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["SLI", "request success, latency, freshness, durability, business success", "사용자 여정과 연결되지 않은 지표는 paging 기준이 아니다."],
       ["Telemetry", "log schema, metric label, trace sampling, deploy marker", "traceId와 version이 없으면 원인 연결이 약해진다."],
@@ -1258,6 +1294,15 @@ const playbooksByFile = {
   },
   "operations-incident-dr-handbook.html": {
     marker: "INCIDENT RESPONSE DRILL PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "처음 15분은 원인이 아니라 영향을 고정한다 — SLI, 영향 서비스, 최근 배포, 의존성 상태, 문의 추이. 지휘자·기록자·공지 담당을 함께 정한다"],
+      [5, "완화", "mitigation", "rollback, feature off, traffic shift, queue pause, rate limit 중 데이터 유실 위험이 가장 낮은 것을 고른다. 복구 지점(RTO/RPO)을 먼저 확인한다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Incident command", "commander, scribe, comms owner, SME, decision log", "한 사람이 모든 역할을 맡지 않는다."],
       ["Mitigation", "rollback, feature off, traffic shift, queue pause, rate limit", "원인 확정 전에도 사용자 영향 완화를 검토한다."],
@@ -1277,6 +1322,15 @@ const playbooksByFile = {
   },
   "operations-checklist-interview-handbook.html": {
     marker: "OPERATIONS HANDOFF REVIEW PLAYBOOK",
+    stepGlossary: [
+      [1, "증상", "symptom", "무엇이 안 되는가를 사용자 관점 한 문장으로. \"느리다\"가 아니라 어떤 요청이 언제부터 어떻게 실패하는지 적는다"],
+      [2, "영향 범위", "scope", "전체인가 일부인가. region·tenant·경로·클라이언트 중 무엇으로 갈리는지가 가설의 절반을 지운다"],
+      [3, "최근 변경", "recent change", "직전 배포, 설정·권한 변경, 인증서·route 교체를 같은 시간축에 올린다. 대부분의 장애는 최근 변경에서 온다"],
+      [4, "증거", "evidence", "인수 대상의 owner, escalation, 의존성, 접근 권한, 비용을 카탈로그에서 확인하고 runbook·dashboard·DR 계획을 실제로 열어본다"],
+      [5, "완화", "mitigation", "빠진 것이 있으면 인수를 미루는 대신 임시 owner와 기한을 정해 공백을 막는다. 면접 답변에서는 직접 경험과 설계 지식의 경계를 흐리지 않는다"],
+      [6, "복구 검증", "verification", "완화가 실제로 먹혔는지 같은 증거로 다시 확인한다. 사용자 경로를 한 번 통과시켜야 끝난 것이다"],
+      [7, "런북 갱신", "runbook diff", "이번에 내린 판단을 문서에 되돌린다. 다음 사람이 같은 순서를 다시 발명하지 않게 하는 단계"],
+    ],
     evidenceRows: [
       ["Handoff", "owner, escalation, architecture, dependency, access, cost", "권한과 책임자가 없으면 인수 완료가 아니다."],
       ["Release readiness", "artifact, config, migration, secret, smoke, rollback", "변경 전 차단 기준을 명확히 둔다."],
