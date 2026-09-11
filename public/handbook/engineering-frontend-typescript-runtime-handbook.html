@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TypeScript·JavaScript 런타임</title></head>
+<body><div class="shell"><nav aria-label="목차">
+  <div class="nav-brand">ENGINEERING · FRONTEND TYPESCRIPT RUNTIME</div>
+  <div class="nav-title">TypeScript·JavaScript 런타임</div>
+  <a href="#type-boundary"><span class="code">TS-01</span>타입 경계</a>
+  <a href="#runtime-schema"><span class="code">TS-02</span>런타임 스키마</a>
+  <a href="#async-model"><span class="code">JS-03</span>비동기 실행 모델</a>
+  <a href="#module-boundary"><span class="code">TS-04</span>모듈 경계</a>
+  <a href="#error-model"><span class="code">JS-05</span>오류 모델</a>
+  <a href="#build-runtime"><span class="code">JS-06</span>빌드와 런타임 차이</a>
+  <a href="#ts-review-gate"><span class="code">GATE</span>리뷰 게이트</a>
+</nav><main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : ENGINEERING-FRONTEND-TYPESCRIPT-RUNTIME</span>
+    <span>SCOPE : TYPESCRIPT · JAVASCRIPT RUNTIME · SCHEMA · ASYNC · MODULE BOUNDARY</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>TypeScript·JavaScript 런타임</h1>
+  <p class="hero-sub">TypeScript는 런타임을 안전하게 만들지 않습니다. 중급 이상 프론트엔드 개발자는 타입, 스키마, 비동기 실행, 모듈 경계를 함께 설계해야 합니다.</p>
+  <div class="hero-meta">CURATED FRONTEND PATH · UPDATED 2026-09</div>
+</header>
+
+<section id="type-boundary">
+<div class="ch-head"><span class="ch-code">TS-01</span><h2>타입 경계</h2></div>
+<p class="lede">타입은 코드 안쪽의 약속이고, 네트워크·스토리지·URL·사용자 입력은 타입 시스템 밖에서 들어옵니다.</p>
+<div class="semantic-card decision-card"><span class="sc-label">TYPE SAFETY BOUNDARY MODEL</span><br>1 unknown input → 2 runtime parse → 3 typed domain model<br>→ 4 UI view model → 5 mutation command → 6 serialized output</div>
+<table>
+<tr><th>경계</th><th>입력</th><th>필수 방어</th><th>나쁜 냄새</th></tr>
+<tr><td>API response</td><td>JSON</td><td>schema parse, nullability 처리</td><td>response as SomeType</td></tr>
+<tr><td>URL params</td><td>string</td><td>enum/range/default 파싱</td><td>page as number</td></tr>
+<tr><td>localStorage</td><td>old string</td><td>versioned schema, migration</td><td>JSON.parse 결과 즉시 사용</td></tr>
+<tr><td>postMessage</td><td>외부 window</td><td>origin check, message type guard</td><td>event.data 신뢰</td></tr>
+</table>
+</section>
+
+<section id="runtime-schema">
+<div class="ch-head"><span class="ch-code">TS-02</span><h2>런타임 스키마</h2></div>
+<p class="lede">zod, valibot, io-ts 같은 스키마 도구는 타입을 만드는 도구가 아니라 신뢰 경계를 통과시키는 검문소입니다.</p>
+<pre class="snippet-card"><code>const UserSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1),
+  role: z.enum(["admin", "member"]),
+});
+
+const result = UserSchema.safeParse(await response.json());
+if (!result.success) {
+  throw new DataContractError("user_response_invalid", result.error);
+}</code></pre>
+<table>
+<tr><th>대상</th><th>스키마 전략</th><th>실패 처리</th></tr>
+<tr><td>서버 응답</td><td>route별 response schema</td><td>사용자 메시지와 telemetry를 분리한다</td></tr>
+<tr><td>폼 draft</td><td>field schema + submit schema</td><td>입력 중 오류와 제출 오류를 나눈다</td></tr>
+<tr><td>저장소</td><td>versioned schema</td><td>마이그레이션 실패 시 초기화 또는 읽기 전용 fallback</td></tr>
+<tr><td>feature flag</td><td>strict enum</td><td>알 수 없는 variant는 control로 보낸다</td></tr>
+</table>
+</section>
+
+<section id="async-model">
+<div class="ch-head"><span class="ch-code">JS-03</span><h2>비동기 실행 모델</h2></div>
+<p class="lede">race condition, input delay, stale closure는 문법 문제가 아니라 이벤트 루프와 렌더링 타이밍 문제입니다.</p>
+<div class="semantic-card evidence-card"><span class="sc-label">ASYNC RACE REVIEW PACKET</span><br>trigger event<br>in-flight request id<br>abort signal<br>latest-wins or first-wins rule<br>stale closure guard<br>cleanup on unmount<br>telemetry for cancellation</div>
+<table>
+<tr><th>문제</th><th>원인</th><th>대응</th></tr>
+<tr><td>늦게 온 응답이 최신 화면을 덮음</td><td>요청 순서와 완료 순서를 혼동</td><td>request id, AbortController, latest-wins 정책</td></tr>
+<tr><td>입력 중 화면이 멈춤</td><td>main thread long task</td><td>debounce, transition, worker, chunking</td></tr>
+<tr><td>effect가 오래된 값을 사용</td><td>closure와 dependency 경계 누락</td><td>dependency 정리, ref 사용 기준, reducer 전환</td></tr>
+<tr><td>unmount 후 setState</td><td>cleanup 누락</td><td>subscription cleanup, abort, mounted guard 최소화</td></tr>
+</table>
+</section>
+
+<section id="module-boundary">
+<div class="ch-head"><span class="ch-code">TS-04</span><h2>모듈 경계</h2></div>
+<p class="lede">프론트엔드 코드베이스가 커질수록 타입 안정성은 파일 내부보다 모듈 공개 API에서 깨집니다.</p>
+<div class="semantic-card decision-card"><span class="sc-label">FRONTEND MODULE PUBLIC API GATE</span><br>feature exports only public entry<br>domain model does not import UI<br>API client returns parsed result<br>components receive view model<br>shared package has owner and change log</div>
+<table>
+<tr><th>경계</th><th>허용</th><th>금지</th></tr>
+<tr><td>feature</td><td>public index에서 화면, route, command만 공개</td><td>내부 hook과 store deep import</td></tr>
+<tr><td>domain</td><td>순수 타입, parser, 정책 함수</td><td>React, router, query client import</td></tr>
+<tr><td>shared UI</td><td>variant, size, state, accessibility contract</td><td>도메인 전용 prop 누수</td></tr>
+<tr><td>API client</td><td>request command와 parsed response</td><td>raw fetch response를 화면에 전달</td></tr>
+</table>
+</section>
+
+<section id="error-model">
+<div class="ch-head"><span class="ch-code">JS-05</span><h2>오류 모델</h2></div>
+<p class="lede">throw, rejected promise, render error, resource load error는 서로 다른 위치에서 발생하고 서로 다른 복구 경로가 필요합니다.</p>
+<table>
+<tr><th>오류</th><th>잡는 곳</th><th>복구</th><th>로그 필드</th></tr>
+<tr><td>render error</td><td>Error Boundary</td><td>부분 fallback, route 복귀</td><td>component stack, route, release_id</td></tr>
+<tr><td>async error</td><td>query/mutation handler</td><td>retry, stale data, toast, field error</td><td>operation, status, traceId</td></tr>
+<tr><td>chunk load error</td><td>global handler + router</td><td>새로고침 안내, cache bust</td><td>chunk url, build version</td></tr>
+<tr><td>schema parse error</td><td>API boundary</td><td>안전 fallback, report</td><td>schema name, field path, endpoint</td></tr>
+</table>
+</section>
+
+<section id="build-runtime">
+<div class="ch-head"><span class="ch-code">JS-06</span><h2>빌드와 런타임 차이</h2></div>
+<p class="lede">타입 체크와 번들 빌드가 통과해도 사용자의 브라우저 런타임에서는 네트워크, 캐시, polyfill, CSP, 브라우저 버전 때문에 깨질 수 있습니다.</p>
+<table>
+<tr><th>영역</th><th>빌드에서 보이는 것</th><th>런타임에서 깨지는 것</th><th>검증</th></tr>
+<tr><td>환경변수</td><td>문자열 치환</td><td>잘못된 API URL, secret 노출</td><td>runtime config audit</td></tr>
+<tr><td>브라우저 지원</td><td>transpile 결과</td><td>API 미지원, CSS 차이</td><td>browserslist, device smoke</td></tr>
+<tr><td>코드 분할</td><td>chunk 생성</td><td>chunk load error, 캐시 불일치</td><td>release id, cache header, reload path</td></tr>
+<tr><td>CSP</td><td>대개 통과</td><td>inline script/style 차단</td><td>preview CSP report</td></tr>
+</table>
+</section>
+
+<section id="ts-review-gate">
+<div class="ch-head"><span class="ch-code">GATE</span><h2>리뷰 게이트</h2></div>
+<p class="lede">TypeScript 리뷰는 any 금지 캠페인이 아니라 런타임에서 깨질 경계를 찾는 일입니다.</p>
+<div class="semantic-card answer-card"><span class="sc-label">TYPESCRIPT RUNTIME REVIEW GATE</span><br>□ 외부 입력은 unknown에서 시작하는가<br>□ API/URL/storage 경계에 parser가 있는가<br>□ as, non-null assertion, any가 신뢰 경계를 숨기지 않는가<br>□ async race와 cancellation 정책이 있는가<br>□ module public API가 내부 구현을 노출하지 않는가<br>□ parse failure와 chunk failure가 관측되는가</div>
+<table>
+<tr><th>산출물</th><th>포함 내용</th><th>통과 기준</th></tr>
+<tr><td>schema boundary map</td><td>API, URL, storage, message 경계와 parser</td><td>외부 입력이 바로 domain type으로 들어오지 않는다</td></tr>
+<tr><td>async race fixture</td><td>slow response, abort, unmount, rapid input</td><td>최신 화면이 낡은 응답으로 덮이지 않는다</td></tr>
+<tr><td>module API report</td><td>public export, forbidden import, owner</td><td>deep import 없이 feature가 조립된다</td></tr>
+</table>
+</section>
+
+<footer>FRONTEND TYPESCRIPT RUNTIME HANDBOOK · V1 · 2026-09</footer>
+</main></div></body></html>

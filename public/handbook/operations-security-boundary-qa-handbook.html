@@ -28,7 +28,6 @@
   <a href="#qa-12"><span class="code">Q12</span>incident containment와 isolation은 무엇부터 끊나요?</a>
   <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
-  <a href="#qa-evidence-standards"><span class="code">EVIDENCE</span>Q&amp;A 최신성·증거 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -261,17 +260,6 @@ IOC timeline, CloudTrail event, identity revoke log, quarantine security rule, n
 <span class="sc-label">OPERATIONS QA TRAINING PACKET</span>
 통과 답변은 서비스 이름이나 명령어 나열에서 멈추지 않고 사용자 영향, 경계, 증거, 완화, 복구, 재발 방지 action을 함께 닫는다.
 </div>
-</section>
-
-<section id="qa-evidence-standards">
-<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>Q&amp;A 최신성·증거 기준</h2></div>
-<p class="lede">보안 경계 Q&amp;A는 2026-07-09 기준으로 답한다. 관련 본문은 <a href="operations-security-boundary-handbook.html#evidence-packet">검증 기준·증거 패킷</a>이며, 임시 허용과 예외는 승인자·만료일·회수 명령 없이는 좋은 답변이 아니다.</p>
-<table>
-<tr><th>확인 영역</th><th>확인 명령/증거</th><th>좋은 답변</th><th>나쁜 답변</th></tr>
-<tr><td>공개면·TLS</td><td><code>dig</code>, <code>openssl s_client</code>, WAF/firewall log, public endpoint inventory</td><td>public ingress, TLS policy, WAF rule, origin exposure를 각각 증거로 분리한다.</td><td>WAF가 있으니 origin도 안전하다고 말한다.</td></tr>
-<tr><td>LB health와 containment</td><td>LB target/backend health, SG/NSG diff, Flow Logs, denied sample</td><td>가용성을 유지할 완화와 격리할 경계를 동시에 제시한다.</td><td>문제가 된 rule을 넓게 열어 먼저 살리자고 말한다.</td></tr>
-<tr><td>사설 경로·BGP 영향</td><td>route table, BGP prefix, firewall hit/drop, egress proxy log</td><td>egress 차단이 업무 destination과 data exfil path에 미치는 영향을 구분한다.</td><td>egress를 전부 막으면 보안상 안전하다고만 말한다.</td></tr>
-</table>
 </section>
 
 <footer>OPERATIONS QA TRAINING PACKET · 보안 경계 Q&amp;A · generated for handbook practice</footer>

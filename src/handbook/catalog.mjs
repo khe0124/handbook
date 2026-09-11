@@ -467,6 +467,18 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-core-qa-handbook.html",
   },
   {
+    id: "engineering-frontend-data-state-form",
+    label: "05 프론트엔드 데이터·상태·폼",
+    kind: "개발 핸드북",
+    file: "engineering-frontend-data-state-form-handbook.html",
+  },
+  {
+    id: "engineering-frontend-typescript-runtime",
+    label: "06 TypeScript·JavaScript 런타임",
+    kind: "개발 핸드북",
+    file: "engineering-frontend-typescript-runtime-handbook.html",
+  },
+  {
     id: "engineering-frontend-interaction",
     label: "05 프론트엔드 인터랙션",
     kind: "개발 핸드북",
@@ -667,10 +679,10 @@ const BACKEND_ROADMAP_PAGE = {
 };
 
 const { core: FRONTEND_CORE_HANDBOOKS, qaAndQuiz: FRONTEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
-  ENGINEERING_HANDBOOKS.slice(4, 18),
+  ENGINEERING_HANDBOOKS.slice(4, 20),
 );
 const { core: BACKEND_CORE_HANDBOOKS, qaAndQuiz: BACKEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
-  ENGINEERING_HANDBOOKS.slice(18),
+  ENGINEERING_HANDBOOKS.slice(20),
 );
 
 export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
@@ -690,64 +702,64 @@ export const LLM_HANDBOOKS = [
     file: "llm-roadmap-handbook.html",
   },
   {
-    id: "llm-ai-native-work-standards",
-    label: "01 AI Native 작업 표준·Definition of Done",
-    kind: "LLM",
-    file: "llm-ai-native-work-standards-handbook.html",
-  },
-  {
     id: "llm-fundamentals",
-    label: "02 LLM 기초·모델 동작 원리",
+    label: "01 LLM 기초·모델 동작 원리",
     kind: "LLM",
     file: "llm-fundamentals-handbook.html",
   },
   {
     id: "llm-prompting",
-    label: "03 프로덕션 프롬프팅·구조화 출력",
+    label: "02 프로덕션 프롬프팅·구조화 출력",
     kind: "LLM",
     file: "llm-prompting-handbook.html",
   },
   {
     id: "llm-rag",
-    label: "04 RAG·임베딩·벡터DB",
+    label: "03 RAG·임베딩·벡터DB",
     kind: "LLM",
     file: "llm-rag-handbook.html",
   },
   {
     id: "llm-evaluation",
-    label: "05 LLM 평가·품질 관리",
+    label: "04 LLM 평가·품질 관리",
     kind: "LLM",
     file: "llm-evaluation-handbook.html",
   },
   {
     id: "llm-agents-tool-use",
-    label: "06 Agent·Tool Use·Workflow",
+    label: "05 Agent·Tool Use·Workflow",
     kind: "LLM",
     file: "llm-agents-tool-use-handbook.html",
   },
   {
     id: "llm-security-governance",
-    label: "07 LLM 보안·거버넌스",
+    label: "06 LLM 보안·거버넌스",
     kind: "LLM",
     file: "llm-security-governance-handbook.html",
   },
   {
     id: "llm-app-architecture-operations",
-    label: "08 LLM 앱 아키텍처·운영",
+    label: "07 LLM 앱 아키텍처·운영",
     kind: "LLM",
     file: "llm-app-architecture-operations-handbook.html",
   },
   {
     id: "llm-multimodal-realtime",
-    label: "09 멀티모달·파일·음성·Realtime",
+    label: "08 멀티모달·파일·음성·Realtime",
     kind: "LLM",
     file: "llm-multimodal-realtime-handbook.html",
   },
   {
     id: "llm-model-customization",
-    label: "10 Fine-tuning·Customization·Model Routing",
+    label: "09 Fine-tuning·Customization·Model Routing",
     kind: "LLM",
     file: "llm-model-customization-handbook.html",
+  },
+  {
+    id: "llm-ai-native-work-standards",
+    label: "10 AI Native 작업 표준·Definition of Done",
+    kind: "LLM",
+    file: "llm-ai-native-work-standards-handbook.html",
   },
   {
     id: "llm-portfolio-projects",
@@ -1011,46 +1023,40 @@ export const OPERATIONS_HANDBOOKS = [
     file: "operations-request-path-handbook.html",
   },
   {
-    id: "operations-vpc-routing",
-    label: "02 VPC·Subnet·Routing·NAT",
-    kind: "인프라·운영 핸드북",
-    file: "operations-vpc-routing-handbook.html",
-  },
-  {
-    id: "operations-security-boundary",
-    label: "03 보안 경계",
-    kind: "인프라·운영 핸드북",
-    file: "operations-security-boundary-handbook.html",
-  },
-  {
     id: "operations-dns-tls",
-    label: "04 DNS·TLS·도메인 운영",
+    label: "02 DNS·TLS·도메인 운영",
     kind: "인프라·운영 핸드북",
     file: "operations-dns-tls-handbook.html",
   },
   {
-    id: "operations-private-connectivity",
-    label: "05 VPN·Private Connectivity",
-    kind: "인프라·운영 핸드북",
-    file: "operations-private-connectivity-handbook.html",
-  },
-  {
     id: "operations-delivery-pipeline",
-    label: "06 CI/CD·Artifact·Environment",
+    label: "03 CI/CD·Artifact·Environment",
     kind: "인프라·운영 핸드북",
     file: "operations-delivery-pipeline-handbook.html",
   },
   {
     id: "operations-runtime-orchestration",
-    label: "07 컨테이너·오케스트레이션·Health Check",
+    label: "04 컨테이너·오케스트레이션·Health Check",
     kind: "인프라·운영 핸드북",
     file: "operations-runtime-orchestration-handbook.html",
   },
   {
-    id: "operations-iac-change",
-    label: "08 IaC·변경관리·Drift",
+    id: "operations-vpc-routing",
+    label: "05 VPC·Subnet·Routing·NAT",
     kind: "인프라·운영 핸드북",
-    file: "operations-iac-change-handbook.html",
+    file: "operations-vpc-routing-handbook.html",
+  },
+  {
+    id: "operations-security-boundary",
+    label: "06 보안 경계",
+    kind: "인프라·운영 핸드북",
+    file: "operations-security-boundary-handbook.html",
+  },
+  {
+    id: "operations-private-connectivity",
+    label: "07 VPN·Private Connectivity",
+    kind: "인프라·운영 핸드북",
+    file: "operations-private-connectivity-handbook.html",
   },
   {
     id: "operations-observability-slo",
@@ -1065,8 +1071,14 @@ export const OPERATIONS_HANDBOOKS = [
     file: "operations-incident-dr-handbook.html",
   },
   {
+    id: "operations-iac-change",
+    label: "10 IaC·변경관리·Drift",
+    kind: "인프라·운영 핸드북",
+    file: "operations-iac-change-handbook.html",
+  },
+  {
     id: "operations-checklist-interview",
-    label: "11 운영 체크리스트·면접 답변",
+    label: "11 운영 인수·릴리즈 리뷰·면접 답변",
     kind: "인프라·운영 핸드북",
     file: "operations-checklist-interview-handbook.html",
   },
@@ -1127,6 +1139,21 @@ const INFRA_ROADMAP_PAGE = {
   pageType: "react",
 };
 
+const INFRA_CONTAINER_HANDBOOKS = [
+  {
+    id: "infra-docker",
+    label: "02 Docker",
+    kind: "인프라 핸드북",
+    file: "infra-docker-handbook.html",
+  },
+  {
+    id: "infra-kubernetes",
+    label: "03 Kubernetes",
+    kind: "인프라 핸드북",
+    file: "infra-kubernetes-handbook.html",
+  },
+];
+
 const INFRA_CORE_HANDBOOKS = INFRA_MENU_SOURCE_HANDBOOKS.filter((item) => !isQaOrQuizItem(item));
 const INFRA_QA_QUIZ_HANDBOOKS = INFRA_MENU_SOURCE_HANDBOOKS.filter(isQaOrQuizItem);
 
@@ -1137,11 +1164,16 @@ const OPERATIONS_QA_QUIZ_HANDBOOKS = OPERATIONS_RUNTIME_MENU_SOURCE_HANDBOOKS.fi
 
 export const INFRA_MENU_HANDBOOKS = renumberMenuItems([
   INFRA_ROADMAP_PAGE,
-  ...INFRA_CORE_HANDBOOKS,
+  INFRA_CORE_HANDBOOKS[0],
+  ...INFRA_CONTAINER_HANDBOOKS,
+  ...INFRA_CORE_HANDBOOKS.slice(1),
 ]);
 
 export const OPERATIONS_GROUP_HANDBOOKS = renumberMenuItems([
   ...OPERATIONS_CORE_HANDBOOKS,
+]);
+
+export const OPERATIONS_CONTEXT_GROUP_HANDBOOKS = renumberMenuItems([
   ...ENGINEERING_CONTEXT_HANDBOOKS,
 ]);
 
@@ -1312,6 +1344,12 @@ export const DESIGN_HANDBOOKS = [
     kind: "디자인 핸드북",
     file: "design-handoff-qa-handbook.html",
   },
+  {
+    id: "practice-design-systems",
+    label: "디자인 실행·시스템 품질",
+    kind: "디자인",
+    file: "practice-design-systems-handbook.html",
+  },
 ];
 
 export const CHEAT_SHEETS = [
@@ -1463,61 +1501,127 @@ export const AI_NATIVE_GROUP_HANDBOOKS = [
 export const DESIGN_PRACTICE_HANDBOOKS = [
   {
     id: "practice-design-foundation",
-    label: "00 디자인 기반·사용자 흐름",
+    label: "00 디자인 기반·문제-흐름 워크북",
     kind: "디자인",
     file: "practice-design-foundation-handbook.html",
   },
   {
-    id: "practice-design-systems",
-    label: "01 디자인 실행·시스템 품질",
+    id: "design-ux-thinking",
+    label: "01 UX 사고와 문제 정의",
     kind: "디자인",
-    file: "practice-design-systems-handbook.html",
+    file: "design-ux-thinking-handbook.html",
+  },
+  {
+    id: "design-information-architecture",
+    label: "02 정보구조와 내비게이션",
+    kind: "디자인",
+    file: "design-information-architecture-handbook.html",
+  },
+  {
+    id: "design-user-flows",
+    label: "03 사용자 흐름과 태스크 설계",
+    kind: "디자인",
+    file: "design-user-flows-handbook.html",
+  },
+  {
+    id: "design-layout-hierarchy",
+    label: "04 UI 레이아웃과 시각 위계",
+    kind: "디자인",
+    file: "design-layout-hierarchy-handbook.html",
+  },
+  {
+    id: "design-interaction-patterns",
+    label: "05 인터랙션 디자인 패턴",
+    kind: "디자인",
+    file: "design-interaction-patterns-handbook.html",
+  },
+  {
+    id: "design-forms-input",
+    label: "06 폼과 입력 경험",
+    kind: "디자인",
+    file: "design-forms-input-handbook.html",
+  },
+  {
+    id: "design-component-patterns",
+    label: "07 컴포넌트 패턴",
+    kind: "디자인",
+    file: "design-component-patterns-handbook.html",
+  },
+  {
+    id: "design-system-tokens",
+    label: "08 디자인 시스템과 토큰",
+    kind: "디자인",
+    file: "design-system-tokens-handbook.html",
+  },
+  {
+    id: "design-ax-interaction-motion",
+    label: "09 AX 인터랙션·마이크로인터랙션",
+    kind: "디자인",
+    file: "design-ax-interaction-motion-handbook.html",
+  },
+  {
+    id: "design-accessibility-inclusive",
+    label: "10 접근성과 인클루시브 디자인",
+    kind: "디자인",
+    file: "design-accessibility-inclusive-handbook.html",
+  },
+  {
+    id: "design-prototyping-testing",
+    label: "11 프로토타입과 사용성 테스트",
+    kind: "디자인",
+    file: "design-prototyping-testing-handbook.html",
+  },
+  {
+    id: "design-handoff-qa",
+    label: "12 디자인 핸드오프와 QA",
+    kind: "디자인",
+    file: "design-handoff-qa-handbook.html",
   },
   {
     id: "practice-visual-design-foundations",
-    label: "02 시각디자인 기초·조형 원리",
+    label: "13 시각디자인 기초·조형 원리",
     kind: "디자인",
     file: "practice-visual-design-foundations-handbook.html",
   },
   {
     id: "practice-color-typography-brand",
-    label: "03 색채·타이포그래피·브랜드 시각 언어",
+    label: "14 색채·타이포그래피·브랜드 시각 언어",
     kind: "디자인",
     file: "practice-color-typography-brand-handbook.html",
   },
   {
     id: "practice-iconography-illustration",
-    label: "04 아이콘·일러스트레이션 시스템",
+    label: "15 아이콘·일러스트레이션 시스템",
     kind: "디자인",
     file: "practice-iconography-illustration-handbook.html",
   },
   {
     id: "practice-data-visualization",
-    label: "05 데이터 시각화",
+    label: "16 데이터 시각화",
     kind: "디자인",
     file: "practice-data-visualization-handbook.html",
   },
   {
     id: "practice-motion-animation",
-    label: "06 모션·애니메이션 원리",
+    label: "17 모션·애니메이션 원리",
     kind: "디자인",
     file: "practice-motion-animation-handbook.html",
   },
   {
     id: "practice-photography-image-literacy",
-    label: "07 사진학·이미지 리터러시",
+    label: "18 사진학·이미지 리터러시",
     kind: "디자인",
     file: "practice-photography-image-literacy-handbook.html",
   },
   {
     id: "design-ai-product-ux",
-    label: "08 AI 제품 UX·신뢰 설계",
+    label: "19 AI 제품 UX·신뢰 설계",
     kind: "디자인",
     file: "design-ai-product-ux-handbook.html",
   },
   {
     id: "design-system-directing",
-    label: "09 디자인시스템 거버넌스·디렉팅",
+    label: "20 디자인시스템 거버넌스·디렉팅",
     kind: "디자인",
     file: "design-system-directing-handbook.html",
   },
@@ -1563,6 +1667,11 @@ export const HANDBOOK_GROUPS = [
     label: "운영",
     items: OPERATIONS_GROUP_HANDBOOKS,
   },
+  {
+    key: "operations-context",
+    label: "운영 확장",
+    items: OPERATIONS_CONTEXT_GROUP_HANDBOOKS,
+  },
   { key: "quiz", label: "퀴즈", items: QUIZ_TOOL_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   {
@@ -1590,6 +1699,7 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_BACKEND_HANDBOOKS,
   ...INFRA_MENU_HANDBOOKS,
   ...OPERATIONS_GROUP_HANDBOOKS,
+  ...OPERATIONS_CONTEXT_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,

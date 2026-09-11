@@ -3,7 +3,7 @@
   grid-template-columns: 264px minmax(0, 1fr);
   max-width: 1280px;
   margin: 0 auto;
-  padding-top: 72px;
+  padding-top: 56px;
   background: var(--paper);
   overflow-x: clip;
 }
@@ -15,11 +15,11 @@
 
 .handbook-toc {
   position: sticky;
-  top: 72px;
-  height: calc(100vh - 72px);
+  top: 56px;
+  height: calc(100vh - 56px);
   overflow-y: auto;
   border-right: 1px solid var(--line);
-  padding: 32px 20px 48px;
+  padding: 20px 14px 28px;
   background: var(--paper);
 }
 
@@ -30,7 +30,7 @@
 
 .handbook-main {
   min-width: 0;
-  padding: 0 56px 120px;
+  padding: 0 40px 96px;
   background: var(--paper);
 }
 
@@ -46,7 +46,7 @@
 .handbook-toc .nav-title {
   font-size: 15px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   letter-spacing: -0.01em;
 }
 
@@ -56,7 +56,7 @@
   align-items: baseline;
   text-decoration: none;
   color: var(--ink-soft);
-  padding: 7px 8px;
+  padding: 5px 6px;
   border-radius: 0;
   font-size: 13.5px;
   line-height: 1.4;
@@ -78,7 +78,7 @@
 }
 
 .handbook-main .hero {
-  padding: 72px 0 48px;
+  padding: 52px 0 34px;
   border-bottom: 1px solid var(--ink);
 }
 
@@ -88,14 +88,14 @@
   letter-spacing: 0.12em;
   color: var(--green);
   display: flex;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .handbook-main .hero-serial span {
   border: 1px solid var(--line);
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 0;
   background: var(--panel);
 }
@@ -110,7 +110,7 @@
 }
 
 .handbook-main .hero-sub {
-  margin-top: 18px;
+  margin-top: 12px;
   margin-bottom: 0;
   font-size: 17px;
   color: var(--ink-soft);
@@ -118,7 +118,7 @@
 }
 
 .handbook-main .hero-meta {
-  margin-top: 28px;
+  margin-top: 18px;
   font-family: var(--mono);
   font-size: 11.5px;
   color: var(--ink-soft);
@@ -126,16 +126,16 @@
 }
 
 .handbook-main section {
-  padding-top: 72px;
+  padding-top: 44px;
 }
 
 .handbook-main .ch-head {
   display: flex;
   align-items: baseline;
-  gap: 14px;
+  gap: 10px;
   border-bottom: 2px solid var(--ink);
-  padding-bottom: 12px;
-  margin-bottom: 28px;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
 }
 
 .handbook-main .ch-code {
@@ -158,7 +158,7 @@
 .handbook-main h3 {
   font-size: 18px;
   font-weight: 700;
-  margin: 36px 0 12px;
+  margin: 24px 0 8px;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -173,7 +173,7 @@
 }
 
 .handbook-main p {
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 }
 
 .handbook-main p.lede {
@@ -189,11 +189,11 @@
 
 .handbook-main ul,
 .handbook-main ol {
-  margin: 0 0 16px 22px;
+  margin: 0 0 12px 18px;
 }
 
 .handbook-main li {
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .handbook-main code {
@@ -209,9 +209,9 @@
   border: 1px solid var(--line);
   border-left: 3px solid var(--green);
   background: var(--panel);
-  padding: 18px 22px;
+  padding: 14px 16px;
   border-radius: 0;
-  margin: 22px 0;
+  margin: 16px 0;
 }
 
 .handbook-main .callout.warn {
@@ -258,7 +258,7 @@
 .handbook-main table {
   width: 100%;
   border-collapse: collapse;
-  margin: 22px 0;
+  margin: 16px 0;
   font-size: 14px;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -272,12 +272,12 @@
   font-weight: 600;
   color: var(--green-deep);
   background: var(--green-tint);
-  padding: 10px 14px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--line);
 }
 
 .handbook-main td {
-  padding: 11px 14px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   vertical-align: top;
   line-height: 1.6;
@@ -328,7 +328,7 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin: 22px 0;
+  margin: 16px 0;
   font-family: var(--mono);
   font-size: 12.5px;
 }
@@ -336,7 +336,7 @@
 .handbook-main .flow .step {
   background: var(--panel);
   border: 1px solid var(--ink);
-  padding: 8px 14px;
+  padding: 6px 10px;
   border-radius: 0;
   font-weight: 500;
 }
@@ -355,7 +355,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin: 24px 0;
+  margin: 16px 0;
 }
 
 .handbook-main .shortcut-link {
@@ -367,7 +367,7 @@
   border-left: 3px solid var(--green);
   background: var(--panel);
   color: var(--ink);
-  padding: 18px 20px;
+  padding: 14px 16px;
   text-decoration: none;
 }
 
@@ -404,8 +404,8 @@
   background: var(--ink);
   color: #e7eaf1;
   border-radius: 0;
-  padding: 22px 26px;
-  margin: 24px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
   font-size: 13.5px;
   line-height: 2;
   overflow-x: auto;
@@ -418,8 +418,8 @@
   background: var(--ink);
   color: #e7eaf1;
   border-radius: 0;
-  padding: 22px 26px;
-  margin: 24px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
   font-size: 13.5px;
   line-height: 1.85;
   overflow-x: auto;
@@ -439,8 +439,8 @@
   border-left: 3px solid var(--green);
   background: var(--panel);
   color: var(--ink);
-  padding: 18px 22px;
-  margin: 22px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
   font-family: var(--sans);
   font-size: 14.5px;
   line-height: 1.75;
@@ -583,12 +583,12 @@
   border-radius: 0;
   overflow: hidden;
   background: var(--panel);
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .handbook-main .g-row {
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: 200px 1fr;
   border-bottom: 1px solid var(--line);
 }
 
@@ -597,7 +597,7 @@
 }
 
 .handbook-main .g-term {
-  padding: 13px 18px;
+  padding: 10px 12px;
   background: var(--green-tint);
 }
 
@@ -607,20 +607,18 @@
 }
 
 .handbook-main .g-term span {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--green-deep);
+  display: none;
 }
 
 .handbook-main .g-def {
-  padding: 13px 18px;
+  padding: 10px 12px;
   font-size: 14px;
   line-height: 1.65;
 }
 
 .handbook-main footer {
-  margin-top: 96px;
-  padding-top: 24px;
+  margin-top: 64px;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
   font-family: var(--mono);
   font-size: 11px;
@@ -630,8 +628,8 @@
 }
 
 .handbook-main .handbook-practical-example {
-  margin-top: 72px;
-  padding: 36px 28px 28px;
+  margin-top: 40px;
+  padding: 20px 16px 16px;
   border: 1px solid var(--line);
   border-radius: 0;
   background: var(--panel);
@@ -686,16 +684,16 @@
 }
 
 .handbook-main .handbook-practical-example .ch-head {
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .handbook-main .practical-example-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px 28px;
-  margin-top: 28px;
-  padding-top: 22px;
+  gap: 16px 20px;
+  margin-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
 }
 
@@ -704,7 +702,7 @@
 }
 
 .handbook-main .practical-example-block h3 {
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 800;
@@ -718,22 +716,22 @@
 }
 
 .handbook-main .practical-example-block li {
-  margin: 8px 0;
+  margin: 5px 0;
 }
 
 .handbook-main .practical-example-review {
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px dashed var(--line);
 }
 
 .handbook-main .practical-example-review ul {
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .handbook-main .practical-example-training {
-  margin-top: 22px;
-  padding-top: 18px;
+  margin-top: 16px;
+  padding-top: 14px;
   border-top: 1px dashed var(--line);
 }
 
@@ -742,7 +740,7 @@
 }
 
 .handbook-main .roadmap-page {
-  padding-bottom: 24px;
+  padding-bottom: 16px;
 }
 
 .handbook-main .roadmap-map-figure {
@@ -989,7 +987,7 @@
 .handbook-empty {
   max-width: 760px;
   margin: 80px auto;
-  padding: 24px;
+  padding: 16px;
   border: 1px dashed var(--line);
   border-radius: 0;
   color: var(--ink-soft);
@@ -1003,14 +1001,14 @@
 
   .handbook-mobile-toc-toggle {
     position: fixed;
-    top: 16px;
+    top: 12px;
     right: 14px;
     z-index: 999;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    min-height: 38px;
-    padding: 0 13px;
+    min-height: 34px;
+    padding: 0 10px;
     border: 1px solid var(--line);
     background: var(--paper);
     color: var(--ink);
@@ -1038,7 +1036,7 @@
 
   .handbook-toc {
     position: fixed;
-    top: 78px;
+    top: 70px;
     right: 14px;
     left: 14px;
     z-index: 40;
@@ -1051,7 +1049,7 @@
     border: 1px solid var(--line);
     background: var(--panel);
     box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
-    padding: 18px;
+    padding: 14px;
     overflow-y: auto;
     white-space: normal;
     overscroll-behavior: contain;
@@ -1063,7 +1061,7 @@
   }
 
   .handbook-main {
-    padding: 0 16px 128px;
+    padding: 0 14px 96px;
     font-size: 15px;
     line-height: 1.72;
   }
@@ -1077,9 +1075,9 @@
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 34px;
+    min-height: 32px;
     margin-top: 4px;
-    padding: 8px 10px;
+    padding: 6px 8px;
     border: 1px solid var(--line);
     background: var(--panel);
     font-size: 12.5px;
@@ -1088,12 +1086,12 @@
 
 @media (max-width: 900px) {
   .handbook-main .hero {
-    padding: 38px 0 30px;
+    padding: 26px 0 20px;
   }
 
   .handbook-main .hero-serial {
     gap: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     font-size: 10.5px;
   }
 
@@ -1103,7 +1101,7 @@
   }
 
   .handbook-main .hero-meta {
-    margin-top: 18px;
+    margin-top: 12px;
     font-size: 10.5px;
   }
 
@@ -1117,20 +1115,20 @@
   }
 
   .handbook-main h3 {
-    margin-top: 28px;
+    margin-top: 20px;
     font-size: 17px;
   }
 
   .handbook-main section {
-    padding-top: 56px;
+    padding-top: 40px;
   }
 
   .handbook-main .ch-head {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
-    padding-bottom: 10px;
-    margin-bottom: 22px;
+    gap: 6px;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   .handbook-main .ch-code {
@@ -1150,21 +1148,21 @@
   }
 
   .handbook-main .callout {
-    padding: 14px 16px;
-    margin: 18px 0;
+    padding: 12px 14px;
+    margin: 14px 0;
   }
 
   .handbook-main .handbook-practical-example {
-    margin-top: 48px;
-    padding: 24px 16px 18px;
+    margin-top: 32px;
+    padding: 18px 14px 14px;
     border-radius: 0;
   }
 
   .handbook-main .practical-example-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
-    margin-top: 22px;
-    padding-top: 18px;
+    gap: 14px;
+    margin-top: 16px;
+    padding-top: 14px;
   }
 
   .handbook-main .roadmap-gate-grid {
@@ -1172,7 +1170,7 @@
   }
 
   .handbook-main .roadmap-diagram-frame {
-    padding: 10px;
+    padding: 8px;
   }
 
   .handbook-main .roadmap-mobile-flow {
@@ -1200,7 +1198,7 @@
   .handbook-main th,
   .handbook-main td {
     min-width: 132px;
-    padding: 9px 10px;
+    padding: 7px 8px;
   }
 
   .handbook-main .flow {
@@ -1220,14 +1218,14 @@
 
   .handbook-main .shortcut-link {
     min-height: 0;
-    padding: 15px 16px;
+    padding: 12px 14px;
   }
 
   .handbook-main .serial-card,
   .handbook-main .snippet-card {
-    padding: 16px;
+    padding: 12px;
     padding-bottom: 52px;
-    margin: 18px 0;
+    margin: 14px 0;
     font-size: 12.5px;
     line-height: 1.8;
     max-width: 100%;
@@ -1266,7 +1264,7 @@
 
   .handbook-main .g-term,
   .handbook-main .g-def {
-    padding: 11px 14px;
+    padding: 9px 10px;
     min-width: 0;
     overflow-wrap: anywhere;
   }
@@ -1293,14 +1291,14 @@
   }
 
   .handbook-main table.mobile-card-table tr {
-    margin: 12px 0;
+    margin: 10px 0;
     border: 1px solid var(--line);
     background: var(--panel);
   }
 
   .handbook-main table.mobile-card-table td {
     min-width: 0;
-    padding: 11px 12px;
+    padding: 9px 10px;
     border-bottom: 1px dashed var(--line);
     overflow-wrap: anywhere;
   }
@@ -1328,11 +1326,11 @@
 
 @media (max-width: 380px) {
   .handbook-main {
-    padding-inline: 14px;
+    padding-inline: 12px;
   }
 
   .handbook-main .hero {
-    padding-top: 32px;
+    padding-top: 22px;
   }
 
   .handbook-main h1 {
@@ -1354,11 +1352,11 @@
   min-width: 0;
   border: 1px solid var(--line);
   background: var(--panel);
-  padding: 18px;
+  padding: 14px;
 }
 
 .handbook-main .personal-notes {
-  margin-top: 34px;
+  margin-top: 20px;
 }
 
 .handbook-main .personal-note-list {
@@ -1369,7 +1367,7 @@
 .handbook-main .personal-note {
   border: 1px solid var(--line);
   background: var(--paper);
-  padding: 13px 14px;
+  padding: 10px 12px;
 }
 
 .handbook-main .personal-note-meta {
@@ -1427,8 +1425,8 @@
 
 .handbook-main .quiz-head {
   border-bottom: 2px solid var(--ink);
-  padding-bottom: 20px;
-  margin-bottom: 28px;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .handbook-main .quiz-kicker {
@@ -1450,7 +1448,7 @@
 .handbook-main .quiz-progress {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   font-family: var(--mono);
   font-size: 13px;
   color: var(--ink-soft);

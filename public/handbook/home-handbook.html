@@ -323,7 +323,7 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
 <table>
 <tr><th>역량 층</th><th>담당하는 질문</th><th>이 핸드북에서 확인할 문서</th><th>남겨야 할 증거</th></tr>
 <tr><td>기본기</td><td>왜 이 구조가 맞고 어디서 깨지는가</td><td>CS 기초, 컴퓨터 시스템, 언어 런타임, 응용 수학·측정</td><td>복잡도 판단, resource trace, benchmark evidence, 불변식 설명</td></tr>
-<tr><td>제품 구현</td><td>사용자 흐름이 UI, API, DB 상태로 안전하게 닫히는가</td><td>프론트엔드 핵심, 백엔드 핵심, 데이터 계층, Java·Spring·JPA</td><td>UI state model, API contract, transaction boundary, 테스트 결과</td></tr>
+<tr><td>제품 구현</td><td>사용자 흐름이 UI, API, DB 상태로 안전하게 닫히는가</td><td>프론트엔드 데이터·상태·폼, TypeScript·JavaScript 런타임, 백엔드 핵심, 데이터 계층</td><td>UI state model, schema boundary, API contract, transaction boundary, 테스트 결과</td></tr>
 <tr><td>운영 책임</td><td>배포 후 문제가 생기면 어떻게 감지하고 되돌리는가</td><td>인프라·운영, 런타임 품질, 플랫폼 도구</td><td>runbook, log/metric/trace, rollback plan, incident note</td></tr>
 <tr><td>AI Native 실행</td><td>AI를 빠른 초안이 아니라 검증 가능한 작업 시스템으로 쓰는가</td><td>LLM, AI Native 훈련</td><td>task spec, context package, eval dataset, security fixture, cost/latency trace</td></tr>
 <tr><td>제품 경험</td><td>기능이 실제 사용 흐름과 의사결정 구조에 맞는가</td><td>디자인 실무, 프론트엔드 인터랙션·품질</td><td>IA, user flow, accessibility check, QA gate, before/after 화면</td></tr>
@@ -407,13 +407,14 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>홈</b><span>starting point</span></div><div class="g-def">전체 로드맵과 학습 순서를 확인하는 입구입니다. 세부 문서를 바로 찾기보다 어떤 묶음에서 시작할지 결정합니다.</div></div>
 <div class="g-row"><div class="g-term"><b>CS 기본</b><span>engineering foundation</span></div><div class="g-def">CS 기초와 알고리즘 사고, 컴퓨터 시스템·OS·네트워크 기초, 프로그래밍 언어·런타임, 응용 수학·측정·검증을 묶습니다. 목적은 지식 암기가 아니라 설계 선택, 성능 판단, 오류 분석을 방어할 근거를 만드는 것입니다.</div></div>
-<div class="g-row"><div class="g-term"><b>프론트엔드</b><span>frontend engineering</span></div><div class="g-def">프론트엔드 핵심에서 브라우저와 접근성의 기준을 잡고, 프론트엔드 인터랙션, 프론트엔드 모션·애니메이션, 프론트엔드 그래픽·3D·WebGL로 사용자 입력과 표현 품질을 깊게 나눕니다. 이후 프론트엔드 성능·진단, SEO·AEO·GEO·애널리틱스, 프론트엔드 품질·릴리스로 발견 가능성, 측정, 보안, 테스트, 배포 증거를 닫습니다.</div></div>
+<div class="g-row"><div class="g-term"><b>프론트엔드</b><span>frontend engineering</span></div><div class="g-def">프론트엔드 핵심에서 브라우저와 접근성 기준을 잡고, 프론트엔드 데이터·상태·폼과 TypeScript·JavaScript 런타임에서 상태 소유권, API 계약, 런타임 검증을 닫습니다. 이후 프론트엔드 인터랙션, 프론트엔드 모션·애니메이션, 프론트엔드 그래픽·3D·WebGL로 표현 품질을 깊게 나누고, 프론트엔드 성능·진단, SEO·AEO·GEO·애널리틱스, 프론트엔드 품질·릴리스로 측정과 운영 증거를 닫습니다.</div></div>
 <div class="g-row"><div class="g-term"><b>백엔드</b><span>backend engineering</span></div><div class="g-def">백엔드 핵심, 백엔드 핵심 Q&A, 백엔드 인증·보안, 백엔드 인증·보안 Q&A, 백엔드 아키텍처, 데이터 계층·저장소 심화, 런타임 품질·장애대응, 플랫폼 도구·운영 기본기, Java·Spring·JPA 내부 동작과 각 Q&A를 묶습니다. 목적은 API, 트랜잭션, 권한, 데이터 모델, 장애 대응을 하나의 서버 책임으로 연결하고 예상 질문·답변·꼬리질문 훈련까지 이어가는 것입니다.</div></div>
-<div class="g-row"><div class="g-term"><b>인프라</b><span>network & cloud boundary</span></div><div class="g-def">인프라·운영 로드맵에서 시작해 서비스 요청 경로, VPC·라우팅, 보안 경계, DNS·TLS, VPN·Private Connectivity, AWS·Azure 실전 시나리오와 각 Q&A를 묶습니다. 목적은 요청이 어떤 주소, 경로, 정책, provider 경계를 지나가는지 증거로 좁히는 것입니다.</div></div>
-<div class="g-row"><div class="g-term"><b>운영</b><span>runtime & reliability</span></div><div class="g-def">CI/CD·Artifact·Environment, 컨테이너·오케스트레이션·Health Check, IaC·변경관리·Drift, Observability·SLO, Incident Response·Rollback·DR, 운영 체크리스트·면접 답변, AI·LLM 운영 Addendum과 각 Q&A를 묶습니다. 여기에 규모 감각, 플랫폼 생산성, 품질·릴리스, 성능 지표, 라이브러리·오픈소스, 마이그레이션, 프론트엔드 런타임 생태계, 운영 책임 같은 엔지니어링 맥락을 붙여 기술 결정을 조직과 운영 언어로 해석합니다.</div></div>
-<div class="g-row"><div class="g-term"><b>LLM</b><span>ai systems</span></div><div class="g-def">LLM 로드맵, AI Native 작업 표준, LLM 기초, 프롬프팅, RAG, 평가, Agent·Tool Use, 보안·거버넌스, 앱 아키텍처·운영, 멀티모달, 커스터마이징, 포트폴리오 프로젝트를 묶습니다. 목적은 모델 호출을 제품 기능으로 만들 때 필요한 prompt contract, eval, security, cost/latency, 운영 기준을 갖추는 것입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>인프라</b><span>network & cloud boundary</span></div><div class="g-def">인프라·운영 로드맵에서 시작해 Docker, Kubernetes, 서비스 요청 경로, VPC·라우팅, 보안 경계, DNS·TLS, VPN·Private Connectivity, AWS·Azure 실전 시나리오와 각 Q&A를 묶습니다. 목적은 애플리케이션이 어떤 이미지와 워크로드로 실행되고, 요청이 어떤 주소, 경로, 정책, provider 경계를 지나가는지 증거로 좁히는 것입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>운영</b><span>runtime & reliability</span></div><div class="g-def">CI/CD·Artifact·Environment, 컨테이너·오케스트레이션·Health Check, Observability·SLO, Incident Response·Rollback·DR, IaC·변경관리·Drift, 운영 인수·릴리즈 리뷰·면접 답변, AI·LLM 운영 Addendum과 각 Q&A를 묶습니다. 목적은 배포된 코드가 어떤 런타임에서 어떻게 관측되고, 깨졌을 때 어떤 기준으로 복구되는지 증거로 설명하는 것입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>운영 확장</b><span>engineering context</span></div><div class="g-def">규모 감각, 플랫폼 생산성, 품질·릴리스, 성능 지표, 라이브러리·오픈소스, 마이그레이션, 프론트엔드 런타임 생태계, 운영 책임 같은 엔지니어링 맥락을 묶습니다. 목적은 운영 실무 문서를 읽은 뒤 기술 결정을 조직, 비용, 생산성, 호환성 언어로 확장하는 것입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>LLM</b><span>ai systems</span></div><div class="g-def">LLM 로드맵에서 방향을 잡고, LLM 기초, 프로덕션 프롬프팅, RAG, 평가, Agent·Tool Use, 보안·거버넌스, 앱 아키텍처·운영, 멀티모달, 커스터마이징을 거쳐 AI Native 작업 표준과 포트폴리오 프로젝트로 닫습니다. 목적은 모델 호출을 제품 기능으로 만들 때 필요한 prompt contract, eval, security, cost/latency, 운영 기준을 갖추는 것입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>AI Native</b><span>execution loop</span></div><div class="g-def">AI Agent·Loop 업무 흐름, 실제 업무과정, 요구사항 정의, 기획, UX/UI 디자인 검토, 프론트엔드 구현 루프, 백엔드·DB·API 설계 루프, 테스트·리뷰·릴리스 자동화, AX 실행 루프와 거버넌스를 묶습니다. 목적은 AI 사용을 빠른 초안이 아니라 Plan → Act → Verify → Reflect로 검증되는 작업 체계로 만드는 것입니다.</div></div>
-<div class="g-row"><div class="g-term"><b>디자인</b><span>product experience</span></div><div class="g-def">디자인 기반·사용자 흐름, 디자인 실행·시스템 품질, 시각디자인, 색채·타이포그래피, 아이콘·일러스트레이션, 데이터 시각화, 모션, 사진·이미지 리터러시, AI Product UX를 묶습니다. 목적은 화면 장식이 아니라 문제 정의, 정보구조, 상태, 시각 언어, 시스템 품질을 개발과 연결하는 것입니다.</div></div>
+<div class="g-row"><div class="g-term"><b>디자인</b><span>product experience</span></div><div class="g-def">디자인 기반·문제-흐름 워크북에서 시작해 UX 문제 정의, 정보구조, 사용자 흐름, 레이아웃, 인터랙션, 폼, 컴포넌트, 토큰, 접근성, 프로토타입, 핸드오프를 세부 하위 문서로 나눕니다. 이후 시각디자인, 색채·타이포그래피, 아이콘·일러스트레이션, 데이터 시각화, 모션, 사진·이미지 리터러시, AI 제품 UX, 디자인시스템 거버넌스로 확장합니다. 목적은 화면 장식이 아니라 문제 정의, 상태, 시각 언어, 개발 전달, 시스템 품질을 연결하는 것입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>실무 도구</b><span>working tools</span></div><div class="g-def">치트시트, 실무 준비·작업 루프, 빌드·설정·릴리스 운영을 묶습니다. 목적은 반복 명령, 환경 설정, 로그 확인, CI/CD, 빌드와 릴리스 절차를 재현 가능한 작업 루틴으로 만드는 것입니다.</div></div>
 <div class="g-row"><div class="g-term"><b>커리어</b><span>career evidence</span></div><div class="g-def">면접 전략·커리어 포지셔닝, 개인 이력 정리, 프론트엔드·JS/TS 면접, 백엔드·Java/Spring 면접, CS·DB·보안 심화, 인프라·분산·클라우드, 시스템 설계·프로젝트, 컬처·협업·코드리뷰, 코딩테스트, AI Native 포트폴리오를 묶습니다. 목적은 학습과 실무 산출물을 답변, 포트폴리오, 직무별 포지셔닝으로 바꾸는 것입니다.</div></div>
 </div>
@@ -468,10 +469,10 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
     <strong>CS 기초와 알고리즘 사고</strong>
     <span>기본기, 시스템 사고, 구현 판단의 시작점</span>
   </a>
-  <a class="shortcut-link" href="#handbook-engineering-frontend-performance" data-handbook-id="engineering-frontend-performance">
+  <a class="shortcut-link" href="#handbook-engineering-frontend-data-state-form" data-handbook-id="engineering-frontend-data-state-form">
     <span class="shortcut-kicker">프론트엔드</span>
-    <strong>프론트엔드 성능·진단</strong>
-    <span>렌더링, LCP/INP, DevTools 진단을 빠르게 확인</span>
+    <strong>프론트엔드 데이터·상태·폼</strong>
+    <span>상태 소유권, API 오류 UX, 폼 검증 계약을 먼저 고정</span>
   </a>
   <a class="shortcut-link" href="#handbook-engineering-backend-core" data-handbook-id="engineering-backend-core">
     <span class="shortcut-kicker">백엔드</span>
@@ -520,8 +521,8 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
   </a>
   <a class="shortcut-link" href="#handbook-practice-design-foundation" data-handbook-id="practice-design-foundation">
     <span class="shortcut-kicker">디자인 실무</span>
-    <strong>디자인 기반·사용자 흐름</strong>
-    <span>문제 정의, IA, 사용자 흐름부터 잡기</span>
+    <strong>디자인 기반·문제-흐름 워크북</strong>
+    <span>문제 정의, IA, 사용자 흐름, 상태·예외를 먼저 닫기</span>
   </a>
   <a class="shortcut-link" href="#handbook-design-ai-product-ux" data-handbook-id="design-ai-product-ux">
     <span class="shortcut-kicker">디자인 실무</span>
@@ -578,7 +579,7 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
 <table>
 <tr><th>트랙</th><th>읽을 순서</th><th>완료 산출물</th></tr>
 <tr><td>입문</td><td>실무 준비 → CS → 시스템 → 언어 → 프론트/백엔드 핵심</td><td>개발 환경 체크, 작은 기능 구현 기록, 디버깅 노트</td></tr>
-<tr><td>풀스택 제품 개발</td><td>디자인 기반 → 프론트엔드 핵심 → 백엔드 핵심 → 데이터 → 인증·보안 → 릴리스</td><td>user flow, API 계약, DB 변경 계획, 테스트 리포트</td></tr>
+<tr><td>풀스택 제품 개발</td><td>디자인 기반 → 프론트엔드 핵심 → 데이터·상태·폼 → TypeScript·JavaScript 런타임 → 백엔드 핵심 → 데이터 → 인증·보안 → 릴리스</td><td>user flow, state ownership map, schema boundary, API 계약, DB 변경 계획, 테스트 리포트</td></tr>
 <tr><td>AI Native 풀스택 업무</td><td>AI Agent·Loop 업무 흐름 → 실제 업무과정 → 요구사항 정의 → 기획 → 디자인 검토 → 프론트 구현 → 백엔드/API → 테스트·릴리스</td><td>workday action log, requirements questions, user flow, screen checklist, API contract, verification log</td></tr>
 <tr><td>AX 작업 체계</td><td>AX 기반 → 실행 루프 → 확장/거버넌스 → AI 작업 위임 템플릿</td><td>context package, episode log, failure taxonomy, approval trace</td></tr>
 <tr><td>커리어 증거화</td><td>커리어 전략 → 프로젝트 심층 → AI Native 포트폴리오</td><td>evidence pack, 30초/90초 답변, portfolio README</td></tr>
@@ -591,13 +592,13 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
 <table>
 <tr><th>그룹</th><th>완료 산출물</th></tr>
 <tr><td>CS 기본</td><td>복잡도 판단, resource trace, benchmark evidence, 불변식 설명</td></tr>
-<tr><td>프론트엔드</td><td>UI state model, 접근성 체크, 성능 진단, 릴리스 품질 게이트</td></tr>
+<tr><td>프론트엔드</td><td>UI state model, form fixture packet, schema boundary map, 접근성 체크, 성능 진단, 릴리스 품질 게이트</td></tr>
 <tr><td>백엔드</td><td>API 계약서, DB 변경 계획, 권한·트랜잭션 검토, 장애 대응 메모</td></tr>
 <tr><td>LLM</td><td>prompt contract, eval dataset, retrieval eval report, security review packet</td></tr>
 <tr><td>AI Native 훈련</td><td>competency scorecard, lab result, context package, red-team report, replay trace</td></tr>
 <tr><td>인프라·운영</td><td>SLO 초안, dashboard spec, incident runbook, rollback/fallback plan</td></tr>
 <tr><td>AI Native 훈련 / AX 실행</td><td>task spec, context package, agent episode log, verification log</td></tr>
-<tr><td>디자인 실무</td><td>problem brief, flow map, uncertainty matrix, handoff packet</td></tr>
+<tr><td>디자인 실무</td><td>problem brief, IA map, flow map, design token map, accessibility fixture, uncertainty matrix, handoff packet</td></tr>
 <tr><td>실무 도구</td><td>반복 명령 runbook, 환경 체크리스트, 릴리스 체크리스트</td></tr>
 <tr><td>면접·커리어</td><td>evidence pack, STAR 답변, 시스템 설계 다이어그램, 공개 README</td></tr>
 </table>
@@ -609,7 +610,7 @@ W3(새로움에 끌림)이 보통은 산만함으로 끝나는데, 여기서는 
 <table>
 <tr><th>트랙</th><th>완료 산출물</th><th>연결해야 할 기준</th></tr>
 <tr><td>AI Native / AX</td><td>eval packet, workflow log, agent handoff, red-team note</td><td>기준일, fixture, metric threshold, 승인/rollback 기준</td></tr>
-<tr><td>디자인</td><td>before/after, handoff sample, token·accessibility check</td><td>시각 변경 근거, 개발 전달 샘플, 권리 검증, 완료 기준</td></tr>
+<tr><td>디자인</td><td>before/after, handoff sample, token·accessibility check, visual regression evidence</td><td>시각 변경 근거, 개발 전달 샘플, 권리 검증, 완료 기준</td></tr>
 <tr><td>실무 도구</td><td>setup packet, troubleshooting card, build/release packet</td><td>precheck, dry-run, rollback, 실행 로그, 자가검수 표</td></tr>
 <tr><td>커리어</td><td>evidence ledger, answer card, portfolio proof map</td><td>수치 산정 기준, 증거 위치, 공개 가능 범위, 과장 방지 문장</td></tr>
 <tr><td>엔지니어링·운영</td><td>runbook, incident packet, release gate, verification report</td><td>입력, 명령 출력, pass/fail, 소유자, 실패 시 조치</td></tr>

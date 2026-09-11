@@ -28,7 +28,6 @@
   <a href="#qa-12"><span class="code">Q12</span>pipeline 권한과 runner isolation은 어디를 trust boundary로 보나요?</a>
   <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
-  <a href="#qa-validation-criteria"><span class="code">VERIFY</span>Q&A 검증 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -263,19 +262,6 @@ CI token permission matrix, runner group policy, job OIDC claim, secret exposure
 </div>
 </section>
 
-<section id="qa-validation-criteria">
-<div class="ch-head"><span class="ch-code">VERIFY</span><h2>Q&A 검증 기준</h2></div>
-<p class="lede">Q&amp;A 답변은 기준일, 관련 본문 앵커, 확인 명령/로그, 좋은 답변과 나쁜 답변의 차이가 함께 있어야 통과로 본다. 기준일은 <strong>2026-07-09</strong>이며, 문항별 최신성은 실제 운영 도구 출력으로 다시 고정한다.</p>
-<table>
-<tr><th>검증 항목</th><th>기준</th></tr>
-<tr><td>관련 본문 앵커</td><td><a href="operations-delivery-pipeline-handbook.html#delivery-evidence-packet">CI/CD·Artifact·Environment 운영 증거 패킷</a>을 먼저 읽고 답변의 증거 이름을 맞춘다.</td></tr>
-<tr><td>확인 명령/로그</td><td>SLSA/SBOM/signature verify, runner isolation log, artifact digest, rollback release id</td></tr>
-<tr><td>좋은 답변</td><td>digest, SBOM, signature, runner 권한, rollback 기준을 한 답변 안에서 연결한다.</td></tr>
-<tr><td>나쁜 답변</td><td>CI가 초록색이면 배포해도 된다고만 말한다.</td></tr>
-<tr><td>승인/rollback 기준</td><td>severity, 사용자 영향, rollback 가능성, 승인자를 답변 마지막에 명시한다.</td></tr>
-</table>
-
-</section>
 <footer>OPERATIONS QA TRAINING PACKET · CI/CD·Artifact·Environment Q&amp;A · generated for handbook practice</footer>
 </main>
 </div>

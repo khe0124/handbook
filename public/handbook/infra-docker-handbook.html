@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker | Dev Handbook</title>
+</head>
+<body>
+<div class="shell">
+<nav aria-label="목차">
+  <div class="nav-brand">INFRA · DOCKER</div>
+  <div class="nav-title">Docker</div>
+  <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
+  <a href="#ch1"><span class="code">DCK-01</span>이미지와 컨테이너</a>
+  <a href="#ch2"><span class="code">DCK-02</span>Dockerfile</a>
+  <a href="#ch3"><span class="code">DCK-03</span>네트워크와 볼륨</a>
+  <a href="#ch4"><span class="code">DCK-04</span>런타임 제한</a>
+  <a href="#ch5"><span class="code">DCK-05</span>보안·배포 증거</a>
+  <a href="#ch6"><span class="code">PRACTICE</span>출력 판독</a>
+  <a href="#ch7"><span class="code">TERM</span>용어사전</a>
+  <a href="#ch8"><span class="code">SUMMARY</span>총정리</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial">
+    <span>DOC : INFRA-DOCKER</span>
+    <span>SCOPE : IMAGE · RUNTIME · NETWORK · DEPLOYMENT</span>
+    <span>LANG : KO</span>
+  </div>
+  <h1>Docker</h1>
+  <p class="hero-sub">Docker를 로컬 편의 도구가 아니라 재현 가능한 실행 환경과 배포 artifact로 이해한다</p>
+  <div class="hero-meta">FORMAT : 개념 → 증거 → 출력 판독 → 운영 연결 · UPDATED 2026-09</div>
+</header>
+
+<section id="chindex">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
+<p class="lede">프론트엔드 개발자가 Docker를 배워야 하는 이유는 “컨테이너를 띄운다”가 아니라 빌드 산출물, 런타임 환경, 네트워크 경계, 배포 재현성을 같은 언어로 설명하기 위해서입니다.</p>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>시작 증거</b><span>FE bridge</span></div><div class="g-def">로컬에서는 되지만 배포 컨테이너에서만 깨지는 env, file path, port, node version, native dependency 차이를 확인합니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>자주 만나는 상황</b><span>debug</span></div><div class="g-def">이미지 빌드는 성공했지만 컨테이너가 즉시 종료되거나, 포트 매핑은 했는데 reverse proxy에서 502가 나는 경우를 다룹니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>완료 산출물</b><span>evidence</span></div><div class="g-def">Dockerfile, image digest, docker inspect, container logs, health check, rollback 가능한 tag 정책을 남깁니다.</div></div>
+</div>
+</section>
+
+<section id="ch1">
+<div class="ch-head"><span class="ch-code">DCK-01</span><h2>이미지와 컨테이너</h2></div>
+<p class="lede">이미지는 실행 가능한 파일시스템과 metadata를 담은 immutable artifact이고, 컨테이너는 그 이미지를 격리된 프로세스로 실행한 상태입니다. tag는 이름일 뿐이며 운영 증거는 digest로 고정해야 합니다.</p>
+<div class="semantic-card">
+  <span class="sc-label">INFRA DECISION</span>
+  <p><b>판단 질문</b> 지금 실행 중인 컨테이너가 배포하려던 이미지와 같은가?</p>
+  <p><b>확인 증거</b> image tag, image digest, container id, created time, command, env readback</p>
+  <p><b>실패 신호</b> latest tag 재사용, registry에는 새 이미지가 있지만 host는 예전 digest 실행, rollback tag가 없음</p>
+</div>
+<pre class="snippet-card"><code>docker image ls
+docker inspect --format '{{.Id}} {{.Config.Image}} {{.Config.Cmd}}' app-container
+docker logs --tail=100 app-container</code></pre>
+</section>
+
+<section id="ch2">
+<div class="ch-head"><span class="ch-code">DCK-02</span><h2>Dockerfile</h2></div>
+<p class="lede">Dockerfile은 배포 환경을 문서화하는 코드입니다. dependency install layer와 source copy layer를 분리하면 cache hit가 안정되고, multi-stage build를 쓰면 빌드 도구와 런타임 파일을 분리할 수 있습니다.</p>
+<div class="semantic-card">
+  <span class="sc-label">DOCKERFILE REVIEW</span>
+  <p><b>볼 것</b> base image pinning, lockfile copy order, multi-stage boundary, non-root user, healthcheck, secret 미포함</p>
+  <p><b>프론트 연결</b> Vite/Next build output, public env, node_modules native dependency, static asset path가 이미지 안에서 일치하는지 확인합니다.</p>
+  <p><b>차단 기준</b> secret이 ARG/ENV/layer history에 남거나, runtime image에 dev dependency와 빌드 도구가 그대로 들어가면 리뷰를 멈춥니다.</p>
+</div>
+<pre class="snippet-card"><code>docker build -t app:web-20260911 .
+docker history app:web-20260911
+docker run --rm -p 3000:3000 app:web-20260911</code></pre>
+</section>
+
+<section id="ch3">
+<div class="ch-head"><span class="ch-code">DCK-03</span><h2>네트워크와 볼륨</h2></div>
+<p class="lede">컨테이너 내부 port와 host publish port는 다릅니다. 앱이 3000에서 listen해도 `-p 8080:3000`이면 외부 사용자는 8080으로 접근합니다. 데이터는 컨테이너 filesystem에 두면 재생성 시 사라지므로 volume이나 외부 저장소에 둡니다.</p>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>port mapping</b><span>network</span></div><div class="g-def">host port와 container port를 연결합니다. nginx upstream, health check target, docker publish 설정이 같은 port를 가리켜야 합니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>bridge network</b><span>network</span></div><div class="g-def">컨테이너 간 통신을 위한 기본 네트워크입니다. 서비스 이름 해석은 Compose network 안에서만 기대해야 합니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>volume</b><span>state</span></div><div class="g-def">컨테이너 재생성 이후에도 남아야 하는 파일을 외부화합니다. 로그, DB, 업로드 파일의 보존 정책을 분리합니다.</div></div>
+</div>
+</section>
+
+<section id="ch4">
+<div class="ch-head"><span class="ch-code">DCK-04</span><h2>런타임 제한</h2></div>
+<p class="lede">컨테이너는 VM이 아니라 host kernel 위의 제한된 프로세스입니다. CPU throttling, memory limit, file descriptor, ephemeral storage를 모르면 앱 장애를 코드 문제로 오판합니다.</p>
+<div class="semantic-card">
+  <span class="sc-label">RUNTIME EVIDENCE</span>
+  <p><b>확인 증거</b> memory limit, restart count, exit code, OOMKilled, CPU usage, log growth</p>
+  <p><b>운영 판단</b> container가 죽었는지, 앱 프로세스가 실패했는지, host resource가 부족한지 분리합니다.</p>
+  <p><b>완화</b> limit 조정은 임시 완화일 수 있습니다. leak, startup spike, cache size, log 폭증 원인을 별도로 닫아야 합니다.</p>
+</div>
+<pre class="snippet-card"><code>docker stats
+docker inspect --format '{{.State.ExitCode}} {{.State.OOMKilled}} {{.RestartCount}}' app-container</code></pre>
+</section>
+
+<section id="ch5">
+<div class="ch-head"><span class="ch-code">DCK-05</span><h2>보안·배포 증거</h2></div>
+<p class="lede">Docker 배포의 핵심은 같은 입력으로 같은 이미지를 만들고, 취약점과 secret 노출을 확인하고, 어떤 digest가 어느 환경에 배포됐는지 추적하는 것입니다.</p>
+<ul>
+  <li>base image는 major tag가 아니라 digest 또는 명시 버전으로 고정합니다.</li>
+  <li>secret은 image에 넣지 않고 runtime secret manager나 orchestrator secret으로 주입합니다.</li>
+  <li>registry scan, SBOM, image signing, deploy approval, rollback tag를 release evidence packet에 묶습니다.</li>
+  <li>frontend bundle에 들어가도 되는 public env와 서버 secret을 분리합니다.</li>
+</ul>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">PRACTICE</span><h2>출력 판독</h2></div>
+<p class="lede">Docker 실무는 명령을 외우는 것보다 출력에서 원인 후보를 줄이는 훈련이 중요합니다.</p>
+<div class="practice-lab">
+  <span class="sc-label">PRACTICE LAB</span>
+  <p><b>Command / Query</b> `docker inspect`, `docker logs --previous`, `docker stats`로 실행 이미지, 종료 이유, 리소스 사용을 확인합니다.</p>
+  <p><b>정상 출력</b> 배포 기록의 image digest와 실행 컨테이너 digest가 같고, health check가 통과하며 restart count가 증가하지 않습니다.</p>
+  <p><b>비정상 출력</b> OOMKilled true, exit code 127, required env 누락, port mismatch, latest tag drift가 보입니다.</p>
+  <p><b>판단 훈련</b> Dockerfile 문제, runtime env 문제, host resource 문제, network mapping 문제를 분리합니다.</p>
+  <p><b>즉시 완화</b> 이전 digest로 rollback하거나 traffic을 빼고 env/port/resource 설정을 되돌립니다.</p>
+  <p><b>영구 수정</b> Dockerfile review checklist, digest pinning, health check, registry scan, release note를 추가합니다.</p>
+  <p><b>검증 기준</b> 같은 commit을 clean build해도 같은 동작을 재현하고, smoke test와 로그에서 request id가 확인됩니다.</p>
+</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">TERM</span><h2>용어사전</h2></div>
+<div class="glossary">
+  <div class="g-row"><div class="g-term"><b>image digest</b><span>TERM</span></div><div class="g-def">이미지 내용을 가리키는 불변 식별자입니다. tag drift를 막는 운영 증거입니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>layer cache</b><span>TERM</span></div><div class="g-def">Dockerfile 명령 단위 cache입니다. lockfile과 source copy 순서가 build time과 재현성을 좌우합니다.</div></div>
+  <div class="g-row"><div class="g-term"><b>healthcheck</b><span>TERM</span></div><div class="g-def">컨테이너가 실행 중인지가 아니라 앱이 요청을 처리할 준비가 됐는지 확인하는 신호입니다.</div></div>
+</div>
+</section>
+
+<section id="ch8">
+<div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+<table>
+<tr><th>주제</th><th>확인 증거</th><th>판단 기준</th></tr>
+<tr><td>이미지</td><td>tag, digest, registry, history</td><td>tag가 아니라 digest로 배포물을 고정한다.</td></tr>
+<tr><td>런타임</td><td>env, command, logs, exit code, OOMKilled</td><td>앱 실패와 컨테이너 실행 실패를 분리한다.</td></tr>
+<tr><td>네트워크</td><td>listen port, publish port, upstream, curl</td><td>container port와 host port를 혼동하지 않는다.</td></tr>
+<tr><td>배포</td><td>scan, SBOM, approval, rollback tag</td><td>재현성과 되돌리기 가능성이 있어야 한다.</td></tr>
+</table>
+</section>
+
+<footer>INFRA DOCKER HANDBOOK · image, runtime, network, deployment evidence</footer>
+</main>
+</div>
+</body>
+</html>

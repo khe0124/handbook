@@ -32,6 +32,10 @@ function extractHomeSections(mainHtml: string) {
   return yearPlan + standard + shortcut;
 }
 
+function removeGlossaryTermSubtext(html: string) {
+  return html.replace(/(<div class="g-term">\s*<b>[\s\S]*?<\/b>)\s*<span>[\s\S]*?<\/span>(\s*<\/div>)/g, "$1$2");
+}
+
 function getPlainText(element: Element | null) {
   return element?.textContent?.replace(/\s+/g, " ").trim() ?? "";
 }
@@ -139,10 +143,8 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
   const practicalLens = getPracticalExampleLens(item.id);
   const personalNotes = useMemo(() => getPersonalNotes(item.id), [item.id]);
   const isHome = item.id === "home";
-  const homeShortcutHtml = useMemo(
-    () => (isHome && document ? extractHomeSections(document.mainHtml) : ""),
-    [isHome, document],
-  );
+  const contentHtml = useMemo(() => (document ? removeGlossaryTermSubtext(document.mainHtml) : ""), [document]);
+  const homeShortcutHtml = useMemo(() => (isHome ? extractHomeSections(contentHtml) : ""), [isHome, contentHtml]);
   const ReactPage = document?.ReactPage;
 
   useEffect(() => {
@@ -386,7 +388,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         {ReactPage ? null : (
           <div
             dangerouslySetInnerHTML={{
-              __html: isHome ? homeShortcutHtml : document.mainHtml,
+              __html: isHome ? homeShortcutHtml : contentHtml,
             }}
           />
         )}

@@ -28,7 +28,6 @@
   <a href="#qa-12"><span class="code">Q12</span>Reachability Analyzer와 runbook handoff는 어떻게 닫나요?</a>
   <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
-  <a href="#qa-evidence-standards"><span class="code">EVIDENCE</span>Q&amp;A 최신성·증거 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -261,17 +260,6 @@ Reachability Analyzer path result, source and destination identifiers, blocking 
 <span class="sc-label">OPERATIONS QA TRAINING PACKET</span>
 통과 답변은 서비스 이름이나 명령어 나열에서 멈추지 않고 사용자 영향, 경계, 증거, 완화, 복구, 재발 방지 action을 함께 닫는다.
 </div>
-</section>
-
-<section id="qa-evidence-standards">
-<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>Q&amp;A 최신성·증거 기준</h2></div>
-<p class="lede">VPC 라우팅 Q&amp;A는 2026-07-09 기준으로 답한다. 관련 본문은 <a href="operations-vpc-routing-handbook.html#evidence-packet">검증 기준·증거 패킷</a>이며, 답변은 source, destination, protocol, port를 고정한 증거로 닫아야 한다.</p>
-<table>
-<tr><th>확인 영역</th><th>확인 명령/증거</th><th>좋은 답변</th><th>나쁜 답변</th></tr>
-<tr><td>DNS/TLS 의존성</td><td><code>dig</code>, private DNS answer, <code>openssl s_client</code> origin 확인</td><td>PrivateLink/Private Endpoint DNS와 TLS endpoint가 같은 경로를 가리키는지 확인한다.</td><td>IP로 ping이 되니 endpoint 경로도 정상이라고 말한다.</td></tr>
-<tr><td>LB health와 return path</td><td>target/backend health, Flow Logs accept/reject, NACL ephemeral port</td><td>inbound 허용과 return path를 별도 증거로 설명한다.</td><td>outbound rule만 열면 통신이 된다고 말한다.</td></tr>
-<tr><td>BGP·route</td><td>route table, propagated route, TGW/VPN/ExpressRoute BGP prefix, Reachability Analyzer</td><td>longest prefix match와 propagated/static route 우선순위를 실제 prefix로 비교한다.</td><td>라우팅 테이블에 대역이 있으니 경로는 맞다고 단정한다.</td></tr>
-</table>
 </section>
 
 <footer>OPERATIONS QA TRAINING PACKET · VPC·Subnet·Routing·NAT Q&amp;A · generated for handbook practice</footer>

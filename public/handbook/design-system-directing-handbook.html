@@ -36,6 +36,15 @@
 <section id="system-directing-map">
 <div class="ch-head"><span class="ch-code">MAP</span><h2>디렉팅이란 무엇이 다른가</h2></div>
 <p class="lede">디자인 시스템을 만드는 일과, 그 시스템의 조직 전체 채택·거버넌스·수명 주기를 이끄는 일은 다른 역할이다. 전자는 컴포넌트와 토큰을 빌드하는 individual contributor의 일이다. 후자는 <strong>디렉팅</strong>이다. 디렉팅은 빌드하는 사람이 아니라 방향을 정하고 자원을 배분하고 갈등을 조정하는 사람의 일이다. 컴포넌트 하나를 잘 만드는 것과, 서른 개 팀이 그 컴포넌트를 실제로 채택하고 계속 쓰게 유지하는 것은 요구하는 스킬셋이 전혀 다르다. 이 문서는 후자 — 디렉팅 — 를 다룬다.</p>
+<div class="serial-card">
+<span class="sc-label">DESIGN SYSTEM GOVERNANCE PACKET</span>
+decision rights matrix<br>
+token change RFC<br>
+component adoption ladder<br>
+handoff SLA<br>
+design-code drift audit<br>
+adoption health scorecard
+</div>
 <table>
 <tr><th></th><th>빌더로서의 디자인 시스템</th><th>디렉터로서의 디자인 시스템</th></tr>
 <tr><td>누가 결정하는가</td><td>만드는 사람이 곧 결정자 — API, 네이밍, 토큰 값을 스스로 정한다</td><td>디자이너·엔지니어·PM·경영진 사이의 의사결정 구조 자체를 설계하는 사람</td></tr>
@@ -176,6 +185,15 @@
 <section id="health-metrics">
 <div class="ch-head"><span class="ch-code">METRICS</span><h2>성공 지표·건강도 측정</h2></div>
 <p class="lede">디자인 시스템이 "잘 되고 있다"는 감을 숫자 없이 말하면 다음 예산 시즌에 방어할 수 없다. 아래 <strong>SYSTEM HEALTH SCORECARD</strong>는 분기마다 채워야 하는 최소 세트다 — 어느 하나도 "느낌"으로 채우지 않는다.</p>
+<div class="serial-card">
+<span class="sc-label">ADOPTION HEALTH SCORECARD</span>
+adoption rate<br>
+component coverage<br>
+design-code drift<br>
+visual regression pass rate<br>
+accessibility violation trend<br>
+consumer satisfaction score
+</div>
 <table>
 <tr><th>지표</th><th>정의</th><th>측정 방법</th></tr>
 <tr><td><strong>adoption rate</strong></td><td>신규 화면 중 디자인 시스템 컴포넌트를 기본값으로 쓴 비율</td><td>PR에서 import된 컴포넌트 경로를 정적 분석 스크립트로 스캔해, 사내 라이브러리 vs 임의 커스텀 마크업 비율을 산출. CI에 붙여 PR마다 리포트</td></tr>
@@ -232,6 +250,15 @@
 <section id="output-verification-standards">
 <div class="ch-head"><span class="ch-code">VERIFY</span><h2>산출물·검증 기준</h2></div>
 <p class="lede">디렉팅은 회의에서 의견을 내는 일이 아니라 조직이 실제로 실행할 수 있는 산출물을 남기는 일이다. 아래 네 산출물이 모두 존재해야 "디렉팅했다"고 말할 수 있다. 하나라도 없으면 방향에 대한 의견을 말한 것이지, 조직을 이끈 게 아니다.</p>
+<div class="serial-card">
+<span class="sc-label">TOKEN CHANGE RFC TEMPLATE</span>
+problem and affected teams<br>
+before/after token value<br>
+accessibility contrast evidence<br>
+component impact list<br>
+migration and deprecation plan<br>
+rollback condition
+</div>
 <table>
 <tr><th>항목</th><th>필수 포함</th><th>완료 기준</th></tr>
 <tr><td>governance doc</td><td>거버넌스 모델(중앙집중형/연합형/하이브리드) 선택과 근거, DECISION RIGHTS MATRIX, breaking change·deprecation 정책</td><td>결정 유형별 최종 결정권자와 협의 대상이 표로 명시돼 있고, 새 팀원이 문서만 읽고 "이 변경은 누구 승인이 필요한가"에 답할 수 있다</td></tr>

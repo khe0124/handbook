@@ -7,31 +7,31 @@ const docs = [
   {
     file: "operations-roadmap-handbook.html",
     title: "인프라·운영 로드맵",
-    subtitle: "서비스를 사용자 요청에서 장애 복구까지 하나의 운영 시스템으로 읽는 기준",
+    subtitle: "프론트엔드 화면에서 시작해 요청 경로, 배포 경로, 관측, 복구까지 이어 보는 학습 지도",
     sections: [
       {
         code: "OP-00",
-        title: "운영 전체 지도",
-        body: "인프라·운영은 네트워크, 배포, 모니터링을 따로 외우는 영역이 아니다. 운영자는 request path, change path, control plane, data plane, recovery path를 한 장으로 연결해야 한다. 사용자의 요청은 DNS → CDN/WAF → Load Balancer → Runtime → Data store를 지나고, 변경은 CI/CD → artifact → config → runtime → metric gate → rollback 또는 incident response로 검증된다.",
-        question: "요청 경로, 변경 경로, 복구 경로가 같은 운영 지도에 연결되어 있는가?",
-        evidence: "request path map, deploy marker, service catalog, dependency map, SLO, rollback/restore owner",
-        judgment: "사용자 영향과 최근 변경, 완화 후보를 한 timeline에서 설명할 수 있어야 한다.",
-        command: "service catalog, dependency map, release note, SLO dashboard, incident runbook, rollback drill record",
-        commandJudgment: "어느 계층이 사용자 영향과 연결되는지 15분 안에 찾고, 원인 확정 전 완화책을 고를 수 있어야 한다.",
-        incidentSignal: "요청 실패, deploy marker, SLO burn이 같은 시간대에 발생",
-        incidentJudgment: "요청 경로와 변경 경로를 동시에 좁히고 rollback, feature off, traffic shift 중 사용자 영향을 가장 빨리 줄이는 조치를 먼저 선택한다.",
+        title: "프론트엔드에서 시작하는 운영 지도",
+        body: "인프라·운영은 클라우드 서비스명을 외우는 영역이 아니라 사용자가 본 화면 오류를 어디까지 추적할 수 있는지의 문제다. 프론트엔드 개발자는 먼저 브라우저 증상, Network waterfall, status code, request id, release version을 잡고, 그 뒤 DNS → CDN/WAF → Load Balancer → Runtime → Data store로 경계를 넘겨야 한다.",
+        question: "브라우저에서 관찰한 증상이 어느 운영 계층으로 이어지는지 설명할 수 있는가?",
+        evidence: "browser Network waterfall, request id, frontend release version, DNS answer, CDN/WAF request id, LB status, trace span",
+        judgment: "화면 오류를 프론트 코드 문제로 단정하지 않고 요청이 멈춘 첫 계층과 최근 변경을 함께 본다.",
+        command: "DevTools Network, curl -v, dig, CDN/WAF log, LB access log, app trace, SLO dashboard",
+        commandJudgment: "프론트에서 수집 가능한 증거와 인프라/백엔드에 넘길 증거가 분리되어야 한다.",
+        incidentSignal: "특정 브라우저 또는 지역에서만 화면 오류가 나고 app log가 비어 있음",
+        incidentJudgment: "request id와 release marker를 붙여 edge, LB, app 중 어디까지 도달했는지 먼저 좁힌다.",
       },
       {
         code: "OP-01",
-        title: "4주 학습 순서",
-        body: "학습 순서는 서비스 장애를 좁히는 순서와 같아야 한다. 1주차에는 브라우저에서 DB까지 요청 경로를 그리고, 2주차에는 VPC, subnet, route table, NAT, ingress, egress, private endpoint를 붙인다. 3주차에는 CI/CD, artifact, runtime, health check, IaC 변경을 배포 경로로 묶고, 4주차에는 Observability, SLO, Incident Response, Rollback, Restore, DR drill로 운영 루프를 닫는다.",
+        title: "4주 흡수 순서",
+        body: "빠르게 흡수하려면 네트워크부터 파고들기보다 본인 업무와 맞닿은 흐름에서 시작한다. 1주차에는 브라우저 요청과 DNS/TLS/CDN/LB를 연결하고, 2주차에는 CI/CD와 runtime health로 배포가 실제 사용자 경로에 들어가는 방식을 본다. 3주차에는 VPC, 보안 경계, private connectivity로 경계를 넓히고, 4주차에는 Observability, SLO, Incident, DR, cloud scenario로 운영 판단을 닫는다.",
         question: "학습 순서가 실제 장애 triage와 운영 인수 순서로 이어지는가?",
         evidence: "request path diagram, VPC route table readback, deploy pipeline stage, SLO dashboard, rollback/restore drill record",
         judgment: "개념 이름을 외운 순서가 아니라 장애 때 배제할 계층과 산출물 순서로 정리되어야 한다.",
-        command: "draw request path, list ingress/egress, check deploy pipeline, run smoke/rollback drill, review SLO burn alert",
-        commandJudgment: "각 단계가 확인 명령, 판독 기준, 제출 산출물로 이어지면 실무 학습 경로로 본다.",
-        incidentSignal: "네트워크는 설명하지만 배포 marker, SLO burn, rollback 가능성을 함께 설명하지 못함",
-        incidentJudgment: "다음 학습 항목을 runbook, dashboard, drill packet으로 연결해 운영 증거를 만든다.",
+        command: "draw browser-to-DB request path, check deploy pipeline, inspect runtime health, list ingress/egress, review SLO burn alert",
+        commandJudgment: "각 주차가 다이어그램, 명령 출력, runbook, drill packet 중 하나의 산출물로 끝나야 한다.",
+        incidentSignal: "DNS나 VPC 용어는 아는데 프론트 배포 실패와 사용자 영향으로 연결하지 못함",
+        incidentJudgment: "다음 학습 항목을 실제 화면 오류, 배포 marker, dashboard, rollback 조건에 연결한다.",
       },
       {
         code: "OP-02",
@@ -48,7 +48,7 @@ const docs = [
       {
         code: "OP-03",
         title: "운영 산출물과 답변 구조",
-        body: "운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. owner, escalation, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 비용 owner, access owner, 마지막 drill 날짜가 있어야 다음 사람이 같은 판단을 반복할 수 있다. 면접에서도 도구 이름보다 경로, 경계, 실패 모드, 증거, 완화, 후속 개선 순서로 말해야 한다.",
+        body: "운영 문서는 아키텍처 다이어그램만으로 끝나지 않는다. 프론트엔드 배포라면 asset hash, CDN invalidation, SPA fallback, API base URL, feature flag, rollback artifact가 함께 있어야 한다. 서비스 운영 전체로는 owner, escalation, SLO, dashboard, alert, runbook, rollback plan, RPO/RTO, 변경 이력, 비용 owner, access owner, 마지막 drill 날짜가 있어야 다음 사람이 같은 판단을 반복할 수 있다.",
         question: "운영 산출물과 면접 답변이 실행 가능한 증거로 닫히는가?",
         evidence: "owner matrix, service catalog, SLO, dashboard, alert, runbook, rollback command, restore drill date, incident packet",
         judgment: "담당자가 바뀌어도 같은 절차와 권한으로 대응할 수 있어야 한다.",
@@ -619,8 +619,8 @@ const docs = [
   },
   {
     file: "operations-checklist-interview-handbook.html",
-    title: "운영 체크리스트·면접 답변",
-    subtitle: "실제 운영 인수와 기술면접 답변에 바로 쓰는 압축 기준",
+    title: "운영 인수·릴리즈 리뷰·면접 답변",
+    subtitle: "운영 인수, 릴리즈 리뷰, 기술면접 답변에 바로 쓰는 압축 기준",
     sections: [
       {
         code: "CHK-00",
@@ -740,10 +740,10 @@ const detailsByFile = {
     pitfalls: ["아키텍처 다이어그램은 있지만 알림 owner와 escalation 경로가 없다.", "배포 절차는 있지만 artifact digest, metric gate, rollback 검증이 없다.", "SLO가 없어서 장애와 단순 오류를 같은 우선순위로 처리한다.", "운영 인수 문서가 사람 이름과 구두 설명에 의존한다.", "백업은 있지만 restore drill과 failback 절차가 없다.", "NAT/egress 비용 급증을 운영 incident가 아니라 비용 이슈로만 본다."],
     interview: "인프라·운영은 요청 경로, 변경 경로, 복구 경로를 함께 보는 영역이라고 답합니다. 사용자의 요청은 DNS부터 DB까지 계층별로 흐르고, 코드 변경은 artifact와 환경 설정, 런타임, 관측, 장애 대응 절차를 거쳐 안전해집니다. 저는 각 단계의 실패 모드와 검증 증거를 연결하고, 원인 확정 전에도 사용자 영향 완화책을 선택하는 방식으로 운영 준비도를 판단하겠습니다.",
     learningPlan: [
-      ["1주차 · 요청 경로", "서비스 요청 경로 → DNS/TLS → LB/App/DB 경계", "request path diagram, dig/curl/openssl 결과, target health 판독"],
-      ["2주차 · 네트워크 경계", "VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity", "route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증"],
-      ["3주차 · 변경과 런타임", "CI/CD·Artifact·Environment → 컨테이너·오케스트레이션 → IaC·변경관리", "release note, artifact digest, health check gate, terraform plan review"],
-      ["4주차 · 관측과 복구", "Observability·SLO → Incident Response·Rollback·DR → Cloud 시나리오", "SLO burn alert, incident packet, rollback/restore drill, postmortem action"],
+      ["1주차 · 브라우저 요청 경로", "서비스 요청 경로 → DNS/TLS → CDN/WAF/LB → App/DB 경계", "DevTools waterfall, request path diagram, dig/curl/openssl 결과, target health 판독"],
+      ["2주차 · 프론트 배포와 런타임", "CI/CD·Artifact·Environment → 컨테이너·오케스트레이션·Health Check", "release note, asset hash/image digest, smoke test, health check gate, rollback 조건"],
+      ["3주차 · 네트워크와 보안 경계", "VPC·Subnet·Routing·NAT → 보안 경계 → VPN/Private Connectivity", "route table readback, flow log, SG/NACL 판정, private endpoint DNS 검증"],
+      ["4주차 · 관측·복구·클라우드 종합", "Observability·SLO → Incident Response·Rollback·DR → IaC·변경관리 → AWS·Azure 시나리오", "RUM/backend SLO dashboard, incident packet, rollback/restore drill, terraform plan review"],
     ],
     failureMatrix: [
       ["DNS/TLS", "NXDOMAIN, wrong CNAME, SNI/SAN mismatch, chain 누락", "dig +trace, resolver 비교, openssl s_client, curl -v"],
@@ -763,10 +763,10 @@ const detailsByFile = {
       ["4점", "game day, failback, runbook diff, error budget policy가 반복 운영됨", "팀 표준화 가능"],
     ],
     audienceContract: [
-      ["대상 독자", "미들급 개발자. API, DB, 배포 경험은 있으나 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람", "서비스 장애를 계층별 증거로 좁히고 운영 인수 산출물을 만들 수 있어야 한다."],
-      ["선행 지식", "HTTP, TLS 기초, Linux process/log, DB connection, CI/CD 기본, container 기본", "이 지식이 없으면 도구명을 외우는 학습으로 흐르므로 먼저 보완한다."],
-      ["학습 산출물", "request path diagram, deploy timeline, incident packet, rollback/restore drill report, service readiness score", "말로 아는 것이 아니라 다른 담당자가 재현 가능한 문서와 증거를 제출해야 한다."],
-      ["강연 목표", "청중이 장애 상황에서 어떤 계층을 먼저 확인하고 어떤 증거로 배제할지 말할 수 있게 한다.", "서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남긴다."],
+      ["대상 독자", "프론트엔드 실무 경험이 있고 API, 배포, 브라우저 디버깅은 익숙하지만 DNS, LB, VPC, SLO, DR을 한 시스템으로 설명하지 못하는 사람", "화면 오류와 배포 이슈를 운영 계층별 증거로 좁히고, 인프라 담당자에게 넘길 evidence packet을 만들 수 있어야 한다."],
+      ["선행 지식", "HTTP, TLS 기초, 브라우저 Network 탭, JavaScript error, API latency, CI/CD 기본", "Linux, DB connection, container, cloud network는 문서 안의 실습 출력으로 보강한다."],
+      ["학습 산출물", "browser-to-DB request path diagram, frontend release timeline, incident packet, rollback/restore drill report, service readiness score", "읽은 양이 아니라 다른 담당자가 재현 가능한 문서와 증거로 완료를 판단한다."],
+      ["학습 목표", "화면에서 보이는 오류를 DNS, edge, LB, runtime, DB, 배포, SLO 중 어느 계층의 문제인지 질문할 수 있게 한다.", "서비스명 암기가 아니라 판단 순서, 증거, 완화, 후속 개선을 남긴다."],
     ],
     lectureFlow: [
       ["0-5분", "왜 운영은 아키텍처 그림만으로 부족한가", "요청 경로, 변경 경로, 복구 경로를 한 장으로 연결해야 함을 보여준다."],
@@ -1417,6 +1417,79 @@ const deepDiveRowsByFile = {
   ],
 };
 
+const frontendBridgeByFile = {
+  "operations-roadmap-handbook.html": [
+    ["시작 증거", "DevTools Network waterfall, console error, request id, frontend release version", "화면 오류를 request path와 change path에 연결한다."],
+    ["인프라에 넘길 것", "실패 URL, status code, timing, region/browser, 재현 시각", "인프라 담당자가 DNS, edge, LB, app log를 바로 대조할 수 있게 한다."],
+    ["완료 산출물", "browser-to-DB request path diagram, release marker, rollback condition", "읽은 지식을 다음 장애 triage에서 재사용한다."],
+  ],
+  "operations-request-path-handbook.html": [
+    ["시작 증거", "브라우저 Network tab의 URL, method, status, timing, request/trace id", "프론트 오류를 DNS/TLS/CDN/LB/App/DB 중 어느 hop 문제인지 좁힌다."],
+    ["자주 만나는 상황", "CORS처럼 보이는 TLS 실패, API 504, CDN stale asset, WAF 403", "브라우저 증상명과 실제 운영 계층을 분리한다."],
+    ["완료 산출물", "정상/실패 요청 waterfall 캡처와 hop별 확인 명령", "백엔드나 인프라에 넘길 evidence packet을 만든다."],
+  ],
+  "operations-dns-tls-handbook.html": [
+    ["시작 증거", "도메인, 인증서 오류 문구, 브라우저 security panel, curl -v 결과", "배포 직후 접속 실패를 앱 코드가 아니라 이름/신뢰 문제로도 볼 수 있게 한다."],
+    ["자주 만나는 상황", "custom domain 연결, 인증서 갱신, CDN origin 교체, preview domain cutover", "TTL과 인증서 전파 시간을 릴리스 계획에 넣는다."],
+    ["완료 산출물", "domain cutover checklist와 rollback record", "도메인 변경을 프론트 릴리스 체크로 흡수한다."],
+  ],
+  "operations-delivery-pipeline-handbook.html": [
+    ["시작 증거", "commit SHA, build id, asset hash, image digest, deploy marker", "내 코드가 production 어느 버전으로 떠 있는지 증명한다."],
+    ["자주 만나는 상황", "환경 변수 불일치, CDN에 남은 이전 asset, canary metric 악화", "CI green과 운영 성공을 분리한다."],
+    ["완료 산출물", "release note, smoke result, rollback command, frontend route check", "배포 후 사용자 경로 검증까지 포함한다."],
+  ],
+  "operations-runtime-orchestration-handbook.html": [
+    ["시작 증거", "API 5xx/504, backend revision, pod restart, readiness, target health", "프론트 화면 실패가 runtime rollout과 연결됐는지 확인한다."],
+    ["자주 만나는 상황", "새 버전만 오류, readiness 통과 후 실제 API 실패, OOMKilled", "Running 상태와 사용자 요청 가능 상태를 구분한다."],
+    ["완료 산출물", "revision별 error dashboard와 rollout pause/undo 조건", "배포 중단 기준을 화면 영향과 연결한다."],
+  ],
+  "operations-vpc-routing-handbook.html": [
+    ["시작 증거", "API timeout, region/VPN 여부, 요청 대상 host, source network", "브라우저나 내부 도구의 timeout을 라우팅/정책/DNS로 분리한다."],
+    ["자주 만나는 상황", "VPN 사용자만 실패, private subnet egress 실패, 특정 고객사 연동 timeout", "요청 경로와 응답 경로를 둘 다 확인한다."],
+    ["완료 산출물", "route table readback, flow log sample, DNS answer", "네트워크 문제를 추측이 아니라 패킷 경로 증거로 말한다."],
+  ],
+  "operations-security-boundary-handbook.html": [
+    ["시작 증거", "public URL, cookie/token 흐름, CORS/CSP 오류, bundle env 노출 여부", "프론트 보안 신호를 edge, IAM, secret, audit 경계로 연결한다."],
+    ["자주 만나는 상황", "secret이 bundle에 들어감, WAF false positive, 관리자 기능 노출", "보안 통제가 사용자 영향과 감사 증거를 동시에 가져야 함을 본다."],
+    ["완료 산출물", "public ingress list, secret exposure check, audit log sample", "보안 질문을 control과 evidence로 답한다."],
+  ],
+  "operations-private-connectivity-handbook.html": [
+    ["시작 증거", "VPN 접속 여부, 내부 API host, resolver, source IP", "사내망/고객사망 연결 실패를 브라우저 문제가 아니라 사설 경로 문제로 본다."],
+    ["자주 만나는 상황", "터널은 UP인데 API timeout, DNS forwarding 누락, 고객사 방화벽 deny", "터널 상태와 애플리케이션 통신 성공을 분리한다."],
+    ["완료 산출물", "src/dst/port packet evidence와 양쪽 firewall log", "상대 조직에 넘길 재현 증거를 만든다."],
+  ],
+  "operations-observability-slo-handbook.html": [
+    ["시작 증거", "RUM, Core Web Vitals, frontend error rate, API latency, trace id", "프론트 사용자 경험 지표를 backend SLO와 연결한다."],
+    ["자주 만나는 상황", "LCP/INP 악화, API p99 증가, 특정 route만 실패", "CPU 같은 인프라 지표보다 사용자 여정 SLI를 먼저 본다."],
+    ["완료 산출물", "RUM + backend trace dashboard, route별 SLI", "성능/장애 판단을 사용자 영향 기준으로 설명한다."],
+  ],
+  "operations-incident-dr-handbook.html": [
+    ["시작 증거", "사용자 영향 화면, affected route, 배포 시각, rollback 가능 여부", "프론트 릴리스 장애도 incident 언어로 기록한다."],
+    ["자주 만나는 상황", "화면 rollback, feature flag off, CDN purge, API degraded mode", "원인 분석 전 사용자 영향 완화를 선택한다."],
+    ["완료 산출물", "incident packet, decision log, customer-facing symptom, runbook diff", "복구됐다는 느낌이 아니라 종료 기준으로 닫는다."],
+  ],
+  "operations-iac-change-handbook.html": [
+    ["시작 증거", "preview URL, CDN/LB/domain 변경 diff, Terraform plan", "프론트 배포 인프라 변경이 실제 공개 경로를 바꾸는지 읽는다."],
+    ["자주 만나는 상황", "도메인 교체, CDN policy 변경, redirect/LB rule 변경", "작은 설정 변경이 public traffic path를 바꿀 수 있음을 본다."],
+    ["완료 산출물", "plan review note, before/after endpoint readback, rollback condition", "인프라 변경을 코드 리뷰처럼 검토한다."],
+  ],
+  "operations-cloud-scenarios-handbook.html": [
+    ["시작 증거", "정적/SSR/SPA 배포 형태, CDN, API ingress, managed DB", "AWS/Azure 서비스명을 프론트 배포 아키텍처 역할로 매핑한다."],
+    ["자주 만나는 상황", "CloudFront/Front Door 캐시, ALB/App Gateway 5xx, managed DB failover", "벤더명이 아니라 edge, ingress, runtime, data 책임으로 이해한다."],
+    ["완료 산출물", "AWS/Azure 역할 매핑표와 request path diagram", "면접에서 서비스명 암기 대신 책임 경계로 답한다."],
+  ],
+  "operations-checklist-interview-handbook.html": [
+    ["시작 증거", "내가 직접 본 장애, 배포, 대시보드, runbook, postmortem", "경험과 학습 지식을 면접에서 정확히 분리한다."],
+    ["자주 만나는 상황", "직접 운영하지 않은 클라우드 질문, 장애 대응 꼬리질문", "아는 척보다 검증 계획과 증거 언어로 답한다."],
+    ["완료 산출물", "30초 답변, 90초 증거 확장, 직접 경험/설계 지식 구분표", "운영 역량을 과장 없이 강하게 보여준다."],
+  ],
+  "operations-ai-llm-operations-handbook.html": [
+    ["시작 증거", "AI UI 실패, schema error, latency, fallback, cost, user feedback", "LLM 기능을 프론트 기능이 아니라 운영 대상 서비스로 본다."],
+    ["자주 만나는 상황", "200 OK인데 잘못된 답변, schema parse 실패, cost spike", "HTTP 성공과 AI 품질 성공을 분리한다."],
+    ["완료 산출물", "AI feature dashboard, eval packet, fallback runbook", "AI 기능의 품질·비용·보안 지표를 운영한다."],
+  ],
+};
+
 const practiceLabsByFile = {
   "operations-roadmap-handbook.html": [
     {
@@ -1831,6 +1904,20 @@ ${items.map((item) => `          <li>${escapeHtml(item)}</li>`).join("\n")}
 const renderRows = (rows) =>
   rows.map((row) => `          <tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("\n");
 
+const renderProseRows = (rows, labels) =>
+  `<div class="glossary">
+${rows
+  .map((row) => {
+    const [title, ...rest] = row;
+    const body = rest
+      .map((cell, index) => `<p><b>${escapeHtml(labels[index + 1] ?? "기준")}</b> ${escapeHtml(cell)}</p>`)
+      .join("");
+
+    return `          <div class="g-row"><div class="g-term"><b>${escapeHtml(title)}</b><span>${escapeHtml(labels[0] ?? "항목")}</span></div><div class="g-def">${body}</div></div>`;
+  })
+  .join("\n")}
+        </div>`;
+
 const renderStepGlossary = (rows) => {
   if (!rows?.length) return "";
 
@@ -1850,10 +1937,7 @@ const renderCodeBlock = (value) => `<pre><code>${escapeHtml(value)}</code></pre>
 const renderOptionalTable = ({ rows, headers }) => {
   if (!rows?.length) return "";
 
-  return `        <table>
-          <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr>
-${renderRows(rows)}
-        </table>`;
+  return `        ${renderProseRows(rows, headers)}`;
 };
 
 const renderCaseStudies = (caseStudies) => {
@@ -1864,14 +1948,9 @@ const renderCaseStudies = (caseStudies) => {
       (caseStudy) => `        <div class="practice-lab">
           <span class="sc-label">${escapeHtml(caseStudy.title)}</span>
           <p>${escapeHtml(caseStudy.context)}</p>
-          <table>
-            <tr><th>시점</th><th>판단/행동</th><th>해석 기준</th></tr>
-${renderRows(caseStudy.timeline)}
-          </table>
-          <table>
-            <tr><th>대표 오판</th><th>종료 조건</th></tr>
-            <tr><td>${escapeHtml(caseStudy.trap)}</td><td>${escapeHtml(caseStudy.outcome)}</td></tr>
-          </table>
+          ${renderProseRows(caseStudy.timeline, ["시점", "판단/행동", "해석 기준"])}
+          <p><b>대표 오판</b> ${escapeHtml(caseStudy.trap)}</p>
+          <p><b>종료 조건</b> ${escapeHtml(caseStudy.outcome)}</p>
         </div>`,
     )
     .join("\n");
@@ -1883,26 +1962,29 @@ const renderPracticeLabs = (labs) =>
       (lab, index) => `        <div class="practice-lab">
           <span class="sc-label">PRACTICE LAB ${String(index + 1).padStart(2, "0")} · ${escapeHtml(lab.title)}</span>
           <p>${escapeHtml(lab.scenario)}</p>
-          <table>
-            <tr><th>Command / Query</th><th>목적</th></tr>
-            <tr><td>${renderCodeBlock(lab.command)}</td><td>${escapeHtml(lab.purpose)}</td></tr>
-          </table>
-          <table>
-            <tr><th>정상 출력</th><th>비정상 출력</th><th>판단 훈련</th></tr>
-            <tr><td>${renderCodeBlock(lab.normalOutput)}</td><td>${renderCodeBlock(lab.abnormalOutput)}</td><td>${escapeHtml(lab.interpretation)}</td></tr>
-          </table>
-          <table>
-            <tr><th>즉시 완화</th><th>영구 수정</th><th>검증 기준</th></tr>
-            <tr><td>${escapeHtml(lab.mitigation)}</td><td>${escapeHtml(lab.permanentFix)}</td><td>${escapeHtml(lab.verification)}</td></tr>
-          </table>
+          <p><b>Command / Query</b></p>
+          ${renderCodeBlock(lab.command)}
+          <p><b>목적</b> ${escapeHtml(lab.purpose)}</p>
+          <p><b>정상 출력</b></p>
+          ${renderCodeBlock(lab.normalOutput)}
+          <p><b>비정상 출력</b></p>
+          ${renderCodeBlock(lab.abnormalOutput)}
+          <p><b>판단 훈련</b> ${escapeHtml(lab.interpretation)}</p>
+          <p><b>즉시 완화</b> ${escapeHtml(lab.mitigation)}</p>
+          <p><b>영구 수정</b> ${escapeHtml(lab.permanentFix)}</p>
+          <p><b>검증 기준</b> ${escapeHtml(lab.verification)}</p>
         </div>`,
     )
     .join("\n");
 
-const renderTerms = (terms) => `        <table>
-          <tr><th>용어</th><th>정의</th><th>운영 증거</th><th>자주 하는 오해</th><th>관련 항목</th></tr>
-${renderRows(terms)}
-        </table>`;
+const renderTerms = (terms) => `        <div class="glossary">
+${terms
+  .map(
+    ([term, definition, evidence, misconception, related]) =>
+      `          <div class="g-row"><div class="g-term"><b>${escapeHtml(term)}</b><span>TERM</span></div><div class="g-def">${escapeHtml(definition)} 운영에서는 ${escapeHtml(evidence)}로 확인한다. 흔한 오해는 "${escapeHtml(misconception)}"라고 보는 것이다. 관련해서 ${escapeHtml(related)}를 함께 본다.</div></div>`,
+  )
+  .join("\n")}
+        </div>`;
 
 const renderAnswerShape = (items) =>
   items.map((item, index) => `          ${index + 1}. ${escapeHtml(item)}<br>`).join("\n");
@@ -1951,6 +2033,7 @@ const render = (doc) => {
   const deepDiveRows = deepDiveRowsByFile[doc.file] ?? [];
   const practiceLabs = practiceLabsByFile[doc.file] ?? [];
   const terms = termsByFile[doc.file] ?? [];
+  const frontendBridge = frontendBridgeByFile[doc.file] ?? [];
   const docSections = doc.sections;
   const docId = doc.file.replace("-handbook.html", "").toUpperCase();
   const navBrand = `OPERATIONS · ${doc.title.split("·")[0].replace(/[^A-Za-z가-힣0-9]/g, " ").trim().toUpperCase()}`;
@@ -1965,11 +2048,16 @@ const render = (doc) => {
     { code: "TERM", title: "용어사전" },
     { code: "CASE", title: "장애/운영 시나리오" },
     { code: "RISK", title: "자주 틀리는 판단" },
+    { code: "SUMMARY", title: "총정리" },
   ];
   const nav = navItems
     .map(({ code, title }, index) => `  <a href="#ch${index === 0 ? "index" : index}"><span class="code">${code}</span>${escapeHtml(title)}</a>`)
     .join("\n");
   const indexExtras = [
+    frontendBridge.length
+      ? `      <h3>프론트엔드 개발자 연결점</h3>
+${renderOptionalTable({ headers: ["상황", "볼 증거", "학습 전환"], rows: frontendBridge })}`
+      : "",
     detail.audienceContract?.length
       ? `      <h3>대상 독자와 학습 계약</h3>
 ${renderOptionalTable({ headers: ["항목", "내용", "완료 기준"], rows: detail.audienceContract })}`
@@ -2038,57 +2126,57 @@ ${renderOptionalTable({ headers: ["검수 영역", "확인 질문", "탈락 기�
       <section id="ch${index + 1}">
         <div class="ch-head"><span class="ch-code">${section.code}</span><h2>${escapeHtml(section.title)}</h2></div>
         <p class="lede">${escapeHtml(section.body)}</p>
-        <table>
-          <tr><th>운영 질문</th><th>확인할 증거</th><th>판단 기준</th></tr>
-          <tr><td>${escapeHtml(section.question)}</td><td>${escapeHtml(section.evidence)}</td><td>${escapeHtml(section.judgment)}</td></tr>
-          <tr><td>${escapeHtml(`${section.title}${objectParticle(section.title)} 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?`)}</td><td>${escapeHtml(section.command)}</td><td>${escapeHtml(section.commandJudgment)}</td></tr>
-          <tr><td>${escapeHtml(`${section.title} 장애에서 임시 완화와 영구 수정은 어떻게 나누는가?`)}</td><td>${escapeHtml(section.incidentSignal)}</td><td>${escapeHtml(section.incidentJudgment)}</td></tr>
-        </table>
-${section.examples?.length ? `        <table>
-          <tr><th>예시 신호</th><th>관찰값</th><th>해석</th></tr>
-${renderRows(section.examples)}
-        </table>` : ""}
+        <div class="semantic-card">
+          <span class="sc-label">OPERATIONS DECISION</span>
+          <p><b>운영 질문</b> ${escapeHtml(section.question)}</p>
+          <p><b>확인할 증거</b> ${escapeHtml(section.evidence)}</p>
+          <p><b>판단 기준</b> ${escapeHtml(section.judgment)}</p>
+          <p><b>배제 확인</b> ${escapeHtml(`${section.title}${objectParticle(section.title)} 원인 후보에서 배제하려면 어떤 확인 결과가 필요한가?`)}</p>
+          <p><b>확인 위치</b> ${escapeHtml(section.command)}</p>
+          <p><b>명령 해석</b> ${escapeHtml(section.commandJudgment)}</p>
+          <p><b>임시 완화와 영구 수정</b> ${escapeHtml(section.incidentSignal)} 기준으로 영향 범위를 좁히고, ${escapeHtml(section.incidentJudgment)}</p>
+        </div>
+${section.examples?.length ? renderProseRows(section.examples, ["예시 신호", "관찰값", "해석"]) : ""}
       </section>`)
     .join("\n");
   const detailStart = docSections.length + 1;
+  const summaryRows = [
+    ...docSections.map((section) => [section.title, section.evidence, section.judgment]),
+    ["실무 플레이북", playbook.evidenceRows.map((row) => row[0]).join(" → "), playbook.commandRows.map((row) => row[1]).join("; ")],
+    ["복구 기준", playbook.incidentRows[0]?.[1] ?? "영향 범위 확인", playbook.incidentRows.at(-1)?.[2] ?? "재발 방지 기록"],
+  ].slice(0, 6);
   const detailSections = `
       <section id="ch${detailStart}">
         <div class="ch-head"><span class="ch-code">CHECK</span><h2>실무 체크리스트</h2></div>
-        <p class="lede">${escapeHtml(doc.title)} 체크리스트는 ${escapeHtml(sectionTitles)}의 변경 위험을 사전에 드러내기 위한 검토표다. 각 항목은 리뷰, 배포 승인, 운영 인수에서 같은 증거로 다시 확인되어야 한다.</p>
+        <p class="lede">${escapeHtml(doc.title)} 체크리스트는 ${escapeHtml(sectionTitles)}에서 놓치기 쉬운 운영 증거를 작업 전후로 고정하기 위한 검토표다. 각 항목은 프론트엔드 증상, 배포 승인, 운영 인수에서 같은 기준으로 다시 확인한다.</p>
         ${renderList(detail.checklist)}
-        <table>
-          <tr><th>작업 단계</th><th>필수 산출물</th><th>차단 기준</th></tr>
-          <tr><td>설계</td><td>목적, 영향 범위, 비목표, owner</td><td>영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음</td></tr>
-          <tr><td>변경</td><td>diff, 승인 기록, 검증 명령</td><td>production 변경과 staging 검증의 차이가 설명되지 않음</td></tr>
-          <tr><td>복구</td><td>rollback 또는 forward fix, 담당자, 예상 시간</td><td>실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음</td></tr>
-        </table>
+        ${renderProseRows([
+          ["설계", "목적, 영향 범위, 비목표, owner", "영향 범위가 사용자·시스템·비용 기준으로 설명되지 않음"],
+          ["변경", "diff, 승인 기록, 검증 명령", "production 변경과 staging 검증의 차이가 설명되지 않음"],
+          ["복구", "rollback 또는 forward fix, 담당자, 예상 시간", "실패 시 되돌릴 수 없는데 사전 승인과 공지가 없음"],
+        ], ["작업 단계", "필수 산출물", "차단 기준"])}
       </section>
 
       <section id="ch${detailStart + 1}">
         <div class="ch-head"><span class="ch-code">PLAYBOOK</span><h2>실무 플레이북</h2></div>
-        <p class="lede">${escapeHtml(doc.title)} 플레이북은 <strong>${escapeHtml(playbook.marker)}</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어 암기가 아니라 어떤 가설을 버리고 어떤 완화책을 실행할지 결정하는 것이다.</p>
+        <p class="lede">${escapeHtml(doc.title)} 플레이북은 <strong>${escapeHtml(playbook.marker)}</strong> 기준으로 증상, 범위, 최근 변경, 계층별 증거를 연결한다. 목표는 명령어를 많이 아는 것이 아니라 어느 가설을 버리고 어떤 완화책을 선택할지 설명하는 것이다.</p>
         <div class="serial-card">
           <span class="sc-label">${escapeHtml(playbook.marker)}</span>
           1 symptom → 2 scope → 3 recent change → 4 evidence<br>
           → 5 mitigation → 6 verification → 7 runbook diff
         </div>${renderStepGlossary(playbook.stepGlossary)}
-        <table>
-          <tr><th>운영 표면</th><th>볼 증거</th><th>판단 기준</th></tr>
-${renderRows(playbook.evidenceRows)}
-        </table>
+        ${renderProseRows(playbook.evidenceRows, ["운영 표면", "볼 증거", "판단 기준"])}
 ${detail.readinessPacketTemplate || detail.incidentPacketTemplate ? `        <h3>운영 산출물 템플릿</h3>
-        <table>
-          <tr><th>Readiness packet</th><th>Incident packet</th></tr>
-          <tr><td>${detail.readinessPacketTemplate ? renderCodeBlock(detail.readinessPacketTemplate) : ""}</td><td>${detail.incidentPacketTemplate ? renderCodeBlock(detail.incidentPacketTemplate) : ""}</td></tr>
-        </table>` : ""}
-        <table>
-          <tr><th>확인 단계</th><th>명령·확인 위치</th><th>해석 기준</th></tr>
-${renderRows(playbook.commandRows)}
-        </table>
-${deepDiveRows.length > 0 ? `        <table>
-          <tr><th>심화 장애 패턴</th><th>관찰 신호</th><th>판정 기준</th></tr>
-${renderRows(deepDiveRows)}
-        </table>` : ""}
+        <div class="semantic-card">
+          <span class="sc-label">Readiness packet</span>
+          ${detail.readinessPacketTemplate ? renderCodeBlock(detail.readinessPacketTemplate) : "<p>이 문서는 별도 readiness packet 없이 체크리스트 산출물로 대체한다.</p>"}
+        </div>
+        <div class="semantic-card">
+          <span class="sc-label">Incident packet</span>
+          ${detail.incidentPacketTemplate ? renderCodeBlock(detail.incidentPacketTemplate) : "<p>이 문서는 별도 incident packet 없이 장애 시나리오 기록으로 대체한다.</p>"}
+        </div>` : ""}
+        ${renderProseRows(playbook.commandRows, ["확인 단계", "명령·확인 위치", "해석 기준"])}
+${deepDiveRows.length > 0 ? renderProseRows(deepDiveRows, ["심화 장애 패턴", "관찰 신호", "판정 기준"]) : ""}
       </section>
 
       <section id="ch${detailStart + 2}">
@@ -2108,16 +2196,15 @@ ${renderTerms(terms)}
         <p class="lede">${escapeHtml(detail.scenario)}</p>
         <div class="callout">
           <span class="co-label">Triage frame</span>
-          <p>${escapeHtml(doc.title)} 장애는 증상 → 영향 범위 → 최근 변경 → ${escapeHtml(playbook.evidenceRows[0][0])} 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다. 이 흐름이 있어야 담당자가 바뀌어도 같은 결론에 도달한다.</p>
+          <p>${escapeHtml(doc.title)} 장애는 프론트엔드에서 보인 증상 → 영향 범위 → 최근 변경 → ${escapeHtml(playbook.evidenceRows[0][0])} 증거 → 완화책 → 복구 검증 → 재발 방지 순서로 기록한다.</p>
         </div>
-        <table>
-          <tr><th>처음 10분</th><th>다음 30분</th><th>종료 조건</th></tr>
-          <tr><td>${escapeHtml(playbook.evidenceRows[0][1])} 기준으로 영향 범위를 고정한다.</td><td>${escapeHtml(playbook.commandRows[0][1])} 항목에서 증거를 모아 완화책을 실행한다.</td><td>${escapeHtml(playbook.incidentRows.at(-1)[2])}</td></tr>
-        </table>
-        <table>
-          <tr><th>Incident packet</th><th>기록할 내용</th><th>판정 기준</th></tr>
-${renderRows(playbook.incidentRows)}
-        </table>
+        <div class="semantic-card">
+          <span class="sc-label">INCIDENT FLOW</span>
+          <p><b>처음 10분</b> ${escapeHtml(playbook.evidenceRows[0][1])} 기준으로 영향 범위를 고정한다.</p>
+          <p><b>다음 30분</b> ${escapeHtml(playbook.commandRows[0][1])} 항목에서 증거를 모아 완화책을 실행한다.</p>
+          <p><b>종료 조건</b> ${escapeHtml(playbook.incidentRows.at(-1)[2])}</p>
+        </div>
+        ${renderProseRows(playbook.incidentRows, ["Incident packet", "기록할 내용", "판정 기준"])}
 ${detail.caseStudies?.length ? `        <h3>강연/출판용 실전 케이스</h3>
 ${renderCaseStudies(detail.caseStudies)}` : ""}
       </section>
@@ -2126,6 +2213,15 @@ ${renderCaseStudies(detail.caseStudies)}` : ""}
         <div class="ch-head"><span class="ch-code">RISK</span><h2>자주 틀리는 판단</h2></div>
         <p class="lede">${escapeHtml(doc.title)}에서 자주 틀리는 판단은 ${escapeHtml(docSections[0].title)}와 ${escapeHtml(docSections.at(-1).title)}의 책임 경계를 흐리는 데서 시작된다. 아래 신호가 보이면 설계, runbook, 답변 구조를 다시 점검한다.</p>
         ${renderList(detail.pitfalls)}
+      </section>
+
+      <section id="ch${detailStart + 6}">
+        <div class="ch-head"><span class="ch-code">SUMMARY</span><h2>총정리</h2></div>
+        <p class="lede">${escapeHtml(doc.title)}의 핵심은 프론트엔드에서 보이는 증상을 운영 계층의 증거와 연결해, 원인 후보를 줄이고 복구 기준을 명확히 말하는 것이다. 아래 표는 리뷰나 면접 직전에 마지막으로 훑는 압축본이다.</p>
+        <table>
+          <tr><th>주제</th><th>확인할 증거</th><th>판단 기준</th></tr>
+${renderRows(summaryRows)}
+        </table>
       </section>`;
 
   return `<!DOCTYPE html>
@@ -2156,7 +2252,7 @@ ${nav}
 
 <section id="chindex">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
-<p class="lede">이 문서는 개념 요약이 아니라 운영 판단 연습용 플레이북입니다. 각 항목은 “무엇을 아는가”보다 “장애 때 어떤 증거를 보고 어떤 가설을 버리는가”를 기준으로 읽습니다.</p>
+<p class="lede">이 문서는 ${escapeHtml(doc.title)}를 프론트엔드 업무에서 출발해 운영 판단으로 확장하는 학습 단위입니다. 각 항목은 “무엇을 아는가”보다 “어떤 증거를 보고 어디까지 책임 있게 말할 수 있는가”를 기준으로 읽습니다.</p>
 <div class="glossary">
   <div class="g-row"><div class="g-term"><b>1 · 핵심 개념</b><span>CONCEPT</span></div><div class="g-def">이 주제에서 반드시 구분해야 하는 개념과 그 경계</div></div>
   <div class="g-row"><div class="g-term"><b>2 · 주제별 운영 증거</b><span>EVIDENCE</span></div><div class="g-def">각 판단을 무슨 출력·로그·설정으로 확인하는지</div></div>

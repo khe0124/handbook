@@ -28,7 +28,6 @@
   <a href="#qa-12"><span class="code">Q12</span>cost dashboard와 token accounting 이상은 어떤 ledger부터 봐야 하나요?</a>
   <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
-  <a href="#qa-validation-criteria"><span class="code">VERIFY</span>Q&A 검증 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -263,25 +262,6 @@ token accounting ledger, provider invoice sample, feature cost dashboard, anomal
 </div>
 </section>
 
-<section id="qa-validation-criteria">
-<div class="ch-head"><span class="ch-code">VERIFY</span><h2>Q&A 검증 기준</h2></div>
-<p class="lede">Q&amp;A 답변은 기준일, 관련 본문 앵커, 확인 명령/로그, 좋은 답변과 나쁜 답변의 차이가 함께 있어야 통과로 본다. 기준일은 <strong>2026-07-09</strong>이며, 문항별 최신성은 실제 운영 도구 출력으로 다시 고정한다.</p>
-<table>
-<tr><th>검증 항목</th><th>기준</th></tr>
-<tr><td>관련 본문 앵커</td><td><a href="operations-ai-llm-operations-handbook.html#llm-version-evidence-packet">AI·LLM 운영 Addendum 운영 증거 패킷</a>을 먼저 읽고 답변의 증거 이름을 맞춘다.</td></tr>
-<tr><td>확인 명령/로그</td><td>provider/model/API version, route log, eval dataset/judge version, safety policy changelog, cost/token ledger</td></tr>
-<tr><td>좋은 답변</td><td>provider/model/API/eval/safety policy 버전과 changelog 확인 루틴, fallback 품질 저하를 함께 말한다.</td></tr>
-<tr><td>나쁜 답변</td><td>모델을 바꾸거나 프롬프트를 고치면 된다고만 답한다.</td></tr>
-<tr><td>승인/rollback 기준</td><td>severity, 사용자 영향, rollback 가능성, 승인자를 답변 마지막에 명시한다.</td></tr>
-</table>
-<h3>LLM Q&A 추가 검증</h3>
-<table>
-<tr><th>문항 유형</th><th>반드시 포함할 버전 증거</th><th>중단 기준</th></tr>
-<tr><td>provider outage/fallback</td><td>provider status, route decision log, primary/fallback model id, region/data residency</td><td>fallback model이 tool/schema/safety parity를 만족하지 않으면 자동 전환 금지.</td></tr>
-<tr><td>structured output/API 변경</td><td>API version, SDK version, raw output, schema validation path, parser version</td><td>repair가 의미 필드를 추정하거나 raw output 보존이 없으면 release block.</td></tr>
-<tr><td>eval/safety policy</td><td>eval dataset id, judge version, safety policy version, red-team fixture, changelog 확인일</td><td>critical safety category false negative 또는 정상 업무 false positive 급증이면 rollout 중단.</td></tr>
-</table>
-</section>
 <footer>OPERATIONS QA TRAINING PACKET · AI·LLM 운영 Addendum Q&amp;A · generated for handbook practice</footer>
 </main>
 </div>

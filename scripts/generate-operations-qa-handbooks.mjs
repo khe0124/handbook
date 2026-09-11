@@ -2736,8 +2736,8 @@ const pages = [
   },
   {
     "id": "operations-checklist-interview-qa",
-    "title": "운영 체크리스트·면접 답변 Q&A",
-    "source": "운영 체크리스트·면접 답변",
+    "title": "운영 인수·릴리즈 리뷰·면접 답변 Q&A",
+    "source": "운영 인수·릴리즈 리뷰·면접 답변",
     "subtitle": "면접 답변 검증에서 판단 기준, 실패 신호, 완화 선택, 인계 증거를 실제 운영 언어로 답하는 Q&A입니다.",
     "questions": [
       {

@@ -10,6 +10,7 @@
 <nav aria-label="목차">
 <div class="nav-brand">OPERATIONS · AI LLM</div>
 <div class="nav-title">AI·LLM 운영</div>
+  <a href="#chindex"><span class="code">INDEX</span>문서 구조</a>
   <a href="#ch1"><span class="code">AI-OPS-01</span>SLI/SLO</a>
   <a href="#ch2"><span class="code">AI-OPS-02</span>Dashboard</a>
   <a href="#ch3"><span class="code">AI-OPS-03</span>Release</a>
@@ -32,9 +33,26 @@
   <div class="hero-meta">OPERATIONS ADDENDUM · 개념 모델 · 실무 체크리스트 · RUNBOOK</div>
 </header>
 
+<section id="chindex">
+<div class="ch-head"><span class="ch-code">INDEX</span><h2>문서 구조</h2></div>
+<p class="lede">이 문서는 AI·LLM 기능을 운영 서비스로 다룰 때 필요한 품질 지표, 릴리즈 기준, 장애 대응, 증거 패킷을 정리한 확장 문서입니다. 프론트엔드에서는 AI 응답이 화면에 표시되는 순간부터 schema, citation, fallback, 비용, 안전 정책을 함께 봐야 합니다.</p>
+<h3>프론트엔드 개발자 연결점</h3>
+<div class="glossary">
+<div class="g-row"><div class="g-term"><b>시작 증거</b><span>상황</span></div><div class="g-def"><p><b>볼 증거</b> UI 응답 실패, parser error, citation mismatch, fallback banner, request id</p><p><b>학습 전환</b> AI 호출 200 응답과 사용자에게 안전한 결과 표시를 분리한다.</p></div></div>
+<div class="g-row"><div class="g-term"><b>자주 만나는 상황</b><span>상황</span></div><div class="g-def"><p><b>볼 증거</b> 새 prompt 이후 schema failure 증가, RAG 답변 근거 불일치, token 비용 급증</p><p><b>학습 전환</b> 프롬프트 문제가 아니라 model route, retrieval index, judge, policy 문제일 수 있음을 확인한다.</p></div></div>
+<div class="g-row"><div class="g-term"><b>완료 산출물</b><span>상황</span></div><div class="g-def"><p><b>볼 증거</b> llm release evidence packet, golden set replay, dashboard snapshot, rollback/fallback plan</p><p><b>학습 전환</b> AI 기능 배포를 제품 UX, 품질 평가, 운영 복구 기준까지 묶어 설명한다.</p></div></div>
+</div>
+</section>
+
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">AI-OPS-01</span><h2>AI/LLM SLI</h2></div>
 <p class="lede">개념 모델은 일반 웹 서비스의 availability, latency, error rate 위에 AI 품질 신호를 얹는 것입니다. 모델 호출이 성공해도 근거 없는 답변, 잘못된 citation, schema 실패, 과도한 비용은 운영 장애입니다.</p>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS DECISION</span>
+<p><b>운영 질문</b> AI 응답이 HTTP 200이어도 사용자에게 안전하고 신뢰 가능한 결과인지 어떻게 판단하는가?</p>
+<p><b>확인할 증거</b> schema success, groundedness, citation precision, cost per successful answer, fallback rate, policy violation</p>
+<p><b>판단 기준</b> 모델 호출 성공과 제품 기능 성공을 분리하고, UI가 소비하는 contract와 근거 품질을 함께 본다.</p>
+</div>
 <p>일반 웹 서비스라면 availability, latency, error rate만 잘 챙기면 되지만, LLM 기능은 여기에 AI 품질 신호를 하나 더 얹어야 한다. 모델 호출 자체가 200으로 성공해도, 그 안에 근거 없는 답변이나 잘못된 citation, schema 실패, 과도한 비용이 숨어 있다면 그것도 엄연한 운영 장애다.</p>
 <p>품질 관련 SLI로는 schema success rate(구조화 출력 성공률), groundedness rate(근거 있는 답변 비율), citation precision(인용이 실제 근거인지)을 본다. 이 지표들이 나빠지면 prompt나 schema를 rollback하거나, retrieval와 judge를 점검하거나, chunk와 citation policy를 수정해서 대응한다.</p>
 <p>안전과 비용 관련 SLI로는 tool blocked rate(위험 도구 호출 차단율), cost per successful answer(성공 답변당 비용), fallback rate(대체 경로 사용률)를 본다. 이 세 지표는 각각 policy 조정, model routing과 token budget 조정, provider와 region 점검으로 대응한다.</p>
@@ -42,6 +60,12 @@
 
 <section id="ch2">
 <div class="ch-head"><span class="ch-code">AI-OPS-02</span><h2>Dashboard 구성</h2></div>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS DECISION</span>
+<p><b>운영 질문</b> AI 품질 저하가 트래픽, retrieval, policy, 비용, provider 중 어디에서 시작됐는가?</p>
+<p><b>확인할 증거</b> tenant traffic, p95 latency, retrieval recall sample, groundedness sample, policy blocked count, fallback route</p>
+<p><b>판단 기준</b> 품질·비용·보안·fallback 패널을 한 화면에서 보고, 같은 시간축의 release marker와 대조한다.</p>
+</div>
 <div class="serial-card">
 <span class="sc-label">LLM DASHBOARD</span>
 traffic · p95 latency · error rate · schema failure<br>
@@ -54,12 +78,24 @@ policy violation · tool blocked · cost · fallback · provider health
 
 <section id="ch3">
 <div class="ch-head"><span class="ch-code">AI-OPS-03</span><h2>Prompt/model release</h2></div>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS DECISION</span>
+<p><b>운영 질문</b> prompt, model, retrieval index 변경이 전체 사용자에게 나가기 전에 어떤 gate를 통과해야 하는가?</p>
+<p><b>확인할 증거</b> golden set, security fixture, latency/cost comparison, tenant scope, feature flag, health window</p>
+<p><b>판단 기준</b> 오프라인 평가와 제한 배포를 통과하고 rollback 가능한 상태에서만 전체 배포한다.</p>
+</div>
 <p>prompt나 model을 바꾸는 release는 일반 배포보다 조심스럽게 단계를 나눠야 한다. 변경 요청 단계에서는 영향받는 flow, prompt/model/index version, rollback plan을 먼저 확인한다. 오프라인 평가 단계에서는 golden set, security fixture, latency/cost 비교로 실제 배포 전에 검증한다. 제한 배포 단계에서는 tenant, traffic, feature flag, human review queue로 영향 범위를 최대한 좁혀서 내보낸다. 마지막 health window 단계에서는 schema, groundedness, cost, fallback, user feedback을 일정 기간 지켜보고 나서야 전체 배포로 넘어간다.</p>
 </section>
 
 <section id="ch4">
 <div class="ch-head"><span class="ch-code">AI-OPS-04</span><h2>Incident drill</h2></div>
 <h3>장애/운영 시나리오</h3>
+<div class="semantic-card">
+<span class="sc-label">OPERATIONS DECISION</span>
+<p><b>운영 질문</b> AI 장애에서 가장 작은 blast radius로 즉시 완화할 수 있는 선택지는 무엇인가?</p>
+<p><b>확인할 증거</b> provider error spike, cost/request, groundedness drop, citation precision drop, tool call count</p>
+<p><b>판단 기준</b> flag off, prompt rollback, provider fallback, index rollback 중 사용자 피해와 부작용이 가장 작은 조치를 먼저 고른다.</p>
+</div>
 <p>AI·LLM 운영에서 반복되는 사고 유형은 몇 가지로 정리된다. provider outage는 timeout이나 error spike로 나타나는데, 이럴 때는 fallback provider로 전환하거나 degraded mode로 즉시 완화한다. cost spike는 cost/request가 갑자기 급증하는 형태로 나타나며, token budget 조정, model routing 변경, rate limit으로 대응한다. retrieval index corruption은 groundedness와 citation precision이 함께 떨어지는 형태로 나타나고, index rollback이나 reingest freeze로 완화한다. prompt regression은 schema failure가 늘어나는 형태로 나타나며, prompt rollback이나 release block으로 대응한다. runaway agent loop는 tool call이 폭증하는 형태로 나타나는데, episode kill switch나 approval lock으로 막아야 한다.</p>
 </section>
 

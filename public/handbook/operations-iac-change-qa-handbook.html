@@ -28,7 +28,6 @@
   <a href="#qa-12"><span class="code">Q12</span>apply 후에는 state 성공 말고 무엇을 실제 cloud에서 다시 읽어야 하나요?</a>
   <a href="#drill"><span class="code">DRILL</span>운영 답변 반복</a>
   <a href="#rubric"><span class="code">RUBRIC</span>통과 기준</a>
-  <a href="#qa-validation-criteria"><span class="code">VERIFY</span>Q&A 검증 기준</a>
 </nav>
 <main>
 <header class="hero">
@@ -263,19 +262,6 @@ apply output, state serial, cloud API readback, application smoke result, metric
 </div>
 </section>
 
-<section id="qa-validation-criteria">
-<div class="ch-head"><span class="ch-code">VERIFY</span><h2>Q&A 검증 기준</h2></div>
-<p class="lede">Q&amp;A 답변은 기준일, 관련 본문 앵커, 확인 명령/로그, 좋은 답변과 나쁜 답변의 차이가 함께 있어야 통과로 본다. 기준일은 <strong>2026-07-09</strong>이며, 문항별 최신성은 실제 운영 도구 출력으로 다시 고정한다.</p>
-<table>
-<tr><th>검증 항목</th><th>기준</th></tr>
-<tr><td>관련 본문 앵커</td><td><a href="operations-iac-change-handbook.html#iac-evidence-packet">IaC·변경관리·Drift 운영 증거 패킷</a>을 먼저 읽고 답변의 증거 이름을 맞춘다.</td></tr>
-<tr><td>확인 명령/로그</td><td>terraform/OpenTofu version, provider lock, plan -out, drift-only plan, cloud audit readback</td></tr>
-<tr><td>좋은 답변</td><td>plan diff의 replace/destroy, provider lock, rollback 불가 지점을 분리한다.</td></tr>
-<tr><td>나쁜 답변</td><td>terraform plan이 성공했으니 apply하면 된다고 말한다.</td></tr>
-<tr><td>승인/rollback 기준</td><td>severity, 사용자 영향, rollback 가능성, 승인자를 답변 마지막에 명시한다.</td></tr>
-</table>
-
-</section>
 <footer>OPERATIONS QA TRAINING PACKET · IaC·변경관리·Drift Q&amp;A · generated for handbook practice</footer>
 </main>
 </div>
