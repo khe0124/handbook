@@ -12,11 +12,16 @@
 <div class="nav-title">AI Native 포트폴리오</div>
   <a href="#parts"><span class="code">PART</span>Curated Path</a>
   <a href="#ch1"><span class="code">PORT-01</span>포지셔닝</a>
+  <a href="#personal-ai-projects"><span class="code">PORT-P1</span>개인 프로젝트 맵</a>
+  <a href="#personal-ai-loop"><span class="code">PORT-P2</span>AI 작업 루프</a>
+  <a href="#personal-ai-answer"><span class="code">PORT-P3</span>답변 스크립트</a>
   <a href="#ch2"><span class="code">PORT-02</span>JD 매핑</a>
   <a href="#ch3"><span class="code">PORT-03</span>증거팩</a>
   <a href="#ch4"><span class="code">PORT-04</span>답변 카드</a>
   <a href="#career-output-packet"><span class="code">OUTPUT</span>답변 산출물</a>
   <a href="#ch5"><span class="code">PORT-05</span>README</a>
+  <a href="#ch6"><span class="code">PORT-06</span>Eval·Security·Ops</a>
+  <a href="#ch7"><span class="code">PORT-07</span>운영 실패 방어</a>
   <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
 </nav>
 <main>
@@ -56,17 +61,61 @@
 </table>
 </section>
 
+<section id="personal-ai-projects">
+<div class="ch-head"><span class="ch-code">PORT-P1</span><h2>개인 AI Native 프로젝트 맵</h2></div>
+<p class="lede">이 페이지의 핵심 포지셔닝은 RAG 데모가 아니라, 실제 탄소시장 풀스택 시스템을 AI와 함께 설계·구현·검증한 경험입니다. “AI로 만들었다”는 말을 그대로 쓰면 가벼워 보일 수 있으므로, 프로젝트 범위와 사람의 판단 책임을 함께 말합니다.</p>
+<table>
+<tr><th>프로젝트</th><th>AI로 만든 범위</th><th>사람이 책임진 판단</th><th>면접에서의 의미</th></tr>
+<tr><td>gks-car-be</td><td>Spring Boot 백엔드, 멀티모듈 구조, VRC/VCM 도메인 흐름, API·테스트·리팩터링 초안 생성과 반복 수정</td><td>탄소크레딧을 serial range와 상태 전이가 있는 원장성 자산으로 모델링하고, 트랜잭션·동시성·감사 경계를 검증</td><td>AI를 코드 생성기로만 쓴 것이 아니라 백엔드 도메인 모델과 정합성 검증 루프까지 운영한 증거</td></tr>
+<tr><td>gkx-car-fe 계열</td><td>사용자 웹·어드민 화면, 상태 관리, 폼·테이블·검증·API 연동, 화면별 실패 상태 초안 생성</td><td>사용자/관리자 흐름, 권한별 UX, API contract, loading/empty/error, 중복 요청 방지와 복구 가능성을 검수</td><td>프론트엔드 경험을 AI와 결합해 복잡한 B2B/공공 업무 UI를 빠르게 제품화한 증거</td></tr>
+<tr><td>seoul-carbon</td><td>Spring Boot/React 기반의 방법론·프로젝트·모니터링·발행 요청·크레딧·인증서·감사 로그 구현 보조</td><td>상태 전이, 관리자/공개 API 분리, AuditLog, Flyway migration, 오류 응답 계약을 검증</td><td>AI Native 작업 방식이 한 번의 실험이 아니라 유사 도메인에 반복 적용됐다는 증거</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">포지셔닝</span>“저는 AI로 단순 샘플 앱을 만든 것이 아니라, 탄소크레딧 거래·발행·폐기·인증서·감사 로그가 얽힌 풀스택 시스템을 AI와 함께 구현했습니다. 중요한 점은 AI가 코드를 만들었다는 사실보다, 제가 요구사항을 쪼개고 도메인 불변조건을 정의하고, 생성된 코드를 트랜잭션·권한·테스트·운영 관점에서 검증했다는 점입니다.”</div>
+</section>
+
+<section id="personal-ai-loop">
+<div class="ch-head"><span class="ch-code">PORT-P2</span><h2>AI 작업 루프</h2></div>
+<p class="lede">AI Native 포트폴리오에서 가장 위험한 표현은 “AI가 다 만들었습니다”입니다. 강한 표현은 사람이 문제를 쪼개고, AI에게 초안을 맡기고, 사람이 검증·수정·릴리스 판단을 닫았다는 작업 루프입니다.</p>
+<table>
+<tr><th>단계</th><th>내가 한 일</th><th>AI에게 맡긴 일</th><th>남길 증거</th></tr>
+<tr><td>Problem framing</td><td>탄소시장 도메인의 actor, 상태, 불변조건, 금지 상태를 정의</td><td>요구사항을 entity/API/use case 후보로 분해</td><td>context package, 도메인 glossary, 상태 전이표</td></tr>
+<tr><td>Architecture</td><td>모듈 경계, public/admin API, transaction boundary, audit log 책임을 결정</td><td>패키지 구조, controller/service/repository 초안, DTO mapping 초안 생성</td><td>architecture note, ADR, rejected alternatives</td></tr>
+<tr><td>Implementation</td><td>생성 코드의 도메인 의미, null/enum/state guard, 권한 경계를 검수</td><td>반복 CRUD, validation, query, UI component, table/form 상태 초안 작성</td><td>PR diff, commit log, review note</td></tr>
+<tr><td>Verification</td><td>테스트 실패, 상태 전이 반례, 동시성·중복 요청·오류 응답을 확인</td><td>테스트 케이스 초안, edge case 목록, 리팩터링 후보 제안</td><td>test output, QA ticket, bug reproduction note</td></tr>
+<tr><td>Release evidence</td><td>공개 가능한 범위와 과장 금지선을 정리</td><td>README, release note, 면접 답변 카드 초안 작성</td><td>README, evidence packet, 30/90초 답변</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">경계 문장</span><p>“AI가 다 만들었다”라고 말하지 않는다. “AI가 초안과 반복 구현 속도를 크게 높였고, 저는 요구사항 분해, 도메인 판단, 생성 코드 검증, 테스트 실패 해석, 최종 책임을 맡았다”라고 말한다.</p></div>
+</section>
+
+<section id="personal-ai-answer">
+<div class="ch-head"><span class="ch-code">PORT-P3</span><h2>AI Native 답변 스크립트</h2></div>
+<p class="lede">면접에서는 AI 사용 자체보다 “AI 결과물을 어떻게 통제했는가”를 물을 가능성이 큽니다. 아래 답변은 백엔드/프론트/풀스택/AI Native 포지션에서 바로 쓸 수 있는 형태입니다.</p>
+<table>
+<tr><th>질문</th><th>답변 골격</th></tr>
+<tr><td>AI로 어떤 프로젝트를 만들었나요?</td><td>gks-car-be, gkx-car-fe 계열, seoul-carbon을 AI와 함께 만들었고, 탄소크레딧 발행·거래·폐기·인증서·감사 로그가 있는 풀스택 시스템이었다고 답한다.</td></tr>
+<tr><td>AI가 만든 코드의 품질은 어떻게 보장했나요?</td><td>요구사항을 작은 task spec으로 쪼개고, 생성 코드마다 도메인 invariant, API contract, 타입/validation, 테스트, 오류 상태를 확인했다고 답한다.</td></tr>
+<tr><td>AI가 틀린 코드를 만들면?</td><td>상태 전이 반례, 컴파일/테스트 실패, API 응답 mismatch, 권한 누락을 기준으로 reject하고, 실패 원인을 다음 prompt/context에 반영했다고 답한다.</td></tr>
+<tr><td>그럼 본인 실력은 어디서 드러나나요?</td><td>AI가 코드를 빠르게 만들 수는 있지만 무엇이 맞는 도메인 모델인지, 어떤 transaction boundary가 안전한지, 어떤 UI 상태가 사용자 실수를 막는지는 사람이 판단했다고 답한다.</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">30초 답변</span>gks-car-be, gkx-car-fe 계열, seoul-carbon을 만들 때 AI를 단순 자동완성보다 훨씬 적극적으로 사용했습니다. 요구사항을 작은 task spec으로 쪼개고, AI가 백엔드 API, 도메인 서비스, 프론트 화면, 테스트 초안을 만들게 한 뒤 제가 도메인 불변조건, 트랜잭션 경계, 권한, 오류 상태, API 계약을 검증했습니다. 그래서 제 AI Native 경험은 “AI를 써봤다”가 아니라 “AI가 만든 코드를 제품 코드로 받아들이기 위한 검증 루프를 운영했다”에 가깝습니다.</div>
+<div class="serial-card"><span class="sc-label">90초 답변</span>예를 들어 gks-car-be에서는 탄소크레딧을 단순 수량이 아니라 serial range와 상태를 가진 원장성 자산으로 봐야 했습니다. AI는 entity, service, repository, DTO, 테스트 초안을 빠르게 만들 수 있었지만, 입금·체결·보유 수량 변경·인증서 발급이 어떤 트랜잭션 경계에 묶여야 하는지, 이중 체결이나 부분 성공이 생기면 어떤 불변조건이 깨지는지는 제가 검증해야 했습니다. seoul-carbon에서도 방법론, 프로젝트, 발행 요청, 크레딧 이전·폐기 상태 전이를 AI와 함께 구현하되, 관리자 API와 감사 로그, 오류 응답 계약은 제가 검수했습니다. 그래서 저는 AI를 개발 속도 도구로만 쓰지 않고, 도메인 설계와 테스트, 리뷰, 릴리스 증거까지 포함한 작업 방식으로 사용했습니다.</div>
+</section>
+
 <section id="ch2">
 <div class="ch-head"><span class="ch-code">PORT-02</span><h2>JD 키워드 매핑</h2></div>
 <table>
 <tr><th>JD 키워드</th><th>보여줄 증거</th></tr>
+<tr><td>AI-assisted fullstack development</td><td>gks-car-be, gkx-car-fe 계열, seoul-carbon의 task spec, commit log, PR diff, README, 테스트 결과</td></tr>
+<tr><td>AI code review / verification</td><td>생성 코드 reject 사례, 반례 목록, test failure 수정 기록, API contract mismatch 수정</td></tr>
+<tr><td>Domain-driven prompting</td><td>탄소크레딧 serial range, 상태 전이, transaction boundary, audit log를 context package로 정리한 기록</td></tr>
+<tr><td>Agent/tool workflow</td><td>Plan → Act → Verify → Reflect episode log, 역할별 prompt, 검증 체크리스트</td></tr>
 <tr><td>RAG</td><td>retrieval eval report, chunking tradeoff, citation failure analysis</td></tr>
 <tr><td>LLM evaluation</td><td>eval dataset, baseline/candidate report, CI gate</td></tr>
 <tr><td>Agent/tool use</td><td>tool contract, approval policy, audit trace</td></tr>
 <tr><td>AI security</td><td>prompt injection fixture, tenant isolation test, red-team report</td></tr>
 <tr><td>LLM operations</td><td>dashboard spec, SLO, incident packet, fallback plan</td></tr>
 </table>
-<p>대표 capstone인 Policy Document Intelligence Assistant를 포트폴리오로 쓴다면, JD 키워드를 기능 이름에 매핑하지 말고 증거에 매핑합니다. RAG는 “문서 검색 챗봇”이 아니라 retrieval trace와 citation failure analysis로, evaluation은 “테스트했다”가 아니라 baseline/candidate gate로, security는 “API key를 숨겼다”가 아니라 indirect injection과 tenant isolation fixture로 보여줘야 합니다.</p>
+<p>이 페이지에서는 AI Native를 LLM 기능 개발로만 좁히지 않습니다. 핵심 capstone은 탄소시장 풀스택 시스템을 AI와 함께 만든 경험입니다. JD 키워드는 “AI를 썼다”가 아니라 task spec, context package, generated diff, rejected suggestion, test output, release note 같은 증거에 매핑합니다.</p>
 </section>
 
 <section id="ch3">
@@ -74,6 +123,9 @@
 <p class="lede">포트폴리오 문서는 템플릿 원문을 다시 싣지 않습니다. 실제 제출에는 <strong>AI Native 템플릿 키트</strong>의 <code>portfolio-evidence-pack.md</code>를 사용하고, 여기서는 어떤 증거를 선택할지만 정합니다.</p>
 <table>
 <tr><th>증거 축</th><th>대표 산출물</th><th>면접에서 말할 핵심</th></tr>
+<tr><td>Fullstack delivery</td><td>gks-car-be, gkx-car-fe, seoul-carbon README·commit log·기능 목록·테스트 결과</td><td>AI로 만든 범위와 사람이 검증한 범위를 분리한다</td></tr>
+<tr><td>Prompt/context</td><td>task spec, domain glossary, 상태 전이표, API contract, rejected prompt</td><td>AI에게 일을 맡기기 전에 문제를 어떻게 구조화했는지 보여준다</td></tr>
+<tr><td>Verification</td><td>test output, type/build failure, QA ticket, bug reproduction note, review checklist</td><td>생성 코드를 믿지 않고 제품 코드로 검증했다는 증거를 붙인다</td></tr>
 <tr><td>Evaluation</td><td>baseline/candidate report, failing cases</td><td>좋아졌다는 주장보다 릴리스 기준을 보여준다</td></tr>
 <tr><td>Security</td><td>red-team report, blocked trace</td><td>위험 입력을 어떻게 차단했는지 보여준다</td></tr>
 <tr><td>Operations</td><td>cost/latency trace, fallback plan</td><td>데모 이후 운영 가능성을 보여준다</td></tr>
@@ -97,18 +149,18 @@
 <div class="ch-head"><span class="ch-code">OUTPUT</span><h2>CAREER OUTPUT PACKET</h2></div>
 <p class="lede">AI Native 포트폴리오는 “AI를 썼다”는 문장이 아니라, 평가·보안·운영 증거가 붙은 답변 산출물로 방어해야 합니다. 좋은 답변은 기능명보다 판단 기준과 실패 처리 방식을 먼저 보여줍니다.</p>
 <pre class="snippet-card"><code>career_output_packet:
-  project: policy_document_intelligence_assistant
-  weak_claim: "RAG 챗봇을 만들고 AI를 활용했습니다"
-  strong_claim: "정책 문서 QA를 citation 기반 RAG로 구현하고, golden query 64개, indirect injection fixture 18개, p95 latency/cost trace로 release gate를 운영했습니다"
+  project: carbon_market_fullstack_ai_native
+  weak_claim: "AI로 백엔드와 프론트를 만들었습니다"
+  strong_claim: "gks-car-be, gkx-car-fe 계열, seoul-carbon을 AI와 함께 구현하며 task spec, domain context, generated diff, test/build result, rejected suggestion을 남기고 사람이 도메인 불변조건·트랜잭션·권한·오류 상태를 검증했습니다"
   evidence_to_attach:
-    - context-package.yaml
-    - retrieval-eval-report.md
-    - baseline-candidate-quality-report.md
-    - security-fixtures.jsonl
-    - red-team-report.md
-    - cost-latency-trace.md
-    - residual-risk-register.md
-  interview_use: "30초 답변은 문제·범위·검증 지표로 말하고, 90초 답변은 eval/security/operations 실패와 개선으로 확장한다"</code></pre>
+    - ai-task-specs.md
+    - domain-context-package.md
+    - agent-episode-log.md
+    - generated-diff-review.md
+    - rejected-suggestions.md
+    - test-build-results.md
+    - project-readme-links.md
+  interview_use: "30초 답변은 AI로 만든 범위와 사람이 검증한 범위를 나누고, 90초 답변은 gks-car-be/seoul-carbon의 도메인 불변조건과 테스트·리뷰 루프로 확장한다"</code></pre>
 <table>
 <tr><th>Before</th><th>After</th><th>검증 질문</th></tr>
 <tr><td>AI 도구 사용 경험을 기능명으로만 말한다</td><td>task spec, eval, security fixture, runbook이 붙은 작업 루프로 설명한다</td><td>모델 출력 실패를 어떻게 발견하고 막았는가?</td></tr>
@@ -128,6 +180,33 @@
 <li>운영 지표와 장애 대응은 무엇인가</li>
 <li>남은 한계와 다음 개선은 무엇인가</li>
 </ol>
+</section>
+
+<section id="ch6">
+<div class="ch-head"><span class="ch-code">PORT-06</span><h2>Eval·Security·Ops 답변 장부</h2></div>
+<p class="lede">AI Native 포트폴리오는 데모보다 검증 루프가 중요합니다. 면접에서 “잘 되는 것처럼 보이는데 실제 품질은 어떻게 보장했나요?”라는 질문을 받으면 아래 축으로 답합니다.</p>
+<table>
+<tr><th>축</th><th>좋은 증거</th><th>면접 답변</th></tr>
+<tr><td>Evaluation</td><td>golden query, baseline/candidate report, recall@k, citation precision, failure bucket</td><td>프롬프트 감이 아니라 릴리스 기준과 실패 유형으로 품질을 봤다고 말한다.</td></tr>
+<tr><td>Retrieval</td><td>chunking 비교, rerank 여부, citation trace, no-answer policy</td><td>정답을 못 찾을 때 환각하지 않고 근거 부족으로 응답하는 정책을 둔다.</td></tr>
+<tr><td>Security</td><td>prompt injection fixture, tenant isolation test, PII redaction, tool approval rule</td><td>악성 문서와 사용자 입력이 system/developer instruction을 덮지 못하게 검증한다.</td></tr>
+<tr><td>Operations</td><td>p95 latency, token cost, fallback path, model/version change log, incident packet</td><td>모델이 바뀌어도 품질·비용·지연시간을 비교하고 되돌릴 기준을 둔다.</td></tr>
+<tr><td>Human Review</td><td>review queue, confidence threshold, audit trace</td><td>모든 판단을 자동화하지 않고 위험한 결과는 사람 검토로 넘긴다.</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">90초 답변</span>AI 기능은 데모가 아니라 eval로 설명하겠습니다. 먼저 대표 질문을 golden query로 만들고, recall@5와 citation precision 같은 기준으로 baseline과 후보 변경을 비교합니다. 보안은 indirect prompt injection과 tenant isolation fixture를 회귀 테스트에 넣고, 운영은 p95 latency와 token cost, fallback을 같이 봅니다. 신뢰도가 낮거나 근거가 없는 응답은 no-answer 또는 human review로 보내는 정책을 둡니다.</div>
+</section>
+
+<section id="ch7">
+<div class="ch-head"><span class="ch-code">PORT-07</span><h2>운영 실패 방어</h2></div>
+<p class="lede">AI 포트폴리오에서 강한 답변은 성공 사례보다 실패를 통제한 기록에서 나옵니다. 아래 질문에 답하지 못하면 “AI 써봤다” 수준으로 보일 수 있습니다.</p>
+<table>
+<tr><th>압박 질문</th><th>방어 답변</th><th>증거</th></tr>
+<tr><td>모델이 그럴듯한 거짓 답을 하면?</td><td>citation required, confidence threshold, no-answer policy, human review로 환각을 낮춥니다.</td><td>citation failure report, rejected answer sample</td></tr>
+<tr><td>악성 문서가 prompt injection을 넣으면?</td><td>retrieved text를 instruction으로 취급하지 않고, tool call과 권한 경계를 policy로 제한합니다.</td><td>injection fixture, blocked trace, red-team note</td></tr>
+<tr><td>비용과 latency가 튀면?</td><td>model tier, context length, cache, batching, fallback을 비교하고 p95/cost budget을 둡니다.</td><td>cost-latency trace, budget threshold</td></tr>
+<tr><td>개인정보가 들어오면?</td><td>PII redaction, data retention, access log, tenant isolation을 설계에 포함합니다.</td><td>privacy checklist, redaction fixture</td></tr>
+</table>
+<div class="callout warn"><span class="co-label">위험한 표현</span><p>“AI가 알아서 답합니다”라고 말하지 않는다. “모델 출력은 신뢰 경계 밖의 후보 결과로 보고, eval/security/ops gate를 통과해야 사용자에게 노출합니다”라고 답한다.</p></div>
 </section>
 <section id="career-evidence-anti-exaggeration">
 <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>

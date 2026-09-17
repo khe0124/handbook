@@ -56,6 +56,7 @@
   <a href="#personalb2b-ch4"><span class="code">ADM-PER-03</span>대표 답변</a>
   <a href="#personalb2b-ch5"><span class="code">ADM-PER-04</span>회사별 조정</a>
   <a href="#personalb2b-ch6"><span class="code">ADM-PER-05</span>SaaS 도메인 깊이</a>
+  <a href="#personalb2b-ch7"><span class="code">ADM-PER-06</span>Senior IC 운영 모델</a>
   <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
 </nav>
 <main>
@@ -752,6 +753,20 @@ B2B SaaS의 핵심은 고객 조직의 업무 위험을 소프트웨어가 대�
 <tr><td>Data export</td><td>Excel/PDF export의 위험은?</td><td>권한, 범위, masking, rate limit, formula injection, audit를 봅니다.</td></tr>
 <tr><td>고객별 설정</td><td>고객별 요구가 충돌하면?</td><td>core model과 configuration을 분리하고 예외를 제품 구조로 흡수할지 판단합니다.</td></tr>
 </table>
+</section>
+
+<section id="personalb2b-ch7">
+<div class="ch-head"><span class="ch-code">ADM-PER-06</span><h2>Senior IC 운영 모델</h2></div>
+<p class="lede">시니어처럼 보이는 협업 답변은 “소통을 잘합니다”가 아니라 모호한 문제를 구조화하고, 위험을 드러내고, 팀이 되돌릴 수 있는 결정을 하게 만드는 방식이어야 합니다.</p>
+<table>
+<tr><th>상황</th><th>시니어답게 말하는 방식</th><th>증거</th></tr>
+<tr><td>요구사항이 모호함</td><td>사용자, 성공 기준, 제외 범위, 위험한 가정을 짧은 RFC나 스펙 갭으로 정리합니다.</td><td>요구사항 질문 목록, spec gap, decision log</td></tr>
+<tr><td>기술 선택 갈등</td><td>선호가 아니라 제약, 대안, 되돌림 비용, 운영 리스크로 비교하고 ADR을 남깁니다.</td><td>ADR, trade-off table, rejected alternative</td></tr>
+<tr><td>리뷰 품질</td><td>스타일 지적보다 correctness, security, performance, maintainability, rollout risk를 먼저 봅니다.</td><td>리뷰 코멘트, 테스트 추가, rollback 조건</td></tr>
+<tr><td>일정 압박</td><td>핵심 경로와 부가 기능을 나누고, 기능 축소·feature flag·후속 부채 상환 계획을 제안합니다.</td><td>scope cut 기록, release note, debt ticket</td></tr>
+<tr><td>장애/실패</td><td>책임 추궁이 아니라 timeline, impact, detection gap, prevention action으로 postmortem을 닫습니다.</td><td>incident timeline, action item, alert 보강</td></tr>
+</table>
+<div class="serial-card"><span class="sc-label">90초 답변</span>협업에서 제가 중요하게 보는 것은 의견을 크게 내는 것보다 판단 기준을 보이게 만드는 것입니다. 요구사항이 모호하면 사용자와 성공 기준, 제외 범위, 위험한 가정을 먼저 정리하고, 기술 선택은 선호가 아니라 운영 리스크와 되돌림 비용으로 비교합니다. 리뷰에서는 스타일보다 정확성, 보안, 성능, 배포 리스크를 우선 보고, 일정이 급하면 핵심 경로를 지키는 대신 feature flag나 후속 부채 상환 계획을 같이 둡니다.</div>
 </section>
 <section id="career-evidence-anti-exaggeration">
 <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>

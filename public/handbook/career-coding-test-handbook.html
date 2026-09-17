@@ -27,6 +27,7 @@
   <a href="#coding-q14"><span class="code">CODE-14</span>핵심 질문 40선</a>
   <a href="#coding-q15"><span class="code">CODE-15</span>정당성 설명</a>
   <a href="#coding-q16"><span class="code">CODE-16</span>개념 인과관계</a>
+  <a href="#coding-q17"><span class="code">CODE-17</span>고급 패턴 방어</a>
   <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
 </nav>
 <main>
@@ -431,6 +432,21 @@ DP, greedy, graph는 패턴 이름보다 정당성 실패 지점을 먼저 훈�
 <span class="co-label">면접 답변 전환</span>
 <p>“이건 DP입니다”보다 “완전탐색은 각 위치에서 선택지가 갈라져 지수 시간이 됩니다. 하지만 i번째까지의 최적해가 이전 상태 두세 개로 요약되고 같은 부분문제가 반복되므로 dp[i]를 정의할 수 있습니다. base case와 전이식이 모든 선택을 포함하므로 정답입니다”라고 말해야 합니다.</p>
 </div>
+</section>
+
+<section id="coding-q17">
+<div class="ch-head"><span class="ch-code">CODE-17</span><h2>고급 패턴 방어</h2></div>
+<p class="lede">시니어급 코딩 인터뷰에서는 패턴 이름보다 불변식, 자료구조 선택 이유, 반례 제거 능력을 봅니다. 아래 표는 “왜 이 자료구조인가요?”라는 질문에 답하기 위한 압축 장부입니다.</p>
+<table>
+<tr><th>패턴</th><th>언제 떠올릴지</th><th>정당성 문장</th><th>자주 터지는 실수</th></tr>
+<tr><td>Heap / Priority Queue</td><td>매번 최소/최대 후보를 꺼내야 하고 전체 정렬은 과한 경우</td><td>현재까지 발견한 후보 중 가장 우선순위가 높은 것만 필요하므로 O(log N)으로 갱신합니다.</td><td>삭제된 후보 lazy removal 누락, comparator overflow</td></tr>
+<tr><td>Union-Find</td><td>연결 여부가 반복 질의되고 edge가 추가되는 경우</td><td>집합 대표를 압축해 연결성 질의를 거의 상수 시간으로 줄입니다.</td><td>rank/size 갱신 실수, 방향 그래프에 잘못 적용</td></tr>
+<tr><td>Topological Sort</td><td>선후 관계, prerequisite, build order, cycle 검출이 있는 경우</td><td>indegree 0인 노드는 남은 의존성이 없으므로 먼저 처리해도 전체 순서를 깨지 않습니다.</td><td>cycle일 때 결과 길이 검증 누락</td></tr>
+<tr><td>Monotonic Stack</td><td>각 원소의 다음 큰/작은 값, span, 직사각형 확장이 필요한 경우</td><td>스택이 단조성을 유지하므로 새 원소가 들어올 때 더 이상 답이 될 수 없는 후보를 제거합니다.</td><td>같은 값 처리, pop 조건의 등호 방향</td></tr>
+<tr><td>Interval / Sweep Line</td><td>구간 겹침, 회의실, 동시 이벤트 수를 세는 경우</td><td>시작/끝 event를 시간순으로 처리하면 현재 활성 구간 수가 항상 정확합니다.</td><td>끝점 포함/제외, 같은 시간 start/end 정렬 순서</td></tr>
+<tr><td>Bitmask DP</td><td>N이 20 안팎이고 방문 집합 자체가 상태인 경우</td><td>방문한 집합과 현재 위치가 미래 선택에 필요한 정보를 충분히 담습니다.</td><td>상태 수와 메모리 계산 누락</td></tr>
+</table>
+<div class="callout"><span class="co-label">말하면서 푸는 구조</span><p>“먼저 brute force를 두고 입력 크기 때문에 탈락시킵니다. 그 다음 후보를 버릴 수 있는 성질이 있는지 봅니다. 단조성이 있으면 binary search나 two pointer, 반복 subproblem이면 DP, 연결성 반복 질의면 union-find, 선후 관계면 topological sort로 좁히겠습니다.”</p></div>
 </section>
 <section id="career-evidence-anti-exaggeration">
 <div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
