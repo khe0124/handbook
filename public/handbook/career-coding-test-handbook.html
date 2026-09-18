@@ -75,6 +75,13 @@
 
 <section id="doc-coding">
 <div class="ch-head"><span class="ch-code">PART</span><h2>코딩테스트 패턴</h2></div>
+<p class="lede">코딩테스트 파트는 문제 풀이 목록이 아니라 사고 루틴을 훈련하는 문서다. 모든 문제는 제약 확인, 패턴 선택, 반례 검증, 복잡도 설명으로 닫는다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>초기 접근</td><td>제약을 보고 brute force가 가능한가</td><td>제약·복잡도 표</td></tr>
+<tr><td>패턴 선택</td><td>왜 이 자료구조와 알고리즘인가</td><td>패턴별 불변식 노트</td></tr>
+<tr><td>면접 설명</td><td>막혔을 때 어떤 기준으로 되돌아가나</td><td>30초 풀이 설명</td></tr>
+</table>
 </section>
 
 <section id="coding-q1">
@@ -449,16 +456,15 @@ DP, greedy, graph는 패턴 이름보다 정당성 실패 지점을 먼저 훈�
 <div class="callout"><span class="co-label">말하면서 푸는 구조</span><p>“먼저 brute force를 두고 입력 크기 때문에 탈락시킵니다. 그 다음 후보를 버릴 수 있는 성질이 있는지 봅니다. 단조성이 있으면 binary search나 two pointer, 반복 subproblem이면 DP, 연결성 반복 질의면 union-find, 선후 관계면 topological sort로 좁히겠습니다.”</p></div>
 </section>
 <section id="career-evidence-anti-exaggeration">
-<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
-<p class="lede">커리어 답변은 강하게 말하되 증거가 받쳐 주는 범위 안에서만 말한다. 수치, 역할, 성과, 장애 대응 경험은 원천 증거와 공개 가능 범위를 먼저 정한 뒤 답변에 넣는다.</p>
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>코딩테스트 증거·과장 방지 기준</h2></div>
+<p class="lede">코딩테스트 역량은 푼 문제 수보다 제약을 읽고, 불변식을 세우고, 반례로 검증하는 과정으로 설명해야 한다.</p>
 <table>
-<tr><th>항목</th><th>기준</th><th>금지선</th></tr>
-<tr><td>수치</td><td>커밋, 기간, 사용자 수, 성능 개선율은 산정 기준과 기간을 함께 말한다.</td><td>추정치를 확정 성과처럼 말하지 않는다.</td></tr>
-<tr><td>역할</td><td>직접 구현, 공동 설계, 리뷰 참여, 운영 보조를 구분한다.</td><td>팀 성과를 단독 성과로 바꾸지 않는다.</td></tr>
-<tr><td>증거 위치</td><td>Git log, PR, ticket, dashboard, release note, 회고 문서 중 하나 이상에 연결한다.</td><td>공개할 수 없는 내부 정보를 화면 캡처나 원문으로 노출하지 않는다.</td></tr>
-<tr><td>공개 범위</td><td>공개 가능, 익명화 필요, 면접 구두 설명만 가능, 비공개를 구분한다.</td><td>NDA, 고객명, 보안 설정, 매출·트래픽 원문을 임의로 공개하지 않는다.</td></tr>
+<tr><th>항목</th><th>강한 증거</th><th>금지선</th></tr>
+<tr><td>문제 접근</td><td>제약 해석, brute force 한계, 선택한 자료구조의 불변식</td><td>패턴 이름만 외운 것처럼 말하지 않는다.</td></tr>
+<tr><td>복잡도</td><td>입력 크기별 허용 연산 수, 정렬/탐색/DP 선택 근거</td><td>Big-O만 쓰고 상수·메모리·구현 위험을 빼지 않는다.</td></tr>
+<tr><td>검증</td><td>edge case, counterexample, dry-run, failing case 수정 기록</td><td>AC 여부를 실무 문제 해결력 전체로 과장하지 않는다.</td></tr>
+<tr><td>면접 설명</td><td>30초 접근 요약, 막혔을 때 되돌아간 기준, 개선 여지</td><td>침묵하거나 완성 코드만 보여주는 흐름으로 가지 않는다.</td></tr>
 </table>
-<div class="callout"><span class="co-label">답변 기준</span><p>말해도 되는 범위는 “내가 한 행동, 관찰한 문제, 확인 가능한 결과, 배운 점”이다. 모르는 수치나 비공개 지표는 “정확한 원문 수치는 공개할 수 없지만, 개선 방향과 검증 방식은 설명할 수 있습니다”라고 경계를 둔다.</p></div>
 </section>
 
 </main>

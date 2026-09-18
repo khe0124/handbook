@@ -60,7 +60,7 @@
   <a href="#personalbe-ch6"><span class="code">BE-PER-05</span>제한적이라는 말로 끝내지 않기</a>
   <a href="#personalbe-ch7"><span class="code">BE-PER-06</span>검증 가능한 서버 기능</a>
   <a href="#personalbe-ch8"><span class="code">BE-PER-07</span>gks-car-be 프로젝트 카드</a>
-  <a href="#personalbe-ch9"><span class="code">BE-PER-08</span>seoul-carbon 프로젝트 카드</a>
+  <a href="#personalbe-ch9"><span class="code">BE-PER-08</span>seoul-climate 프로젝트 카드</a>
   <a href="#personalbe-ch10"><span class="code">BE-PER-09</span>백엔드 답변 스크립트</a>
   <a href="#personalbe-ch11"><span class="code">BE-PER-10</span>운영 사고 루프</a>
   <a href="#personalbe-ch12"><span class="code">BE-PER-11</span>무중단 변경·관측성</a>
@@ -112,6 +112,13 @@
 
 <section id="doc-bedb">
 <div class="ch-head"><span class="ch-code">PART</span><h2>백엔드·DB 면접</h2></div>
+<p class="lede">백엔드·DB 파트는 API, 데이터 정합성, 변경 관리, 장애 복구를 한 묶음으로 검증한다. “서버를 만들었다”보다 깨졌을 때 무엇을 보호했는지가 핵심이다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>API 계약</td><td>호환성을 어떻게 지키나</td><td>OpenAPI·error contract</td></tr>
+<tr><td>데이터 정합성</td><td>트랜잭션 경계는 무엇으로 정했나</td><td>불변조건·동시성 테스트</td></tr>
+<tr><td>DB 성능</td><td>쿼리 병목을 어떻게 증명하나</td><td>EXPLAIN·query count</td></tr>
+</table>
 </section>
 
 <section id="bedb-q1">
@@ -482,6 +489,13 @@
 
 <section id="doc-javaspring">
 <div class="ch-head"><span class="ch-code">PART</span><h2>Java·Spring·JPA 면접</h2></div>
+<p class="lede">Java·Spring·JPA 파트는 프레임워크 사용법보다 런타임 동작, 트랜잭션 프록시, 영속성 컨텍스트, SQL 결과를 예측하는지 본다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>Spring</td><td>Bean lifecycle과 transaction proxy가 어디서 깨지나</td><td>실패 사례 노트</td></tr>
+<tr><td>JPA</td><td>N+1과 dirty checking을 어떻게 검증하나</td><td>generated SQL</td></tr>
+<tr><td>Java</td><td>컬렉션·동시성·예외를 어떻게 선택하나</td><td>코드 리뷰 체크리스트</td></tr>
+</table>
 </section>
 
 <section id="javaspring-q1">
@@ -707,6 +721,14 @@ JPA 문제는 N+1, LazyInitializationException, OSIV로 인한 connection 장기
 
 <section id="doc-personalbe">
 <div class="ch-head"><span class="ch-code">PART</span><h2>백엔드 전환 대응</h2></div>
+<p class="lede">백엔드 전환 대응 파트는 프론트엔드 기반 위에 어디까지 서버 책임을 확장했는지 정직하게 말하는 구간이다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>경험 경계</td><td>직접 구현한 도메인 로직은 무엇인가</td><td>본인/팀 책임 분리표</td></tr>
+<tr><td>전환 설득</td><td>FE 출신이 백엔드에서 주는 강점은 무엇인가</td><td>API 경계 사례</td></tr>
+<tr><td>보완 계획</td><td>운영·인프라 갭을 어떻게 줄이나</td><td>30/60/90일 학습 산출물</td></tr>
+</table>
+<div class="callout"><span class="co-label">사용법</span><p>이 파트는 백엔드 전환을 과장하기 위한 장치가 아니라, 프론트엔드 강점 위에 서버 도메인·트랜잭션 경험을 어디까지 붙일 수 있는지 정직하게 정리하는 방어선이다.</p></div>
 </section>
 
 <section id="personalbe-ch1">
@@ -779,23 +801,23 @@ JPA 문제는 N+1, LazyInitializationException, OSIV로 인한 connection 장기
 
 <section id="personalbe-ch8">
 <div class="ch-head"><span class="ch-code">BE-PER-07</span><h2>스마트시티: gks-car-be 프로젝트 카드</h2></div>
-<p class="lede">gks-car-be는 스마트시티/광명시 탄소거래 플랫폼의 Spring Boot 백엔드입니다. 면접에서는 “백엔드를 해봤다”가 아니라, 탄소크레딧의 발행·보유·판매·주문·결제·정산·인증서 흐름을 어떤 트랜잭션 경계와 데이터 모델로 지켰는지 설명해야 합니다.</p>
+<p class="lede">gks-car-be는 스마트시티/광명시 거래 플랫폼의 Spring Boot 백엔드입니다. 면접에서는 “백엔드를 해봤다”가 아니라, 크레딧의 발행·보유·판매·주문·결제·정산·인증서 흐름을 어떤 트랜잭션 경계와 데이터 모델로 지켰는지 설명해야 합니다.</p>
 <table>
 <tr><th>축</th><th>설명할 내용</th><th>면접 포인트</th></tr>
-<tr><td>시스템 성격</td><td>Java 25, Spring Boot 4, Gradle 멀티모듈, api-user/api-admin 분리, PostgreSQL/JPA/QueryDSL/MapStruct 기반의 공공 탄소시장 백엔드</td><td>단일 CRUD 서버가 아니라 사용자 API와 관리자 API, 공통 모듈, 도메인 모듈이 나뉜 구조라고 말한다.</td></tr>
+<tr><td>시스템 성격</td><td>Java 25, Spring Boot 4, Gradle 멀티모듈, api-user/api-admin 분리, PostgreSQL/JPA/QueryDSL/MapStruct 기반의 공공 도메인 시장 백엔드</td><td>단일 CRUD 서버가 아니라 사용자 API와 관리자 API, 공통 모듈, 도메인 모듈이 나뉜 구조라고 말한다.</td></tr>
 <tr><td>아키텍처</td><td>module-vrc, module-ccm, module-project, module-methodology, module-chain, module-audit, module-rbac, module-network-access 등 40개 이상 모듈로 도메인과 횡단 관심사를 분리</td><td>모듈 수를 성과처럼 말하지 말고, 변경 이유와 책임 경계를 나누기 위한 구조로 설명한다.</td></tr>
-<tr><td>핵심 도메인</td><td>VRC 보유 블록, serial range, 판매, 주문, 결제, 거래 이력, 소각·기부·이전 인증서 snapshot, 체인 anchor 이벤트</td><td>탄소크레딧은 수량만 차감하는 포인트가 아니라 serial 단위 소유권과 증명 가능한 이력을 남기는 원장이라고 설명한다.</td></tr>
+<tr><td>핵심 도메인</td><td>VRC 보유 블록, serial range, 판매, 주문, 결제, 거래 이력, 소각·기부·이전 인증서 snapshot, 체인 anchor 이벤트</td><td>크레딧은 수량만 차감하는 포인트가 아니라 serial 단위 소유권과 증명 가능한 이력을 남기는 원장이라고 설명한다.</td></tr>
 <tr><td>트랜잭션</td><td>입금 확인 또는 결제 성공 이후 주문·결제·거래·보유 수량·인증서·감사 로그가 한 실패 단위로 묶인다</td><td>부분 성공이 남으면 돈은 냈는데 크레딧이 없거나, 크레딧은 이동했는데 인증서가 없는 상태가 되므로 transaction boundary가 핵심이라고 말한다.</td></tr>
 <tr><td>동시성</td><td>판매 잔량과 보유 블록을 동시에 여러 요청이 건드릴 수 있어 lock, 상태 전이, 잔량 검증, 재현 테스트로 이중 체결을 막는다</td><td>락을 썼다는 말보다 어떤 invariant를 지키려 했는지, 실패 시 어떤 중복·초과 판매가 생기는지로 답한다.</td></tr>
 <tr><td>운영 품질</td><td>local/prod 설정 분리, placeholder secret fail-fast, 포트 충돌 방지 bootRun task, 테스트 JVM heap/context cache 튜닝, 감사·접근제어·rate limit 모듈</td><td>기능 구현뿐 아니라 로컬 재현성, 보안 설정 누락, 테스트 안정성까지 백엔드 운영 감각으로 연결한다.</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">30초 답변</span>gks-car-be에서는 Spring Boot 멀티모듈 구조 안에서 VRC 탄소크레딧의 발행, 보유 블록, 판매, 주문, 결제, 거래 이력, 인증서 snapshot 흐름을 구현했습니다. 특히 탄소크레딧을 단순 수량이 아니라 serial range를 가진 원장성 자산으로 보고, 입금·체결·보유 수량 변경·인증서 발급이 부분 성공으로 남지 않도록 트랜잭션 경계와 동시성 검증을 중요하게 다뤘습니다.</div>
+<div class="serial-card"><span class="sc-label">30초 답변</span>gks-car-be에서는 Spring Boot 멀티모듈 구조 안에서 VRC 크레딧의 발행, 보유 블록, 판매, 주문, 결제, 거래 이력, 인증서 snapshot 흐름을 구현했습니다. 특히 크레딧을 단순 수량이 아니라 serial range를 가진 원장성 자산으로 보고, 입금·체결·보유 수량 변경·인증서 발급이 부분 성공으로 남지 않도록 트랜잭션 경계와 동시성 검증을 중요하게 다뤘습니다.</div>
 <div class="callout warn"><span class="co-label">경계 문장</span><p>인증·RBAC·네트워크 접근제어·체인 인프라 전체를 혼자 설계했다고 말하지 않는다. 강하게 말할 범위는 VRC/CCM 도메인 흐름, API 계약, 트랜잭션 경계, 테스트와 로컬 운영성 개선이다.</p></div>
 </section>
 
 <section id="personalbe-ch9">
-<div class="ch-head"><span class="ch-code">BE-PER-08</span><h2>서울연구원: seoul-carbon 프로젝트 카드</h2></div>
-<p class="lede">seoul-carbon은 서울형 탄소시장 탄소크레딧 거래 플랫폼입니다. 프로젝트 등록·심사, 방법론 관리, 모니터링, 크레딧 발행·이전·폐기, 인증서, 감사추적을 Spring Boot 백엔드와 React 사용자/관리자 앱으로 묶은 공공 VCM 레지스트리 성격의 프로젝트입니다.</p>
+<div class="ch-head"><span class="ch-code">BE-PER-08</span><h2>서울연구원: seoul-climate 프로젝트 카드</h2></div>
+<p class="lede">seoul-climate은 서울형 도메인 시장 크레딧 거래 플랫폼입니다. 프로젝트 등록·심사, 방법론 관리, 모니터링, 크레딧 발행·이전·폐기, 인증서, 감사추적을 Spring Boot 백엔드와 React 사용자/관리자 앱으로 묶은 공공 자발적 시장 레지스트리 성격의 프로젝트입니다.</p>
 <table>
 <tr><th>축</th><th>설명할 내용</th><th>면접 포인트</th></tr>
 <tr><td>시스템 성격</td><td>Spring Boot 4, Java 21, Gradle 멀티모듈(core/api-common/api-server), PostgreSQL, Flyway, REST API, Swagger, systemd/nginx 배포 문서</td><td>짧은 프로토타입이어도 스키마 마이그레이션, 환경 분리, 배포 문서까지 운영 가능한 형태로 만들었다고 설명한다.</td></tr>
@@ -805,21 +827,21 @@ JPA 문제는 N+1, LazyInitializationException, OSIV로 인한 connection 장기
 <tr><td>감사추적</td><td>AuditLogRecorder가 create/update/delete/download/transfer/retire/approve 같은 행위를 actor, target, action으로 기록하고 REQUIRES_NEW로 본 트랜잭션과 분리한다</td><td>공공/관리자 시스템에서는 누가 무엇을 했는지 남기는 것이 기능만큼 중요하다고 연결한다.</td></tr>
 <tr><td>API 품질</td><td>GlobalExceptionHandler, ErrorCode, ApiResponse, PageResponse, DTO validation, public/admin route 분리, controller test와 service test</td><td>프론트와 맞닿는 계약을 일관된 응답·오류·페이지 형식으로 고정했다고 말한다.</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">30초 답변</span>seoul-carbon은 서울형 탄소시장 VCM 레지스트리 프로토타입으로, Spring Boot 4와 PostgreSQL 기반에서 방법론, 프로젝트, 모니터링, 발행 요청, 크레딧, 인증서, 감사 로그를 구현했습니다. 핵심은 상태 전이입니다. 프로젝트와 발행 요청은 허용된 action으로만 이동하고, 크레딧 이전은 거래 이력으로 남기며, 폐기는 retired 상태로 잠가 재이전이나 재소각을 막는 식으로 도메인 불변조건을 코드에 넣었습니다.</div>
+<div class="serial-card"><span class="sc-label">30초 답변</span>seoul-climate은 서울형 도메인 시장 자발적 시장 레지스트리 프로토타입으로, Spring Boot 4와 PostgreSQL 기반에서 방법론, 프로젝트, 모니터링, 발행 요청, 크레딧, 인증서, 감사 로그를 구현했습니다. 핵심은 상태 전이입니다. 프로젝트와 발행 요청은 허용된 action으로만 이동하고, 크레딧 이전은 거래 이력으로 남기며, 폐기는 retired 상태로 잠가 재이전이나 재소각을 막는 식으로 도메인 불변조건을 코드에 넣었습니다.</div>
 <div class="callout warn"><span class="co-label">경계 문장</span><p>서울연구원 도메인 정책을 임의로 해석했다고 말하지 않는다. 구현 관점에서는 요구사항을 상태 전이, DB migration, REST contract, 감사 로그, 관리자/공개 API 경계로 바꾼 경험이라고 말한다.</p></div>
 </section>
 
 <section id="personalbe-ch10">
 <div class="ch-head"><span class="ch-code">BE-PER-09</span><h2>백엔드 프로젝트 답변 스크립트</h2></div>
-<p class="lede">두 프로젝트를 함께 말할 때는 “Spring을 썼다”보다 “탄소시장 도메인의 상태와 원장성을 어떻게 지켰다”로 시작한다. 그러면 백엔드 개발자처럼 보이는 지점이 기술명 나열이 아니라 불변조건, 트랜잭션, 감사 가능성으로 이동한다.</p>
+<p class="lede">두 프로젝트를 함께 말할 때는 “Spring을 썼다”보다 “도메인 시장 도메인의 상태와 원장성을 어떻게 지켰다”로 시작한다. 그러면 백엔드 개발자처럼 보이는 지점이 기술명 나열이 아니라 불변조건, 트랜잭션, 감사 가능성으로 이동한다.</p>
 <table>
 <tr><th>질문</th><th>답변 골격</th></tr>
 <tr><td>백엔드 프로젝트를 하나 설명해 주세요.</td><td>도메인 한 줄 → 내가 맡은 모듈 → 가장 위험한 불변조건 → 트랜잭션/락/상태 전이 → 테스트와 운영 경계 순서로 답한다.</td></tr>
-<tr><td>두 프로젝트의 차이는 무엇인가요?</td><td>seoul-carbon은 서울형 VCM 레지스트리 M1 성격이라 core/api-server 중심으로 빠르게 도메인 상태 전이를 구현했고, gks-car-be는 더 큰 멀티모듈 구조에서 VRC/CCM, 인증, RBAC, 감사, 네트워크 접근제어, 체인 연동까지 확장된 형태라고 설명한다.</td></tr>
+<tr><td>두 프로젝트의 차이는 무엇인가요?</td><td>seoul-climate은 서울형 자발적 시장 레지스트리 M1 성격이라 core/api-server 중심으로 빠르게 도메인 상태 전이를 구현했고, gks-car-be는 더 큰 멀티모듈 구조에서 VRC/CCM, 인증, RBAC, 감사, 네트워크 접근제어, 체인 연동까지 확장된 형태라고 설명한다.</td></tr>
 <tr><td>가장 백엔드다운 판단은 무엇이었나요?</td><td>크레딧을 단순 숫자로 보지 않고 발행·보유·이전·폐기·인증서·감사 로그가 추적 가능한 자산으로 모델링한 점, 그리고 부분 성공이 남지 않게 transaction boundary를 잡은 점을 든다.</td></tr>
 <tr><td>압박 질문: 프론트 출신인데 깊이가 충분한가요?</td><td>프론트 출신이라 API 계약과 사용자 상태 흐름을 강하게 이해하고 있고, 백엔드에서는 그 흐름을 DB 제약, 상태 전이, 트랜잭션, 감사 로그로 옮겼다고 답한다. 모르는 인프라 영역은 경계를 인정한다.</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">통합 답변</span>두 프로젝트 모두 탄소크레딧을 다뤘지만 깊이가 조금 다릅니다. seoul-carbon에서는 서울형 탄소시장 프로토타입으로 방법론, 프로젝트, 발행 요청, 크레딧 이전·폐기, 인증서, 감사 로그의 상태 전이를 빠르게 구현했습니다. gks-car-be에서는 그 경험을 더 큰 Spring Boot 멀티모듈 구조로 확장해 VRC 보유 블록과 serial range, 주문·결제·정산, 인증서 snapshot, 체인 anchor 이벤트까지 다뤘습니다. 그래서 제 백엔드 경험은 단순 CRUD보다 탄소시장 도메인의 상태, 원장성, 트랜잭션 정합성을 코드로 표현한 쪽에 가깝습니다.</div>
+<div class="serial-card"><span class="sc-label">통합 답변</span>두 프로젝트 모두 크레딧을 다뤘지만 깊이가 조금 다릅니다. seoul-climate에서는 서울형 도메인 시장 프로토타입으로 방법론, 프로젝트, 발행 요청, 크레딧 이전·폐기, 인증서, 감사 로그의 상태 전이를 빠르게 구현했습니다. gks-car-be에서는 그 경험을 더 큰 Spring Boot 멀티모듈 구조로 확장해 VRC 보유 블록과 serial range, 주문·결제·정산, 인증서 snapshot, 체인 anchor 이벤트까지 다뤘습니다. 그래서 제 백엔드 경험은 단순 CRUD보다 도메인 시장 도메인의 상태, 원장성, 트랜잭션 정합성을 코드로 표현한 쪽에 가깝습니다.</div>
 </section>
 
 <section id="personalbe-ch11">
@@ -849,29 +871,28 @@ JPA 문제는 N+1, LazyInitializationException, OSIV로 인한 connection 장기
 </section>
 
 <section id="personalbe-ch13">
-<div class="ch-head"><span class="ch-code">BE-PER-12</span><h2>gks-car-be · seoul-carbon 증거 장부</h2></div>
+<div class="ch-head"><span class="ch-code">BE-PER-12</span><h2>gks-car-be · seoul-climate 증거 장부</h2></div>
 <p class="lede">프로젝트 답변은 개념을 많이 아는 척하는 자리가 아니라, 실제로 어떤 증거를 말할 수 있는지 확인받는 자리입니다. 아래 장부를 채우면 두 프로젝트가 백엔드 개발자 경험처럼 단단해집니다.</p>
 <table>
-<tr><th>증거 축</th><th>gks-car-be에서 말할 것</th><th>seoul-carbon에서 말할 것</th><th>꼬리질문 방어</th></tr>
+<tr><th>증거 축</th><th>gks-car-be에서 말할 것</th><th>seoul-climate에서 말할 것</th><th>꼬리질문 방어</th></tr>
 <tr><td>도메인 invariant</td><td>VRC serial range, 보유 블록, 판매 잔량, 주문/결제/인증서 정합성</td><td>프로젝트 상태 전이, 발행 요청 상태, Credit issued/retired 잠금</td><td>깨지면 어떤 사용자 피해와 데이터 보정이 필요한지 말한다.</td></tr>
 <tr><td>트랜잭션 경계</td><td>입금 확인, 체결, 보유 수량 변경, 인증서 snapshot, 감사 로그의 실패 단위</td><td>발행 승인, transfer, retire, certificate 생성, audit log 분리</td><td>외부 API와 DB transaction을 무작정 같이 묶지 않는 이유를 설명한다.</td></tr>
 <tr><td>권한·감사</td><td>사용자/API 관리자 분리, RBAC, audit, network access 모듈</td><td>admin/public route 분리, actor/action/target 기반 AuditLog</td><td>프론트 guard와 서버 최종 인가의 차이를 분명히 한다.</td></tr>
 <tr><td>운영 품질</td><td>환경 분리, secret placeholder fail-fast, rate limit, 테스트 안정화</td><td>Flyway migration, systemd/nginx 배포 문서, 예외 응답 일관화</td><td>직접 운영한 것과 문서화/구현한 것을 구분한다.</td></tr>
 </table>
-<div class="serial-card"><span class="sc-label">암기용 한 줄</span>“두 프로젝트의 공통점은 탄소크레딧을 숫자가 아니라 상태와 이력이 있는 자산으로 모델링했다는 점이고, 차이는 seoul-carbon이 레지스트리 프로토타입의 상태 전이를 빠르게 구현한 경험이라면 gks-car-be는 멀티모듈 구조에서 거래·결제·인증서·감사·접근제어까지 더 넓게 확장한 경험이라는 점입니다.”</div>
+<div class="serial-card"><span class="sc-label">암기용 한 줄</span>“두 프로젝트의 공통점은 크레딧을 숫자가 아니라 상태와 이력이 있는 자산으로 모델링했다는 점이고, 차이는 seoul-climate이 레지스트리 프로토타입의 상태 전이를 빠르게 구현한 경험이라면 gks-car-be는 멀티모듈 구조에서 거래·결제·인증서·감사·접근제어까지 더 넓게 확장한 경험이라는 점입니다.”</div>
 </section>
 
 <section id="career-evidence-anti-exaggeration">
-<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
-<p class="lede">커리어 답변은 강하게 말하되 증거가 받쳐 주는 범위 안에서만 말한다. 수치, 역할, 성과, 장애 대응 경험은 원천 증거와 공개 가능 범위를 먼저 정한 뒤 답변에 넣는다.</p>
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>백엔드 답변 증거·과장 방지 기준</h2></div>
+<p class="lede">백엔드 면접의 신뢰는 “서버도 해봤다”가 아니라 정합성, 장애, 권한, 데이터 변경을 어디까지 책임졌는지 분리하는 데서 나온다.</p>
 <table>
-<tr><th>항목</th><th>기준</th><th>금지선</th></tr>
-<tr><td>수치</td><td>커밋, 기간, 사용자 수, 성능 개선율은 산정 기준과 기간을 함께 말한다.</td><td>추정치를 확정 성과처럼 말하지 않는다.</td></tr>
-<tr><td>역할</td><td>직접 구현, 공동 설계, 리뷰 참여, 운영 보조를 구분한다.</td><td>팀 성과를 단독 성과로 바꾸지 않는다.</td></tr>
-<tr><td>증거 위치</td><td>Git log, PR, ticket, dashboard, release note, 회고 문서 중 하나 이상에 연결한다.</td><td>공개할 수 없는 내부 정보를 화면 캡처나 원문으로 노출하지 않는다.</td></tr>
-<tr><td>공개 범위</td><td>공개 가능, 익명화 필요, 면접 구두 설명만 가능, 비공개를 구분한다.</td><td>NDA, 고객명, 보안 설정, 매출·트래픽 원문을 임의로 공개하지 않는다.</td></tr>
+<tr><th>주제</th><th>강한 증거</th><th>주의할 표현</th></tr>
+<tr><td>트랜잭션</td><td>경계 선택 이유, 격리 수준, lock/unique constraint, 재현 테스트</td><td>단순 CRUD를 정합성 설계처럼 말하지 않는다.</td></tr>
+<tr><td>JPA·DB</td><td>generated SQL, query count, EXPLAIN, index 전후 비교</td><td>N+1을 “fetch join 쓰면 된다”로 끝내지 않는다.</td></tr>
+<tr><td>인증·권한</td><td>RBAC matrix, 401/403 contract, tenant boundary test</td><td>프론트 가드만으로 권한을 보장했다고 말하지 않는다.</td></tr>
+<tr><td>운영</td><td>migration plan, rollback note, error log, incident timeline</td><td>직접 운영하지 않은 장애 대응을 본인 경험처럼 섞지 않는다.</td></tr>
 </table>
-<div class="callout"><span class="co-label">답변 기준</span><p>말해도 되는 범위는 “내가 한 행동, 관찰한 문제, 확인 가능한 결과, 배운 점”이다. 모르는 수치나 비공개 지표는 “정확한 원문 수치는 공개할 수 없지만, 개선 방향과 검증 방식은 설명할 수 있습니다”라고 경계를 둔다.</p></div>
 </section>
 
 </main>

@@ -160,93 +160,150 @@ export const CAREER_HANDBOOKS = [
   },
   {
     id: "career-linkedin-resume",
-    label: "01L LinkedIn 이력서",
+    label: "02 LinkedIn 이력서",
     kind: "면접·커리어",
     file: "career-linkedin-resume-handbook.html",
   },
   {
     id: "career-growth-plan",
-    label: "01R 강점·취약점 진단과 성장 로드맵",
+    label: "03 성장·노선·시장·산출물 로드맵",
     kind: "면접·커리어",
     file: "career-growth-plan-handbook.html",
   },
   {
-    id: "career-track-pm-builder",
-    label: "01R-A 노선 · PM 겸 개발자",
+    id: "career-strategic-thinking-2027",
+    label: "04 전략적 사고방법 2026 하반기·2027 목표",
     kind: "면접·커리어",
-    file: "career-track-pm-builder-handbook.html",
-  },
-  {
-    id: "career-track-product-frontend",
-    label: "01R-B 노선 · 제품형 프론트엔드",
-    kind: "면접·커리어",
-    file: "career-track-product-frontend-handbook.html",
-  },
-  {
-    id: "career-market-demand",
-    label: "01R-C 시장 요구 분석·이력 갭 맵",
-    kind: "면접·커리어",
-    file: "career-market-demand-handbook.html",
-  },
-  {
-    id: "career-artifacts",
-    label: "01R-D 산출물 정리 가이드",
-    kind: "면접·커리어",
-    file: "career-artifacts-handbook.html",
+    file: "career-strategic-thinking-2027-handbook.html",
   },
   {
     id: "career-job-change-playbook",
-    label: "01R-E 이직 실행 플레이북",
+    label: "05 이직 실행 플레이북",
     kind: "면접·커리어",
     file: "career-job-change-playbook-handbook.html",
   },
   {
     id: "career-frontend-interview",
-    label: "02 프론트엔드·JS/TS 면접",
+    label: "10 프론트엔드·JS/TS 면접",
     kind: "면접·커리어",
     file: "career-frontend-interview-handbook.html",
   },
   {
     id: "career-backend-interview",
-    label: "03 백엔드·Java/Spring 면접",
+    label: "11 백엔드·Java/Spring 면접",
     kind: "면접·커리어",
     file: "career-backend-interview-handbook.html",
   },
   {
     id: "career-core-deep-dive",
-    label: "04 CS·DB·보안 심화 면접",
+    label: "12 CS·DB·보안 심화 면접",
     kind: "면접·커리어",
     file: "career-core-deep-dive-handbook.html",
   },
   {
     id: "career-infra-distributed-cloud",
-    label: "05 인프라·분산·클라우드 면접",
+    label: "13 인프라·분산·클라우드 면접",
     kind: "면접·커리어",
     file: "career-infra-distributed-cloud-handbook.html",
   },
   {
     id: "career-system-project",
-    label: "06 시스템 설계·프로젝트 심층",
+    label: "14 시스템 설계·프로젝트 심층",
     kind: "면접·커리어",
     file: "career-system-project-handbook.html",
   },
   {
     id: "career-culture-collaboration",
-    label: "07 컬처·협업·코드리뷰",
+    label: "15 컬처·협업·코드리뷰",
     kind: "면접·커리어",
     file: "career-culture-collaboration-handbook.html",
   },
   {
     id: "career-coding-test",
-    label: "08 코딩테스트 패턴",
+    label: "16 코딩테스트 패턴",
     kind: "면접·커리어",
     file: "career-coding-test-handbook.html",
   },
   {
     id: "career-ai-native-portfolio",
-    label: "09 AI Native 포트폴리오",
+    label: "17 AI Native 포트폴리오",
     kind: "면접·커리어",
     file: "career-ai-native-portfolio-handbook.html",
+  },
+];
+
+export const CARBON_DOMAIN_HANDBOOKS = [
+  {
+    id: "carbon-accounting-functional-spec",
+    label: "00 탄소회계 기능정의서",
+    kind: "탄소회계 산출물",
+    file: "carbon-accounting-functional-spec.html",
+  },
+  {
+    id: "carbon-accounting-screens",
+    label: "01 탄소회계 전체화면",
+    kind: "탄소회계 산출물",
+    file: "carbon-accounting-screens.html",
+  },
+  {
+    id: "carbon-accounting-screen-register",
+    label: "02 탄소회계 상세목록",
+    kind: "탄소회계 산출물",
+    file: "carbon-accounting-screen-register.html",
+  },
+  {
+    id: "carbon-accounting-casestudy-cotton-tshirt",
+    label: "03 탄소회계 사례연구 · 면 티셔츠",
+    kind: "탄소회계 산출물",
+    file: "carbon-accounting-casestudy-cotton-tshirt.html",
+  },
+  {
+    id: "lca-functional-spec",
+    label: "04 LCA 기능정의서",
+    kind: "LCA 산출물",
+    file: "lca-functional-spec.html",
+  },
+  {
+    id: "lca-screens",
+    label: "05 LCA 전체화면",
+    kind: "LCA 산출물",
+    file: "lca-screens.html",
+  },
+  {
+    id: "lca-screen-register",
+    label: "06 LCA 상세목록",
+    kind: "LCA 산출물",
+    file: "lca-screen-register.html",
+  },
+  {
+    id: "lca-casestudy-aluminum-can",
+    label: "07 LCA 사례연구 · 알루미늄 캔",
+    kind: "LCA 산출물",
+    file: "lca-casestudy-aluminum-can.html",
+  },
+  {
+    id: "carbon-accounting",
+    label: "08 탄소회계 도메인 핸드북",
+    kind: "탄소핸드북",
+    file: "carbon-accounting-handbook.html",
+  },
+  {
+    id: "carbon-compliance",
+    label: "09 탄소시장 컴플라이언스",
+    kind: "탄소핸드북",
+    file: "carbon-compliance-handbook.html",
+  },
+  {
+    id: "vcm-registry",
+    label: "10 VCM 레지스트리",
+    kind: "탄소핸드북",
+    file: "vcm-registry-handbook.html",
+  },
+  {
+    id: "lca",
+    label: "11 전과정평가(LCA) 도메인 핸드북",
+    kind: "탄소핸드북",
+    file: "lca-handbook.html",
   },
 ];
 
@@ -1650,6 +1707,7 @@ export const PRACTICE_HANDBOOKS = [
 
 export const HANDBOOK_GROUPS = [
   { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
+  { key: "carbon", label: "탄소", items: CARBON_DOMAIN_HANDBOOKS },
   { key: "cs-basic", label: "CS 기본", items: ENGINEERING_CS_BASIC_HANDBOOKS },
   {
     key: "frontend",
@@ -1694,6 +1752,7 @@ export const NON_STUDY_DOC_IDS = new Set(
 
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
+  ...CARBON_DOMAIN_HANDBOOKS,
   ...ENGINEERING_CS_BASIC_HANDBOOKS,
   ...ENGINEERING_FRONTEND_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,

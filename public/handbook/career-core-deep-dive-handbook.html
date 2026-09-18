@@ -131,6 +131,14 @@ CS, DB, 보안 개념을 정의 암기가 아니라 장애, 성능, 공격 경�
 
 <section id="doc-cs">
 <div class="ch-head"><span class="ch-code">PART</span><h2>CS 기본기 면접</h2></div>
+<p class="lede">CS 기본기 파트는 자료구조와 운영 비용을 연결한다. 면접관은 정답보다 제약을 읽고 불변식과 실패 조건을 설명하는지를 본다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>복잡도</td><td>입력 크기가 커지면 어디서 터지나</td><td>복잡도 계산표</td></tr>
+<tr><td>동시성</td><td>race/deadlock을 어떻게 재현하나</td><td>실패 시나리오</td></tr>
+<tr><td>운영 비용</td><td>CPU·메모리·I/O 중 병목은 무엇인가</td><td>resource trace</td></tr>
+</table>
+<div class="callout"><span class="co-label">사용법</span><p>각 질문은 정의만 외우지 말고 작은 코드, 운영 증상, 측정 지표 중 하나에 연결한다. 설명이 추상적으로 흐르면 “어떤 입력에서 깨지는가”로 다시 좁힌다.</p></div>
 </section>
 
 <section id="cs-q1">
@@ -359,6 +367,13 @@ CS, DB, 보안 개념을 정의 암기가 아니라 장애, 성능, 공격 경�
 
 <section id="doc-dbdeep">
 <div class="ch-head"><span class="ch-code">PART</span><h2>DB 심화 면접</h2></div>
+<p class="lede">DB 심화 파트는 데이터 모델과 트랜잭션, 쿼리 계획을 함께 본다. 스키마 선택이 나중에 어떤 장애와 변경 비용을 만드는지 설명해야 한다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>모델링</td><td>정규화와 조회 성능을 어떻게 균형 잡나</td><td>ERD·query sample</td></tr>
+<tr><td>트랜잭션</td><td>격리 수준별 anomaly를 어떻게 막나</td><td>동시성 테스트</td></tr>
+<tr><td>마이그레이션</td><td>무중단 변경은 어떤 순서로 하나</td><td>expand-contract plan</td></tr>
+</table>
 </section>
 
 <section id="dbdeep-q1">
@@ -820,6 +835,13 @@ PostgreSQL은 row version마다 xmin/xmax로 생성·삭제 transaction 정보�
 
 <section id="doc-security">
 <div class="ch-head"><span class="ch-code">PART</span><h2>보안 심화 면접</h2></div>
+<p class="lede">보안 심화 파트는 공격자가 조작 가능한 입력과 신뢰 경계를 찾는 훈련이다. 방어 기술명보다 어떤 abuse case를 막는지 말한다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>위협 모델</td><td>보호할 자산과 신뢰 경계는 어디인가</td><td>STRIDE/abuse case</td></tr>
+<tr><td>권한</td><td>IDOR·tenant leak을 어떻게 막나</td><td>권한 matrix</td></tr>
+<tr><td>입력 검증</td><td>클라이언트 검증과 서버 검증은 어떻게 나뉘나</td><td>보안 테스트 fixture</td></tr>
+</table>
 </section>
 
 <section id="security-q1">
@@ -1147,6 +1169,13 @@ PostgreSQL은 row version마다 xmin/xmax로 생성·삭제 transaction 정보�
 
 <section id="doc-network">
 <div class="ch-head"><span class="ch-code">PART</span><h2>네트워크 심화 면접</h2></div>
+<p class="lede">네트워크 심화 파트는 브라우저 오류를 계층별로 좁히는 능력을 본다. DNS, TCP, TLS, HTTP, proxy 중 어디인지 분리해야 한다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>요청 경로</td><td>사용자 요청은 어떤 단계를 거치나</td><td>request path diagram</td></tr>
+<tr><td>장애 분리</td><td>timeout·reset·5xx를 어떻게 구분하나</td><td>log·curl 결과</td></tr>
+<tr><td>보안 경계</td><td>TLS·CORS·쿠키 정책이 어디서 적용되나</td><td>브라우저/서버 설정표</td></tr>
+</table>
 </section>
 
 <section id="net-q1">
@@ -1379,16 +1408,15 @@ PostgreSQL은 row version마다 xmin/xmax로 생성·삭제 transaction 정보�
 </section>
 
 <section id="career-evidence-anti-exaggeration">
-<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>증거·과장 방지 기준</h2></div>
-<p class="lede">커리어 답변은 강하게 말하되 증거가 받쳐 주는 범위 안에서만 말한다. 수치, 역할, 성과, 장애 대응 경험은 원천 증거와 공개 가능 범위를 먼저 정한 뒤 답변에 넣는다.</p>
+<div class="ch-head"><span class="ch-code">EVIDENCE</span><h2>CS·DB·보안 증거·과장 방지 기준</h2></div>
+<p class="lede">심화 질문은 정의 암기보다 “이 개념이 실제 장애·성능·공격 경로에서 어떻게 깨지는가”를 묻는다. 직접 경험과 설계 지식의 경계를 먼저 밝힌다.</p>
 <table>
-<tr><th>항목</th><th>기준</th><th>금지선</th></tr>
-<tr><td>수치</td><td>커밋, 기간, 사용자 수, 성능 개선율은 산정 기준과 기간을 함께 말한다.</td><td>추정치를 확정 성과처럼 말하지 않는다.</td></tr>
-<tr><td>역할</td><td>직접 구현, 공동 설계, 리뷰 참여, 운영 보조를 구분한다.</td><td>팀 성과를 단독 성과로 바꾸지 않는다.</td></tr>
-<tr><td>증거 위치</td><td>Git log, PR, ticket, dashboard, release note, 회고 문서 중 하나 이상에 연결한다.</td><td>공개할 수 없는 내부 정보를 화면 캡처나 원문으로 노출하지 않는다.</td></tr>
-<tr><td>공개 범위</td><td>공개 가능, 익명화 필요, 면접 구두 설명만 가능, 비공개를 구분한다.</td><td>NDA, 고객명, 보안 설정, 매출·트래픽 원문을 임의로 공개하지 않는다.</td></tr>
+<tr><th>축</th><th>강한 증거</th><th>주의할 표현</th></tr>
+<tr><td>CS</td><td>복잡도 계산, resource limit, race/deadlock 재현 조건</td><td>자료구조 이름 나열을 설계 판단으로 포장하지 않는다.</td></tr>
+<tr><td>DB</td><td>schema trade-off, transaction anomaly, EXPLAIN, migration risk</td><td>인덱스를 성능 만능 해결책처럼 말하지 않는다.</td></tr>
+<tr><td>보안</td><td>threat model, abuse case, exploit path, server-side validation test</td><td>라이브러리 사용을 보안 설계로 과장하지 않는다.</td></tr>
+<tr><td>네트워크</td><td>DNS/TCP/TLS/HTTP 단계별 실패 분리, packet/log 증거</td><td>브라우저 오류 메시지만 보고 원인을 단정하지 않는다.</td></tr>
 </table>
-<div class="callout"><span class="co-label">답변 기준</span><p>말해도 되는 범위는 “내가 한 행동, 관찰한 문제, 확인 가능한 결과, 배운 점”이다. 모르는 수치나 비공개 지표는 “정확한 원문 수치는 공개할 수 없지만, 개선 방향과 검증 방식은 설명할 수 있습니다”라고 경계를 둔다.</p></div>
 </section>
 
 </main>

@@ -9,6 +9,7 @@ import {
   ARCHIVE_HANDBOOKS,
   AX_HANDBOOKS,
   BACKEND_HANDBOOKS,
+  CARBON_DOMAIN_HANDBOOKS,
   CAREER_HANDBOOKS,
   CATALOG_DOCUMENTS,
   CHEAT_SHEETS,
@@ -651,11 +652,12 @@ test("engineering context handbooks include metric anchor packets", async () => 
   }
 });
 
-test("catalog exposes only the selected non-carbon handbook groups", () => {
+test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.deepEqual(
     HANDBOOK_GROUPS.map((group) => group.key),
     [
       "career",
+      "carbon",
       "cs-basic",
       "frontend",
       "backend",
@@ -676,6 +678,7 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   ].join("\n");
 
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
+  const carbonGroup = HANDBOOK_GROUPS.find((group) => group.key === "carbon");
   const csBasicGroup = HANDBOOK_GROUPS.find((group) => group.key === "cs-basic");
   const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
@@ -688,8 +691,11 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 170);
-  assert.equal(careerGroup?.items.length, 17);
+  assert.equal(HANDBOOK_ITEMS.length, 179);
+  assert.equal(careerGroup?.items.length, 14);
+  assert.equal(carbonGroup?.items.length, 12);
+  assert.equal(carbonGroup?.label, "탄소");
+  assert.deepEqual(carbonGroup?.items.map((item) => item.id), CARBON_DOMAIN_HANDBOOKS.map((item) => item.id));
   assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 10);
   assert.equal(backendGroup?.items.length, 8);
@@ -717,6 +723,10 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.equal(practiceGroup?.items.length, 3);
   assert.ok(labels.includes("홈"));
   assert.ok(labels.includes("커리어"));
+  assert.ok(labels.includes("탄소"));
+  assert.ok(labels.includes("00 탄소회계 기능정의서"));
+  assert.ok(labels.includes("08 탄소회계 도메인 핸드북"));
+  assert.ok(labels.includes("10 VCM 레지스트리"));
   assert.ok(labels.includes("CS 기본"));
   assert.ok(labels.includes("프론트엔드"));
   assert.ok(labels.includes("백엔드"));
@@ -730,8 +740,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("실무 도구"));
   assert.ok(labels.includes("00 면접 전략·커리어 포지셔닝"));
   assert.ok(labels.includes("01 개인 이력 정리"));
-  assert.ok(labels.includes("02 프론트엔드·JS/TS 면접"));
-  assert.ok(labels.includes("03 백엔드·Java/Spring 면접"));
+  assert.ok(labels.includes("02 LinkedIn 이력서"));
+  assert.ok(labels.includes("03 성장·노선·시장·산출물 로드맵"));
+  assert.ok(labels.includes("04 전략적 사고방법 2026 하반기·2027 목표"));
+  assert.ok(labels.includes("05 이직 실행 플레이북"));
+  assert.ok(labels.includes("10 프론트엔드·JS/TS 면접"));
+  assert.ok(labels.includes("11 백엔드·Java/Spring 면접"));
   assert.deepEqual(
     ENGINEERING_CONTEXT_HANDBOOKS.map((item) => item.id),
     [
@@ -753,12 +767,12 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(labels.includes("05 마이그레이션·호환성"));
   assert.ok(labels.includes("06 프론트엔드 빌드·런타임·생태계"));
   assert.ok(labels.includes("07 운영 책임·장애 대응 언어"));
-  assert.ok(labels.includes("04 CS·DB·보안 심화 면접"));
-  assert.ok(labels.includes("05 인프라·분산·클라우드 면접"));
-  assert.ok(labels.includes("06 시스템 설계·프로젝트 심층"));
-  assert.ok(labels.includes("07 컬처·협업·코드리뷰"));
-  assert.ok(labels.includes("08 코딩테스트 패턴"));
-  assert.ok(labels.includes("09 AI Native 포트폴리오"));
+  assert.ok(labels.includes("12 CS·DB·보안 심화 면접"));
+  assert.ok(labels.includes("13 인프라·분산·클라우드 면접"));
+  assert.ok(labels.includes("14 시스템 설계·프로젝트 심층"));
+  assert.ok(labels.includes("15 컬처·협업·코드리뷰"));
+  assert.ok(labels.includes("16 코딩테스트 패턴"));
+  assert.ok(labels.includes("17 AI Native 포트폴리오"));
   assert.ok(labels.includes("00 CS 기초와 알고리즘 사고"));
   assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
@@ -842,13 +856,14 @@ test("catalog exposes only the selected non-carbon handbook groups", () => {
   assert.ok(!HANDBOOK_GROUPS.some((group) => group.key === "examples" || group.label === "예시 사례"));
   assert.ok(!labels.includes("개발핸드북"));
   assert.ok(!labels.includes("업무현황"));
-  assert.ok(!labels.includes("탄소회계"));
-  assert.ok(!labels.includes("탄소핸드북"));
-  assert.ok(!/\bLCA\b/.test(labels));
 
   for (const item of HANDBOOK_ITEMS) {
     const searchable = `${item.id}\n${item.file}\n${item.label}\n${item.kind}`;
-    assert.doesNotMatch(searchable, /carbon|lca|vcm|탄소|업무현황/i);
+    if (CARBON_DOMAIN_HANDBOOKS.some((carbonItem) => carbonItem.id === item.id)) {
+      assert.match(searchable, /carbon|lca|vcm|탄소/i);
+    } else {
+      assert.doesNotMatch(searchable, /carbon|lca|vcm|탄소|업무현황/i);
+    }
   }
 });
 
@@ -1026,6 +1041,22 @@ test("home shortcut links point to catalog items", async () => {
 
 test("career menu consolidates interview, personalized career, and AI Native portfolio documents", async () => {
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
+  const expectedFiles = [
+    "career-strategy-foundation-handbook.html",
+    "career-personal-history-handbook.html",
+    "career-linkedin-resume-handbook.html",
+    "career-growth-plan-handbook.html",
+    "career-strategic-thinking-2027-handbook.html",
+    "career-job-change-playbook-handbook.html",
+    "career-frontend-interview-handbook.html",
+    "career-backend-interview-handbook.html",
+    "career-core-deep-dive-handbook.html",
+    "career-infra-distributed-cloud-handbook.html",
+    "career-system-project-handbook.html",
+    "career-culture-collaboration-handbook.html",
+    "career-coding-test-handbook.html",
+    "career-ai-native-portfolio-handbook.html",
+  ];
   const bundles = [
     {
       file: "career-strategy-foundation-handbook.html",
@@ -1035,7 +1066,7 @@ test("career menu consolidates interview, personalized career, and AI Native por
     {
       file: "career-personal-history-handbook.html",
       sources: ["개인 이력 정리"],
-      evidence: ["PERSONAL POSITIONING MAP", "REPRESENTATIVE PROJECT MAP", "CAREER TIMELINE", "POPLE", "GREENERY", "HEMS", "LCA", "TaaS", "INTERVIEW EVIDENCE MAP", "POSITION PRIORITY MATRIX", "EXPERIENCE BOUNDARY SENTENCES", "ANSWER CARDS"],
+      evidence: ["PERSONAL POSITIONING MAP", "REPRESENTATIVE PROJECT MAP", "CAREER TIMELINE", "POPLE", "GREENERY", "HEMS", "제품환경평가", "TaaS", "INTERVIEW EVIDENCE MAP", "POSITION PRIORITY MATRIX", "EXPERIENCE BOUNDARY SENTENCES", "ANSWER CARDS"],
     },
     {
       file: "career-frontend-interview-handbook.html",
@@ -1079,10 +1110,10 @@ test("career menu consolidates interview, personalized career, and AI Native por
     },
   ];
 
-  assert.equal(careerGroup?.items.length, 10);
+  assert.equal(careerGroup?.items.length, 14);
   assert.deepEqual(
     careerGroup?.items.map((item) => item.file),
-    bundles.map((bundle) => bundle.file),
+    expectedFiles,
   );
 
   for (const bundle of bundles) {
@@ -1098,8 +1129,69 @@ test("career menu consolidates interview, personalized career, and AI Native por
   }
 });
 
+test("career growth plan consolidates route market and artifact planning", async () => {
+  const source = await readFile("public/handbook/career-growth-plan-handbook.html", "utf8");
+
+  assert.match(source, /성장·노선·시장·산출물 로드맵/);
+  assert.match(source, /id="diagnosis"/);
+  assert.match(source, /id="route-choice"/);
+  assert.match(source, /id="market-map"/);
+  assert.match(source, /id="artifact-map"/);
+  assert.match(source, /id="execution"/);
+  assert.match(source, /노선 A · PM 겸 개발자/);
+  assert.match(source, /노선 B · 제품형 프론트엔드/);
+  assert.match(source, /시장 요구·이력 갭 맵/);
+  assert.match(source, /산출물 지도/);
+  assert.match(source, /성능 개선 회고/);
+  assert.match(source, /트랜잭션·원장 ADR/);
+  assert.match(source, /지원 시즌 시작 전 또는 6주 이상 지난 경우/);
+});
+
+test("career strategic thinking handbook covers 2026 H2 and 2027 goal setting", async () => {
+  const source = await readFile("public/handbook/career-strategic-thinking-2027-handbook.html", "utf8");
+
+  assert.match(source, /전략적 사고방법 2026 하반기/);
+  assert.match(source, /2027년 전략적 목표 설정/);
+  assert.match(source, /id="north-star"/);
+  assert.match(source, /id="gap-map"/);
+  assert.match(source, /id="thinking-system"/);
+  assert.match(source, /id="second-half-2026"/);
+  assert.match(source, /id="decision-rules"/);
+  assert.match(source, /id="portfolio-system"/);
+  assert.match(source, /id="visual-archive"/);
+  assert.match(source, /id="goal-2027"/);
+  assert.match(source, /id="quarter-plan"/);
+  assert.match(source, /목표 → 제약 → 레버 → 증거 → 리뷰/);
+  assert.match(source, /full stack art director & builder/);
+  assert.match(source, /aesthetic한 제품과 인터페이스/);
+  assert.match(source, /책과 유튜브/);
+  assert.match(source, /그러려면 해야 할 것 · 남은 것 · 준비할 것/);
+  assert.match(source, /증거의 형태/);
+  assert.match(source, /시각적 미감/);
+  assert.match(source, /full stack 확장/);
+  assert.match(source, /업계 인지도/);
+  assert.match(source, /2016–2019 시각 작업 아카이브 전략/);
+  assert.match(source, /visual sense seed/);
+  assert.match(source, /bad but useful/);
+  assert.match(source, /craft gap/);
+  assert.match(source, /지금의 기준이 형성되기 전의 원본 자료/);
+  assert.match(source, /visual-journey-2016-2019/);
+  assert.match(source, /2026 하반기 운영/);
+  assert.match(source, /2027 분기 실행 계획/);
+  assert.match(source, /월간·분기 리뷰 루프/);
+});
+
 test("career bundles read as curated publications instead of raw merged drafts", async () => {
-  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
+  const careerFiles = [
+    "career-strategy-foundation-handbook.html",
+    "career-frontend-interview-handbook.html",
+    "career-backend-interview-handbook.html",
+    "career-core-deep-dive-handbook.html",
+    "career-infra-distributed-cloud-handbook.html",
+    "career-system-project-handbook.html",
+    "career-culture-collaboration-handbook.html",
+    "career-coding-test-handbook.html",
+  ];
 
   for (const file of careerFiles) {
     const source = await readFile(path.join("public", "handbook", file), "utf8");
@@ -1119,7 +1211,16 @@ test("career bundles read as curated publications instead of raw merged drafts",
 });
 
 test("career bundles include interview readiness gates and topic evidence", async () => {
-  const careerFiles = CAREER_HANDBOOKS.filter((item) => item.id !== "career-personal-history" && item.id !== "career-ai-native-portfolio").map((item) => item.file);
+  const careerFiles = [
+    "career-strategy-foundation-handbook.html",
+    "career-frontend-interview-handbook.html",
+    "career-backend-interview-handbook.html",
+    "career-core-deep-dive-handbook.html",
+    "career-infra-distributed-cloud-handbook.html",
+    "career-system-project-handbook.html",
+    "career-culture-collaboration-handbook.html",
+    "career-coding-test-handbook.html",
+  ];
   const documents = await Promise.all(
     careerFiles.map(async (file) => [file, await readFile(path.join("public", "handbook", file), "utf8")]),
   );
@@ -1775,24 +1876,25 @@ test("design system directing document covers governance, stakeholder, and rollo
   assert.doesNotMatch(html, /TODO_/);
 });
 
-test("public handbook directory contains no carbon domain documents outside the dev handbook catalog", async () => {
+test("public handbook directory contains carbon domain documents only in the carbon group", async () => {
   const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
+  const carbonFiles = new Set(CARBON_DOMAIN_HANDBOOKS.map((item) => item.file));
   const careerSourceFiles = new Set([...INTERVIEW_HANDBOOKS, ...PERSONAL_HANDBOOKS].map((item) => item.file));
   const engineeringSourceFiles = new Set([...FRONTEND_HANDBOOKS, ...BACKEND_HANDBOOKS].map((item) => item.file));
   const operationsSourceFiles = new Set([...NETWORK_HANDBOOKS, ...DEVOPS_HANDBOOKS].map((item) => item.file));
   const practiceSourceFiles = new Set([...AX_HANDBOOKS, ...DESIGN_HANDBOOKS, ...CHEAT_SHEETS, ...PRACTICAL_GUIDES].map((item) => item.file));
-  const personalSourceFiles = new Set(PERSONAL_HANDBOOKS.map((item) => item.file));
-  const allowedCareerEvidenceFiles = new Set(["career-personal-history-handbook.html"]);
   const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file) && !careerSourceFiles.has(file) && !engineeringSourceFiles.has(file) && !operationsSourceFiles.has(file) && !practiceSourceFiles.has(file));
 
   assert.deepEqual(extraFiles, []);
 
   for (const file of publicFiles) {
-    assert.doesNotMatch(file, /carbon|lca|vcm/i);
-    if (personalSourceFiles.has(file) || allowedCareerEvidenceFiles.has(file)) {
+    if (carbonFiles.has(file)) {
+      assert.match(file, /carbon|lca|vcm/i);
       continue;
     }
+
+    assert.doesNotMatch(file, /carbon|lca|vcm/i);
 
     const source = await readFile(path.join("public", "handbook", file), "utf8");
     assert.doesNotMatch(
@@ -1905,8 +2007,9 @@ test("each public handbook nav links all main sections", async () => {
 });
 
 test("selected handbook content is positioned as a neutral full-stack growth guide", async () => {
+  const carbonIds = new Set(CARBON_DOMAIN_HANDBOOKS.map((item) => item.id));
   const sources = await Promise.all(
-    HANDBOOK_ITEMS.filter((item) => item.file && item.id !== "home" && item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM").map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
+    HANDBOOK_ITEMS.filter((item) => item.file && item.id !== "home" && item.kind !== "개인화" && item.kind !== "면접·커리어" && item.kind !== "LLM" && !carbonIds.has(item.id)).map((item) => readFile(path.join("public", "handbook", item.file), "utf8")),
   );
   const source = sources.join("\n");
   const roadmap = await readFile("public/handbook/fullstack-growth-roadmap-handbook.html", "utf8");
@@ -2467,7 +2570,7 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(overview, /대표 프로젝트 맵/);
   assert.match(overview, /포지션별 우선순위/);
   assert.match(overview, /경험 경계 문장/);
-  assert.match(overview, /탄소·에너지\/투자 서비스/);
+  assert.match(overview, /에너지\/투자 서비스/);
   assert.match(overview, /프로젝트별 실전 답변 카드/);
   assert.match(overview, /690 작업 커밋/);
   assert.match(overview, /573 개인 커밋/);
@@ -2481,7 +2584,7 @@ test("personalized handbook maps career evidence to four target positions", asyn
   assert.match(frontend, /성장 서사/);
   assert.match(frontend, /Data Grid/);
   assert.match(frontend, /지도·차트/);
-  assert.match(frontend, /탄소·에너지 서비스/);
+  assert.match(frontend, /에너지 서비스/);
   assert.match(frontend, /i18n/);
   assert.match(frontend, /SEO\/AEO/);
   assert.match(frontend, /성능 최적화/);
@@ -3989,4 +4092,59 @@ test("practice cheat sheet inline code exposes copy buttons for commands and sho
   assert.match(buttonSource, /aria-label=\{label\}/);
   assert.match(cssSource, /\.inline-code-copy-mount/);
   assert.match(cssSource, /\.inline-code-copy/);
+});
+
+test("career menu content avoids duplicated evidence boilerplate and empty part sections", async () => {
+  const careerSources = await Promise.all(
+    CAREER_HANDBOOKS.map(async (item) => ({
+      item,
+      source: await readFile(path.join("public", "handbook", item.file), "utf8"),
+    })),
+  );
+
+  const evidenceBodies = [];
+
+  for (const { item, source } of careerSources) {
+    const evidence = source.match(/<section id="career-evidence-anti-exaggeration">([\s\S]*?)<\/section>/);
+
+    if (evidence) {
+      const normalized = evidence[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      assert.ok(normalized.length >= 300, `${item.file} evidence section should contain document-specific substance`);
+      evidenceBodies.push({ file: item.file, normalized });
+    }
+
+    for (const part of source.matchAll(/<section id="doc-[^"]+">([\s\S]*?)<\/section>/g)) {
+      const normalized = part[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      assert.ok(normalized.length >= 220, `${item.file} should not leave title-only PART sections`);
+      assert.match(normalized, /검증 초점|검증|먼저 볼 질문|산출물/, `${item.file} PART sections should guide use, not only separate chapters`);
+    }
+  }
+
+  for (let i = 0; i < evidenceBodies.length; i += 1) {
+    for (let j = i + 1; j < evidenceBodies.length; j += 1) {
+      assert.notEqual(
+        evidenceBodies[i].normalized,
+        evidenceBodies[j].normalized,
+        `${evidenceBodies[i].file} and ${evidenceBodies[j].file} should not share copied evidence text`,
+      );
+    }
+  }
+});
+
+test("career resume and growth roadmap include maintenance gates", async () => {
+  const [resumeSource, growthSource] = await Promise.all([
+    readFile("public/handbook/career-linkedin-resume-handbook.html", "utf8"),
+    readFile("public/handbook/career-growth-plan-handbook.html", "utf8"),
+  ]);
+
+  assert.match(resumeSource, /id="target-headlines"/);
+  assert.match(resumeSource, /id="resume-bullet-rules"/);
+  assert.match(resumeSource, /id="resume-review-gate"/);
+  assert.match(resumeSource, /타깃별 헤드라인/);
+  assert.match(resumeSource, /공개 전 검수/);
+
+  assert.match(growthSource, /id="market-map"/);
+  assert.match(growthSource, /갱신 규칙/);
+  assert.match(growthSource, /최근 표본 기준/);
+  assert.match(growthSource, /공개 가능 범위/);
 });
