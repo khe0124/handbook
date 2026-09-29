@@ -1,0 +1,123 @@
+/* Money has no fixed header: do not inherit the Dev handbook anchor offset. */
+html:has(.money-workspace) { scroll-padding-top: 0; }
+.money-workspace { --money-paper: #fff; --money-ink: #252c36; --money-muted: #596473; --money-line: #dce2ec; --money-accent: #465467; --money-tint: #f8fafc; min-height: 100vh; color: var(--money-ink); background: var(--money-paper); font-size: 14px; line-height: 1.85; }
+.money-workspace a { color: inherit; text-underline-offset: 4px; }
+.money-workspace :focus-visible { outline: 2px solid var(--money-accent); outline-offset: 4px; }
+.money-workspace [data-route-heading]:focus { outline: none; }
+.money-skip { position: fixed; top: -100px; left: 16px; z-index: 100; padding: 12px; background: var(--money-paper); }
+.money-skip:focus { top: 8px; }
+.money-header { position: relative; z-index: 80; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 24px; padding: 8px max(16px, calc((100% - 1200px) / 2)); border-bottom: 1px solid var(--money-line); background: var(--money-paper); }
+.money-wordmark { display: flex; align-items: baseline; gap: 12px; text-decoration: none; font-size: 23px; font-weight: 700; white-space: nowrap; }
+.money-wordmark span { color: var(--money-muted); font: 10px var(--mono); font-weight: 400; }
+.money-back { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; text-decoration: none; }
+.money-nav { display: flex; justify-content: space-between; gap: 8px; flex-basis: 100%; }
+.money-menu { position: relative; }
+.money-menu button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 8px 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--money-ink); font: inherit; font-size: 13px; cursor: pointer; }
+.money-menu button[data-active="true"], .money-menu button[aria-expanded="true"] { border-bottom-color: var(--money-accent); background: var(--money-tint); }
+.money-menu button[aria-expanded="true"] svg { transform: rotate(180deg); }
+.money-menu ul { position: absolute; top: 100%; left: 0; z-index: 2; width: 264px; max-height: 60dvh; overflow-y: auto; padding: 8px; margin: 0; list-style: none; border: 1px solid var(--money-line); background: var(--money-paper); }
+.money-menu:nth-last-child(-n+2) ul { left: auto; right: 0; }
+.money-menu ul[hidden] { display: none; }
+.money-menu li a { display: flex; align-items: center; padding: 8px; min-height: 44px; font-size: 13px; text-decoration: none; }
+.money-menu li a:hover, .money-menu li a:focus-visible, .money-menu li a[aria-current="page"] { background: var(--money-tint); }
+.money-menu li a[aria-current="page"] { font-weight: 700; }
+.money-menu-group { padding: 8px 8px 4px; color: var(--money-muted); font-size: 11px; font-weight: 650; }
+.money-menu-group:not(:first-child) { border-top: 1px solid var(--money-line); margin-top: 4px; }
+.money-main { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.money-intro { padding: 20px 0 16px; border-bottom: 1px solid var(--money-ink); }
+.money-intro .workspace-eyebrow { color: var(--money-muted); margin: 0 0 8px; }
+.money-intro h1 { margin: 0; font-size: clamp(28px, 3.5vw, 42px); letter-spacing: -.04em; line-height: 1.4; overflow-wrap: anywhere; }
+.money-intro > p:last-child { margin: 8px 0 0; max-width: 800px; color: var(--money-muted); }
+.money-main h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.5; letter-spacing: -.02em; }
+.money-main h3 { font-size: 17px; margin: 0 0 8px; }
+.money-muted { color: var(--money-muted); font-size: 12px; }
+.money-foundation { padding: 20px 0; }
+.money-foundation ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 32px; }
+.money-foundation li { display: flex; gap: 12px; border-top: 1px solid var(--money-line); padding-top: 12px; }
+.money-foundation li > span, .money-number { font: 12px var(--mono); color: var(--money-muted); padding-top: 4px; }
+.money-foundation p { margin: 0; }
+.money-directory { border-top: 1px solid var(--money-ink); }
+.money-directory > section { display: grid; grid-template-columns: 32px minmax(0,1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--money-line); }
+.money-directory p { margin: 0 0 12px; color: var(--money-muted); }
+.money-directory ul { display: flex; flex-wrap: wrap; gap: 0 16px; padding: 0; margin: 0; list-style: none; }
+.money-directory a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+.money-directory-group + .money-directory-group { margin-top: 8px; }
+.money-directory-group h4 { margin: 0; color: var(--money-muted); font-size: 12px; font-weight: 500; }
+.money-reading-layout { display: grid; grid-template-columns: 200px minmax(0,1fr); gap: 24px; padding-top: 16px; }
+.money-outline { align-self: start; position: sticky; top: 16px; max-height: calc(100dvh - 32px); overflow-y: auto; padding: 4px; font-size: 13px; scrollbar-width: thin; }
+.money-outline > p { font-weight: 650; margin: 0 0 8px; }
+.money-outline nav { display: flex; flex-direction: column; margin-bottom: 8px; }
+.money-outline nav a { padding: 8px 0; text-decoration: none; }
+.money-outline a[aria-current="page"] { font-weight: 700; text-decoration: underline; }
+.money-outline-group { display: flex; flex-direction: column; }
+.money-outline-group + .money-outline-group { margin-top: 8px; }
+.money-outline-group > p { margin: 0 0 4px; color: var(--money-muted); font-size: 11px; }
+.money-article { min-width: 0; overflow-wrap: anywhere; }
+.money-article > section { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--money-line); }
+.money-article p { margin: 8px 0; }
+.money-concepts { margin: 0; }
+.money-concepts > div { display: grid; grid-template-columns: 152px minmax(0,1fr); gap: 16px; padding: 8px 0; border-top: 1px solid var(--money-line); }
+.money-concepts dt { font-weight: 650; }
+.money-concepts dd { margin: 0; }
+.money-article .money-example, .money-article .money-rule-note { padding: 12px; background: var(--money-tint); }
+.money-explanation-index { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin: 0 0 12px; font-size: 12px; }
+.money-explanation-index a { min-height: 28px; padding: 4px 0; }
+.money-explanation + .money-explanation { margin-top: 16px; }
+.money-explanation h3 { scroll-margin-top: 16px; }
+.money-explanation-sources { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--money-muted); font-size: 12px; }
+.money-example p:last-child, .money-rule-note p:last-child { margin-bottom: 0; }
+.money-checks { padding-left: 20px; }
+.money-checks li + li { margin-top: 8px; }
+.money-table-scroll { max-width: 100%; overflow-x: auto; border-top: 1px solid var(--money-ink); }
+.money-guide-table { width: 100%; min-width: 680px; border-collapse: collapse; table-layout: fixed; font-size: 13px; line-height: 1.85; }
+.money-guide-table th, .money-guide-table td { padding: 8px 12px; border-bottom: 1px solid var(--money-line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.money-guide-table thead th { background: var(--money-tint); font-weight: 650; }
+.money-guide-table tr > :first-child { width: 20%; }
+.money-guide-table tbody th { font-weight: 650; }
+.money-table-hint { color: var(--money-muted); font-size: 12px; }
+.money-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.money-sources ul { margin: 0; padding-left: 20px; }
+.money-sources li + li { margin-top: 8px; }
+.money-sources li p { margin: 4px 0 0; color: var(--money-muted); font-size: 12px; }
+.money-pagination { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.money-pagination a { min-height: 44px; }
+.money-disclaimer { margin: 20px 0; padding-top: 12px; border-top: 1px solid var(--money-line); color: var(--money-muted); font-size: 12px; }
+.money-footer { max-width: 1168px; margin: 0 auto; padding: 16px 0; display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--money-ink); color: var(--money-muted); font-size: 12px; }
+@media (max-width: 900px) {
+  .money-reading-layout { grid-template-columns: 160px minmax(0,1fr); gap: 16px; }
+  .money-concepts > div { grid-template-columns: 1fr; gap: 4px; }
+  .money-footer { margin: 0 16px; }
+}
+@media (max-width: 700px) {
+  .money-header { padding: 8px 16px; }
+  .money-nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); width: 100%; gap: 4px; }
+  .money-menu button { width: 100%; padding: 8px 4px; font-size: 12px; }
+  .money-menu ul { width: min(264px, calc(100vw - 32px)); }
+  .money-menu:nth-child(3n+1) ul { left: 0; right: auto; }
+  .money-menu:nth-child(3n+2) ul { left: 50%; right: auto; transform: translateX(-50%); }
+  .money-menu:nth-child(3n) ul { left: auto; right: 0; }
+  .money-foundation ol, .money-reading-layout { grid-template-columns: 1fr; }
+  .money-outline { position: static; max-height: 192px; padding-bottom: 8px; border-bottom: 1px solid var(--money-line); }
+  .money-outline nav { flex-direction: row; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 8px; }
+  .money-outline-group { flex-direction: row; flex-wrap: wrap; gap: 4px 16px; width: 100%; }
+  .money-outline-group > p { flex-basis: 100%; margin: 0; }
+  .money-outline-group + .money-outline-group { margin-top: 8px; }
+  .money-intro { padding: 16px 0 12px; }
+  .money-main h2 { font-size: 20px; }
+}
+@media (max-width: 480px) {
+  .money-wordmark span { display: none; }
+  .money-nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .money-menu:nth-child(n) ul { width: calc(100vw - 32px); transform: none; }
+  .money-menu:nth-child(odd) ul { left: 0; right: auto; }
+  .money-menu:nth-child(even) ul { right: 0; left: auto; }
+  .money-directory > section { grid-template-columns: 24px minmax(0,1fr); gap: 12px; }
+  .money-directory ul { display: block; }
+  .money-footer { flex-direction: column; gap: 4px; }
+}
+@media (pointer: coarse) {
+  .money-outline nav a, .money-explanation-index a { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.money-workspace) { scroll-behavior: auto; }
+}

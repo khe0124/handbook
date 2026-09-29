@@ -1,0 +1,42 @@
+.core-page .brand-intro .core-lead { color: var(--work-ink); font-size: clamp(18px, 2vw, 24px); font-weight: 550; line-height: 1.6; letter-spacing: -.025em; }
+.core-section { overflow-wrap: anywhere; }
+.core-section:last-child { margin-bottom: 0; border-bottom: 0; }
+.core-reading-note { margin: 16px 0 0; font-size: 12px; color: var(--work-muted); line-height: 1.8; }
+.core-reading-note strong { color: var(--work-ink); margin-right: 8px; }
+.core-section .core-evidence-label { font: 12px var(--mono); color: var(--work-accent-ink); margin: 20px 0 8px; }
+.core-statement { margin: 20px 0; padding: 12px 0 12px 20px; border-left: 3px solid var(--work-accent); font-size: 18px; font-weight: 600; line-height: 1.75; letter-spacing: -.025em; }
+.core-evidence-label + .core-statement { margin-top: 0; }
+.core-section .core-note { padding: 12px 16px; margin-top: 20px; background: var(--work-tint); }
+.core-page .core-table table { min-width: 640px; table-layout: fixed; }
+.core-page .core-table th:first-child { width: 30%; }
+.core-table tbody th { font-weight: 550; }
+.core-table caption { color: var(--work-muted); font-size: 12px; }
+.core-evidence-list, .core-philosophy-list { margin: 20px 0; padding: 0; list-style: none; }
+.core-evidence-list > li, .core-philosophy-list > li { padding: 20px 0; border-top: 1px solid var(--work-line); }
+.core-evidence-list h3, .core-philosophy-list h3 { margin: 0 0 12px; display: flex; align-items: baseline; gap: 12px; font-size: 16px; }
+.core-evidence-list h3 span, .core-philosophy-list h3 span { color: var(--work-accent-ink); font: 12px var(--mono); }
+.core-evidence-list dl { margin: 0; }
+.core-evidence-list dl > div { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; margin-top: 12px; }
+.core-evidence-list dt { color: var(--work-accent-ink); font-size: 12px; font-weight: 600; padding-top: 2px; }
+.core-evidence-list dd { margin: 0; }
+.core-evidence-list dd a { display: inline-block; color: var(--work-muted); font-size: 12px; }
+.core-record-meanings { margin: 20px 0; }
+.core-record-meanings > div { padding: 12px 0; border-top: 1px solid var(--work-line); }
+.core-record-meanings dt { font-weight: 600; }
+.core-record-meanings dd { margin: 4px 0 0; color: var(--work-muted); }
+.core-philosophy-list p { margin: 12px 0 0; }
+.core-principle-question { padding: 12px 16px; background: var(--work-tint); font-size: 13px; }
+.core-principle-question strong { display: block; color: var(--work-accent-ink); font-size: 12px; margin-bottom: 4px; }
+.core-validation-list { margin: 20px 0; }
+.core-validation-list > div { border-top: 1px solid var(--work-line); padding: 16px 0; }
+.core-validation-list dt { font-weight: 600; }
+.core-validation-list dd { margin: 8px 0 0; color: var(--work-muted); }
+.core-resource-links { display: flex; gap: 12px 24px; flex-wrap: wrap; font-size: 13px; }
+.core-source-note { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--work-line); color: var(--work-muted); font-size: 12px; }
+.core-source-note h3 { margin: 0 0 8px; font-size: 13px; color: var(--work-ink); }
+.core-page [id="core-practice"], .core-page [id="core-project"], .core-page [id="core-references"] { scroll-margin-top: 24px; }
+@media (max-width: 600px) {
+  .core-evidence-list dl > div { grid-template-columns: 1fr; gap: 4px; }
+  .core-evidence-list dt { padding-top: 0; }
+  .core-statement { font-size: 17px; padding-left: 16px; }
+}

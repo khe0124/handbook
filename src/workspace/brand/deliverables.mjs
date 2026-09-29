@@ -1,33 +1,38 @@
 // 일반 실무 기준. 실제 제공 항목은 선택 상품과 견적에서 확정한다.
+export const deliverableHeadings = {
+  branding: ["산출물", "권장 양식·구성", "파일 확장자", "전달·사용 조건"],
+  web: ["산출물", "상세 내용", "형식 / 조건"],
+};
+
 export const deliverables = {
   branding: {
     discovery: [
-      ["Brand Brief", "사업 배경·목표·문제·성공 기준", "PDF / Notion"],
+      ["Brand Brief", "질문·답변형 브리프: 사업 배경 → 목표 → 문제 → 성공 기준 → 작업 범위·승인자", ".pdf", "PDF 문서 또는 Notion 공유 링크"],
     ],
     direction: [
-      ["Audience", "고객·사용 맥락·니즈·장벽·선택 기준", "PDF / Notion"],
-      ["Competitor", "경쟁 대안·표현 방식·차별점", "PDF"],
-      ["Positioning", "누구의 어떤 문제를 왜 이 브랜드가 해결하는가", "PDF / Notion"],
-      ["Message", "한 줄/짧은/긴 소개 · 핵심 메시지 3–5개 · CTA", "PDF / Notion"],
-      ["Tone of Voice", "말투·단어 선택 · 권장/금지 표현", "PDF"],
-      ["Moodboard", "이미지·색·질감·레이아웃·참고 브랜드", "PDF / Figma"],
-      ["Creative Brief", "디자인 문제·시각 방향·원칙", "PDF"],
+      ["Audience", "고객 정의 시트: 고객군별 사용 맥락·니즈·장벽·선택 기준 비교표", ".pdf", "PDF 문서 또는 Notion 공유 링크"],
+      ["Competitor", "경쟁 비교표: 경쟁 대안별 표현 방식·강점·차별점 + 참고 화면", ".pdf", "비교 근거와 참고 출처 함께 기재"],
+      ["Positioning", "포지셔닝 시트: 대상 고객 → 해결할 문제 → 차별점 → 선택 이유 → 포지셔닝 문장", ".pdf", "PDF 문서 또는 Notion 공유 링크"],
+      ["Message", "메시지 매트릭스: 한 줄/짧은/긴 소개 · 핵심 메시지 3–5개 · CTA", ".pdf", "PDF 문서 또는 Notion 공유 링크"],
+      ["Tone of Voice", "언어 가이드: 말투·단어 선택 원칙 + 권장/금지 표현 비교표", ".pdf", "실제 문장 예시 포함"],
+      ["Moodboard", "주석형 레퍼런스 보드: 이미지·색·질감·레이아웃·참고 브랜드와 선택 이유", ".pdf / .fig(별도 합의 시)", "PDF 또는 Figma 공유 링크. 로컬 편집 원본은 제공 범위 확인"],
+      ["Creative Brief", "디자인 지시서: 디자인 문제 → 시각 방향 → 원칙 → 적용·제외 기준", ".pdf", "승인한 방향과 버전 표시"],
     ],
     identity: [
-      ["Logo System", "메인 로고와 조합 규칙", "SVG / PDF / AI(포함 상품)"],
-      ["Logo Variations", "가로·세로·심벌·단색·반전", "SVG / PNG / PDF"],
-      ["Logo Usage", "보호 여백·최소 크기·배경·금지 사례", "PDF"],
-      ["Color System", "Primary / Secondary / Accent · HEX / RGB / CMYK", "PDF / Figma"],
-      ["Typography", "제목/본문 · 크기·굵기·행간 · 웹폰트", "PDF / CSS"],
-      ["Graphic System", "패턴·도형·선·아이콘·이미지 스타일", "SVG / PNG / PDF · 범위 합의"],
+      ["Logo System", "로고 마스터 시트 + 벡터 에셋: 메인 로고·조합 규칙", ".svg / .pdf / .ai(포함 상품)", "웹·인쇄 용도 구분. .ai는 Custom Logo System 등 포함 상품에만 제공; Logo Starter 제외"],
+      ["Logo Variations", "변형 로고 시트 + 개별 파일: 가로·세로·심벌·단색·반전", ".svg / .png / .pdf", "종류·색상·배경별 파일 분리. Logo Starter의 변형 시스템은 제외"],
+      ["Logo Usage", "사용 규정 시트: 보호 여백·최소 크기·배경별 사용·금지 사례 도해", ".pdf", "올바른 사용과 잘못된 사용 예시 비교"],
+      ["Color System", "컬러 팔레트 표: Primary / Secondary / Accent별 HEX·RGB·CMYK 값", ".pdf / .fig(별도 합의 시)", "PDF 또는 Figma 공유 링크. 인쇄·디지털 색상 구분; 색상 범위는 상품별 확인"],
+      ["Typography", "타입 스케일 표: 제목/본문별 서체·크기·굵기·행간 + 웹 적용 스타일", ".pdf / .css(웹 적용 시)", "폰트명·라이선스·구매 링크 안내. 폰트 파일 자체는 사용권 확인 없이 재배포하지 않음"],
+      ["Graphic System", "그래픽 규칙 시트 + 개별 에셋: 패턴·도형·선·아이콘·이미지 스타일", ".svg / .png / .pdf", "벡터·이미지·사용 가이드로 구분. 제작 항목은 범위 합의"],
     ],
     applications: [
-      ["Application Examples", "명함·SNS·제안서 표지·문서 등 실제 적용 예시. 일반 기준 2종, Essentials 기본 1종", "PNG / PDF · 상품별 수량 우선"],
+      ["Application Examples", "실제 규격 적용 시트: 명함·SNS·제안서 표지·문서의 최종 시안 및 목업", ".png / .pdf", "SNS용 이미지·인쇄용 파일 구분. 일반 기준 2종, Essentials 기본 1종. 편집 원본·추가 수량은 별도 합의"],
     ],
     handoff: [
-      ["Brand Guidelines", "로고·색상·서체·그래픽 사용 규칙 통합", "PDF"],
-      ["Asset Library", "파일명과 용도가 정리된 최종 에셋", "ZIP / Drive"],
-      ["README / 라이선스", "인쇄: AI 또는 PDF·CMYK / 웹: SVG·PNG·JPG·RGB. 폰트 사용 조건과 파일 설명", "원본은 상품별 제공 범위 확인"],
+      ["Brand Guidelines", "목차형 가이드북: 로고 → 색상 → 서체 → 그래픽 → 응용 예시 → 금지 규정", ".pdf", "Essentials는 8–12페이지 미니 가이드. 그래픽·응용물 등 실제 제공 범위만 수록"],
+      ["Asset Library", "납품 폴더: Logo / Color-Type / Graphics / Applications / Guidelines + 파일 목록", ".zip · 내부 .svg / .png / .jpg / .pdf / .ai(포함 시)", "압축 파일 또는 Drive 폴더 링크. 미포함 항목은 폴더에서도 제외; 인쇄 CMYK·웹 RGB 구분"],
+      ["README / 라이선스", "인계 안내서: 폴더 구조·파일명·용도·버전·사용법·폰트/외부 자산 라이선스·지원 범위", ".md / .txt / .pdf 중 합의한 형식", "권장 문서 양식. 사용 조건·구매 출처를 기록하고 편집 원본은 상품별 제공 범위 확인"],
     ],
   },
   web: {

@@ -5,12 +5,13 @@ import type { BrandDraft } from "./useBrandDraft";
 
 type BriefEditorProps = {
   label: string;
+  title?: string;
   draft: BrandDraft;
   storageError: string;
   onChange: (draft: BrandDraft) => void;
 };
 
-export function BriefEditor({ label, draft, storageError, onChange }: BriefEditorProps) {
+export function BriefEditor({ label, title = "프로젝트 브리프", draft, storageError, onChange }: BriefEditorProps) {
   const [copyStatus, setCopyStatus] = useState("");
   const [showExport, setShowExport] = useState(false);
   const text = formatBrief(label, draft);
@@ -27,7 +28,7 @@ export function BriefEditor({ label, draft, storageError, onChange }: BriefEdito
 
   return (
     <section id="project-brief" className="brand-brief" aria-labelledby="brief-title">
-      <div className="brand-section-heading"><div><p className="workspace-eyebrow">YOUR WORKING NOTES</p><h2 id="brief-title">프로젝트 브리프</h2></div><button type="button" className="brand-action" onClick={copy}><Copy size={16} aria-hidden />브리프 복사</button></div>
+      <div className="brand-section-heading"><div><p className="workspace-eyebrow">YOUR WORKING NOTES</p><h2 id="brief-title">{title}</h2></div><button type="button" className="brand-action" onClick={copy}><Copy size={16} aria-hidden />브리프 복사</button></div>
       <p className="brand-muted">아직 정하지 못한 내용은 비워 두고 미팅에서 확인하세요. 노트와 체크 상태는 이 브라우저에만 저장되며, 다른 기기와 동기화되지 않습니다. 비밀번호·민감한 고객 정보는 적지 마세요.</p>
       <div className="brand-brief-fields">
         {BRIEF_FIELDS.map(([key, title, placeholder]) => (

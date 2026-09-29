@@ -1955,7 +1955,7 @@ test("site opts out of search indexing", async () => {
 test("README describes the handbook project instead of the Vite template", async () => {
   const source = await readFile("README.md", "utf8");
 
-  assert.match(source, /^# Dev \/ Brand Workspace/m);
+  assert.match(source, /^# Dev \/ Brand \/ Money Workspace/m);
   assert.match(source, /^## Dev Handbook/m);
   assert.match(source, /풀스택/);
   assert.match(source, /문서 생성/);
@@ -2887,17 +2887,17 @@ test("mobile top header can collapse so reading content is not covered", async (
   assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header-open \.mobile-topbar-content\s*\{[\s\S]*display: contents/s);
 });
 
-test("workspace root describes both spaces and retains the existing Open Graph image", async () => {
+test("workspace root describes all three spaces and retains the existing Open Graph image", async () => {
   const [source, image] = await Promise.all([
     readFile("index.html", "utf8"),
     readFile("public/dev.png"),
   ]);
 
-  assert.match(source, /<title>Dev \/ Brand — Workspace<\/title>/);
-  assert.match(source, /<meta name="description" content="개발 핸드북과 브랜딩·웹 프리랜싱 작업 공간" \/>/);
+  assert.match(source, /<title>Dev \/ Brand \/ 재테크 — Workspace<\/title>/);
+  assert.match(source, /<meta name="description" content="개발 핸드북, 브랜딩·웹 작업, 자산관리 기초 학습 공간" \/>/);
   assert.match(source, /<meta property="og:type" content="website" \/>/);
-  assert.match(source, /<meta property="og:title" content="Dev \/ Brand — Workspace" \/>/);
-  assert.match(source, /<meta property="og:description" content="개발 핸드북과 브랜딩·웹 프리랜싱 작업 공간" \/>/);
+  assert.match(source, /<meta property="og:title" content="Dev \/ Brand \/ 재테크 — Workspace" \/>/);
+  assert.match(source, /<meta property="og:description" content="개발 핸드북, 브랜딩·웹 작업, 자산관리 기초 학습 공간" \/>/);
   assert.match(source, /<meta property="og:image" content="\/dev\.png" \/>/);
   assert.match(source, /<meta property="og:image:width" content="1200" \/>/);
   assert.match(source, /<meta property="og:image:height" content="675" \/>/);
