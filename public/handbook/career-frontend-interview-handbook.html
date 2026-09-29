@@ -53,15 +53,17 @@
   <a href="#jsts-q10"><span class="code">JT-10</span>타입 안전 경계</a>
   <a href="#jsts-typescript-advanced-boundary"><span class="code">JT-D1</span>TypeScript Advanced Boundary</a>
   <a href="#doc-personalfe"><span class="code">PART</span>프론트엔드 개발자 대응</a>
-<a href="#personalfe-ch1"><span class="code">FE-PER-00</span>성장 서사</a>
-  <a href="#personalfe-ch2"><span class="code">FE-PER-01</span>핵심 강점</a>
-  <a href="#personalfe-ch3"><span class="code">FE-PER-02</span>대표 답변</a>
+<a href="#personalfe-ch3"><span class="code">FE-PER-02</span>대표 답변</a>
   <a href="#personalfe-ch4"><span class="code">FE-PER-03</span>압박 질문</a>
-  <a href="#personalfe-ch5"><span class="code">FE-PER-04</span>포트폴리오 문장</a>
   <a href="#personalfe-ch6"><span class="code">FE-PER-05</span>대체 증거</a>
   <a href="#personalfe-ch7"><span class="code">FE-PER-06</span>심화 드릴 연결</a>
   <a href="#personalfe-ch8"><span class="code">FE-PER-07</span>운영형 FE 증거</a>
   <a href="#career-evidence-anti-exaggeration"><span class="code">EVIDENCE</span>증거·과장 방지</a>
+<a href="#doc-personalb2b"><span class="code">PART</span>B2B·SaaS 어드민 대응</a>
+<a href="#personalb2b-ch2"><span class="code">B2B</span>경험 증거</a>
+<a href="#personalb2b-ch3"><span class="code">B2B</span>운영자 UX</a>
+<a href="#personalb2b-ch4"><span class="code">B2B</span>대표 답변</a>
+<a href="#personalb2b-ch6"><span class="code">B2B</span>B2B·SaaS 도메인 깊이</a>
 </nav>
 <main>
 <header class="hero">
@@ -78,7 +80,7 @@
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>학습 로드맵</h2></div>
 <p class="lede">이 문서는 아래 원문을 면접 학습 흐름에 맞게 이어 읽도록 구성했습니다. 각 파트는 개념 이해, 압박 질문, 답변 근거를 확인하는 기준점으로 사용합니다.</p>
-<ul><li>프론트엔드 면접</li><li>JavaScript·TypeScript 면접</li><li>프론트엔드 개발자 대응</li></ul>
+<ul><li>프론트엔드 면접</li><li>JavaScript·TypeScript 면접</li><li>프론트엔드 개발자 대응</li><li>B2B·SaaS 어드민 대응</li></ul>
 </section>
 
 <section id="career-readiness-gate">
@@ -895,40 +897,13 @@ TypeScript 타입은 빌드 후 사라지므로 외부 API 응답, localStorage,
 
 <section id="doc-personalfe">
 <div class="ch-head"><span class="ch-code">PART</span><h2>프론트엔드 개발자 대응</h2></div>
-<p class="lede">프론트엔드 개발자 대응 파트는 개인 이력을 FE 채용 언어로 압축한다. B2B, 성능, API 경계, 디자인 기반 중 공고에 맞는 카드를 선택한다.</p>
-<table>
-<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
-<tr><td>포지셔닝</td><td>나는 어떤 FE 문제에 강한가</td><td>헤드라인 3종</td></tr>
-<tr><td>대표 프로젝트</td><td>B2B·SaaS·Next·RN 중 무엇을 앞세우나</td><td>공고별 프로젝트 우선순위</td></tr>
-<tr><td>대체 증거</td><td>정량 수치가 없을 때 무엇을 보여주나</td><td>before/after 또는 QA 기록</td></tr>
-</table>
+<p>이 파트는 성능·i18n·API 오류·운영 품질을 기술 질문으로 검증한다. 반복되던 성장 서사와 이력서 요약은 <a href="/handbook/career-personal-history-handbook.html" data-handbook-id="career-personal-history">이력 원장</a> · <a href="/handbook/career-linkedin-resume-handbook.html" data-handbook-id="career-linkedin-resume">제출 문안</a>에서 관리한다.</p>
+<p>먼저 볼 질문은 화면이 느려진 조건, 상태를 나눈 이유, 사용자 오류를 복구한 방식이다. 답변 뒤에 변경 전후 구조와 재현 조건을 붙이고 실제로 측정한 값만 말한다. 아래 B2B 파트에서는 운영자 오조작·대량 입력·권한 경계를 같은 방식으로 검증한다. 결과는 새 이력 요약이 아니라 설명이 막힌 질문과 확인할 증거 목록이다.</p>
 </section>
 
-<section id="personalfe-ch1">
-<div class="ch-head"><span class="ch-code">FE-PER-00</span><h2>성장 서사</h2></div>
-<div class="serial-card"><span class="sc-label">STORY</span>초기에는 JavaScript·jQuery·Vue 기반으로 어드민 UI와 에너지 서비스의 지도, 차트, 소셜 공유, 반응형 웹을 구현하며 화면 구조와 데이터 시각화 경험을 쌓았습니다. 이후 React/Next/TypeScript 기반 프로젝트에서 인증, 상태관리, 복잡한 Form, Data Grid, i18n, 성능 최적화, 배포까지 맡으며 제품형 프론트엔드 역량으로 확장했습니다.</div>
-<table>
-<tr><th>시기</th><th>기술</th><th>면접에서의 의미</th></tr>
-<tr><td>초기 UI 구현</td><td>JavaScript, jQuery, HTML/CSS, SCSS, Vue, Quasar</td><td>프레임워크 이전의 DOM, 스타일링, 화면 구조 이해가 있습니다.</td></tr>
-<tr><td>에너지 서비스 화면 확장</td><td>Vue3, Chart.js, Kakao Map, Firebase</td><td>지도·차트·소셜 공유·정적 배포 같은 사용자 경험을 다뤘습니다.</td></tr>
-<tr><td>React 실무</td><td>React, MUI, Tailwind, Context API, Redux Toolkit</td><td>대규모 화면 상태와 컴포넌트 구조를 다뤘습니다.</td></tr>
-<tr><td>Next/TypeScript</td><td>Next.js, TypeScript, Jotai, Lingui, SEO/AEO</td><td>타입 안정성, 성능, 검색 노출, 다국어 운영까지 확장했습니다.</td></tr>
-<tr><td>모바일</td><td>React Native, Expo, redux-saga, d3</td><td>웹을 넘어 앱의 상태, 네비게이션, 실시간 갱신 경험이 있습니다.</td></tr>
-</table>
-</section>
 
-<section id="personalfe-ch2">
-<div class="ch-head"><span class="ch-code">FE-PER-01</span><h2>핵심 강점</h2></div>
-<table>
-<tr><th>강점</th><th>증거 프로젝트</th><th>답변 키워드</th></tr>
-<tr><td>복잡한 업무 UI</td><td>산업 데이터 플랫폼, 관리자 콘솔</td><td>Data Grid, Form validation, 권한, Excel/PDF, loading/empty/error</td></tr>
-<tr><td>데이터 시각화</td><td>거래형 서비스, 에너지 앱, 이전 Vue 서비스</td><td>Chart.js, d3, Recharts, 금액·수량 표기, 대시보드</td></tr>
-<tr><td>지도·위치 UI</td><td>React 웹, Vue 서비스</td><td>Google Map, Kakao Map, 주소 검색, 지도 컴포넌트 분리</td></tr>
-<tr><td>국제화</td><td>3-web 서비스, 가상자산 서비스, 기업 웹사이트</td><td>i18n, Lingui, locale, timezone, 번역 사전, 빈 메시지 검출</td></tr>
-<tr><td>성능 최적화</td><td>기업 웹사이트</td><td>next/Image, dynamic import, bundle analyzer, preload, CLS 방지</td></tr>
-<tr><td>검색 노출</td><td>기업 웹사이트</td><td>SEO/AEO, OpenGraph, sitemap, robots, 구조화 데이터</td></tr>
-</table>
-</section>
+
+
 
 <section id="personalfe-ch3">
 <div class="ch-head"><span class="ch-code">FE-PER-02</span><h2>대표 답변</h2></div>
@@ -951,17 +926,7 @@ TypeScript 타입은 빌드 후 사라지므로 외부 API 응답, localStorage,
 </table>
 </section>
 
-<section id="personalfe-ch5">
-<div class="ch-head"><span class="ch-code">FE-PER-04</span><h2>포트폴리오 문장</h2></div>
-<div class="serial-card"><span class="sc-label">RESUME SUMMARY</span>React/Next/TypeScript 기반으로 B2B 어드민, 거래형 서비스, 기업 웹사이트, React Native 앱을 개발했습니다. Data Grid, 복잡한 Form, 인증·권한, i18n, 지도·차트, 성능 최적화, SEO/AEO, 파일 업로드/다운로드 같은 제품 핵심 흐름을 다뤘고, 화면 구현을 넘어 API 계약과 실패 복구까지 고려하는 프론트엔드 개발을 지향합니다.</div>
-<h3>대체 증거</h3>
-<table>
-<tr><th>증거 유형</th><th>면접에서 말할 방식</th></tr>
-<tr><td>커밋 수</td><td>장기간 유지보수와 반복 개선을 보여주는 보조 증거로만 사용합니다.</td></tr>
-<tr><td>반복 개선 횟수</td><td>기능을 한 번 만들고 끝낸 것이 아니라 오류 상태, 성능, i18n, 권한 흐름을 계속 다듬었다고 설명합니다.</td></tr>
-<tr><td>대체 증거</td><td>정량 성능 수치가 없을 때는 변경 구조, 재현 조건, 리뷰 기록, 테스트 추가, 배포 후 장애 감소 신호를 제시합니다.</td></tr>
-</table>
-</section>
+
 
 <section id="personalfe-ch6">
 <div class="ch-head"><span class="ch-code">FE-PER-05</span><h2>대체 증거</h2></div>
@@ -1013,6 +978,68 @@ TypeScript 타입은 빌드 후 사라지므로 외부 API 응답, localStorage,
 </table>
 </section>
 
+<section id="doc-personalb2b">
+<div class="ch-head"><span class="ch-code">PART</span><h2>B2B·SaaS 어드민 대응</h2></div>
+<p class="lede">B2B·SaaS 어드민 대응 파트는 반복 업무, 권한, 감사 가능성, 대량 데이터의 실수를 줄이는 경험을 앞세운다.</p>
+<table>
+<tr><th>검증 초점</th><th>먼저 볼 질문</th><th>준비 산출물</th></tr>
+<tr><td>업무 흐름</td><td>운영자가 어떤 일을 완료해야 하나</td><td>workflow map</td></tr>
+<tr><td>권한·감사</td><td>누가 무엇을 할 수 있고 어떻게 남나</td><td>RBAC/audit 표</td></tr>
+<tr><td>대량 데이터</td><td>엑셀·테이블·검증 오류를 어떻게 복구하나</td><td>error recovery 사례</td></tr>
+</table>
+</section>
+
+<section id="personalb2b-ch2">
+<div class="ch-head"><span class="ch-code">ADM-PER-01</span><h2>경험 증거</h2></div>
+<table>
+<tr><th>경험</th><th>면접에서 말할 내용</th></tr>
+<tr><td>권한</td><td>관리자 로그인, 권한 등급별 메뉴 노출, 접근 불가 라우팅, RBAC API 연동, 권한 변경 흐름을 설명합니다.</td></tr>
+<tr><td>대량 데이터</td><td>목록 필터, pagination/filter, 거래내역 상세, Data Grid 입력, virtualized grid 필요성을 말합니다.</td></tr>
+<tr><td>Excel/PDF</td><td>다운로드 API, spinner modal, 파일 생성 대기, 실패 메시지, 사용자 재시도 흐름을 말합니다.</td></tr>
+<tr><td>운영자 UX</td><td>잘못 누르면 위험한 버튼 disable, confirm, modal, toast, 상태별 badge, 빈 상태 안내를 말합니다.</td></tr>
+<tr><td>감사 가능성</td><td>프론트에서 audit log를 직접 구현하지 않았더라도 actor/action/result가 서버에 남아야 한다는 기준을 말합니다.</td></tr>
+</table>
+</section>
+
+<section id="personalb2b-ch3">
+<div class="ch-head"><span class="ch-code">ADM-PER-02</span><h2>운영자 UX</h2></div>
+<p class="lede">B2B 어드민 답변은 사용자 편의성보다 업무 정확성과 오조작 방지를 중심에 둬야 합니다.</p>
+<table>
+<tr><th>상황</th><th>좋은 설계</th><th>면접 표현</th></tr>
+<tr><td>위험한 상태 변경</td><td>API 응답 전 버튼 disable, confirmation, 권한 체크</td><td>“중복 요청과 오조작을 정상 시나리오로 보고 막았습니다.”</td></tr>
+<tr><td>대량 목록</td><td>서버 pagination, filter state, reset 조건, loading/empty/error</td><td>“목록은 화면 렌더링보다 검색 조건과 서버 계약이 먼저입니다.”</td></tr>
+<tr><td>파일 다운로드</td><td>비동기 처리, 진행 상태, 실패 메시지, 재시도</td><td>“파일 생성 대기 중 사용자가 멈췄다고 느끼지 않도록 상태를 보여줬습니다.”</td></tr>
+<tr><td>권한 부족</td><td>메뉴 숨김, route guard, 서버 최종 검증</td><td>“프론트 guard는 UX이고 보안 최종 판단은 서버입니다.”</td></tr>
+</table>
+</section>
+
+<section id="personalb2b-ch4">
+<div class="ch-head"><span class="ch-code">ADM-PER-03</span><h2>대표 답변</h2></div>
+<h3>Q. B2B 어드민에서 가장 중요하게 보는 것은?</h3>
+<div class="serial-card"><span class="sc-label">30초</span>정확성, 권한, 추적성, 실패 복구입니다. 운영자는 한 번의 잘못된 액션으로 고객 데이터나 정산 흐름에 영향을 줄 수 있으므로, 버튼 노출보다 서버 권한 검증, confirmation, 중복 요청 방지, 상태별 피드백, audit log가 중요합니다.</div>
+<h3>Q. 대량 데이터 화면은 어떻게 설계하나요?</h3>
+<div class="serial-card"><span class="sc-label">90초</span>먼저 데이터 규모와 검색 조건, 정렬 기준, 실시간성 요구를 확인합니다. 프론트에서는 Data Grid나 virtualization만 보는 것이 아니라 서버 pagination/filter 계약, URL query 동기화, loading/empty/error 상태, 필터 reset 조건을 함께 설계합니다. 입력형 grid라면 server snapshot, draft state, validation errors, dirty rows를 분리합니다.</div>
+<h3>Q. 어드민에서 권한은 어떻게 처리하나요?</h3>
+<div class="serial-card"><span class="sc-label">90초</span>프론트에서는 권한별 메뉴 노출과 route guard로 사용성을 보조하지만, 보안의 최종 판단은 서버가 해야 합니다. 화면에서는 403과 401을 구분하고, 관리자가 접근할 수 없는 기능은 명확히 막되, 서버 API도 actor, action, resource 기준으로 권한을 검증해야 합니다.</div>
+</section>
+
+<section id="personalb2b-ch6">
+<div class="ch-head"><span class="ch-code">ADM-PER-05</span><h2>B2B·SaaS 도메인 깊이</h2></div>
+<p class="lede">B2B SaaS 어드민 면접은 Data Grid나 관리자 화면 경험만으로 충분하지 않습니다. 고객별 권한, 감사 가능성, 데이터 보존, 운영자 실수 방지까지 말해야 합니다.</p>
+<div class="serial-card">
+<span class="sc-label">B2B SAAS DOMAIN DEPTH</span>
+B2B SaaS의 핵심은 고객 조직의 업무 위험을 소프트웨어가 대신 통제하는 것입니다. 그래서 tenant isolation, RBAC/ABAC, approval workflow, audit trail, data export, admin impersonation, 고객별 설정, SLA와 장애 고지가 모두 제품 설계 질문이 됩니다.
+</div>
+<table>
+<tr><th>도메인 축</th><th>면접 질문</th><th>좋은 답변 방향</th></tr>
+<tr><td>Tenant isolation</td><td>다른 고객사 데이터가 섞이면 어디서 막나요?</td><td>DB query scope, cache key, file path, audit log, test fixture에 tenant를 포함합니다.</td></tr>
+<tr><td>RBAC/ABAC</td><td>역할만으로 권한이 부족한 경우는?</td><td>actor, action, resource, scope, condition을 분리합니다.</td></tr>
+<tr><td>Audit trail</td><td>관리자 변경을 어떻게 추적하나요?</td><td>actor, target, before/after, reason, requestId, result를 기록합니다.</td></tr>
+<tr><td>Approval workflow</td><td>위험한 작업은 바로 실행해도 되나요?</td><td>draft, review, approval, execution, rollback 상태를 분리합니다.</td></tr>
+<tr><td>Data export</td><td>Excel/PDF export의 위험은?</td><td>권한, 범위, masking, rate limit, formula injection, audit를 봅니다.</td></tr>
+<tr><td>고객별 설정</td><td>고객별 요구가 충돌하면?</td><td>core model과 configuration을 분리하고 예외를 제품 구조로 흡수할지 판단합니다.</td></tr>
+</table>
+</section>
 </main>
 </div>
 </body>

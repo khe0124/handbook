@@ -351,6 +351,227 @@
   color: var(--ink-soft);
 }
 
+.handbook-main .home-profile {
+  margin: 18px 0 36px;
+}
+
+.handbook-main .home-strategy {
+  margin: 18px 0 32px;
+}
+
+.handbook-main .home-strategy .ch-head {
+  margin-top: 0;
+}
+
+.handbook-main .home-strategy .home-strategy-source {
+  margin: 4px 0 8px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.home-strategy-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 8px 0;
+  border-block: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.home-strategy a {
+  color: var(--green-deep);
+  text-underline-offset: 3px;
+}
+
+.home-strategy a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+.handbook-main .home-strategy-part > h3 {
+  margin: 24px 0 8px;
+  scroll-margin-top: 16px;
+}
+
+.handbook-main .home-strategy-part > p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.handbook-main table.home-strategy-table {
+  table-layout: fixed;
+  border-top: 2px solid var(--ink);
+}
+
+.handbook-main .home-strategy-table th:first-child {
+  width: 26%;
+}
+
+.handbook-main .home-strategy-table td {
+  overflow-wrap: anywhere;
+  font-size: 13.5px;
+}
+
+@media (max-width: 700px) {
+  .handbook-main table.home-strategy-table,
+  .handbook-main .home-strategy-table tbody,
+  .handbook-main .home-strategy-table tr,
+  .handbook-main .home-strategy-table td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .handbook-main table.home-strategy-table {
+    background: transparent;
+    border-inline: 0;
+  }
+
+  .handbook-main .home-strategy-table thead {
+    display: none;
+  }
+
+  .handbook-main .home-strategy-table tr {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .handbook-main .home-strategy-table td {
+    padding: 4px 0;
+    border: 0;
+  }
+
+  .handbook-main .home-strategy-table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--green-deep);
+    font-size: 11px;
+    font-weight: 700;
+  }
+}
+
+.handbook-main .home-profile .ch-head {
+  margin-top: 0;
+}
+
+.handbook-main .home-profile .lede {
+  max-width: 860px;
+  margin-bottom: 14px;
+}
+
+.handbook-main table.home-profile-table {
+  width: 100%;
+  margin: 0;
+  border-top: 2px solid var(--ink);
+}
+
+.home-profile-table thead th {
+  padding: 8px 12px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-align: left;
+}
+
+.home-profile-table thead th:first-child {
+  color: var(--green-deep);
+}
+
+.home-profile-table thead th:last-child {
+  color: var(--amber);
+}
+
+.home-profile-table tbody tr {
+  border-top: 1px solid var(--line);
+}
+
+.home-profile-table td {
+  width: 50%;
+  padding: 12px;
+  vertical-align: top;
+}
+
+.home-profile-table td + td {
+  border-left: 1px solid var(--line);
+}
+
+.home-profile-table-meta {
+  margin-bottom: 4px;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.home-profile-table h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.home-profile-table p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.home-profile-table .home-profile-action {
+  display: grid;
+  gap: 3px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-top: 0;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.home-profile-table td:first-child .home-profile-action {
+  background: var(--green-tint);
+}
+
+.home-profile-table td + td .home-profile-action {
+  background: var(--amber-tint);
+}
+
+.home-profile-table .home-profile-action strong {
+  color: var(--green-deep);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.home-profile-table td + td .home-profile-action strong {
+  color: var(--amber);
+}
+
+.home-profile-table .home-profile-detail {
+  margin-top: 8px;
+}
+
+.home-profile-table .home-profile-evidence {
+  display: grid;
+  gap: 3px;
+  margin-top: 5px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--line);
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.home-profile-table .home-profile-evidence strong {
+  display: block;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+}
+
 .handbook-main .shortcut-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1271,6 +1492,10 @@
 }
 
 @media (max-width: 700px) {
+  .handbook-main .home-profile {
+    margin: 14px 0 28px;
+  }
+
   .handbook-main table.mobile-card-table {
     display: block;
     overflow: visible;
@@ -1291,7 +1516,7 @@
   }
 
   .handbook-main table.mobile-card-table tr {
-    margin: 10px 0;
+    margin: 0;
     border: 1px solid var(--line);
     background: var(--panel);
   }

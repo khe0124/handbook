@@ -41,6 +41,20 @@
   cursor: pointer;
 }
 
+.workspace-return {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.workspace-return:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
 .home-title-button:hover {
   color: var(--green);
 }

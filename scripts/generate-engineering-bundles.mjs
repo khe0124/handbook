@@ -1125,6 +1125,11 @@ function transformEngineeringCards(html) {
 }
 
 for (const bundle of BUNDLES) {
+  // Career publications are purpose-edited sources now. Re-merging the archived
+  // interview drafts would restore removed duplication and lose curated cases.
+  // Use handbook-html.mjs to publish public/handbook/career-*.html into the app.
+  if (bundle.id.startsWith("career-")) continue;
+
   const firstHtml = await readFile(path.join(handbookDir, bundle.sources[0].file), "utf8");
   const { beforeNav, afterMainEnd } = extractShell(firstHtml);
   const isCareer = bundle.id.startsWith("career-");

@@ -738,12 +738,13 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.ok(labels.includes("08 AX 기반·조직 적용"));
   assert.ok(labels.includes("디자인"));
   assert.ok(labels.includes("실무 도구"));
-  assert.ok(labels.includes("00 면접 전략·커리어 포지셔닝"));
-  assert.ok(labels.includes("01 개인 이력 정리"));
-  assert.ok(labels.includes("02 LinkedIn 이력서"));
-  assert.ok(labels.includes("03 성장·노선·시장·산출물 로드맵"));
-  assert.ok(labels.includes("04 전략적 사고방법 2026 하반기·2027 목표"));
-  assert.ok(labels.includes("05 이직 실행 플레이북"));
+  assert.ok(labels.includes("00 커리어 방향·일과 개인 작업"));
+  assert.ok(labels.includes("01 개인 이력·기여 증거"));
+  assert.ok(labels.includes("02 지원 포지션·팀 선택"));
+  assert.ok(labels.includes("03 이력서·LinkedIn 문안"));
+  assert.ok(labels.includes("04 이직 실행·지원 관리"));
+  assert.ok(labels.includes("05 개인 작품·포트폴리오"));
+  assert.ok(labels.includes("06 면접 답변·공통 훈련"));
   assert.ok(labels.includes("10 프론트엔드·JS/TS 면접"));
   assert.ok(labels.includes("11 백엔드·Java/Spring 면접"));
   assert.deepEqual(
@@ -772,7 +773,6 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.ok(labels.includes("14 시스템 설계·프로젝트 심층"));
   assert.ok(labels.includes("15 컬처·협업·코드리뷰"));
   assert.ok(labels.includes("16 코딩테스트 패턴"));
-  assert.ok(labels.includes("17 AI Native 포트폴리오"));
   assert.ok(labels.includes("00 CS 기초와 알고리즘 사고"));
   assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
   assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
@@ -1039,15 +1039,16 @@ test("home shortcut links point to catalog items", async () => {
   }
 });
 
-test("career menu consolidates interview, personalized career, and AI Native portfolio documents", async () => {
+test("career menu separates decisions, evidence, publication, execution and interview practice", async () => {
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const expectedFiles = [
-    "career-strategy-foundation-handbook.html",
-    "career-personal-history-handbook.html",
-    "career-linkedin-resume-handbook.html",
-    "career-growth-plan-handbook.html",
     "career-strategic-thinking-2027-handbook.html",
+    "career-personal-history-handbook.html",
+    "career-growth-plan-handbook.html",
+    "career-linkedin-resume-handbook.html",
     "career-job-change-playbook-handbook.html",
+    "career-ai-native-portfolio-handbook.html",
+    "career-strategy-foundation-handbook.html",
     "career-frontend-interview-handbook.html",
     "career-backend-interview-handbook.html",
     "career-core-deep-dive-handbook.html",
@@ -1055,22 +1056,21 @@ test("career menu consolidates interview, personalized career, and AI Native por
     "career-system-project-handbook.html",
     "career-culture-collaboration-handbook.html",
     "career-coding-test-handbook.html",
-    "career-ai-native-portfolio-handbook.html",
   ];
   const bundles = [
     {
       file: "career-strategy-foundation-handbook.html",
-      sources: ["기술면접 개요", "회사·직무별 면접 전략", "개인화 개요"],
+      sources: ["면접 답변·공통 훈련", "회사 유형별 면접 훈련", "프로젝트별 답변 카드"],
       evidence: ["BASE ANSWER FRAME", "핵심 질문 30선", "ANSWER FRAME"],
     },
     {
       file: "career-personal-history-handbook.html",
-      sources: ["개인 이력 정리"],
-      evidence: ["PERSONAL POSITIONING MAP", "REPRESENTATIVE PROJECT MAP", "CAREER TIMELINE", "POPLE", "GREENERY", "HEMS", "제품환경평가", "TaaS", "INTERVIEW EVIDENCE MAP", "POSITION PRIORITY MATRIX", "EXPERIENCE BOUNDARY SENTENCES", "ANSWER CARDS"],
+      sources: ["개인 이력·기여 증거"],
+      evidence: ["REPRESENTATIVE PROJECT MAP", "CAREER TIMELINE", "POPLE", "GREENERY", "HEMS", "제품환경평가", "TaaS", "EXPERIENCE BOUNDARY SENTENCES", "증거 위치와 공개 범위"],
     },
     {
       file: "career-frontend-interview-handbook.html",
-      sources: ["프론트엔드 면접", "JavaScript·TypeScript 면접", "프론트엔드 개발자 대응"],
+      sources: ["프론트엔드 면접", "JavaScript·TypeScript 면접", "프론트엔드 개발자 대응", "B2B·SaaS 어드민 대응"],
       evidence: ["REACT CONCURRENT SSR DRILL", "TYPESCRIPT ADVANCED BOUNDARY", "프론트엔드 개발자 대응"],
     },
     {
@@ -1095,8 +1095,8 @@ test("career menu consolidates interview, personalized career, and AI Native por
     },
     {
       file: "career-culture-collaboration-handbook.html",
-      sources: ["컬처·압박 면접", "Git·협업·코드리뷰 면접", "B2B·SaaS 어드민 대응"],
-      evidence: ["STAR", "Git", "B2B"],
+      sources: ["컬처·압박 면접", "Git·협업·코드리뷰 면접", "시니어 IC 협업 판단"],
+      evidence: ["STAR", "Git", "Senior IC 운영 모델"],
     },
     {
       file: "career-coding-test-handbook.html",
@@ -1105,8 +1105,8 @@ test("career menu consolidates interview, personalized career, and AI Native por
     },
     {
       file: "career-ai-native-portfolio-handbook.html",
-      sources: ["AI Native 포트폴리오"],
-      evidence: ["AI Native", "EVIDENCE PACKET", "30초 결론"],
+      sources: ["개인 작품·포트폴리오"],
+      evidence: ["EVIDENCE PACKET", "LCA", "visual-journey-2016-2019", "가상 예시"],
     },
   ];
 
@@ -1129,56 +1129,38 @@ test("career menu consolidates interview, personalized career, and AI Native por
   }
 });
 
-test("career growth plan consolidates route market and artifact planning", async () => {
+test("career role guide owns role and team selection without duplicating production plans", async () => {
   const source = await readFile("public/handbook/career-growth-plan-handbook.html", "utf8");
-
-  assert.match(source, /성장·노선·시장·산출물 로드맵/);
-  assert.match(source, /id="diagnosis"/);
-  assert.match(source, /id="route-choice"/);
-  assert.match(source, /id="market-map"/);
-  assert.match(source, /id="artifact-map"/);
-  assert.match(source, /id="execution"/);
-  assert.match(source, /노선 A · PM 겸 개발자/);
-  assert.match(source, /노선 B · 제품형 프론트엔드/);
-  assert.match(source, /시장 요구·이력 갭 맵/);
-  assert.match(source, /산출물 지도/);
-  assert.match(source, /성능 개선 회고/);
-  assert.match(source, /트랜잭션·원장 ADR/);
+  for (const id of ["route-choice", "position-evidence", "strength-gap", "team-selection", "market-map", "review-gate"]) {
+    assert.ok(source.includes(`id="${id}"`), `Missing role decision section: ${id}`);
+  }
   assert.match(source, /지원 시즌 시작 전 또는 6주 이상 지난 경우/);
+  assert.match(source, /코드리뷰와 기술 피드백/);
+  assert.match(source, /개발자에게 모든 결정을 떠넘기는지/);
+  assert.doesNotMatch(source, /<section id="(?:execution|artifact-map)"/);
+  assert.match(source, /data-handbook-id="career-ai-native-portfolio"/);
+  assert.match(source, /data-handbook-id="career-strategic-thinking-2027"/);
 });
 
-test("career strategic thinking handbook covers 2026 H2 and 2027 goal setting", async () => {
+test("career direction owns parallel work and personal practice with one execution plan", async () => {
   const source = await readFile("public/handbook/career-strategic-thinking-2027-handbook.html", "utf8");
-
-  assert.match(source, /전략적 사고방법 2026 하반기/);
-  assert.match(source, /2027년 전략적 목표 설정/);
-  assert.match(source, /id="north-star"/);
-  assert.match(source, /id="gap-map"/);
-  assert.match(source, /id="thinking-system"/);
-  assert.match(source, /id="second-half-2026"/);
-  assert.match(source, /id="decision-rules"/);
-  assert.match(source, /id="portfolio-system"/);
-  assert.match(source, /id="visual-archive"/);
-  assert.match(source, /id="goal-2027"/);
-  assert.match(source, /id="quarter-plan"/);
-  assert.match(source, /목표 → 제약 → 레버 → 증거 → 리뷰/);
+  for (const id of ["north-star", "two-tracks", "thinking-system", "execution", "decision-rules", "review-loop"]) {
+    assert.ok(source.includes(`id="${id}"`), `Missing direction section: ${id}`);
+  }
   assert.match(source, /full stack art director & builder/);
   assert.match(source, /aesthetic한 제품과 인터페이스/);
+  assert.match(source, /목표 → 제약 → 레버 → 증거 → 리뷰/);
+  assert.match(source, /개인 작품 완성을 지원의 선행 조건으로 두지 않는다/);
+  assert.match(source, /취업할 때까지 미루지 않는다/);
   assert.match(source, /책과 유튜브/);
-  assert.match(source, /그러려면 해야 할 것 · 남은 것 · 준비할 것/);
-  assert.match(source, /증거의 형태/);
-  assert.match(source, /시각적 미감/);
-  assert.match(source, /full stack 확장/);
-  assert.match(source, /업계 인지도/);
-  assert.match(source, /2016–2019 시각 작업 아카이브 전략/);
-  assert.match(source, /visual sense seed/);
-  assert.match(source, /bad but useful/);
-  assert.match(source, /craft gap/);
-  assert.match(source, /지금의 기준이 형성되기 전의 원본 자료/);
-  assert.match(source, /visual-journey-2016-2019/);
-  assert.match(source, /2026 하반기 운영/);
-  assert.match(source, /2027 분기 실행 계획/);
-  assert.match(source, /월간·분기 리뷰 루프/);
+  assert.doesNotMatch(source, /<section id="(?:visual-archive|portfolio-system|quarter-plan|second-half-2026)"/);
+
+  const portfolio = await readFile("public/handbook/career-ai-native-portfolio-handbook.html", "utf8");
+  for (const marker of ["visual sense seed", "bad but useful", "craft gap", "visual-journey-2016-2019", "성능 개선 회고", "트랜잭션·원장 ADR"]) {
+    assert.ok(portfolio.includes(marker), `Moved artifact guidance is preserved: ${marker}`);
+  }
+  assert.match(portfolio, /일반 UI 작품에는 이 평가 장부를 요구하지 않는다/);
+  assert.match(portfolio, /수치는 형식을 보여주는 가상 예시/);
 });
 
 test("career bundles read as curated publications instead of raw merged drafts", async () => {
@@ -1876,7 +1858,7 @@ test("design system directing document covers governance, stakeholder, and rollo
   assert.doesNotMatch(html, /TODO_/);
 });
 
-test("public handbook directory contains carbon domain documents only in the carbon group", async () => {
+test("carbon teaching documents stay in the carbon group; career may cite personal domain work", async () => {
   const publicFiles = (await readdir("public/handbook")).filter((file) => file.endsWith(".html"));
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
   const carbonFiles = new Set(CARBON_DOMAIN_HANDBOOKS.map((item) => item.file));
@@ -1895,6 +1877,10 @@ test("public handbook directory contains carbon domain documents only in the car
     }
 
     assert.doesNotMatch(file, /carbon|lca|vcm/i);
+
+    // Career evidence and proposed personal works may name the user's actual domain.
+    // Generic engineering lessons remain domain-neutral.
+    if (CAREER_HANDBOOKS.some((item) => item.file === file)) continue;
 
     const source = await readFile(path.join("public", "handbook", file), "utf8");
     assert.doesNotMatch(
@@ -1969,7 +1955,8 @@ test("site opts out of search indexing", async () => {
 test("README describes the handbook project instead of the Vite template", async () => {
   const source = await readFile("README.md", "utf8");
 
-  assert.match(source, /^# Dev Handbook/m);
+  assert.match(source, /^# Dev \/ Brand Workspace/m);
+  assert.match(source, /^## Dev Handbook/m);
   assert.match(source, /풀스택/);
   assert.match(source, /문서 생성/);
   assert.match(source, /npm run generate:handbook/);
@@ -2900,17 +2887,17 @@ test("mobile top header can collapse so reading content is not covered", async (
   assert.match(appCssSource, /@media \(max-width: 900px\)[\s\S]*\.app-header-open \.mobile-topbar-content\s*\{[\s\S]*display: contents/s);
 });
 
-test("root document exposes the Dev Handbook Open Graph image", async () => {
+test("workspace root describes both spaces and retains the existing Open Graph image", async () => {
   const [source, image] = await Promise.all([
     readFile("index.html", "utf8"),
     readFile("public/dev.png"),
   ]);
 
-  assert.match(source, /<title>Dev Handbook<\/title>/);
-  assert.match(source, /<meta name="description" content="풀스택 개발자 성장을 위한 Dev Handbook" \/>/);
+  assert.match(source, /<title>Dev \/ Brand — Workspace<\/title>/);
+  assert.match(source, /<meta name="description" content="개발 핸드북과 브랜딩·웹 프리랜싱 작업 공간" \/>/);
   assert.match(source, /<meta property="og:type" content="website" \/>/);
-  assert.match(source, /<meta property="og:title" content="Dev Handbook" \/>/);
-  assert.match(source, /<meta property="og:description" content="풀스택 개발자 성장을 위한 Dev Handbook" \/>/);
+  assert.match(source, /<meta property="og:title" content="Dev \/ Brand — Workspace" \/>/);
+  assert.match(source, /<meta property="og:description" content="개발 핸드북과 브랜딩·웹 프리랜싱 작업 공간" \/>/);
   assert.match(source, /<meta property="og:image" content="\/dev\.png" \/>/);
   assert.match(source, /<meta property="og:image:width" content="1200" \/>/);
   assert.match(source, /<meta property="og:image:height" content="675" \/>/);
@@ -4146,5 +4133,6 @@ test("career resume and growth roadmap include maintenance gates", async () => {
   assert.match(growthSource, /id="market-map"/);
   assert.match(growthSource, /갱신 규칙/);
   assert.match(growthSource, /최근 표본 기준/);
-  assert.match(growthSource, /공개 가능 범위/);
+  const portfolioSource = await readFile("public/handbook/career-ai-native-portfolio-handbook.html", "utf8");
+  assert.match(portfolioSource, /공개 범위/);
 });

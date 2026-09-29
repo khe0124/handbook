@@ -292,10 +292,17 @@ export default function App() {
     setMobileMenuOpen(false);
   };
 
-  const handleSelectHandbookId = (itemId: string) => {
+  const handleSelectHandbookId = (itemId: string, sectionId?: string) => {
     const item = items.find((candidate) => candidate.id === itemId);
 
     if (item) {
+      if (sectionId && item.id === activeItem.id) {
+        window.document.getElementById(sectionId)?.scrollIntoView({ behavior: "auto" });
+        setMobileMenuOpen(false);
+        return;
+      }
+
+      pendingSectionIdRef.current = sectionId ?? null;
       handleSelectItem(item);
     }
   };
@@ -312,8 +319,7 @@ export default function App() {
       return;
     }
 
-    pendingSectionIdRef.current = sectionId;
-    handleSelectHandbookId(docId);
+    handleSelectHandbookId(docId, sectionId);
   };
 
   const handleToggleMobileGroup = (groupKey: string) => {
@@ -344,6 +350,7 @@ export default function App() {
             {mobileTopbarOpen ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
           </button>
           <div className="app-header-title">
+            <a className="workspace-return" href="/">Dev / Brand 선택</a>
             <h1>
               <button
                 type="button"

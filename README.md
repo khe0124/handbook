@@ -1,4 +1,16 @@
-# Dev Handbook
+# Dev / Brand Workspace
+
+메인 `/`에서 두 작업 공간을 선택합니다.
+
+- `/dev`: 기존 Dev Handbook. 문서·학습 기능과 기존 저장 상태를 유지합니다.
+- `/brand` (또는 `/brand/branding`): Branding 프리랜싱 가이드.
+- `/brand/web`: Web 제작·납품 가이드.
+
+Brand에는 단계별 체크리스트, 납품 점검표, 브리프 작성·복사가 있습니다. Branding과 Web의 초안은 각각 브라우저 localStorage에 저장됩니다. 서버 저장·기기 간 동기화·다중 프로젝트 관리는 제공하지 않습니다. 중요한 자료는 브리프 복사로 별도 보관하세요.
+
+정적 호스팅에서는 `/dev`, `/brand`, `/brand/branding`, `/brand/web`의 직접 접근을 `/index.html`로 연결하는 SPA fallback 설정이 필요합니다. 실제 `/handbook/*.html`과 에셋 요청은 원래 파일을 제공해야 합니다. 로컬 Vite 개발·미리보기 서버는 이 경로들을 처리합니다.
+
+## Dev Handbook
 
 역량 있는 풀스택·AI Native 개발자가 되기 위해 필요한 지식과 실무 판단 기준을 모은 핸드북입니다. CS 기본기, 컴퓨터 시스템, 언어·런타임, 측정·검증, 프론트엔드, 백엔드, 데이터베이스, 네트워크, DevOps, LLM, AX, 디자인, 실무 가이드를 하나의 학습 경로로 연결합니다.
 

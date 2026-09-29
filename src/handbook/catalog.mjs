@@ -147,40 +147,46 @@ export const PERSONAL_HANDBOOKS = [
 
 export const CAREER_HANDBOOKS = [
   {
-    id: "career-strategy-foundation",
-    label: "00 면접 전략·커리어 포지셔닝",
-    kind: "면접·커리어",
-    file: "career-strategy-foundation-handbook.html",
-  },
-  {
-    id: "career-personal-history",
-    label: "01 개인 이력 정리",
-    kind: "면접·커리어",
-    file: "career-personal-history-handbook.html",
-  },
-  {
-    id: "career-linkedin-resume",
-    label: "02 LinkedIn 이력서",
-    kind: "면접·커리어",
-    file: "career-linkedin-resume-handbook.html",
-  },
-  {
-    id: "career-growth-plan",
-    label: "03 성장·노선·시장·산출물 로드맵",
-    kind: "면접·커리어",
-    file: "career-growth-plan-handbook.html",
-  },
-  {
     id: "career-strategic-thinking-2027",
-    label: "04 전략적 사고방법 2026 하반기·2027 목표",
+    label: "00 커리어 방향·일과 개인 작업",
     kind: "면접·커리어",
     file: "career-strategic-thinking-2027-handbook.html",
   },
   {
+    id: "career-personal-history",
+    label: "01 개인 이력·기여 증거",
+    kind: "면접·커리어",
+    file: "career-personal-history-handbook.html",
+  },
+  {
+    id: "career-growth-plan",
+    label: "02 지원 포지션·팀 선택",
+    kind: "면접·커리어",
+    file: "career-growth-plan-handbook.html",
+  },
+  {
+    id: "career-linkedin-resume",
+    label: "03 이력서·LinkedIn 문안",
+    kind: "면접·커리어",
+    file: "career-linkedin-resume-handbook.html",
+  },
+  {
     id: "career-job-change-playbook",
-    label: "05 이직 실행 플레이북",
+    label: "04 이직 실행·지원 관리",
     kind: "면접·커리어",
     file: "career-job-change-playbook-handbook.html",
+  },
+  {
+    id: "career-ai-native-portfolio",
+    label: "05 개인 작품·포트폴리오",
+    kind: "면접·커리어",
+    file: "career-ai-native-portfolio-handbook.html",
+  },
+  {
+    id: "career-strategy-foundation",
+    label: "06 면접 답변·공통 훈련",
+    kind: "면접·커리어",
+    file: "career-strategy-foundation-handbook.html",
   },
   {
     id: "career-frontend-interview",
@@ -223,12 +229,6 @@ export const CAREER_HANDBOOKS = [
     label: "16 코딩테스트 패턴",
     kind: "면접·커리어",
     file: "career-coding-test-handbook.html",
-  },
-  {
-    id: "career-ai-native-portfolio",
-    label: "17 AI Native 포트폴리오",
-    kind: "면접·커리어",
-    file: "career-ai-native-portfolio-handbook.html",
   },
 ];
 
