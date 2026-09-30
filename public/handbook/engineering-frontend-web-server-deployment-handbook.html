@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>프론트엔드 웹 서버 배포와 Nginx 보안</title></head>
+<body><div class="shell"><nav aria-label="목차">
+  <div class="nav-brand">ENGINEERING · FRONTEND WEB SERVER</div>
+  <div class="nav-title">웹 서버 배포 · Nginx 설정 · 보안</div>
+  <a href="#webdeploy-ch1"><span class="code">WEB-01</span>배포 경계와 요청 흐름</a>
+  <a href="#webdeploy-ch2"><span class="code">WEB-02</span>빌드 산출물과 서버 구조</a>
+  <a href="#webdeploy-ch3"><span class="code">WEB-03</span>Nginx 정적 서빙</a>
+  <a href="#webdeploy-ch4"><span class="code">WEB-04</span>SPA 라우팅과 오류 처리</a>
+  <a href="#webdeploy-ch5"><span class="code">WEB-05</span>캐시·압축·성능</a>
+  <a href="#webdeploy-ch6"><span class="code">WEB-06</span>리버스 프록시와 API</a>
+  <a href="#webdeploy-ch7"><span class="code">WEB-07</span>TLS와 보안 헤더</a>
+  <a href="#webdeploy-ch8"><span class="code">WEB-08</span>서버 권한과 공격 표면</a>
+  <a href="#webdeploy-ch9"><span class="code">WEB-09</span>배포·롤백·관측</a>
+  <a href="#webdeploy-ch10"><span class="code">WEB-10</span>검증 체크리스트</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : ENGINEERING-FRONTEND-WEB-SERVER-DEPLOYMENT</span><span>SCOPE : NGINX · STATIC ASSETS · REVERSE PROXY · TLS · SECURITY</span><span>LANG : KO</span></div>
+  <h1>프론트엔드 웹 서버 배포와<br>Nginx 설정·보안</h1>
+  <p class="hero-sub">빌드가 성공한 뒤 실제 사용자 요청이 안전하게 도착하기까지의 경계를 다룹니다. 정적 파일 서빙, SPA fallback, 캐시, 압축, API proxy, TLS, 보안 헤더, 권한, 로그와 rollback을 하나의 운영 흐름으로 연결합니다.</p>
+  <div class="hero-meta">AUDIENCE : FRONTEND · PRODUCT ENGINEER · RELEASE OWNER · UPDATED 2026-09</div>
+</header>
+
+<section id="webdeploy-ch1">
+<div class="ch-head"><span class="ch-code">WEB-01</span><h2>배포 경계와 요청 흐름</h2></div>
+<p class="lede">프론트엔드 배포는 <code>dist</code> 폴더를 복사하는 작업이 아닙니다. DNS와 TLS를 거친 요청이 CDN 또는 Nginx에 도착하고, HTML·해시 자산·API 요청이 서로 다른 정책으로 처리되는 전체 경로를 설계하는 일입니다.</p>
+<div class="semantic-card"><span class="sc-label">REQUEST PATH</span>Browser → DNS → CDN/LB → Nginx → HTML or hashed asset<br>Browser → Nginx <code>/api/</code> → application upstream → database/external API</div>
+<table><tr><th>경계</th><th>책임</th><th>대표 실패</th></tr><tr><td>DNS·TLS</td><td>올바른 endpoint와 인증서 제공</td><td>인증서 만료, 잘못된 레코드, redirect loop</td></tr><tr><td>CDN·Nginx</td><td>정적 파일, 캐시, 압축, route fallback</td><td>오래된 HTML, chunk 404, 잘못된 MIME</td></tr><tr><td>API proxy</td><td>upstream 연결, timeout, header 전달</td><td>CORS, 무한 retry, client IP 유실</td></tr><tr><td>브라우저</td><td>HTML과 chunk 조합 실행</td><td>구 HTML이 삭제된 새 chunk를 요청</td></tr></table>
+</section>
+
+<section id="webdeploy-ch2">
+<div class="ch-head"><span class="ch-code">WEB-02</span><h2>빌드 산출물과 서버 구조</h2></div>
+<p class="lede">빌드 산출물은 immutable artifact로 만들고, 서버에서 다시 빌드하지 않습니다. 같은 artifact를 환경별로 승격해야 재현과 rollback이 가능합니다.</p>
+<table><tr><th>항목</th><th>기준</th><th>증거</th></tr><tr><td>artifact</td><td>commit SHA와 build ID로 식별</td><td>checksum, release manifest</td></tr><tr><td>환경값</td><td>secret을 번들에 넣지 않음</td><td>번들 문자열 검사, runtime config 정책</td></tr><tr><td>배포 디렉터리</td><td>release별 디렉터리와 atomic symlink 전환</td><td><code>current → releases/20260930-...</code></td></tr><tr><td>소유권</td><td>Nginx worker는 읽기만 가능</td><td>owner/group/mode 점검</td></tr></table>
+<div class="callout warn"><span class="co-label">중요</span><p>Vite의 <code>VITE_*</code> 같은 값은 빌드 시 JavaScript에 포함되어 사용자에게 공개됩니다. API key나 private token을 환경변수라는 이유만으로 넣으면 안 됩니다.</p></div>
+</section>
+
+<section id="webdeploy-ch3">
+<div class="ch-head"><span class="ch-code">WEB-03</span><h2>Nginx 정적 서빙 기본 설정</h2></div>
+<p class="lede">가장 작은 설정에서 시작해 server name, document root, index, MIME, access log를 명시합니다. 배포 전에는 반드시 <code>nginx -t</code>로 구문과 참조 파일을 검증합니다.</p>
+<pre class="snippet-card"><code>server {
+    listen 80;
+    server_name app.example.com;
+    root /srv/frontend/current;
+    index index.html;
+
+    access_log /var/log/nginx/frontend.access.log;
+    error_log  /var/log/nginx/frontend.error.log warn;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}</code></pre>
+<table><tr><th>지시어</th><th>의미</th><th>주의</th></tr><tr><td><code>root</code></td><td>URI를 파일 경로에 결합</td><td>업로드 경로와 섞지 않음</td></tr><tr><td><code>try_files</code></td><td>파일 존재 여부 순서대로 확인</td><td>API까지 index.html로 fallback하지 않음</td></tr><tr><td><code>server_name</code></td><td>가상 호스트 선택</td><td>default server의 의도치 않은 응답 차단</td></tr><tr><td><code>include mime.types</code></td><td>확장자별 Content-Type</td><td>JS/CSS MIME 오류 확인</td></tr></table>
+</section>
+
+<section id="webdeploy-ch4">
+<div class="ch-head"><span class="ch-code">WEB-04</span><h2>SPA 라우팅과 오류 처리</h2></div>
+<p class="lede">클라이언트 라우터의 URL은 서버 파일이 아닙니다. 존재하지 않는 실제 asset과 SPA route를 구분하지 않으면 누락된 JavaScript 요청에도 HTML이 200으로 반환되어 진단이 어려워집니다.</p>
+<pre class="snippet-card"><code>location /assets/ {
+    try_files $uri =404;
+    expires 1y;
+    add_header Cache-Control "public, max-age=31536000, immutable";
+}
+
+location / {
+    try_files $uri $uri/ /index.html;
+}
+
+location = /index.html {
+    add_header Cache-Control "no-cache";
+}</code></pre>
+<table><tr><th>요청</th><th>기대 응답</th><th>이유</th></tr><tr><td><code>/orders/42</code></td><td><code>index.html</code></td><td>클라이언트 router가 해석</td></tr><tr><td><code>/assets/app.hash.js</code></td><td>파일 또는 404</td><td>HTML fallback 금지</td></tr><tr><td><code>/api/orders</code></td><td>upstream 응답</td><td>SPA fallback과 분리</td></tr><tr><td>없는 일반 URL</td><td>앱의 Not Found 화면</td><td>HTTP status 전략은 SSR/SEO 요구와 별도 검토</td></tr></table>
+</section>
+
+<section id="webdeploy-ch5">
+<div class="ch-head"><span class="ch-code">WEB-05</span><h2>캐시·압축·성능</h2></div>
+<p class="lede">HTML은 최신 배포를 가리켜야 하고, content hash가 있는 자산은 오래 캐시해야 합니다. 둘을 같은 정책으로 캐시하면 새 배포가 보이지 않거나 매 요청마다 자산을 다시 받습니다.</p>
+<table><tr><th>대상</th><th>권장 방향</th><th>검증</th></tr><tr><td>HTML</td><td><code>no-cache</code> 또는 짧은 TTL</td><td>재검증 후 최신 build ID 확인</td></tr><tr><td>해시 JS/CSS</td><td>1년 + <code>immutable</code></td><td>같은 URL의 내용이 절대 바뀌지 않음</td></tr><tr><td>이미지·폰트</td><td>해시 여부에 따라 장기 캐시</td><td>CORS와 font MIME 확인</td></tr><tr><td>압축</td><td>Brotli 또는 gzip, text 계열만</td><td><code>Content-Encoding</code>, <code>Vary: Accept-Encoding</code></td></tr></table>
+<pre class="snippet-card"><code>gzip on;
+gzip_vary on;
+gzip_min_length 1024;
+gzip_types text/css application/javascript application/json image/svg+xml;</code></pre>
+<div class="callout"><span class="co-label">배포 호환성</span><p>새 release가 올라간 직후에도 이전 HTML을 가진 사용자가 있을 수 있습니다. 최근 release의 해시 asset을 일정 시간 보존하거나 CDN invalidation과 service worker 갱신 전략을 함께 설계합니다.</p></div>
+</section>
+
+<section id="webdeploy-ch6">
+<div class="ch-head"><span class="ch-code">WEB-06</span><h2>리버스 프록시와 API 경계</h2></div>
+<p class="lede">같은 origin의 <code>/api/</code>를 upstream으로 전달하면 브라우저 CORS 구성이 단순해집니다. 대신 path rewrite, timeout, 실제 client IP, protocol header의 책임이 Nginx로 이동합니다.</p>
+<pre class="snippet-card"><code>location /api/ {
+    proxy_pass http://app_upstream;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_connect_timeout 3s;
+    proxy_read_timeout 30s;
+}
+</code></pre>
+<table><tr><th>판단</th><th>확인 질문</th><th>실패 신호</th></tr><tr><td>path</td><td><code>proxy_pass</code>의 trailing slash가 URI를 어떻게 바꾸는가</td><td>upstream 404</td></tr><tr><td>timeout</td><td>사용자 요청의 최대 정상 시간은 얼마인가</td><td>무제한 대기 또는 성급한 504</td></tr><tr><td>retry</td><td>mutation을 자동 재시도해도 멱등한가</td><td>중복 주문·저장</td></tr><tr><td>WebSocket/SSE</td><td>upgrade·buffering 정책이 필요한가</td><td>연결 즉시 종료, 이벤트 지연</td></tr></table>
+</section>
+
+<section id="webdeploy-ch7">
+<div class="ch-head"><span class="ch-code">WEB-07</span><h2>TLS와 보안 헤더</h2></div>
+<p class="lede">TLS 종료 지점과 보안 헤더의 소유자를 명확히 합니다. CDN과 Nginx가 동시에 같은 헤더를 덧붙이면 중복·충돌할 수 있으므로 실제 최종 응답을 기준으로 검증합니다.</p>
+<pre class="snippet-card"><code>add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" always;
+</code></pre>
+<table><tr><th>통제</th><th>목적</th><th>도입 방법</th></tr><tr><td>HTTPS redirect</td><td>평문 전송 차단</td><td>LB/CDN의 원본 protocol 인지 후 loop 확인</td></tr><tr><td>HSTS</td><td>브라우저가 HTTPS만 사용</td><td>전체 subdomain 준비 후 점진 적용</td></tr><tr><td>CSP</td><td>스크립트·연결·frame 출처 제한</td><td>Report-Only로 위반 수집 후 강제</td></tr><tr><td>frame-ancestors</td><td>clickjacking 방지</td><td>실제 embed 요구와 함께 결정</td></tr><tr><td>server tokens</td><td>불필요한 버전 노출 축소</td><td><code>server_tokens off</code>, 패치 대체 불가</td></tr></table>
+<div class="callout warn"><span class="co-label">CSP</span><p><code>'unsafe-inline'</code>과 넓은 wildcard로 경고만 없애면 CSP의 방어력이 사라집니다. nonce/hash 또는 자체 호스팅으로 실제 실행 출처를 좁히고, 외부 analytics가 전송하는 데이터도 검토합니다.</p></div>
+</section>
+
+<section id="webdeploy-ch8">
+<div class="ch-head"><span class="ch-code">WEB-08</span><h2>서버 권한과 공격 표면</h2></div>
+<p class="lede">Nginx 설정만 안전해도 서버가 안전한 것은 아닙니다. worker 권한, 파일 쓰기 권한, directory listing, 숨김 파일, 관리 endpoint, 로그의 민감정보를 함께 제한합니다.</p>
+<table><tr><th>항목</th><th>안전 기준</th><th>검증</th></tr><tr><td>프로세스</td><td>비특권 worker, 필요한 port만 노출</td><td>process owner와 listening socket 확인</td></tr><tr><td>파일</td><td>artifact read-only, Nginx가 배포 디렉터리에 쓰지 못함</td><td>권한과 mount mode 확인</td></tr><tr><td>숨김 파일</td><td><code>.git</code>, <code>.env</code>, backup 파일 차단</td><td>대표 경로에 404/403 확인</td></tr><tr><td>autoindex</td><td>기본 비활성화</td><td>디렉터리 URL에서 목록 미노출</td></tr><tr><td>로그</td><td>token, cookie, 개인정보, query secret 제거</td><td>샘플 로그 privacy review</td></tr><tr><td>rate limit</td><td>로그인·고비용 endpoint 중심, 사용자 영향 측정</td><td>429와 정상 burst 시나리오</td></tr></table>
+</section>
+
+<section id="webdeploy-ch9">
+<div class="ch-head"><span class="ch-code">WEB-09</span><h2>배포·롤백·관측</h2></div>
+<p class="lede">설정 변경과 artifact 배포는 검증 순서가 있어야 합니다. syntax test, 새 release 준비, smoke test, atomic 전환, reload, health 관찰, rollback 조건을 자동화합니다.</p>
+<div class="semantic-card"><span class="sc-label">SAFE RELEASE</span>artifact verify → unpack new release → permission check → <code>nginx -t</code><br>→ pre-switch smoke → atomic symlink switch → graceful reload<br>→ HTML/asset/API/security-header smoke → release health window → retain or rollback</div>
+<table><tr><th>신호</th><th>관찰값</th><th>조치 기준</th></tr><tr><td>Nginx</td><td>4xx/5xx, upstream time, request rate</td><td>배포 직후 baseline 대비 급증</td></tr><tr><td>브라우저</td><td>chunk load error, blank screen, CSP violation</td><td>특정 build ID에 집중</td></tr><tr><td>성능</td><td>TTFB, LCP, asset cache hit</td><td>p75 budget 초과</td></tr><tr><td>인증·API</td><td>401/403/429/502/504</td><td>proxy/header/timeout 변경과 상관 확인</td></tr></table>
+</section>
+
+<section id="webdeploy-ch10">
+<div class="ch-head"><span class="ch-code">WEB-10</span><h2>검증 체크리스트</h2></div>
+<p class="lede">명령이 성공했다는 사실보다 사용자 경로와 실패 경로가 기대한 응답을 내는지 확인합니다. 아래 결과를 release evidence로 남깁니다.</p>
+<table><tr><th>검증</th><th>방법 예시</th><th>통과 기준</th></tr><tr><td>설정</td><td><code>nginx -t</code></td><td>syntax와 참조 파일 정상</td></tr><tr><td>HTML</td><td><code>curl -I https://app.example.com/</code></td><td>HTTPS, 올바른 cache/security header</td></tr><tr><td>deep link</td><td>새 세션에서 중첩 route 직접 접속</td><td>앱 로드 후 올바른 화면</td></tr><tr><td>asset 404</td><td>존재하지 않는 JS 요청</td><td>HTML 200이 아니라 404</td></tr><tr><td>API</td><td>정상·timeout·upstream down 시나리오</td><td>정해진 status와 사용자 오류 UX</td></tr><tr><td>TLS</td><td>인증서 chain·만료·protocol 확인</td><td>자동 갱신과 만료 알림 존재</td></tr><tr><td>rollback</td><td>이전 symlink 또는 artifact로 전환</td><td>목표 시간 내 복구하고 build ID 확인</td></tr></table>
+<div class="semantic-card"><span class="sc-label">WEB SERVER RELEASE EVIDENCE</span>release ID · artifact checksum · Nginx config diff · syntax test · header capture · deep-link smoke · asset 404 smoke · API proxy smoke · TLS expiry · rollback command/result · dashboard link · owner</div>
+</section>
+
+<footer>FRONTEND WEB SERVER DEPLOYMENT HANDBOOK · NGINX · SECURITY · RELEASE EVIDENCE</footer>
+</main></div></body></html>

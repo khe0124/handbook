@@ -608,6 +608,12 @@ export const ENGINEERING_HANDBOOKS = [
     file: "engineering-frontend-quality-qa-handbook.html",
   },
   {
+    id: "engineering-frontend-web-server-deployment",
+    label: "11 웹 서버 배포·Nginx 보안",
+    kind: "개발 핸드북",
+    file: "engineering-frontend-web-server-deployment-handbook.html",
+  },
+  {
     id: "engineering-backend-core",
     label: "11 백엔드 핵심",
     kind: "개발 핸드북",
@@ -691,6 +697,12 @@ export const ENGINEERING_HANDBOOKS = [
     kind: "백엔드 Q&A",
     file: "engineering-java-spring-qa-handbook.html",
   },
+  {
+    id: "engineering-php-agency-delivery",
+    label: "18 PHP·WordPress 웹에이전시 구축·운영",
+    kind: "개발 핸드북",
+    file: "engineering-php-agency-delivery-handbook.html",
+  },
 ];
 
 const renumberMenuItems = (items) =>
@@ -736,10 +748,10 @@ const BACKEND_ROADMAP_PAGE = {
 };
 
 const { core: FRONTEND_CORE_HANDBOOKS, qaAndQuiz: FRONTEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
-  ENGINEERING_HANDBOOKS.slice(4, 20),
+  ENGINEERING_HANDBOOKS.slice(4, 21),
 );
 const { core: BACKEND_CORE_HANDBOOKS, qaAndQuiz: BACKEND_QA_QUIZ_HANDBOOKS } = splitCoreFromQaQuiz(
-  ENGINEERING_HANDBOOKS.slice(20),
+  ENGINEERING_HANDBOOKS.slice(21),
 );
 
 export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
@@ -1228,24 +1240,32 @@ export const INFRA_MENU_HANDBOOKS = renumberMenuItems([
 
 export const OPERATIONS_GROUP_HANDBOOKS = renumberMenuItems([
   ...OPERATIONS_CORE_HANDBOOKS,
-]);
-
-export const OPERATIONS_CONTEXT_GROUP_HANDBOOKS = renumberMenuItems([
   ...ENGINEERING_CONTEXT_HANDBOOKS,
 ]);
 
 // 도메인별 Q&A + 퀴즈 원본 목록. quizDomains.mjs가 퀴즈 허브/통합 랜덤 퀴즈의 도메인 묶음을 만들 때 재사용한다.
 export { FRONTEND_QA_QUIZ_HANDBOOKS, BACKEND_QA_QUIZ_HANDBOOKS, INFRA_QA_QUIZ_HANDBOOKS, OPERATIONS_QA_QUIZ_HANDBOOKS };
 
-// 프론트·백엔드·인프라·운영에서 빠져나온 Q&A 문서 + 퀴즈를 도메인별로 묶어 모아둔다.
-export const QUIZ_TOOL_HANDBOOKS = renumberMenuItems([
-  { id: "quiz-hub", label: "00 퀴즈 허브", kind: "퀴즈", pageType: "react" },
-  { id: "quiz-mixed", label: "01 통합 랜덤 퀴즈", kind: "퀴즈", pageType: "react" },
+const QA_MENU_HANDBOOKS = [
   ...FRONTEND_QA_QUIZ_HANDBOOKS,
   ...BACKEND_QA_QUIZ_HANDBOOKS,
   ...INFRA_QA_QUIZ_HANDBOOKS,
   ...OPERATIONS_QA_QUIZ_HANDBOOKS,
+].filter((item) => item.id.endsWith("-qa"));
+
+// 퀴즈 메뉴에는 실제 문서가 있는 Q&A만 노출한다. 문항 페이지는 허브에서만 진입한다.
+export const QUIZ_TOOL_HANDBOOKS = renumberMenuItems([
+  { id: "quiz-hub", label: "00 퀴즈 허브", kind: "퀴즈", pageType: "react" },
+  ...QA_MENU_HANDBOOKS,
 ]);
+
+const QUIZ_PAGE_HANDBOOKS = [
+  { id: "quiz-mixed", label: "통합 랜덤 퀴즈", kind: "퀴즈", pageType: "react" },
+  ...FRONTEND_QA_QUIZ_HANDBOOKS,
+  ...BACKEND_QA_QUIZ_HANDBOOKS,
+  ...INFRA_QA_QUIZ_HANDBOOKS,
+  ...OPERATIONS_QA_QUIZ_HANDBOOKS,
+].filter((item) => item.id === "quiz-mixed" || item.id.endsWith("-quiz"));
 
 export const AX_HANDBOOKS = [
   {
@@ -1725,11 +1745,6 @@ export const HANDBOOK_GROUPS = [
     label: "운영",
     items: OPERATIONS_GROUP_HANDBOOKS,
   },
-  {
-    key: "operations-context",
-    label: "운영 확장",
-    items: OPERATIONS_CONTEXT_GROUP_HANDBOOKS,
-  },
   { key: "quiz", label: "퀴즈", items: QUIZ_TOOL_HANDBOOKS },
   { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
   {
@@ -1758,8 +1773,8 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_BACKEND_HANDBOOKS,
   ...INFRA_MENU_HANDBOOKS,
   ...OPERATIONS_GROUP_HANDBOOKS,
-  ...OPERATIONS_CONTEXT_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,
+  ...QUIZ_PAGE_HANDBOOKS,
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,

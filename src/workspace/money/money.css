@@ -31,6 +31,21 @@ html:has(.money-workspace) { scroll-padding-top: 0; }
 .money-main h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.5; letter-spacing: -.02em; }
 .money-main h3 { font-size: 17px; margin: 0 0 8px; }
 .money-muted { color: var(--money-muted); font-size: 12px; }
+.money-tracks { padding: 16px 0; border-bottom: 1px solid var(--money-ink); }
+.money-tracks > p { margin: 8px 0; }
+.money-track-list { list-style: none; padding: 0; margin: 12px 0; }
+.money-track-list > li { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); gap: 16px 32px; padding: 12px 0; border-top: 1px solid var(--money-line); }
+.money-track-list h3 { display: inline; margin-left: 8px; }
+.money-track-list p { margin: 4px 0; }
+.money-track-output { color: var(--money-muted); font-size: 12px; }
+.money-track-list nav ol { margin: 0; padding-left: 24px; }
+.money-track-list nav a { display: inline-flex; align-items: center; min-height: 32px; padding: 4px 0; }
+.money-practice-template { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; padding: 12px; border: 1px solid var(--money-line); background: var(--money-tint); }
+.money-practice button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--money-line); background: var(--money-paper); color: var(--money-ink); font: inherit; cursor: pointer; }
+.money-practice button:hover { background: var(--money-tint); }
+.money-practice [role="status"]:empty { margin: 0; }
+.money-learning-next { display: flex; flex-direction: column; align-items: flex-start; }
+.money-learning-next a { display: inline-flex; align-items: center; min-height: 44px; }
 .money-foundation { padding: 20px 0; }
 .money-foundation ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 32px; }
 .money-foundation li { display: flex; gap: 12px; border-top: 1px solid var(--money-line); padding-top: 12px; }
@@ -59,6 +74,38 @@ html:has(.money-workspace) { scroll-padding-top: 0; }
 .money-concepts > div { display: grid; grid-template-columns: 152px minmax(0,1fr); gap: 16px; padding: 8px 0; border-top: 1px solid var(--money-line); }
 .money-concepts dt { font-weight: 650; }
 .money-concepts dd { margin: 0; }
+.macro-visual { padding: 16px; border: 1px solid var(--money-line); background: var(--money-tint); }
+.macro-visual > p { max-width: 780px; }
+.macro-visual-eyebrow { margin: 0 0 2px !important; color: var(--money-muted); font: 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.macro-bars { position: relative; display: grid; gap: 12px; margin: 16px 0; padding: 16px; border: 1px solid var(--money-line); background: var(--money-paper); }
+.macro-bar { position: relative; z-index: 1; }
+.macro-bar-copy { display: flex; justify-content: space-between; gap: 16px; line-height: 1.5; }
+.macro-bar-copy strong { font: 650 14px var(--mono); }
+.macro-bar-track { height: 10px; margin-top: 4px; overflow: hidden; background: var(--money-line); }
+.macro-bar-track span { display: block; height: 100%; background: var(--money-accent); }
+.macro-bar small, .macro-flow small { display: block; margin-top: 3px; color: var(--money-muted); line-height: 1.5; }
+.macro-bars-reference { position: absolute; inset: 12px 16px 12px 16px; pointer-events: none; }
+.macro-bars-reference::after { content: ""; position: absolute; left: var(--reference); top: 20px; bottom: 0; border-left: 1px dashed var(--money-muted); }
+.macro-bars-reference span { position: absolute; left: var(--reference); top: 0; padding-left: 4px; color: var(--money-muted); font-size: 10px; white-space: nowrap; }
+.macro-flow { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1px; padding: 0; margin: 16px 0; list-style: none; background: var(--money-line); border: 1px solid var(--money-line); }
+.macro-flow li { position: relative; min-width: 0; padding: 12px; background: var(--money-paper); }
+.macro-flow li:not(:last-child)::after { content: "→"; position: absolute; z-index: 1; top: 50%; right: -9px; width: 18px; transform: translateY(-50%); background: var(--money-paper); color: var(--money-muted); text-align: center; }
+.macro-flow-number { display: block; margin-bottom: 16px; color: var(--money-muted); font: 10px var(--mono); }
+.macro-flow strong, .macro-flow b { display: block; line-height: 1.5; }
+.macro-flow b { margin-top: 4px; font: 650 14px var(--mono); }
+.macro-equation { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.macro-equation-result { display: flex; align-items: baseline; justify-content: flex-end; gap: 12px; margin: -8px 0 16px !important; }
+.macro-equation-result span { color: var(--money-muted); font-size: 12px; }
+.macro-equation-result strong { font: 650 18px var(--mono); }
+.macro-matrix-wrap { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 6px 10px; margin: 16px 0; }
+.macro-matrix { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); border: 1px solid var(--money-line); background: var(--money-line); gap: 1px; }
+.macro-matrix > div { min-height: 112px; padding: 12px; background: var(--money-paper); }
+.macro-matrix strong, .macro-matrix span { display: block; }
+.macro-matrix span { margin-top: 6px; color: var(--money-muted); font-size: 12px; }
+.macro-matrix-y { align-self: center; max-width: 18px; color: var(--money-muted); font-size: 10px; line-height: 1.3; writing-mode: vertical-rl; transform: rotate(180deg); }
+.macro-matrix-x { grid-column: 2; color: var(--money-muted); font-size: 10px; text-align: center; }
+.macro-visual-takeaway { display: grid; grid-template-columns: 64px minmax(0,1fr); gap: 12px; padding-top: 12px; border-top: 1px solid var(--money-line); }
+.macro-visual-takeaway strong { font-size: 12px; }
 .money-article .money-example, .money-article .money-rule-note { padding: 12px; background: var(--money-tint); }
 .money-explanation-index { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin: 0 0 12px; font-size: 12px; }
 .money-explanation-index a { min-height: 28px; padding: 4px 0; }
@@ -89,6 +136,7 @@ html:has(.money-workspace) { scroll-padding-top: 0; }
   .money-footer { margin: 0 16px; }
 }
 @media (max-width: 700px) {
+  .money-track-list > li { grid-template-columns: 1fr; gap: 8px; }
   .money-header { padding: 8px 16px; }
   .money-nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); width: 100%; gap: 4px; }
   .money-menu button { width: 100%; padding: 8px 4px; font-size: 12px; }
@@ -104,6 +152,10 @@ html:has(.money-workspace) { scroll-padding-top: 0; }
   .money-outline-group + .money-outline-group { margin-top: 8px; }
   .money-intro { padding: 16px 0 12px; }
   .money-main h2 { font-size: 20px; }
+  .macro-flow { grid-template-columns: 1fr; }
+  .macro-equation { grid-template-columns: 1fr; }
+  .macro-flow li:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -12px; width: 24px; transform: translateX(50%); }
+  .macro-flow-number { margin-bottom: 8px; }
 }
 @media (max-width: 480px) {
   .money-wordmark span { display: none; }
@@ -114,8 +166,14 @@ html:has(.money-workspace) { scroll-padding-top: 0; }
   .money-directory > section { grid-template-columns: 24px minmax(0,1fr); gap: 12px; }
   .money-directory ul { display: block; }
   .money-footer { flex-direction: column; gap: 4px; }
+  .macro-visual { padding: 12px; }
+  .macro-bars { padding: 12px; }
+  .macro-bars-reference { inset-inline: 12px; }
+  .macro-matrix > div { min-height: 128px; padding: 8px; }
+  .macro-visual-takeaway { grid-template-columns: 1fr; gap: 2px; }
 }
 @media (pointer: coarse) {
+  .money-track-list nav a { min-height: 44px; }
   .money-outline nav a, .money-explanation-index a { min-height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {

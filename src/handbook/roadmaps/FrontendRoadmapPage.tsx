@@ -133,7 +133,7 @@ const tracks: RoadmapTrack[] = [
     title: "릴리스와 운영 피드백",
     intent: "프론트엔드도 배포 이후 오류, 성능, 전환, 사용자 세션을 읽고 다음 설계로 돌려야 한다.",
     nodes: [
-      { id: "FE-36", title: "Release Gate", why: "기능 완료는 merge가 아니라 테스트, 접근성, 성능, 계측, rollback 준비가 닫힌 상태다.", artifacts: ["release gate"], failureSignals: ["배포 후 확인 항목 없음"], evidence: ["release checklist result"], links: ["프론트엔드 품질·릴리스"] },
+      { id: "FE-36", title: "Release Gate", why: "기능 완료는 merge가 아니라 테스트, 접근성, 성능, 계측, rollback 준비가 닫힌 상태다.", artifacts: ["release gate"], failureSignals: ["배포 후 확인 항목 없음"], evidence: ["release checklist result"], links: ["프론트엔드 품질·릴리스", "웹 서버 배포·Nginx 보안"] },
       { id: "FE-37", title: "Error Observability", why: "클라이언트 오류는 route, user action, build version, API correlation이 있어야 복구된다.", artifacts: ["error event schema"], failureSignals: ["minified stack만 수집"], evidence: ["sourcemap verified issue"], links: ["프론트엔드 품질·릴리스"] },
       { id: "FE-38", title: "Session Replay", why: "재현 어려운 UI 결함은 privacy-safe replay와 event timeline으로 좁힌다.", artifacts: ["replay sampling policy"], failureSignals: ["민감정보 masking 누락"], evidence: ["redacted replay sample"], links: ["프론트엔드 품질·릴리스"] },
       { id: "FE-39", title: "Experimentation", why: "A/B 테스트는 UI 취향 경쟁이 아니라 가설, guardrail, 통계 해석 문제다.", artifacts: ["experiment brief"], failureSignals: ["전환만 보고 오류율 악화 무시"], evidence: ["guardrail metric report"], links: ["SEO·AEO·GEO·애널리틱스"] },

@@ -9,11 +9,11 @@ import { macroExplanations } from "../src/workspace/money/lessons/macro-explanat
 
 const read = path => readFileSync(new URL(`../src/workspace/${path}`, import.meta.url), "utf8");
 
-test("Money has six requested categories and 27 distinct refresh-safe lessons", () => {
-  assert.deepEqual(moneyCategories.map(item => item.title), ["ISA/연금저축", "절세", "거시경제 상식", "암호화폐", "부동산", "주식"]);
+test("Money has seven categories and 42 refresh-safe learning and reference pages", () => {
+  assert.deepEqual(moneyCategories.map(item => item.title), ["자산관리 전략", "ISA/연금저축", "절세", "거시경제 상식", "암호화폐", "부동산", "주식"]);
   const paths = [];
   for (const category of moneyCategories) {
-    assert.equal(category.lessons.length, category.id === "macro" ? 12 : 3);
+    assert.equal(category.lessons.length, { strategy: 4, accounts: 5, macro: 13, crypto: 4, stocks: 10 }[category.id] ?? 3);
     for (const [id, title] of category.lessons) {
       const path = moneyHref(category.id, id);
       paths.push(path);
@@ -23,7 +23,7 @@ test("Money has six requested categories and 27 distinct refresh-safe lessons", 
       }
     }
   }
-  assert.equal(new Set(paths).size, 27);
+  assert.equal(new Set(paths).size, 42);
   assert.equal(moneyLessonCount, paths.length);
   assert.deepEqual(resolveMoneyPage("/money/"), { category: null, lesson: null });
   for (const path of ["/money/accounts", "/money/unknown/isa", "/money/accounts/unknown", "/money/accounts/isa/extra", "/moneys"]) {
@@ -41,11 +41,11 @@ test("learning groups partition every category once, in page order", () => {
       assert.ok(groups.every(group => group.title && group.lessons.length > 0));
     }
   }
-  assert.equal(getMoneyLessonGroups(moneyCategories.find(category => category.id === "macro")).length, 5);
+  assert.equal(getMoneyLessonGroups(moneyCategories.find(category => category.id === "macro")).length, 6);
 });
 
 test("nine macro practice pages include complete comparison tables and qualified scenarios", () => {
-  const lessons = moneyLessons.macro.slice(3);
+  const lessons = moneyLessons.macro.slice(3, 12);
   assert.deepEqual(lessons.map(lesson => lesson.id), ["observation", "indicators", "regimes", "credit", "scenarios", "cyclical", "supply-cycle", "sectors", "routine"]);
   for (const lesson of lessons) {
     const guide = lesson.guide;
@@ -68,7 +68,7 @@ test("nine macro practice pages include complete comparison tables and qualified
 
 test("macro guides have accessible tables and shared grouped navigation", () => {
   const guide = read("money/LearningGuide.tsx");
-  for (const token of ['role="region"', 'aria-labelledby="money-guide-title"', "tabIndex={0}", "<caption", 'scope="col"', 'scope="row"']) assert.ok(guide.includes(token), token);
+  for (const token of ['role="region"', "aria-labelledby={id}", "tabIndex={0}", "<caption", 'scope="col"', 'scope="row"']) assert.ok(guide.includes(token), token);
   const page = read("money/MoneyWorkspace.tsx");
   assert.ok(page.includes("{moneyLessonCount}"));
   assert.ok(page.includes("<LearningGuide guide={lesson.guide}"));
@@ -80,7 +80,7 @@ test("macro guides have accessible tables and shared grouped navigation", () => 
 test("every lesson has substantive concepts, an example, risks, checks and valid sources", () => {
   for (const category of moneyCategories) {
     const lessons = moneyLessons[category.id];
-    assert.deepEqual(lessons.map(item => [item.id, item.title]), category.lessons);
+    assert.deepEqual(lessons.map(item => [item.id, item.title]), category.lessons.filter(([id]) => !(category.id === "strategy" && id === "plan")));
     for (const lesson of lessons) {
       assert.ok(lesson.summary.length > 30);
       assert.ok(lesson.concepts.length >= 4);
@@ -101,10 +101,11 @@ test("every lesson has substantive concepts, an example, risks, checks and valid
 });
 
 test("all twelve macro lessons have specific expanded explanations and complete source coverage", () => {
-  assert.deepEqual(Object.keys(macroExplanations).sort(), moneyLessons.macro.map(lesson => lesson.id).sort());
+  const originalMacro = moneyLessons.macro.slice(0, 12);
+  assert.deepEqual(Object.keys(macroExplanations).sort(), originalMacro.map(lesson => lesson.id).sort());
   const allIds = [];
   const allParagraphs = [];
-  for (const lesson of moneyLessons.macro) {
+  for (const lesson of originalMacro) {
     assert.ok(lesson.explanations.length >= 3, lesson.id);
     for (const section of lesson.explanations) {
       assert.match(section.id, /^[a-z][a-z-]+$/);
@@ -159,23 +160,62 @@ test("financial examples retain qualifications and avoid hard-coded loan or ISA 
   assert.match(moneyLessons.property[1].example, /허용 한도나 대출 승인 예시가 아닙니다/);
   assert.match(moneyLessons.stocks[2].example, /개인 추천이 아닙니다/);
   assert.match(moneyLessons.tax[2].update, /과세 시행 시점은 단정하지 않습니다/);
-  assert.match(moneyLessons.crypto[1].concepts.flat().join(" "), /복구 구문·개인키.*공유하지 않습니다/);
-  assert.match(moneyLessons.crypto[2].concepts.flat().join(" "), /가치 보증과 다릅니다/);
+  assert.match(moneyLessons.crypto.find(lesson => lesson.id === "custody").concepts.flat().join(" "), /복구 구문·개인키.*공유하지 않습니다/);
+  assert.match(moneyLessons.crypto.find(lesson => lesson.id === "risk").concepts.flat().join(" "), /가치 보증과 다릅니다/);
 });
 
-test("six navigation disclosures support hover, touch, keyboard, dismissal and current links", () => {
+test("tax lessons teach current Korean thresholds with reproducible calculations", () => {
+  for (const lesson of moneyLessons.tax) {
+    assert.equal(lesson.reviewedAt, "2026-09-30");
+    assert.ok(lesson.explanations.length >= 3, lesson.id);
+    assert.ok(lesson.guide.rows.length >= 5, lesson.id);
+    assert.ok(lesson.practice.steps.length >= 3, lesson.id);
+    for (const section of lesson.explanations) {
+      assert.ok(section.paragraphs.every(paragraph => paragraph.length >= 100), `${lesson.id}/${section.id}`);
+      for (const key of section.sources) assert.ok(lesson.sources.includes(key), `${lesson.id} omits ${key}`);
+    }
+  }
+  const text = id => moneyLessons.tax.find(lesson => lesson.id === id).explanations.flatMap(section => section.paragraphs).join(" ");
+  assert.match(text("deductions"), /5,100만.*648만.*26만 4,000원/);
+  assert.match(text("income"), /6,000만.*1,200만.*4,650만.*430만 6,500원/);
+  assert.match(text("investment"), /1,000만.*300만.*250만.*99만 원/);
+  assert.equal(moneyLessons.tax[0].guides.length, 3);
+  assert.match(moneyLessons.tax[0].guides.flatMap(guide => guide.rows.flat()).join(" "), /415만 4,700원.*1,500만 원.*118만 8,000원.*2만 4,750원/);
+  assert.ok(read("money/MoneyWorkspace.tsx").includes('"guides" in lesson && lesson.guides.map'));
+  assert.equal((51000000 * .24 - 5760000), 6480000);
+  assert.equal((10000000 - 3000000 - 2500000) * .22, 990000);
+});
+
+test("three-year salary guide preserves the 36-month cash-flow plan and change rules", () => {
+  const lesson = moneyLessons.strategy.find(item => item.id === "three-year-plan");
+  assert.ok(lesson);
+  assert.equal(lesson.reviewedAt, "2026-09-30");
+  assert.equal(lesson.explanations.length, 4);
+  assert.equal(lesson.guides.length, 2);
+  assert.equal(lesson.guide.rows.length, 4);
+  assert.match(lesson.summary, /415만 4,700원.*2026년 10월.*2029년 9월/);
+  const all = [lesson.example, lesson.pitfall, ...lesson.explanations.flatMap(section => section.paragraphs), ...lesson.guide.rows.flat(), ...lesson.guides.flatMap(guide => guide.rows.flat())].join(" ");
+  assert.match(all, /1,380만 원.*1,860만 원.*2,100만 원.*6,060만 원.*316만 8,000원/);
+  assert.match(all, /실수령 10% 이상 감소.*3년 내 주거자금.*고금리 부채/);
+  assert.equal(6000000 + 9000000 + 3600000, 18600000);
+  assert.equal(18600000 + 21000000 + 21000000, 60600000);
+  assert.equal(792000 + 1188000 * 2, 3168000);
+  assert.ok(resolveMoneyPage("/money/strategy/three-year-plan"));
+});
+
+test("navigation disclosures support hover, touch, keyboard, dismissal and current links", () => {
   const source = read("money/MoneyNavigation.tsx");
   for (const token of ["moneyCategories.map", 'event.pointerType === "mouse"', "onPointerEnter", "onPointerLeave", "onPointerDown", "onClick", "onBlur", 'event.key === "Escape"', 'event.key === "ArrowDown"', "aria-expanded=", "aria-controls=", "hidden={open !== category.id}", "aria-current=", '"pointerdown"']) assert.ok(source.includes(token), token);
   assert.doesNotMatch(source, /role="menu"|role="menuitem"/);
 });
 
-test("Money integrates without changing existing pages or adding financial data collection", () => {
+test("Money integrates existing pages and explains local-only personal records", () => {
   const app = read("WorkspaceApp.tsx");
   const page = read("money/MoneyWorkspace.tsx");
   assert.match(app, /href="\/money" data-workspace-link/);
   assert.match(app, /route === "money"\) return <MoneyWorkspace pathname=\{pathname\}/);
   assert.match(app, /resolveMoneyPage\(pathname\).*Money Notes/);
-  for (const token of ["<MoneyNavigation key={pathname}", 'id="money-content"', "data-route-heading", "<dl", "<dt", "<dd", "lesson.example", "lesson.pitfall", "lesson.checks", "lesson.sources", "<time", "개인별 투자·세무·법률 자문", "실제 자산·계좌 연결이나 개인정보 입력 기능은 없습니다"]) assert.ok(page.includes(token), token);
+  for (const token of ["<MoneyNavigation key={pathname}", 'id="money-content"', "data-route-heading", "<dl", "<dt", "<dd", "lesson.example", "lesson.pitfall", "lesson.checks", "lesson.sources", "<time", "개인별 투자·세무·법률 자문", "이 브라우저에서만 읽고 저장", "<PersonalPlan />"]) assert.ok(page.includes(token), token);
   assert.doesNotMatch(page, /localStorage|<input|<textarea/);
   assert.equal(resolveWorkspace("/brand/products"), "products");
   assert.equal(resolveWorkspace("/dev"), "dev");

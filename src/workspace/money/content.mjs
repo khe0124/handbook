@@ -4,8 +4,13 @@ import { macro } from "./lessons/macro.mjs";
 import { crypto } from "./lessons/crypto.mjs";
 import { property } from "./lessons/property.mjs";
 import { stocks } from "./lessons/stocks.mjs";
+import { strategy } from "./lessons/strategy.mjs";
+import { retirement } from "./lessons/retirement.mjs";
+import { stockResearch } from "./lessons/stock-research.mjs";
+import { stockOperation } from "./lessons/stock-operation.mjs";
+import { macroPortfolio } from "./lessons/macro-portfolio.mjs";
 
-export const moneyLessons = { accounts, tax, macro, crypto, property, stocks };
+export const moneyLessons = { strategy, accounts: [...accounts, ...retirement], tax, macro: [...macro, macroPortfolio], crypto, property, stocks: [...stocks, ...stockResearch, ...stockOperation] };
 export const foundation = [
   ["01", "내 돈의 현재 위치", "순자산 = 자산 − 부채. 예금·투자·보증금과 대출을 같은 기준일에 적고, 당장 현금화할 수 있는 자산을 따로 구분합니다."],
   ["02", "매달 남는 돈", "현금흐름 = 실제 수입 − 실제 지출. 생활비·세금·원리금 상환·비정기 지출을 반영하고, 매출과 개인적으로 쓸 수 있는 돈을 구분합니다."],

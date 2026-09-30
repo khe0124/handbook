@@ -1,0 +1,26 @@
+.money-plan-storage { padding: 16px 0; border-bottom: 1px solid var(--money-line); }
+.money-plan-storage summary { min-height: 44px; cursor: pointer; }
+.money-plan-storage summary h2 { display: inline; font-size: 14px; margin-right: 12px; }
+.money-plan-storage summary span { color: var(--money-muted); font-size: 12px; }
+.money-plan-storage[open] summary { margin-bottom: 8px; }
+.money-plan-storage p { margin: 4px 0 8px; max-width: 960px; }
+.money-plan-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px; }
+.money-plan-controls label { display: flex; flex-direction: column; gap: 4px; max-width: 100%; font-size: 12px; }
+.money-plan-controls input { width: 320px; max-width: 100%; min-height: 44px; font: inherit; color: var(--money-ink); }
+.money-plan-controls input::file-selector-button, .money-plan-storage button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--money-line); border-radius: 0; background: var(--money-paper); color: var(--money-ink); font: inherit; cursor: pointer; }
+.money-plan-storage button:hover, .money-plan-controls input::file-selector-button:hover { background: var(--money-tint); }
+.money-plan-confirm { padding: 12px; margin-top: 8px; border: 1px solid var(--money-line); background: var(--money-tint); }
+.money-plan-confirm button + button { margin-left: 8px; }
+.money-plan-note { padding: 8px 12px; border-left: 2px solid var(--money-accent); background: var(--money-tint); }
+.money-plan-table { table-layout: auto; }
+.money-plan-table caption { text-align: left; padding: 8px 0; color: var(--money-muted); font-size: 12px; }
+.money-plan-table tr > :first-child { width: auto; min-width: 140px; }
+.money-plan-table td { font-variant-numeric: tabular-nums; }
+.money-plan-links { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.money-plan-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.money-article h2[id^="plan-"] { scroll-margin-top: 16px; }
+@media (max-width: 480px) {
+  .money-plan-controls { align-items: stretch; }
+  .money-plan-controls label { width: 100%; }
+  .money-plan-controls input { width: 100%; }
+}

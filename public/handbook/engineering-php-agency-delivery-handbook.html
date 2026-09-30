@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="robots" content="noindex, nofollow, noarchive, nosnippet"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PHP·WordPress 웹에이전시 구축과 운영</title></head>
+<body><div class="shell"><nav aria-label="목차">
+  <div class="nav-brand">ENGINEERING · PHP AGENCY DELIVERY</div>
+  <div class="nav-title">Cafe24 · PHP · AJAX · Apache · WordPress · CRM</div>
+  <a href="#phpagency-ch1"><span class="code">PHP-01</span>전체 생명주기</a>
+  <a href="#phpagency-ch2"><span class="code">PHP-02</span>착수·인수 조사</a>
+  <a href="#phpagency-ch3"><span class="code">PHP-03</span>요구사항·견적·계약</a>
+  <a href="#phpagency-ch4"><span class="code">PHP-04</span>호스팅·아키텍처 선택</a>
+  <a href="#phpagency-ch5"><span class="code">PHP-05</span>개발환경·형상관리</a>
+  <a href="#phpagency-ch6"><span class="code">PHP-06</span>PHP 애플리케이션 설계</a>
+  <a href="#phpagency-ch7"><span class="code">PHP-07</span>WordPress 구축</a>
+  <a href="#phpagency-ch8"><span class="code">PHP-08</span>AJAX·프론트엔드 연동</a>
+  <a href="#phpagency-ch9"><span class="code">PHP-09</span>DB·콘텐츠·파일</a>
+  <a href="#phpagency-ch10"><span class="code">PHP-10</span>CRM·외부 서비스 연동</a>
+  <a href="#phpagency-ch11"><span class="code">PHP-11</span>Apache·.htaccess</a>
+  <a href="#phpagency-ch12"><span class="code">PHP-12</span>보안·개인정보</a>
+  <a href="#phpagency-ch13"><span class="code">PHP-13</span>테스트·검수</a>
+  <a href="#phpagency-ch14"><span class="code">PHP-14</span>배포·DNS·SSL</a>
+  <a href="#phpagency-ch15"><span class="code">PHP-15</span>리뉴얼·마이그레이션</a>
+  <a href="#phpagency-ch16"><span class="code">PHP-16</span>운영·유지보수</a>
+  <a href="#phpagency-ch17"><span class="code">PHP-17</span>인수인계·완료 기준</a>
+  <a href="#phpagency-ch18"><span class="code">PHP-18</span>실전 프로젝트 템플릿</a>
+  <a href="#phpagency-sources"><span class="code">SOURCE</span>공식 기준 자료</a>
+</nav>
+<main>
+<header class="hero">
+  <div class="hero-serial"><span>DOC : ENGINEERING-PHP-AGENCY-DELIVERY</span><span>SCOPE : CAFE24 · PHP · APACHE · WORDPRESS · CRM · DELIVERY</span><span>LANG : KO</span></div>
+  <h1>PHP·WordPress 웹에이전시<br>구축·리뉴얼·운영 핸드북</h1>
+  <p class="hero-sub">Cafe24 계열 호스팅에서 PHP·AJAX·Apache로 운영되는 기업 사이트, WordPress 사이트, 고객·상담 데이터를 CRM으로 넘기는 사이트를 처음 인수하는 순간부터 설계·개발·배포·유지보수까지 책임지기 위한 실무 지도입니다.</p>
+  <div class="hero-meta">FOR : WEB AGENCY · FULL-STACK · MAINTENANCE OWNER · UPDATED 2026-09</div>
+</header>
+
+<section id="phpagency-ch1">
+<div class="ch-head"><span class="ch-code">PHP-01</span><h2>전체 생명주기와 산출물</h2></div>
+<p class="lede">웹에이전시 프로젝트는 코딩보다 소유권·콘텐츠·도메인·호스팅·외부 계정의 경계를 먼저 닫아야 합니다. 특히 기존 사이트 리뉴얼은 보이지 않는 폼, 관리자 기능, 검색 유입 URL, 메일 발송, CRM 연동을 잃지 않는 일이 핵심입니다.</p>
+<div class="semantic-card process-card"><span class="sc-label">AGENCY DELIVERY LIFECYCLE</span><p>문의·현황 조사 → 계정·소유권 확인 → 범위·견적·계약 → 백업·개발환경 → IA·데이터·권한 설계 → 구현 → 콘텐츠 이관 → 통합·보안·성능 테스트 → 고객 검수 → DNS·SSL·배포 → 안정화 → 유지보수·인수인계. 각 단계는 다음 단계에 필요한 입력과 승인자를 명확히 하고, 실패했을 때 이전 상태로 돌아갈 증거를 남겨야 완료됩니다.</p></div>
+<table><tr><th>단계</th><th>핵심 산출물</th><th>종료 조건</th></tr><tr><td>착수</td><td>계정 레지스터, 기존 기능·URL·연동 목록</td><td>소유자와 접근 가능 여부 확인</td></tr><tr><td>정의</td><td>요구사항, 화면·콘텐츠 목록, 데이터·권한 표, 견적</td><td>포함·제외·변경 절차 승인</td></tr><tr><td>구축</td><td>Git 코드, DB migration, CMS 설정, 테스트 증거</td><td>개발/스테이징 검수 통과</td></tr><tr><td>전환</td><td>백업, runbook, DNS/SSL 계획, rollback 기준</td><td>운영 smoke와 데이터 대사 통과</td></tr><tr><td>운영</td><td>모니터링, 월간 보고, 업데이트·복구 기록</td><td>SLA와 유지보수 범위에 따라 반복</td></tr></table>
+</section>
+
+<section id="phpagency-ch2">
+<div class="ch-head"><span class="ch-code">PHP-02</span><h2>착수·인수 조사</h2></div>
+<p class="lede">FTP 비밀번호 하나를 받았다고 인수가 끝난 것이 아닙니다. 도메인 등록자, DNS, 호스팅, SSL, 메일, DB, 소스, 관리자, analytics, 검색도구, 문자·메일·CRM 계정의 실제 소유자를 확인합니다.</p>
+<table><tr><th>조사 축</th><th>확인 항목</th><th>위험 신호</th></tr><tr><td>소유권</td><td>도메인 명의, Cafe24 대표 계정, 결제자, 2FA 복구 수단</td><td>퇴사자 개인 계정·개인 카드</td></tr><tr><td>인프라</td><td>상품명, OS/PHP/DB 버전, 용량·트래픽, cron, SSL 만료</td><td>EOL 런타임, 용량 90%, 백업 불명</td></tr><tr><td>코드</td><td>Git 존재, 배포본과 저장소 일치, 직접 수정 이력</td><td>운영 서버가 유일한 원본</td></tr><tr><td>데이터</td><td>DB 수, 문자셋, 개인정보, 업로드, 보존·삭제 요구</td><td>평문 비밀번호·민감정보 무기한 보관</td></tr><tr><td>기능</td><td>문의·예약·게시판·검색·로그인·결제·메일·CRM</td><td>관리자만 아는 수동 업무</td></tr><tr><td>유입</td><td>색인 URL, redirect, sitemap, 광고 landing, analytics</td><td>리뉴얼 URL 변경 계획 없음</td></tr></table>
+<div class="callout warn"><span class="co-label">FIRST ACTION</span><p>수정 전에 파일과 DB를 각각 백업하고 복구 시험을 합니다. 백업 파일이 생성됐다는 사실과 실제로 복원할 수 있다는 사실은 다릅니다.</p></div>
+</section>
+
+<section id="phpagency-ch3">
+<div class="ch-head"><span class="ch-code">PHP-03</span><h2>요구사항·견적·계약</h2></div>
+<p class="lede">“홈페이지 리뉴얼”은 범위가 아닙니다. 페이지 수, 언어, 콘텐츠 입력 주체, 관리자 기능, 데이터 이관, 외부 연동, SEO 보존, 브라우저 기준, 검수 횟수, 운영 지원을 수량과 완료 조건으로 바꿉니다.</p>
+<table><tr><th>범위 항목</th><th>결정 질문</th><th>견적 단위 예시</th></tr><tr><td>정보구조</td><td>템플릿 종류와 실제 페이지는 몇 개인가</td><td>템플릿·페이지·언어 수</td></tr><tr><td>CMS</td><td>고객이 무엇을 직접 수정해야 하는가</td><td>콘텐츠 타입·필드·권한</td></tr><tr><td>기능</td><td>문의, 검색, 예약, 결제, 회원, 게시판이 필요한가</td><td>기능별 happy/failure path</td></tr><tr><td>이관</td><td>게시물·회원·파일·URL을 몇 건 옮기는가</td><td>건수·정제·검수 난도</td></tr><tr><td>연동</td><td>CRM·ERP·메일·문자·PG의 API와 sandbox가 있는가</td><td>연동 시스템·event 수</td></tr><tr><td>운영</td><td>장애·업데이트·콘텐츠 수정의 책임은 누구인가</td><td>월 시간·응답 시간·제외 범위</td></tr></table>
+<p>계약서에는 산출물 소유권, 유료 theme/plugin/license 귀속, 계정 명의, 제3자 비용, 데이터 제공 책임, 검수 기간, 변경 요청 단가, 하자와 유지보수의 구분, 종료 시 인계 항목을 명시합니다.</p>
+</section>
+
+<section id="phpagency-ch4">
+<div class="ch-head"><span class="ch-code">PHP-04</span><h2>호스팅·아키텍처 선택</h2></div>
+<p class="lede">Cafe24라는 이름보다 실제 상품의 권한과 제약을 봅니다. 공유 웹호스팅은 빠르고 저렴하지만 root·Apache 전역 설정·daemon 실행이 제한될 수 있고, VPS/단독 서버는 자유도만큼 패치·방화벽·백업 책임이 커집니다.</p>
+<table><tr><th>선택지</th><th>적합한 경우</th><th>확인할 제약</th></tr><tr><td>공유 PHP 웹호스팅</td><td>기업 소개, 게시판, 소규모 문의 사이트</td><td>PHP 선택 범위, SSH/cron, DB·용량, mail, <code>.htaccess</code></td></tr><tr><td>매니지드 WordPress</td><td>콘텐츠 운영 중심, 표준 WordPress 구조</td><td>자동 업데이트 범위, plugin 제한, backup/restore</td></tr><tr><td>VPS·단독 서버</td><td>특수 extension, queue, daemon, 높은 트래픽</td><td>OS·Apache/PHP-FPM·방화벽·패치 owner</td></tr><tr><td>정적/CDN + API</td><td>읽기 중심, 독립 API 또는 headless CMS</td><td>preview, webhook, cache invalidation, 운영 복잡도</td></tr></table>
+<div class="callout"><span class="co-label">VERSION GATE</span><p>PHP 버전은 프로젝트 시작일의 공식 지원 상태와 theme/plugin/extension 호환성을 함께 확인합니다. 호스팅 관리 화면에서 선택 가능한 버전을 사실로 기록하고, EOL 버전에 신규 구축하지 않습니다.</p></div>
+</section>
+
+<section id="phpagency-ch5">
+<div class="ch-head"><span class="ch-code">PHP-05</span><h2>개발환경·형상관리</h2></div>
+<p class="lede">운영 FTP에서 직접 고치는 방식을 끊고 local → staging → production을 분리합니다. 서버 환경과 완전히 같게 만들 수 없다면 차이를 문서화하고 그 차이를 검증하는 smoke test를 둡니다.</p>
+<table><tr><th>영역</th><th>기준</th><th>권장 산출물</th></tr><tr><td>로컬</td><td>PHP·Apache/Nginx·DB 버전 고정</td><td>Docker Compose 또는 setup 문서</td></tr><tr><td>의존성</td><td>Composer lock, npm lock, WordPress plugin inventory</td><td>버전·출처·license 표</td></tr><tr><td>설정</td><td>코드와 secret 분리, 환경별 config</td><td><code>.env.example</code>, secret owner</td></tr><tr><td>Git</td><td>운영 업로드 파일과 secret 제외</td><td>branch·review·tag 규칙</td></tr><tr><td>스테이징</td><td>운영과 같은 URL 구조·PHP extension</td><td>basic auth/noindex/IP 제한</td></tr></table>
+<pre class="snippet-card"><code>project/
+├─ public/              # DocumentRoot
+├─ src/                 # application code
+├─ config/              # environment-aware config
+├─ migrations/          # schema changes
+├─ tests/
+├─ composer.json
+├─ composer.lock
+├─ .env.example
+└─ docs/runbook.md</code></pre>
+</section>
+
+<section id="phpagency-ch6">
+<div class="ch-head"><span class="ch-code">PHP-06</span><h2>PHP 애플리케이션 설계</h2></div>
+<p class="lede">기존 순수 PHP를 유지하더라도 요청, 인증, validation, DB 접근, view, 외부 연동을 파일 하나에 섞지 않습니다. 신규 구축이면 팀 역량과 수명에 맞는 유지보수 가능한 framework·package 정책을 정합니다.</p>
+<table><tr><th>경계</th><th>필수 기준</th><th>나쁜 신호</th></tr><tr><td>입력</td><td>server-side validation, allowlist, 크기 제한</td><td>AJAX 검증만 신뢰</td></tr><tr><td>DB</td><td>prepared statement, transaction, index</td><td>문자열 SQL 결합</td></tr><tr><td>출력</td><td>context별 escaping</td><td>DB 값 직접 HTML 출력</td></tr><tr><td>인증</td><td>session cookie, CSRF, rate limit, 권한</td><td>관리자 URL 숨기기만 함</td></tr><tr><td>오류</td><td>사용자 메시지와 내부 로그 분리</td><td>stack trace·DB 오류 노출</td></tr><tr><td>메일·job</td><td>실패·재시도·중복 방지</td><td>요청 중 발송 실패를 무시</td></tr></table>
+</section>
+
+<section id="phpagency-ch7">
+<div class="ch-head"><span class="ch-code">PHP-07</span><h2>WordPress 구축</h2></div>
+<p class="lede">WordPress는 페이지 빌더가 아니라 콘텐츠 모델·theme·plugin·권한·업데이트 정책을 가진 애플리케이션입니다. core를 수정하지 않고 child theme, custom plugin, hook과 공식 API로 확장합니다.</p>
+<table><tr><th>설계 대상</th><th>결정 내용</th><th>운영 증거</th></tr><tr><td>콘텐츠 모델</td><td>post type, taxonomy, field, revision</td><td>콘텐츠 스키마와 입력 가이드</td></tr><tr><td>theme</td><td>block/classic, child theme, template hierarchy</td><td>core·vendor 수정 없음</td></tr><tr><td>plugin</td><td>필수성, 유지 상태, license, data ownership</td><td>plugin register와 제거 영향</td></tr><tr><td>권한</td><td>administrator/editor/custom role</td><td>role별 작업 시나리오</td></tr><tr><td>업데이트</td><td>core/theme/plugin staging 검증과 rollback</td><td>월간 update 기록</td></tr><tr><td>보안</td><td>file editing 제한, config 보호, MFA/로그</td><td>hardening checklist</td></tr></table>
+<div class="callout warn"><span class="co-label">PLUGIN RULE</span><p>기능이 된다는 이유만으로 plugin을 추가하지 않습니다. 최근 유지보수, 보안 이력, PHP/WordPress 호환성, 데이터 삭제 방식, 외부 전송, 라이선스, 대체·제거 비용을 검토합니다.</p></div>
+</section>
+
+<section id="phpagency-ch8">
+<div class="ch-head"><span class="ch-code">PHP-08</span><h2>AJAX·프론트엔드 연동</h2></div>
+<p class="lede">AJAX는 jQuery 호출 문법이 아니라 HTTP 계약입니다. 브라우저 검증은 UX이고 신뢰 경계는 PHP 서버입니다. 모든 mutation은 인증·권한·CSRF·validation·idempotency를 다시 확인합니다.</p>
+<pre class="snippet-card"><code>fetch('/api/inquiries', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+  body: JSON.stringify(payload),
+  credentials: 'same-origin'
+});</code></pre>
+<table><tr><th>상태</th><th>UI</th><th>서버 계약</th></tr><tr><td>제출 중</td><td>중복 클릭 방지</td><td>idempotency 또는 duplicate 판정</td></tr><tr><td>검증 실패</td><td>field별 메시지</td><td>안정적인 error code·field map</td></tr><tr><td>세션 만료</td><td>입력 보존 후 재인증</td><td>401과 login 경로</td></tr><tr><td>권한 없음</td><td>행동 불가 설명</td><td>403, UI 숨김만으로 대체 금지</td></tr><tr><td>서버 실패</td><td>재시도·문의 경로</td><td>correlation ID, 내부 상세 비노출</td></tr></table>
+</section>
+
+<section id="phpagency-ch9">
+<div class="ch-head"><span class="ch-code">PHP-09</span><h2>DB·콘텐츠·파일</h2></div>
+<p class="lede">스키마 변경, 콘텐츠 이관, 업로드 파일은 함께 움직입니다. DB dump만 옮기고 media를 빠뜨리거나, URL 문자열을 무작정 치환해 serialized data를 깨뜨리지 않도록 도구와 검증 기준을 정합니다.</p>
+<table><tr><th>대상</th><th>계획</th><th>검증</th></tr><tr><td>schema</td><td>versioned migration, backward compatibility</td><td>fresh install·upgrade·rollback test</td></tr><tr><td>콘텐츠</td><td>source→target field mapping, 정제 규칙</td><td>건수·샘플·누락·중복 대사</td></tr><tr><td>업로드</td><td>MIME·크기·확장자·저장경로·권한</td><td>악성/대용량/중복 파일 fixture</td></tr><tr><td>문자셋</td><td><code>utf8mb4</code>, collation 정책</td><td>한글·emoji·정렬 확인</td></tr><tr><td>개인정보</td><td>최소 수집, 보존·삭제·masking</td><td>운영 dump의 개발 반출 차단</td></tr></table>
+</section>
+
+<section id="phpagency-ch10">
+<div class="ch-head"><span class="ch-code">PHP-10</span><h2>CRM·메일·문자·외부 서비스 연동</h2></div>
+<p class="lede">CRM 연동은 폼 데이터를 보내는 것으로 끝나지 않습니다. 어느 시스템이 고객의 master인지, 중복 판정 키는 무엇인지, consent와 source campaign을 어떻게 보존하는지, 장애 시 재처리할 수 있는지를 정합니다.</p>
+<div class="semantic-card decision-card"><span class="sc-label">INTEGRATION CONTRACT</span>trigger → payload schema → authentication → idempotency key → timeout → retry/backoff → failure queue → reconciliation → alert → data deletion propagation</div>
+<table><tr><th>연동</th><th>핵심 질문</th><th>실패 처리</th></tr><tr><td>CRM</td><td>lead/contact/deal 매핑과 중복 기준은?</td><td>outbox·재처리 큐·일일 대사</td></tr><tr><td>메일</td><td>transactional과 marketing 발송을 분리했는가?</td><td>bounce/complaint·SPF/DKIM/DMARC 관찰</td></tr><tr><td>SMS/알림톡</td><td>템플릿 승인·수신 동의·실패 code는?</td><td>대체 채널과 중복 발송 차단</td></tr><tr><td>PG</td><td>browser redirect와 server webhook 중 무엇을 신뢰하는가?</td><td>서명 검증·멱등 처리·정산 대사</td></tr><tr><td>지도·소셜</td><td>API key 제한과 quota owner는?</td><td>fallback UI와 quota alert</td></tr></table>
+</section>
+
+<section id="phpagency-ch11">
+<div class="ch-head"><span class="ch-code">PHP-11</span><h2>Apache·.htaccess</h2></div>
+<p class="lede">공유호스팅에서는 서버 전역 설정을 바꿀 수 없어 <code>.htaccess</code>로 rewrite·접근 제한·일부 헤더를 설정하는 경우가 많습니다. VPS처럼 전역 설정 권한이 있다면 성능과 통제 면에서 VirtualHost 설정을 우선합니다.</p>
+<pre class="snippet-card"><code>Options -Indexes
+RewriteEngine On
+
+# 실제 파일과 디렉터리는 그대로 제공
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L,QSA]
+
+# 민감한 파일 접근 차단
+&lt;FilesMatch "^(\.env|composer\.(json|lock)|.*\.sql)$"&gt;
+  Require all denied
+&lt;/FilesMatch&gt;</code></pre>
+<table><tr><th>설정</th><th>확인</th><th>주의</th></tr><tr><td>rewrite</td><td><code>mod_rewrite</code>와 <code>AllowOverride</code> 허용 범위</td><td>redirect loop·query 손실</td></tr><tr><td>DirectoryIndex</td><td>index 우선순위</td><td>불필요한 파일 노출</td></tr><tr><td>Options</td><td>directory listing 차단</td><td>호스팅이 지시어를 금지할 수 있음</td></tr><tr><td>headers</td><td>실제 응답에 적용되는지</td><td>CDN·애플리케이션과 중복</td></tr><tr><td>PHP 설정</td><td>호스팅이 허용한 방식 확인</td><td><code>php_value</code> 사용 시 500 가능</td></tr></table>
+</section>
+
+<section id="phpagency-ch12">
+<div class="ch-head"><span class="ch-code">PHP-12</span><h2>보안·개인정보</h2></div>
+<p class="lede">호스팅 업체는 인프라 일부를 보호하지만 애플리케이션·계정·plugin·데이터 처리 책임까지 대신하지 않습니다. 최소 권한, 패치, 입력·출력 안전, secret 관리, 백업·복구를 계층별로 둡니다.</p>
+<table><tr><th>계층</th><th>통제</th><th>검증</th></tr><tr><td>계정</td><td>개인 계정, MFA, 퇴사자 회수, SFTP/SSH</td><td>분기별 access review</td></tr><tr><td>PHP</td><td>supported version, error display off, dependency audit</td><td>버전·설정·Composer audit 기록</td></tr><tr><td>웹</td><td>XSS, CSRF, SQLi, upload, session, rate limit</td><td>negative fixture·보안 헤더</td></tr><tr><td>WordPress</td><td>core/theme/plugin 업데이트, file permission, admin 보호</td><td>변경·로그인·무결성 로그</td></tr><tr><td>secret</td><td>repo·webroot 밖 저장, rotation</td><td>노출 스캔과 폐기 시험</td></tr><tr><td>개인정보</td><td>목적·최소수집·동의·보존·삭제·위탁 흐름</td><td>데이터 흐름도와 삭제 테스트</td></tr></table>
+<div class="callout warn"><span class="co-label">법적 검토</span><p>개인정보·광고성 메시지·결제·의료 등 규제 영역의 문구와 보존 기간은 프로젝트 시점의 법률·고객 정책을 담당자와 별도로 검토합니다. 개발자가 관행으로 확정하지 않습니다.</p></div>
+</section>
+
+<section id="phpagency-ch13">
+<div class="ch-head"><span class="ch-code">PHP-13</span><h2>테스트·고객 검수</h2></div>
+<p class="lede">디자인 확인만으로 검수하지 않습니다. 역할·기기·브라우저·데이터·연동·실패 조건을 실제 업무 시나리오로 묶고, 고객이 제공해야 할 콘텐츠와 승인 책임을 분리합니다.</p>
+<table><tr><th>테스트 층</th><th>대표 범위</th><th>증거</th></tr><tr><td>정적</td><td>PHP syntax, lint, dependency, secret scan</td><td>CI log</td></tr><tr><td>unit/integration</td><td>계산, validation, DB, API adapter</td><td>test report</td></tr><tr><td>E2E</td><td>문의→메일/CRM, 로그인→관리, 결제→확정</td><td>실행 영상·trace</td></tr><tr><td>콘텐츠</td><td>링크, 맞춤법, 전화·주소, 법정 고지, 이미지 권리</td><td>content sign-off</td></tr><tr><td>비기능</td><td>모바일, 접근성, 성능, SEO, 보안, backup restore</td><td>audit packet</td></tr><tr><td>UAT</td><td>고객 역할별 실제 업무</td><td>승인·잔여 issue 목록</td></tr></table>
+</section>
+
+<section id="phpagency-ch14">
+<div class="ch-head"><span class="ch-code">PHP-14</span><h2>배포·DNS·SSL</h2></div>
+<p class="lede">FTP 업로드도 배포 절차가 필요합니다. 변경 파일 목록, DB migration, maintenance window, DNS TTL, SSL 발급, cache, smoke, rollback을 시간순으로 적고 작업자를 지정합니다.</p>
+<div class="semantic-card process-card"><span class="sc-label">CUTOVER RUNBOOK</span><p>T-7d 계정·SSL·DNS 확인 → T-2d TTL 조정·최종 이관 rehearsal → T-0 백업·쓰기 동결 → 파일/DB 배포 → config·permission → DNS/VirtualHost → HTTPS → smoke → 메일·CRM·결제 확인 → 관찰 → rollback 또는 완료. 전환 담당자는 단계마다 시각과 결과를 기록하고, 사용자 영향이나 데이터 불일치가 기준을 넘으면 DNS·파일·DB를 합의된 이전 release로 복구합니다.</p></div>
+<table><tr><th>검증</th><th>통과 기준</th></tr><tr><td>도메인</td><td>www/non-www, apex, redirect, mail DNS 영향 확인</td></tr><tr><td>SSL</td><td>chain·hostname·만료·자동 갱신 확인</td></tr><tr><td>웹</td><td>주요 URL status, redirect, asset, form, 관리자 정상</td></tr><tr><td>데이터</td><td>건수·최근 작성·첨부·한글·sequence 대사</td></tr><tr><td>연동</td><td>실제 또는 승인된 production smoke가 CRM 등에 도착</td></tr><tr><td>관측</td><td>PHP/Apache error, 4xx/5xx, mail/API failure 확인</td></tr></table>
+</section>
+
+<section id="phpagency-ch15">
+<div class="ch-head"><span class="ch-code">PHP-15</span><h2>리뉴얼·마이그레이션</h2></div>
+<p class="lede">리뉴얼의 성공은 새 화면이 뜨는 것이 아니라 기존 업무·데이터·검색 유입·외부 연동이 끊기지 않는 것입니다. 먼저 현행을 inventory하고, 유지·변경·폐기 결정을 항목별로 승인받습니다.</p>
+<table><tr><th>이관 대상</th><th>필수 작업</th><th>완료 증거</th></tr><tr><td>URL·SEO</td><td>old→new 301 map, canonical, sitemap, robots</td><td>상위 유입 URL crawl·redirect report</td></tr><tr><td>WordPress URL</td><td>home/siteurl, media, serialized data-aware replace</td><td>본문·widget·option 샘플 대사</td></tr><tr><td>콘텐츠</td><td>field mapping, HTML 정제, 작성자·날짜 보존</td><td>건수와 랜덤 샘플 검수</td></tr><tr><td>회원</td><td>password hash 호환, 동의·휴면·탈퇴 상태</td><td>대표 상태 로그인·권한 test</td></tr><tr><td>파일</td><td>경로·권한·썸네일·broken link</td><td>파일 수·checksum·404 scan</td></tr><tr><td>병행 운영</td><td>delta migration과 쓰기 동결</td><td>cutover 시점 이후 누락 0건</td></tr></table>
+</section>
+
+<section id="phpagency-ch16">
+<div class="ch-head"><span class="ch-code">PHP-16</span><h2>운영·유지보수</h2></div>
+<p class="lede">유지보수는 무제한 수정이 아닙니다. 장애 대응, 보안 업데이트, 백업·복구, 콘텐츠 수정, 기능 개선을 구분하고 요청 채널·우선순위·응답 시간·월 한도를 합의합니다.</p>
+<table><tr><th>주기</th><th>작업</th><th>기록</th></tr><tr><td>상시</td><td>uptime, 5xx, SSL, 용량, 연동 실패 알림</td><td>alert와 incident ticket</td></tr><tr><td>주간</td><td>backup 성공, 보안·error log, 문의·CRM 누락</td><td>운영 체크</td></tr><tr><td>월간</td><td>PHP/WordPress/plugin 업데이트, 성능·트래픽, 계정 검토</td><td>maintenance report</td></tr><tr><td>분기</td><td>복구 훈련, license·도메인·SSL·외부 API 점검</td><td>restore evidence와 갱신표</td></tr><tr><td>변경 시</td><td>staging test, 승인, backup, release, health window</td><td>change record</td></tr></table>
+<p>장애 때는 사용자 영향 확인 → 변경 동결 → 완화·복구 → 증거 보존 → 원인 분석 → 재발 방지 순서를 지킵니다. 원인 규명 때문에 복구를 늦추지 않습니다.</p>
+</section>
+
+<section id="phpagency-ch17">
+<div class="ch-head"><span class="ch-code">PHP-17</span><h2>인수인계·완료 기준</h2></div>
+<p class="lede">사이트가 동작해도 고객 또는 다음 담당자가 운영할 수 없으면 납품이 끝난 것이 아닙니다. 계정 명의와 복구 가능성, 코드·데이터·라이선스의 소유권, 반복 업무 문서를 함께 넘깁니다.</p>
+<table><tr><th>인계 묶음</th><th>포함 항목</th></tr><tr><td>계정</td><td>도메인·호스팅·DNS·SSL·메일·CRM·analytics의 owner와 복구 수단</td></tr><tr><td>코드</td><td>Git, release tag, dependency lock, build/setup, 배포 절차</td></tr><tr><td>데이터</td><td>schema, migration, backup/restore, 보존·삭제 기준</td></tr><tr><td>CMS</td><td>콘텐츠 입력, role, plugin/theme/license, update 방법</td></tr><tr><td>운영</td><td>monitoring, 장애·복구, cron, 외부 연동, 담당자</td></tr><tr><td>검수</td><td>완료 항목, 알려진 제한, 후속 backlog, 고객 승인</td></tr></table>
+<div class="semantic-card"><span class="sc-label">DEFINITION OF DONE</span>운영 URL 정상 · 주요 업무 E2E 통과 · 데이터 대사 완료 · SSL/redirect/SEO 확인 · backup restore 검증 · monitoring/alert 연결 · 계정 소유권 이전 · 운영자 교육 · runbook 전달 · 잔여 위험 승인</div>
+</section>
+
+<section id="phpagency-ch18">
+<div class="ch-head"><span class="ch-code">PHP-18</span><h2>실전 프로젝트 템플릿</h2></div>
+<p class="lede">아래 구조를 프로젝트 시작 시 복사해 빈칸을 채우면 조사·개발·배포·운영의 누락을 줄일 수 있습니다.</p>
+<pre class="snippet-card"><code>docs/
+├─ 01-scope-and-estimate.md
+├─ 02-account-ownership-register.md
+├─ 03-current-system-inventory.md
+├─ 04-information-architecture.md
+├─ 05-data-and-permission-model.md
+├─ 06-integration-contracts.md
+├─ 07-content-migration-map.md
+├─ 08-test-and-uat-plan.md
+├─ 09-security-privacy-review.md
+├─ 10-cutover-rollback-runbook.md
+├─ 11-operations-maintenance.md
+└─ 12-handover-acceptance.md</code></pre>
+<table><tr><th>첫 주 질문</th><th>반드시 받을 답</th></tr><tr><td>누가 소유하는가?</td><td>도메인·호스팅·데이터·유료 라이선스의 법적·실무 owner</td></tr><tr><td>무엇을 절대 잃으면 안 되는가?</td><td>업무 기능, 데이터, 유입 URL, 외부 연동, 메일</td></tr><tr><td>누가 무엇을 운영하는가?</td><td>콘텐츠·회원·문의·CRM·업데이트·장애 역할</td></tr><tr><td>완료를 누가 승인하는가?</td><td>검수 책임자와 객관적 통과 기준</td></tr><tr><td>실패하면 어떻게 돌아가는가?</td><td>백업 위치, 복구 시간, rollback 명령·담당자</td></tr></table>
+</section>
+
+<section id="phpagency-sources">
+<div class="ch-head"><span class="ch-code">SOURCE</span><h2>공식 기준 자료</h2></div>
+<ul>
+  <li><a href="https://hosting.cafe24.com/">Cafe24 호스팅</a> — 상품·관리 범위·지원 기능은 계약 시점의 실제 상품 페이지와 관리 콘솔에서 재확인합니다.</li>
+  <li><a href="https://developer.wordpress.org/advanced-administration/security/hardening/">WordPress Hardening</a> — 업데이트, 권한, 설정, plugin, backup, logging·monitoring 기준.</li>
+  <li><a href="https://developer.wordpress.org/advanced-administration/upgrade/migrating/">WordPress Migrating</a> — URL·서버·도메인 변경과 migration 주의점.</li>
+  <li><a href="https://www.php.net/supported-versions.php">PHP Supported Versions</a> — 신규 구축과 업그레이드 전 공식 지원 기간 확인.</li>
+  <li><a href="https://httpd.apache.org/docs/2.4/howto/htaccess.html">Apache .htaccess Guide</a> — 공유호스팅과 전역 설정의 차이, AllowOverride와 성능·보안 고려.</li>
+</ul>
+</section>
+
+<footer>PHP · WORDPRESS · APACHE · CAFE24 AGENCY DELIVERY HANDBOOK · BUILD TO OPERATE</footer>
+</main></div></body></html>

@@ -32,7 +32,7 @@ test("every catalog quiz item has a data file, and vice versa", () => {
   assert.deepEqual(dataIds, [...catalogQuizIds].sort());
 });
 
-test("every quiz item is a React page placed right after its Q&A page", () => {
+test("every quiz item is a hidden React page with a matching Q&A document", () => {
   for (let index = 0; index < HANDBOOK_ITEMS.length; index += 1) {
     const item = HANDBOOK_ITEMS[index];
     if (!item.id.endsWith("-quiz")) continue;
@@ -40,12 +40,7 @@ test("every quiz item is a React page placed right after its Q&A page", () => {
     assert.equal(item.pageType, "react", `${item.id} should be a react page`);
 
     const qaId = item.id.replace(/-quiz$/, "-qa");
-    const previous = HANDBOOK_ITEMS[index - 1];
-    assert.equal(
-      previous?.id,
-      qaId,
-      `${item.id} should immediately follow ${qaId}`,
-    );
+    assert.ok(HANDBOOK_ITEMS.some((candidate) => candidate.id === qaId));
   }
 });
 

@@ -5,6 +5,7 @@ export function resolveWorkspace(pathname) {
   if (path === "/") return "home";
   if (path === "/core" || path === "/brand/core") return "core";
   if (path === "/dev") return "dev";
+  if (["/english", "/english/word", "/english/writing", "/english/speaking", "/english/portfolio"].includes(path)) return "english";
   if (resolveMoneyPage(path)) return "money";
   if (path === "/brand" || path === "/brand/branding") return "branding";
   if (path === "/brand/web") return "web";
