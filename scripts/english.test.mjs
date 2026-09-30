@@ -23,6 +23,7 @@ test("English learning collections keep their promised density", () => {
     assert.ok(exists, `missing grammar category: ${category}`);
   }
   assert.ok(greWords.length >= 3000);
+  assert.ok(greWords.every(([, korean, english]) => /[가-힣]/.test(korean) && english));
   const speakingPhrases = speakingGroups.flatMap(([, phrases]) => phrases);
   assert.ok(speakingPhrases.length >= 1000);
   assert.equal(new Set(speakingPhrases.map(([english]) => english)).size, speakingPhrases.length);
