@@ -64,7 +64,6 @@
   <a href="#cheattools-ch2"><span class="code">TL-CS-02</span>판단 한 줄</a>
   <a href="#cheattools-ch3"><span class="code">TL-CS-03</span>자주 터지는 것 · 즉시 확인</a>
   <a href="#cheattools-ch4"><span class="code">TL-CS-04</span>장애 증거 1카드</a>
-  <a href="#danger-command-safety-guard"><span class="code">SAFE</span>위험 명령 가드</a>
 </nav>
 <main>
 <header class="hero">
@@ -82,6 +81,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
 <p class="lede">암기용 요약이 아니라 작업 중 5초 안에 찾아 복사할 참조입니다. 도메인마다 핵심 명령·스니펫, 판단 한 줄, 자주 터지는 것, 장애 증거 카드 네 블록으로 정리했습니다. 개념 설명은 개발 핸드북, 면접 답변은 커리어 핸드북이 담당합니다.</p>
 <ul><li>Frontend</li><li>Backend</li><li>Database</li><li>Network</li><li>DevOps</li><li>Linux</li><li>Docker</li><li>Interview</li><li>Tools·Shortcuts·Commands</li></ul>
+
 </section>
 
 <section id="cheat-routes">
@@ -1220,19 +1220,6 @@ npm run</code></pre>
     </table>
     <div class="callout risk"><span class="co-label">복구/중단 기준</span><p>작업 유실이 의심되면 다른 명령을 치기 전에 <b><code>git reflog</code>부터</b> — HEAD 이동 기록이 남아 있는 동안이 복구 골든타임이다. secret이 커밋·push됐다면 history 정리보다 <b>토큰 재발급이 먼저</b>다. 히스토리 재작성(rebase/force)은 공유 브랜치에서 중단하고 merge로 우회한다.</p></div>
   </section>
-<section id="danger-command-safety-guard">
-<div class="ch-head"><span class="ch-code">SAFE</span><h2>위험 명령 안전 가드</h2></div>
-<p class="lede">이 문서의 빠른 복사용 명령 중 <code>rm -rf</code>, <code>kill -9</code>, <code>docker system prune</code>, <code>DROP INDEX</code>, <code>git reset --hard</code>, <code>git push --force</code>처럼 데이터를 지우거나 히스토리를 바꾸는 명령은 아래 가드를 통과하기 전 직접 실행하지 않는다.</p>
-<table>
-<tr><th>단계</th><th>필수 확인</th><th>실행 예</th></tr>
-<tr><td>precheck</td><td>현재 경로, 대상 리소스, 브랜치, 원격 추적 상태, 백업 존재를 먼저 출력한다.</td><td><code>pwd</code>, <code>git status --short</code>, <code>git branch --show-current</code>, <code>docker volume ls</code>, <code>kubectl config current-context</code></td></tr>
-<tr><td>dry-run</td><td>지원되는 명령은 반드시 preview 모드로 영향 범위를 확인한다.</td><td><code>git clean -ndx</code>, <code>docker system df</code>, <code>kubectl diff</code>, SQL transaction 안의 explain/lock 확인</td></tr>
-<tr><td>rollback</td><td>되돌릴 기준점을 실행 전 기록한다.</td><td><code>git stash push</code> 또는 임시 커밋, <code>git reflog</code> 기준점, DB dump/snapshot, 배포 이전 revision</td></tr>
-<tr><td>승인 조건</td><td>공유 브랜치, 운영 DB, 운영 클러스터, 팀원이 쓰는 Docker volume, secret 포함 히스토리는 단독 실행 금지다.</td><td>작업 티켓, 승인자, 실행 시각, 영향 범위, 복구 담당자를 남긴 뒤 실행한다.</td></tr>
-</table>
-<div class="callout warn"><span class="co-label">직접 실행 금지</span><p><code>git reset --hard</code>와 <code>rm -rf</code>는 실행 전 삭제 대상 목록을 사람이 읽을 수 있게 출력하고, <code>git push --force</code>는 공유 브랜치에서 금지한다. 불가피하면 <code>--force-with-lease</code>와 팀 공지를 함께 사용한다. <code>docker system prune --volumes</code>는 named volume의 DB 데이터 삭제 여부를 확인하기 전 실행하지 않는다.</p></div>
-</section>
-
 </main>
 </body>
 </html>

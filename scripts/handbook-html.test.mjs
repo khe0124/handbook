@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  AI_HANDBOOKS,
   AI_NATIVE_TRAINING_HANDBOOKS,
   ARCHIVE_HANDBOOKS,
   AX_HANDBOOKS,
@@ -16,6 +17,7 @@ import {
   DESIGN_HANDBOOKS,
   DESIGN_PRACTICE_HANDBOOKS,
   DEVOPS_HANDBOOKS,
+  ENGINEERING_CS_BASIC_HANDBOOKS,
   ENGINEERING_CONTEXT_HANDBOOKS,
   FRONTEND_HANDBOOKS,
   HANDBOOK_GROUPS,
@@ -655,14 +657,13 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
     [
       "career",
       "carbon",
-      "cs-basic",
       "frontend",
+      "interactive",
       "backend",
       "infra",
       "operations",
       "quiz",
-      "llm",
-      "ai-native",
+      "ai",
       "design",
       "practice",
     ],
@@ -675,24 +676,24 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
 
   const careerGroup = HANDBOOK_GROUPS.find((group) => group.key === "career");
   const carbonGroup = HANDBOOK_GROUPS.find((group) => group.key === "carbon");
-  const csBasicGroup = HANDBOOK_GROUPS.find((group) => group.key === "cs-basic");
   const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
+  const interactiveGroup = HANDBOOK_GROUPS.find((group) => group.key === "interactive");
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
   const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
   const quizGroup = HANDBOOK_GROUPS.find((group) => group.key === "quiz");
-  const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
-  const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
+  const aiGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 181);
+  assert.equal(HANDBOOK_ITEMS.length, 187);
   assert.equal(careerGroup?.items.length, 14);
   assert.equal(carbonGroup?.items.length, 12);
   assert.equal(carbonGroup?.label, "탄소");
   assert.deepEqual(carbonGroup?.items.map((item) => item.id), CARBON_DOMAIN_HANDBOOKS.map((item) => item.id));
-  assert.equal(csBasicGroup?.items.length, 4);
   assert.equal(frontendGroup?.items.length, 11);
+  assert.equal(interactiveGroup?.items.length, 10);
+  assert.equal(interactiveGroup?.label, "Interactive");
   assert.equal(backendGroup?.items.length, 9);
   assert.equal(infraGroup?.items.length, 10);
   assert.equal(infraGroup?.label, "인프라");
@@ -700,13 +701,9 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.equal(operationsGroup?.label, "운영");
   assert.equal(quizGroup?.items.length, 29);
   assert.equal(quizGroup?.label, "퀴즈");
-  assert.equal(llmGroup?.items.length, 12);
-  assert.equal(aiNativeGroup?.items.length, 11);
-  assert.equal(aiNativeGroup?.label, "AI Native");
-  assert.ok(
-    aiNativeGroup?.items.every((item) => item.kind === "AI Native"),
-    "AI Native group item kind should match the shorter label",
-  );
+  assert.equal(aiGroup?.items.length, 23);
+  assert.equal(aiGroup?.label, "AI");
+  assert.deepEqual(aiGroup?.items.map((item) => item.id), AI_HANDBOOKS.map((item) => item.id));
   assert.equal(designGroup?.items.length, 21);
   assert.equal(designGroup?.label, "디자인");
   assert.ok(
@@ -720,15 +717,15 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.ok(labels.includes("00 탄소회계 기능정의서"));
   assert.ok(labels.includes("08 탄소회계 도메인 핸드북"));
   assert.ok(labels.includes("10 VCM 레지스트리"));
-  assert.ok(labels.includes("CS 기본"));
+  assert.ok(!HANDBOOK_GROUPS.some((group) => group.label === "CS 기본"));
   assert.ok(labels.includes("프론트엔드"));
   assert.ok(labels.includes("백엔드"));
   assert.ok(labels.includes("인프라"));
   assert.ok(labels.includes("운영"));
   assert.ok(!HANDBOOK_GROUPS.some((group) => group.label === "운영 확장"));
-  assert.ok(labels.includes("LLM"));
-  assert.ok(labels.includes("AI Native"));
-  assert.ok(labels.includes("08 AX 기반·조직 적용"));
+  assert.ok(labels.includes("AI"));
+  assert.ok(!HANDBOOK_GROUPS.some((group) => group.label === "LLM" || group.label === "AI Native"));
+  assert.ok(labels.includes("20 AX 기반·조직 적용"));
   assert.ok(labels.includes("디자인"));
   assert.ok(labels.includes("실무 도구"));
   assert.ok(labels.includes("00 커리어 방향·일과 개인 작업"));
@@ -766,10 +763,6 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.ok(labels.includes("14 시스템 설계·프로젝트 심층"));
   assert.ok(labels.includes("15 컬처·협업·코드리뷰"));
   assert.ok(labels.includes("16 코딩테스트 패턴"));
-  assert.ok(labels.includes("00 CS 기초와 알고리즘 사고"));
-  assert.ok(labels.includes("01 컴퓨터 시스템·OS·네트워크 기초"));
-  assert.ok(labels.includes("02 프로그래밍 언어·런타임"));
-  assert.ok(labels.includes("03 응용 수학·측정·검증"));
   assert.ok(labels.includes("00 전체 로드맵"));
   assert.ok(labels.includes("01 프론트엔드 핵심"));
   assert.ok(labels.includes("02 프론트엔드 데이터·상태·폼"));
@@ -804,19 +797,19 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   assert.ok(labels.includes("09 Fine-tuning·Customization·Model Routing"));
   assert.ok(labels.includes("10 AI Native 작업 표준·Definition of Done"));
   assert.ok(labels.includes("11 포트폴리오 프로젝트"));
-  assert.ok(labels.includes("00 AI Agent·Loop 업무 흐름"));
-  assert.ok(labels.includes("01 실제 업무과정"));
-  assert.ok(labels.includes("02 요구사항 정의·문제 분해"));
-  assert.ok(labels.includes("03 기획·사용자 시나리오 설계"));
-  assert.ok(labels.includes("04 UX/UI 디자인 검토와 화면 설계"));
-  assert.ok(labels.includes("05 프론트엔드 구현 루프"));
-  assert.ok(labels.includes("06 백엔드·DB·API 설계 루프"));
-  assert.ok(labels.includes("07 테스트·리뷰·릴리스 자동화"));
+  assert.ok(labels.includes("12 AI Agent·Loop 업무 흐름"));
+  assert.ok(labels.includes("13 실제 업무과정"));
+  assert.ok(labels.includes("14 요구사항 정의·문제 분해"));
+  assert.ok(labels.includes("15 기획·사용자 시나리오 설계"));
+  assert.ok(labels.includes("16 UX/UI 디자인 검토와 화면 설계"));
+  assert.ok(labels.includes("17 프론트엔드 구현 루프"));
+  assert.ok(labels.includes("18 백엔드·DB·API 설계 루프"));
+  assert.ok(labels.includes("19 테스트·리뷰·릴리스 자동화"));
   assert.ok(labels.includes("01 인프라·운영 로드맵"));
   assert.ok(labels.includes("00 CI/CD·Artifact·Environment"));
-  assert.ok(labels.includes("08 AX 기반·조직 적용"));
-  assert.ok(labels.includes("09 AX 실행 루프·자동화"));
-  assert.ok(labels.includes("10 AX 확장·거버넌스"));
+  assert.ok(labels.includes("20 AX 기반·조직 적용"));
+  assert.ok(labels.includes("21 AX 실행 루프·자동화"));
+  assert.ok(labels.includes("22 AX 확장·거버넌스"));
   assert.ok(labels.includes("00 디자인 기반·문제-흐름 워크북"));
   assert.ok(labels.includes("01 UX 사고와 문제 정의"));
   assert.ok(labels.includes("12 디자인 핸드오프와 QA"));
@@ -1238,26 +1231,6 @@ test("career bundles avoid repeated generic answer packet boilerplate", async ()
 test("engineering handbook menu splits backend core and architecture into separate items", async () => {
   const bundles = [
     {
-      file: "engineering-cs-foundations-handbook.html",
-      sources: ["CS FOUNDATION SPINE", "INVARIANT PROOF DRILL", "PRODUCTION ALGORITHM DECISION", "BENCHMARK EVIDENCE PACKET"],
-      evidence: ["CS FOUNDATION SPINE", "INVARIANT PROOF DRILL", "PRODUCTION ALGORITHM DECISION", "BENCHMARK EVIDENCE PACKET"],
-    },
-    {
-      file: "engineering-computer-systems-handbook.html",
-      sources: ["COMPUTER SYSTEMS SPINE", "CPU CACHE LOCALITY", "PROCESS THREAD SCHEDULING", "RESOURCE LIMIT PLAYBOOK"],
-      evidence: ["COMPUTER SYSTEMS SPINE", "CPU CACHE LOCALITY", "FILE SOCKET SYSCALL TRACE", "RESOURCE LIMIT PLAYBOOK"],
-    },
-    {
-      file: "engineering-language-runtime-handbook.html",
-      sources: ["LANGUAGE RUNTIME SPINE", "TYPE SYSTEM BOUNDARY", "AST COMPILER PIPELINE", "SERIALIZATION CONTRACT"],
-      evidence: ["LANGUAGE RUNTIME SPINE", "TYPE SYSTEM BOUNDARY", "GC JIT MEMORY MODEL", "SERIALIZATION CONTRACT"],
-    },
-    {
-      file: "engineering-applied-math-measurement-handbook.html",
-      sources: ["APPLIED MEASUREMENT SPINE", "PROBABILITY SAMPLING DRILL", "LATENCY PERCENTILE EVIDENCE", "VERIFICATION EVIDENCE PACKET"],
-      evidence: ["APPLIED MEASUREMENT SPINE", "PROBABILITY SAMPLING DRILL", "VECTOR SIMILARITY BASICS", "VERIFICATION EVIDENCE PACKET"],
-    },
-    {
       file: "engineering-frontend-core-handbook.html",
       sources: ["프론트엔드 개요", "브라우저 동작 원리", "웹접근성"],
       evidence: ["FRONTEND ENGINEERING HANDBOOK", "BROWSER RUNTIME HANDBOOK", "WEB ACCESSIBILITY HANDBOOK"],
@@ -1468,8 +1441,8 @@ test("backend auth security is a dedicated engineering handbook instead of being
   );
 });
 
-test("LLM handbook group covers AI Native developer concepts from fundamentals to portfolio evidence", async () => {
-  const llmGroup = HANDBOOK_GROUPS.find((group) => group.key === "llm");
+test("AI handbook group covers LLM developer concepts from fundamentals to portfolio evidence", async () => {
+  const aiGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai");
   const documents = [
     {
       file: "llm-roadmap-handbook.html",
@@ -1521,7 +1494,7 @@ test("LLM handbook group covers AI Native developer concepts from fundamentals t
     },
   ];
 
-  assert.equal(llmGroup?.items.length, 12);
+  assert.equal(aiGroup?.items.filter((item) => item.id.startsWith("llm-")).length, 12);
   assert.deepEqual(
     LLM_HANDBOOKS.map((item) => item.file),
     documents.map((document) => document.file),
@@ -1562,8 +1535,8 @@ test("LLM handbook documents use concept-depth narratives instead of table-only 
   }
 });
 
-test("AX, design, and practical tool menus group consistent handbook bundles", async () => {
-  const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai-native");
+test("AI, design, and practical tool menus group consistent handbook bundles", async () => {
+  const aiNativeGroup = HANDBOOK_GROUPS.find((group) => group.key === "ai");
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
   const axBundles = [
@@ -1857,7 +1830,7 @@ test("carbon teaching documents stay in the carbon group; career may cite person
   const catalogFiles = new Set(HANDBOOK_ITEMS.map((item) => item.file));
   const carbonFiles = new Set(CARBON_DOMAIN_HANDBOOKS.map((item) => item.file));
   const careerSourceFiles = new Set([...INTERVIEW_HANDBOOKS, ...PERSONAL_HANDBOOKS].map((item) => item.file));
-  const engineeringSourceFiles = new Set([...FRONTEND_HANDBOOKS, ...BACKEND_HANDBOOKS].map((item) => item.file));
+  const engineeringSourceFiles = new Set([...ENGINEERING_CS_BASIC_HANDBOOKS, ...FRONTEND_HANDBOOKS, ...BACKEND_HANDBOOKS].map((item) => item.file));
   const operationsSourceFiles = new Set([...NETWORK_HANDBOOKS, ...DEVOPS_HANDBOOKS].map((item) => item.file));
   const practiceSourceFiles = new Set([...AX_HANDBOOKS, ...DESIGN_HANDBOOKS, ...CHEAT_SHEETS, ...PRACTICAL_GUIDES].map((item) => item.file));
   const extraFiles = publicFiles.filter((file) => file !== "index.html" && !catalogFiles.has(file) && !careerSourceFiles.has(file) && !engineeringSourceFiles.has(file) && !operationsSourceFiles.has(file) && !practiceSourceFiles.has(file));
@@ -2063,7 +2036,7 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /학습 순서/);
   assert.match(homeSource, /메뉴별 목적/);
   const menuPurposeSection = homeSource.match(/<section id="ch5">[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(menuPurposeSection, /CS 기본[\s\S]*프론트엔드[\s\S]*백엔드[\s\S]*인프라[\s\S]*운영[\s\S]*LLM[\s\S]*AI Native[\s\S]*디자인[\s\S]*실무 도구[\s\S]*커리어/);
+  assert.match(menuPurposeSection, /프론트엔드[\s\S]*백엔드[\s\S]*인프라[\s\S]*운영[\s\S]*AI[\s\S]*디자인[\s\S]*실무 도구[\s\S]*커리어/);
   assert.match(menuPurposeSection, /프론트엔드 핵심[\s\S]*프론트엔드 데이터·상태·폼[\s\S]*TypeScript·JavaScript 런타임[\s\S]*프론트엔드 인터랙션[\s\S]*프론트엔드 모션·애니메이션[\s\S]*프론트엔드 그래픽·3D·WebGL[\s\S]*프론트엔드 성능·진단[\s\S]*SEO·AEO·GEO·애널리틱스[\s\S]*프론트엔드 품질·릴리스/);
   assert.match(menuPurposeSection, /백엔드 핵심[\s\S]*백엔드 핵심 Q&A[\s\S]*백엔드 인증·보안[\s\S]*백엔드 인증·보안 Q&A[\s\S]*백엔드 아키텍처[\s\S]*데이터 계층·저장소 심화[\s\S]*런타임 품질·장애대응[\s\S]*플랫폼 도구·운영 기본기[\s\S]*Java·Spring·JPA 내부 동작[\s\S]*Q&A/);
   assert.match(menuPurposeSection, /인프라·운영 로드맵[\s\S]*Docker[\s\S]*Kubernetes[\s\S]*서비스 요청 경로[\s\S]*VPC·라우팅[\s\S]*AWS·Azure 실전 시나리오/);
@@ -2074,15 +2047,10 @@ test("home handbook provides roadmap, sequence, menu purposes, and practical usa
   assert.match(homeSource, /핸드북 사용법/);
   assert.match(homeSource, /실전 루프/);
   assert.match(homeSource, /면접·커리어/);
-  assert.match(homeSource, /CS 기본/);
   assert.match(homeSource, /프론트엔드/);
   assert.match(homeSource, /백엔드/);
-  assert.match(homeSource, /CS 기본기/);
-  assert.match(homeSource, /컴퓨터 시스템/);
-  assert.match(homeSource, /언어 런타임/);
-  assert.match(homeSource, /측정/);
   assert.match(homeSource, /LLM/);
-  assert.match(homeSource, /AI Native Definition of Done/);
+  assert.match(homeSource, /AI Native 작업 표준/);
   assert.match(homeSource, /인프라/);
   assert.match(homeSource, /운영/);
   assert.match(homeSource, /AX 실행 루프/);
@@ -2677,7 +2645,7 @@ test("every handbook item has a rendered practical example", async () => {
     );
     assert.match(
       examplesSource,
-      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|network|devops|ax|design|practical|llm|fundamentals|context)"`),
+      new RegExp(`(?:^|\\n)\\s*(?:"${item.id}"|${item.id}):\\s*"(?:home|interview|personal|backend|frontend|interactive|network|devops|ax|design|practical|llm|fundamentals|context)"`),
       `${item.id} should have a practical example lens`,
     );
   }
@@ -3007,14 +2975,14 @@ test("ax handbook includes harness, loop, verification, and governance guidance"
     readFile("public/handbook/ax-practical-playbook-handbook.html", "utf8"),
   ]);
   const source = docs.join("\n");
-  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "ai-native")
+  const axLabels = HANDBOOK_GROUPS.find((group) => group.key === "ai")
     ?.items.filter((item) => item.id.startsWith("practice-ax-"))
     .map((item) => item.label);
 
   assert.deepEqual(axLabels, [
-    "08 AX 기반·조직 적용",
-    "09 AX 실행 루프·자동화",
-    "10 AX 확장·거버넌스",
+    "20 AX 기반·조직 적용",
+    "21 AX 실행 루프·자동화",
+    "22 AX 확장·거버넌스",
   ]);
   assert.match(source, /Model·Harness·Environment/);
   assert.match(source, /Workflow Mining/);
@@ -3499,6 +3467,24 @@ test("frontend interaction, motion, and graphics are separate senior-depth handb
   assert.match(graphics, /CANVAS WEBGL AUTOMATION GATE/);
 });
 
+test("frontend bundles render exactly one top-level hero", async () => {
+  const bundleFiles = [
+    "engineering-frontend-core-handbook.html",
+    "engineering-frontend-interaction-handbook.html",
+    "engineering-frontend-motion-handbook.html",
+    "engineering-frontend-graphics-3d-handbook.html",
+    "engineering-frontend-performance-handbook.html",
+    "engineering-frontend-quality-handbook.html",
+  ];
+
+  for (const file of bundleFiles) {
+    const source = await readFile(`public/handbook/${file}`, "utf8");
+    const heroCount = source.match(/<header class="hero">/g)?.length ?? 0;
+
+    assert.equal(heroCount, 1, `${file} should render one top-level hero`);
+  }
+});
+
 test("frontend motion handbook includes visual easing comparison", async () => {
   const source = await readFile("public/handbook/engineering-frontend-motion-handbook.html", "utf8");
 
@@ -3959,7 +3945,7 @@ test("snippet cards expose lucide-powered copy buttons", async () => {
 });
 
 test("engineering handbook separates code snippets from semantic explanation cards", async () => {
-  const engineeringFiles = ["cs-basic", "frontend", "backend"].flatMap(
+  const engineeringFiles = ["frontend", "backend"].flatMap(
     (key) => HANDBOOK_GROUPS.find((group) => group.key === key)?.items.filter((item) => item.file).map((item) => item.file) ?? [],
   );
   const sources = await Promise.all(

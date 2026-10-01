@@ -9,6 +9,7 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">UI 레이아웃과 시각 위계</div>
+  <a href="#concept-first"><span class="code">LAYOUT-00</span>처음 읽는 설명</a>
   <a href="#ch1"><span class="code">LAY-01</span>레이아웃의 역할</a>
   <a href="#ch2"><span class="code">LAY-02</span>그리드와 간격</a>
   <a href="#ch3"><span class="code">LAY-03</span>시각 위계</a>
@@ -28,6 +29,20 @@
   <h1>UI 레이아웃과<br>시각 위계</h1>
   <p class="hero-sub">레이아웃은 요소를 배치하는 일이 아니라 사용자의 시선을 설계하는 일입니다. 좋은 화면은 어떤 정보가 중요하고, 어떤 행동을 먼저 해야 하며, 어떤 것은 나중에 봐도 되는지 구조적으로 알려줍니다.</p>
 </header>
+<section id="concept-first">
+<div class="ch-head"><span class="ch-code">LAYOUT-00</span><h2>먼저 이해할 것: 레이아웃은 읽는 순서를 정한다</h2></div>
+<p class="lede">레이아웃은 요소를 빈 공간에 배치하는 일이 아니라 중요도와 관계를 위치·크기·간격·정렬로 설명하는 일입니다. 좋은 화면은 사용자가 3초 안에 현재 상태, 가장 중요한 정보, 다음 행동을 찾게 합니다.</p>
+<h3>판단 순서</h3>
+<ol>
+<li><strong>1.</strong> 사용자가 가장 먼저 알아야 할 한 가지를 고른다.</li>
+<li><strong>2.</strong> 내용을 의미 단위로 묶고 그룹 간 간격을 더 크게 둔다.</li>
+<li><strong>3.</strong> 공통 기준선과 제한된 너비 체계를 정한다.</li>
+<li><strong>4.</strong> 좁은 화면에서 우선순위대로 재배치되는지 확인한다.</li>
+</ol>
+<div class="callout"><span class="co-label">하나의 예로 연결하기</span><p>주문 상세에서 주문번호, 결제 상태, 배송 주소, 취소 버튼을 같은 크기의 카드로 나열하면 모두가 경쟁한다. 상단에는 현재 상태와 핵심 행동을 두고, 금액과 배송은 관련 정보끼리 묶는다. 취소가 가능한 기간에는 행동을 보이되 위험도를 문구와 스타일로 구분한다. 모바일에서는 단순 축소하지 않고 상태 → 행동 → 핵심 요약 → 상세 순으로 다시 쌓는다.</p></div>
+<div class="callout warn"><span class="co-label">다시 설계해야 하는 신호</span><p>모든 카드가 같은 무게를 갖거나, 구분선이 내용보다 먼저 보이거나, 화면이 좁아졌을 때 중요한 행동이 아래로 밀리면 위계가 없는 것이다.</p></div>
+</section>
+
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">LAY-01</span><h2>레이아웃의 역할</h2></div>

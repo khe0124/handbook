@@ -9,6 +9,7 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">사용자 흐름과 태스크 설계</div>
+  <a href="#concept-first"><span class="code">FLOW-00</span>처음 읽는 설명</a>
   <a href="#ch1"><span class="code">FLOW-01</span>Flow의 종류</a>
   <a href="#ch2"><span class="code">FLOW-02</span>Happy path와 예외</a>
   <a href="#ch3"><span class="code">FLOW-03</span>상태 설계</a>
@@ -28,6 +29,20 @@
   <h1>사용자 흐름과<br>태스크 설계</h1>
   <p class="hero-sub">사용자 흐름은 화면 목록이 아니라 목표 달성을 위한 행동의 순서입니다. 좋은 흐름은 다음 행동을 예측 가능하게 하고, 예외 상황에서도 사용자가 길을 잃지 않게 합니다.</p>
 </header>
+<section id="concept-first">
+<div class="ch-head"><span class="ch-code">FLOW-00</span><h2>먼저 이해할 것: 사용자 흐름은 화면 목록이 아니라 상태 변화다</h2></div>
+<p class="lede">사용자 흐름은 시작 조건에서 목표 상태까지 사용자의 행동과 시스템의 반응을 시간 순서로 연결한 것입니다. 화살표로 화면만 잇는 것이 아니라 입력, 검증, 권한, 대기, 실패, 복구 뒤에 무엇이 달라지는지를 기록해야 합니다.</p>
+<h3>판단 순서</h3>
+<ol>
+<li><strong>1.</strong> 시작 조건과 완료 상태를 한 문장으로 정한다.</li>
+<li><strong>2.</strong> 사용자 행동과 시스템 반응을 번갈아 적는다.</li>
+<li><strong>3.</strong> 분기마다 조건과 책임 주체를 쓴다.</li>
+<li><strong>4.</strong> 실패·취소·재접속·중복 실행의 복구 경로를 추가한다.</li>
+</ol>
+<div class="callout"><span class="co-label">하나의 예로 연결하기</span><p>환불 요청은 ‘버튼 → 완료 화면’이 아니다. 주문 선택, 환불 가능 여부 검증, 사유 입력, 예상 금액 확인, 제출, 처리 대기, 승인 또는 거절, 통지까지 이어진다. 네트워크가 끊겼을 때 중복 요청을 막는지, 사용자가 나중에 상태를 어디서 확인하는지도 흐름에 포함한다.</p></div>
+<div class="callout warn"><span class="co-label">다시 설계해야 하는 신호</span><p>모든 분기가 성공 화면으로 끝나거나, 시스템 상태가 적혀 있지 않거나, 실패 뒤 행동이 ‘문의하세요’ 하나뿐이면 구현 가능한 흐름이 아니다.</p></div>
+</section>
+
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">FLOW-01</span><h2>Flow의 종류</h2></div>

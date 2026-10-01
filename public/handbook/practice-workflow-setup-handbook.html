@@ -67,7 +67,6 @@
   <a href="#playbook-ch8"><span class="code">PLAY-08</span>git 사고 복구</a>
   <a href="#playbook-ch9"><span class="code">PLAY-09</span>환경설정·시크릿</a>
   <a href="#playbook-ch10"><span class="code">PLAY-10</span>체크리스트 모음</a>
-  <a href="#practice-output-verification-standards"><span class="code">OUTPUT</span>산출물·검증</a>
 </nav>
 <main>
 <header class="hero">
@@ -85,6 +84,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
 <p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
 <ul><li>풀스택 성장 로드맵</li><li>개발자 FAQ·트러블슈팅</li><li>새 PC 환경 설정</li><li>실무 플레이북</li></ul>
+
 </section>
 
 <section id="doc-roadmap">
@@ -1666,19 +1666,6 @@ lsof -ti :8080 <span class="dim">|</span> xargs kill &nbsp;&nbsp; <span class="d
 <span class="co-label">한 줄 요약</span>
 <p>실무 감각 = <strong>"이게 터지면?"을 미리 묻고, 답을 runbook으로 박제하고, 평소/비상/금지를 분리하는 습관.</strong> 네 DB 리셋 예시가 그 축소판이었다 — 이제 같은 발상을 포트·마이그레이션·배포·git·설정으로 넓히면 된다.</p>
 </div>
-</section>
-
-<section id="practice-output-verification-standards">
-<div class="ch-head"><span class="ch-code">OUTPUT</span><h2>실무 도구 산출물·검증 기준</h2></div>
-<p class="lede">실무 루프와 빌드·릴리스 문서는 따라 한 행동이 남기는 산출물까지 고정해야 한다. 명령을 실행했다는 사실보다 재현 가능한 입력, 결과, 복구 경로가 중요하다.</p>
-<table>
-<tr><th>산출물</th><th>포함할 증거</th><th>자가검수 기준</th></tr>
-<tr><td>작업 루프 기록</td><td>문제 정의, 가설, 실행 명령, 결과 로그, 다음 행동</td><td>다른 사람이 같은 순서로 재현할 수 있다.</td></tr>
-<tr><td>환경 설정 패킷</td><td>OS/런타임 버전, env sample, secret 제외 여부, 설치 확인 명령</td><td>새 장비에서 30분 안에 smoke test까지 도달한다.</td></tr>
-<tr><td>빌드·릴리스 패킷</td><td>변경 범위, test/build 결과, rollback 방법, 승인자</td><td>실패 시 이전 버전으로 돌아가는 명령과 책임자가 명확하다.</td></tr>
-<tr><td>문제 해결 카드</td><td>증상, 원인 후보, 확인 명령, 실제 원인, 재발 방지</td><td>같은 증상이 다시 오면 검색해서 바로 시작할 수 있다.</td></tr>
-</table>
-<div class="callout"><span class="co-label">완료 기준</span><p>각 루프는 빈 템플릿, 채워진 예시, 자가검수 표 중 최소 2개 이상을 연결한다. 복구 절차가 없는 destructive 명령은 실습 기록에 포함하지 않는다.</p></div>
 </section>
 
 <footer>

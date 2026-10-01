@@ -8,11 +8,14 @@ type Section = "word" | "writing" | "speaking" | "portfolio";
 const sections: {id:Section; label:string; description:string}[] = [
   {id:"word",label:"Word",description:"GRE 수준 핵심 어휘"},{id:"writing",label:"Writing",description:"문법 case별 예문"},{id:"speaking",label:"Speaking",description:"Business conversation"},{id:"portfolio",label:"Portfolio",description:"Case study writing"},
 ];
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const wordGroups = alphabet.map(letter => ({
+  letter,
+  words: greWords.map((item,index)=>({item,index})).filter(({item:[word]})=>word.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().startsWith(letter)),
+})).filter(({words})=>words.length);
 
 function WordPage(){
-  const [query,setQuery]=useState("");
-  const words=useMemo(()=>greWords.map((item,index)=>({item,index})).filter(({item:[word,korean,english,phonetic]})=>`${word} ${korean} ${english} ${phonetic}`.toLowerCase().includes(query.toLowerCase())),[query]);
-  return <><h1 className="sr-only" tabIndex={-1} data-route-heading>GRE Word</h1><div className="english-toolbar"><label><span className="sr-only">단어 검색</span><Search size={16} aria-hidden/><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="단어·한국어·영어 뜻 검색"/></label><span>{words.length.toLocaleString()} / {greWords.length.toLocaleString()} words</span></div><ol className="word-grid">{words.map(({item:[word,korean,english,phonetic],index})=><li key={word}><span>{String(index+1).padStart(4,"0")}</span><div><h2>{word}</h2><p className="word-korean">{korean}</p><p className="word-english">{english}</p>{phonetic&&<em>{phonetic}</em>}</div></li>)}</ol>{!words.length&&<p className="english-empty">일치하는 단어가 없습니다.</p>}<p className="word-source">한국어 뜻: <a href="https://github.com/jhseo1211/open-english-korean-dict" target="_blank" rel="noreferrer">Open English–Korean Dictionary</a> (CC BY-SA 4.0) 기반 · 미수록 고급 어휘는 영어 정의를 번역해 보완</p></>;
+  return <><h1 className="sr-only" tabIndex={-1} data-route-heading>GRE Word</h1><div className="english-toolbar word-toolbar"><nav className="word-alphabet" aria-label="단어 알파벳 바로가기">{alphabet.map(letter=>{const available=wordGroups.some(group=>group.letter===letter);return available?<a key={letter} href={`#word-${letter.toLowerCase()}`}>{letter}</a>:<span key={letter} aria-disabled="true">{letter}</span>})}</nav><span>{greWords.length.toLocaleString()} words</span></div><div className="word-groups">{wordGroups.map(({letter,words})=><section id={`word-${letter.toLowerCase()}`} key={letter} aria-labelledby={`word-heading-${letter.toLowerCase()}`}><h2 id={`word-heading-${letter.toLowerCase()}`} className="word-letter">{letter}</h2><ol className="word-grid">{words.map(({item:[word,korean,english,phonetic],index})=><li key={word}><span>{String(index+1).padStart(4,"0")}</span><div><h3>{word}</h3><p className="word-korean">{korean}</p><p className="word-english">{english}</p>{phonetic&&<em>{phonetic}</em>}</div></li>)}</ol></section>)}</div><p className="word-source">한국어 뜻: <a href="https://github.com/jhseo1211/open-english-korean-dict" target="_blank" rel="noreferrer">Open English–Korean Dictionary</a> (CC BY-SA 4.0) 기반 · 미수록 고급 어휘는 영어 정의를 번역해 보완</p></>;
 }
 
 function WritingPage(){

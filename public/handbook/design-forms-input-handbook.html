@@ -9,6 +9,7 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">폼과 입력 경험</div>
+  <a href="#concept-first"><span class="code">FORM-00</span>처음 읽는 설명</a>
   <a href="#ch1"><span class="code">FORM-01</span>폼의 목적</a>
   <a href="#ch2"><span class="code">FORM-02</span>입력 설계</a>
   <a href="#ch3"><span class="code">FORM-03</span>검증과 오류</a>
@@ -28,6 +29,20 @@
   <h1>폼과 입력 경험</h1>
   <p class="hero-sub">폼은 사용자에게 일을 시키는 인터페이스입니다. 좋은 폼은 필요한 데이터만 묻고, 입력 형식을 예측 가능하게 만들며, 오류가 생겼을 때 사용자가 빠르게 고칠 수 있게 합니다.</p>
 </header>
+<section id="concept-first">
+<div class="ch-head"><span class="ch-code">FORM-00</span><h2>먼저 이해할 것: 폼은 데이터를 받는 화면이 아니라 대화다</h2></div>
+<p class="lede">폼은 시스템이 필요한 정보를 사용자가 정확하고 안전하게 제공하도록 돕는 대화입니다. 필드 수를 줄이는 것만으로는 부족하며, 왜 묻는지, 어떤 형식인지, 잘못되면 어떻게 고치는지, 입력이 보존되는지를 설계해야 합니다.</p>
+<h3>판단 순서</h3>
+<ol>
+<li><strong>1.</strong> 업무 결정에 꼭 필요한 값만 남긴다.</li>
+<li><strong>2.</strong> 질문 순서를 사용자의 사고 순서에 맞춘다.</li>
+<li><strong>3.</strong> 입력 전 형식과 제약을 가까이 설명한다.</li>
+<li><strong>4.</strong> 오류 위치·원인·수정법을 함께 보여 주고 입력을 보존한다.</li>
+</ol>
+<div class="callout"><span class="co-label">하나의 예로 연결하기</span><p>사업자 등록 폼에서 번호를 받은 뒤 제출 시점에만 ‘형식 오류’를 보이면 사용자는 무엇을 고칠지 모른다. 라벨은 항상 보이게 하고 허용 형식을 예로 든다. 입력 중에는 명백한 형식만 안내하고, 서버 검증이 필요한 중복 여부는 제출 뒤 구체적으로 알려 준다. 서버 오류가 나도 나머지 입력은 유지한다.</p></div>
+<div class="callout warn"><span class="co-label">다시 설계해야 하는 신호</span><p>placeholder가 라벨을 대신하거나, 오류가 화면 맨 위에만 나오거나, 선택 항목을 필수처럼 보이게 하거나, 실패 후 입력이 사라지면 폼의 책임을 사용자에게 떠넘긴 것이다.</p></div>
+</section>
+
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">FORM-01</span><h2>폼의 목적</h2></div>

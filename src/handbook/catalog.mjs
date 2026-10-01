@@ -758,6 +758,70 @@ export const ENGINEERING_FRONTEND_HANDBOOKS = renumberMenuItems([
   FRONTEND_ROADMAP_PAGE,
   ...FRONTEND_CORE_HANDBOOKS,
 ]);
+
+export const INTERACTIVE_HANDBOOKS = [
+  {
+    id: "interactive-browser-rendering",
+    label: "01 Browser & Rendering",
+    kind: "Interactive Web",
+    file: "interactive-browser-rendering-handbook.html",
+  },
+  {
+    id: "interactive-motion-principles",
+    label: "02 Motion Principles",
+    kind: "Interactive Web",
+    file: "interactive-motion-principles-handbook.html",
+  },
+  {
+    id: "interactive-animation-engineering",
+    label: "03 Animation Engineering",
+    kind: "Interactive Web",
+    file: "interactive-animation-engineering-handbook.html",
+  },
+  {
+    id: "interactive-interaction-engineering",
+    label: "04 Interaction Engineering",
+    kind: "Interactive Web",
+    file: "interactive-interaction-engineering-handbook.html",
+  },
+  {
+    id: "interactive-ux",
+    label: "05 Interactive UX",
+    kind: "Interactive Web",
+    file: "interactive-ux-handbook.html",
+  },
+  {
+    id: "interactive-creative-graphics",
+    label: "06 Creative Graphics",
+    kind: "Interactive Web",
+    file: "interactive-creative-graphics-handbook.html",
+  },
+  {
+    id: "interactive-performance-accessibility",
+    label: "07 Performance & Accessibility",
+    kind: "Interactive Web",
+    file: "interactive-performance-accessibility-handbook.html",
+  },
+  {
+    id: "interactive-architecture",
+    label: "08 Interactive Architecture",
+    kind: "Interactive Web",
+    file: "interactive-architecture-handbook.html",
+  },
+  {
+    id: "interactive-art-direction",
+    label: "09 Art Direction",
+    kind: "Interactive Web",
+    file: "interactive-art-direction-handbook.html",
+  },
+  {
+    id: "interactive-master-practice",
+    label: "10 Master Practice",
+    kind: "Interactive Web",
+    file: "interactive-master-practice-handbook.html",
+  },
+];
+
 export const ENGINEERING_BACKEND_HANDBOOKS = renumberMenuItems([
   BACKEND_ROADMAP_PAGE,
   ...BACKEND_CORE_HANDBOOKS,
@@ -1725,15 +1789,20 @@ export const PRACTICE_HANDBOOKS = [
   },
 ];
 
+export const AI_HANDBOOKS = renumberMenuItems([
+  ...LLM_HANDBOOKS,
+  ...AI_NATIVE_GROUP_HANDBOOKS,
+]);
+
 export const HANDBOOK_GROUPS = [
   { key: "career", label: "커리어", items: CAREER_HANDBOOKS },
   { key: "carbon", label: "탄소", items: CARBON_DOMAIN_HANDBOOKS },
-  { key: "cs-basic", label: "CS 기본", items: ENGINEERING_CS_BASIC_HANDBOOKS },
   {
     key: "frontend",
     label: "프론트엔드",
     items: ENGINEERING_FRONTEND_HANDBOOKS,
   },
+  { key: "interactive", label: "Interactive", items: INTERACTIVE_HANDBOOKS },
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
   {
     key: "infra",
@@ -1746,12 +1815,7 @@ export const HANDBOOK_GROUPS = [
     items: OPERATIONS_GROUP_HANDBOOKS,
   },
   { key: "quiz", label: "퀴즈", items: QUIZ_TOOL_HANDBOOKS },
-  { key: "llm", label: "LLM", items: LLM_HANDBOOKS },
-  {
-    key: "ai-native",
-    label: "AI Native",
-    items: AI_NATIVE_GROUP_HANDBOOKS,
-  },
+  { key: "ai", label: "AI", items: AI_HANDBOOKS },
   { key: "design", label: "디자인", items: DESIGN_PRACTICE_HANDBOOKS },
   { key: "practice", label: "실무 도구", items: PRACTICE_HANDBOOKS },
 ];
@@ -1768,15 +1832,14 @@ export const NON_STUDY_DOC_IDS = new Set(
 export const HANDBOOK_ITEMS = [
   ...HOME_HANDBOOKS,
   ...CARBON_DOMAIN_HANDBOOKS,
-  ...ENGINEERING_CS_BASIC_HANDBOOKS,
   ...ENGINEERING_FRONTEND_HANDBOOKS,
+  ...INTERACTIVE_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
   ...INFRA_MENU_HANDBOOKS,
   ...OPERATIONS_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,
   ...QUIZ_PAGE_HANDBOOKS,
-  ...LLM_HANDBOOKS,
-  ...AI_NATIVE_GROUP_HANDBOOKS,
+  ...AI_HANDBOOKS,
   ...DESIGN_PRACTICE_HANDBOOKS,
   ...PRACTICE_HANDBOOKS,
   ...CAREER_HANDBOOKS,
@@ -1797,6 +1860,11 @@ const markStatus = (items, status, statusNote) =>
   );
 
 export const SOURCE_HANDBOOKS = [
+  ...markStatus(
+    ENGINEERING_CS_BASIC_HANDBOOKS,
+    "source",
+    "CS 기본 공식 메뉴 제거 후 참고 원문으로 보존",
+  ),
   ...markStatus(INTERVIEW_HANDBOOKS, "source", "career-* 번들로 병합"),
   ...markStatus(PERSONAL_HANDBOOKS, "source", "career-* 번들로 병합"),
   ...markStatus(

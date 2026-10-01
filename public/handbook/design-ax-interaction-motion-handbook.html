@@ -8,6 +8,7 @@
 <nav aria-label="목차">
   <div class="nav-brand">DESIGN · AX INTERACTION</div>
   <div class="nav-title">AX 인터랙션·마이크로인터랙션</div>
+  <a href="#concept-first"><span class="code">AX-00</span>처음 읽는 설명</a>
   <a href="#ch1"><span class="code">AXI-01</span>인터랙션 설계 개요</a>
   <a href="#ch2"><span class="code">AXI-02</span>AX 인터랙션 원칙</a>
   <a href="#ch3"><span class="code">AXI-03</span>입력과 응답 패턴</a>
@@ -32,6 +33,20 @@
     <p class="hero-sub">AX 디자인에서 인터랙션은 “AI가 뭔가 하는 느낌”을 꾸미는 장식이 아닙니다. 사용자가 시스템의 상태를 이해하고, AI 결과를 검토하고, 위험한 자동화를 멈추거나 되돌릴 수 있게 만드는 신뢰 설계입니다.</p>
     <div class="hero-meta">FOR : PRODUCT DESIGN · FRONTEND · AX WORKFLOW · UPDATED 2026-06</div>
   </header>
+<section id="concept-first">
+<div class="ch-head"><span class="ch-code">AX-00</span><h2>먼저 이해할 것: AI 인터랙션은 불확실성을 다루는 흐름이다</h2></div>
+<p class="lede">AI 기능은 같은 입력에도 다른 결과를 낼 수 있고 처리 시간이 일정하지 않습니다. 따라서 입력창과 애니메이션만 설계해서는 안 됩니다. 사용자가 요청 범위, 진행 상태, 결과의 근거와 한계, 검토·수정·재실행 방법을 이해하게 해야 합니다.</p>
+<h3>판단 순서</h3>
+<ol>
+<li><strong>1.</strong> AI가 할 일과 하지 못하는 일을 입력 전에 설명한다.</li>
+<li><strong>2.</strong> 대기 중 실제 진행 단계와 취소 가능 여부를 보여 준다.</li>
+<li><strong>3.</strong> 결과의 출처·신뢰도·누락 가능성을 표시한다.</li>
+<li><strong>4.</strong> 수정, 비교, 재생성, 승인, 되돌리기 경로를 제공한다.</li>
+</ol>
+<div class="callout"><span class="co-label">하나의 예로 연결하기</span><p>보고서 요약 기능은 반짝이는 로딩 효과보다 ‘자료 확인 중 → 핵심 항목 추출 중 → 초안 작성 중’처럼 실제 상태를 보여 주는 편이 낫다. 완성된 초안에는 참조 위치를 연결하고, 확신이 낮은 문장을 구분한다. 사용자가 수정한 뒤 최종 승인해야 외부로 전송되도록 경계를 둔다.</p></div>
+<div class="callout warn"><span class="co-label">다시 설계해야 하는 신호</span><p>가짜 진행률을 보여 주거나, 생성 결과를 사실처럼 단정하거나, 재생성만 있고 부분 수정이 없거나, 모션 때문에 내용을 읽기 어려우면 신뢰를 해친다.</p></div>
+</section>
+
 
   <section id="ch1">
     <div class="ch-head"><span class="ch-code">AXI-01</span><h2>인터랙션 설계 개요</h2></div>

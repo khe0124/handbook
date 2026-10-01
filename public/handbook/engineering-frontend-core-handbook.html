@@ -11,6 +11,7 @@
 <div class="nav-brand">ENGINEERING · FRONTEND CORE</div>
   <div class="nav-title">프론트엔드 핵심 · 브라우저와 접근성</div>
   <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#frontend-mental-model"><span class="code">FE-MAP</span>핵심 개념 지도</a>
   <a href="#doc-fe"><span class="code">PART</span>프론트엔드 개요</a>
 <a href="#fe-ch1"><span class="code">FE-01</span>실무 프론트엔드의 역할</a>
   <a href="#fe-ch2"><span class="code">FE-02</span>브라우저를 알아야 하는 이유</a>
@@ -49,7 +50,6 @@
   <a href="#a11y-ch6"><span class="code">A11Y-06</span>컴포넌트별 접근성 패턴</a>
   <a href="#a11y-ch7"><span class="code">A11Y-07</span>검증 루틴</a>
   <a href="#a11y-ch8"><span class="code">A11Y-08</span>접근성 회귀 방지</a>
-  <a href="#quality-evidence-packet"><span class="code">FE-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -59,14 +59,29 @@
     <span>LANG : KO</span>
   </div>
   <h1>프론트엔드 핵심</h1>
-  <p class="hero-sub">프론트엔드 개요, 브라우저 동작 원리, 웹접근성을 하나의 흐름으로 통합한 개발 핸드북입니다.</p>
+  <p class="hero-sub">사용자의 행동을 안정적인 제품 경험으로 바꾸기 위해 프론트엔드가 맡는 책임을 브라우저, 상태, UI 계약, 접근성의 흐름으로 설명합니다.</p>
   <div class="hero-meta">CURATED HANDBOOK PATH · SOURCES : 3 DOCUMENTS · UPDATED 2026-06</div>
 </header>
 
 <section id="bundle-index">
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
-<p class="lede">FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK 원천을 기반으로 역할 판단에서 시작해 브라우저 제약, UI 계약, 접근성 검증으로 이어 읽도록 구성했습니다. 각 파트는 원문을 그대로 나열하지 않고 통합 흐름에서 중복되는 문서 크롬을 제거해 이어 읽기 좋게 정리했습니다.</p>
+<p class="lede">이 문서는 프레임워크 사용법을 나열하지 않습니다. 사용자 행동이 입력되면 브라우저가 이를 처리하고, 애플리케이션 상태와 서버 데이터가 바뀌며, 그 결과가 다시 모든 사용자에게 이해 가능한 UI로 전달되는 과정을 설명합니다. 먼저 프론트엔드의 책임과 설계 기준을 잡고, 브라우저의 실행 제약을 이해한 뒤, 접근성을 구현과 검증의 기본 조건으로 연결해 읽습니다. 통합 원문은 FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK입니다.</p>
 <ul><li>프론트엔드 개요</li><li>브라우저 동작 원리</li><li>웹접근성</li></ul>
+
+</section>
+
+<section id="frontend-mental-model">
+<div class="ch-head"><span class="ch-code">FE-MAP</span><h2>핵심 개념 지도</h2></div>
+<p class="lede">프론트엔드는 화면을 만드는 기술이 아니라 사용자 의도와 원격 시스템 사이의 불확실성을 관리하는 계층입니다. 아래 다섯 질문을 기준으로 보면 상태 관리, 성능, 접근성, 테스트가 서로 떨어진 주제가 아니라 하나의 사용자 흐름을 지키는 장치라는 점이 선명해집니다.</p>
+<table>
+<tr><th>관점</th><th>핵심 질문</th><th>연결되는 개념</th><th>완료 기준</th></tr>
+<tr><td><b>의미</b></td><td>사용자가 무엇을 보고 무엇을 할 수 있는가?</td><td>시맨틱 HTML, 정보 구조, 컴포넌트 계약</td><td>보이는 의미와 DOM의 의미가 일치한다</td></tr>
+<tr><td><b>상태</b></td><td>지금 무엇이 참이며 누가 그 값을 소유하는가?</td><td>로컬·URL·서버 상태, 캐시, 상태 전이</td><td>새로고침·뒤로 가기·동시 수정에도 맥락이 유지된다</td></tr>
+<tr><td><b>시간</b></td><td>사용자는 기다리는 동안 무엇을 알 수 있는가?</td><td>이벤트 루프, 로딩, 낙관적 업데이트, 성능</td><td>지연을 설명하고 입력을 막지 않으며 실패에서 복구할 수 있다</td></tr>
+<tr><td><b>경계</b></td><td>브라우저와 서버, 컴포넌트와 기능의 책임은 어디서 나뉘는가?</td><td>API 계약, 검증, 권한, 아키텍처</td><td>신뢰 경계와 변경 영향 범위가 명확하다</td></tr>
+<tr><td><b>증거</b></td><td>올바르게 동작한다는 사실을 어떻게 확인하는가?</td><td>접근성, 테스트, 관측성, 릴리스</td><td>핵심 흐름과 실패 경로를 재현하고 측정할 수 있다</td></tr>
+</table>
+<div class="callout"><span class="co-label">읽는 순서</span><p><strong>책임을 정의하고 → 상태와 경계를 설계하고 → 브라우저 비용을 측정하고 → 접근성을 포함해 검증합니다.</strong> 새 기능을 검토할 때도 같은 순서를 반복하면 도구 선택보다 먼저 빠진 계약을 찾을 수 있습니다.</p></div>
 </section>
 
 <section id="doc-fe">
@@ -75,7 +90,7 @@
 
 <section id="fe-ch1">
 <div class="ch-head"><span class="ch-code">FE-01</span><h2>실무 프론트엔드의 역할</h2></div>
-<p class="lede">프론트엔드의 성공 기준은 "화면이 보인다"가 아닙니다. 사용자가 의도한 일을 끝낼 수 있고, 실패했을 때 이유를 이해할 수 있으며, 팀이 기능을 계속 바꿔도 UI가 무너지지 않는 것입니다.</p>
+<p class="lede">프론트엔드의 성공 기준은 디자인 시안을 화면에 옮겼는지가 아니라 사용자가 목적을 끝까지 달성할 수 있는지입니다. 정상·대기·빈 결과·오류·권한 없음 상태가 일관되게 설명되고, 기능이 바뀌어도 그 흐름을 안전하게 유지할 수 있어야 합니다.</p>
 <table>
 <tr><th>관점</th><th>기본 구현</th><th>제품 기능</th><th>시스템 품질</th></tr>
 <tr><td><b>성공 기준</b></td><td>디자인과 비슷하게 구현</td><td>상태·에러·권한·빈 화면까지 흐름을 완성</td><td>제품과 팀이 유지 가능한 UI 시스템 설계</td></tr>
@@ -83,15 +98,17 @@
 <tr><td><b>네트워크</b></td><td>API 호출 후 데이터 표시</td><td>로딩·재시도·낙관 업데이트·캐시 무효화 설계</td><td>사용자 경험과 백엔드 계약을 함께 조율</td></tr>
 <tr><td><b>품질</b></td><td>로컬에서 동작 확인</td><td>접근성·성능·테스트·관측가능성을 기본값으로 둠</td><td>품질 기준을 자동화하고 팀의 반복 비용을 줄임</td></tr>
 </table>
+<p>이 세 수준은 직급을 나누는 표가 아니라 한 기능을 어디까지 책임질지 보여주는 범위입니다. 예를 들어 목록 화면을 만든다면 데이터를 표시하는 것만으로는 충분하지 않습니다. 첫 요청이 느릴 때 무엇을 보여줄지, 결과가 없을 때 사용자가 다음에 무엇을 할지, 권한이 바뀌거나 저장이 실패했을 때 기존 입력을 어떻게 보존할지까지 연결되어야 제품 기능이 됩니다.</p>
+<p>여기에 팀 차원의 재사용과 운영을 더하면 시스템 품질의 문제가 됩니다. 같은 로딩·오류·권한 패턴을 화면마다 다시 만들지 않도록 공통 계약을 두고, 테스트와 관측 지표로 회귀를 발견할 수 있게 만드는 단계입니다. 따라서 프론트엔드의 책임은 화면 구현에서 끝나지 않고 <strong>사용자가 작업을 완료하는 흐름과 팀이 그 흐름을 지속적으로 변경할 수 있는 구조</strong>까지 이어집니다.</p>
 <div class="callout">
 <span class="co-label">CORE STANCE</span>
-<p>프론트엔드 실력은 CSS 트릭이나 라이브러리 개수가 아니라 <strong>상태와 사용자 흐름을 안정적으로 설계하는 능력</strong>에서 갈립니다. "클릭하면 모달이 열린다"가 아니라 "권한이 없고, 저장 중이고, 네트워크가 실패하고, 새로고침 후에도 사용자가 맥락을 잃지 않는가"까지 보는 사람이 실무형입니다.</p>
+<p>프론트엔드 역량은 사용한 라이브러리 수보다 <strong>사용자 흐름, 상태의 소유권, 실패 뒤 복구 방법을 명확히 설계하는 능력</strong>에서 드러납니다. “클릭하면 모달이 열린다”에서 끝내지 않고, 권한이 없거나 저장이 지연되고 네트워크가 끊겨도 사용자가 현재 상태와 다음 행동을 이해하는지까지 확인해야 합니다.</p>
 </div>
 </section>
 
 <section id="fe-ch2">
 <div class="ch-head"><span class="ch-code">FE-02</span><h2>브라우저를 알아야 하는 이유</h2></div>
-<p class="lede">React나 Vue 이전에 브라우저가 있습니다. 이 장은 상세 원리 설명이 아니라, 프론트엔드 의사결정이 브라우저 제약과 어떻게 연결되는지 보여주는 입구입니다. 이벤트 루프, 렌더링 파이프라인, 네트워크 waterfall의 상세 진단은 브라우저 동작 원리 파트에서 다룹니다.</p>
+<p class="lede">React와 Vue도 브라우저의 실행·렌더링·네트워크 규칙 안에서 동작합니다. 이벤트 처리와 화면 갱신이 언제 지연되는지 알아야 프레임워크의 재렌더링 문제와 브라우저 자체의 병목을 구분할 수 있습니다. 세부 진단 방법은 뒤의 브라우저 동작 원리에서 다룹니다.</p>
 <table>
 <tr><th>개념</th><th>의미</th><th>실무 영향</th></tr>
 <tr><td><b>이벤트 루프</b></td><td>콜스택, 태스크, 마이크로태스크, 렌더링 기회를 순서대로 처리</td><td>긴 JS 작업은 입력 반응성을 막음. 무거운 계산은 쪼개거나 worker로 이동</td></tr>
@@ -99,6 +116,7 @@
 <tr><td><b>CSSOM</b></td><td>CSS 규칙 트리</td><td>복잡한 selector와 전역 cascade는 예측 비용을 키움</td></tr>
 <tr><td><b>렌더링 파이프라인</b></td><td>style → layout → paint → composite</td><td>transform/opacity는 비교적 싸고, width/height/top 변경은 layout 비용이 큼</td></tr>
 </table>
+<p>이 개념들은 따로 움직이지 않습니다. 사용자가 버튼을 누르면 이벤트 핸들러가 실행되고 상태가 바뀌며, 그 결과 DOM이나 스타일이 변경됩니다. 브라우저는 변경된 부분의 스타일과 배치를 다시 계산한 뒤 픽셀을 그리고 화면에 합성합니다. 어느 단계가 오래 걸려도 사용자는 같은 현상, 즉 “눌렀는데 늦게 반응한다”로 경험합니다.</p>
 <p>실무 성능 최적화는 대부분 "무엇이 비싼지"를 구분하는 일입니다. 렌더링을 줄인다고 무조건 빨라지는 것이 아니라, 사용자가 체감하는 병목이 JS 실행인지, 네트워크인지, layout인지, 이미지인지 먼저 측정해야 합니다.</p>
 <div class="callout warn">
 <span class="co-label">MEASURE FIRST</span>
@@ -108,7 +126,7 @@
 
 <section id="fe-ch3">
 <div class="ch-head"><span class="ch-code">FE-03</span><h2>HTML·CSS UI 계약</h2></div>
-<p class="lede">HTML과 CSS는 화면을 꾸미는 재료가 아니라 브라우저, 보조기술, 테스트가 읽는 UI 계약입니다. 이 장은 기본 요소 선택과 스타일 경계만 다루고, accessible name, ARIA, 키보드 패턴은 웹접근성 파트에서 상세히 다룹니다.</p>
+<p class="lede">HTML은 콘텐츠와 행동의 의미를 정의하고, CSS는 그 의미와 상태를 시각적으로 표현합니다. 브라우저·보조기술·자동화 테스트는 이 구조를 함께 읽으므로 요소 선택과 문서 구조는 곧 UI 계약입니다. 접근 가능한 이름, ARIA, 키보드 상호작용은 웹접근성 파트에서 이어서 다룹니다.</p>
 <table>
 <tr><th>선택</th><th>좋은 기본값</th><th>피해야 할 패턴</th></tr>
 <tr><td>버튼</td><td><code>&lt;button type="button"&gt;</code></td><td><code>&lt;div onClick&gt;</code>에 role만 붙이기</td></tr>
@@ -133,6 +151,8 @@
 <tr><td><b>Compound</b></td><td>Tabs, Dialog, Menu처럼 내부 부품이 협력할 때</td><td>암묵적 규칙이 많아지면 사용법이 어려움</td></tr>
 <tr><td><b>Headless</b></td><td>동작과 UI 스타일을 분리해야 할 때</td><td>접근성 책임이 호출자에게 넘어가지 않게 주의</td></tr>
 </table>
+<p>패턴 이름보다 중요한 것은 컴포넌트가 소유할 결정입니다. 데이터 조회와 권한 판단은 기능 경계에서 맡고, 버튼의 크기나 색처럼 제품 전체에서 반복되는 표현은 디자인 시스템이 맡는 편이 자연스럽습니다. 호출자가 컴포넌트 내부의 세부 동작을 계속 조종해야 한다면 책임 경계가 잘못 나뉘었을 가능성이 큽니다.</p>
+<p>합성은 이런 경계를 유지하면서 변형을 허용하는 방법입니다. 부모는 전체 구조와 공통 규칙을 제공하고, 자식은 각 영역의 콘텐츠를 맡습니다. 반대로 boolean 속성을 계속 추가하면 가능한 조합이 급격히 늘고, 어떤 조합이 유효한지 컴포넌트 내부에서도 설명하기 어려워집니다.</p>
 <div class="semantic-card process-card">
 <span class="sc-label">COMPOSITION OVER CONFIGURATION</span><br>
 <p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>
@@ -154,7 +174,7 @@
 
 <section id="fe-ch5">
 <div class="ch-head"><span class="ch-code">FE-05</span><h2>상태 관리와 서버 상태</h2></div>
-<p class="lede">프론트엔드 상태 문제의 절반은 "상태의 종류"를 구분하지 않아서 생깁니다. 모든 것을 전역 store에 넣는 것은 단순화가 아니라 책임 회피일 때가 많습니다.</p>
+<p class="lede">상태 설계의 출발점은 저장 도구가 아니라 소유권과 생명주기입니다. 누가 값을 바꾸는지, URL로 공유하거나 새로고침 뒤 복원해야 하는지, 서버가 최종 진실인지에 따라 상태의 위치와 동기화 방법이 달라집니다.</p>
 <table>
 <tr><th>상태 종류</th><th>예</th><th>좋은 위치</th></tr>
 <tr><td><b>로컬 UI 상태</b></td><td>모달 열림, 탭 선택, 입력 중 값</td><td><code>useState</code>, 컴포넌트 내부</td></tr>
@@ -163,6 +183,8 @@
 <tr><td><b>서버 상태</b></td><td>사용자 목록, 상세 데이터, 통계</td><td>React Query, SWR 같은 서버 상태 도구</td></tr>
 <tr><td><b>클라이언트 도메인 상태</b></td><td>편집 캔버스, 복잡한 builder 상태</td><td>Zustand, reducer, state machine</td></tr>
 </table>
+<p>상태의 위치는 “몇 군데에서 쓰는가”만으로 정하지 않습니다. 주소를 복사했을 때 같은 화면을 보여줘야 하는 필터는 URL에 있어야 하고, 서버에서 다시 받을 수 있는 목록은 서버 상태 캐시가 맡아야 합니다. 모달의 열림 여부처럼 해당 화면을 떠나면 의미가 사라지는 값은 가능한 가까운 컴포넌트에 두는 편이 좋습니다.</p>
+<p>전역 저장소는 여러 곳에서 접근하기 쉽지만 값의 생성·변경·폐기 시점을 흐리게 만들 수 있습니다. 먼저 상태가 유지되어야 하는 기간과 진실의 원천을 정한 뒤, 그 조건을 만족하는 가장 좁은 위치를 선택합니다. 도구는 이 판단 뒤에 따라옵니다.</p>
 <p>서버 상태는 클라이언트가 소유하지 않습니다. 캐시된 복사본일 뿐입니다. 그래서 stale time, refetch, optimistic update, invalidation 같은 개념이 필요합니다. "전역 store에 API 결과 저장"은 캐시 무효화, 중복 요청, stale data 문제를 직접 떠안겠다는 뜻입니다.</p>
 <h3>상태 설계 실패 모드</h3>
 <table>
@@ -180,7 +202,7 @@
 
 <section id="fe-ch6">
 <div class="ch-head"><span class="ch-code">FE-06</span><h2>API 연동과 에러·로딩 UX</h2></div>
-<p class="lede">API 연동은 fetch 한 줄이 아니라 사용자 흐름 설계입니다. 느림, 실패, 권한 없음, 부분 데이터, 재시도, 중복 제출을 모두 다뤄야 합니다.</p>
+<p class="lede">API 연동은 원격 상태의 불확실성을 UI에 번역하는 일입니다. 응답을 기다리는 동안의 상태, 데이터 없음, 권한 거부, 부분 실패, 재시도 가능 여부, 중복 제출까지 정의해야 하나의 사용자 흐름이 완성됩니다.</p>
 <table>
 <tr><th>상태</th><th>UI 책임</th><th>실무 기준</th></tr>
 <tr><td>loading</td><td>기다릴 이유와 범위를 보여줌</td><td>전체 spinner보다 skeleton, 버튼 단위 pending 선호</td></tr>
@@ -188,6 +210,8 @@
 <tr><td>error</td><td>원인과 회복 방법을 제시</td><td>재시도 가능/불가능, 권한 문제, 입력 문제를 구분</td></tr>
 <tr><td>success</td><td>변경 결과를 사용자가 확인 가능하게 함</td><td>낙관 업데이트 시 실패 rollback 설계</td></tr>
 </table>
+<p>이 네 상태는 화면 전체에 하나씩만 존재하지 않습니다. 페이지의 기존 데이터는 그대로 보이는 동안 저장 버튼만 대기 상태일 수 있고, 일부 패널의 재조회만 실패할 수도 있습니다. 따라서 로딩과 오류의 범위는 요청 범위와 맞아야 합니다. 작은 변경 때문에 화면 전체를 가리면 사용자는 이미 확인하던 정보와 작업 맥락을 잃습니다.</p>
+<p>오류 메시지는 기술적 원인을 그대로 노출하는 대신 사용자가 선택할 행동을 알려야 합니다. 다시 시도하면 되는지, 입력을 고쳐야 하는지, 로그인이나 권한 요청이 필요한지를 구분합니다. 복구할 수 없는 오류라면 입력 내용을 보존하고 문의에 사용할 추적 번호를 제공하는 편이 단순한 “오류가 발생했습니다”보다 유용합니다.</p>
 <p>백엔드 API는 완벽히 안정적이지 않습니다. 프론트엔드는 실패를 감추는 층이 아니라 실패를 사용자가 이해 가능한 행동으로 바꾸는 층입니다. 같은 500이라도 저장 실패, 조회 실패, 결제 실패의 UI는 다릅니다.</p>
 <h3>에러별 UI 책임</h3>
 <table>
@@ -209,13 +233,15 @@
 
 <section id="fe-ch7">
 <div class="ch-head"><span class="ch-code">FE-07</span><h2>폼·검증·사용자 입력</h2></div>
-<p class="lede">폼은 프론트엔드에서 가장 복잡한 상태 기계 중 하나입니다. 입력값, touched, dirty, validation, async validation, submit 상태가 함께 움직입니다.</p>
+<p class="lede">폼은 입력값만 저장하는 화면이 아니라 사용자 입력을 검증된 서버 명령으로 바꾸는 상태 흐름입니다. 초기값과 현재 값, 방문 여부, 검증 결과, 제출 중 상태, 서버의 거절 사유를 구분해야 오류를 정확히 보여주고 입력을 잃지 않습니다.</p>
 <table>
 <tr><th>검증 위치</th><th>역할</th><th>예</th></tr>
 <tr><td>브라우저</td><td>기본 입력 제약</td><td><code>type="email"</code>, <code>required</code>, <code>min</code></td></tr>
 <tr><td>클라이언트</td><td>즉각 피드백과 UX</td><td>형식, 길이, 필수값, UI 전용 규칙</td></tr>
 <tr><td>서버</td><td>최종 진실과 보안</td><td>권한, 중복, 비즈니스 규칙, 데이터 무결성</td></tr>
 </table>
+<p>세 검증은 서로 대체하지 않습니다. 브라우저의 기본 제약은 입력 단계에서 빠른 피드백을 주고, 클라이언트 검증은 여러 필드의 관계나 제품 문구를 다듬습니다. 서버는 클라이언트를 신뢰하지 않고 권한·중복·현재 데이터까지 다시 확인합니다. 같은 규칙이 여러 층에 있더라도 각 층의 목적이 다릅니다.</p>
+<p>제출 실패 뒤의 동작도 폼 계약에 포함됩니다. 사용자가 고칠 수 있는 필드 오류는 해당 입력과 연결하고, 인증 만료나 서버 장애처럼 폼 전체의 문제는 요약 영역에서 설명합니다. 오류가 발생했다고 모든 입력을 초기화하면 사용자가 이미 수행한 작업을 잃으므로, 성공적으로 저장되기 전까지 초안을 보존하는 것이 기본값에 가깝습니다.</p>
 <p>클라이언트 검증은 사용자 경험을 위한 것이고, 서버 검증은 시스템 무결성을 위한 것입니다. 클라이언트에서 막았다고 서버가 믿으면 안 됩니다. 반대로 서버만 믿고 클라이언트 피드백을 없애면 사용자는 실패 이유를 너무 늦게 알게 됩니다.</p>
 <div class="semantic-card decision-card">
 <span class="sc-label">FORM STATE MODEL</span><br>
@@ -238,6 +264,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>상호작용</td><td>긴 main thread 작업</td><td>작업 분할, worker, transition, debounce</td></tr>
 <tr><td>화면 안정성</td><td>이미지·폰트·동적 콘텐츠 크기 변화</td><td>크기 예약, skeleton, font-display 전략</td></tr>
 </table>
+<p>성능 영역은 사용자 여정의 서로 다른 순간을 설명합니다. 초기 로드는 콘텐츠를 보기까지의 시간이고, 상호작용 성능은 클릭이나 입력 뒤 변화가 보이기까지의 시간이며, 화면 안정성은 사용자가 누르려던 요소가 갑자기 이동하지 않는지를 뜻합니다. 한 지표가 좋아도 다른 경험은 나쁠 수 있으므로 “페이지가 빠르다”는 말만으로는 개선 대상을 정할 수 없습니다.</p>
+<p>최적화는 측정값과 원인을 연결한 뒤 적용합니다. 초기 JavaScript가 크다면 코드 분할이 후보지만, 이미 필요한 코드만 내려받고 있다면 네트워크 요청을 더 잘게 나누는 것이 오히려 지연을 늘릴 수 있습니다. 입력 지연이 큰 경우에도 재렌더링 횟수보다 이벤트 핸들러의 동기 작업이나 큰 데이터 변환이 실제 원인일 수 있습니다.</p>
 <p><code>memo</code>, <code>useMemo</code>, <code>useCallback</code>은 성능 마법이 아닙니다. 비교 비용과 복잡도를 추가합니다. 문제가 "같은 props인데 자주 다시 그려진다"일 때 유효하고, 네트워크나 큰 번들이 병목일 때는 효과가 없습니다. <code>React.memo</code>는 props 얕은 비교에만 관여하므로 자신의 state나 context 변경에는 다시 렌더링되고, 객체·배열·함수 props의 identity가 매번 바뀌면 효과가 줄어듭니다.</p>
 <p><code>useTransition</code>은 상태 업데이트를 non-urgent로 표시해 입력 같은 urgent update가 먼저 반영될 수 있게 하는 도구입니다. 무거운 계산을 worker처럼 다른 thread로 옮기는 기능은 아니므로 작업 분할, virtualization, worker 이동과 함께 판단합니다.</p>
 <div class="callout risk">
@@ -273,6 +301,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>E2E</td><td>핵심 사용자 여정</td><td>로그인, 생성, 결제, 권한별 접근</td></tr>
 <tr><td>시각 회귀</td><td>디자인 깨짐</td><td>공통 컴포넌트와 핵심 화면 screenshot diff</td></tr>
 </table>
+<p>테스트 종류는 서로의 상위·하위 관계가 아니라 다른 위험을 잡는 도구입니다. 가격 계산처럼 입력과 출력이 분명한 규칙은 단위 테스트가 빠르고 정확합니다. 반면 저장 버튼을 누른 뒤 오류가 필드에 연결되는지는 컴포넌트와 네트워크 응답을 함께 실행해야 확인할 수 있습니다. 로그인부터 결제 완료까지 여러 시스템이 이어지는 흐름은 적은 수의 E2E 테스트로 보호합니다.</p>
+<p>테스트 범위는 구현 구조가 아니라 실패했을 때의 피해를 기준으로 정합니다. 데이터 손실·결제·권한처럼 위험이 큰 흐름은 정상 경로뿐 아니라 시간 초과, 중복 제출, 권한 거부도 검증합니다. 스타일 변경이 여러 화면에 퍼지는 공통 컴포넌트는 시각 회귀와 키보드 검사를 함께 두는 편이 효과적입니다.</p>
 <p>테스트는 구현 세부가 아니라 계약을 잡아야 합니다. "이 hook이 두 번 호출된다"보다 "사용자가 저장하면 성공 메시지와 새 데이터가 보인다"가 더 오래 갑니다.</p>
 <div class="semantic-card evidence-card">
 <span class="sc-label">TEST DECISION PACKET</span><br>
@@ -546,7 +576,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="browser-ch1">
 <div class="ch-head"><span class="ch-code">BR-01</span><h2>브라우저는 앱 런타임이다</h2></div>
-<p class="lede">브라우저는 HTML 뷰어가 아니라 네트워크, 파서, JS 엔진, 렌더링 엔진, 저장소, 보안 모델을 가진 애플리케이션 런타임입니다.</p>
+<p class="lede">브라우저는 문서를 보여주는 뷰어를 넘어 네트워크 요청, 문서 파싱, JavaScript 실행, 픽셀 렌더링, 저장소, 보안 경계를 함께 관리하는 애플리케이션 런타임입니다. 프론트엔드 코드는 이 실행 환경의 순서와 자원 제약 안에서 동작합니다.</p>
 <table>
 <tr><th>영역</th><th>하는 일</th><th>프론트엔드 판단</th></tr>
 <tr><td>파싱</td><td>HTML/CSS/JS를 읽어 구조화</td><td>blocking script와 critical CSS 관리</td></tr>
@@ -554,12 +584,14 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>렌더링 엔진</td><td>layout, paint, composite</td><td>비싼 스타일 변경과 layout thrash 회피</td></tr>
 <tr><td>네트워크</td><td>요청 우선순위, cache, connection 관리</td><td>preload, lazy loading, cache header 이해</td></tr>
 </table>
+<p>사용자가 페이지를 열면 브라우저는 HTML을 받는 동시에 필요한 CSS·JavaScript·이미지를 발견하고 요청합니다. 파싱 결과로 DOM과 CSSOM을 만들고, JavaScript가 상태나 구조를 바꾸면 렌더링 엔진이 필요한 단계를 다시 수행합니다. 이 과정이 한 번 끝나는 것이 아니라 입력, 네트워크 응답, 애니메이션마다 반복됩니다.</p>
+<p>따라서 프론트엔드 문제는 한 계층만 보고 판단하기 어렵습니다. 버튼 반응이 늦은 원인이 이벤트 핸들러일 수도 있고, 그 뒤 실행된 대규모 레이아웃 계산일 수도 있습니다. 먼저 사용자가 느끼는 증상을 고정한 뒤 Network와 Performance 기록에서 실제로 시간이 쓰인 계층을 찾아야 합니다.</p>
 <div class="callout"><span class="co-label">핵심 관점</span><p>브라우저는 한 번에 모든 일을 하지 않습니다. JS가 main thread를 오래 점유하면 클릭, 스크롤, 렌더링이 밀립니다. UI 성능은 "코드가 빠른가"보다 <strong>브라우저에게 렌더링할 기회를 주는가</strong>에 가깝습니다.</p></div>
 </section>
 
 <section id="browser-ch2">
 <div class="ch-head"><span class="ch-code">BR-02</span><h2>이벤트 루프와 태스크 큐</h2></div>
-<p class="lede">이벤트 루프는 JS 실행, Promise callback, timer, 사용자 입력, 렌더링을 순서대로 조율합니다.</p>
+<p class="lede">JavaScript는 한 번에 하나의 작업을 실행하며, 이벤트 루프는 태스크와 마이크로태스크를 처리한 뒤 브라우저가 화면을 갱신할 기회를 만듭니다. 한 작업이 오래 걸리면 다음 입력 처리와 렌더링도 함께 늦어집니다.</p>
 <div class="semantic-card answer-card"><span class="sc-label">EVENT LOOP ORDER</span><br>1 task 하나 실행 <span class="dim">(click, timer, network callback 등)</span><br><span class="dim">→</span> 2 microtask queue 모두 비움 <span class="dim">(Promise, queueMicrotask)</span><br><span class="dim">→</span> 3 필요하면 style/layout/paint/composite<br><span class="dim">→</span> 4 다음 task 선택</div>
 <div class="glossary">
 <div class="g-row"><div class="g-term"><b>1 · 태스크 실행</b><span>task</span></div><div class="g-def">큐에서 콜백 하나를 꺼내 끝까지 실행한다. 실행이 끝나기 전에는 렌더링도 다른 태스크도 끼어들지 못한다</div></div>
@@ -574,6 +606,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td><code>requestAnimationFrame</code></td><td>다음 repaint 전에 애니메이션 콜백 실행을 요청</td><td>애니메이션과 layout 읽기 타이밍</td></tr>
 <tr><td><code>requestIdleCallback</code></td><td>idle period에 낮은 우선순위 작업 예약. 지원 범위와 timeout 필요성 확인</td><td>필수 작업, 입력 직후 피드백, animation에는 사용하지 않음</td></tr>
 </table>
+<p>중요한 점은 Promise가 “비동기”라는 사실만으로 화면을 양보하지는 않는다는 것입니다. 현재 태스크가 끝난 뒤 마이크로태스크가 모두 처리되어야 렌더링 기회가 오므로, 긴 Promise 연쇄도 화면 갱신을 막을 수 있습니다. 반대로 다음 태스크로 작업을 넘기면 브라우저가 그 사이 입력과 렌더링을 처리할 기회를 얻습니다.</p>
+<p>작업 분할은 전체 계산량을 줄이지 않지만 사용자가 느끼는 멈춤을 줄입니다. 계산 자체가 크고 DOM이 필요 없다면 Web Worker로 옮겨 메인 스레드와 분리하고, 화면 갱신에 필요한 작은 작업이라면 여러 태스크로 나누어 진행 상태를 보여주는 방식을 검토합니다.</p>
 <h3>시간 예산으로 보는 이벤트 루프</h3>
 <table>
 <tr><th>기준</th><th>의미</th><th>실무 판단</th></tr>
@@ -587,7 +621,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="browser-ch3">
 <div class="ch-head"><span class="ch-code">BR-03</span><h2>DOM·CSSOM·렌더 트리</h2></div>
-<p class="lede">화면은 DOM과 CSSOM이 합쳐진 렌더 트리에서 시작합니다. 이후 style, layout, paint, composite를 거쳐 픽셀이 됩니다.</p>
+<p class="lede">브라우저는 DOM과 CSSOM으로 표시할 요소를 결정한 뒤 스타일 계산, 배치, 그리기, 합성 단계를 거쳐 화면을 만듭니다. 어떤 속성을 바꾸느냐에 따라 다시 수행해야 하는 단계와 비용이 달라집니다.</p>
 <table>
 <tr><th>단계</th><th>비용</th><th>대표 트리거</th></tr>
 <tr><td>style</td><td>selector 계산</td><td>class 변경, stylesheet 변경</td></tr>
@@ -595,6 +629,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>paint</td><td>픽셀 그리기</td><td>color, shadow, border 변경</td></tr>
 <tr><td>composite</td><td>레이어 합성</td><td>transform, opacity 변경</td></tr>
 </table>
+<p>DOM이나 스타일이 바뀔 때 모든 단계가 항상 다시 실행되는 것은 아닙니다. 요소의 크기나 위치가 달라지면 주변 요소의 배치까지 영향을 받아 레이아웃과 페인트가 필요할 수 있습니다. 색상만 바뀌면 보통 페인트부터 다시 수행하고, 이미 별도 레이어에 있는 요소의 transform이나 opacity 변화는 합성만으로 처리될 수 있습니다.</p>
+<p>다만 “합성만 일어나면 무조건 빠르다”는 규칙으로 받아들이면 안 됩니다. 레이어를 많이 만들면 메모리와 관리 비용이 증가하고, 큰 영역의 페인트가 다른 병목이 될 수도 있습니다. 어떤 단계가 발생했는지는 속성 이름으로 추측하기보다 Performance와 Layers 기록에서 확인합니다.</p>
 <p>성능이 중요한 애니메이션은 가능한 <code>transform</code>과 <code>opacity</code>를 사용합니다. layout을 유발하는 속성을 매 프레임 바꾸면 60fps를 유지하기 어렵습니다.</p>
 <h3>강제 layout을 만드는 패턴</h3>
 <table>
@@ -695,7 +731,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="a11y-ch1">
 <div class="ch-head"><span class="ch-code">A11Y-01</span><h2>접근성은 UI의 계약</h2></div>
-<p class="lede">화면에 보이는 것과 DOM이 말하는 의미가 다르면 UI는 거짓말을 합니다. 접근성의 출발점은 시각 표현이 아니라 의미 구조입니다.</p>
+<p class="lede">사용자는 마우스와 화면만으로 UI를 경험하지 않습니다. 키보드, 스크린 리더, 확대 화면 등 어떤 방식으로 접근하더라도 요소의 이름·역할·상태와 가능한 행동이 같은 의미로 전달되어야 합니다.</p>
 <table>
 <tr><th>품질</th><th>나쁜 기준</th><th>좋은 기준</th></tr>
 <tr><td>탐색</td><td>마우스로만 가능</td><td>키보드만으로 모든 기능 접근</td></tr>
@@ -703,12 +739,14 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>상태</td><td>색으로만 알림</td><td>텍스트, aria, focus, live region으로 전달</td></tr>
 <tr><td>오류</td><td>빨간 테두리만 표시</td><td>오류 문구와 필드를 연결하고 수정 방법 제공</td></tr>
 </table>
+<p>접근성 계약은 세 부분으로 볼 수 있습니다. 먼저 요소가 무엇인지 알려주는 이름과 역할이 있어야 합니다. 다음으로 선택됨, 펼쳐짐, 오류 같은 현재 상태가 전달되어야 합니다. 마지막으로 키보드나 보조기술로 실제 행동을 완료할 수 있어야 합니다. 셋 중 하나라도 빠지면 화면은 보이지만 일부 사용자에게는 기능이 없는 것과 같습니다.</p>
+<p>예를 들어 휴지통 아이콘이 시각적으로 명확해 보여도 스크린 리더가 “버튼”이라고만 읽으면 무엇을 삭제하는지 알 수 없습니다. 이름을 제공했더라도 키보드로 도달할 수 없거나 삭제 뒤 포커스가 사라지면 작업 흐름은 완성되지 않습니다. 접근성은 속성 하나를 추가하는 일이 아니라 의미와 행동 전체를 맞추는 일입니다.</p>
 <div class="callout"><span class="co-label">PRODUCT QUALITY</span><p>접근성은 법적 요구이기 전에 제품 품질입니다. 키보드 탐색, 명확한 label, 충분한 contrast는 장애 사용자뿐 아니라 빠른 작업자, 모바일 사용자, 임시 장애 상황의 사용자에게도 직접적인 개선입니다.</p></div>
 </section>
 
 <section id="a11y-ch2">
 <div class="ch-head"><span class="ch-code">A11Y-02</span><h2>Semantic HTML</h2></div>
-<p class="lede">가장 좋은 ARIA는 필요 없는 ARIA입니다. 먼저 올바른 HTML 요소를 선택합니다.</p>
+<p class="lede">시맨틱 HTML은 요소의 역할과 기본 키보드 동작을 브라우저와 보조기술에 함께 제공합니다. 같은 의미를 가진 기본 요소가 있다면 ARIA로 다시 구현하기보다 그 요소를 먼저 사용합니다.</p>
 <table>
 <tr><th>상황</th><th>사용</th><th>피함</th></tr>
 <tr><td>액션 실행</td><td><code>&lt;button type="button"&gt;</code></td><td><code>&lt;div onClick&gt;</code></td></tr>
@@ -716,6 +754,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>주요 영역</td><td><code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code></td><td>의미 없는 wrapper 중첩</td></tr>
 <tr><td>제목 구조</td><td>순서 있는 <code>h1</code>~<code>h6</code></td><td>크기 때문에 heading 건너뛰기</td></tr>
 </table>
+<p>기본 요소를 사용하면 브라우저가 제공하는 동작을 함께 얻습니다. 버튼은 키보드 포커스를 받고 Enter와 Space에 반응하며, 폼 안에서는 타입에 따라 제출 동작도 가집니다. <code>div</code>에 클릭 이벤트와 역할만 붙이면 이 동작과 비활성 상태, 고대비 모드 표현을 모두 직접 복원해야 합니다.</p>
+<p>제목과 landmark는 긴 페이지를 순서대로 읽지 않고도 원하는 영역으로 이동하게 하는 탐색 구조입니다. 시각적 크기는 CSS로 조정하고, heading 단계는 문서의 포함 관계에 맞춥니다. 즉 시맨틱 요소는 기본 스타일을 얻기 위한 선택이 아니라 콘텐츠와 행동의 구조를 전달하기 위한 선택입니다.</p>
 <h3>Accessible name 설계</h3>
 <table>
 <tr><th>요소</th><th>좋은 이름</th><th>나쁜 이름</th><th>비고</th></tr>
@@ -728,7 +768,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="a11y-ch3">
 <div class="ch-head"><span class="ch-code">A11Y-03</span><h2>키보드와 focus</h2></div>
-<p class="lede">키보드 사용자는 focus를 통해 UI의 현재 위치를 파악합니다. focus가 사라지거나 예측 불가능하게 이동하면 UI 맥락이 끊깁니다.</p>
+<p class="lede">키보드 사용자는 포커스를 통해 현재 위치와 다음에 조작할 대상을 파악합니다. 이동 순서는 화면의 읽기 흐름과 맞아야 하고, 모달이나 메뉴가 열리고 닫힐 때도 포커스가 사용자의 작업 맥락을 이어야 합니다.</p>
 <table>
 <tr><th>컴포넌트</th><th>키보드 기준</th><th>focus 기준</th></tr>
 <tr><td>Modal</td><td>Esc 닫기, Tab trap</td><td>열릴 때 첫 actionable 또는 제목으로 이동, 닫히면 트리거로 복귀</td></tr>
@@ -736,6 +776,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>Tabs</td><td>Arrow로 tab 이동</td><td>선택된 tab과 panel 연결</td></tr>
 <tr><td>Toast</td><td>키보드 작업 방해 금지</td><td>중요 상태는 live region 고려</td></tr>
 </table>
+<p>포커스는 단순한 테두리가 아니라 사용자의 현재 작업 위치입니다. 새 UI가 열렸다면 포커스를 그 안의 의미 있는 시작점으로 옮기고, 닫혔다면 사용자가 출발했던 요소로 돌려보냅니다. 이 규칙이 없으면 키보드 사용자는 화면은 바뀌었는데 조작 위치는 배경이나 문서 처음에 남는 상황을 겪습니다.</p>
+<p>모든 컴포넌트가 Tab만 사용하는 것도 아닙니다. Tab은 큰 영역과 조작 그룹 사이를 이동하고, 탭·메뉴·라디오 그룹 내부에서는 화살표 키로 항목을 이동하는 패턴이 일반적입니다. 어떤 키를 쓸지는 임의로 정하기보다 해당 역할의 표준 상호작용 패턴을 따릅니다.</p>
 <table>
 <tr><th>패턴</th><th>구현 기준</th><th>주의</th></tr>
 <tr><td>Dialog</td><td><code>role="dialog"</code> 또는 native <code>&lt;dialog&gt;</code>, <code>aria-modal</code>, <code>aria-labelledby</code>, 배경 inert, focus trap/restore</td><td>닫힌 뒤 focus를 원래 트리거로 돌려보내야 함</td></tr>
@@ -750,7 +792,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="a11y-ch4">
 <div class="ch-head"><span class="ch-code">A11Y-04</span><h2>ARIA 사용 기준</h2></div>
-<p class="lede">ARIA는 의미를 보강하는 도구이지 잘못된 HTML을 고치는 만능 패치가 아닙니다.</p>
+<p class="lede">ARIA는 기본 HTML만으로 표현하기 어려운 이름·관계·상태를 보조기술에 전달합니다. 역할을 선언해도 키보드 동작과 상태 관리는 자동으로 생기지 않으므로, 기본 요소를 대체할 때는 그 행동까지 직접 구현해야 합니다.</p>
 <table>
 <tr><th>원칙</th><th>설명</th></tr>
 <tr><td>가능하면 native 사용</td><td>button을 만들 수 있으면 role="button"을 만들지 않음</td></tr>
@@ -766,6 +808,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>동적 메시지를 시각적으로만 표시</td><td>스크린 리더 사용자가 저장 성공·실패를 알 수 없음</td><td>중요 상태는 적절한 live region으로 전달</td></tr>
 <tr><td>복잡한 combobox를 직접 구현</td><td>role, active descendant, 키보드, announcement가 빠지기 쉬움</td><td>검증된 headless 컴포넌트 또는 충분한 테스트를 둠</td></tr>
 </table>
+<p>ARIA 속성은 접근성 트리에 전달되는 정보만 바꿉니다. <code>aria-expanded="true"</code>를 붙여도 패널이 열리지 않고, <code>role="button"</code>을 붙여도 Space 키 처리나 비활성 동작이 생기지 않습니다. 시각적 상태, DOM 상태, ARIA 상태를 같은 상태 값에서 파생해야 서로 어긋나지 않습니다.</p>
+<p>복잡한 위젯에서는 역할 사이의 관계도 중요합니다. 탭은 자신이 제어하는 패널과 연결되어야 하고, 콤보박스는 현재 활성화된 선택지와 목록의 열림 상태를 알려야 합니다. 속성을 개별적으로 암기하기보다 “사용자가 지금 무엇을 조작하며 결과가 어디에 나타나는가”를 접근성 트리에서도 설명할 수 있는지 확인합니다.</p>
 </section>
 
 <section id="a11y-ch5">
@@ -781,6 +825,8 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <tr><td>제출 중</td><td>버튼 pending 상태와 중복 제출 방지</td><td>disabled만 두면 이유를 모를 수 있어 상태 텍스트도 고려</td></tr>
 <tr><td>제출 실패</td><td>첫 오류 필드 또는 오류 요약으로 focus 이동</td><td>화면 위쪽 오류를 보지 못한 채 같은 입력을 반복</td></tr>
 </table>
+<p>오류를 필드와 연결하면 사용자가 입력으로 이동했을 때 무엇이 잘못되었는지 함께 들을 수 있습니다. 여러 오류가 한 번에 발생하면 상단 요약에서 전체 문제를 알려주고 각 오류를 해당 필드로 연결합니다. 첫 오류나 오류 요약으로 포커스를 옮기는 이유는 화면 밖에서 생긴 변화를 사용자가 놓치지 않게 하기 위해서입니다.</p>
+<p>제출 중 상태도 전달 방식이 필요합니다. 버튼을 비활성화하는 것만으로는 왜 눌리지 않는지 알기 어려우므로 “저장 중”처럼 상태를 함께 표시합니다. 완료나 실패 메시지가 포커스를 강제로 빼앗을 필요는 없지만, 중요한 결과는 적절한 live region을 통해 보조기술에도 알려야 합니다.</p>
 <div class="callout"><span class="co-label">ERROR UX</span><p>오류는 "틀렸습니다"가 아니라 "무엇을 어떻게 고쳐야 하는지"를 알려야 합니다. 서버 오류와 클라이언트 검증 오류도 구분합니다.</p></div>
 </section>
 
@@ -802,7 +848,7 @@ serverError <span class="dim">서버가 거절한 이유</span>
 
 <section id="a11y-ch7">
 <div class="ch-head"><span class="ch-code">A11Y-07</span><h2>검증 루틴</h2></div>
-<p class="lede">접근성은 자동 검사만으로 충분하지 않습니다. 패턴을 설계한 뒤 자동화와 수동 키보드 검사를 함께 둡니다.</p>
+<p class="lede">자동 검사는 누락된 이름이나 잘못된 속성 같은 규칙 위반을 빠르게 찾지만, 작업 흐름이 이해 가능한지까지 판단하지 못합니다. 규칙 검사에 키보드·스크린 리더·확대 화면의 실제 사용 검증을 더해야 합니다.</p>
 <table>
 <tr><th>도구</th><th>잡는 것</th><th>못 잡는 것</th></tr>
 <tr><td>Lighthouse</td><td>기본 label, contrast, landmark 일부</td><td>실제 키보드 흐름의 자연스러움</td></tr>
@@ -838,20 +884,6 @@ serverError <span class="dim">서버가 거절한 이유</span>
 <div class="semantic-card process-card"><span class="sc-label">ACCESSIBILITY PR QUESTIONS</span><br>
 <p>이 카드는 절차나 구조를 키워드로만 외우지 않고, 실제 작업에서 어떤 판단 순서와 검증 증거를 함께 봐야 하는지 확인하기 위한 실행 맥락입니다. 각 줄은 구현 단계, 실패 가능성, 리뷰 기준을 같이 점검하라는 신호입니다.</p>1. 이 화면의 주요 작업은 마우스 없이 끝나는가?<br>2. 보이는 label과 보조기술의 이름이 같은 의미인가?<br>3. 오류, 저장 성공, 로딩 상태가 시각 정보 외 경로로도 전달되는가?<br>4. 모달·메뉴·페이지 전환 후 focus 위치가 사용자의 맥락을 보존하는가?<br>5. 자동 검사 통과 외에 수동으로 확인한 핵심 플로우가 있는가?</div>
 </section>
-
-
-<section id="quality-evidence-packet">
-<div class="ch-head"><span class="ch-code">FE-Q</span><h2>품질 보강 패킷</h2></div>
-<p class="lede">프론트엔드 핵심은 개요, 브라우저, 접근성을 한 번에 다루므로 누적 과제의 기준과 evidence를 명확히 남겨야 합니다.</p>
-<table>
-<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
-<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, 대상 브라우저와 접근성 기준을 명시하고 HTML/CSS/상태/API 경계를 함께 검토합니다.</td><td>browser matrix, a11y 기준 메모</td></tr>
-<tr><td>필요 evidence</td><td>상태 행렬, 브라우저 trace, keyboard-only 흐름, 접근성 수동 검증 결과를 누적합니다.</td><td>state matrix, trace, axe 또는 수동 체크 결과</td></tr>
-<tr><td>최소 실습/fixture</td><td>loading/empty/error/success를 가진 폼 화면 1개에 API 실패, focus 이동, 오류 announce를 fixture로 둡니다.</td><td>Story 또는 테스트 시나리오</td></tr>
-<tr><td>완료 기준</td><td>기능 동작, 접근성, 성능, 오류 복구, 관측 이벤트가 같은 PR evidence에 들어가면 통과입니다.</td><td>frontend core quality packet</td></tr>
-</table>
-</section>
-
 </main>
 </div>
 </body>

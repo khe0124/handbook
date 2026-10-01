@@ -122,10 +122,24 @@ const BUNDLES = [
     navBrand: "ENGINEERING · FRONTEND CORE",
     navTitle: "프론트엔드 핵심 · 브라우저와 접근성",
     title: "프론트엔드 핵심",
-    subtitle: "프론트엔드 개요, 브라우저 동작 원리, 웹접근성을 하나의 흐름으로 통합한 개발 핸드북입니다.",
+    subtitle: "사용자의 행동을 안정적인 제품 경험으로 바꾸기 위해 프론트엔드가 맡는 책임을 브라우저, 상태, UI 계약, 접근성의 흐름으로 설명합니다.",
     scope: "FRONTEND · BROWSER · ACCESSIBILITY",
     indexDescription:
-      "FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK 원천을 기반으로 역할 판단에서 시작해 브라우저 제약, UI 계약, 접근성 검증으로 이어 읽도록 구성했습니다. 각 파트는 원문을 그대로 나열하지 않고 통합 흐름에서 중복되는 문서 크롬을 제거해 이어 읽기 좋게 정리했습니다.",
+      "이 문서는 프레임워크 사용법을 나열하지 않습니다. 사용자 행동이 입력되면 브라우저가 이를 처리하고, 애플리케이션 상태와 서버 데이터가 바뀌며, 그 결과가 다시 모든 사용자에게 이해 가능한 UI로 전달되는 과정을 설명합니다. 먼저 프론트엔드의 책임과 설계 기준을 잡고, 브라우저의 실행 제약을 이해한 뒤, 접근성을 구현과 검증의 기본 조건으로 연결해 읽습니다. 통합 원문은 FRONTEND ENGINEERING HANDBOOK, BROWSER RUNTIME HANDBOOK, WEB ACCESSIBILITY HANDBOOK입니다.",
+    afterIndexNav: "  <a href=\"#frontend-mental-model\"><span class=\"code\">FE-MAP</span>핵심 개념 지도</a>",
+    afterIndexHtml: `<section id="frontend-mental-model">
+<div class="ch-head"><span class="ch-code">FE-MAP</span><h2>핵심 개념 지도</h2></div>
+<p class="lede">프론트엔드는 화면을 만드는 기술이 아니라 사용자 의도와 원격 시스템 사이의 불확실성을 관리하는 계층입니다. 아래 다섯 질문을 기준으로 보면 상태 관리, 성능, 접근성, 테스트가 서로 떨어진 주제가 아니라 하나의 사용자 흐름을 지키는 장치라는 점이 선명해집니다.</p>
+<table>
+<tr><th>관점</th><th>핵심 질문</th><th>연결되는 개념</th><th>완료 기준</th></tr>
+<tr><td><b>의미</b></td><td>사용자가 무엇을 보고 무엇을 할 수 있는가?</td><td>시맨틱 HTML, 정보 구조, 컴포넌트 계약</td><td>보이는 의미와 DOM의 의미가 일치한다</td></tr>
+<tr><td><b>상태</b></td><td>지금 무엇이 참이며 누가 그 값을 소유하는가?</td><td>로컬·URL·서버 상태, 캐시, 상태 전이</td><td>새로고침·뒤로 가기·동시 수정에도 맥락이 유지된다</td></tr>
+<tr><td><b>시간</b></td><td>사용자는 기다리는 동안 무엇을 알 수 있는가?</td><td>이벤트 루프, 로딩, 낙관적 업데이트, 성능</td><td>지연을 설명하고 입력을 막지 않으며 실패에서 복구할 수 있다</td></tr>
+<tr><td><b>경계</b></td><td>브라우저와 서버, 컴포넌트와 기능의 책임은 어디서 나뉘는가?</td><td>API 계약, 검증, 권한, 아키텍처</td><td>신뢰 경계와 변경 영향 범위가 명확하다</td></tr>
+<tr><td><b>증거</b></td><td>올바르게 동작한다는 사실을 어떻게 확인하는가?</td><td>접근성, 테스트, 관측성, 릴리스</td><td>핵심 흐름과 실패 경로를 재현하고 측정할 수 있다</td></tr>
+</table>
+<div class="callout"><span class="co-label">읽는 순서</span><p><strong>책임을 정의하고 → 상태와 경계를 설계하고 → 브라우저 비용을 측정하고 → 접근성을 포함해 검증합니다.</strong> 새 기능을 검토할 때도 같은 순서를 반복하면 도구 선택보다 먼저 빠진 계약을 찾을 수 있습니다.</p></div>
+</section>`,
     omitSourceJumpNav: true,
     stripNestedChrome: true,
     sourceNavCode: "PART",
@@ -143,8 +157,17 @@ const BUNDLES = [
     title: "프론트엔드 인터랙션",
     subtitle: "입력 모델, 상태 기계, 좌표계, 접근성, 제품형 조작 패턴, QA 게이트를 인터랙션 엔지니어링 관점으로 정리했습니다.",
     scope: "INPUT MODEL · STATE MACHINE · POINTER · KEYBOARD · ACCESSIBILITY · INTERACTION QA",
+    sourceAttribution: "FRONTEND INTERACTION HANDBOOK",
     indexDescription:
       "목표는 버튼에 효과를 붙이는 개발자가 아니라 사용자 의도, 입력 장치, 상태 전이, focus, 좌표계, undo, 실패 복구를 하나의 계약으로 설계하는 수준급 인터랙션 엔지니어입니다. 이 문서는 인터랙션 계약 → 상태 기계 → 포인터·키보드 생명주기 → 제품형 조작 패턴 → 접근성 수용 기준 → 관측과 QA 게이트 순서로 읽습니다.",
+    afterIndexNav: `  <a href="#interaction-concept-model"><span class="code">MODEL</span>인터랙션 개념 모델</a>`,
+    afterIndexHtml: `<section id="interaction-concept-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>입력에서 결과까지의 인터랙션 모델</h2></div>
+<p class="lede">인터랙션은 이벤트 핸들러 하나가 아니라 사용자의 의도를 해석하고, 유효한 상태 전이로 바꾸고, 그 결과와 복구 방법을 다시 전달하는 과정입니다. 마우스 클릭, 터치, 키보드, 보조기술은 서로 다른 이벤트를 만들지만 제품이 제공하는 행동과 결과는 같아야 합니다.</p>
+<p>먼저 사용자가 무엇을 하려는지 정의합니다. “카드를 드래그한다”는 구현 표현이고, 실제 의도는 순서를 바꾸거나 다른 그룹으로 이동하는 것일 수 있습니다. 의도를 명령으로 모델링하면 포인터 드래그뿐 아니라 키보드 이동, 실행 취소, 자동화 테스트도 같은 상태 전이를 공유할 수 있습니다.</p>
+<p>입력은 시작·갱신·완료·취소의 생명주기를 가집니다. 포인터가 화면 밖으로 나가거나, Esc를 누르거나, 네트워크 저장이 실패하는 경우도 정상적인 전이로 정의해야 합니다. 좌표와 임시 미리보기는 UI가 소유하지만 확정된 순서와 권한은 도메인 또는 서버 상태가 소유합니다.</p>
+<p>좋은 피드백은 현재 상태와 다음 행동을 설명합니다. hover 효과만으로 가능한 행동을 숨기지 않고, 키보드 포커스와 선택 상태를 구분하며, 비동기 작업 중에는 입력이 접수되었는지 알려야 합니다. 완료 기준은 애니메이션이 자연스러운지가 아니라 어떤 입력 방식에서도 의도한 작업을 끝내고 실패에서 돌아올 수 있는지입니다.</p>
+</section>`,
     sources: [
       { prefix: "interaction", label: "인터랙션 설계", file: "frontend-interaction-handbook.html" },
     ],
@@ -157,8 +180,17 @@ const BUNDLES = [
     title: "프론트엔드 모션·애니메이션",
     subtitle: "CSS/WAAPI/JS animation, motion token, FLIP, spring, reduced motion, animation lifecycle, 회귀 방지를 독립 축으로 다룹니다.",
     scope: "CSS MOTION · WAAPI · JS ANIMATION · FLIP · SPRING · REDUCED MOTION · MOTION QA",
+    sourceAttribution: "FRONTEND ANIMATION MOTION HANDBOOK",
     indexDescription:
       "목표는 화려한 화면 전환이 아니라 상태 변화와 공간 관계를 빠르고 안전하게 설명하는 모션 시스템을 설계하는 것입니다. 이 문서는 모션 판단 원칙 → 구현 선택 → motion system → animation lifecycle → FLIP/spring → compositor 진단 → reduced motion release gate 순서로 읽습니다.",
+    afterIndexNav: `  <a href="#motion-concept-model"><span class="code">MODEL</span>모션 개념 모델</a>`,
+    afterIndexHtml: `<section id="motion-concept-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>모션은 상태 변화의 설명이다</h2></div>
+<p class="lede">모션의 목적은 화면을 장식하는 것이 아니라 무엇이 나타났고, 어디에서 왔으며, 사용자 행동으로 무엇이 바뀌었는지를 시간에 따라 설명하는 것입니다. 변화의 의미가 없다면 애니메이션을 추가하지 않는 것이 더 명확할 수 있습니다.</p>
+<p>모션을 설계할 때는 시작 상태와 끝 상태, 변화의 원인, 중간에 입력이 다시 들어왔을 때의 동작을 먼저 정합니다. 요소가 사라지는 중 다시 열리거나 route 전환이 취소될 수 있으므로 애니메이션은 재생뿐 아니라 중단·반전·정리 가능한 생명주기를 가져야 합니다.</p>
+<p>duration은 단순한 취향 값이 아닙니다. 이동 거리, 정보 중요도, 사용 빈도에 따라 사용자가 관계를 이해하는 데 필요한 시간을 정합니다. easing은 속도의 변화를 통해 진입·퇴장·직접 조작의 물리적 성격을 전달합니다. 여러 컴포넌트가 같은 의미에 서로 다른 값을 쓰지 않도록 토큰과 사용 원칙을 함께 둡니다.</p>
+<p>구현 방식은 효과가 아니라 제어권으로 선택합니다. 간단한 상태 전이는 CSS, 명시적인 재생 제어가 필요하면 WAAPI, 매 프레임 입력이나 물리 계산과 결합하면 JavaScript가 적합할 수 있습니다. 어떤 방식이든 reduced motion에서는 핵심 상태 변화가 사라지지 않는 대체 표현을 제공하고, 실제 Performance 기록에서 layout·paint·composite 비용을 확인합니다.</p>
+</section>`,
     sources: [
       { prefix: "motion", label: "애니메이션·모션 시스템", file: "frontend-animation-motion-handbook.html" },
     ],
@@ -171,8 +203,17 @@ const BUNDLES = [
     title: "프론트엔드 그래픽·3D·WebGL",
     subtitle: "SVG, Canvas, WebGL, Three.js, R3F, asset pipeline, GPU 예산, fallback, 자동화 테스트를 그래픽 시스템 관점으로 분리했습니다.",
     scope: "SVG · CANVAS · WEBGL · THREE.JS · R3F · ASSET PIPELINE · GPU BUDGET · FALLBACK",
+    sourceAttribution: "FRONTEND GRAPHICS · 3D HANDBOOK",
     indexDescription:
       "목표는 3D 모델을 띄우는 데서 멈추지 않고 렌더링 기술 선택, GPU 자원 수명, scene state boundary, asset pipeline, context loss, 접근성 fallback, canvas/WebGL 자동화까지 운영 가능한 그래픽 시스템을 설계하는 것입니다.",
+    afterIndexNav: `  <a href="#graphics-concept-model"><span class="code">MODEL</span>그래픽 개념 모델</a>`,
+    afterIndexHtml: `<section id="graphics-concept-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>표현 방식보다 렌더링 모델을 먼저 고른다</h2></div>
+<p class="lede">SVG, Canvas, WebGL은 같은 그림을 만드는 대체 문법이 아닙니다. 브라우저가 장면을 기억하는 방식, 상호작용 대상을 찾는 방식, 프레임마다 다시 그리는 비용이 서로 다릅니다. 콘텐츠 구조와 업데이트 빈도에 맞지 않는 방식을 고르면 작은 기능도 복잡해집니다.</p>
+<p>SVG는 각 도형이 DOM 요소로 남아 의미·스타일·이벤트를 연결하기 쉽습니다. 요소 수가 매우 많거나 매 프레임 모두 바뀌면 DOM 관리 비용이 커집니다. Canvas는 픽셀을 즉시 그린 뒤 객체 구조를 보존하지 않으므로 많은 도형을 빠르게 그릴 수 있지만 hit testing, 접근성, 다시 그리기를 애플리케이션이 책임집니다.</p>
+<p>WebGL은 GPU에 버퍼·텍스처·셰이더를 전달해 대규모 2D·3D 장면을 그립니다. React 컴포넌트가 선언적으로 보여도 실제 자원은 GPU에 만들어지므로 생성과 해제, context loss, 장치 성능, 프레임 예산을 별도로 관리해야 합니다. Three.js와 R3F는 이 모델을 추상화하지만 비용과 자원 수명을 없애지는 않습니다.</p>
+<p>그래픽 기능은 보이는 화면만으로 완료되지 않습니다. asset 크기와 압축, 로딩 중 대체 UI, 저사양 장치의 품질 단계, 키보드와 텍스트 대안, 스크린샷 기반 회귀 검증까지 함께 설계합니다. 기술 선택의 기준은 가장 화려한 결과가 아니라 필요한 의미와 상호작용을 예산 안에서 안정적으로 제공하는가입니다.</p>
+</section>`,
     sources: [
       { prefix: "graphics", label: "그래픽·3D·WebGL", file: "frontend-graphics-3d-handbook.html" },
     ],
@@ -185,6 +226,17 @@ const BUNDLES = [
     title: "프론트엔드 성능과 렌더링",
     subtitle: "번들링, 렌더링, 메모이제이션, 성능 지표, DevTools 진단 문서를 통합했습니다.",
     scope: "RENDERING · PERFORMANCE · DEVTOOLS",
+    sourceAttribution: "RENDERING OPTIMIZATION HANDBOOK · PERFORMANCE METRICS HANDBOOK · DEVTOOLS HANDBOOK",
+    indexDescription:
+      "성능은 기법 목록이 아니라 사용자 행동이 화면 반응으로 돌아오기까지의 경로를 측정하고 가장 큰 지연 원인을 줄이는 작업입니다. 로딩, JavaScript 실행, 렌더링, 네트워크, 메모리를 분리해 관찰한 뒤 변경 전후를 같은 조건에서 비교합니다.",
+    afterIndexNav: `  <a href="#performance-concept-model"><span class="code">MODEL</span>성능 진단 모델</a>`,
+    afterIndexHtml: `<section id="performance-concept-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>증상에서 병목까지 추적하는 성능 모델</h2></div>
+<p class="lede">사용자는 “느리다”고 말하지만 원인은 서버 응답, 리소스 우선순위, JavaScript 실행, 레이아웃, 이미지 디코딩처럼 서로 다른 계층에 있을 수 있습니다. 최적화는 기법을 적용하는 일이 아니라 사용자의 증상을 측정 가능한 구간으로 분해하는 일에서 시작합니다.</p>
+<p>첫 화면 문제는 HTML 응답, 핵심 CSS·폰트·이미지, JavaScript 다운로드와 실행 순서를 waterfall로 봅니다. 입력 지연은 이벤트가 대기한 시간, 핸들러 실행, React 렌더와 commit, 브라우저의 다음 paint까지 나눕니다. 스크롤 끊김은 긴 태스크와 강제 layout, 넓은 paint 영역을 확인합니다.</p>
+<p>React Profiler는 어떤 컴포넌트가 왜 렌더링되었는지를 보여주고, 브라우저 Performance는 React 밖의 JavaScript와 style·layout·paint까지 보여줍니다. Network는 요청 순서와 캐시를, Memory는 해제되지 않은 DOM·listener·GPU 자원을 찾습니다. 도구 이름보다 각 기록이 답하는 질문을 구분해야 합니다.</p>
+<p>개선 전에는 route, 기기, 네트워크, 캐시 상태와 기준값을 고정하고 개선 후 같은 조건을 비교합니다. 실험실 수치는 회귀를 재현하는 데 유용하고 실제 사용자 데이터는 환경별 분포를 보여줍니다. 평균만 보지 않고 p75·p95와 핵심 사용자 경로를 보며, 기능 정확성·접근성·메모리 비용이 악화되지 않았는지도 함께 확인합니다.</p>
+</section>`,
     sources: [
       { prefix: "rendering", label: "번들링·렌더링·메모이제이션", file: "frontend-rendering-optimization-handbook.html" },
       { prefix: "perf", label: "성능과 지표", file: "frontend-performance-metrics-handbook.html" },
@@ -229,6 +281,7 @@ const BUNDLES = [
     title: "프론트엔드 품질과 릴리스",
     subtitle: "프론트엔드 보안, 테스트 전략, 배포 문서를 운영 품질 기준으로 통합했습니다.",
     scope: "SECURITY · TESTING · DEPLOYMENT",
+    sourceAttribution: "FRONTEND SECURITY HANDBOOK · FRONTEND TESTING HANDBOOK · FRONTEND DEPLOYMENT HANDBOOK",
     indexDescription:
       "프론트엔드 품질·릴리스는 보안, 테스트, 배포를 따로 점검하는 목록이 아니라 변경을 안전하게 사용자에게 내보내는 운영 루프입니다. 변경 위험을 분류하고, 그 위험에 맞는 테스트와 보안 리뷰를 선택하고, preview와 CI에서 확인한 뒤, release health window 동안 오류·Web Vitals·API 실패율을 관찰하고 rollback 또는 forward fix를 결정합니다.",
     afterIndexNav: `  <a href="#frontend-release-quality-model"><span class="code">MODEL</span>릴리스 품질 모델</a>
@@ -1053,6 +1106,7 @@ function bundleIntro(bundle) {
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>${isCareer ? "학습 로드맵" : "통합 문서"}</h2></div>
 <p class="lede">${bundle.indexDescription ?? defaultDescription}</p>
 <ul>${sourceList}</ul>
+${bundle.sourceAttribution ? `<p class="dim">통합 원문: ${bundle.sourceAttribution}</p>` : ""}
 </section>`;
 }
 
@@ -1156,7 +1210,11 @@ for (const bundle of BUNDLES) {
       .replace(/<div class="nav-brand">[\s\S]*?<\/div>\s*/g, "")
       .replace(/<div class="nav-title">[\s\S]*?<\/div>\s*/g, "")
       .trim();
-    const shouldStripChrome = isCareer || bundle.stripNestedChrome;
+    // Frontend bundles provide their own top-level hero. Keeping each source
+    // document's hero as well produces repeated page titles and metadata in the
+    // middle of one reading flow. Source handbooks remain unchanged; only the
+    // nested chrome is removed from the generated bundle.
+    const shouldStripChrome = isCareer || bundle.stripNestedChrome || bundle.id.startsWith("engineering-frontend-");
     const main = shouldStripChrome
       ? stripNestedPageChrome(removeDomainSpecificCareerTerms(prefixAnchors(extractRegion(html, "main"), source.prefix)))
       : prefixAnchors(extractRegion(html, "main"), source.prefix);

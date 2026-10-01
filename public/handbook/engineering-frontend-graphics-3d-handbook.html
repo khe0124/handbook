@@ -7,6 +7,7 @@
 <div class="nav-brand">ENGINEERING · FRONTEND GRAPHICS 3D</div>
   <div class="nav-title">프론트엔드 그래픽·3D·WebGL</div>
   <a href="#bundle-index"><span class="code">INDEX</span>통합 문서</a>
+  <a href="#graphics-concept-model"><span class="code">MODEL</span>그래픽 개념 모델</a>
   <a href="#doc-graphics"><span class="code">DOC</span>그래픽·3D·WebGL</a>
   <a href="#doc-graphics"><span class="code">SRC</span>그래픽·3D·WebGL</a>
 <a href="#graphics-ch1"><span class="code">GFX-01</span>SVG·Canvas·WebGL 선택</a>
@@ -28,7 +29,6 @@
   <a href="#graphics-ch17"><span class="code">GFX-17</span>근거 기반 그래픽 예산</a>
   <a href="#graphics-ch18"><span class="code">GFX-18</span>자주 봉착하는 문제와 해결</a>
   <a href="#graphics-ch19"><span class="code">GFX-19</span>렌더링 시스템 운영 모델</a>
-  <a href="#quality-evidence-packet"><span class="code">GFX-Q</span>품질 보강 패킷</a>
 </nav>
 <main>
 <header class="hero">
@@ -46,18 +46,20 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
 <p class="lede">목표는 3D 모델을 띄우는 데서 멈추지 않고 렌더링 기술 선택, GPU 자원 수명, scene state boundary, asset pipeline, context loss, 접근성 fallback, canvas/WebGL 자동화까지 운영 가능한 그래픽 시스템을 설계하는 것입니다.</p>
 <ul><li>그래픽·3D·WebGL</li></ul>
+<p class="dim">통합 원문: FRONTEND GRAPHICS · 3D HANDBOOK</p>
+</section>
+
+<section id="graphics-concept-model">
+<div class="ch-head"><span class="ch-code">MODEL</span><h2>표현 방식보다 렌더링 모델을 먼저 고른다</h2></div>
+<p class="lede">SVG, Canvas, WebGL은 같은 그림을 만드는 대체 문법이 아닙니다. 브라우저가 장면을 기억하는 방식, 상호작용 대상을 찾는 방식, 프레임마다 다시 그리는 비용이 서로 다릅니다. 콘텐츠 구조와 업데이트 빈도에 맞지 않는 방식을 고르면 작은 기능도 복잡해집니다.</p>
+<p>SVG는 각 도형이 DOM 요소로 남아 의미·스타일·이벤트를 연결하기 쉽습니다. 요소 수가 매우 많거나 매 프레임 모두 바뀌면 DOM 관리 비용이 커집니다. Canvas는 픽셀을 즉시 그린 뒤 객체 구조를 보존하지 않으므로 많은 도형을 빠르게 그릴 수 있지만 hit testing, 접근성, 다시 그리기를 애플리케이션이 책임집니다.</p>
+<p>WebGL은 GPU에 버퍼·텍스처·셰이더를 전달해 대규모 2D·3D 장면을 그립니다. React 컴포넌트가 선언적으로 보여도 실제 자원은 GPU에 만들어지므로 생성과 해제, context loss, 장치 성능, 프레임 예산을 별도로 관리해야 합니다. Three.js와 R3F는 이 모델을 추상화하지만 비용과 자원 수명을 없애지는 않습니다.</p>
+<p>그래픽 기능은 보이는 화면만으로 완료되지 않습니다. asset 크기와 압축, 로딩 중 대체 UI, 저사양 장치의 품질 단계, 키보드와 텍스트 대안, 스크린샷 기반 회귀 검증까지 함께 설계합니다. 기술 선택의 기준은 가장 화려한 결과가 아니라 필요한 의미와 상호작용을 예산 안에서 안정적으로 제공하는가입니다.</p>
 </section>
 
 <section id="doc-graphics">
 <div class="ch-head"><span class="ch-code">SOURCE</span><h2>그래픽·3D·WebGL</h2></div>
 </section>
-
-<header class="hero">
-  <div class="hero-serial"><span>DOC : FE-GRAPHICS-3D-V1</span><span>SCOPE : SVG · CANVAS · WEBGL · THREE.JS · QA</span><span>LANG : KO</span></div>
-  <h1>프론트엔드 그래픽·3D·WebGL</h1>
-  <p class="hero-sub">그래픽 기술 선택은 “멋있게 보이는가”가 아니라 <strong>상호작용 밀도, 픽셀 수, 접근성, 성능 예산, 실패 시 대체 경험</strong>을 동시에 만족하는지로 판단합니다.</p>
-  <div class="hero-meta">AUDIENCE : Frontend · Product UI · Creative Engineering · UPDATED 2026-06</div>
-</header>
 
 <section id="graphics-ch1">
 <div class="ch-head"><span class="ch-code">GFX-01</span><h2>SVG·Canvas·WebGL 선택</h2></div>
@@ -556,21 +558,6 @@
 <p>그래픽 PR은 화면 캡처 하나로 승인하지 않습니다. 기술 선택 근거, GPU 자원 수명, R3F state boundary, asset budget, fallback, nonblank/context-loss 자동화까지 있어야 운영 가능한 그래픽 기능입니다.</p>
 </div>
 </section>
-
-
-<section id="quality-evidence-packet">
-<div class="ch-head"><span class="ch-code">GFX-Q</span><h2>품질 보강 패킷</h2></div>
-<p class="lede">그래픽·3D 기능은 데스크톱 캡처 하나로 품질을 판단할 수 없습니다. 실제 기기 행렬과 fallback 증거를 함께 요구합니다.</p>
-<table>
-<tr><th>항목</th><th>보강 기준</th><th>완료 산출물</th></tr>
-<tr><td>기준일/검증 기준</td><td>2026-07-09 기준, iOS Safari, Android 저사양, 내장 GPU, WebGL unavailable 조건을 검증 행렬에 둡니다.</td><td>device/browser/GPU matrix</td></tr>
-<tr><td>필요 evidence</td><td><code>renderer.info</code>, texture size, draw call, context loss/restore, fallback 캡처, nonblank pixel test를 남깁니다.</td><td>graphics evidence folder</td></tr>
-<tr><td>최소 실습/fixture</td><td>asset 404, slow network, context loss, route 왕복 10회를 같은 scene fixture에서 실행합니다.</td><td>재현 로그와 캡처</td></tr>
-<tr><td>완료 기준</td><td>성능 tier, 자원 해제, 접근성 대체 경로, 제품 CTA 유지가 모두 확인되면 통과입니다.</td><td>3D release packet</td></tr>
-</table>
-</section>
-
-<footer>FRONTEND GRAPHICS · 3D HANDBOOK · V1 · 2026-06</footer>
 </main>
 </div>
 </body>

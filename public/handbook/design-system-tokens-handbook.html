@@ -9,6 +9,7 @@
 <div class="shell">
 <nav aria-label="목차">
   <div class="nav-title">디자인 시스템과 토큰</div>
+  <a href="#concept-first"><span class="code">SYS-00</span>처음 읽는 설명</a>
   <a href="#ch1"><span class="code">SYS-01</span>시스템의 목적</a>
   <a href="#ch2"><span class="code">SYS-02</span>토큰 구조</a>
   <a href="#ch3"><span class="code">SYS-03</span>컴포넌트 가이드</a>
@@ -28,6 +29,20 @@
   <h1>디자인 시스템과 토큰</h1>
   <p class="hero-sub">디자인 시스템은 UI 키트가 아니라 제품 경험을 일관되게 만드는 운영 체계입니다. 토큰, 컴포넌트, 문서, 코드, 변경 절차가 함께 있어야 실제 제품 속도와 품질을 높입니다.</p>
 </header>
+<section id="concept-first">
+<div class="ch-head"><span class="ch-code">SYS-00</span><h2>먼저 이해할 것: 디자인 시스템은 공동 의사결정 체계다</h2></div>
+<p class="lede">디자인 시스템은 UI 모음이 아니라 반복되는 결정을 토큰, 컴포넌트, 사용 지침, 변경 절차로 공유하는 운영 체계입니다. 토큰은 값에 의미 있는 이름을 붙여 브랜드와 제품의 변경을 안전하게 전파하는 최소 단위입니다.</p>
+<h3>판단 순서</h3>
+<ol>
+<li><strong>1.</strong> 반복되는 값과 패턴을 사용 맥락별로 수집한다.</li>
+<li><strong>2.</strong> 원시 값과 의미 토큰, 컴포넌트 토큰을 분리한다.</li>
+<li><strong>3.</strong> 컴포넌트 상태와 접근성 기준에 연결한다.</li>
+<li><strong>4.</strong> 변경 영향·버전·마이그레이션·폐기 절차를 운영한다.</li>
+</ol>
+<div class="callout"><span class="co-label">하나의 예로 연결하기</span><p>#2563EB를 화면마다 직접 쓰면 브랜드 색 변경 때 모든 코드를 찾아야 한다. 원시 토큰 blue-600 위에 action-primary-background 같은 의미 토큰을 두면 라이트·다크 테마에서도 역할은 유지된다. 버튼은 이 의미 토큰을 참조하고, 변경 시 대비 검사와 시각 회귀 테스트를 통과해야 한다.</p></div>
+<div class="callout warn"><span class="co-label">다시 설계해야 하는 신호</span><p>토큰 이름이 blue-1처럼 값만 복제하거나, 모든 예외를 새 토큰으로 만들거나, 문서와 코드 버전이 다르면 시스템이 아니라 또 하나의 파일 모음이다.</p></div>
+</section>
+
 
 <section id="ch1">
 <div class="ch-head"><span class="ch-code">SYS-01</span><h2>시스템의 목적</h2></div>

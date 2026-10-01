@@ -42,7 +42,6 @@
   <a href="#axloop-ch4"><span class="code">LOOP-04</span>Stop Condition</a>
   <a href="#axloop-ch5"><span class="code">LOOP-05</span>Failure Attribution</a>
   <a href="#axloop-ch6"><span class="code">LOOP-06</span>Loop Log</a>
-  <a href="#evaluation-readiness-packet"><span class="code">EVAL</span>평가 가능성</a>
 </nav>
 <main>
 <header class="hero">
@@ -60,6 +59,7 @@
 <div class="ch-head"><span class="ch-code">INDEX</span><h2>통합 문서</h2></div>
 <p class="lede">아래 문서들을 한 페이지에서 이어 읽을 수 있도록 구성했습니다. 각 문서의 내부 목차는 왼쪽 목차에서 바로 이동할 수 있습니다.</p>
 <ul><li>AX 업무 자동화 설계</li><li>Context Engineering</li><li>AI Harness Engineering</li><li>Loop Engineering</li></ul>
+
 </section>
 
 <section id="doc-axauto">
@@ -347,7 +347,6 @@ workflow trigger<br>
 <tr><td>audit logger</td><td>입력, 도구 호출, 권한 승인, 검증 결과 기록</td><td>나중에 같은 episode를 재현할 수 있는가</td></tr>
 <tr><td>reviewer handoff</td><td>사람 리뷰어에게 diff, 근거, 위험, 남은 의문 전달</td><td>리뷰어가 빠르게 판단할 증거가 있는가</td></tr>
 </table>
-<div class="callout" data-marker="model-gateway-routing"><span class="co-label">model gateway</span><p>이 박스를 비워두지 마라. 최소한 tier 기준 routing을 고정한다: 깊은 추론이 필요한 변경(권한·마이그레이션·설계)은 reasoning tier, 반복적 patch·요약·분류는 fast tier, 검증/judge는 낮은 temperature의 reasoning tier. 모델 ID는 env로 두고, tier별 <strong>token budget과 timeout, fallback 모델</strong>을 함께 정의해야 gateway가 실제 통제 지점이 된다.</p></div>
 </section>
 
 <section id="axharness-ch3">
@@ -528,20 +527,6 @@ Next: 다음 loop 또는 reviewer handoff
 <span class="co-label">workflow improvement review</span>
 <p>주간 workflow improvement review에서는 성공 사례보다 반복 실패를 먼저 봅니다. unclear spec, missing tests, unsafe permission, context gap이 반복되면 프롬프트가 아니라 업무 정의와 하네스를 고칩니다.</p>
 </div>
-</section>
-
-<section id="evaluation-readiness-packet">
-<div class="ch-head"><span class="ch-code">EVAL</span><h2>평가 가능성 보강 패킷</h2></div>
-<p class="lede">AI Native와 AX 산출물은 좋은 의도보다 재현 가능한 평가 기록으로 닫는다. 아래 패킷이 없으면 데모는 가능해도 운영 승인이나 다음 반복 학습으로 넘기지 않는다.</p>
-<table>
-<tr><th>항목</th><th>기록 기준</th><th>통과 기준</th></tr>
-<tr><td>기준일</td><td>평가 실행일, 사용 모델·도구 버전, 주요 정책·프롬프트 해시, 대상 코드 브랜치를 함께 남긴다.</td><td>기록된 검증일 기준으로 재실행자가 같은 입력과 버전을 확인할 수 있다.</td></tr>
-<tr><td>평가셋/fixture</td><td>정상 케이스, 경계값, 실패 유도 케이스, 보안·개인정보 케이스를 최소 3:1:1:1 비율로 둔다.</td><td>fixture 이름, 입력, 기대 출력, 금지 출력, 소유자가 표로 연결된다.</td></tr>
-<tr><td>metric threshold</td><td>정확도, 누락률, hallucination, latency, cost, human override율 중 문서 목적에 맞는 지표를 고른다.</td><td>핵심 경로 pass 95% 이상, 치명 실패 0건, p95 latency와 비용이 사전 budget 안에 있다.</td></tr>
-<tr><td>승인 기준</td><td>제품 책임자, 엔지니어, 보안/운영 검토자가 보는 evidence packet을 분리한다.</td><td>각 승인자가 pass/fail 사유와 남은 예외를 한 줄로 남긴다.</td></tr>
-<tr><td>rollback 기준</td><td>오답 누적, 비용 초과, 개인정보 노출, 권한 없는 자동 실행을 즉시 중단 조건으로 둔다.</td><td>feature flag, 이전 prompt/model, 수동 처리 루트, 사용자 공지 문안이 준비되어 있다.</td></tr>
-</table>
-<div class="callout"><span class="co-label">제출물</span><p><code>eval-packet.md</code>에는 기준일, fixture 링크, metric threshold, 승인자, rollback 절차를 채운 완성 예시와 빈 템플릿을 함께 둔다. 수치가 없는 평가는 학습 기록으로만 보관하고 운영 판단에 쓰지 않는다.</p></div>
 </section>
 
 <footer>
