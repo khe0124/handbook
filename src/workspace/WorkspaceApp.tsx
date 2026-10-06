@@ -10,6 +10,7 @@ import { CorePage } from "./core/CorePage";
 import { BrandingIndex } from "./brand/BrandingIndex";
 import { BrandingDeliverables, BrandingGuide } from "./brand/BrandingDocuments";
 import { ProductsPage } from "./brand/products/ProductsPage";
+import { CaseStudyPage } from "./brand/CaseStudyPage";
 import { legacyBrandingDestination } from "./brand/navigation.mjs";
 import { MoneyWorkspace } from "./money/MoneyWorkspace";
 import { resolveMoneyPage } from "./money/navigation.mjs";
@@ -53,7 +54,7 @@ export default function WorkspaceApp() {
   }, []);
 
   useEffect(() => {
-    document.title = route === "money" ? `${resolveMoneyPage(pathname)?.lesson?.[1] || "재테크 기초"} — Money Notes` : route === "english" ? `${pathname.split("/")[2] || "Word"} — English Notes` : route === "knou" ? "방통대 — 2026학년도 2학기" : route === "core" ? "Core — Design & Development" : route === "dev" ? "Dev Handbook" : route === "home" ? "Dev / Brand / 재테크 / English / 방통대 — Workspace" : route === "not-found" ? "페이지를 찾을 수 없습니다" : `${route === "products" ? "상품과 가격" : route === "deliverables" ? "산출물 목록" : route === "guide" ? "가이드와 인계" : route === "questionnaire" ? "사전설문" : route === "design-brief" ? "Design Brief" : route === "specs" ? "인쇄 / Web 규격" : route === "web" ? "Web" : "Branding"} — Brand Workspace`;
+    document.title = route === "money" ? `${resolveMoneyPage(pathname)?.lesson?.[1] || "재테크 기초"} — Money Notes` : route === "english" ? `${pathname.split("/")[2] || "Word"} — English Notes` : route === "knou" ? "방통대 — 2026학년도 2학기" : route === "core" ? "Core — Design & Development" : route === "dev" ? "Dev Handbook" : route === "home" ? "Dev / Brand / 재테크 / English / 방통대 — Workspace" : route === "not-found" ? "페이지를 찾을 수 없습니다" : `${route === "products" ? "상품과 가격" : route === "deliverables" ? "산출물 목록" : route === "guide" ? "가이드와 인계" : route === "questionnaire" ? "사전설문" : route === "design-brief" ? "Design Brief" : route === "case-study" ? "Case Study" : route === "specs" ? "인쇄 / Web 규격" : route === "web" ? "Web" : "Branding"} — Brand Workspace`;
     if (pathname !== previousPath.current) {
       window.scrollTo({ top: 0, behavior: "instant" });
       document.querySelector<HTMLElement>("[data-route-heading]")?.focus({ preventScroll: true });
@@ -69,6 +70,7 @@ export default function WorkspaceApp() {
   if (route === "knou") return <KnouWorkspace pathname={pathname} />;
   if (route === "branding") return <BrandingIndex />;
   if (route === "web") return <BrandWorkspace area="web" />;
+  if (route === "case-study") return <CaseStudyPage />;
   if (route === "products") return <ProductsPage />;
   if (route === "deliverables") return <BrandingDeliverables />;
   if (route === "guide") return <BrandingGuide />;

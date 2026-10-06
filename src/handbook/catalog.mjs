@@ -1789,6 +1789,45 @@ export const PRACTICE_HANDBOOKS = [
   },
 ];
 
+export const SECURITY_DELIVERY_HANDBOOKS = [
+  {
+    id: "security-delivery-roadmap",
+    label: "00 배포 보안 로드맵",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+  {
+    id: "security-env-secrets",
+    label: "01 Env·Secret·Key 관리",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+  {
+    id: "security-production-hardening",
+    label: "02 운영 보안 설정",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+  {
+    id: "security-auth-release",
+    label: "03 인증·인가 배포",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+  {
+    id: "security-clinic-php-hosting",
+    label: "04 병의원 PHP 호스팅 운영",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+  {
+    id: "security-damsoyu-aeo-delivery",
+    label: "05 담소유 AEO 다국어 실행 가이드",
+    kind: "보안·배포",
+    pageType: "react",
+  },
+];
+
 export const AI_HANDBOOKS = renumberMenuItems([
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
@@ -1804,6 +1843,7 @@ export const HANDBOOK_GROUPS = [
   },
   { key: "interactive", label: "Interactive", items: INTERACTIVE_HANDBOOKS },
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
+  { key: "security-delivery", label: "보안·배포", items: SECURITY_DELIVERY_HANDBOOKS },
   {
     key: "infra",
     label: "인프라",
@@ -1835,6 +1875,7 @@ export const HANDBOOK_ITEMS = [
   ...ENGINEERING_FRONTEND_HANDBOOKS,
   ...INTERACTIVE_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
+  ...SECURITY_DELIVERY_HANDBOOKS,
   ...INFRA_MENU_HANDBOOKS,
   ...OPERATIONS_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,

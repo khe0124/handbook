@@ -23,34 +23,34 @@ export const dataStructuresContent: Record<string, JiraEntry> = {
     heading("배열의 원리"), paragraph("배열은 같은 자료형의 원소를 연속된 메모리에 저장하고 인덱스로 접근하는 구조다. 시작 주소 base, 원소 크기 w일 때 0부터 시작하는 A[i]의 주소는 base + i×w다. 따라서 임의 접근은 O(1)이지만 중간 삽입·삭제는 뒤 원소 이동 때문에 O(n)이다."),
     table([["연산", "시간", "이유"], ["인덱스 조회/변경", "O(1)", "주소 직접 계산"], ["끝에 추가", "O(1) 상각", "용량이 남은 동적 배열"], ["중간 삽입/삭제", "O(n)", "원소 이동"], ["값 탐색", "O(n)", "정렬되지 않은 경우"]]),
     heading("다차원 배열과 희소행렬"), paragraph("C의 2차원 배열은 행 우선으로 저장한다. 열 수가 cols이면 A[i][j]의 선형 위치는 i×cols+j다. 0이 대부분인 희소행렬은 전체 칸 대신 (행, 열, 값) 삼중항만 저장하면 공간 낭비를 줄일 수 있다."),
-    code("// 4×5 행렬의 A[2][3]\nindex = 2 * 5 + 3;  // 13\naddress = base + index * sizeof(element);"),
+    code("#include <stddef.h>\n\nint matrix[4][5];\nsize_t row = 2, col = 3;\nsize_t index = row * 5 + col;       /* 13 */\nint *address = &matrix[row][col];   /* &matrix[0][0] + 13 */"),
     heading("선택 기준"), bullets("조회가 많고 크기가 비교적 고정이면 배열이 유리하다.", "빈번한 중간 삽입·삭제에는 연결 리스트를 검토한다.", "범위 밖 인덱스와 동적 배열 재할당 비용을 주의한다."), tasks("행 우선 주소를 계산할 수 있다.", "배열의 삽입이 O(n)인 이유를 설명할 수 있다.", "희소행렬을 삼중항으로 표현할 수 있다.")
   ]),
   "TODO-89": entry("3회차 · 스택", [
     heading("LIFO 추상 자료형"), paragraph("스택은 가장 나중에 들어온 원소가 먼저 나가는 LIFO 구조다. top은 현재 맨 위 원소를 가리킨다. push, pop, peek는 배열이나 연결 리스트로 O(1)에 구현할 수 있으며, 빈 스택의 pop은 언더플로, 고정 배열의 꽉 찬 스택 push는 오버플로다."),
     table([["연산", "역할"], ["push(x)", "맨 위에 x 삽입"], ["pop()", "맨 위 원소 제거·반환"], ["peek()", "제거하지 않고 맨 위 확인"], ["isEmpty()", "공백 여부 확인"]]),
     heading("수식과 호출 스택"), paragraph("중위식 a+b*c는 연산자 우선순위가 필요하지만 후위식 abc*+는 왼쪽부터 읽으며 피연산자를 push하고 연산자를 만나 두 값을 pop해 계산한다. 괄호 검사, 실행 취소, DFS, 재귀 함수의 복귀 주소 관리도 같은 원리다."),
-    code("postfix: 2 3 4 * +\npush 2, 3, 4 → '*' => push 12 → '+' => 14"),
+    code("#define STACK_SIZE 100\n\ntypedef struct { int data[STACK_SIZE]; int top; } Stack;\n\nvoid push(Stack *s, int value) { s->data[++s->top] = value; }\nint pop(Stack *s) { return s->data[s->top--]; }\n\nStack stack = {.top = -1};\n/* 후위식 2 3 4 * + 에서 연산자를 만나면 */\nint right = pop(&stack);\nint left = pop(&stack);\npush(&stack, left * right);"),
     heading("시험 포인트"), bullets("후위식 계산에서 먼저 pop한 값은 오른쪽 피연산자다.", "중위→후위 변환 시 피연산자는 즉시 출력하고 연산자는 스택에서 우선순위를 비교한다.", "연결 스택은 용량 제한 대신 노드 할당 실패를 고려한다."), tasks("push/pop 뒤 top 값을 추적할 수 있다.", "중위식을 후위식으로 바꿀 수 있다.", "재귀와 스택의 관계를 설명할 수 있다.")
   ]),
   "TODO-90": entry("4회차 · 큐", [
     heading("FIFO 추상 자료형"), paragraph("큐는 먼저 들어온 원소가 먼저 나가는 FIFO 구조다. rear에서 enqueue하고 front에서 dequeue한다. 운영체제 준비 큐, 프린터 작업, 메시지 버퍼, BFS처럼 도착 순서를 보존해야 하는 곳에 사용한다."),
     table([["구조", "삽입/삭제", "특징"], ["선형 큐", "rear/front 증가", "앞 공간을 재사용하지 못할 수 있음"], ["원형 큐", "인덱스를 나머지 연산으로 순환", "배열 공간 재사용"], ["덱", "양 끝에서 삽입·삭제", "스택과 큐를 모두 표현"]]),
     heading("원형 큐"), paragraph("크기 N의 배열에서 다음 위치는 (index+1)%N이다. 한 칸을 비워 공백과 포화를 구분하면 empty는 front==rear, full은 (rear+1)%N==front다. 이 방식의 실제 저장 용량은 N-1이다."),
-    code("enqueue(x):\n  if ((rear + 1) % N == front) overflow\n  rear = (rear + 1) % N\n  queue[rear] = x\n\ndequeue():\n  if (front == rear) underflow\n  front = (front + 1) % N\n  return queue[front]"),
+    code("#define N 8\n\ntypedef struct { int data[N]; int front, rear; } Queue;\n\nint enqueue(Queue *q, int value) {\n  int next = (q->rear + 1) % N;\n  if (next == q->front) return 0;   /* 포화 */\n  q->rear = next;\n  q->data[q->rear] = value;\n  return 1;\n}\n\nint dequeue(Queue *q, int *out) {\n  if (q->front == q->rear) return 0; /* 공백 */\n  q->front = (q->front + 1) % N;\n  *out = q->data[q->front];\n  return 1;\n}"),
     heading("시험 포인트"), bullets("큐와 스택의 제거 순서를 구분한다.", "원형 큐의 공백·포화 조건을 암기보다 그림으로 추적한다.", "우선순위 큐는 도착 순서가 아니라 우선순위가 높은 항목을 먼저 제거한다."), tasks("enqueue/dequeue 후 front와 rear를 계산할 수 있다.", "원형 큐가 거짓 포화를 해결하는 이유를 설명할 수 있다.", "큐·덱·우선순위 큐의 용도를 구분할 수 있다.")
   ]),
   "TODO-91": entry("5회차 · 연결 리스트", [
     heading("노드와 포인터"), paragraph("연결 리스트는 데이터와 다음 노드 주소를 가진 노드를 비연속 메모리에 배치한다. head는 첫 노드를 가리키며 마지막 next는 NULL이다. 크기를 미리 정할 필요가 없고 위치를 알고 있을 때 연결 변경만으로 삽입·삭제할 수 있지만, i번째 원소 접근에는 앞에서부터 O(n) 순회가 필요하다."),
     table([["비교", "배열", "연결 리스트"], ["메모리", "연속", "비연속 + 포인터"], ["임의 접근", "O(1)", "O(n)"], ["위치 탐색 후 삽입", "O(n)", "O(1)"], ["캐시 지역성", "좋음", "낮음"]]),
-    heading("삽입과 삭제"), code("// prev 뒤에 new 삽입\nnew->next = prev->next;\nprev->next = new;\n\n// prev 다음 노드 삭제\ntarget = prev->next;\nprev->next = target->next;\nfree(target);"),
+    heading("삽입과 삭제"), code("#include <stdlib.h>\n\ntypedef struct Node {\n  int data;\n  struct Node *next;\n} Node;\n\nint insert_after(Node *prev, int value) {\n  Node *node = malloc(sizeof *node);\n  if (node == NULL) return 0;\n  node->data = value;\n  node->next = prev->next;\n  prev->next = node;\n  return 1;\n}\n\nvoid erase_after(Node *prev) {\n  Node *target = prev->next;\n  if (target == NULL) return;\n  prev->next = target->next;\n  free(target);\n}"),
     paragraph("연결 순서를 바꾸기 전에 필요한 주소를 잃지 않는 것이 핵심이다. 빈 리스트, 첫 노드, 마지막 노드 삭제를 별도 경계 조건으로 확인하고 C에서는 malloc 결과, NULL 역참조, free 이후 사용, 메모리 누수를 점검한다."),
     heading("시험 포인트"), bullets("삽입은 새 노드의 next를 먼저 연결한 뒤 이전 노드를 바꾼다.", "삭제 대상의 이전 노드를 알아야 단일 연결 리스트에서 O(1) 삭제가 가능하다.", "헤드 노드를 데이터 없는 더미 노드로 두면 경계 처리가 단순해진다."), tasks("노드 삽입·삭제 포인터 변경 순서를 그릴 수 있다.", "배열과 연결 리스트의 장단점을 비교할 수 있다.", "메모리 누수와 댕글링 포인터를 설명할 수 있다.")
   ]),
   "TODO-92": entry("6회차 · 연결 리스트의 응용", [
     heading("변형 구조"), table([["구조", "포인터", "장점"], ["원형 단일 리스트", "마지막 next가 첫 노드", "끝에서 다시 처음으로 순회"], ["이중 리스트", "prev와 next", "양방향 순회·현재 노드 O(1) 삭제"], ["원형 이중 리스트", "양방향 원형 연결", "덱·캐시 목록 구현에 편리"]]),
     paragraph("원형 리스트는 NULL을 만날 때까지가 아니라 시작 노드로 돌아왔는지를 종료 조건으로 삼는다. 이중 리스트는 포인터 공간을 더 쓰지만 이전 노드를 찾는 순회를 없앤다. 헤드 더미 노드를 원형으로 연결하면 빈 리스트도 head->next==head로 표현할 수 있다."),
-    heading("이중 리스트 삽입"), code("// a와 b 사이에 x 삽입\nx->prev = a; x->next = b;\na->next = x; b->prev = x;"),
+    heading("이중 리스트 삽입"), code("typedef struct DNode {\n  int data;\n  struct DNode *prev, *next;\n} DNode;\n\nvoid insert_between(DNode *left, DNode *right, DNode *node) {\n  node->prev = left;\n  node->next = right;\n  left->next = node;\n  right->prev = node;\n}"),
     heading("응용"), bullets("다항식: 계수와 지수를 노드로 저장하고 지수 순으로 병합한다.", "희소행렬: 0이 아닌 원소를 행·열 링크로 연결한다.", "LRU 캐시: 해시 테이블과 이중 연결 리스트를 결합해 탐색과 순서 변경을 O(1)에 처리한다.", "라운드 로빈 스케줄링: 원형 리스트로 작업을 반복 순회한다."),
     heading("시험 포인트"), bullets("원형 리스트의 종료 조건을 NULL로 쓰지 않는다.", "이중 리스트 삭제 시 앞·뒤 링크를 모두 갱신한다.", "구조가 복잡할수록 연산은 편해지지만 메모리와 불변식 관리 비용이 늘어난다."), tasks("단일·원형·이중 리스트를 비교할 수 있다.", "이중 리스트 삽입의 네 포인터 연결을 추적할 수 있다.", "응용 문제에 적절한 리스트 형태를 고를 수 있다.")
   ]),
@@ -59,21 +59,21 @@ export const dataStructuresContent: Record<string, JiraEntry> = {
     heading("이진 트리"), table([["종류", "조건"], ["전 이진 트리", "각 노드의 자식이 0개 또는 2개"], ["포화 이진 트리", "모든 레벨이 가득 참"], ["완전 이진 트리", "마지막 레벨만 덜 찰 수 있고 왼쪽부터 채움"]]),
     paragraph("레벨 0부터 시작하면 레벨 i의 최대 노드는 2^i, 높이 h인 포화 이진 트리의 최대 노드는 2^(h+1)-1이다. 완전 이진 트리는 배열 표현이 효율적이며 1번 인덱스 기준 부모 i/2, 왼쪽 2i, 오른쪽 2i+1이다."),
     heading("순회"), bullets("전위: 루트→왼쪽→오른쪽. 트리 복사·구조 출력에 적합", "중위: 왼쪽→루트→오른쪽. BST에서 오름차순", "후위: 왼쪽→오른쪽→루트. 트리 삭제·수식 계산", "레벨 순회: 큐를 사용해 가까운 레벨부터 방문"),
-    code("preorder(n): visit(n); preorder(n.left); preorder(n.right)\ninorder(n): inorder(n.left); visit(n); inorder(n.right)\npostorder(n): postorder(n.left); postorder(n.right); visit(n)"),
+    code("#include <stdio.h>\n\ntypedef struct TreeNode {\n  int key;\n  struct TreeNode *left, *right;\n} TreeNode;\n\nvoid preorder(const TreeNode *node) {\n  if (node == NULL) return;\n  printf(\"%d \", node->key);\n  preorder(node->left);\n  preorder(node->right);\n}\n\nvoid inorder(const TreeNode *node) {\n  if (node == NULL) return;\n  inorder(node->left);\n  printf(\"%d \", node->key);\n  inorder(node->right);\n}\n\nvoid postorder(const TreeNode *node) {\n  if (node == NULL) return;\n  postorder(node->left);\n  postorder(node->right);\n  printf(\"%d \", node->key);\n}"),
     tasks("트리 용어를 그림에서 식별할 수 있다.", "주어진 트리의 네 순회 결과를 구할 수 있다.", "완전·포화·전 이진 트리를 구분할 수 있다.")
   ]),
   "TODO-94": entry("8회차 · 확장된 트리 구조 (Ⅰ)", [
     heading("스레드 이진 트리"), paragraph("연결 이진 트리에는 비어 있는 자식 포인터가 많다. 스레드 트리는 이 NULL 포인터에 순회 순서의 선행자나 후속자 주소를 저장해 재귀나 보조 스택 없이 순회한다. 포인터가 실제 자식인지 스레드인지 구분하는 태그 비트가 필요하다."),
     table([["필드", "의미"], ["left/right", "자식 또는 스레드 주소"], ["ltag=0 / rtag=0", "실제 자식 링크"], ["ltag=1", "중위 선행자 스레드"], ["rtag=1", "중위 후속자 스레드"]]),
     heading("중위 후속자 찾기"), paragraph("현재 노드의 rtag가 스레드이면 right가 즉시 후속자다. 실제 오른쪽 자식이면 오른쪽 서브트리로 한 번 이동한 뒤 실제 왼쪽 자식 링크를 따라 끝까지 내려간 노드가 후속자다."),
-    code("inorderSuccessor(p):\n  q = p.right\n  if p.rtag == CHILD:\n    while q.ltag == CHILD: q = q.left\n  return q"),
+    code("typedef enum { CHILD, THREAD } LinkTag;\n\ntypedef struct ThreadNode {\n  int key;\n  struct ThreadNode *left, *right;\n  LinkTag ltag, rtag;\n} ThreadNode;\n\nThreadNode *inorder_successor(ThreadNode *node) {\n  ThreadNode *next = node->right;\n  if (node->rtag == CHILD)\n    while (next != NULL && next->ltag == CHILD) next = next->left;\n  return next;\n}"),
     heading("삽입·삭제 주의점"), bullets("노드 삽입 시 부모 링크뿐 아니라 새 노드의 선행·후속 스레드도 연결한다.", "삭제 시 이웃 노드가 삭제 노드를 스레드로 가리키는지 확인한다.", "순회는 빨라지지만 갱신 로직과 태그 관리가 복잡해진다."), tasks("스레드와 자식 링크를 태그로 구분할 수 있다.", "중위 후속자를 찾는 두 경우를 설명할 수 있다.", "스레드 트리의 공간·구현상 장단점을 말할 수 있다.")
   ]),
   "TODO-95": entry("9회차 · 힙", [
     heading("힙과 우선순위 큐"), paragraph("힙은 완전 이진 트리의 모양 조건과 부모-자식 사이의 힙 순서 조건을 만족한다. 최대 힙은 부모 키가 자식보다 크거나 같고, 최소 힙은 작거나 같다. 루트가 최댓값/최솟값일 뿐 형제나 서로 다른 서브트리 전체가 정렬된 것은 아니다."),
     table([["연산", "시간"], ["최댓값/최솟값 확인", "O(1)"], ["삽입", "O(log n)"], ["루트 삭제", "O(log n)"], ["임의 값 탐색", "O(n)"], ["배열을 힙으로 만들기", "O(n)"]]),
     heading("삽입과 삭제"), bullets("삽입: 배열 끝에 넣고 부모와 비교하며 위로 올린다(up-heap).", "삭제: 루트를 꺼내고 마지막 원소를 루트로 옮긴 뒤 더 적절한 자식과 교환하며 내린다(down-heap).", "1번 인덱스 기준 부모 ⌊i/2⌋, 자식 2i와 2i+1이다."),
-    code("maxHeapInsert(x):\n  i = ++size\n  while i > 1 and heap[i/2] < x:\n    heap[i] = heap[i/2]; i /= 2\n  heap[i] = x"),
+    code("#define HEAP_CAPACITY 100\n\ntypedef struct { int data[HEAP_CAPACITY + 1]; int size; } MaxHeap;\n\nint heap_insert(MaxHeap *heap, int value) {\n  if (heap->size == HEAP_CAPACITY) return 0;\n  int i = ++heap->size;\n  while (i > 1 && heap->data[i / 2] < value) {\n    heap->data[i] = heap->data[i / 2];\n    i /= 2;\n  }\n  heap->data[i] = value;\n  return 1;\n}"),
     heading("응용"), bullets("우선순위 작업 스케줄링", "힙 정렬: O(n log n), 제자리 정렬 가능", "상위 k개 원소 유지", "다익스트라·프림 알고리즘의 우선순위 큐"), tasks("힙과 BST의 정렬 조건 차이를 설명할 수 있다.", "삽입·삭제 후 힙을 복구할 수 있다.", "heapify가 O(n)인 사실을 구분할 수 있다.")
   ]),
   "TODO-96": entry("10회차 · 선택 트리, 숲, 이진 트리 개수", [
@@ -94,7 +94,7 @@ export const dataStructuresContent: Record<string, JiraEntry> = {
     heading("m원 탐색 트리"), paragraph("한 노드에 최대 m-1개의 정렬된 키와 최대 m개의 자식 포인터를 두는 BST의 일반화다. 키 k1<…<kr은 자식 서브트리의 값 범위를 r+1개로 나눈다. 가지 수가 많아 높이가 낮아지므로 디스크처럼 한 번의 노드 접근 비용이 큰 저장장치에 유리하다."),
     heading("B-트리 불변식"), bullets("모든 잎은 같은 레벨에 있어 높이가 균형이다.", "차수 m 노드는 최대 m개 자식과 m-1개 키를 가진다.", "루트를 제외한 내부 노드는 최소 ⌈m/2⌉개의 자식을 가진다.", "노드 안의 키는 정렬되고 자식 서브트리의 키 범위를 분할한다."),
     heading("삽입"), paragraph("삽입할 잎을 찾아 키를 정렬해 넣는다. 노드가 넘치면 가운데 키를 부모로 승격하고 좌우 노드로 분할한다. 부모도 넘치면 분할이 루트까지 전파되며, 루트가 분할될 때만 트리 높이가 1 증가한다."),
-    code("탐색: 노드 내부에서 키 비교 → 같으면 성공\n키보다 작은 첫 경계의 자식으로 이동 → 잎까지 반복"),
+    code("#define M 5\n\ntypedef struct MNode {\n  int count;                 /* 현재 키 개수 */\n  int key[M - 1];\n  struct MNode *child[M];\n} MNode;\n\nMNode *search_mway(MNode *node, int target) {\n  while (node != NULL) {\n    int i = 0;\n    while (i < node->count && target > node->key[i]) ++i;\n    if (i < node->count && target == node->key[i]) return node;\n    node = node->child[i];\n  }\n  return NULL;\n}"),
     heading("B+, B* 비교"), table([["구조", "특징"], ["B-트리", "내부·잎 모두 레코드 주소 저장 가능"], ["B+트리", "실제 레코드는 잎에 집중, 잎을 순차 연결"], ["B*트리", "형제와 재분배해 노드 이용률을 높임"]]),
     tasks("m원 노드의 최대 키·자식 수를 계산할 수 있다.", "B-트리 분할과 키 승격 과정을 설명할 수 있다.", "B-트리와 B+트리의 범위 검색 차이를 말할 수 있다.")
   ]),
@@ -111,12 +111,12 @@ export const dataStructuresContent: Record<string, JiraEntry> = {
     bullets("경로 길이: 경로에 포함된 간선 수", "단순 경로: 정점을 중복 방문하지 않는 경로", "사이클: 시작과 끝 정점이 같은 경로", "DAG: 방향이 있고 사이클이 없는 그래프", "완전 그래프: 가능한 모든 정점 쌍이 연결된 그래프"),
     heading("표현 방법"), table([["표현", "공간", "간선 확인", "인접 정점 순회"], ["인접 행렬", "O(V²)", "O(1)", "O(V)"], ["인접 리스트", "O(V+E)", "O(deg(v))", "O(deg(v))"]]),
     paragraph("조밀 그래프나 빠른 간선 존재 확인에는 행렬이 단순하다. 희소 그래프와 인접 정점 순회에는 리스트가 효율적이다. 무방향 그래프의 행렬은 대칭이며, 가중 그래프는 1 대신 가중치를 저장하고 간선 없음은 ∞ 같은 별도 값으로 표현한다."),
-    heading("ADT 연산"), code("Graph(), addVertex(v), addEdge(u,v[,w])\nadjacent(u,v), neighbors(v), getVertices(), getEdges()"),
+    heading("C 인접 리스트 표현"), code("#define MAX_VERTICES 100\n\ntypedef struct EdgeNode {\n  int vertex, weight;\n  struct EdgeNode *next;\n} EdgeNode;\n\ntypedef struct {\n  int vertex_count;\n  EdgeNode *adj[MAX_VERTICES];\n} Graph;\n\nvoid init_graph(Graph *graph) {\n  graph->vertex_count = 0;\n  for (int i = 0; i < MAX_VERTICES; ++i) graph->adj[i] = NULL;\n}"),
     tasks("방향·무방향·가중 그래프를 구분할 수 있다.", "차수 합과 최대 간선 수를 계산할 수 있다.", "상황에 맞게 인접 행렬과 리스트를 선택할 수 있다.")
   ]),
   "TODO-100": entry("15회차 · 그래프 (Ⅱ)", [
     heading("DFS와 BFS"), table([["탐색", "자료구조", "특징", "주요 용도"], ["DFS", "스택/재귀", "한 경로를 깊게 탐색", "사이클, 위상 정렬, 연결 요소"], ["BFS", "큐", "가까운 정점부터 레벨 탐색", "무가중 최단 경로"]]),
-    code("BFS(s):\n  mark s; enqueue(s)\n  while queue not empty:\n    v = dequeue()\n    for each unvisited w in neighbors(v):\n      mark w; enqueue(w)"),
+    code("void bfs(const Graph *graph, int start) {\n  int visited[MAX_VERTICES] = {0};\n  int queue[MAX_VERTICES], front = 0, rear = 0;\n  visited[start] = 1;\n  queue[rear++] = start;\n\n  while (front < rear) {\n    int vertex = queue[front++];\n    printf(\"%d \", vertex);\n    for (EdgeNode *edge = graph->adj[vertex]; edge; edge = edge->next) {\n      int next = edge->vertex;\n      if (!visited[next]) {\n        visited[next] = 1;\n        queue[rear++] = next;\n      }\n    }\n  }\n}"),
     paragraph("인접 리스트에서 DFS와 BFS의 시간은 O(V+E), 인접 행렬에서는 O(V²)다. 그래프가 연결되지 않을 수 있으므로 모든 정점을 훑으며 미방문 정점에서 탐색을 다시 시작해야 전체 그래프를 방문한다."),
     heading("최소 신장 트리(MST)"), paragraph("연결된 무방향 가중 그래프의 모든 정점을 사이클 없이 연결하면서 간선 가중치 합이 최소인 트리다. 정점이 V개면 MST 간선은 V-1개다. 가중치가 같으면 MST가 여러 개일 수 있다."),
     table([["알고리즘", "선택 방식", "대표 구현"], ["Kruskal", "가벼운 간선부터, 사이클이면 제외", "간선 정렬 + Union-Find"], ["Prim", "현재 트리와 바깥을 잇는 최소 간선", "우선순위 큐"]]),

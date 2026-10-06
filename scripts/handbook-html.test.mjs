@@ -477,17 +477,19 @@ test("operations handbooks include command interpretation and practice labs", as
   }
 });
 
-test("infra and combined operations follow backend", () => {
+test("security delivery, infra and combined operations follow backend", () => {
   const groupKeys = HANDBOOK_GROUPS.map((group) => group.key);
   const backendIndex = groupKeys.indexOf("backend");
+  const securityDeliveryIndex = groupKeys.indexOf("security-delivery");
   const infraIndex = groupKeys.indexOf("infra");
   const operationsIndex = groupKeys.indexOf("operations");
 
   assert.equal(
     infraIndex,
-    backendIndex + 1,
-    "infra group should be placed immediately after backend",
+    securityDeliveryIndex + 1,
+    "infra group should be placed immediately after security delivery",
   );
+  assert.equal(securityDeliveryIndex, backendIndex + 1);
   assert.equal(
     operationsIndex,
     infraIndex + 1,
@@ -500,6 +502,74 @@ test("infra and combined operations follow backend", () => {
       HANDBOOK_GROUPS[operationsIndex].items.some((groupItem) => groupItem.id === item.id),
       `${item.id} should be included under operations`,
     );
+  }
+});
+
+test("security delivery roadmap separates FE, BE, DB and integrated release cases", async () => {
+  const source = await readFile("src/handbook/documents/security-delivery-roadmap.ts", "utf8");
+
+  for (const marker of [
+    "프론트엔드 배포 보안",
+    "백엔드 배포 보안",
+    "데이터베이스 배포 보안",
+    "Expand–Migrate–Contract",
+    "FE·BE·DB가 함께 바뀔 때의 통합 배포 순서",
+    "운영 API Key가 bundle에 포함됨",
+    "보고서 다운로드 IDOR",
+    "NOT NULL migration이 운영을 잠금",
+  ]) {
+    assert.match(source, new RegExp(marker), `security delivery roadmap should include ${marker}`);
+  }
+});
+
+test("clinic PHP hosting guide covers Korean agency delivery and regulated operations", async () => {
+  const source = await readFile("src/handbook/documents/security-clinic-php-hosting.ts", "utf8");
+
+  for (const marker of [
+    "한국 웹에이전시의 일반적인 제작 흐름",
+    "FTP/SFTP로 서버에 게시하는 프로세스",
+    "실제 배포 Runbook",
+    "DB 배포·백업·개인정보 관리",
+    "로그·모니터링·용량 관리",
+    "병의원 개인정보와 의료광고",
+    "병의원 인수인계 패킷",
+    "WordPress 사이트에 다국어를 추가하는 경우",
+    "자체 제작 PHP 사이트에 다국어를 추가하는 경우",
+    "운영 백업에서 다국어 공개까지",
+    "WORDPRESS I18N GATE",
+    "CUSTOM PHP I18N GATE",
+    "Expand–Migrate–Contract",
+    "카페24 FTP/SFTP 접속 안내",
+    "가비아 웹호스팅 매뉴얼",
+  ]) {
+    assert.match(source, new RegExp(marker), `clinic PHP hosting guide should include ${marker}`);
+  }
+});
+
+test("Damsoyu AEO guide encodes the real multilingual delivery workflow and security gates", async () => {
+  const source = await readFile("src/handbook/documents/security-damsoyu-aeo-delivery.ts", "utf8");
+
+  for (const marker of [
+    "CLIENT : 담소유병원 · damsoyu.com",
+    "현재 확인된 사실과 아직 모르는 것",
+    "블링크애드가 안전하게 초안을 만드는 환경",
+    "AI가 운영 서버의 PHP를 자유롭게 생성·수정하게 하지 않습니다",
+    "draft → medical review → design review → approved → published",
+    "14페이지를 위한 재사용 템플릿",
+    "AEO·SEO를 기술적으로 완성한다",
+    "SECURITY RELEASE GATE",
+    "1차 기반 배포",
+    "2차 콘텐츠 공개",
+    "실전 체크리스트와 그대로 쓰는 질문집",
+    "PROJECT CONTROL SHEET",
+    "접속 계정 요청과 수령 직후 점검",
+    "백업과 복구 리허설",
+    "배포 전날과 당일의 분 단위 Runbook",
+    "즉시 NO-GO",
+    "DEFINITION OF DONE",
+    "AEO OPERATIONS PACKET",
+  ]) {
+    assert.match(source, new RegExp(marker), `Damsoyu AEO guide should include ${marker}`);
   }
 });
 
@@ -660,6 +730,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
       "frontend",
       "interactive",
       "backend",
+      "security-delivery",
       "infra",
       "operations",
       "quiz",
@@ -679,6 +750,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   const frontendGroup = HANDBOOK_GROUPS.find((group) => group.key === "frontend");
   const interactiveGroup = HANDBOOK_GROUPS.find((group) => group.key === "interactive");
   const backendGroup = HANDBOOK_GROUPS.find((group) => group.key === "backend");
+  const securityDeliveryGroup = HANDBOOK_GROUPS.find((group) => group.key === "security-delivery");
   const infraGroup = HANDBOOK_GROUPS.find((group) => group.key === "infra");
   const operationsGroup = HANDBOOK_GROUPS.find((group) => group.key === "operations");
   const quizGroup = HANDBOOK_GROUPS.find((group) => group.key === "quiz");
@@ -686,13 +758,14 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 187);
+  assert.equal(HANDBOOK_ITEMS.length, 193);
   assert.equal(careerGroup?.items.length, 14);
   assert.equal(carbonGroup?.items.length, 12);
   assert.equal(carbonGroup?.label, "탄소");
   assert.deepEqual(carbonGroup?.items.map((item) => item.id), CARBON_DOMAIN_HANDBOOKS.map((item) => item.id));
   assert.equal(frontendGroup?.items.length, 11);
   assert.equal(interactiveGroup?.items.length, 10);
+  assert.equal(securityDeliveryGroup?.items.length, 6);
   assert.equal(interactiveGroup?.label, "Interactive");
   assert.equal(backendGroup?.items.length, 9);
   assert.equal(infraGroup?.items.length, 10);

@@ -10,6 +10,7 @@ export function resolveWorkspace(pathname) {
   if (resolveMoneyPage(path)) return "money";
   if (path === "/brand" || path === "/brand/branding") return "branding";
   if (path === "/brand/web") return "web";
+  if (path === "/brand/case-study") return "case-study";
   if (path === "/brand/specs") return "specs";
   if (path === "/brand/questionnaire") return "questionnaire";
   if (path === "/brand/design-brief") return "design-brief";
