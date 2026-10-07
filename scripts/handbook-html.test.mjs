@@ -477,19 +477,21 @@ test("operations handbooks include command interpretation and practice labs", as
   }
 });
 
-test("security delivery, infra and combined operations follow backend", () => {
+test("security delivery, PHP, infra and combined operations follow backend", () => {
   const groupKeys = HANDBOOK_GROUPS.map((group) => group.key);
   const backendIndex = groupKeys.indexOf("backend");
   const securityDeliveryIndex = groupKeys.indexOf("security-delivery");
+  const phpIndex = groupKeys.indexOf("php");
   const infraIndex = groupKeys.indexOf("infra");
   const operationsIndex = groupKeys.indexOf("operations");
 
   assert.equal(
-    infraIndex,
+    phpIndex,
     securityDeliveryIndex + 1,
-    "infra group should be placed immediately after security delivery",
+    "PHP group should be placed immediately after security delivery",
   );
   assert.equal(securityDeliveryIndex, backendIndex + 1);
+  assert.equal(infraIndex, phpIndex + 1, "infra group should be placed immediately after PHP");
   assert.equal(
     operationsIndex,
     infraIndex + 1,
@@ -567,9 +569,48 @@ test("Damsoyu AEO guide encodes the real multilingual delivery workflow and secu
     "배포 전날과 당일의 분 단위 Runbook",
     "즉시 NO-GO",
     "DEFINITION OF DONE",
+    "Legacy PHP·FTP 환경을 위한 안전 작업장",
+    "GREEN",
+    "전체 mirror 대신 Pull Allowlist",
+    "Config는 “받되 되돌려 보내지 않는 파일”",
+    "deploy-denylist.txt",
+    "변경 파일 Allowlist만 허용",
+    "SFTP가 없거나 staging이 없을 때의 결정",
+    "현실적인 사고 사례로 마지막 점검",
     "AEO OPERATIONS PACKET",
   ]) {
     assert.match(source, new RegExp(marker), `Damsoyu AEO guide should include ${marker}`);
+  }
+});
+
+test("PHP menu links the backend and security delivery source handbooks without duplicating documents", async () => {
+  const { PHP_HANDBOOKS, HANDBOOK_GROUPS, HANDBOOK_ITEMS } = await import(
+    "../src/handbook/catalog.mjs"
+  );
+  const phpGroup = HANDBOOK_GROUPS.find((group) => group.key === "php");
+  const expectedIds = [
+    "engineering-php-agency-delivery",
+    "security-clinic-php-hosting",
+    "security-damsoyu-aeo-delivery",
+  ];
+
+  assert.equal(phpGroup?.label, "PHP");
+  assert.deepEqual(PHP_HANDBOOKS.map((item) => item.id), expectedIds);
+  assert.deepEqual(phpGroup?.items.map((item) => item.id), expectedIds);
+  assert.deepEqual(
+    PHP_HANDBOOKS.map((item) => item.label),
+    [
+      "백엔드 08 · PHP·WordPress 웹에이전시 구축·운영",
+      "보안·배포 04 · 병의원 PHP 호스팅 운영",
+      "보안·배포 05 · 담소유 AEO 다국어 실행 가이드",
+    ],
+  );
+  for (const id of expectedIds) {
+    assert.equal(
+      HANDBOOK_ITEMS.filter((item) => item.id === id).length,
+      1,
+      `${id} should keep one canonical document`,
+    );
   }
 });
 
@@ -731,6 +772,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
       "interactive",
       "backend",
       "security-delivery",
+      "php",
       "infra",
       "operations",
       "quiz",

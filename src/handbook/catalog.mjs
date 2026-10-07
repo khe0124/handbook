@@ -1828,6 +1828,29 @@ export const SECURITY_DELIVERY_HANDBOOKS = [
   },
 ];
 
+// PHP 업무에 필요한 기존 원본 문서를 한곳에서 찾도록 만든 교차 메뉴다.
+// HANDBOOK_ITEMS에는 다시 추가하지 않아 문서·검색 인덱스·이전/다음 순서를 중복시키지 않는다.
+export const PHP_HANDBOOKS = [
+  {
+    ...ENGINEERING_BACKEND_HANDBOOKS.find(
+      (item) => item.id === "engineering-php-agency-delivery",
+    ),
+    label: "백엔드 08 · PHP·WordPress 웹에이전시 구축·운영",
+  },
+  {
+    ...SECURITY_DELIVERY_HANDBOOKS.find(
+      (item) => item.id === "security-clinic-php-hosting",
+    ),
+    label: "보안·배포 04 · 병의원 PHP 호스팅 운영",
+  },
+  {
+    ...SECURITY_DELIVERY_HANDBOOKS.find(
+      (item) => item.id === "security-damsoyu-aeo-delivery",
+    ),
+    label: "보안·배포 05 · 담소유 AEO 다국어 실행 가이드",
+  },
+];
+
 export const AI_HANDBOOKS = renumberMenuItems([
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
@@ -1844,6 +1867,7 @@ export const HANDBOOK_GROUPS = [
   { key: "interactive", label: "Interactive", items: INTERACTIVE_HANDBOOKS },
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
   { key: "security-delivery", label: "보안·배포", items: SECURITY_DELIVERY_HANDBOOKS },
+  { key: "php", label: "PHP", items: PHP_HANDBOOKS },
   {
     key: "infra",
     label: "인프라",

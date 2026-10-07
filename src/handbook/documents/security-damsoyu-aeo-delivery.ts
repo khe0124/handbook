@@ -18,6 +18,7 @@ const document: HandbookDocumentContent = {
 <a href="#aeo-operations"><span class="code">12</span>지속 운영</a>
 <a href="#aeo-incident"><span class="code">13</span>실패·사고 대응</a>
 <a href="#aeo-workbook"><span class="code">14</span>실전 체크리스트·질문집</a>
+<a href="#aeo-legacy-lab"><span class="code">15</span>Legacy PHP 안전 작업장</a>
 <a href="#aeo-handover"><span class="code">PACK</span>전달 패키지</a>`,
   mainHtml: `<header class="hero">
 <div class="hero-serial"><span>CLIENT : 담소유병원 · damsoyu.com</span><span>SERVICE : BLINKAD AEO MULTILINGUAL OPERATIONS</span><span>ROLE : 하은 · ENVIRONMENT &amp; DESIGN DELIVERY</span></div>
@@ -148,6 +149,185 @@ const document: HandbookDocumentContent = {
 <h3><span class="h3-tag">D-12</span>최종 완료 판정</h3>
 <div class="checklist"><strong>DEFINITION OF DONE</strong><ul><li>□ 블링크애드 작성자는 서버 credential 없이 EN·JA 초안을 생성하고 안전하게 preview할 수 있다.</li><li>□ 작성자에게 PHP·template·DB·한국어 원본·사용자 관리 권한이 없다.</li><li>□ 의료·번역·디자인·기술 승인과 revision이 서로 연결된다.</li><li>□ 14페이지 URL Matrix의 상태·담당자·metadata·출처가 모두 채워졌다.</li><li>□ 기존 한국어, 예약, 게시판, 관리자 회귀 테스트가 통과했다.</li><li>□ 배포 package와 승인본이 같고, 재현 가능한 배포·원복 기록이 있다.</li><li>□ 실제 복구 시험과 사고 연락 훈련을 최소 한 번 수행했다.</li><li>□ 운영 매뉴얼 교육 후 블링크애드가 도움 없이 샘플 페이지 한 개를 완주했다.</li><li>□ 병원 소유 계정과 데이터가 외주사 개인 계정에 종속되지 않는다.</li><li>□ 임시 접근권한·미리보기·개인정보 사본의 종료 처리가 완료됐다.</li></ul></div>
 <p>체크 결과는 <strong>완료 / 해당 없음(사유 필수) / 미완료(담당자·기한 필수)</strong> 중 하나로 기록합니다. 체크박스만 채운 문서보다 URL, 캡처, revision, 로그, 승인 기록 같은 증빙이 완료의 기준입니다.</p></section>
+<section id="aeo-legacy-lab"><div class="ch-head"><span class="ch-code">15</span><h2>Legacy PHP·FTP 환경을 위한 안전 작업장</h2></div>
+<p class="lede">이번 업무를 “FTP로 운영 파일을 고치는 일”이 아니라 <strong>운영본 식별 → 필요한 코드만 수집 → 로컬 버전관리 → 격리 검증 → 변경 파일만 배포 → 즉시 검증·복구</strong>하는 유지보수 프로젝트로 다룹니다. 접속 권한이 넓더라도 실제 수집·수정·배포 범위는 업무에 필요한 최소치로 줄입니다.</p>
+
+<h3><span class="h3-tag">15.1</span>먼저 데이터 색깔을 붙인다</h3>
+<table><tr><th>등급</th><th>예시</th><th>기본 처리</th></tr><tr><td>GREEN</td><td>PHP 실행 코드, CSS·JS, 공개 이미지, HTML, robots.txt, sitemap.xml, 완전한 가짜 seed</td><td>승인된 작업 폴더에 저장 가능. 그래도 저작권·내부 주석·비밀 hard-code를 검사</td></tr><tr><td>YELLOW</td><td>.htaccess, 설정 template, 서버 구조 정보, 제한된 오류 로그, 관리자 코드, 업로드 폴더의 공개 자산</td><td>필요성과 승인 확인 후 최소 범위만 수집. 암호화·접근제한·보존기한 적용</td></tr><tr><td>RED</td><td>운영 DB dump, 환자·예약·상담 자료, 실제 로그 원본, 운영 credential, SSH private key, 개인정보가 섞인 전체 backup</td><td>원칙적으로 로컬·Git·개인 cloud·AI 작업영역 반입 금지. 병원 또는 기존 운영사가 관리</td></tr></table>
+<div class="callout risk"><span class="co-label">핵심 판단</span><p>“FTP에서 볼 수 있다”는 “내가 다운로드해도 된다”는 뜻이 아닙니다. 접근 가능성, 업무 필요성, 처리 권한은 서로 다릅니다. 필요한 이유·승인·보관 위치·삭제일을 설명할 수 없는 파일은 열거나 내려받지 않습니다.</p></div>
+<div class="checklist"><strong>수집 전 5문</strong><ul><li>□ 이 파일이 14개 다국어 페이지와 기술 SEO 작업에 정말 필요한가?</li><li>□ 환자·예약·상담·계정·세션·로그 정보가 포함될 가능성이 있는가?</li><li>□ 전체가 아니라 schema, 파일명, 일부 행, 마스킹된 샘플로 목적을 달성할 수 있는가?</li><li>□ 누가 수집을 승인했고 어디에 언제까지 보관할 것인가?</li><li>□ 작업 종료 후 사본·Docker volume·휴지통·자동 backup까지 어떻게 폐기할 것인가?</li></ul></div>
+
+<h3><span class="h3-tag">15.2</span>Day 0 — 서버는 먼저 읽기 전용으로 조사한다</h3>
+<p>명령 실행 권한이 있고 기존 운영사가 허용한 경우에만 아래처럼 구조·버전·최근 변경을 조회합니다. 출력에도 경로·계정명·설정값이 포함될 수 있으므로 공개 문서나 AI prompt에 그대로 붙이지 않습니다.</p>
+<pre class="snippet-card"><code># 현재 위치와 최상위 파일 — 내용을 수정하지 않음
+pwd
+ls -la
+
+# 지원 버전과 얕은 디렉토리 구조
+php -v
+find . -maxdepth 2 -type d
+
+# 용량과 최근 변경 — uploads, backup 등 민감 경로는 제외 후 실행
+du -sh ./include ./css ./js ./images ./pages
+find ./include ./css ./js ./pages -type f -mtime -30</code></pre>
+<table><tr><th>찾을 것</th><th>질문</th><th>기록</th></tr><tr><td>Web root</td><td>실제 도메인이 바라보는 경로는 어디인가?</td><td>경로 자체는 내부 SERVER 문서에만 기록</td></tr><tr><td>공통 include</td><td>head·header·footer가 몇 페이지에 포함되는가?</td><td>검색 결과와 영향 URL 표본</td></tr><tr><td>환경 의존</td><td>절대경로, DOCUMENT_ROOT, short_open_tag, rewrite, extension 의존이 있는가?</td><td>로컬 재현 차이와 우회하지 않을 항목</td></tr><tr><td>관리·예약</td><td>어떤 경로가 DB·개인정보와 연결되는가?</td><td>작업 제외 경계와 회귀 테스트 URL</td></tr><tr><td>기준선</td><td>작업 전에도 404·warning·깨진 화면이 있었는가?</td><td>시각·캡처·응답 상태. 신규 변경과 구분</td></tr></table>
+<div class="callout warn"><span class="co-label">하지 않을 조사</span><p>정체를 모르는 SQL·ZIP·CSV·XLSX·backup 파일을 내용 확인 목적으로 내려받지 않습니다. 설정 파일의 비밀번호를 문서화하지 않습니다. 운영 서버에서 패키지 설치, PHP 업그레이드, 권한 변경, 전체 검색을 무단 실행하지 않습니다.</p></div>
+
+<h3><span class="h3-tag">15.3</span>전체 mirror 대신 Pull Allowlist를 승인받는다</h3>
+<p>첫 다운로드 전에 디렉토리 이름만 보고 개인정보 포함 가능성을 분류합니다. 실제 담소유 구조가 확인된 뒤 아래 예시를 수정하며, 디렉토리를 허용할 때는 내부 파일까지 모두 안전하다고 가정하지 않습니다.</p>
+<pre class="snippet-card"><code># pull-allowlist.txt 예시 — 실제 서버 구조 확인 후 확정
+index.php
+robots.txt
+sitemap.xml
+include/
+css/
+js/
+pages/
+
+# 기본 수집 금지 후보
+uploads/
+data/
+private/
+backup/
+reservation/
+member/
+admin/logs/
+*.sql
+*.sql.gz
+*.csv
+*.xlsx
+*.zip
+*.tar.gz</code></pre>
+<div class="checklist"><strong>PULL APPROVAL</strong><ul><li>□ 기존 유지보수사가 code·public asset 경로와 data·upload·backup 경로를 구분했다.</li><li>□ 허용 목록과 제외 목록을 프로젝트 책임자가 검토했다.</li><li>□ images·uploads 내부에 환자 사진이나 비공개 첨부가 없는지 확인했다.</li><li>□ 최초 수집 결과에서 credential·개인정보 패턴을 Git 추가 전에 검사했다.</li><li>□ 전체 mirror 명령과 동기화 delete 옵션을 사용하지 않았다.</li></ul></div>
+
+<h3><span class="h3-tag">15.4</span>운영본·작업본·배포본을 분리한다</h3>
+<pre class="snippet-card"><code>damsoyu-aeo/
+├─ source/                    # Git으로 관리하는 작업 코드
+│  └─ www/
+├─ seed/                      # schema + 완전한 fake data만
+├─ docs/
+│  ├─ SERVER.md              # 비밀번호 없는 환경 설명
+│  ├─ SECURITY.md            # 데이터 경계·금지행동
+│  ├─ URL-MATRIX.md
+│  └─ DEPLOYMENT-TEMPLATE.md
+├─ manifests/
+│  ├─ pull-allowlist.txt
+│  ├─ deploy-allowlist.txt
+│  └─ deploy-denylist.txt
+├─ local-artifacts/           # Git 제외, 승인된 임시 산출물만
+├─ scripts/                   # audit·check·deploy·rollback
+├─ .env.example              # 값 없는 변수 이름만
+└─ .gitignore</code></pre>
+<p>초기 운영 snapshot은 수집 허용된 코드만 Git의 기준 commit으로 남깁니다. 개인정보가 포함될 수 있는 전체 서버 backup은 작업 repository 안에 두지 않습니다. 배포 직전 내려받은 원격 파일의 pre-image도 암호화된 제한 폴더에 짧게 보관하고 삭제일을 정합니다.</p>
+<div class="semantic-card"><span class="sc-label">SERVER.md에 적는 것과 적지 않는 것</span><br>호스팅 상품, PHP·DB 종류와 버전, web root의 역할, 배포 프로토콜, 중요 디렉토리, staging 유무는 적습니다. 비밀번호, DB secret, API key, private key, 실제 환자정보는 적지 않습니다. 문서가 유출되어도 바로 로그인할 수 없어야 합니다.</div>
+
+<h3><span class="h3-tag">15.5</span>운영 DB는 기본적으로 내 작업범위에서 뺀다</h3>
+<table><tr><th>상황</th><th>요청할 것</th><th>내가 받지 않는 것</th></tr><tr><td>메타가 PHP 파일에 있음</td><td>필요한 코드와 공개 페이지 응답</td><td>DB dump 전체</td></tr><tr><td>메타·본문이 DB에서 생성됨</td><td>schema-only export와 가짜 seed, 필요한 query 설명</td><td>예약·상담·회원 row</td></tr><tr><td>특정 오류 재현에 데이터 필요</td><td>문제를 재현하는 최소 synthetic fixture</td><td>문제 사용자의 실제 row 복사</td></tr><tr><td>배포 전 DB backup 필요</td><td>기존 운영사가 backup·restore 완료 증빙 제공</td><td>내 로컬 PC로 전달되는 운영 dump</td></tr><tr><td>DB migration 필요</td><td>별도 범위·승인·migration·rollback 계획</td><td>SEO 파일 배포에 끼워 넣은 즉석 변경</td></tr></table>
+<pre class="snippet-card"><code># 기존 운영사에 요청할 schema-only 예시 개념
+mysqldump --no-data DATABASE_NAME &gt; schema.sql
+
+# 로컬은 실제 정보가 아닌 명백한 테스트 값만 사용
+name: 테스트 사용자
+phone: 010-0000-0000
+email: test@example.invalid
+message: 다국어 예약 화면 QA용 가짜 데이터</code></pre>
+<div class="callout risk"><span class="co-label">익명화 오해</span><p>이름과 전화번호만 바꿔도 생년월일, 희귀질환, 방문일, 상담 내용의 조합으로 재식별될 수 있습니다. SEO·다국어 작업에서는 익명화된 운영 복제본을 만드는 책임까지 떠안기보다 처음부터 synthetic data를 만드는 것이 기본입니다.</p></div>
+<div class="semantic-card"><span class="sc-label">범위 확인 문구</span><br>“이번 업무는 다국어 페이지와 기술 SEO 관련 소스 수정입니다. 운영 환자·예약 DB의 다운로드·보관·복구는 범위에 포함하지 않으며 기존 운영사에서 수행해 주세요. DB 구조가 필요한 경우 개인정보가 없는 schema-only 파일과 합성 테스트 데이터만 요청드리겠습니다.”</div>
+
+<h3><span class="h3-tag">15.6</span>로컬 PC·cloud·AI로 번지는 경로를 끊는다</h3>
+<p>운영 dump 한 개를 로컬에 저장하면 IDE indexing, AI coding agent, Docker volume, Time Machine, iCloud Desktop, Drive 동기화, antivirus upload, 휴지통까지 사본이 퍼질 수 있습니다. 따라서 repository에서만 숨기는 것으로 끝나지 않습니다.</p>
+<div class="checklist"><strong>LOCAL DATA BOUNDARY</strong><ul><li>□ 프로젝트 경로가 개인 cloud 자동 동기화 폴더 밖에 있다.</li><li>□ 운영 개인정보·credential은 AI agent가 접근하는 workspace 밖에 있다.</li><li>□ Docker volume과 DB GUI에도 synthetic data만 존재한다.</li><li>□ 운영 서버 연결값 대신 별도 local 계정·DB 이름을 사용한다.</li><li>□ 승인된 임시 민감자료가 있다면 디스크 암호화, 최소 접근, 삭제일을 적용했다.</li><li>□ 화면 캡처·오류 로그·터미널 기록에 환자정보나 secret이 없는지 확인했다.</li><li>□ 작업 종료 시 local-artifacts, Docker volume, download, 휴지통과 자동 backup 범위를 점검했다.</li></ul></div>
+<p>AI에는 공개 코드라도 secret hard-code가 없는지 먼저 검사한 뒤 제공합니다. 운영 DB, 환자 CSV, 예약 화면 캡처, production config, 접속 로그, SSH key는 prompt·첨부·workspace에 넣지 않습니다.</p>
+
+<h3><span class="h3-tag">15.7</span>Config는 “받되 되돌려 보내지 않는 파일”로 관리한다</h3>
+<p>Legacy PHP의 <code>config.php</code>, <code>db.php</code>, <code>database.php</code>, <code>wp-config.php</code>, <code>.env</code>에는 운영 연결값이 들어 있을 수 있습니다. 로컬 실행을 위해 값을 바꾼 파일을 폴더 전체 업로드하면 사이트 전체 DB 연결이 끊길 수 있습니다.</p>
+<table><tr><th>파일 형태</th><th>로컬 처리</th><th>배포 처리</th></tr><tr><td>운영 config</td><td>가능하면 내려받지 않음. 필요 시 제한된 별도 보관, Git 제외</td><td>항상 deny</td></tr><tr><td>config.example.php</td><td>키 이름과 안전한 placeholder만 관리</td><td>운영이 사용하지 않는 문서 template만 허용</td></tr><tr><td>config.local.php</td><td>local synthetic DB 연결, Git 제외</td><td>항상 deny</td></tr><tr><td>공통 code config</td><td>secret이 없는 feature·locale 값만 관리</td><td>명시적 review 후 allow</td></tr></table>
+<pre class="snippet-card"><code># .gitignore 최소 예시
+.env
+.env.*
+!.env.example
+config.local.php
+*.sql
+*.sql.gz
+local-artifacts/
+backups/
+
+# deploy-denylist.txt 최소 예시
+.env
+config.php
+config.inc.php
+db.php
+database.php
+wp-config.php
+*.sql
+uploads/
+data/
+backup/</code></pre>
+<div class="callout warn"><span class="co-label">이중 차단</span><p><code>.gitignore</code>는 아직 추적하지 않은 파일의 실수만 줄일 뿐 배포 차단기가 아닙니다. 이미 Git에 추가된 파일도 막지 못합니다. Git 민감정보 검사와 deploy denylist를 별도로 두고, denylist가 allowlist보다 항상 우선하도록 구현합니다.</p></div>
+
+<h3><span class="h3-tag">15.8</span>Git에 올리기 전과 commit 전에 자동 차단한다</h3>
+<p>최초 snapshot도 바로 <code>git add .</code> 하지 않습니다. 먼저 파일명·확장자·내용의 secret 패턴을 검사하고 사람이 목록을 검토합니다. 단순 파일명 hook은 보조 장치이며 변형된 파일명이나 이미 추적된 secret을 모두 찾는다고 믿지 않습니다.</p>
+<pre class="snippet-card"><code># 확인 순서 예시
+git status --short
+git diff --no-index /approved-production-snapshot ./source/www
+git ls-files
+
+# 배포 후보는 마지막 승인 commit과 비교
+git diff --name-status APPROVED_COMMIT..HEAD
+git diff --check APPROVED_COMMIT..HEAD</code></pre>
+<div class="checklist"><strong>COMMIT GATE</strong><ul><li>□ .env, SQL dump, archive, CSV·XLSX, key 파일이 staged 목록에 없다.</li><li>□ password, secret, token, private key header 패턴 검사가 통과했다.</li><li>□ 운영 config를 local 값으로 바꾼 diff가 없다.</li><li>□ 대용량·binary 신규 파일의 출처와 사용권을 확인했다.</li><li>□ baseline commit과 작업 commit이 분리돼 내가 바꾼 내용을 설명할 수 있다.</li></ul></div>
+
+<h3><span class="h3-tag">15.9</span>배포는 변경 파일 Allowlist만 허용한다</h3>
+<p>전체 동기화에서 몇 개를 제외하는 방식보다 기본적으로 아무것도 배포하지 않고 승인한 파일만 보내는 방식이 안전합니다. FileZilla를 사용하더라도 폴더 drag &amp; drop이나 원격 직접 편집 대신 manifest를 보고 파일 단위로 전송합니다.</p>
+<pre class="snippet-card"><code># deploy-allowlist.txt 예시
+en/index.php
+ja/index.php
+shared/templates/condition.php
+assets/css/multilingual.css
+robots.txt
+sitemap.xml
+
+# release manifest에 함께 기록
+release_id: AEO-2026-10-07-01
+approved_commit: &lt;commit-id&gt;
+approved_revision: &lt;content-revision&gt;
+files: &lt;allowlist hash&gt;
+deployer: &lt;named account&gt;</code></pre>
+<div class="checklist"><strong>PREDEPLOY SYSTEM CHECK</strong><ul><li>□ allowlist의 각 local 파일이 존재하고 remote 경로가 web root 안이다.</li><li>□ <code>..</code>, 절대경로, symlink 탈출, wildcard를 허용하지 않는다.</li><li>□ denylist와 한 항목이라도 겹치면 전체 배포를 실패시킨다.</li><li>□ Git 변경 목록과 allowlist가 일치하고 예상 밖 untracked 파일이 없다.</li><li>□ dry-run 결과의 source → destination을 사람이 한 줄씩 검토했다.</li><li>□ 실제 업로드 파일마다 크기·hash 또는 다운로드 재비교가 가능하다.</li><li>□ 비밀번호가 command argument·shell history·process 목록·로그에 노출되지 않는다.</li></ul></div>
+<div class="callout risk"><span class="co-label">자동화도 검증 대상</span><p>배포 script가 잘못되면 GUI보다 더 빠르게 큰 사고를 냅니다. 첫 운영 사용 전 테스트 서버에서 경로 정규화, denylist 우선, 전송 실패, 부분 배포, 재실행, rollback을 검증합니다. <code>delete</code>·전체 mirror 기능은 기본 제공하지 않습니다.</p></div>
+
+<h3><span class="h3-tag">15.10</span>덮어쓸 원격 파일만 Pre-image로 보관한다</h3>
+<ol><li>배포 allowlist가 승인된 뒤 각 원격 대상의 존재 여부·크기·수정시각을 기록한다.</li><li>덮어쓸 기존 파일만 release ID 폴더로 다운로드한다. DB·uploads·전체 서버는 함께 받지 않는다.</li><li>원격 파일이 예상 baseline과 다르면 다른 운영자의 변경일 수 있으므로 배포를 멈춘다.</li><li>pre-image의 hash와 상대경로를 manifest에 기록한다.</li><li>rollback은 해당 pre-image를 원래 경로로 복원하고 권한·응답·기능을 재검증한다.</li><li>보존기간이 끝나면 제한 폴더와 자동 backup의 잔존 여부를 확인해 폐기한다.</li></ol>
+<table><tr><th>예외</th><th>처리</th></tr><tr><td>신규 파일이라 pre-image가 없음</td><td>rollback 시 삭제할 정확한 파일로 manifest에 표시</td></tr><tr><td>배포 중 일부 파일만 성공</td><td>추가 배포 중단, 성공 목록 확정, release 전체를 pre-image 상태로 복원</td></tr><tr><td>원격 파일이 승인 후 변경됨</td><td>덮어쓰지 않고 최신본 재수집·diff·재승인</td></tr><tr><td>DB migration 동반</td><td>파일 rollback만 하지 않고 별도 roll-forward/rollback 계획 적용</td></tr></table>
+
+<h3><span class="h3-tag">15.11</span>.htaccess·rewrite·권한은 고위험 변경이다</h3>
+<div class="checklist"><strong>REWRITE CHANGE GATE</strong><ul><li>□ 기존 .htaccess·nginx 규칙과 적용 순서를 원문 그대로 보존했다.</li><li>□ http/https, www/non-www, trailing slash, 기존 PHP URL, EN·JA 경로의 redirect matrix가 있다.</li><li>□ redirect chain·loop, POST·query string 손실, 관리자·예약 예외를 검사했다.</li><li>□ 규칙 전체 교체가 아니라 최소 블록을 추가·수정했다.</li><li>□ 500 발생 시 한 파일 복원으로 되돌릴 수 있다.</li><li>□ 이유 없이 777 권한을 부여하지 않았고 기존 owner·mode를 기록했다.</li></ul></div>
+<div class="callout warn"><span class="co-label">별도 승인 변경</span><p>PHP 버전 업그레이드, CMS·plugin 일괄 업데이트, DB engine 변경, directory 권한 변경, web server 설정 변경은 다국어/AEO 범위에 끼워 넣지 않습니다. 필요하면 영향 분석과 복구 계획이 있는 별도 프로젝트로 승인받습니다.</p></div>
+
+<h3><span class="h3-tag">15.12</span>SFTP가 없거나 staging이 없을 때의 결정</h3>
+<table><tr><th>제약</th><th>최소 안전조치</th><th>수용 불가 조건</th></tr><tr><td>SFTP·SSH 없음</td><td>FTPS 지원 확인, IP·기간 제한, 개인 계정, 전송 후 credential 교체 요청</td><td>평문 FTP만 가능하고 병원·운영사가 위험을 승인하지 않음</td></tr><tr><td>Staging 없음</td><td>로컬 동등 환경 + 비공개 운영 preview + feature flag + 최소 파일 배포</td><td>운영에서 바로 공개되고 신속한 차단·rollback 불가</td></tr><tr><td>Git 없음</td><td>로컬 Git으로 승인된 production code snapshot과 변경 이력 관리</td><td>현재 운영본을 식별하거나 diff할 수 없음</td></tr><tr><td>SSH 없음</td><td>SFTP/FTPS 파일 단위 배포, 호스팅 관리자 로그·백업 활용</td><td>전송 성공·원본 backup·복구 확인 불가</td></tr><tr><td>개인 계정 없음</td><td>공유 계정을 작업창 동안만 활성화하고 작업 직후 교체·로그 기록</td><td>누가 변경했는지 추적 불가하고 회수도 불가</td></tr></table>
+<p>제약이 있다는 이유로 보안을 생략하지 않고 남은 통제수단을 강화합니다. 그래도 복구 가능성·책임 추적·개인정보 최소화가 확보되지 않으면 작업을 보류하고 위험 수용 결정권자에게 서면으로 올립니다.</p>
+
+<h3><span class="h3-tag">15.13</span>배포 기록은 한 장으로 재현 가능하게 남긴다</h3>
+<pre class="snippet-card"><code># DEPLOYMENT-AEO-2026-10-07-01
+
+목적: EN·JA 기반 구조와 승인 콘텐츠 공개
+작업자 / 승인자 / 배포창:
+승인 commit / content revision:
+변경 파일과 원격 경로:
+배포 전 원격 hash / 배포 후 hash:
+Pre-image backup 위치와 삭제일:
+실행한 dry-run / predeploy 결과:
+한국어·예약·관리자 smoke 결과:
+EN·JA URL·metadata·hreflang 결과:
+로그 관찰 결과:
+Rollback 대상과 실행 순서:
+남은 예외 / 담당자 / 기한:</code></pre>
+<div class="semantic-card"><span class="sc-label">내 설명 기준</span><br>“무엇을 바꿨나요?”에는 commit과 파일 목록으로, “왜 안전한가요?”에는 승인·테스트·denylist로, “문제가 나면요?”에는 pre-image와 검증된 rollback 순서로 답할 수 있어야 합니다.</div>
+
+<h3><span class="h3-tag">15.14</span>현실적인 사고 사례로 마지막 점검</h3>
+<table><tr><th>사례</th><th>사고 원인</th><th>이 가이드의 차단 장치</th></tr><tr><td>로컬 config가 운영에 덮임</td><td>폴더 전체 업로드</td><td>config Git 제외 + deploy denylist + allowlist + dry-run</td></tr><tr><td>환자 DB가 개인 Drive에 동기화</td><td>전체 mirror와 cloud 폴더 사용</td><td>DB 수령 금지 + 선택적 pull + workspace 위치 확인</td></tr><tr><td>AI가 예약 CSV를 읽음</td><td>민감 파일을 agent workspace에 보관</td><td>RED 데이터 분리 + synthetic fixture + AI 입력 금지</td></tr><tr><td>다른 업체의 최신 수정이 사라짐</td><td>오래된 local snapshot 덮어쓰기</td><td>배포 직전 remote baseline 비교 + 불일치 시 STOP</td></tr><tr><td>리디렉션 후 사이트 전체 loop</td><td>.htaccess 전체 교체·matrix 부재</td><td>최소 규칙 + redirect matrix + 즉시 pre-image 복구</td></tr><tr><td>부분 업로드로 code 버전 혼합</td><td>전송 실패 후 계속 진행</td><td>성공 manifest 확정 + 추가 배포 중단 + release 단위 rollback</td></tr></table>
+</section>
 <section id="aeo-handover"><div class="ch-head"><span class="ch-code">PACK</span><h2>블링크애드에 전달할 운영 패키지</h2></div>
 <div class="checklist"><strong>AEO OPERATIONS PACKET</strong><ul><li><code>/en/</code>, <code>/ja/</code> URL·template·component 규칙</li><li>작성자·발행자 계정 발급, MFA, 회수 절차</li><li>페이지 생성·수정·preview·승인·발행 매뉴얼</li><li>이미지 규격, alt, 의료 출처와 금지 HTML 규칙</li><li>14페이지 URL·metadata·hreflang·승인 상태 matrix</li><li>콘텐츠 변경 등급과 병원 재승인 조건</li><li>backup·release·rollback·unpublish runbook</li><li>오류 신고, 긴급 연락, incident escalation</li><li>알려진 제약·미해결 위험·차기 개선 backlog</li></ul></div>
 <div class="callout"><span class="co-label">내 완료 조건</span><p>블링크애드가 운영 credential이나 PHP 지식 없이 안전하게 초안을 만들고 preview할 수 있고, 나는 승인된 revision을 재현 가능하게 디자인 마감·배포·복구할 수 있으며, 병원은 누가 어떤 의료 콘텐츠를 언제 승인했는지 확인할 수 있어야 합니다.</p></div></section>`,
