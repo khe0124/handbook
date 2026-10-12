@@ -477,11 +477,12 @@ test("operations handbooks include command interpretation and practice labs", as
   }
 });
 
-test("security delivery, PHP, infra and combined operations follow backend", () => {
+test("security delivery, PHP, diagnoser, infra and combined operations follow backend", () => {
   const groupKeys = HANDBOOK_GROUPS.map((group) => group.key);
   const backendIndex = groupKeys.indexOf("backend");
   const securityDeliveryIndex = groupKeys.indexOf("security-delivery");
   const phpIndex = groupKeys.indexOf("php");
+  const diagnoserIndex = groupKeys.indexOf("diagnoser");
   const infraIndex = groupKeys.indexOf("infra");
   const operationsIndex = groupKeys.indexOf("operations");
 
@@ -491,7 +492,8 @@ test("security delivery, PHP, infra and combined operations follow backend", () 
     "PHP group should be placed immediately after security delivery",
   );
   assert.equal(securityDeliveryIndex, backendIndex + 1);
-  assert.equal(infraIndex, phpIndex + 1, "infra group should be placed immediately after PHP");
+  assert.equal(diagnoserIndex, phpIndex + 1, "diagnoser group should be placed immediately after PHP");
+  assert.equal(infraIndex, diagnoserIndex + 1, "infra group should be placed immediately after diagnoser");
   assert.equal(
     operationsIndex,
     infraIndex + 1,
@@ -611,6 +613,56 @@ test("PHP menu links the backend and security delivery source handbooks without 
       1,
       `${id} should keep one canonical document`,
     );
+  }
+});
+
+test("diagnoser menu covers the 2026 exam, 20 design criteria, 49 implementation weaknesses, and report practice", async () => {
+  const { DIAGNOSER_HANDBOOKS, HANDBOOK_GROUPS } = await import("../src/handbook/catalog.mjs");
+  const diagnoserGroup = HANDBOOK_GROUPS.find((group) => group.key === "diagnoser");
+
+  assert.equal(diagnoserGroup?.label, "진단원");
+  assert.equal(DIAGNOSER_HANDBOOKS.length, 10);
+  assert.deepEqual(diagnoserGroup?.items, DIAGNOSER_HANDBOOKS);
+
+  const source = await readFile("src/handbook/diagnoserDocuments.ts", "utf8");
+  for (const marker of [
+    "이론×0.4 + 실습×0.6 ≥ 70",
+    "4분류·20개 전체 목록",
+    "20개 기준별 판정 노트",
+    "검수 가능한 합격 증거",
+    "49개 핵심 개념과 개선 방향",
+    "고빈도 12개 정·오탐 판정집",
+    "오탐 인정 증거",
+    "보완 후 재시험",
+    "입력데이터 검증 및 표현 (17)",
+    "보안기능 (16)",
+    "취약한 암호화 알고리즘 사용",
+    "Source",
+    "Sink",
+    "검증·정화·인코딩·바인딩을 구분한다",
+    "정탐 답안 예시",
+    "오탐 답안 예시",
+    "정탐·오탐 판정",
+    "보고서 6칸",
+    "2026 안내서 공식 예시를 채점 단위로 해설",
+    "자체 모의 문제와 채점 핵심어",
+    "시험 직전",
+  ]) {
+    assert.ok(source.includes(marker), `diagnoser material should include ${marker}`);
+  }
+
+  const plan = await readFile("src/handbook/documents/diagnoser-curriculum-plan.ts", "utf8");
+  assert.ok(plan.includes("단계별 Definition of Done"));
+  assert.ok(plan.includes("구현 예정"));
+
+  const quiz = await readFile("src/handbook/quiz/data/diagnoser-theory.quiz.mjs", "utf8");
+  assert.ok(quiz.includes('id: "diagnoser-theory-quiz"'));
+  assert.equal((quiz.match(/^  \["/gm) ?? []).length, 30);
+
+  const casebook = await readFile("src/handbook/documents/diagnoser-code-casebook.ts", "utf8");
+  assert.equal((casebook.match(/^    \["/gm) ?? []).length, 49);
+  for (const marker of ["취약 코드", "안전 코드", "Source → Sink", "오탐 인정 조건", "보완 후 재시험"]) {
+    assert.ok(casebook.includes(marker), `code casebook should include ${marker}`);
   }
 });
 
@@ -773,6 +825,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
       "backend",
       "security-delivery",
       "php",
+      "diagnoser",
       "infra",
       "operations",
       "quiz",
@@ -800,7 +853,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 193);
+  assert.equal(HANDBOOK_ITEMS.length, 203);
   assert.equal(careerGroup?.items.length, 14);
   assert.equal(carbonGroup?.items.length, 12);
   assert.equal(carbonGroup?.label, "탄소");

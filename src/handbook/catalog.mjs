@@ -1851,6 +1851,69 @@ export const PHP_HANDBOOKS = [
   },
 ];
 
+export const DIAGNOSER_HANDBOOKS = [
+  {
+    id: "diagnoser-roadmap",
+    label: "00 시험 구조·학습 로드맵",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-process",
+    label: "01 제도·역할·진단 프로세스",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-design-criteria",
+    label: "02 설계단계 20개 보안설계 기준",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-implementation-weaknesses",
+    label: "03 구현단계 49개 보안약점",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-report-practice",
+    label: "04 정·오탐 판정·보고서 실습",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-final-review",
+    label: "05 최종 암기·시험 당일 운영",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-curriculum-plan",
+    label: "06 합격 교재 구현계획·진척도",
+    kind: "SW 보안약점 진단원",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-theory-qa",
+    label: "07 이론 핵심문답",
+    kind: "SW 보안약점 진단원 Q&A",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-theory-quiz",
+    label: "08 이론 모의시험 30문항",
+    kind: "SW 보안약점 진단원 퀴즈",
+    pageType: "react",
+  },
+  {
+    id: "diagnoser-code-casebook",
+    label: "09 구현약점 49개 코드 판정집",
+    kind: "SW 보안약점 진단원 실습",
+    pageType: "react",
+  },
+];
+
 export const AI_HANDBOOKS = renumberMenuItems([
   ...LLM_HANDBOOKS,
   ...AI_NATIVE_GROUP_HANDBOOKS,
@@ -1868,6 +1931,7 @@ export const HANDBOOK_GROUPS = [
   { key: "backend", label: "백엔드", items: ENGINEERING_BACKEND_HANDBOOKS },
   { key: "security-delivery", label: "보안·배포", items: SECURITY_DELIVERY_HANDBOOKS },
   { key: "php", label: "PHP", items: PHP_HANDBOOKS },
+  { key: "diagnoser", label: "진단원", items: DIAGNOSER_HANDBOOKS },
   {
     key: "infra",
     label: "인프라",
@@ -1900,6 +1964,7 @@ export const HANDBOOK_ITEMS = [
   ...INTERACTIVE_HANDBOOKS,
   ...ENGINEERING_BACKEND_HANDBOOKS,
   ...SECURITY_DELIVERY_HANDBOOKS,
+  ...DIAGNOSER_HANDBOOKS,
   ...INFRA_MENU_HANDBOOKS,
   ...OPERATIONS_GROUP_HANDBOOKS,
   ...QUIZ_TOOL_HANDBOOKS,

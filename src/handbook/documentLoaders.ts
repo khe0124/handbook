@@ -68,7 +68,7 @@ function createQuizPageLoader(id: string): HandbookDocumentLoader {
     }
 
     const module = await import("./quiz/QuizPage");
-    const QuizDocumentPage = () => createElement(module.default, { quizId: id.replace(/-quiz$/, "") });
+    const QuizDocumentPage = () => createElement(module.default, { quizId: id });
 
     return {
       default: {
