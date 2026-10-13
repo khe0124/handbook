@@ -2,6 +2,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { Menu, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChecklistCard, type ChecklistItem } from "./ChecklistCard";
+import { DiagnoserLearningFlow } from "./DiagnoserLearningFlow";
 import { HANDBOOK_DOCUMENT_LOADERS } from "./documentLoaders";
 import { InlineCodeCopyButton } from "./InlineCodeCopyButton";
 import { HomeStrategy } from "./HomeStrategy";
@@ -523,6 +524,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
         ref={mainRef}
         className="handbook-main"
       >
+        <DiagnoserLearningFlow itemId={item.id} position="start" onSelect={onSelectHandbook} />
         {isHome ? <HomeStrategy /> : null}
         {isHome ? (
           <section className="home-profile" aria-labelledby="home-profile-title">
@@ -573,6 +575,7 @@ export function HandbookPage({ item, onReady, onSelectHandbook }: HandbookPagePr
             }}
           />
         )}
+        <DiagnoserLearningFlow itemId={item.id} position="end" onSelect={onSelectHandbook} />
         {!isHome && personalNotes.length ? (
           <section className="personal-notes" aria-labelledby="personal-notes-title">
             <div className="ch-head">

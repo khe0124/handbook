@@ -45,11 +45,11 @@ export const processDocument: HandbookDocumentContent = {
 <section id="d1-check"><div class="ch-head"><span class="ch-code">GATE</span><h2>숙련 점검</h2></div><div class="checklist"><strong>말로 설명할 수 있는가?</strong><ul><li>설계 진단과 구현 진단의 대상·판정 증거 차이</li><li>도구 결과가 곧 정탐이 아닌 이유</li><li>1차 진단과 2차 진단 보고서에 필요한 정보</li><li>유지보수에서 변경 파일 외 영향범위를 보는 이유</li><li>좋은 개선안과 모호한 개선안의 차이</li></ul></div></section>`,
 };
 
-const designRows = [
+export const designRows = [
   ["입력데이터 검증 및 표현","DBMS 조회 및 결과 검증","질의 입력·조회결과 검증, 바인딩과 실패 처리"],["입력데이터 검증 및 표현","XML 조회 및 결과 검증","XPath/XQuery 입력과 결과 검증"],["입력데이터 검증 및 표현","디렉토리 서비스 조회 및 결과 검증","LDAP 입력·결과의 형식·범위 제한"],["입력데이터 검증 및 표현","시스템 자원 접근 및 명령어 수행 입력값 검증","경로·명령 인자를 허용목록으로 제한"],["입력데이터 검증 및 표현","웹 서비스 요청 및 결과 검증","요청과 응답의 문맥별 검증·인코딩"],["입력데이터 검증 및 표현","웹 기반 중요 기능 수행 요청 유효성 검증","권한·의도·재전송 방지 검증"],["입력데이터 검증 및 표현","HTTP 프로토콜 유효성 검증","헤더·리다이렉트·개행 등 검증"],["입력데이터 검증 및 표현","허용된 범위내 메모리 접근","경계 검사와 초과 시 안전한 실패"],["입력데이터 검증 및 표현","보안기능 입력값 검증","인증·인가 결정값을 신뢰하지 않음"],["입력데이터 검증 및 표현","업로드·다운로드 파일 검증","형식·크기·경로·권한·실행·무결성 통제"],["보안기능","인증 대상 및 방식","자산 중요도에 맞는 인증과 우회 방지"],["보안기능","인증 수행 제한","반복 시도 제한·잠금·이력 추적"],["보안기능","비밀번호 관리","생성·저장·변경·복구 정책"],["보안기능","중요자원 접근통제","주체·객체·행위 기반 최소권한과 실패 처리"],["보안기능","암호키 관리","생성·분배·저장·접근·교체·폐기 수명주기"],["보안기능","암호연산","검증된 알고리즘·키 길이·salt·난수"],["보안기능","중요정보 저장","분류·암호화·접근·보존·삭제"],["보안기능","중요정보 전송","TLS 등 안전 채널과 인증정보 보호"],["에러처리","예외처리","내부정보 비노출, 일관된 실패·복구"],["세션통제","세션통제","세션ID 비노출·재발급·만료·격리"],
 ];
 
-const designStudyNotes: Record<string, [string, string, string]> = {
+export const designStudyNotes: Record<string, [string, string, string]> = {
   "DBMS 조회 및 결과 검증": ["사용자 입력이 질의의 데이터가 아니라 SQL 구조로 해석되거나, 과도한 조회결과가 그대로 노출되는 위험", "동적 질의 지점·바인딩 방식·동적 식별자 허용목록·조회 건수와 column 제한·DB 오류 처리", "악성 입력에도 질의 구조가 고정되고 업무상 필요한 행·열만 반환되는 testcase"],
   "XML 조회 및 결과 검증": ["입력이 XPath/XQuery predicate를 바꾸거나 조회결과 전체가 노출되는 위험", "변수 binding, XML parser 설정, 조회 node 범위, 결과 schema·건수 검증", "인용부호·논리연산자 입력이 query 구조를 바꾸지 않고 허용 node만 반환"],
   "디렉토리 서비스 조회 및 결과 검증": ["LDAP filter·DN 조작으로 인증 우회 또는 조직정보 과다조회", "attribute·base DN 고정, filter escaping, 검색 scope·결과 수 제한", "LDAP metacharacter 입력이 filter 구조를 변경하지 않는 경계·부정 testcase"],
@@ -91,7 +91,7 @@ export const designDocument: HandbookDocumentContent = {
 <section id="d2-drill"><div class="ch-head"><span class="ch-code">LAB</span><h2>빈 종이 회상 훈련</h2></div><div class="checklist"><strong>5분 안에 작성</strong><ul><li>4개 대분류와 개수: 입력 10 · 보안기능 8 · 에러 1 · 세션 1</li><li>파일 업로드 기능에 적용할 설계 기준과 검수 증거</li><li>관리자 기능에 필요한 인증·인가·session·audit 조건</li><li>중요정보 저장과 전송의 통제 차이</li><li>설계 문구가 구현 기준으로 추적되지 않는 사례</li></ul></div></section>`,
 };
 
-const implementationGroups: Array<[string,string[]]> = [
+export const implementationGroups: Array<[string,string[]]> = [
   ["입력데이터 검증 및 표현 (17)",["SQL 삽입","코드 삽입","경로 조작 및 자원 삽입","크로스사이트 스크립트","운영체제 명령어 삽입","위험한 형식 파일 업로드","신뢰되지 않는 URL 주소로 자동접속 연결","부적절한 XML 외부 개체 참조","XML 삽입","LDAP 삽입","크로스사이트 요청 위조","서버사이드 요청 위조","HTTP 응답분할","정수형 오버플로우","보안기능 결정에 사용되는 부적절한 입력값","메모리 버퍼 오버플로우","포맷 스트링 삽입"]],
   ["보안기능 (16)",["적절한 인증 없는 중요기능 허용","부적절한 인가","중요한 자원에 대한 잘못된 권한 설정","취약한 암호화 알고리즘 사용","암호화되지 않은 중요정보","하드코드된 중요정보","충분하지 않은 키 길이 사용","적절하지 않은 난수 값 사용","취약한 비밀번호 허용","부적절한 전자서명 확인","부적절한 인증서 유효성 검증","사용자 하드디스크에 저장되는 쿠키를 통한 정보 노출","주석문 안에 포함된 시스템 주요정보","솔트 없이 일방향 해쉬 함수 사용","무결성 검사 없는 코드 다운로드","반복된 인증시도 제한 기능 부재"]],
   ["시간 및 상태 (2)",["경쟁조건: 검사 시점과 사용 시점(TOCTOU)","종료되지 않는 반복문 또는 재귀 함수"]],
@@ -101,7 +101,7 @@ const implementationGroups: Array<[string,string[]]> = [
   ["API 오용 (2)",["DNS lookup에 의존한 보안결정","취약한 API 사용"]],
 ];
 
-const weaknessDetails: Record<string, [string, string]> = {
+export const weaknessDetails: Record<string, [string, string]> = {
   "SQL 삽입": ["외부값이 SQL 문자열의 구조로 결합되어 조건·명령을 바꾼다. query 생성부까지 데이터 흐름과 동적 table·column명도 확인한다.", "prepared statement로 구조와 값을 분리하고 동적 식별자는 서버 allowlist로 선택한다."],
   "코드 삽입": ["입력값이 eval, expression language, template interpreter 등에서 실행 가능한 코드로 해석된다.", "동적 코드 실행을 제거하고 필요한 동작을 고정된 함수·명령 allowlist로 매핑한다."],
   "경로 조작 및 자원 삽입": ["파일명·경로·자원 식별자에 ../, 절대경로, symlink 우회가 섞여 허용 root 밖 자원에 접근한다.", "서버 식별자를 사용하고 정규화된 실제 경로가 허용 root 내부인지 확인하며 OS 권한도 최소화한다."],

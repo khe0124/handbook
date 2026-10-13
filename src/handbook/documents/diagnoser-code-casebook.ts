@@ -1,8 +1,8 @@
 import type { HandbookDocumentContent } from "../types";
 
-type Case = [name: string, vulnerable: string, safe: string, flow: string, falsePositive: string, retest: string];
+export type CodeCase = [name: string, vulnerable: string, safe: string, flow: string, falsePositive: string, retest: string];
 
-const groups: Array<[string, Case[]]> = [
+export const codeCaseGroups: Array<[string, CodeCase[]]> = [
   ["입력데이터 검증 및 표현", [
     ["SQL 삽입", `sql = "SELECT * FROM member WHERE id='" + request.id + "'"; execute(sql);`, `prepare("SELECT * FROM member WHERE id=?").bind(request.id).execute();`, "request.id → SQL 문자열 → DB 실행", "외부값은 전부 bind되고 동적 열 이름은 server enum으로만 선택됨을 확인", "' OR '1'='1, 주석, 빈값, Unicode 인용부호"],
     ["코드 삽입", `result = eval(request.expression);`, `result = allowedOperations[request.operation](validatedNumber);`, "expression → eval/interpreter", "실행 문자열이 상수이고 외부값은 숫자 인자로만 전달됨", "함수호출·속성접근·구분자·중첩 표현식"],
@@ -71,7 +71,7 @@ const groups: Array<[string, Case[]]> = [
 const escape = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const slug = (index: number) => `case-${String(index + 1).padStart(2, "0")}`;
 let caseIndex = 0;
-const sections = groups.map(([group, cases], groupIndex) => {
+const sections = codeCaseGroups.map(([group, cases], groupIndex) => {
   const cards = cases.map(([name, vulnerable, safe, flow, falsePositive, retest]) => {
     const index = caseIndex++;
     return `<article id="${slug(index)}"><h3>${String(index + 1).padStart(2, "0")}. ${name}</h3><table><tr><th>취약 코드</th><td><pre><code>${escape(vulnerable)}</code></pre></td></tr><tr><th>안전 코드</th><td><pre><code>${escape(safe)}</code></pre></td></tr><tr><th>Source → Sink</th><td>${flow}</td></tr><tr><th>정탐 판정</th><td>외부 통제값이 위 흐름으로 실제 실행되며 안전 코드의 핵심 통제가 누락되거나 우회 가능하면 정탐이다.</td></tr><tr><th>오탐 인정 조건</th><td>${falsePositive}</td></tr><tr><th>보완 후 재시험</th><td>${retest}</td></tr></table></article>`;
@@ -80,7 +80,7 @@ const sections = groups.map(([group, cases], groupIndex) => {
 }).join("");
 
 const document: HandbookDocumentContent = {
-  navHtml: `<div class="nav-brand">SW SECURITY DIAGNOSER</div><div class="nav-title">49개 코드 판정집</div>${groups.map(([group], index) => `<a href="#group-${index + 1}"><span class="code">${String(index + 1).padStart(2, "0")}</span>${group}</a>`).join("")}<a href="#casebook-gate"><span class="code">GATE</span>완료 점검</a>`,
+  navHtml: `<div class="nav-brand">SW SECURITY DIAGNOSER</div><div class="nav-title">49개 코드 판정집</div>${codeCaseGroups.map(([group], index) => `<a href="#group-${index + 1}"><span class="code">${String(index + 1).padStart(2, "0")}</span>${group}</a>`).join("")}<a href="#casebook-gate"><span class="code">GATE</span>완료 점검</a>`,
   mainHtml: `<header class="hero"><div class="hero-serial"><span>TRACK : SW 보안약점 진단원</span><span>DOC : DIAGNOSER-09</span><span>COVERAGE : 49 / 49</span></div><h1>코드를 읽고 근거로 판정하는<br>49개 보안약점 사례집</h1><p class="hero-sub">예제를 외우지 말고 입력을 바꾸고 중간 함수를 숨겨도 Source·Sink·누락 통제를 다시 찾는 훈련을 합니다.</p><div class="hero-meta">VULNERABLE · SAFE · TRUE POSITIVE · FALSE POSITIVE · RETEST</div></header><section><div class="callout key"><span class="co-label">사용법</span><p>먼저 취약 코드만 보고 약점명과 흐름을 적습니다. 다음으로 안전 코드를 설명하고, 오탐 인정 조건과 재시험 입력을 보지 않고 작성합니다. 한 항목당 6분, 49개 중 무작위 45개를 통과해야 완료입니다.</p></div></section>${sections}<section id="casebook-gate"><div class="ch-head"><span class="ch-code">GATE</span><h2>49개 판정집 완료 점검</h2></div><div class="checklist"><strong>항목마다 확인</strong><ul><li>외부가 통제하는 Source에 밑줄을 그었다.</li><li>값을 코드·질의·명령·경로·권한으로 해석하는 Sink를 찾았다.</li><li>정탐에 필요한 실행경로와 영향까지 설명했다.</li><li>오탐은 함수명이나 느낌이 아닌 증거로 설명했다.</li><li>개선안이 원인을 제거하며 재시험에 정상·악성·경계 입력이 있다.</li></ul></div><p><strong>완료 기준:</strong> 49개 모두 답안 작성, 무작위 재시험 45/49 이상, 혼동쌍 오분류 0개.</p></section>`,
 };
 

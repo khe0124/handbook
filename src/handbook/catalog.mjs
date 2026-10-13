@@ -1852,66 +1852,28 @@ export const PHP_HANDBOOKS = [
 ];
 
 export const DIAGNOSER_HANDBOOKS = [
-  {
-    id: "diagnoser-roadmap",
-    label: "00 시험 구조·학습 로드맵",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-process",
-    label: "01 제도·역할·진단 프로세스",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-design-criteria",
-    label: "02 설계단계 20개 보안설계 기준",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-implementation-weaknesses",
-    label: "03 구현단계 49개 보안약점",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-report-practice",
-    label: "04 정·오탐 판정·보고서 실습",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-final-review",
-    label: "05 최종 암기·시험 당일 운영",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-curriculum-plan",
-    label: "06 합격 교재 구현계획·진척도",
-    kind: "SW 보안약점 진단원",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-theory-qa",
-    label: "07 이론 핵심문답",
-    kind: "SW 보안약점 진단원 Q&A",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-theory-quiz",
-    label: "08 이론 모의시험 30문항",
-    kind: "SW 보안약점 진단원 퀴즈",
-    pageType: "react",
-  },
-  {
-    id: "diagnoser-code-casebook",
-    label: "09 구현약점 49개 코드 판정집",
-    kind: "SW 보안약점 진단원 실습",
-    pageType: "react",
-  },
+  { id: "diagnoser-roadmap", label: "00 시작 · 시험 구조와 학습 지도", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-guide-part1", label: "01 개념 · 개발보안이 필요한 이유", kind: "2021 SW 보안약점 진단가이드", pageType: "react" },
+  { id: "diagnoser-guide-part2", label: "02 체계 · 주체와 단계별 역할", kind: "2021 SW 보안약점 진단가이드", pageType: "react" },
+  { id: "diagnoser-process", label: "03 절차 · 증거 중심 진단 프로세스", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-design-criteria", label: "04 설계 · 20개 기준 공통 판정법", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-guide-part3", label: "05 설계 · 분석·설계 원문 심화", kind: "2021 SW 보안약점 진단가이드", pageType: "react" },
+  { id: "diagnoser-design-workbook", label: "06 설계 · 20개 산출물 적용", kind: "SW 보안약점 진단원 실습", pageType: "react" },
+  { id: "diagnoser-implementation-weaknesses", label: "07 구현 · 49개 공통 원리", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-guide-part4", label: "08 구현 · 49개 원문 심화", kind: "2021 SW 보안약점 진단가이드", pageType: "react" },
+  { id: "diagnoser-code-casebook", label: "09 구현 · 49개 코드 판정", kind: "SW 보안약점 진단원 실습", pageType: "react" },
+  { id: "diagnoser-language-guide", label: "10 구현 · 언어·프레임워크 변형", kind: "SW 보안약점 진단원 심화", pageType: "react" },
+  { id: "diagnoser-report-practice", label: "11 보고 · 정·오탐과 보고서", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-guide-part5", label: "12 증적 · 부록과 추적표", kind: "2021 SW 보안약점 진단가이드", pageType: "react" },
+  { id: "diagnoser-theory-qa", label: "13 회상 · 이론 핵심문답 A", kind: "SW 보안약점 진단원 Q&A", pageType: "react" },
+  { id: "diagnoser-theory-b-qa", label: "14 회상 · 이론 심화문답 B", kind: "SW 보안약점 진단원 Q&A", pageType: "react" },
+  { id: "diagnoser-theory-quiz", label: "15 평가 · 이론 모의시험 A", kind: "SW 보안약점 진단원 퀴즈", pageType: "react" },
+  { id: "diagnoser-theory-b-quiz", label: "16 평가 · 이론 모의시험 B", kind: "SW 보안약점 진단원 퀴즈", pageType: "react" },
+  { id: "diagnoser-practical-mock-a", label: "17 평가 · 실습 모의고사 A", kind: "SW 보안약점 진단원 모의시험", pageType: "react" },
+  { id: "diagnoser-practical-mock-b", label: "18 평가 · 실습 모의고사 B", kind: "SW 보안약점 진단원 모의시험", pageType: "react" },
+  { id: "diagnoser-error-review", label: "19 고정 · 오답 1·3·7일 회독", kind: "SW 보안약점 진단원 학습관리", pageType: "react" },
+  { id: "diagnoser-final-review", label: "20 압축 · 시험 직전 운영", kind: "SW 보안약점 진단원", pageType: "react" },
+  { id: "diagnoser-curriculum-plan", label: "21 판정 · 완료도와 응시 결정", kind: "SW 보안약점 진단원", pageType: "react" },
 ];
 
 export const AI_HANDBOOKS = renumberMenuItems([

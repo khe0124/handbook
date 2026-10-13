@@ -621,8 +621,29 @@ test("diagnoser menu covers the 2026 exam, 20 design criteria, 49 implementation
   const diagnoserGroup = HANDBOOK_GROUPS.find((group) => group.key === "diagnoser");
 
   assert.equal(diagnoserGroup?.label, "진단원");
-  assert.equal(DIAGNOSER_HANDBOOKS.length, 10);
+  assert.equal(DIAGNOSER_HANDBOOKS.length, 22);
   assert.deepEqual(diagnoserGroup?.items, DIAGNOSER_HANDBOOKS);
+  assert.deepEqual(
+    DIAGNOSER_HANDBOOKS.map((item) => item.id),
+    [
+      "diagnoser-roadmap", "diagnoser-guide-part1", "diagnoser-guide-part2", "diagnoser-process",
+      "diagnoser-design-criteria", "diagnoser-guide-part3", "diagnoser-design-workbook",
+      "diagnoser-implementation-weaknesses", "diagnoser-guide-part4", "diagnoser-code-casebook",
+      "diagnoser-language-guide", "diagnoser-report-practice", "diagnoser-guide-part5",
+      "diagnoser-theory-qa", "diagnoser-theory-b-qa", "diagnoser-theory-quiz",
+      "diagnoser-theory-b-quiz", "diagnoser-practical-mock-a", "diagnoser-practical-mock-b",
+      "diagnoser-error-review", "diagnoser-final-review", "diagnoser-curriculum-plan",
+    ],
+  );
+
+  const learningFlow = await readFile("src/handbook/DiagnoserLearningFlow.tsx", "utf8");
+  assert.equal((learningFlow.match(/ id:"diagnoser-/g) ?? []).length, 22);
+  for (const marker of ["먼저 3분 복습", "이번 장의 핵심 질문", "책을 덮기 전 5분 회상", "READ · RECALL · CONNECT", "diagnoser-learning-completed-v1"]) {
+    assert.ok(learningFlow.includes(marker), `linear diagnoser course should include ${marker}`);
+  }
+  const handbookPage = await readFile("src/handbook/HandbookPage.tsx", "utf8");
+  assert.ok(handbookPage.includes('position="start"'));
+  assert.ok(handbookPage.includes('position="end"'));
 
   const source = await readFile("src/handbook/diagnoserDocuments.ts", "utf8");
   for (const marker of [
@@ -653,7 +674,8 @@ test("diagnoser menu covers the 2026 exam, 20 design criteria, 49 implementation
 
   const plan = await readFile("src/handbook/documents/diagnoser-curriculum-plan.ts", "utf8");
   assert.ok(plan.includes("단계별 Definition of Done"));
-  assert.ok(plan.includes("구현 예정"));
+  assert.ok(plan.includes("이론 A/B 각 30문항"));
+  assert.doesNotMatch(plan, /구현 예정/);
 
   const quiz = await readFile("src/handbook/quiz/data/diagnoser-theory.quiz.mjs", "utf8");
   assert.ok(quiz.includes('id: "diagnoser-theory-quiz"'));
@@ -664,6 +686,42 @@ test("diagnoser menu covers the 2026 exam, 20 design criteria, 49 implementation
   for (const marker of ["취약 코드", "안전 코드", "Source → Sink", "오탐 인정 조건", "보완 후 재시험"]) {
     assert.ok(casebook.includes(marker), `code casebook should include ${marker}`);
   }
+
+  const guideParts = await readFile("src/handbook/diagnoserGuidePartDocuments.ts", "utf8");
+  for (const marker of [
+    "PART1 · 제1장",
+    "PART2 · 제2장",
+    "PART3 · 제3장",
+    "PART4 · 제4장",
+    "PART5 · 제5장",
+    "제1절 보안항목 식별",
+    "제2절 설계단계 보안설계 적용 방법",
+    "제3절 설계단계 보안설계 기준",
+    "7개 분류 49개 약점",
+    "설계단계 보안설계 산출물 적용 예",
+  ]) {
+    assert.ok(guideParts.includes(marker), `diagnoser guide parts should include ${marker}`);
+  }
+
+  const designWorkbook = await readFile("src/handbook/documents/diagnoser-design-workbook.ts", "utf8");
+  assert.equal((designWorkbook.match(/^    \["/gm) ?? []).length, 20);
+  for (const marker of ["문제 상황", "모범답안", "5점 채점표", "43~49", "171~177"]) {
+    assert.ok(designWorkbook.includes(marker), `design workbook should include ${marker}`);
+  }
+
+  const theoryB = await readFile("src/handbook/quiz/data/diagnoser-theory-b.quiz.mjs", "utf8");
+  assert.equal((theoryB.match(/^ \["/gm) ?? []).length, 30);
+  const practicalA = await readFile("src/handbook/documents/diagnoser-practical-mock-a.ts", "utf8");
+  const practicalB = await readFile("src/handbook/documents/diagnoser-practical-mock-b.ts", "utf8");
+  assert.equal((practicalA.match(/^ \["/gm) ?? []).length, 15);
+  assert.equal((practicalB.match(/^ \["/gm) ?? []).length, 15);
+  for (const source of [practicalA, practicalB]) {
+    for (const marker of ["100 MIN", "SCORE : 100", "모범답안", "재시험"]) assert.ok(source.includes(marker));
+  }
+  const language = await readFile("src/handbook/documents/diagnoser-language-guide.ts", "utf8");
+  for (const marker of ["Java·JSP·JDBC", "MyBatis", "Hibernate·JPA", "JDO", "C·C++", "C#·ASP.NET", "PHP"]) assert.ok(language.includes(marker));
+  const review = await readFile("src/handbook/documents/diagnoser-error-review.ts", "utf8");
+  for (const marker of ["오답 원인 8분류", "D+1", "D+3", "D+7", "응시 준비도 최종 판정"]) assert.ok(review.includes(marker));
 });
 
 test("frontend and backend menu item labels use group-local numbering", () => {
@@ -853,7 +911,7 @@ test("catalog exposes carbon only through the dedicated carbon group", () => {
   const designGroup = HANDBOOK_GROUPS.find((group) => group.key === "design");
   const practiceGroup = HANDBOOK_GROUPS.find((group) => group.key === "practice");
 
-  assert.equal(HANDBOOK_ITEMS.length, 203);
+  assert.equal(HANDBOOK_ITEMS.length, 215);
   assert.equal(careerGroup?.items.length, 14);
   assert.equal(carbonGroup?.items.length, 12);
   assert.equal(carbonGroup?.label, "탄소");
